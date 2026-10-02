@@ -25,5 +25,7 @@ Supabase pg_cron job "fno-tick" calls /api/tick every minute on weekdays;
 the app only acts between 09:15 and 15:30 IST.
 
 ## Deploying changes
+This repo is connected to the Vercel project: every push to `main` deploys automatically.
+
 Easiest: push this folder to a GitHub repo and connect it to the Vercel
 project (Settings -> Git). Every push then redeploys automatically.
