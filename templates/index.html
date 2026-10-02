@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0f17">
+<title>F&amp;O Trainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
+<style>
+:root{
+  --bg:#0b0f17;--panel:#121826;--panel2:#182032;--line:#243049;--text:#e6eaf2;--muted:#8a96ad;
+  --green:#22c55e;--green-bg:#0d2a1a;--red:#ef4444;--red-bg:#2c1214;--amber:#f59e0b;--amber-bg:#2b2108;
+  --blue:#60a5fa;--violet:#a78bfa;--accent:#7dd3fc;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 Inter,system-ui,sans-serif}
+a{color:var(--accent)}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.hidden{display:none!important}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:8px 14px}
+button:hover{border-color:#3a4a6b}
+button.primary{background:#2563eb;border-color:#2563eb;font-weight:600}
+button.primary:hover{background:#1d4ed8}
+button.danger{background:transparent;border-color:#5b2328;color:#fca5a5}
+button:disabled{opacity:.5;cursor:not-allowed}
+input,select{background:#0e1420;border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-width:0}
+label{display:block;font-size:12px;color:var(--muted);margin:0 0 4px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 16px}
+header{position:sticky;top:0;z-index:10;background:rgba(11,15,23,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:10px;padding:10px 0;flex-wrap:wrap}
+.brand{font-weight:800;letter-spacing:.3px;margin-right:6px}
+.brand span{color:var(--accent)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill.live{background:var(--green-bg);color:#86efac}.pill.demo{background:var(--amber-bg);color:#fcd34d}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.spacer{flex:1}
+nav{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-bottom:8px}
+nav::-webkit-scrollbar{display:none}
+nav button{background:transparent;border:none;color:var(--muted);padding:7px 12px;border-radius:8px;white-space:nowrap;font-weight:500}
+nav button.on{background:var(--panel2);color:var(--text)}
+main.wrap{padding-top:18px;padding-bottom:60px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:1.1fr 1fr}.g4{grid-template-columns:repeat(4,1fr)}.g5{grid-template-columns:repeat(5,1fr)}.g6{grid-template-columns:repeat(6,1fr)}
+@media(max-width:900px){.g2{grid-template-columns:1fr}.g4,.g5,.g6{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h3{margin:0 0 10px;font-size:14px;font-weight:700}
+.kpi .k{font-size:12px;color:var(--muted)}
+.kpi .v{font-size:20px;font-weight:700;margin-top:2px}
+.kpi .d{font-size:12px;margin-top:2px}
+.up{color:var(--green)}.down{color:var(--red)}.muted{color:var(--muted)}
+.sig{border-radius:14px;padding:18px 20px;font-size:28px;font-weight:800;letter-spacing:.4px}
+.sig small{display:block;font-size:13px;font-weight:500;opacity:.85;margin-top:4px;letter-spacing:0}
+.sig.call{background:var(--green-bg);color:#86efac;border:1px solid #14532d}
+.sig.put{background:var(--red-bg);color:#fca5a5;border:1px solid #7f1d1d}
+.sig.wait{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+.sig.stop{background:var(--amber-bg);color:#fcd34d;border:1px solid #78350f}
+.checks{list-style:none;padding:0;margin:10px 0 0}
+.checks li{display:flex;gap:8px;padding:5px 0;border-bottom:1px dashed #1e2840}
+.checks li:last-child{border:none}
+.ic{width:18px;flex:none;text-align:center}
+.warn{background:var(--amber-bg);color:#fcd34d;border:1px solid #78350f;border-radius:10px;padding:8px 12px;margin-top:10px;font-size:13px}
+.note{background:#0f1a2e;border:1px solid #1e3a5f;color:#bfdbfe;border-radius:10px;padding:8px 12px;font-size:13px}
+.err{background:var(--red-bg);border:1px solid #7f1d1d;color:#fecaca;border-radius:10px;padding:8px 12px;font-size:13px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:7px 8px;text-align:right;border-bottom:1px solid #1c2538;white-space:nowrap}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:600;background:var(--panel);position:sticky;top:0}
+td:first-child,th:first-child{text-align:left}
+.tablewrap{overflow:auto;border-radius:10px;border:1px solid var(--line)}
+.chain td.strike{text-align:center;font-weight:700;background:#0e1420}
+.chain th.strike{text-align:center}
+.chain tr.atm td.strike{background:#3b2f06;color:#fde68a}
+.chain td.itm{background:rgba(34,197,94,.06)}
+.chain td.pick{cursor:pointer}
+.chain td.pick:hover{outline:1px solid var(--blue);outline-offset:-1px}
+.ticket .row{display:flex;justify-content:space-between;padding:4px 0}
+.legs{margin:6px 0 10px}
+.leg{display:flex;gap:8px;align-items:center;padding:6px 10px;background:#0e1420;border-radius:8px;margin-bottom:6px}
+.tag{font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px}
+.tag.buy{background:var(--green-bg);color:#86efac}.tag.sell{background:var(--red-bg);color:#fca5a5}
+#chart,#eqchart,#btchart{height:380px}
+#eqchart,#btchart{height:220px}
+.factor-score{font-weight:700}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#1f2a40;border:1px solid #33456b;padding:10px 16px;border-radius:10px;z-index:50;max-width:92vw;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.news a{color:var(--text);text-decoration:none}
+.news a:hover{text-decoration:underline}
+.news li{padding:8px 0;border-bottom:1px solid #1c2538;list-style:none;display:flex;gap:8px}
+.news ul{padding:0;margin:0}
+.formrow{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.formrow>div{flex:1;min-width:120px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:none;border-radius:0;background:transparent;padding:8px 12px}
+.seg button.on{background:#1e3a8a}
+.login{min-height:100vh;display:grid;place-items:center;padding:16px}
+.login .card{width:100%;max-width:360px}
+.rule h4{margin:18px 0 6px}
+.rule table td,.rule table th{text-align:left;white-space:normal}
+.copy{display:flex;gap:6px}.copy input{flex:1}
+.loading{opacity:.55;transition:opacity .2s}
+.empty{color:var(--muted);padding:16px 0}
+</style>
+</head>
+<body>
+
+<div id="login" class="login hidden">
+  <div class="card">
+    <h3 style="font-size:18px">F&amp;O <span style="color:var(--accent)">Trainer</span></h3>
+    <p class="muted" style="margin-top:0">Paper trading with demo money.</p>
+    <form id="loginForm">
+      <label for="pw">Password</label>
+      <input id="pw" type="password" autocomplete="current-password" style="width:100%" required>
+      <div id="loginErr" class="err hidden" style="margin-top:10px"></div>
+      <button class="primary" style="width:100%;margin-top:12px">Sign in</button>
+    </form>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+<header>
+  <div class="wrap">
+    <div class="bar">
+      <div class="brand">F&amp;O <span>Trainer</span></div>
+      <select id="symbol" aria-label="Instrument"></select>
+      <span id="srcPill" class="pill demo"><span class="dot"></span><span>…</span></span>
+      <div class="spacer"></div>
+      <label style="display:flex;align-items:center;gap:6px;margin:0;font-size:13px"><input type="checkbox" id="auto" checked style="min-width:auto"> Auto 30s</label>
+      <button id="refresh" title="Refresh">↻</button>
+    </div>
+    <nav id="tabs">
+      <button data-t="signal" class="on">🎯 Signal</button>
+      <button data-t="chain">🔗 Option chain</button>
+      <button data-t="portfolio">💼 Portfolio</button>
+      <button data-t="context">🌍 Market context</button>
+      <button data-t="backtest">🧪 Backtest</button>
+      <button data-t="rules">📘 Rulebook</button>
+      <button data-t="settings">⚙️ Settings</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- SIGNAL -->
+  <section id="t-signal">
+    <div class="grid g5" id="kpis"></div>
+    <div id="sigNotes" style="margin-top:12px"></div>
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card">
+        <div id="sigCard"></div>
+        <ul class="checks" id="checks"></ul>
+        <div id="orb" class="muted" style="font-size:12px;margin-top:6px"></div>
+      </div>
+      <div class="grid" style="align-content:start">
+        <div class="card ticket hidden" id="ticket"></div>
+        <div class="card">
+          <h3>Market score breakdown</h3>
+          <div class="tablewrap"><table id="factors"></table></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h3>5-minute chart <span class="muted" style="font-weight:400">· VWAP <span style="color:#f59e0b">━</span> EMA 9 <span style="color:#60a5fa">━</span> EMA 21 <span style="color:#a78bfa">━</span></span></h3>
+      <div id="chart"></div>
+    </div>
+  </section>
+
+  <!-- CHAIN -->
+  <section id="t-chain" class="hidden">
+    <div class="formrow">
+      <div style="max-width:200px"><label>Expiry</label><select id="expiry" style="width:100%"></select></div>
+      <div class="grid g4" id="chainStats" style="flex:4"></div>
+    </div>
+    <div id="chainNote" style="margin-top:10px"></div>
+    <div class="tablewrap" style="margin-top:12px;max-height:70vh"><table class="chain" id="chainTbl"></table></div>
+    <div class="card" style="margin-top:14px">
+      <h3>Manual paper order <span class="muted" style="font-weight:400">· tip: click any price in the chain</span></h3>
+      <div class="formrow">
+        <div><label>Strike</label><select id="mStrike" style="width:100%"></select></div>
+        <div><label>Type</label><div class="seg" id="mOpt"><button data-v="CE" class="on">CE</button><button data-v="PE">PE</button></div></div>
+        <div><label>Side</label><div class="seg" id="mSide"><button data-v="BUY" class="on">BUY</button><button data-v="SELL">SELL</button></div></div>
+        <div style="max-width:100px"><label>Lots</label><input id="mLots" type="number" min="1" max="50" value="1" style="width:100%"></div>
+        <div><label>Fill price</label><div id="mPrice" class="mono" style="font-size:18px;font-weight:700;padding:6px 0">–</div></div>
+        <div style="flex:0"><button class="primary" id="mPlace">Place</button></div>
+      </div>
+      <div id="mWarn" class="warn hidden">Option SELLING has unlimited risk and needs large margin. The rulebook only buys options or debit spreads.</div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="t-portfolio" class="hidden">
+    <div class="grid g4" id="pKpis"></div>
+    <div class="card" style="margin-top:14px"><h3>Open positions</h3><div id="positions"></div></div>
+    <div class="card" style="margin-top:14px">
+      <h3>Performance</h3>
+      <div class="grid g5" id="pStats"></div>
+      <div id="eqchart" style="margin-top:12px"></div>
+      <p class="muted" style="font-size:12px">Judge yourself after 30+ trades: profit factor above 1.3 and max drawdown under 10% is a reasonable bar before risking real money.</p>
+    </div>
+    <div class="card" style="margin-top:14px"><h3>Trade journal</h3><div class="tablewrap"><table id="journal"></table></div></div>
+  </section>
+
+  <!-- CONTEXT -->
+  <section id="t-context" class="hidden">
+    <div class="grid g2">
+      <div class="grid" style="align-content:start">
+        <div class="card"><h3 id="gTitle">Global markets</h3><div class="tablewrap"><table id="global"></table></div>
+          <p class="muted" style="font-size:12px">Rising crude, dollar index, USD/INR or US yields are usually negative for Indian equities.</p></div>
+        <div class="card"><h3>FII / DII cash flow (₹ crore)</h3><div id="fii"></div></div>
+      </div>
+      <div class="card news"><h3 id="nTitle">News</h3><div id="events"></div><ul id="news"></ul>
+        <p class="muted" style="font-size:12px">Sentiment is a simple keyword score. Read the headlines yourself before trading.</p></div>
+    </div>
+  </section>
+
+  <!-- BACKTEST -->
+  <section id="t-backtest" class="hidden">
+    <div class="card">
+      <p style="margin-top:0">Replays the exact rules on the last ~60 days of 5-minute data. <b>This is the honest answer to “what is the accuracy?”</b></p>
+      <div class="formrow">
+        <div><label>Instrument</label><select id="btSym" style="width:100%"></select></div>
+        <div><label>Minimum score</label><select id="btScore" style="width:100%"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></div>
+        <div><label>Capital (₹)</label><input id="btCap" type="number" value="200000" step="50000" style="width:100%"></div>
+        <div style="flex:0"><button class="primary" id="btRun">▶ Run backtest</button></div>
+      </div>
+      <p class="muted" style="font-size:12px;margin-bottom:0">History can't include past news, OI or FII flows, so the backtest scores 5 of the 8 factors - a threshold of 2 here roughly equals the live threshold of 3.</p>
+    </div>
+    <div id="btOut" style="margin-top:14px"></div>
+  </section>
+
+  <!-- RULES -->
+  <section id="t-rules" class="hidden"><div class="card rule" id="rulebook"></div></section>
+
+  <!-- SETTINGS -->
+  <section id="t-settings" class="hidden">
+    <div class="grid g2">
+      <div class="card" id="upCard"></div>
+      <div class="card" id="fyCard"></div>
+    </div>
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card">
+        <h3>Data preferences</h3>
+        <label>Use which broker when both are connected?</label>
+        <select id="pref" style="width:100%"><option value="auto">Automatic (Upstox first)</option><option value="upstox">Upstox</option><option value="fyers">Fyers</option></select>
+        <div style="margin-top:14px">
+          <label>Previous day FII cash net (₹ crore) - only needed if the automatic NSE fetch fails</label>
+          <div class="copy"><input id="fiiIn" type="number" step="100" placeholder="e.g. -1250"><button id="fiiSave">Save</button></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Demo account</h3>
+        <label>Reset with new starting capital (₹) - clears all positions and the journal</label>
+        <div class="copy"><input id="capIn" type="number" value="200000" step="50000"><button class="danger" id="resetBtn">Reset</button></div>
+        <div style="margin-top:18px"><button id="logout">Sign out</button></div>
+      </div>
+    </div>
+    <p class="muted" style="font-size:12px;margin-top:14px">Educational simulator only - it never places real orders. Not investment advice. SEBI's studies show most individual F&amp;O traders lose money; practise here first.</p>
+  </section>
+</main>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const rs = v => v == null ? "–" : "₹" + Math.round(v).toLocaleString("en-IN");
+const n2 = v => v == null ? "–" : Number(v).toFixed(2);
+const sgn = v => v == null ? "–" : (v >= 0 ? "+" : "") + Number(v).toFixed(2);
+const cls = v => v == null ? "" : v >= 0 ? "up" : "down";
+const big = v => v == null ? "–" : Math.abs(v) >= 1e5 ? (v/1e5).toFixed(1) + "L" : Math.round(v).toLocaleString("en-IN");
+let S = {tab: "signal", symbol: localStorage.getItem("sym") || "NIFTY", meta: null, chain: null, opt: "CE", side: "BUY", timer: null};
+
+function toast(msg, ms = 3500) {
+  const t = document.createElement("div"); t.className = "toast"; t.textContent = msg;
+  document.body.appendChild(t); setTimeout(() => t.remove(), ms);
+}
+async function api(path, opts = {}) {
+  const r = await fetch(path, {credentials: "same-origin", headers: {"Content-Type": "application/json"}, ...opts});
+  if (r.status === 401 && !path.endsWith("/login")) { showLogin(); throw new Error("Please sign in"); }
+  let j = {}; try { j = await r.json(); } catch (e) {}
+  if (!r.ok) throw new Error(j.message || j.error || ("HTTP " + r.status));
+  return j;
+}
+const post = (p, b) => api(p, {method: "POST", body: JSON.stringify(b || {})});
+
+/* ---------- login ---------- */
+function showLogin() { $("#app").classList.add("hidden"); $("#login").classList.remove("hidden"); }
+$("#loginForm").onsubmit = async e => {
+  e.preventDefault(); $("#loginErr").classList.add("hidden");
+  try { await post("/api/login", {password: $("#pw").value}); start(); }
+  catch (err) { $("#loginErr").textContent = err.message; $("#loginErr").classList.remove("hidden"); }
+};
+
+/* ---------- shell ---------- */
+async function start() {
+  try { S.meta = await api("/api/meta"); } catch (e) { return; }
+  $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
+  const opts = S.meta.symbols.map(s => `<option value="${s.id}">${esc(s.label)}</option>`).join("");
+  $("#symbol").innerHTML = opts; $("#btSym").innerHTML = opts;
+  $("#symbol").value = S.symbol; $("#btSym").value = S.symbol;
+  renderRules();
+  const q = new URLSearchParams(location.search);
+  if (q.get("msg")) { toast(q.get("msg"), 6000); history.replaceState(null, "", location.pathname + location.hash); }
+  go((location.hash || "#signal").slice(1));
+}
+function go(t) {
+  if (!document.getElementById("t-" + t)) t = "signal";
+  S.tab = t; location.hash = t;
+  document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.t === t));
+  document.querySelectorAll("main section").forEach(s => s.classList.toggle("hidden", s.id !== "t-" + t));
+  load(); schedule();
+}
+$("#tabs").onclick = e => { const b = e.target.closest("button"); if (b) go(b.dataset.t); };
+$("#symbol").onchange = () => { S.symbol = $("#symbol").value; localStorage.setItem("sym", S.symbol); $("#btSym").value = S.symbol; S.chain = null; load(); };
+$("#refresh").onclick = () => load();
+$("#auto").onchange = schedule;
+function schedule() {
+  clearInterval(S.timer);
+  if ($("#auto").checked && ["signal", "portfolio", "chain"].includes(S.tab)) S.timer = setInterval(() => !document.hidden && load(true), 30000);
+}
+async function load(quiet) {
+  const sec = $("#t-" + S.tab); if (!quiet) sec.classList.add("loading");
+  try {
+    if (S.tab === "signal") await loadSignal();
+    else if (S.tab === "chain") await loadChain();
+    else if (S.tab === "portfolio") await loadPortfolio();
+    else if (S.tab === "context") await loadContext();
+    else if (S.tab === "settings") await loadSettings();
+  } catch (e) { if (!quiet) toast(e.message); }
+  finally { sec.classList.remove("loading"); }
+}
+function setSource(src, live) {
+  const p = $("#srcPill"); p.className = "pill " + (live ? "live" : "demo"); p.lastElementChild.textContent = src;
+}
+const kpi = (k, v, d, dc) => `<div class="card kpi"><div class="k">${k}</div><div class="v mono">${v}</div>${d != null ? `<div class="d ${dc || ""}">${d}</div>` : ""}</div>`;
+
+/* ---------- signal ---------- */
+let chart, cs, lv, l9, l21, priceLines = [];
+function ensureChart() {
+  if (chart || !window.LightweightCharts) return;
+  chart = LightweightCharts.createChart($("#chart"), {
+    autoSize: true, layout: {background: {color: "transparent"}, textColor: "#8a96ad", fontFamily: "Inter"},
+    grid: {vertLines: {color: "#1a2234"}, horzLines: {color: "#1a2234"}},
+    timeScale: {timeVisible: true, secondsVisible: false, borderColor: "#243049"}, rightPriceScale: {borderColor: "#243049"},
+    crosshair: {mode: 0},
+  });
+  cs = chart.addCandlestickSeries({upColor: "#22c55e", downColor: "#ef4444", borderVisible: false, wickUpColor: "#22c55e", wickDownColor: "#ef4444"});
+  lv = chart.addLineSeries({color: "#f59e0b", lineWidth: 1.5, priceLineVisible: false, lastValueVisible: false});
+  l9 = chart.addLineSeries({color: "#60a5fa", lineWidth: 1, priceLineVisible: false, lastValueVisible: false});
+  l21 = chart.addLineSeries({color: "#a78bfa", lineWidth: 1, priceLineVisible: false, lastValueVisible: false});
+}
+async function loadSignal() {
+  const d = await api("/api/dashboard?symbol=" + S.symbol);
+  setSource(d.source, d.live);
+  const chg = d.spot - d.prev_close, pct = chg / d.prev_close * 100;
+  $("#kpis").innerHTML =
+    kpi(esc(d.label), d.spot.toLocaleString("en-IN", {maximumFractionDigits: 2}), `${sgn(chg)} (${sgn(pct)}%)`, cls(chg)) +
+    kpi("India VIX", n2(d.vix.level), `${sgn(d.vix.chg_pct)}%`, d.vix.chg_pct > 0 ? "down" : "up") +
+    kpi("Market score", (d.signal.score > 0 ? "+" : "") + d.signal.score, "range −8 to +8", "muted") +
+    kpi("Expiry · lot", new Date(d.expiry).toLocaleDateString("en-IN", {day: "2-digit", month: "short"}), "lot size " + d.lot, "muted") +
+    kpi("Demo cash · " + d.time, rs(d.cash), null);
+  let notes = "";
+  if (!d.live) notes += `<div class="note">Demo mode: prices from Yahoo (may be delayed) and option prices are THEORETICAL. Connect Upstox or Fyers in ⚙️ Settings for the real option chain.</div>`;
+  (d.errors || []).forEach(e => notes += `<div class="err" style="margin-top:8px">${esc(e)}</div>`);
+  (d.closed_now || []).forEach(c => toast(`Auto-exit ${c.symbol}: ${c.reason} → ${rs(c.pnl)}`, 6000));
+  $("#sigNotes").innerHTML = notes;
+
+  const sg = d.signal, s = sg.signal;
+  const k = s === "BUY CALL" ? "call" : s === "BUY PUT" ? "put" : ["STOP FOR TODAY", "NO TRADE TODAY"].includes(s) ? "stop" : "wait";
+  const sub = {"WAIT": "No valid setup right now. Waiting is a position.", "BUY CALL": "All entry conditions met for a bullish trade.",
+    "BUY PUT": "All entry conditions met for a bearish trade.", "NO TRADE TODAY": "Today's conditions fail the rulebook.",
+    "NO NEW ENTRIES": "Entry window closed. Manage open trades only.", "STOP FOR TODAY": "Risk limit reached.",
+    "MARKET CLOSED": "Showing the last session. Review your journal."}[s] || "";
+  $("#sigCard").innerHTML = `<div class="sig ${k}">${esc(s)}<small>${sub}</small></div>` +
+    (sg.warnings || []).map(w => `<div class="warn">${esc(w)}</div>`).join("") +
+    `<h3 style="margin-top:14px">Entry checklist</h3>`;
+  $("#checks").innerHTML = sg.checks.map(([ok, t]) => `<li><span class="ic">${ok === true ? "✅" : ok === false ? "❌" : "👀"}</span><span>${esc(t)}</span></li>`).join("");
+  $("#orb").textContent = sg.orb ? `Opening range ${n2(sg.orb.low)} – ${n2(sg.orb.high)} (${sg.orb.width_pct.toFixed(2)}%)` : "";
+  $("#factors").innerHTML = "<tr><th>Factor</th><th>Value</th><th>Score</th></tr>" + sg.factors.map(f =>
+    `<tr title="${esc(f.why)}"><td>${esc(f.factor)}<div class="muted" style="font-size:11px;white-space:normal">${esc(f.why)}</div></td><td class="mono">${esc(f.value)}</td>` +
+    `<td class="factor-score ${f.score > 0 ? "up" : f.score < 0 ? "down" : "muted"}">${f.score > 0 ? "+1" : f.score < 0 ? "−1" : "0"}</td></tr>`).join("");
+
+  const t = $("#ticket");
+  if (d.order && sg.plan) {
+    const o = d.order, p = sg.plan;
+    t.innerHTML = `<h3>Trade ticket – ${esc(o.type)}</h3>
+      <div class="legs">${o.legs.map(l => `<div class="leg"><span class="tag ${l.side.toLowerCase()}">${l.side}</span><span>${esc(d.label)} ${l.strike} ${l.opt}</span><span class="spacer"></span><span class="mono">₹${n2(l.price)}</span></div>`).join("")}</div>
+      <div class="grid g4" style="grid-template-columns:repeat(3,1fr)">
+        ${kpi("Entry premium", "₹" + n2(o.entry_prem))}${kpi("Stop-loss", "₹" + n2(o.sl_prem), null)}${kpi("Target", "₹" + n2(o.target_prem))}
+      </div>
+      <div style="margin-top:10px">
+        <div class="row"><span class="muted">Underlying stop / breakeven / target</span><span class="mono">${n2(p.sl)} / ${n2(p.breakeven_at)} / ${n2(p.target)}</span></div>
+        <div class="row"><span class="muted">Size</span><span class="mono">${o.lots} lot(s) = ${o.qty} qty</span></div>
+        <div class="row"><span class="muted">Capital used</span><span class="mono">${rs(o.capital_used)}</span></div>
+        <div class="row"><span class="muted">Risk / reward</span><span class="mono"><span class="down">${rs(o.risk_rs)}</span> / <span class="up">${rs(o.reward_rs)}</span></span></div>
+        <div class="muted" style="font-size:12px;margin-top:4px">Time stop: exit if not +0.5R within ${p.time_stop_min} min. Square-off 15:15.</div>
+      </div>
+      ${o.note ? `<div class="warn">${esc(o.note)}</div>` : ""}
+      ${o.lots > 0 ? `<button class="primary" id="placeSig" style="width:100%;margin-top:12px">📝 Place this as a paper trade</button>` : ""}`;
+    t.classList.remove("hidden");
+    const b = $("#placeSig"); if (b) b.onclick = async () => {
+      b.disabled = true;
+      try { const r = await post("/api/trade/signal", {symbol: S.symbol}); toast(r.message); load(); }
+      catch (e) { toast(e.message); } finally { b.disabled = false; }
+    };
+  } else t.classList.add("hidden");
+
+  ensureChart();
+  if (chart) {
+    const c = d.chart;
+    cs.setData(c.map(x => ({time: x.time, open: x.open, high: x.high, low: x.low, close: x.close})));
+    lv.setData(c.filter(x => x.vwap != null).map(x => ({time: x.time, value: x.vwap})));
+    l9.setData(c.filter(x => x.ema9 != null).map(x => ({time: x.time, value: x.ema9})));
+    l21.setData(c.filter(x => x.ema21 != null).map(x => ({time: x.time, value: x.ema21})));
+    priceLines.forEach(pl => cs.removePriceLine(pl)); priceLines = [];
+    const add = (price, color, title, style = 2) => priceLines.push(cs.createPriceLine({price, color, title, lineWidth: 1, lineStyle: style, axisLabelVisible: true}));
+    if (sg.orb) { add(sg.orb.high, "#94a3b8", "ORB high"); add(sg.orb.low, "#94a3b8", "ORB low"); }
+    if (sg.plan) { add(sg.plan.sl, "#ef4444", "Stop", 0); add(sg.plan.target, "#22c55e", "Target", 0); }
+  }
+}
+
+/* ---------- chain ---------- */
+async function loadChain() {
+  const exp = S.chain && S.chain.symbol === S.symbol ? $("#expiry").value : "";
+  const d = await api(`/api/chain?symbol=${S.symbol}${exp ? "&expiry=" + exp : ""}`);
+  S.chain = d;
+  $("#expiry").innerHTML = d.expiries.map(e => `<option value="${e}" ${e === d.expiry ? "selected" : ""}>${new Date(e).toLocaleDateString("en-IN", {day: "2-digit", month: "short", year: "numeric"})}</option>`).join("");
+  const st = d.stats;
+  $("#chainStats").innerHTML = kpi("PCR", st.pcr ?? "–") + kpi("Support (max put OI)", st.support ?? "–") +
+    kpi("Resistance (max call OI)", st.resistance ?? "–") + kpi("Max pain", st.max_pain ?? "–");
+  $("#chainNote").innerHTML = (d.source === "theoretical" ? `<div class="note">THEORETICAL prices - OI, volume and PCR need a broker connection.</div>` : "") +
+    (d.errors || []).map(e => `<div class="err" style="margin-top:8px">${esc(e)}</div>`).join("");
+  const h = `<tr><th>OI</th><th>ΔOI</th><th>IV</th><th>Δ</th><th>Call LTP</th><th class="strike">Strike · spot ${n2(d.spot)}</th><th style="text-align:left">Put LTP</th><th>Δ</th><th>IV</th><th>ΔOI</th><th>OI</th></tr>`;
+  $("#chainTbl").innerHTML = h + d.rows.map(r => {
+    const ci = r.strike < d.spot ? "itm" : "", pi = r.strike > d.spot ? "itm" : "";
+    return `<tr class="${r.strike === d.atm ? "atm" : ""}">
+      <td class="mono ${ci}">${big(r.ce_oi)}</td><td class="mono ${ci} ${cls(r.ce_chg_oi)}">${big(r.ce_chg_oi)}</td><td class="mono ${ci}">${n2(r.ce_iv)}</td><td class="mono ${ci}">${n2(r.ce_delta)}</td>
+      <td class="mono ${ci} pick" data-k="${r.strike}" data-o="CE"><b>${n2(r.ce_ltp)}</b></td>
+      <td class="strike mono">${r.strike}</td>
+      <td class="mono ${pi} pick" style="text-align:left" data-k="${r.strike}" data-o="PE"><b>${n2(r.pe_ltp)}</b></td>
+      <td class="mono ${pi}">${n2(r.pe_delta)}</td><td class="mono ${pi}">${n2(r.pe_iv)}</td><td class="mono ${pi} ${cls(r.pe_chg_oi)}">${big(r.pe_chg_oi)}</td><td class="mono ${pi}">${big(r.pe_oi)}</td></tr>`;
+  }).join("");
+  const cur = $("#mStrike").value;
+  $("#mStrike").innerHTML = d.rows.map(r => `<option value="${r.strike}">${r.strike}</option>`).join("");
+  $("#mStrike").value = d.rows.some(r => String(r.strike) === cur) ? cur : d.atm;
+  updPrice();
+}
+$("#expiry").onchange = () => load();
+$("#chainTbl").onclick = e => {
+  const td = e.target.closest("td.pick"); if (!td) return;
+  $("#mStrike").value = td.dataset.k; setSeg("#mOpt", td.dataset.o); S.opt = td.dataset.o; updPrice();
+  $("#mPlace").scrollIntoView({behavior: "smooth", block: "center"});
+};
+function setSeg(id, v) { document.querySelectorAll(id + " button").forEach(b => b.classList.toggle("on", b.dataset.v === v)); }
+$("#mOpt").onclick = e => { const b = e.target.closest("button"); if (b) { S.opt = b.dataset.v; setSeg("#mOpt", S.opt); updPrice(); } };
+$("#mSide").onclick = e => { const b = e.target.closest("button"); if (b) { S.side = b.dataset.v; setSeg("#mSide", S.side); updPrice(); } };
+$("#mStrike").onchange = updPrice;
+function updPrice() {
+  if (!S.chain) return;
+  const r = S.chain.rows.find(x => String(x.strike) === $("#mStrike").value); if (!r) return;
+  const t = S.opt.toLowerCase(); let p = S.side === "BUY" ? r[t + "_ask"] : r[t + "_bid"]; if (!p) p = r[t + "_ltp"];
+  $("#mPrice").textContent = p ? "₹" + n2(p) : "–";
+  $("#mWarn").classList.toggle("hidden", S.side !== "SELL");
+}
+$("#mPlace").onclick = async () => {
+  const b = $("#mPlace"); b.disabled = true;
+  try {
+    const r = await post("/api/trade/manual", {symbol: S.symbol, expiry: S.chain.expiry, strike: +$("#mStrike").value, opt: S.opt, side: S.side, lots: +$("#mLots").value});
+    toast(r.message);
+  } catch (e) { toast(e.message); } finally { b.disabled = false; }
+};
+
+/* ---------- portfolio ---------- */
+let eqc, eqs;
+function lineChart(el) {
+  const c = LightweightCharts.createChart(el, {autoSize: true, layout: {background: {color: "transparent"}, textColor: "#8a96ad"},
+    grid: {vertLines: {visible: false}, horzLines: {color: "#1a2234"}}, timeScale: {borderColor: "#243049"}, rightPriceScale: {borderColor: "#243049"}});
+  return [c, c.addAreaSeries({lineColor: "#60a5fa", topColor: "rgba(96,165,250,.25)", bottomColor: "rgba(96,165,250,0)", lineWidth: 2})];
+}
+async function loadPortfolio() {
+  const d = await api("/api/portfolio");
+  setSource(d.source, d.source.startsWith("LIVE"));
+  (d.closed_now || []).forEach(c => toast(`Auto-exit ${c.symbol}: ${c.reason} → ${rs(c.pnl)}`, 6000));
+  $("#pKpis").innerHTML = kpi("Demo cash", rs(d.cash)) + kpi("Open P&L", rs(d.unrealised), null) +
+    kpi("Realised P&L", `<span class="${cls(d.realised)}">${rs(d.realised)}</span>`) + kpi("Account value", rs(d.account_value), "started with " + rs(d.capital_start), "muted");
+  $("#positions").innerHTML = d.positions.length ? d.positions.map(p => `
+    <div class="leg" style="flex-wrap:wrap;gap:10px;padding:10px 12px">
+      <div style="flex:2;min-width:200px"><b>${esc(p.symbol)}</b> ${p.legs.map(l => `<span class="tag ${l.side.toLowerCase()}">${l.side}</span> ${l.strike}${l.opt}`).join(" / ")}
+        <div class="muted" style="font-size:12px">exp ${p.expiry} · ${p.lots} lot(s) · ${p.mode} · opened ${p.opened.slice(11, 16)} · SL ₹${n2(p.sl_prem)} · target ₹${n2(p.target_prem)}${p.at_breakeven ? " · stop at breakeven" : ""}</div></div>
+      <div class="mono" style="flex:1">₹${n2(p.entry_prem)} → ₹${n2(p.current_prem)}</div>
+      <div class="mono ${cls(p.unrealised)}" style="flex:1;font-weight:700">${rs(p.unrealised)}</div>
+      <button class="danger" data-exit="${p.id}">Exit</button>
+    </div>`).join("") : `<div class="empty">No open positions.</div>`;
+  const s = d.stats || {};
+  $("#pStats").innerHTML = s.trades ? kpi("Trades", s.trades) + kpi("Win rate", s.win_rate.toFixed(0) + "%") +
+    kpi("Avg win / loss", `<span class="up">${rs(s.avg_win)}</span> / <span class="down">${rs(s.avg_loss)}</span>`) +
+    kpi("Profit factor", s.profit_factor == null ? "∞" : s.profit_factor.toFixed(2)) + kpi("Max drawdown", s.max_dd_pct.toFixed(1) + "%")
+    : `<div class="empty">Your statistics appear after your first closed trade.</div>`;
+  if (s.equity && s.equity.length && window.LightweightCharts) {
+    if (!eqc) [eqc, eqs] = lineChart($("#eqchart"));
+    eqs.setData(s.equity.map((e, i) => ({time: Math.floor(new Date(e.t).getTime() / 1000) + 19800 + i, value: e.v})));
+    eqc.timeScale().fitContent();
+  }
+  $("#journal").innerHTML = d.history.length ? "<tr><th>Opened</th><th>Closed</th><th>Instrument</th><th>Legs</th><th>Lots</th><th>Entry</th><th>Exit</th><th>Charges</th><th>Net P&L</th><th style='text-align:left'>Reason</th></tr>" +
+    d.history.map(h => `<tr><td>${h.opened.slice(0, 16).replace("T", " ")}</td><td>${h.closed.slice(11, 16)}</td><td>${esc(h.symbol)}</td>
+      <td>${h.legs.map(l => l.side[0] + " " + l.strike + l.opt).join(" / ")}</td><td>${h.lots}</td><td class="mono">${n2(h.entry_prem)}</td><td class="mono">${n2(h.exit_prem)}</td>
+      <td class="mono">${rs(h.charges)}</td><td class="mono ${cls(h.pnl)}"><b>${rs(h.pnl)}</b></td><td style="text-align:left">${esc(h.reason)}</td></tr>`).join("")
+    : `<tr><td class="empty">Closed trades will appear here.</td></tr>`;
+}
+$("#positions").onclick = async e => {
+  const b = e.target.closest("[data-exit]"); if (!b) return;
+  b.disabled = true;
+  try { const r = await post("/api/trade/exit", {id: b.dataset.exit}); toast(r.message); load(); } catch (err) { toast(err.message); b.disabled = false; }
+};
+
+/* ---------- context ---------- */
+async function loadContext() {
+  const d = await api("/api/context?symbol=" + S.symbol);
+  const g = d.global || {};
+  $("#gTitle").textContent = `Global markets${g.avg_equity_chg != null ? ` · avg ${sgn(g.avg_equity_chg)}%` : ""}`;
+  const rows = Object.entries(g.markets || {});
+  $("#global").innerHTML = rows.length ? "<tr><th>Market</th><th>Last</th><th>Change</th><th>Session</th></tr>" + rows.map(([k, v]) =>
+    `<tr><td>${esc(k)}</td><td class="mono">${Number(v.last).toLocaleString("en-IN", {maximumFractionDigits: 2})}</td><td class="mono ${cls(v.chg_pct)}">${sgn(v.chg_pct)}%</td><td class="muted">${esc(v.date)}</td></tr>`).join("")
+    : `<tr><td class="empty">Global data unavailable right now.</td></tr>`;
+  const f = d.fii;
+  $("#fii").innerHTML = f ? `<div class="grid g4" style="grid-template-columns:1fr 1fr">${kpi("FII", `<span class="${cls(f.fii)}">${sgn(f.fii).replace(".00", "")}</span>`, f.date || "", "muted")}${f.dii != null ? kpi("DII", `<span class="${cls(f.dii)}">${sgn(f.dii).replace(".00", "")}</span>`) : ""}</div><div class="muted" style="font-size:12px;margin-top:6px">Source: ${esc(f.source)}</div>`
+    : `<div class="note">NSE blocked the automatic fetch. Enter yesterday's FII figure in ⚙️ Settings (from nseindia.com → FII/DII).</div>`;
+  const nw = d.news || {};
+  $("#nTitle").textContent = `News · sentiment ${sgn(nw.score)}`;
+  $("#events").innerHTML = (nw.events || []).length ? `<div class="warn" style="margin:0 0 8px">Events detected: ${esc(nw.events.join(", "))}</div>` : "";
+  $("#news").innerHTML = (nw.items || []).map(i => `<li><span>${i.score > 0 ? "🟢" : i.score < 0 ? "🔴" : "⚪"}</span><div><a href="${esc(i.link)}" target="_blank" rel="noopener">${esc(i.title)}</a>
+    <div class="muted" style="font-size:12px">${i.when ? new Date(i.when).toLocaleString("en-IN", {day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit"}) : ""}</div></div></li>`).join("") || `<li class="empty">No headlines right now.</li>`;
+}
+
+/* ---------- backtest ---------- */
+let btc, bts;
+$("#btRun").onclick = async () => {
+  const b = $("#btRun"); b.disabled = true; b.textContent = "Running… (up to a minute)";
+  try {
+    const d = await post("/api/backtest", {symbol: $("#btSym").value, min_score: +$("#btScore").value, capital: +$("#btCap").value});
+    if (d.error) throw new Error(d.error);
+    const s = d.summary;
+    if (!s.trades) { $("#btOut").innerHTML = `<div class="card empty">No trades in ${d.days} sessions with these filters.</div>`; return; }
+    $("#btOut").innerHTML = `<div class="grid g6">${kpi("Trades", `${s.trades}`, `in ${s.days} days`, "muted")}${kpi("Win rate", s.win_rate.toFixed(0) + "%")}
+      ${kpi("Profit factor", s.profit_factor == null ? "∞" : s.profit_factor.toFixed(2))}${kpi("Net P&L", `<span class="${cls(s.net)}">${rs(s.net)}</span>`, sgn(s.return_pct) + "%", cls(s.net))}
+      ${kpi("Max drawdown", s.max_dd_pct.toFixed(1) + "%")}${kpi("Avg R / trade", sgn(s.avg_R))}</div>
+      <div class="card" style="margin-top:14px"><h3>Equity curve</h3><div id="btchart"></div></div>
+      <div class="card" style="margin-top:14px"><h3>Every trade</h3><div class="tablewrap" style="max-height:60vh"><table>
+      <tr><th>Date</th><th>In</th><th>Out</th><th>Side</th><th>Type</th><th>Score</th><th>Spot in</th><th>Spot out</th><th>R</th><th>Prem in</th><th>Prem out</th><th>Lots</th><th>P&L</th><th style="text-align:left">Reason</th></tr>
+      ${d.trades.map(t => `<tr><td>${t.date}</td><td>${t.entry_time}</td><td>${t.exit_time}</td><td class="${t.side === "CALL" ? "up" : "down"}">${t.side}</td><td>${t.type}</td><td>${t.score}</td>
+        <td class="mono">${n2(t.spot_in)}</td><td class="mono">${n2(t.spot_out)}</td><td class="mono ${cls(t.R)}">${sgn(t.R)}</td><td class="mono">${n2(t.prem_in)}</td><td class="mono">${n2(t.prem_out)}</td>
+        <td>${t.lots}</td><td class="mono ${cls(t.pnl)}"><b>${rs(t.pnl)}</b></td><td style="text-align:left">${esc(t.reason)}</td></tr>`).join("")}</table></div>
+      <p class="muted" style="font-size:12px">Small sample (~60 days). Treat this as a sanity check, not proof. Paper-trade 30+ live signals before trusting it.</p></div>`;
+    if (window.LightweightCharts) { [btc, bts] = lineChart($("#btchart"));
+    bts.setData(d.trades.map((t, i) => ({time: Math.floor(new Date(t.date + "T" + t.entry_time + ":00Z").getTime() / 1000) + i, value: t.equity})));
+    btc.timeScale().fitContent(); }
+  } catch (e) { toast(e.message); }
+  finally { b.disabled = false; b.textContent = "▶ Run backtest"; }
+};
+
+/* ---------- settings ---------- */
+function brokerCard(name, title, idLabel, st, steps) {
+  return `<h3>${title} ${st.connected ? `<span class="pill live"><span class="dot"></span>Connected</span>` : st.configured ? `<span class="pill demo">Not logged in today</span>` : ""}</h3>
+    <ol class="muted" style="padding-left:18px;margin:0 0 12px;font-size:13px">${steps}</ol>
+    <label>Redirect URL (paste this exactly into your ${title} app)</label>
+    <div class="copy"><input readonly value="${esc(st.redirect)}" id="${name}Redir"><button data-copy="${name}Redir">Copy</button></div>
+    <div class="formrow" style="margin-top:10px">
+      <div><label>${idLabel}</label><input id="${name}Id" value="${esc(st.id)}" style="width:100%" autocomplete="off"></div>
+      <div><label>Secret ${st.configured ? "(saved - leave blank to keep)" : ""}</label><input id="${name}Sec" type="password" style="width:100%" autocomplete="new-password"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+      <button data-save="${name}">Save keys</button>
+      ${st.configured ? `<a href="/api/${name}/login"><button class="primary" type="button">🔐 Log in with ${title}</button></a>` : ""}
+      ${st.connected ? `<button class="danger" data-disc="${name}">Disconnect</button>` : ""}
+    </div>
+    ${st.logged_in_at ? `<div class="muted" style="font-size:12px;margin-top:8px">Last login ${esc(st.logged_in_at.replace("T", " ").slice(0, 16))} IST · logins expire every night around 3:30 AM.</div>` : ""}`;
+}
+async function loadSettings() {
+  const d = await api("/api/settings");
+  $("#upCard").innerHTML = brokerCard("upstox", "Upstox", "API Key", d.upstox,
+    `<li>Open <a href="https://account.upstox.com/developer/apps" target="_blank" rel="noopener">account.upstox.com/developer/apps</a> → New App.</li><li>Paste the redirect URL below, create the app, copy the API Key &amp; Secret here and save.</li><li>Click Log in each trading morning.</li>`);
+  $("#fyCard").innerHTML = brokerCard("fyers", "Fyers", "App ID (e.g. ABCD1234-100)", d.fyers,
+    `<li>Open <a href="https://myapi.fyers.in/dashboard" target="_blank" rel="noopener">myapi.fyers.in/dashboard</a> → Create App.</li><li>Paste the redirect URL below, create the app, copy the App ID &amp; Secret here and save.</li><li>Click Log in each trading morning.</li>`);
+  $("#pref").value = d.broker_pref;
+  $("#fiiIn").value = d.fii_manual ? d.fii_manual.value : "";
+}
+document.addEventListener("click", async e => {
+  const c = e.target.closest("[data-copy]");
+  if (c) { const i = document.getElementById(c.dataset.copy); i.select(); navigator.clipboard?.writeText(i.value); toast("Copied"); }
+  const s = e.target.closest("[data-save]");
+  if (s) {
+    const n = s.dataset.save;
+    try { await post("/api/settings", {broker: n, id: $("#" + n + "Id").value, secret: $("#" + n + "Sec").value}); toast("Saved. Now click Log in."); loadSettings(); }
+    catch (err) { toast(err.message); }
+  }
+  const d = e.target.closest("[data-disc]");
+  if (d) { await post("/api/settings", {broker: d.dataset.disc, disconnect: true}); toast("Disconnected"); loadSettings(); }
+});
+$("#pref").onchange = async () => { await post("/api/settings", {broker_pref: $("#pref").value}); toast("Saved"); };
+$("#fiiSave").onclick = async () => { await post("/api/settings", {fii_manual: $("#fiiIn").value}); toast("Saved"); };
+$("#resetBtn").onclick = async () => {
+  if (!confirm("Reset the demo account? This deletes all positions and the trade journal.")) return;
+  try { const r = await post("/api/account/reset", {capital: +$("#capIn").value}); toast(r.message); } catch (e) { toast(e.message); }
+};
+$("#logout").onclick = async () => { await post("/api/logout"); location.reload(); };
+
+/* ---------- rulebook ---------- */
+function renderRules() {
+  const r = S.meta.rules, pct = v => Math.round(v * 100) + "%";
+  $("#rulebook").innerHTML = `
+  <h3 style="font-size:18px">The rulebook – “ORB-VWAP Trend Breakout with Market-Bias Filter”</h3>
+  <p><b>Why this strategy:</b> opening-range breakouts confirmed by VWAP and trend are among the most widely taught and tested intraday methods for Nifty/Bank Nifty options. On their own they give many false breakouts, so this version adds a <b>market-bias filter</b>: it only trades when global markets, India VIX, option-chain OI, news and FII flows lean the same way. Nothing is discretionary - if the checklist isn't fully green, you don't trade.</p>
+  <h4>Before 9:30 – build the bias</h4>
+  <div class="tablewrap"><table><tr><th>Factor</th><th>+1 (bullish)</th><th>−1 (bearish)</th></tr>
+  <tr><td>Global markets (US close, US futures, Asia)</td><td>avg &gt; +0.4%</td><td>avg &lt; −0.4%</td></tr>
+  <tr><td>Opening gap vs yesterday</td><td>&gt; +0.25%</td><td>&lt; −0.25%</td></tr>
+  <tr><td>India VIX change</td><td>falls &gt; 5%</td><td>rises &gt; 5%</td></tr>
+  <tr><td>Put-Call Ratio (OI)</td><td>&gt; 1.2</td><td>&lt; 0.7</td></tr>
+  <tr><td>News headline sentiment</td><td>≥ +3</td><td>≤ −3</td></tr>
+  <tr><td>FII cash flow (previous day)</td><td>&gt; +₹1,000 cr</td><td>&lt; −₹1,000 cr</td></tr>
+  <tr><td>Price vs VWAP</td><td>above</td><td>below</td></tr>
+  <tr><td>EMA 9/21 + Supertrend</td><td>both up</td><td>both down</td></tr></table></div>
+  <h4>Entry (9:30 – 14:30), on a closed 5-minute candle</h4>
+  <ul><li><b>BUY CALL:</b> close above the 9:15–9:30 high, above VWAP, EMA9 &gt; EMA21, Supertrend up, score ≥ <b>+${r.MIN_BIAS_SCORE}</b>, VIX not spiking.</li>
+  <li><b>BUY PUT:</b> close below the 9:15–9:30 low, below VWAP, EMA9 &lt; EMA21, Supertrend down, score ≤ <b>−${r.MIN_BIAS_SCORE}</b>.</li>
+  <li><b>Skip the day</b> if the opening range is under ${r.ORB_MIN_PCT}% (dead) or over ${r.ORB_MAX_PCT}% (chaotic).</li></ul>
+  <h4>What to buy</h4>
+  <ul><li>India VIX ≤ ${r.VIX_SPREAD_LEVEL}: buy the <b>ATM option</b>.</li>
+  <li>India VIX &gt; ${r.VIX_SPREAD_LEVEL}: buy a <b>debit spread</b> (buy ATM, sell ${r.SPREAD_WIDTH_STRIKES} strikes OTM) - cheaper and less hurt by falling IV.</li>
+  <li>Expiry: Nifty - nearest weekly (Tuesday), never on expiry day itself. Bank Nifty &amp; stocks - current month, rolled 3 days before expiry.</li></ul>
+  <h4>Exit – decided before you enter</h4>
+  <ul><li><b>Stop-loss:</b> underlying back to the opening-range midpoint (kept between 0.5 and 1.5 × ATR). The option is never allowed to lose more than ${pct(r.PREMIUM_HARD_SL)}.</li>
+  <li><b>Target:</b> ${r.RR_TARGET} × risk. At +1R the stop moves to entry (free trade).</li>
+  <li><b>Time stop:</b> no +0.5R within ${r.TIME_STOP_MIN} minutes → exit (options lose time value).</li>
+  <li><b>Square off by 15:15.</b> No overnight positions. The server checks open trades every minute, even when this page is closed.</li></ul>
+  <h4>Risk – the part that keeps you in the game</h4>
+  <ul><li>Risk <b>${pct(r.RISK_PER_TRADE)} of capital per trade</b>. Lots are calculated for you.</li>
+  <li>Max <b>${r.MAX_TRADES_PER_DAY} trades a day</b>; stop after a <b>${pct(r.MAX_DAILY_LOSS)} daily loss</b> or two losers.</li>
+  <li>On RBI policy, Union Budget or election-result days: skip, or trade half size.</li></ul>
+  <h4>About “accuracy” – read this</h4>
+  <ul><li>No public strategy, from any YouTuber or institution, wins 80–90% of the time over the long run. Those numbers come from cherry-picked screenshots, tiny samples or option <i>selling</i> with hidden blow-up risk.</li>
+  <li>A realistic win rate for this kind of breakout system is <b>roughly 40–55%</b>. It can still make money because winners (≈2R) are bigger than losers (≈1R). At 40% wins: 0.4×2 − 0.6×1 = <b>+0.2R per trade</b> before costs.</li>
+  <li>Charges, slippage and discipline decide whether that edge survives. The <b>Backtest</b> tab and your <b>paper journal</b> show the real number - trust those, not promises.</li>
+  <li>Move to real money only after <b>30+ paper trades</b> with profit factor &gt; 1.3, and start with 1 lot.</li></ul>`;
+}
+
+start();
+</script>
+</body>
+</html>
