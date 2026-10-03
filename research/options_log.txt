@@ -1,0 +1,14 @@
+bhavcopy: 533342 rows, 740 days, fails 0
+live contracts to fetch: 952 {'BANKNIFTY': ['2026-10-27', '2026-11-23', '2026-12-29', '2027-03-30', '2027-06-29'], 'NIFTY': ['2026-10-06', '2026-10-13', '2026-10-19', '2026-10-27', '2026-11-03']}
+contracts done 0 rows 0
+contracts done 100 rows 6197
+contracts done 200 rows 108567
+contracts done 300 rows 167933
+contracts done 400 rows 208557
+contracts done 500 rows 264570
+contracts done 600 rows 348883
+contracts done 700 rows 432224
+contracts done 800 rows 462499
+contracts done 900 rows 529920
+live option candles: 553551 rows, 2026-05-05 12:00:00 -> 2026-10-01 15:35:00
+expired-instruments API without login: 401 {"status":"error","errors":[{"errorCode":"UDAPI100050","message":"Invalid token used to access API","propertyPath":null,"invalidValue":null,"error_cod
