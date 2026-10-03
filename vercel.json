@@ -7,5 +7,6 @@
     "app.py": {
       "maxDuration": 120
     }
-  }
+  },
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)research' ':(exclude).github'"
 }

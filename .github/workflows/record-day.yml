@@ -1,0 +1,42 @@
+name: record-market-day
+# Saves each trading day's 1-minute option data, NSE end-of-day files and the app's
+# option-chain snapshots into the research-data branch (research/data/live/<date>/).
+# Scheduled workflows only run from the default branch, so this file lives on main
+# and checks out research-data to write the data there.
+on:
+  schedule:
+    - cron: "40 13 * * 1-5"   # 19:10 IST, after NSE publishes its end-of-day files
+    - cron: "20 3 * * 2-6"    # 08:50 IST next morning, picks up anything that was late
+  workflow_dispatch:
+    inputs:
+      dates:
+        description: "Dates to record (YYYY-MM-DD, space separated). Empty = catch up on the last 7 days"
+        required: false
+        default: ""
+permissions:
+  contents: write
+concurrency:
+  group: record-market-day
+  cancel-in-progress: false
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research-data
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas requests
+      - run: python research/record_day.py ${{ github.event.inputs.dates }}
+      - name: commit data
+        if: always()
+        run: |
+          git config user.name "fno-data-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/data/live || true
+          git commit -m "market data $(date -u +%F) [skip ci]" || echo "nothing to commit"
+          git pull --rebase -q origin research-data || true
+          git push origin HEAD:research-data
