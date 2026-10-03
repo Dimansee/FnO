@@ -124,6 +124,7 @@ def record_candles(d: date, out: str, man: dict):
             log("  ", i, "rows", len(rows))
     df = pd.DataFrame(rows, columns=["ts", "sym", "kind", "expiry", "strike", "open", "high", "low", "close", "volume", "oi"])
     df["ts"] = df["ts"].str[:19]
+    df = df.sort_values(["sym", "kind", "expiry", "strike", "ts"], na_position="first")
     df.to_csv(f"{out}/candles_1m.csv.gz", index=False, compression="gzip")
     man["candles"] = {"rows": len(df), "instruments": int(df.groupby(["sym", "kind", "expiry", "strike"], dropna=False).ngroups),
                       "options_without_data": empty}
