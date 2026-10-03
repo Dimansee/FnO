@@ -2,33 +2,20 @@
 import os, sys
 from datetime import date, datetime, timedelta
 
-os.environ.update(APP_PASSWORD="pw", SESSION_SECRET="s", CRON_SECRET="c", SUPABASE_URL="x", SUPABASE_KEY="k", DB_SECRET="d")
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.dirname(__file__))
+import upstash_shim  # noqa: E402  local stand-in for Upstash Redis
+_url, _tok = upstash_shim.start()
+os.environ.update(APP_PASSWORD="pw", SESSION_SECRET="s", CRON_SECRET="c", KV_REST_API_URL=_url, KV_REST_API_TOKEN=_tok)
 
 import numpy as np
 import pandas as pd
 
 from fno import config as C, store, market as M, context as X, brokers as B, strategy as S
 
-# ---------- in-memory store ----------
-DB = {"settings": {}, "pos": {}, "trades": {}}
-store.get = lambda k, d=None: DB["settings"].get(k, d)
-store.get_many = lambda ks: {k: DB["settings"][k] for k in ks if k in DB["settings"]}
-store.put = lambda k, v: DB["settings"].__setitem__(k, v)
-store.delete_setting = lambda k: DB["settings"].pop(k, None)
-store.positions = lambda: [dict(v) for v in DB["pos"].values()]
-store.insert_position = lambda p: DB["pos"].__setitem__(p["id"], p)
-store.update_position = lambda p: DB["pos"].__setitem__(p["id"], p)
-store.take_position = lambda i: DB["pos"].pop(i, None)
-store.clear_positions = lambda: DB["pos"].clear()
-store.trades = lambda: list(DB["trades"].values())
-store.insert_trade = lambda r: DB["trades"].__setitem__(r["id"], r)
-store.clear_trades = lambda: DB["trades"].clear()
-store.ping = lambda: True
-
 # ---------- synthetic market ----------
 rng = np.random.default_rng(5)
-NOW = [datetime.combine(C.today_ist(), datetime.min.time().replace(hour=11, minute=2), tzinfo=C.IST)]
+NOW = [datetime(2026, 10, 1, 11, 2, tzinfo=C.IST)]  # a Thursday, mid-session
 C.now_ist = lambda: NOW[0]
 C.today_ist = lambda: NOW[0].date()
 
@@ -117,9 +104,9 @@ print("upstox login ->", r.status_code, r.headers["Location"][:90])
 r = c.get("/api/upstox/callback?code=x&state=WRONG")
 print("bad state ->", r.headers["Location"])
 B.upstox_exchange = lambda *a: "TOKEN123"
-st = DB["settings"]["upstox"]["state"]
+st = store.get("upstox")["state"]
 r = c.get(f"/api/upstox/callback?code=x&state={st}")
-print("good callback ->", r.headers["Location"], DB["settings"]["upstox"].get("token"))
+print("good callback ->", r.headers["Location"], store.get("upstox").get("token"))
 
 # with a 'live' (fake) Upstox broker
 class FakeUp(B.Upstox):
@@ -147,4 +134,14 @@ print("live portfolio:", [(x["legs"][0]["src"], x["current_prem"]) for x in p["p
 bt = j(c.post("/api/backtest", json={"symbol": "NIFTY", "min_score": 2, "capital": 200000}))
 print("backtest keys", list(bt.keys()), bt.get("summary", {}).get("trades"))
 print("reset", j(c.post("/api/account/reset", json={"capital": 300000})))
+
+# ---------- Redis store edge cases ----------
+store.insert_position({"id": "race1", "symbol": "NIFTY", "opened": "2026-10-02T10:00:00+05:30"})
+first = store.take_position("race1")
+second = store.take_position("race1")
+assert first and first["id"] == "race1" and second is None, "double close must be impossible"
+store.update_position({"id": "race1", "symbol": "NIFTY", "opened": "x"})
+assert all(p["id"] != "race1" for p in store.positions()), "update must not resurrect a closed position"
+assert store.ping()
+print("redis edge cases OK; positions", len(store.positions()), "trades", len(store.trades()))
 print("ALL OK")

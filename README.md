@@ -1,7 +1,8 @@
 # F&O Trainer – web version
 
 Live at https://fno-trainer.vercel.app (Vercel project "fno-trainer", region Mumbai).
-Data lives in Supabase project "fno-trainer" (tables fno_settings, fno_positions, fno_trades).
+Data lives in Upstash Redis (free tier, added via Vercel Storage): hashes fno:settings,
+fno:positions and fno:trades.
 
 ## Structure
 - app.py                – Flask web app / API (Vercel entrypoint)
@@ -14,15 +15,18 @@ Data lives in Supabase project "fno-trainer" (tables fno_settings, fno_positions
 - fno/service.py        – glue between the above
 - fno/backtest.py       – backtester
 - fno/context.py        – global markets, news, FII/DII
-- fno/store.py          – Supabase storage
-- tests/test_app.py     – offline test (python tests/test_app.py)
+- fno/store.py          – Upstash Redis storage (REST API)
+- fno/scheduler.py      – registers the every-minute QStash schedule
+- tests/test_app.py     – offline test (python tests/test_app.py; needs `pip install "fakeredis[lua]"`)
 
 ## Vercel environment variables (already set)
-SUPABASE_URL, SUPABASE_KEY, DB_SECRET, SESSION_SECRET, CRON_SECRET, APP_PASSWORD
+APP_PASSWORD, SESSION_SECRET, CRON_SECRET (set by hand)
+KV_REST_API_URL, KV_REST_API_TOKEN (added by the Upstash Redis integration)
+QSTASH_TOKEN, QSTASH_URL (added by the Upstash QStash integration)
 
 ## Scheduler
-Supabase pg_cron job "fno-tick" calls /api/tick every minute on weekdays;
-the app only acts between 09:15 and 15:30 IST.
+Upstash QStash schedule "fno-tick" calls /api/tick every minute on weekdays
+(registered automatically by the app); the app only acts 09:15-15:30 IST.
 
 ## Deploying changes
 This repo is connected to the Vercel project: every push to `main` deploys automatically.

@@ -14,6 +14,7 @@ from flask import Flask, Response, jsonify, redirect, request
 from fno import brokers as B
 from fno import config as C
 from fno import service as SV
+from fno import scheduler
 from fno import store
 
 app = Flask(__name__)
@@ -84,7 +85,8 @@ def logout():
 @app.get("/api/health")
 def health():
     out = {"ok": True, "db": store.ping(), "time_ist": C.now_ist().isoformat(timespec="seconds"),
-           "configured": bool(C.APP_PASSWORD and C.SESSION_SECRET and C.SUPABASE_URL)}
+           "configured": bool(C.APP_PASSWORD and C.SESSION_SECRET and C.REDIS_URL),
+           "scheduler_connected": bool(C.QSTASH_TOKEN)}
     if request.args.get("deep") == "1":  # data-source reachability only (counts, no data)
         from fno import market as M
         checks = {
@@ -94,6 +96,7 @@ def health():
             "news_items": lambda: len(SV.news("NIFTY")["items"]),
             "fii_auto": lambda: bool(M.cached("fii", 3600, __import__("fno.context").context.fii_dii)),
             "lot_master": lambda: M.master().get("lots", {}),
+            "scheduler": lambda: scheduler.ensure(request.host),
         }
         for k, fn in checks.items():
             try:
@@ -124,6 +127,10 @@ def meta():
 
 @app.get("/api/dashboard")
 def dashboard():
+    try:
+        scheduler.ensure(request.host)  # no-op once registered
+    except Exception:
+        traceback.print_exc()
     return jsonify(SV.dashboard(_sym()))
 
 
@@ -270,7 +277,7 @@ def broker_callback(name):
 
 
 # ---------------------------------------------------------------------------
-# Scheduler hook (called every minute by Supabase pg_cron during market hours)
+# Scheduler hook (called every minute by Upstash QStash during market hours)
 # ---------------------------------------------------------------------------
 @app.route("/api/tick", methods=["GET", "POST"])
 def tick():

@@ -1,6 +1,13 @@
-"""Supabase storage (PostgREST). Every request carries a secret header; the
-database's row-level-security policies reject anything without it, so the
-public anon key alone can't read or write this data."""
+"""Storage on Upstash Redis (free tier) through its REST API - no driver needed.
+
+Layout (all keys prefixed "fno:"):
+  fno:settings   hash  name -> JSON   (account, broker keys/tokens, preferences)
+  fno:positions  hash  id   -> JSON   (open paper positions)
+  fno:trades     hash  id   -> JSON   (closed trades / journal)
+
+The Redis credentials are only ever used on the server (Vercel env vars), never
+sent to the browser.
+"""
 from __future__ import annotations
 
 import json
@@ -9,104 +16,100 @@ import requests
 
 from . import config as C
 
+SETTINGS, POSITIONS, TRADES = "fno:settings", "fno:positions", "fno:trades"
 _s = requests.Session()
 
-
-def _h(extra=None):
-    h = {
-        "apikey": C.SUPABASE_KEY,
-        "Authorization": f"Bearer {C.SUPABASE_KEY}",
-        "x-app-secret": C.DB_SECRET,
-        "Content-Type": "application/json",
-    }
-    if extra:
-        h.update(extra)
-    return h
+# Lua scripts so concurrent requests (the page + the every-minute scheduler)
+# can never resurrect or double-close a position.
+_UPDATE_IF_EXISTS = ("if redis.call('HEXISTS', KEYS[1], ARGV[1]) == 1 then "
+                     "return redis.call('HSET', KEYS[1], ARGV[1], ARGV[2]) end return -1")
+_TAKE = ("local v = redis.call('HGET', KEYS[1], ARGV[1]) "
+         "if v then redis.call('HDEL', KEYS[1], ARGV[1]) end return v")
 
 
-def _url(table):
-    return f"{C.SUPABASE_URL}/rest/v1/{table}"
-
-
-def _check(r):
-    if r.status_code >= 400:
+def _cmd(*args):
+    if not C.REDIS_URL or not C.REDIS_TOKEN:
+        raise RuntimeError("Database not connected - add Upstash Redis to the Vercel project.")
+    r = _s.post(C.REDIS_URL, data=json.dumps([str(a) for a in args]),
+                headers={"Authorization": f"Bearer {C.REDIS_TOKEN}"}, timeout=10)
+    try:
+        j = r.json()
+    except Exception:
         raise RuntimeError(f"Database error {r.status_code}: {r.text[:200]}")
-    return r
+    if r.status_code >= 400 or "error" in j:
+        raise RuntimeError(f"Database error: {j.get('error') or r.status_code}")
+    return j.get("result")
 
 
-# ---------------- settings (key -> json) ----------------
+def _dump(v):
+    return json.dumps(v, default=str, separators=(",", ":"))
+
+
+def _load_all(key, sort_field):
+    raw = _cmd("HVALS", key) or []
+    rows = [json.loads(x) for x in raw]
+    return sorted(rows, key=lambda d: d.get(sort_field) or "")
+
+
+# ---------------- settings (name -> json) ----------------
 def get(key, default=None):
-    r = _check(_s.get(_url("fno_settings"), params={"key": f"eq.{key}", "select": "value"}, headers=_h(), timeout=10))
-    rows = r.json()
-    return rows[0]["value"] if rows else default
+    v = _cmd("HGET", SETTINGS, key)
+    return json.loads(v) if v is not None else default
 
 
 def get_many(keys) -> dict:
-    r = _check(_s.get(_url("fno_settings"), params={"key": f"in.({','.join(keys)})", "select": "key,value"},
-                      headers=_h(), timeout=10))
-    return {row["key"]: row["value"] for row in r.json()}
+    keys = list(keys)
+    vals = _cmd("HMGET", SETTINGS, *keys) or []
+    return {k: json.loads(v) for k, v in zip(keys, vals) if v is not None}
 
 
 def put(key, value):
-    _check(_s.post(_url("fno_settings"), params={"on_conflict": "key"},
-                   data=json.dumps({"key": key, "value": value, "updated_at": "now()"}, default=str),
-                   headers=_h({"Prefer": "resolution=merge-duplicates,return=minimal"}), timeout=10))
+    _cmd("HSET", SETTINGS, key, _dump(value))
 
 
 def delete_setting(key):
-    _check(_s.delete(_url("fno_settings"), params={"key": f"eq.{key}"}, headers=_h(), timeout=10))
+    _cmd("HDEL", SETTINGS, key)
 
 
 # ---------------- positions ----------------
 def positions() -> list[dict]:
-    r = _check(_s.get(_url("fno_positions"), params={"select": "data", "order": "opened_at.asc"}, headers=_h(), timeout=10))
-    return [row["data"] for row in r.json()]
+    return _load_all(POSITIONS, "opened")
 
 
 def insert_position(pos: dict):
-    _check(_s.post(_url("fno_positions"),
-                   data=json.dumps({"id": pos["id"], "symbol": pos["symbol"], "opened_at": pos["opened"], "data": pos},
-                                   default=str),
-                   headers=_h({"Prefer": "return=minimal"}), timeout=10))
+    _cmd("HSET", POSITIONS, pos["id"], _dump(pos))
 
 
 def update_position(pos: dict):
-    _check(_s.patch(_url("fno_positions"), params={"id": f"eq.{pos['id']}"},
-                    data=json.dumps({"data": pos}, default=str), headers=_h({"Prefer": "return=minimal"}), timeout=10))
+    """Update only if the position is still open (never re-creates a closed one)."""
+    _cmd("EVAL", _UPDATE_IF_EXISTS, 1, POSITIONS, pos["id"], _dump(pos))
 
 
 def take_position(pos_id) -> dict | None:
-    """Atomically delete and return a position (only one closer can win)."""
-    r = _check(_s.delete(_url("fno_positions"), params={"id": f"eq.{pos_id}"},
-                         headers=_h({"Prefer": "return=representation"}), timeout=10))
-    rows = r.json()
-    return rows[0]["data"] if rows else None
+    """Atomically remove and return a position (only one closer can win)."""
+    v = _cmd("EVAL", _TAKE, 1, POSITIONS, pos_id)
+    return json.loads(v) if v else None
 
 
 def clear_positions():
-    _check(_s.delete(_url("fno_positions"), params={"id": "neq.__none__"}, headers=_h(), timeout=10))
+    _cmd("DEL", POSITIONS)
 
 
 # ---------------- trades ----------------
 def trades() -> list[dict]:
-    r = _check(_s.get(_url("fno_trades"), params={"select": "data", "order": "closed_at.asc"}, headers=_h(), timeout=10))
-    return [row["data"] for row in r.json()]
+    return _load_all(TRADES, "closed")
 
 
 def insert_trade(rec: dict):
-    _check(_s.post(_url("fno_trades"),
-                   data=json.dumps({"id": rec["id"], "symbol": rec["symbol"], "opened_at": rec["opened"],
-                                    "closed_at": rec["closed"], "pnl": rec["pnl"], "data": rec}, default=str),
-                   headers=_h({"Prefer": "return=minimal"}), timeout=10))
+    _cmd("HSET", TRADES, rec["id"], _dump(rec))
 
 
 def clear_trades():
-    _check(_s.delete(_url("fno_trades"), params={"id": "neq.__none__"}, headers=_h(), timeout=10))
+    _cmd("DEL", TRADES)
 
 
 def ping() -> bool:
     try:
-        get("ping")
-        return True
+        return _cmd("PING") in ("PONG", True)
     except Exception:
         return False

@@ -22,9 +22,14 @@ def today_ist():
 # ---------------------------------------------------------------------------
 # Environment (set in Vercel project settings)
 # ---------------------------------------------------------------------------
-SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
-DB_SECRET = os.environ.get("DB_SECRET", "")
+# Upstash Redis (added via Vercel Storage / Marketplace - either name set works)
+REDIS_URL = os.environ.get("KV_REST_API_URL") or os.environ.get("UPSTASH_REDIS_REST_URL", "")
+REDIS_TOKEN = os.environ.get("KV_REST_API_TOKEN") or os.environ.get("UPSTASH_REDIS_REST_TOKEN", "")
+# Upstash QStash - calls /api/tick every minute in market hours
+QSTASH_URL = (os.environ.get("QSTASH_URL") or "https://qstash.upstash.io").rstrip("/")
+QSTASH_TOKEN = os.environ.get("QSTASH_TOKEN", "")
+TICK_CRON = "* 3-10 * * 1-5"   # UTC = 08:30-16:29 IST, Mon-Fri (~480 calls/day, free limit 1,000)
+PRODUCTION_HOST = os.environ.get("VERCEL_PROJECT_PRODUCTION_URL", "")
 APP_PASSWORD = os.environ.get("APP_PASSWORD", "")
 SESSION_SECRET = os.environ.get("SESSION_SECRET", "")
 CRON_SECRET = os.environ.get("CRON_SECRET", "")
