@@ -453,6 +453,10 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
         <p class="muted" style="font-size:12px;margin-bottom:0">The server checks every minute in market hours. Auto trades follow exactly the same rules and exits, so your journal builds a real paper track record.</p>
         <button class="primary" id="pfSave" style="margin-top:10px">Save preferences</button>
       </div>
+      <div class="card" id="recCard">
+        <h3>Market recorder</h3>
+        <div id="recBody" class="muted">Loading…</div>
+      </div>
       <div class="card">
         <h3>Demo account</h3>
         <label>Reset with new starting capital (₹) - clears all positions and the journal</label>
@@ -1397,6 +1401,22 @@ async function loadSettings() {
   $("#pfAuto").checked = !!pf.auto;
   $("#pfSyms").innerHTML = ["NIFTY", "BANKNIFTY"].map(x => `<label class="tog" style="margin-right:14px"><input type="checkbox" data-asym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${x === "NIFTY" ? "Nifty 50" : "Bank Nifty"}</label>`).join("");
   $("#fiiIn").value = d.fii_manual ? d.fii_manual.value : "";
+  loadRecorder();
+}
+async function loadRecorder() {
+  let r;
+  try { r = await api("/api/recorder/status"); } catch (e) { $("#recBody").textContent = "Recorder status unavailable."; return; }
+  const days = r.days || [];
+  const when = r.last_ok ? new Date(r.last_ok).toLocaleString("en-IN", {timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit"}) : null;
+  $("#recBody").innerHTML = `
+    <p style="margin-top:0">Saves the Nifty and Bank Nifty option chain every ${r.every_min} minutes in market hours (price, bid/ask, open interest, volume and IV for ${r.strikes_each_side} strikes each side, nearest two expiries). Every evening a free GitHub job also keeps 1-minute candles with open interest for every nearby strike, plus NSE's end-of-day and FII/DII/Pro/Client position files. This is the data free history doesn't keep, so after a few weeks we can study it for patterns.</p>
+    <div class="formrow">
+      <div>${kpi("Days recorded", days.length, days.length ? days[0].date + " → " + days[days.length - 1].date : "starts next trading day", "muted")}</div>
+      <div>${kpi("Last snapshot", when || "–", r.src && r.src.length ? "source: " + r.src.join(", ").replace("nse", "NSE public chain") : "", "muted")}</div>
+    </div>
+    ${(r.errors || []).length ? `<p class="down" style="font-size:12px">Last attempt: ${esc(r.errors.join(" · "))}</p>` : ""}
+    ${days.length ? `<div class="tablewrap" style="margin-top:8px"><table><tr><th>Day</th><th>Snapshots</th></tr>${days.slice(-10).reverse().map(x => `<tr><td>${x.date}</td><td>${x.snapshots}</td></tr>`).join("")}</table></div>` : ""}
+    <p class="muted" style="font-size:12px;margin-bottom:0">Runs on the server even when this page is closed. The app keeps ${r.keep_days} days; the nightly job keeps a permanent copy in the research branch.</p>`;
 }
 document.addEventListener("click", async e => {
   const c = e.target.closest("[data-copy]");
