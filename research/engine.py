@@ -92,6 +92,9 @@ class Day:
     l: list
     c: list
     vwap: list
+    e5: list
+    s44: list
+    e20: list
     e9: list
     e21: list
     st: list           # supertrend 10,3 (+1/-1)
@@ -111,6 +114,7 @@ class Day:
     vix_chg: float
     expiry: date = None
     idx: dict = field(default_factory=dict)
+    b15: list = field(default_factory=list)   # completed 15m bars: (i5_close_index, o, h, l, c, e5, e20, s44, rsi)
 
 
 def load_days(sym: str) -> list[Day]:
@@ -129,6 +133,10 @@ def load_days(sym: str) -> list[Day]:
     st15 = I.supertrend(d15)
     st15.index = st15.index + pd.Timedelta(minutes=10)       # value known at the close of the 3rd 5m bar
     df["st15"] = st15.reindex(df.index).ffill().fillna(1)
+    d15["e5"], d15["e20"], d15["s44"], d15["rsi"] = I.ema(d15["close"], 5), I.ema(d15["close"], 20), \
+        d15["close"].rolling(44).mean(), _rsi(d15["close"])
+    d15["bar_end"] = d15.index + pd.Timedelta(minutes=15)
+    df["e5"], df["s44"], df["e20"] = I.ema(df["close"], 5), df["close"].rolling(44).mean(), I.ema(df["close"], 20)
     df["vix"] = vix.ffill().fillna(14)
     # noise-area sigma by time-of-day (Zarattini et al. "Beat the Market")
     day = df.index.date
@@ -169,11 +177,17 @@ def load_days(sym: str) -> list[Day]:
         srow = sig.loc[d] if d in sig.index else None
         sg = [float(srow.get(t, np.nan)) if srow is not None else np.nan for t in x["tod"]]
         dd = Day(d=d, t=list(x["tod"]), o=list(x["open"]), h=list(x["high"]), l=list(x["low"]), c=list(x["close"]),
-                 vwap=list(x["vwap"]), e9=list(x["e9"]), e21=list(x["e21"]), st=list(x["st"]), st15=list(x["st15"]),
+                 vwap=list(x["vwap"]), e5=list(x["e5"]), s44=list(x["s44"]), e20=list(x["e20"]), e9=list(x["e9"]), e21=list(x["e21"]), st=list(x["st"]), st15=list(x["st15"]),
                  atr=list(x["atr"]), adx=list(x["adx"]), rsi=list(x["rsi"]), vix=list(x["vix"]), sig=sg,
                  prev_close=pc, prev_high=ph, prev_low=pl, cpr_w=abs(tc - bc) / pc * 100, pivot=pv, ctx=ctx,
                  gap=gap, vix_chg=vcl, expiry=expiry_for(d, meta["kind"]))
         dd.idx = {t: i for i, t in enumerate(dd.t)}
+        q = d15[d15.index.date == d]
+        for ts, r in q.iterrows():
+            end = r["bar_end"]
+            i5 = dd.idx.get(end.hour * 60 + end.minute - 5)
+            if i5 is not None:
+                dd.b15.append((i5, r["open"], r["high"], r["low"], r["close"], r["e5"], r["e20"], r["s44"], r["rsi"]))
         days.append(dd)
         prev = x
     return days
@@ -199,11 +213,12 @@ class Sig:
     be_r: float = 1.0      # move stop to entry after this many R (0 = never)
     time_stop: int = 0     # minutes; exit if +0.5R not reached (0 = off)
     tag: str = ""
+    px: float | None = None  # entry price if it is a stop-order fill inside the bar (default: bar close)
 
 
 def simulate(d: Day, s: Sig, meta, p, upper=None, lower=None):
     """Walk forward from the entry bar. Returns (exit_index, exit_spot, reason)."""
-    side, entry = s.side, d.c[s.i]
+    side, entry = s.side, (s.px if s.px is not None else d.c[s.i])
     risk = abs(entry - s.stop)
     stop, reached = s.stop, False
     n = len(d.t)
@@ -244,7 +259,7 @@ def simulate(d: Day, s: Sig, meta, p, upper=None, lower=None):
 
 
 def trade_pnl(d: Day, s: Sig, k_exit, px_exit, meta, p, capital=CAPITAL):
-    side, entry = s.side, d.c[s.i]
+    side, entry = s.side, (s.px if s.px is not None else d.c[s.i])
     opt = "CE" if side > 0 else "PE"
     m_in, m_out = d.t[s.i] + 5, d.t[k_exit] + 5
     iv_in = max(d.vix[s.i] / 100 * meta["iv_mult"], 0.06)
@@ -256,14 +271,19 @@ def trade_pnl(d: Day, s: Sig, k_exit, px_exit, meta, p, capital=CAPITAL):
     risk_unit = max(prem_in - prem_stop, prem_in * 0.05)
     lot = meta["lot"]
     budget = capital * RISK
-    lots = int(budget // (risk_unit * lot))
-    if lots == 0 and risk_unit * lot <= 1.5 * budget:
+    if p.get("one_lot"):                     # small accounts: always 1 lot if the premium fits in the cash
+        if prem_in * lot > capital:
+            return None
         lots = 1
-    if lots == 0:
-        return None
-    lots = min(lots, int(capital * 0.6 // (prem_in * lot)) or 0)   # cannot spend more than 60% of capital
-    if lots == 0:
-        return None
+    else:
+        lots = int(budget // (risk_unit * lot))
+        if lots == 0 and risk_unit * lot <= 1.5 * budget:
+            lots = 1
+        if lots == 0:
+            return None
+        lots = min(lots, int(capital * 0.6 // (prem_in * lot)) or 0)   # cannot spend more than 60% of capital
+        if lots == 0:
+            return None
     prem_out = opt_price(px_exit, k, d, m_out, iv_out, opt) * (1 - SLIP)
     qty = lots * lot
     pnl = (prem_out - prem_in) * qty - I.charges(prem_in, prem_out, qty)
@@ -509,7 +529,227 @@ def s_gap(d: Day, j, p, st):
     return Sig(i, side, stop, tgt, p.get("trail", ""), p.get("be", 0), p.get("tstop", 0), "gap")
 
 
-STRATS = {"orb": s_orb, "orb_candle": s_orb_candle, "noise": s_noise, "vwap_pull": s_vwap_pull,
+# ---------------------------------------------------------------- popular Indian creator setups
+def _sig(d, i, side, entry, stop, p, tag, px=None):
+    stop = _risk_clip(d, i, entry, stop, side, p)
+    r = abs(entry - stop)
+    tgt = entry + side * p["rr"] * r if p.get("rr") else None
+    return Sig(i, side, stop, tgt, p.get("trail", ""), p.get("be", 0), p.get("tstop", 0), tag, px)
+
+
+def _window_ok(d, i, p):
+    t = d.t[i] + 5
+    if t > p.get("last_entry", 870) or t < p.get("first_entry", 0):
+        return False
+    if p.get("skip_mid") and 11 * 60 <= t < 13 * 60 + 30:     # 5-EMA folklore: avoid the midday lull
+        return False
+    return True
+
+
+def s_ema5(d: Day, j, p, st):
+    """Power of Stocks '5 EMA': alert candle completely away from the 5 EMA; enter when a later candle breaks it.
+    Official: sell on the 5-min chart, buy on the 15-min chart. Stop = alert candle's other extreme."""
+    sides = p.get("sides", "both")
+    alert_s = alert_l = None                      # (index, high, low)
+    b15 = {x[0]: x for x in d.b15}
+    for i in range(max(j, 1), len(d.t)):
+        # ---- short side on 5m
+        if sides in ("both", "short") and p.get("tf_s", 5) == 5:
+            if alert_s and d.l[i] < alert_s[2] and _window_ok(d, i, p) and _ctx_ok(d, -1, p):
+                px = min(alert_s[2], d.o[i])
+                return _sig(d, i, -1, px, alert_s[1], p, "ema5", px)
+            if d.l[i] > d.e5[i]:
+                alert_s = (i, d.h[i], d.l[i])
+            elif alert_s and i - alert_s[0] > p.get("valid", 1):
+                alert_s = None
+        # ---- long side on 15m (or 5m)
+        if sides in ("both", "long"):
+            if p.get("tf_l", 15) == 5:
+                if alert_l and d.h[i] > alert_l[1] and _window_ok(d, i, p) and _ctx_ok(d, 1, p):
+                    px = max(alert_l[1], d.o[i])
+                    return _sig(d, i, 1, px, alert_l[2], p, "ema5", px)
+                if d.h[i] < d.e5[i]:
+                    alert_l = (i, d.h[i], d.l[i])
+                elif alert_l and i - alert_l[0] > p.get("valid", 1):
+                    alert_l = None
+            else:
+                if alert_l and i > alert_l[0] and d.h[i] > alert_l[1] and _window_ok(d, i, p) and _ctx_ok(d, 1, p):
+                    px = max(alert_l[1], d.o[i])
+                    return _sig(d, i, 1, px, alert_l[2], p, "ema5", px)
+                if i in b15:
+                    _, o, h, l, c, e5, *_ = b15[i]
+                    if h < e5:
+                        alert_l = (i, h, l)
+                    elif alert_l and i - alert_l[0] > 3 * p.get("valid", 1):
+                        alert_l = None
+                elif alert_l and i - alert_l[0] > 3 * p.get("valid", 1):
+                    alert_l = None
+    return None
+
+
+def s_inside(d: Day, j, p, st):
+    """Inside-bar breakout (Bank Nifty creators): a 'mother' candle, then a candle inside it;
+    trade the break of the mother's high/low, stop at the mother's other side."""
+    tf = p.get("tf", 5)
+    bars = [(i, d.h[i], d.l[i], d.c[i]) for i in range(len(d.t))] if tf == 5 else [(x[0], x[2], x[3], x[4]) for x in d.b15]
+    for k in range(2, len(bars)):
+        i_in, h_in, l_in, _ = bars[k - 1]
+        i_m, h_m, l_m, _ = bars[k - 2]
+        if not (h_in <= h_m and l_in >= l_m) or (h_m - l_m) < p.get("min_mother_atr", 0.5) * d.atr[i_m]:
+            continue
+        # watch bars after the inside bar for a break (until the next pattern)
+        end = bars[k + 2][0] if k + 2 < len(bars) else len(d.t) - 1
+        for i in range(max(j, i_in + 1), end + 1):
+            if not _window_ok(d, i, p):
+                continue
+            for side, lvl, stp in ((1, h_m, l_m), (-1, l_m, h_m)):
+                hit = d.h[i] > lvl if side > 0 else d.l[i] < lvl
+                if not hit:
+                    continue
+                if p.get("vwap", 1) and side * (lvl - d.vwap[i]) <= 0:
+                    continue
+                if not _ctx_ok(d, side, p):
+                    continue
+                px = max(lvl, d.o[i]) if side > 0 else min(lvl, d.o[i])
+                return _sig(d, i, side, px, stp, p, "inside", px)
+    return None
+
+
+def s_ma44(d: Day, j, p, st):
+    """44-MA (Siddharth Bhanushali): MA rising, a candle dips to touch it and closes green above it;
+    buy above that candle's high, stop below its low, 1:2. Mirror for shorts."""
+    use15 = p.get("tf", 15) == 15
+    rows = [(x[0], x[1], x[2], x[3], x[4], x[7]) for x in d.b15] if use15 else \
+        [(i, d.o[i], d.h[i], d.l[i], d.c[i], d.s44[i]) for i in range(len(d.t))]
+    prev_ma = None
+    setup = None
+    for k, (i, o, h, l, c, ma) in enumerate(rows):
+        if setup and i > setup[0]:
+            # trigger window: the next few 5m bars
+            for ii in range(max(j, setup[0] + 1), min(len(d.t), setup[0] + 1 + p.get("valid_bars", 6))):
+                if not _window_ok(d, ii, p):
+                    continue
+                side, trig, stp = setup[1], setup[2], setup[3]
+                if (side > 0 and d.h[ii] > trig) or (side < 0 and d.l[ii] < trig):
+                    if _ctx_ok(d, side, p):
+                        px = max(trig, d.o[ii]) if side > 0 else min(trig, d.o[ii])
+                        return _sig(d, ii, side, px, stp, p, "ma44", px)
+            setup = None
+        if ma is None or math.isnan(ma) or prev_ma is None or math.isnan(prev_ma):
+            prev_ma = ma
+            continue
+        tol = p.get("tol", 0.001)
+        if ma > prev_ma and l <= ma * (1 + tol) and c > ma and c > o and i >= j:
+            setup = (i, 1, h, l)
+        elif p.get("shorts", 1) and ma < prev_ma and h >= ma * (1 - tol) and c < ma and c < o and i >= j:
+            setup = (i, -1, l, h)
+        prev_ma = ma
+    return None
+
+
+def s_rsi6040(d: Day, j, p, st):
+    """RSI 60/40 momentum (Vishal Malkan style, intraday): 15-min RSI sets the bias (>60 bull, <40 bear),
+    5-min RSI crossing 60 (or 40) triggers. Stop ATR-based; exit on target or RSI giving up."""
+    b15 = sorted(d.b15)
+    for i in range(max(j, 1), len(d.t)):
+        if not _window_ok(d, i, p):
+            continue
+        fr = [x for x in b15 if x[0] <= i]
+        if not fr:
+            continue
+        r15 = fr[-1][8]
+        hi, lo = p.get("hi", 60), 100 - p.get("hi", 60)
+        if d.rsi[i - 1] <= hi < d.rsi[i] and (not p.get("htf", 1) or r15 > hi - p.get("htf_slack", 0)):
+            side = 1
+        elif d.rsi[i - 1] >= lo > d.rsi[i] and (not p.get("htf", 1) or r15 < lo + p.get("htf_slack", 0)):
+            side = -1
+        else:
+            continue
+        if p.get("vwap", 1) and side * (d.c[i] - d.vwap[i]) <= 0:
+            continue
+        if not _ctx_ok(d, side, p):
+            continue
+        return _sig(d, i, side, d.c[i], d.c[i] - side * p.get("stop_atr", 1.5) * d.atr[i], p, "rsi6040")
+    return None
+
+
+def s_mtf(d: Day, j, p, st):
+    """Multi-timeframe price action (Booming Bulls style): 15-min chart gives the bias (close vs 20 EMA and
+    the 20 EMA sloping), 5-min chart triggers on a break of the last N-bar swing high/low."""
+    b15 = sorted(d.b15)
+    n = p.get("swing", 6)
+    for i in range(max(j, n + 1), len(d.t)):
+        if not _window_ok(d, i, p):
+            continue
+        fr = [x for x in b15 if x[0] <= i]
+        if len(fr) < 2:
+            continue
+        c15, e20, e20p = fr[-1][4], fr[-1][6], fr[-2][6]
+        bias = 1 if (c15 > e20 and e20 > e20p) else -1 if (c15 < e20 and e20 < e20p) else 0
+        if not bias:
+            continue
+        sh, sl_ = max(d.h[i - n:i]), min(d.l[i - n:i])
+        if bias > 0 and d.c[i] > sh:
+            side, stop = 1, sl_
+        elif bias < 0 and d.c[i] < sl_:
+            side, stop = -1, sh
+        else:
+            continue
+        if p.get("vwap", 1) and side * (d.c[i] - d.vwap[i]) <= 0:
+            continue
+        if not _ctx_ok(d, side, p):
+            continue
+        return _sig(d, i, side, d.c[i], stop, p, "mtf")
+    return None
+
+
+def s_fib(d: Day, j, p, st):
+    """Fibonacci pullback (Magicfibs style, mechanical version): after the first hour sets a clear swing,
+    buy the 50-61.8% retracement once a candle closes back in the trend direction; stop beyond 78.6%,
+    target the 1.272-1.618 extension of the swing."""
+    k = d.idx.get(p.get("swing_end", 615) - 5)        # end of the first-hour swing
+    if k is None or j > len(d.t) - 2:
+        return None
+    hi, lo = max(d.h[:k + 1]), min(d.l[:k + 1])
+    ih, il = d.h[:k + 1].index(hi), d.l[:k + 1].index(lo)
+    if (hi - lo) < p.get("min_swing_atr", 3) * d.atr[k]:
+        return None
+    side = 1 if ih > il else -1                     # swing up if the high came after the low
+    rng = hi - lo
+    z1, z2 = p.get("zone", (0.5, 0.618))
+    touched = False
+    for i in range(max(j, k + 1), len(d.t)):
+        if not _window_ok(d, i, p):
+            continue
+        if side > 0:
+            zt, zb, inval = hi - z1 * rng, hi - z2 * rng, hi - 0.786 * rng
+            if d.l[i] < inval:
+                return None
+            touched = touched or d.l[i] <= zt
+            if touched and d.c[i] > d.o[i] and d.c[i] > zb and _ctx_ok(d, 1, p):
+                tgt = lo + p.get("ext", 1.272) * rng
+                s = _sig(d, i, 1, d.c[i], inval, p, "fib")
+                s.target = tgt if tgt > d.c[i] else s.target
+                return s
+            if d.h[i] > hi:
+                return None
+        else:
+            zt, zb, inval = lo + z1 * rng, lo + z2 * rng, lo + 0.786 * rng
+            if d.h[i] > inval:
+                return None
+            touched = touched or d.h[i] >= zt
+            if touched and d.c[i] < d.o[i] and d.c[i] < zb and _ctx_ok(d, -1, p):
+                tgt = hi - p.get("ext", 1.272) * rng
+                s = _sig(d, i, -1, d.c[i], inval, p, "fib")
+                s.target = tgt if tgt < d.c[i] else s.target
+                return s
+            if d.l[i] < lo:
+                return None
+    return None
+
+
+STRATS = {"ema5": s_ema5, "inside": s_inside, "ma44": s_ma44, "rsi6040": s_rsi6040, "mtf": s_mtf, "fib": s_fib,
+          "orb": s_orb, "orb_candle": s_orb_candle, "noise": s_noise, "vwap_pull": s_vwap_pull,
           "supertrend": s_supertrend, "pdhl": s_pdhl, "ema_adx": s_ema_adx, "gap": s_gap}
 
 

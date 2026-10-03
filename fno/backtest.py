@@ -39,7 +39,7 @@ def research_summary() -> dict:
 def _vix_series():
     try:
         v = D.yahoo_candles(C.INDIA_VIX_YAHOO, period="60d", interval="5m")["close"]
-        if len(v) > 100:
+        if len(v) > 100 and 5 < float(v.median()) < 100:     # sanity: India VIX lives roughly in 8-90
             return v, None
     except Exception:
         pass
@@ -52,7 +52,11 @@ def _vix_series():
 
 
 def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_MULT, candles: pd.DataFrame | None = None,
-        vix_intraday: pd.Series | None = None, vix_daily: pd.Series | None = None, lot: int | None = None):
+        vix_intraday: pd.Series | None = None, vix_daily: pd.Series | None = None, lot: int | None = None,
+        sizing: str = "risk", otm: int = 0):
+    """sizing: "risk" = lots so that 1% of capital is at risk (1 lot allowed up to 1.5%);
+    "one_lot" = always 1 lot if the premium fits in the cash (small accounts - much riskier).
+    otm: 0 = ATM, 1/2 = that many strikes out of the money (cheaper)."""
     meta = D.instrument(symbol)
     lot = lot or meta["lot"]
     if candles is None:
@@ -64,6 +68,7 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
     df = I.add_indicators(candles)
     days = sorted(set(df.index.date))
     trades, equity = [], capital
+    skips = {"risk": 0, "cash": 0}
     step = meta["step"]
     traded_days = 0
     for n, d in enumerate(days):
@@ -97,21 +102,28 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
             iv_of = lambda ts: min(max(rv, 0.08), 0.9)  # noqa: E731
         exp = I.pick_trading_expiry(I.demo_expiries(meta["expiry"], d, 3), meta["expiry"], d)
         idx = list(day.index)
-        start = 0
+        start, day_why = 0, set()
         while True:
-            res = _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d, mult)
+            res = _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d, mult, sizing, otm)
             if res is None:
                 break
-            if isinstance(res, tuple):          # ("skip", bar): too risky/costly for this capital, keep looking
+            if isinstance(res, tuple):          # ("skip", bar, why): too risky/costly for this capital, keep looking
+                day_why.add(res[2])
                 start = res[1] + 1
                 continue
             equity = res["equity"]
             trades.append(res)
+            day_why.clear()
             break
-    return _summary(trades, capital, traded_days)
+        for w in day_why:                         # days whose signal(s) couldn't be taken
+            skips[w] += 1
+    out = _summary(trades, capital, traded_days)
+    out["summary"]["skipped"] = skips
+    out["summary"]["sizing"] = sizing
+    return out
 
 
-def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d, mult):
+def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d, mult, sizing="risk", otm=0):
         entry_i = None
         for i, ts in enumerate(idx):
             if i < start:
@@ -140,7 +152,7 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
         risk = min(max(C.STOP_ATR * a, a), 2.5 * a)
         sl, tgt = spot - sign * risk, spot + sign * C.RR_NOISE * risk
         t_in = ts_in + timedelta(minutes=C.CANDLE_MIN)
-        k = round(spot / step) * step
+        k = round(spot / step) * step + sign * otm * step
 
         def prem(s, when, ts):
             t = I.years_to_expiry(exp, when.to_pydatetime().replace(tzinfo=None))
@@ -148,13 +160,19 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
 
         p_in = prem(spot, t_in, ts_in) * (1 + SLIP)
         risk_unit = max(p_in - prem(sl, t_in, ts_in), p_in * 0.05)
-        budget = capital * C.RISK_PER_TRADE
-        lots = int(budget // (risk_unit * lot))
-        if lots == 0 and risk_unit * lot <= 1.5 * budget:
+        cost = p_in * lot
+        if cost > capital:
+            return ("skip", entry_i, "cash")       # can't pay for even 1 lot
+        if sizing == "one_lot":
             lots = 1
-        lots = min(lots, int(capital * 0.6 // (p_in * lot)))
-        if lots <= 0:
-            return ("skip", entry_i)
+        else:
+            budget = capital * C.RISK_PER_TRADE
+            lots = int(budget // (risk_unit * lot))
+            if lots == 0 and risk_unit * lot <= 1.5 * budget:
+                lots = 1
+            if lots == 0:
+                return ("skip", entry_i, "risk")   # 1 lot would risk more than 1.5% of capital
+            lots = min(lots, int(capital // cost))
         reason, x_spot, x_ts = None, None, None
         for ts in idx[entry_i + 1:]:
             c = day.loc[ts]
@@ -182,7 +200,7 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
         equity += pnl
         return {
             "date": d.isoformat(), "entry_time": t_in.strftime("%H:%M"), "exit_time": x_ts.strftime("%H:%M"),
-            "side": "CALL" if opt == "CE" else "PUT", "type": "ATM option", "band": mult,
+            "side": "CALL" if opt == "CE" else "PUT", "type": "ATM option" if not otm else f"{otm} OTM option", "band": mult,
             "spot_in": round(spot, 1), "spot_out": round(float(x_spot), 1), "R": round(sign * (x_spot - spot) / risk, 2),
             "prem_in": round(p_in, 2), "prem_out": round(p_out, 2), "lots": lots, "pnl": round(pnl, 0),
             "reason": reason, "equity": round(equity, 0),

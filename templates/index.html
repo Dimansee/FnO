@@ -405,7 +405,9 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
       <div class="formrow">
         <div><label>Instrument</label><select id="btSym" style="width:100%"></select></div>
         <div><label>Band width</label><select id="btMult" style="width:100%"><option value="1.5">1.5× usual move</option><option value="1.75" selected>1.75× (the rule)</option><option value="2">2× usual move</option></select></div>
-        <div><label>Capital (₹)</label><input id="btCap" type="number" value="200000" step="50000" style="width:100%"></div>
+        <div><label>Capital (₹)</label><input id="btCap" type="number" value="200000" min="1000" step="5000" style="width:100%"></div>
+        <div><label>Position size</label><select id="btSize" style="width:100%"><option value="risk" selected>Risk 1% per trade (the rule)</option><option value="one_lot">Always 1 lot (small accounts)</option></select></div>
+        <div><label>Strike</label><select id="btOtm" style="width:100%"><option value="0" selected>ATM</option><option value="1">1 strike OTM (cheaper)</option><option value="2">2 strikes OTM (cheapest)</option></select></div>
         <div style="flex:0"><button class="primary" id="btRun">▶ Run backtest</button></div>
       </div>
     </div>
@@ -1202,9 +1204,15 @@ async function loadStudy() {
       ${row("Old ORB rules · both indices", both(r.old.NIFTY, r.old.BANKNIFTY))}
       ${row("New · Fin Nifty (never used in tuning)", r.new.FINNIFTY)}</table></div>
     <h4>Every strategy family tested</h4>
-    <div class="tablewrap"><table><tr><th>Strategy</th><th>Settings tried</th><th>Held up in training*</th><th>…of those, profitable on the unseen 120 days</th><th>Walk-forward 2024–26**</th></tr>
-      ${r.families.map(f => `<tr><td>${esc(f.name)}</td><td class="mono">${f.tested}</td><td class="mono">${f.robust}</td><td class="mono">${f.robust ? Math.round(f.robust_oos_profitable / f.robust * 100) + "%" : "–"}</td><td class="mono">${k(f.walk_forward_net)}</td></tr>`).join("")}</table></div>
-    <p class="muted" style="font-size:12px">* profitable on both indices in both halves of the training period. ** re-picking the best setting every 30 days from the previous 250 days, then trading the next 30 unseen days.</p>
+    <div class="tablewrap"><table><tr><th>Strategy</th><th>Settings tried</th><th>Held up in training*</th><th>Unseen 120 days†</th><th>Held-up settings profitable there</th><th>Walk-forward 2024–26**</th></tr>
+      ${r.families.map((f, i) => `<tr${i === 0 ? ' style="background:rgba(242,169,59,.08)"' : ""}><td>${i === 0 ? "<b>" + esc(f.name) + " · chosen</b>" : esc(f.name)}</td><td class="mono">${f.tested}</td><td class="mono">${f.robust}</td>
+        <td class="mono">${f.key === "ironfly" ? '<span class="muted">model can\'t judge</span>' : k(f.best_train_setting_last120)}</td>
+        <td class="mono">${f.robust ? Math.round(f.robust_oos_profitable / f.robust * 100) + "%" : "–"}</td><td class="mono">${k(f.walk_forward_net)}</td></tr>`).join("")}</table></div>
+    <p class="muted" style="font-size:12px">Both indices combined, ₹2 lakh, 1% risk. † the setting that scored best on the training days, run on the last 120 days it never saw. * profitable on both indices in both halves of the training period. ** re-picking the best setting every 30 days from the previous 250 days, then trading the next 30 unseen days.</p>
+    ${r.small_account ? `<h4>Small account: ₹${r.small_account.capital.toLocaleString("en-IN")}, 1 lot per signal</h4>
+    <div class="tablewrap"><table><tr><th></th><th>Cost of 1 lot</th><th>Trades</th><th>Last 120 days</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>Worst trade</th><th>Deepest fall</th></tr>
+      ${r.small_account.rows.map(x => `<tr><td>${x.symbol === "NIFTY" ? "Nifty" : "Bank Nifty"} · ${x.otm ? x.otm + " OTM" : "ATM"}</td><td class="mono">₹${(x.cost_per_lot || 0).toLocaleString("en-IN")}</td><td class="mono">${x.trades}</td><td class="mono">${k(x.last120)}</td>${[2023, 2024, 2025, 2026].map(y => `<td class="mono">${k(x.years[y])}</td>`).join("")}<td class="mono down">₹${x.worst_trade.toLocaleString("en-IN")}</td><td class="mono down">${x.max_dd_pct}%</td></tr>`).join("")}</table></div>
+    <p class="muted" style="font-size:12px">With ₹15,000 one lot already risks 10–40% of the account per trade, so the account can fall by half on a bad run even though the rules make money over a year. Bank Nifty lots mostly cost more than ₹15,000, so it barely trades.</p>` : ""}
     <h4>Single stocks (same rules)</h4>
     <div class="tablewrap"><table>${head}${Object.entries(r.stocks).map(([s, b]) => row(s, b)).join("")}</table></div>
     <h4>Caveats</h4><ul>${r.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul></div>`;
@@ -1213,10 +1221,18 @@ let btc, bts;
 $("#btRun").onclick = async () => {
   const b = $("#btRun"); b.disabled = true; b.textContent = "Running… (up to a minute)";
   try {
-    const d = await post("/api/backtest", {symbol: $("#btSym").value, mult: +$("#btMult").value, capital: +$("#btCap").value});
+    const d = await post("/api/backtest", {symbol: $("#btSym").value, mult: +$("#btMult").value, capital: +$("#btCap").value, sizing: $("#btSize").value, otm: +$("#btOtm").value});
     if (d.error) throw new Error(d.error);
     const s = d.summary;
-    if (!s.trades) { $("#btOut").innerHTML = `<div class="card empty">No trades in ${d.days} sessions with these filters.</div>`; return; }
+    const sk = s.skipped || {risk: 0, cash: 0}, cap = +$("#btCap").value;
+    if (!s.trades) {
+      const why = [];
+      if (sk.risk) why.push(`<li>On <b>${sk.risk}</b> day(s) the signal was skipped because 1 lot would risk more than 1.5% of ₹${cap.toLocaleString("en-IN")} (the 1% rule allows only ₹${(cap * 0.01).toLocaleString("en-IN")} of risk).</li>`);
+      if (sk.cash) why.push(`<li>On <b>${sk.cash}</b> day(s) the signal was skipped because 1 lot of the option cost more than ₹${cap.toLocaleString("en-IN")}.</li>`);
+      $("#btOut").innerHTML = `<div class="card"><h3>No trades taken in ${d.days} sessions</h3>${why.length ? `<ul>${why.join("")}</ul>
+        <p class="muted" style="margin-bottom:0">Try <b>Position size → Always 1 lot</b> and/or a <b>cheaper OTM strike</b>. Be aware: with a small account one lot can risk 10–20% of your capital on a single trade.</p>` : `<p class="muted" style="margin:0">No setup appeared in this period.</p>`}</div>`;
+      return;
+    }
     $("#btOut").innerHTML = `<div class="grid g6">${kpi("Trades", `${s.trades}`, `in ${s.days} days`, "muted")}${kpi("Win rate", s.win_rate.toFixed(0) + "%")}
       ${kpi("Profit factor", s.profit_factor == null ? "∞" : s.profit_factor.toFixed(2))}${kpi("Net P&L", `<span class="${cls(s.net)}">${rs(s.net)}</span>`, sgn(s.return_pct) + "%", cls(s.net))}
       ${kpi("Max drawdown", s.max_dd_pct.toFixed(1) + "%")}${kpi("Avg R / trade", sgn(s.avg_R))}</div>
@@ -1226,6 +1242,7 @@ $("#btRun").onclick = async () => {
       ${d.trades.map(t => `<tr><td>${t.date}</td><td>${t.entry_time}</td><td>${t.exit_time}</td><td class="${t.side === "CALL" ? "up" : "down"}">${t.side}</td><td>${t.type}</td><td>${t.band}×</td>
         <td class="mono">${n2(t.spot_in)}</td><td class="mono">${n2(t.spot_out)}</td><td class="mono ${cls(t.R)}">${sgn(t.R)}</td><td class="mono">${n2(t.prem_in)}</td><td class="mono">${n2(t.prem_out)}</td>
         <td>${t.lots}</td><td class="mono ${cls(t.pnl)}"><b>${rs(t.pnl)}</b></td><td style="text-align:left">${esc(t.reason)}</td></tr>`).join("")}</table></div>
+      ${sk.risk || sk.cash ? `<p class="muted" style="font-size:12px">Days with a skipped signal: ${sk.risk} too risky for the 1% rule, ${sk.cash} too costly for your cash.</p>` : ""}
       <p class="muted" style="font-size:12px">Small sample (~45 traded days). Treat this as a sanity check; the study below covers 924 days.</p></div>`;
     if (window.LightweightCharts) { [btc, bts] = lineChart($("#btchart"));
     bts.setData(d.trades.map((t, i) => ({time: Math.floor(new Date(t.date + "T" + t.entry_time + ":00Z").getTime() / 1000) + i, value: t.equity})));
