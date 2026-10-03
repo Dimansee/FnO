@@ -125,9 +125,14 @@ def _sym():
 def meta():
     from fno import market as M
     return jsonify({"symbols": [{"id": s, "label": M.instrument(s)["label"]} for s in SV.ALL_SYMBOLS],
-                    "rules": {k: getattr(C, k) for k in ("MIN_BIAS_SCORE", "ORB_MIN_PCT", "ORB_MAX_PCT",
-                              "VIX_SPREAD_LEVEL", "PREMIUM_HARD_SL", "TIME_STOP_MIN", "RR_TARGET",
-                              "RISK_PER_TRADE", "MAX_DAILY_LOSS", "MAX_TRADES_PER_DAY", "SPREAD_WIDTH_STRIKES")}})
+                    "rules": {k: getattr(C, k) for k in ("NOISE_MULT", "NOISE_LOOKBACK", "STOP_ATR", "RR_NOISE", "VIX_MIN",
+                              "SIGNAL_VALID_MIN", "RISK_PER_TRADE", "MAX_DAILY_LOSS", "MAX_TRADES_PER_DAY")}})
+
+
+@app.get("/api/research")
+def research():
+    from fno import backtest as BT
+    return jsonify(BT.research_summary())
 
 
 @app.get("/api/dashboard")
@@ -203,7 +208,10 @@ def account_reset():
 @app.post("/api/backtest")
 def backtest():
     b = request.get_json(force=True) or {}
-    return jsonify(SV.backtest(_sym(), int(b.get("min_score", 2)), float(b.get("capital", C.DEFAULT_CAPITAL))))
+    mult = float(b.get("mult") or C.NOISE_MULT)
+    if not 1.0 <= mult <= 3.0:
+        raise ValueError("Band multiplier must be between 1 and 3.")
+    return jsonify(SV.backtest(_sym(), mult, float(b.get("capital", C.DEFAULT_CAPITAL))))
 
 
 # ---------------------------------------------------------------------------

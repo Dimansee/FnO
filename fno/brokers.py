@@ -132,13 +132,18 @@ class Upstox:
             rows.append(row)
         return pd.DataFrame(rows).sort_values("strike").reset_index(drop=True) if rows else pd.DataFrame()
 
-    def candles(self, key, days=6):
+    def candles(self, key, days=24):
         enc = quote(key, safe="")
         rows = []
         to_d = C.today_ist() - timedelta(days=1)
-        fr_d = to_d - timedelta(days=days + 4)
-        past = self._get(f"/v3/historical-candle/{enc}/minutes/5/{to_d}/{fr_d}") or {}
-        rows += past.get("candles", [])
+        fr_d = to_d - timedelta(days=days + 6)
+        # Upstox rejects some 5-minute ranges that span two months, so ask month by month
+        a = fr_d
+        while a <= to_d:
+            b = min(date(a.year + (a.month == 12), a.month % 12 + 1, 1) - timedelta(days=1), to_d)
+            past = self._get(f"/v3/historical-candle/{enc}/minutes/5/{b}/{a}") or {}
+            rows += past.get("candles", [])
+            a = b + timedelta(days=1)
         today = self._get(f"/v3/historical-candle/intraday/{enc}/minutes/5") or {}
         rows += today.get("candles", [])
         if not rows:
@@ -267,7 +272,7 @@ class Fyers:
                     df[f"{c}_{f}"] = None
         return df.reset_index(drop=True)
 
-    def candles(self, key, days=6):
+    def candles(self, key, days=24):
         to_d = C.today_ist()
         fr_d = to_d - timedelta(days=days + 4)
         j = self._get("/history", {"symbol": key, "resolution": "5", "date_format": "1",

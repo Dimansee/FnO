@@ -205,7 +205,8 @@ class Market:
                     return df
             except Exception as e:
                 self._fail("Candles", e)
-        return cached(f"c:yahoo:{symbol}", 45, lambda: yahoo_candles(instrument(symbol)["yahoo"]))
+        # 30 days: the noise band needs the last 14 sessions
+        return cached(f"c:yahoo:{symbol}", 45, lambda: yahoo_candles(instrument(symbol)["yahoo"], period="30d"))
 
     def vix(self) -> dict:
         if self.br:

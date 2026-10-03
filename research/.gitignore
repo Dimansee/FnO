@@ -1,0 +1,6 @@
+*.pkl
+*.log
+results.json
+refine.json
+wf_report_*.json
+__pycache__/
