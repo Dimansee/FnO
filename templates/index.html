@@ -178,10 +178,13 @@ details[open] summary::before{transform:rotate(45deg) translate(-2px,-2px)}
 .ws.l4{--wsh:760px;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
 .pane{display:flex;flex-direction:column;min-width:0;min-height:0;border:1px solid var(--line);border-radius:14px;background:var(--bg2);padding:8px;transition:border-color .2s,box-shadow .2s}
 .pane.focus{border-color:rgba(242,169,59,.55);box-shadow:0 0 0 1px rgba(242,169,59,.2)}
-.phead{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:0 2px 8px}
-.phead select{padding:4px 8px;font-size:13px;min-width:0;max-width:150px}
-.phead .seg button{padding:4px 9px;font-size:12.5px;display:inline-flex;align-items:center}
+.phead{display:flex;flex-wrap:wrap;gap:5px;align-items:center;padding:0 2px 8px}
+.phead select{padding:4px 6px;font-size:13px;min-width:0;max-width:124px}
+.phead .p-strike{max-width:112px}
+.phead .seg button{padding:4px 8px;font-size:12.5px;display:inline-flex;align-items:center}
 .phead .p-fit{padding:5px 8px;display:inline-flex}
+.phead .p-auto{padding:4px 9px;font-size:12.5px;color:var(--muted)}
+.phead .p-auto.on{color:var(--gold);border-color:rgba(242,169,59,.5)}
 .pchart{position:relative;flex:1;min-height:0}
 .legend{position:absolute;left:6px;top:4px;z-index:3;pointer-events:none;font-size:12px;line-height:1.45;color:var(--muted);background:rgba(11,20,27,.72);padding:3px 7px;border-radius:7px;max-width:calc(100% - 70px)}
 .legend .t{font-family:var(--display);font-weight:650;color:var(--text);font-size:12.5px}
@@ -341,7 +344,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
           <button id="cmpFull">Full screen</button>
         </div>
       </div>
-      <div class="muted hint">Drag to move · scroll or pinch to zoom · drag the price or time axis to stretch it · double-click an axis to reset. Click a chart to select it, then click a price in the option chain to show that contract there.</div>
+      <div class="muted hint">Drag to move · scroll or pinch to zoom · drag the price or time axis to stretch it. The chart stays where you leave it; "Auto" re-fits prices and the ↺ button resets the view. Click a chart to select it, then click a price in the option chain to show that contract there.</div>
       <div class="ws l2v" id="cmpGrid"></div>
       <div id="oNote" class="muted" style="font-size:12px;margin-top:8px"></div>
     </div>
@@ -826,6 +829,7 @@ function renderWorkspace() {
       <select class="p-tf" aria-label="Candle size">${TFS.map(t => `<option value="${t}">${tfName(t)}</option>`).join("")}</select>
       <div class="seg p-sty"><button data-v="c" title="Candles" aria-label="Candles">${ICON_C}</button><button data-v="l" title="Line" aria-label="Line">${ICON_L}</button></div>
       <span class="spacer"></span>
+      <button class="p-auto on" title="Auto-fit prices: on. Moving or zooming the chart turns it off so the view stays where you put it.">Auto</button>
       <button class="p-fit" title="Reset zoom" aria-label="Reset zoom"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7a4.5 4.5 0 1 0 1.4-3.3M2.5 1.5v3h3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
     <div class="pchart"><div class="legend mono"></div></div>
@@ -841,8 +845,23 @@ function makeChart(i) {
     handleScale: {mouseWheel: true, pinch: true, axisPressedMouseMove: {time: true, price: true}, axisDoubleClickReset: {time: true, price: true}},
     kineticScroll: {touch: true, mouse: false},
     timeScale: {...CH_OPTS.timeScale, rightOffset: 4, barSpacing: 7, minBarSpacing: 1.2}});
-  const o = {chart: c, levels: [], pls: [], lines: [], data: [], idx: new Map(), key: null, lg: el.querySelector(".legend"), title: ""};
-  const auto = withLevels(() => o.levels);
+  const o = {chart: c, levels: [], pls: [], lines: [], data: [], idx: new Map(), key: null, lg: el.querySelector(".legend"), title: "", user: false, i};
+  // SL/target are only forced into view until the user takes control of the chart
+  const auto = withLevels(() => o.user ? [] : o.levels);
+  // the moment the user drags, zooms or pinches, freeze the price axis so nothing re-fits on its own
+  const take = () => { if (!o.user) { o.user = true; c.priceScale("right").applyOptions({autoScale: false}); autoBtn(o); } };
+  el.addEventListener("wheel", take, {passive: true, capture: true});
+  const pts = new Map();
+  el.addEventListener("pointerdown", e => pts.set(e.pointerId, [e.clientX, e.clientY]), {capture: true});
+  const up = e => pts.delete(e.pointerId);
+  ["pointerup", "pointercancel", "pointerleave"].forEach(ev => el.addEventListener(ev, up, {capture: true}));
+  el.addEventListener("pointermove", e => {
+    const st = pts.get(e.pointerId); if (!st || !e.buttons) return;
+    const dx = Math.abs(e.clientX - st[0]), dy = Math.abs(e.clientY - st[1]);
+    // touch: only a sideways swipe or a pinch moves the chart (an up/down swipe scrolls the page)
+    if (e.pointerType === "mouse" ? dx + dy > 3 : pts.size > 1 || (dx > 6 && dx > dy)) take();
+  }, {capture: true});
+  el.addEventListener("dblclick", () => setTimeout(() => autoBtn(o), 0));
   o.main = p.sty === "l"
     ? c.addAreaSeries({lineColor: "#3fbf8f", topColor: "rgba(63,191,143,.22)", bottomColor: "rgba(63,191,143,0)", lineWidth: 2, autoscaleInfoProvider: auto})
     : c.addCandlestickSeries({...CANDLE, autoscaleInfoProvider: auto});
@@ -870,6 +889,12 @@ function makeChart(i) {
   return o;
 }
 
+function autoBtn(o) {
+  const b = paneEl(o.i) && paneEl(o.i).querySelector(".p-auto"); if (!b) return;
+  const on = o.chart.priceScale("right").options().autoScale;
+  b.classList.toggle("on", on);
+  b.title = on ? "Auto-fit prices: on. Moving or zooming the chart turns it off so the view stays where you put it." : "Auto-fit prices: off. Click to fit the prices of the visible candles again.";
+}
 function legend(o, t) {
   if (!o.lg) return;
   if (o.err) { o.lg.innerHTML = `<div class="t">${esc(o.title || "Chart")}</div><span class="down">${esc(o.err)}</span>`; return; }
@@ -910,6 +935,8 @@ async function refreshPane(i) {
   o.err = null; o.strikes = r.strikes || o.strikes; o.atm = r.atm; o.source = r.source; o.strikeNow = r.strike;
   o.title = `${r.label}${p.kind === "UND" ? "" : " " + r.strike + " " + p.kind} · ${tfName(p.tf)}`;
   const bars = resample(r.candles || [], p.tf);
+  const keep = o.user && o.key === [sym, p.kind, r.strike, p.tf, p.sty].join("|") ? o.chart.timeScale().getVisibleLogicalRange() : null;
+  const atEdge = keep && keep.to >= o.data.length - 1;
   o.data = bars; o.idx = new Map(bars.map((b, j) => [b.time, j]));
   if (p.sty === "l") {
     const last = bars[bars.length - 1], day = last ? Math.floor(last.time / 86400) : 0, first = bars.find(b => Math.floor(b.time / 86400) === day);
@@ -933,11 +960,12 @@ async function refreshPane(i) {
     }
   }
   const key = [sym, p.kind, r.strike, p.tf, p.sty].join("|");
+  if (keep && !atEdge) o.chart.timeScale().setVisibleLogicalRange(keep);   // new candles never move a chart you have scrolled back
   if (o.key !== key) {
     o.key = key; const n = bars.length;
     if (n > 130) o.chart.timeScale().setVisibleLogicalRange({from: n - 120, to: n + 4}); else o.chart.timeScale().fitContent();
   }
-  syncPaneControls(i); legend(o, null); optNote();
+  syncPaneControls(i); legend(o, null); autoBtn(o); optNote();
   if (S.dash && i === targetPane()) renderMiniChain(S.dash);
 }
 function optNote() {
@@ -981,7 +1009,8 @@ $("#cmpGrid").addEventListener("click", e => {
   if (i !== CW.focus) setFocus(i);
   if (!b) return;
   const seg = b.parentElement;
-  if (b.classList.contains("p-fit")) { const o = PC[i]; o.chart.timeScale().fitContent(); o.chart.priceScale("right").applyOptions({autoScale: true}); return; }
+  if (b.classList.contains("p-fit")) { const o = PC[i]; o.user = false; o.chart.priceScale("right").applyOptions({autoScale: true}); o.chart.timeScale().fitContent(); autoBtn(o); return; }
+  if (b.classList.contains("p-auto")) { const o = PC[i], ps = o.chart.priceScale("right"); ps.applyOptions({autoScale: !ps.options().autoScale}); autoBtn(o); return; }
   if (seg.classList.contains("p-kind")) { if (p.kind === b.dataset.v) return; p.kind = b.dataset.v; }
   else if (seg.classList.contains("p-sty")) { if (p.sty === b.dataset.v) return; p.sty = b.dataset.v; }
   else return;
