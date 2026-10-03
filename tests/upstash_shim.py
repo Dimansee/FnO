@@ -23,6 +23,8 @@ class H(BaseHTTPRequestHandler):
         cmd = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
         try:
             res = R.execute_command(*cmd)
+            if isinstance(res, (set, frozenset)):      # Upstash returns sets as JSON arrays
+                res = sorted(res)
             self._send(200, {"result": res})
         except Exception as e:
             self._send(400, {"error": str(e)})

@@ -408,4 +408,10 @@ def tick():
                     placed.append({"symbol": sym, "message": msg})
             except Exception as e:                       # one instrument failing must not stop the others
                 placed.append({"symbol": sym, "error": str(e)[:120]})
-    return {"closed": closed, "placed": placed, "time": now.isoformat(timespec="seconds")}
+    try:                                                     # market recorder (every RECORD_EVERY_MIN minutes)
+        from . import recorder
+        from .market import Market
+        rec = recorder.snapshot(now, market=Market())
+    except Exception as e:
+        rec = {"error": str(e)[:160]}
+    return {"closed": closed, "placed": placed, "recorded": rec, "time": now.isoformat(timespec="seconds")}

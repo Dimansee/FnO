@@ -115,6 +115,10 @@ CAM_VIX_MAX = 22.0
 CAM_BE_R = 1.0             # stop moves to entry after +1R
 CAM_TIME_STOP = 45         # exit if +0.5R not reached within 45 minutes
 CAM_RMIN, CAM_RMAX = 1.0, 3.0   # stop distance kept between 1 and 3 x ATR
+# Market recorder (fno/recorder.py): option-chain snapshots kept for later research
+RECORD_EVERY_MIN = 5       # one snapshot every 5 minutes, 09:15-15:30
+RECORD_STRIKES = 15        # strikes each side of the money
+RECORD_KEEP_DAYS = 45      # Redis copy expires after this; the nightly job keeps a permanent copy
 STRIKE_ITM = 1             # buy 1 strike in-the-money: on real option prices it loses less to time decay than ATM
 
 MIN_BIAS_SCORE = 3
