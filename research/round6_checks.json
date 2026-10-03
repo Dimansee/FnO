@@ -1,0 +1,470 @@
+{
+ "base": {
+  "trades": 915,
+  "net": 213649,
+  "per_trade": 233,
+  "win": 29.2,
+  "pf": 1.27,
+  "max_dd": -64206,
+  "unseen120": 53664,
+  "years": {
+   "2023": 31331,
+   "2024": 96485,
+   "2025": 14727,
+   "2026": 71106
+  }
+ },
+ "by_weekday": {
+  "Fri": {
+   "trades": 205,
+   "net": 109615,
+   "per_trade": 535,
+   "win": 35.1,
+   "pf": 1.71
+  },
+  "Mon": {
+   "trades": 182,
+   "net": 30617,
+   "per_trade": 168,
+   "win": 34.6,
+   "pf": 1.2
+  },
+  "Sat": {
+   "trades": 1,
+   "net": -629,
+   "per_trade": -629,
+   "win": 0.0,
+   "pf": 0.0
+  },
+  "Sun": {
+   "trades": 2,
+   "net": -5001,
+   "per_trade": -2501,
+   "win": 0.0,
+   "pf": 0.0
+  },
+  "Thu": {
+   "trades": 181,
+   "net": -18192,
+   "per_trade": -101,
+   "win": 23.2,
+   "pf": 0.9
+  },
+  "Tue": {
+   "trades": 177,
+   "net": 54746,
+   "per_trade": 309,
+   "win": 28.8,
+   "pf": 1.36
+  },
+  "Wed": {
+   "trades": 167,
+   "net": 42494,
+   "per_trade": 254,
+   "win": 23.4,
+   "pf": 1.27
+  }
+ },
+ "by_dte": {
+  "1": {
+   "trades": 94,
+   "net": -11431,
+   "per_trade": -122,
+   "win": 25.5,
+   "pf": 0.87
+  },
+  "15+": {
+   "trades": 245,
+   "net": 20788,
+   "per_trade": 85,
+   "win": 27.3,
+   "pf": 1.08
+  },
+  "2": {
+   "trades": 77,
+   "net": 20549,
+   "per_trade": 267,
+   "win": 28.6,
+   "pf": 1.32
+  },
+  "3-4": {
+   "trades": 119,
+   "net": 53740,
+   "per_trade": 452,
+   "win": 33.6,
+   "pf": 1.64
+  },
+  "5-7": {
+   "trades": 286,
+   "net": 132793,
+   "per_trade": 464,
+   "win": 30.8,
+   "pf": 1.6
+  },
+  "8-14": {
+   "trades": 94,
+   "net": -2789,
+   "per_trade": -30,
+   "win": 27.7,
+   "pf": 0.97
+  }
+ },
+ "by_expiry_day": {
+  "BANKNIFTY expiry day": {
+   "trades": 52,
+   "net": -34074,
+   "per_trade": -655,
+   "win": 15.4,
+   "pf": 0.53
+  },
+  "BANKNIFTY other day": {
+   "trades": 355,
+   "net": 107238,
+   "per_trade": 302,
+   "win": 31.0,
+   "pf": 1.33
+  },
+  "NIFTY expiry day": {
+   "trades": 116,
+   "net": 12977,
+   "per_trade": 112,
+   "win": 27.6,
+   "pf": 1.13
+  },
+  "NIFTY other day": {
+   "trades": 392,
+   "net": 127510,
+   "per_trade": 325,
+   "win": 29.8,
+   "pf": 1.42
+  }
+ },
+ "by_strategy": {
+  "BANKNIFTY camarilla": {
+   "trades": 255,
+   "net": 64154,
+   "per_trade": 252,
+   "win": 24.7,
+   "pf": 1.27
+  },
+  "BANKNIFTY noise": {
+   "trades": 152,
+   "net": 9009,
+   "per_trade": 59,
+   "win": 36.2,
+   "pf": 1.06
+  },
+  "NIFTY camarilla": {
+   "trades": 360,
+   "net": 86585,
+   "per_trade": 241,
+   "win": 26.7,
+   "pf": 1.3
+  },
+  "NIFTY noise": {
+   "trades": 148,
+   "net": 53901,
+   "per_trade": 364,
+   "win": 35.8,
+   "pf": 1.47
+  }
+ },
+ "skip_expiry_days": {
+  "trades": 747,
+  "net": 234747,
+  "per_trade": 314,
+  "win": 30.4,
+  "pf": 1.37,
+  "max_dd": -44310,
+  "unseen120": 21675,
+  "years": {
+   "2023": 46809,
+   "2024": 109642,
+   "2025": 38297,
+   "2026": 40000
+  }
+ },
+ "delay_next_open": {
+  "trades": 916,
+  "net": 193941,
+  "per_trade": 212,
+  "win": 29.5,
+  "pf": 1.24,
+  "max_dd": -65840,
+  "unseen120": 45304,
+  "years": {
+   "2023": 25834,
+   "2024": 85652,
+   "2025": 12438,
+   "2026": 70017
+  }
+ },
+ "delay_worse_fill": {
+  "trades": 879,
+  "net": -1120,
+  "per_trade": -1,
+  "win": 27.0,
+  "pf": 1.0,
+  "max_dd": -117891,
+  "unseen120": 27231,
+  "years": {
+   "2023": -24690,
+   "2024": 19601,
+   "2025": -38138,
+   "2026": 42106
+  }
+ },
+ "risk": {
+  "0.5%": {
+   "trades": 311,
+   "net": 8457,
+   "max_dd": -63143,
+   "unseen120": 28621,
+   "years": {
+    "2023": -167,
+    "2024": -14417,
+    "2025": -19248,
+    "2026": 42289
+   },
+   "median_year": 559,
+   "p_losing_year": 48.7,
+   "dd_median_pct": 9.6,
+   "dd_95_pct": 18.5,
+   "dd_99_pct": 23.5,
+   "worst_year_5pct": -29346
+  },
+  "1%": {
+   "trades": 915,
+   "net": 213649,
+   "max_dd": -64206,
+   "unseen120": 53664,
+   "years": {
+    "2023": 31331,
+    "2024": 96485,
+    "2025": 14727,
+    "2026": 71106
+   },
+   "median_year": 55724,
+   "p_losing_year": 13.5,
+   "dd_median_pct": 17.8,
+   "dd_95_pct": 34.6,
+   "dd_99_pct": 45.2,
+   "worst_year_5pct": -27486
+  },
+  "1.5%": {
+   "trades": 998,
+   "net": 154153,
+   "max_dd": -69393,
+   "unseen120": 19848,
+   "years": {
+    "2023": 49953,
+    "2024": 56278,
+    "2025": -13877,
+    "2026": 61800
+   },
+   "median_year": 39673,
+   "p_losing_year": 25.9,
+   "dd_median_pct": 25.9,
+   "dd_95_pct": 50.0,
+   "dd_99_pct": 63.2,
+   "worst_year_5pct": -58395
+  },
+  "2%": {
+   "trades": 1011,
+   "net": 182910,
+   "max_dd": -108984,
+   "unseen120": 32455,
+   "years": {
+    "2023": 78924,
+    "2024": 95326,
+    "2025": -47587,
+    "2026": 56247
+   },
+   "median_year": 46847,
+   "p_losing_year": 28.9,
+   "dd_median_pct": 34.2,
+   "dd_95_pct": 67.4,
+   "dd_99_pct": 83.7,
+   "worst_year_5pct": -87326
+  }
+ },
+ "events": {
+  "Budget": {
+   "trades": 4,
+   "net": -6292,
+   "per_trade": -1573,
+   "win": 0.0,
+   "pf": 0.0
+  },
+  "Day after US Fed": {
+   "trades": 26,
+   "net": -8909,
+   "per_trade": -343,
+   "win": 23.1,
+   "pf": 0.73
+  },
+  "RBI policy": {
+   "trades": 22,
+   "net": 19446,
+   "per_trade": 884,
+   "win": 31.8,
+   "pf": 2.28
+  },
+  "normal day": {
+   "trades": 863,
+   "net": 209405,
+   "per_trade": 243,
+   "win": 29.4,
+   "pf": 1.28
+  }
+ },
+ "skip_events": {
+  "trades": 863,
+  "net": 209405,
+  "per_trade": 243,
+  "win": 29.4,
+  "pf": 1.28,
+  "max_dd": -62891,
+  "unseen120": 58516,
+  "years": {
+   "2023": 23163,
+   "2024": 90006,
+   "2025": 10657,
+   "2026": 85578
+  }
+ },
+ "by_vix": {
+  "12-14": {
+   "trades": 348,
+   "net": 105957,
+   "per_trade": 304,
+   "win": 27.9,
+   "pf": 1.36
+  },
+  "14-16": {
+   "trades": 228,
+   "net": 106526,
+   "per_trade": 467,
+   "win": 29.4,
+   "pf": 1.5
+  },
+  "16-20": {
+   "trades": 111,
+   "net": 21546,
+   "per_trade": 194,
+   "win": 36.0,
+   "pf": 1.19
+  },
+  "20+": {
+   "trades": 21,
+   "net": -20446,
+   "per_trade": -974,
+   "win": 19.0,
+   "pf": 0.26
+  },
+  "<12": {
+   "trades": 207,
+   "net": 65,
+   "per_trade": 0,
+   "win": 28.5,
+   "pf": 1.0
+  }
+ },
+ "by_gap": {
+  "gap down >0.5%": {
+   "trades": 64,
+   "net": 22324,
+   "per_trade": 349,
+   "win": 32.8,
+   "pf": 1.35
+  },
+  "gap up >0.5%": {
+   "trades": 69,
+   "net": 49406,
+   "per_trade": 716,
+   "win": 30.4,
+   "pf": 1.83
+  },
+  "small gap": {
+   "trades": 782,
+   "net": 141919,
+   "per_trade": 181,
+   "win": 28.8,
+   "pf": 1.21
+  }
+ },
+ "by_daytype": {
+  "mixed day": {
+   "trades": 336,
+   "net": -105022,
+   "per_trade": -313,
+   "win": 20.8,
+   "pf": 0.66
+  },
+  "range day": {
+   "trades": 185,
+   "net": -213435,
+   "per_trade": -1154,
+   "win": 10.8,
+   "pf": 0.06
+  },
+  "trend day (close far from open)": {
+   "trades": 394,
+   "net": 532107,
+   "per_trade": 1351,
+   "win": 44.9,
+   "pf": 3.02
+  }
+ },
+ "daytype_share": {
+  "trend": 36,
+  "mixed": 40,
+  "range": 24
+ },
+ "specs_today": {
+  "trades": 915,
+  "net": 213649,
+  "per_trade": 233,
+  "win": 29.2,
+  "pf": 1.27,
+  "max_dd": -64206,
+  "unseen120": 53664,
+  "years": {
+   "2023": 31331,
+   "2024": 96485,
+   "2025": 14727,
+   "2026": 71106
+  }
+ },
+ "specs_real": {
+  "trades": 943,
+  "net": 195507,
+  "per_trade": 207,
+  "win": 28.5,
+  "pf": 1.25,
+  "max_dd": -69369,
+  "unseen120": 54772,
+  "years": {
+   "2023": 56661,
+   "2024": 61942,
+   "2025": 4634,
+   "2026": 72270
+  }
+ },
+ "specs_real_by_sym": {
+  "BANKNIFTY": {
+   "trades": 438,
+   "net": 78520,
+   "per_trade": 179,
+   "win": 28.3,
+   "pf": 1.21
+  },
+  "NIFTY": {
+   "trades": 505,
+   "net": 116987,
+   "per_trade": 232,
+   "win": 28.7,
+   "pf": 1.3
+  }
+ }
+}

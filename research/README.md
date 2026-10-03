@@ -119,3 +119,43 @@ participant positioning can't be backtested from free sources, so they are now s
   ~1.7 MB per day.
 Ideas to test once 15–20 days exist: expiry-day premium decay and straddle selling, OI build-up / PCR shifts
 before trend days, FII index-option positioning vs next-day direction, real bid/ask cost per strike, IV crush.
+
+## Round 6 — stress tests of the two strategies (`round6*.py`, `noise_level.py`, `verify_*.py`)
+Both strategies, both indices, real-price-corrected premiums, ₹2 lakh, 1% risk (base: ₹213.6k over 3¾ years).
+- **Expiry / days to expiry:** options with 1 day left PF 0.87; 3–7 days PF 1.6. → Nifty rolls to the next weekly expiry
+  when 1 day or less is left (`pick_trading_expiry`). Bank Nifty on its own expiry day PF 0.53 (52 trades), but the loss
+  came from its weekly-expiry era (to Nov 2024) and an independent check found its expiry days only slightly more
+  range-bound (not significant) → not adopted.
+- **Entering late:** matched trade-by-trade on real 1-minute prices, buying 1 minute after the signal changed P&L by
+  +₹4.4k on 840 trades (premium paid ±0.1%) → no measurable cost. Totals of whole runs move ±₹20k from tiny changes
+  (starting capital ±3% → ₹197k–₹240k) because marginal trades get sized in or out: treat smaller differences as noise.
+  (A first version of this test wrongly suggested a 1-minute delay halved profit; the matched comparison showed the
+  gap was trade-set reshuffling, not the delay.)
+- **Luck test** (block bootstrap, 5,000 one-year paths): at 1% risk median year +₹55.7k, 13.5% of years negative,
+  median deepest fall 17.8% of capital, 1-in-20 34.6%. 1.5–2% risk: lower profit, much deeper falls → keep 1%.
+- **Events:** Budget days 4/4 losers → no new signals on Budget day. Day after a US Fed decision PF 0.73 (26 trades),
+  RBI days PF 2.28 (22) — too few to act on.
+- **Regimes:** all profit from trend days (close far from open, 36% of days: +₹532k, PF 3.0); range days −₹213k,
+  mixed −₹105k. VIX 20+ at the open PF 0.26 (21 trades).
+- **Real contract history** (listed expiries incl. Bank Nifty weeklies, historical lot sizes, pre-Oct-2024 STT and
+  exchange charges): ₹195.5k vs ₹213.6k; unseen 120 days ₹54.8k vs ₹53.7k → results hold.
+- Adopted rules (roll + Budget day): ₹223k, unseen 120 days ₹56.5k, deepest fall ₹58k (was ₹64k).
+
+## Round 7 — 80–120 point rallies, scalping, and "stop hit then target" (`m1.py`, `rally.py`, `scalp.py`, `stops.py`, `stops_d.py`)
+New data: 1-minute Nifty / Bank Nifty / India VIX 2023-01 → 2026-10 from Upstox's public API (`fetch_1m.py`).
+- **Rallies** (zigzag, swing ends on a 25-point pull-back): Nifty makes ~3 moves of 80+ points a day (independent
+  re-count 3.0; 3.5 in 2024–26, 1.5 in quieter 2023), on ~87% of days; median 17 minutes. 29% start in the first half
+  hour. They start 2.6× more often right after a 40+ point move the other way (V-turn), 2× when VIX > 16, 1.5× on
+  gap-down days; rarely after a quiet spell (0.09×). PDH/PDL and Camarilla levels are not special starting points.
+- **Real time:** when Nifty is 30 points off a low, it reaches +80 before revisiting the low 44.6% of the time;
+  conditions only move that between ~34% (after 14:30) and ~50% (first half hour).
+- **After:** once +80 is done, +100 follows 52%, +120 26%, +160 8%; median give-back after the top 48% within 30 min;
+  39% fully reversed the same day.
+- **Scalping:** 1,458 rules (chase / fade / V-bounce × targets, stops, time limits, filters), on the option with costs:
+  0 profitable on training — also 0 with 0.1% slippage. Best edge before costs ≈ 1.3 index points a trade.
+- **Stops:** 51% of the app's trades touched the stop; of those 49% came back to entry later, 20% reached +1R, 7.5%
+  +2R; price usually went well past the stop first (median 0.47R). Wider (1.25×, 1.5×), tighter (0.75×), stop on a
+  5-minute close, or fixed profit-booking at +80/+100/+120 points all earned less than the current stop.
+  Generic entries: "stop then target" is ~5 points *less* common on real prices than on a shuffled random market,
+  every year (independently confirmed) — no sign of stop hunting beyond chance. On real near-expiry option premiums
+  (12 days so far) a 20–40% premium stop is rarely followed by the target the same day.

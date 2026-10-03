@@ -1,0 +1,692 @@
+{
+ "NIFTY": {
+  "describe": {
+   "days": 924,
+   "legs_per_day_80plus": 3.29,
+   "pct_days_with_80plus": 88,
+   "pct_days_with_80plus_up": 70,
+   "pct_days_with_80plus_down": 70,
+   "size_buckets_per_100_days": {
+    "25-50": 1360.1,
+    "50-80": 630.0,
+    "80-120": 245.2,
+    "120-200": 74.9,
+    "200+": 9.0
+   },
+   "duration_min_median": {
+    "80-120": 17,
+    "120+": 19
+   },
+   "duration_min_p25_p75": [
+    8,
+    36
+   ],
+   "start_time_share": {
+    "09:15-09:45": 28.7,
+    "11:00-13:00": 23.3,
+    "09:45-11:00": 22.1,
+    "13:00-14:30": 16.8,
+    "14:30-15:30": 9.1
+   }
+  },
+  "lift": [
+   {
+    "condition": "at_day_extreme",
+    "rally_starts_pct": 16.0,
+    "all_minutes_pct": 9.1,
+    "lift": 1.77
+   },
+   {
+    "condition": "near_prev_hl",
+    "rally_starts_pct": 19.0,
+    "all_minutes_pct": 21.7,
+    "lift": 0.88
+   },
+   {
+    "condition": "near_camarilla",
+    "rally_starts_pct": 25.3,
+    "all_minutes_pct": 31.3,
+    "lift": 0.81
+   },
+   {
+    "condition": "near_round",
+    "rally_starts_pct": 19.8,
+    "all_minutes_pct": 18.8,
+    "lift": 1.05
+   },
+   {
+    "condition": "quiet_30m",
+    "rally_starts_pct": 0.9,
+    "all_minutes_pct": 9.9,
+    "lift": 0.09
+   },
+   {
+    "condition": "after_opposite_40",
+    "rally_starts_pct": 24.6,
+    "all_minutes_pct": 9.4,
+    "lift": 2.61
+   },
+   {
+    "condition": "with_trend_vs_open",
+    "rally_starts_pct": 46.7,
+    "all_minutes_pct": 50.2,
+    "lift": 0.93
+   },
+   {
+    "condition": "vix_30m_falling",
+    "rally_starts_pct": 35.9,
+    "all_minutes_pct": 47.6,
+    "lift": 0.75
+   },
+   {
+    "condition": "tod=11:00-13:00",
+    "rally_starts_pct": 23.3,
+    "all_minutes_pct": 37.8,
+    "lift": 0.62
+   },
+   {
+    "condition": "tod=13:00-14:30",
+    "rally_starts_pct": 16.8,
+    "all_minutes_pct": 28.9,
+    "lift": 0.58
+   },
+   {
+    "condition": "tod=09:45-11:00",
+    "rally_starts_pct": 22.1,
+    "all_minutes_pct": 24.4,
+    "lift": 0.91
+   },
+   {
+    "condition": "tod=14:30-15:30",
+    "rally_starts_pct": 9.1,
+    "all_minutes_pct": 8.9,
+    "lift": 1.03
+   },
+   {
+    "condition": "vs_twap=with",
+    "rally_starts_pct": 40.8,
+    "all_minutes_pct": 50.2,
+    "lift": 0.81
+   },
+   {
+    "condition": "vs_twap=against",
+    "rally_starts_pct": 59.2,
+    "all_minutes_pct": 49.8,
+    "lift": 1.19
+   },
+   {
+    "condition": "gap=flat open",
+    "rally_starts_pct": 55.1,
+    "all_minutes_pct": 61.7,
+    "lift": 0.89
+   },
+   {
+    "condition": "gap=gap up",
+    "rally_starts_pct": 23.5,
+    "all_minutes_pct": 23.8,
+    "lift": 0.99
+   },
+   {
+    "condition": "gap=gap down",
+    "rally_starts_pct": 21.4,
+    "all_minutes_pct": 14.5,
+    "lift": 1.48
+   },
+   {
+    "condition": "vix=<13",
+    "rally_starts_pct": 25.5,
+    "all_minutes_pct": 45.6,
+    "lift": 0.56
+   },
+   {
+    "condition": "vix=13-16",
+    "rally_starts_pct": 41.1,
+    "all_minutes_pct": 38.1,
+    "lift": 1.08
+   },
+   {
+    "condition": "vix=16+",
+    "rally_starts_pct": 33.4,
+    "all_minutes_pct": 16.3,
+    "lift": 2.05
+   }
+  ],
+  "after": {
+   "rallies": 3041,
+   "extra_after_80_median": 21.0,
+   "p_reach_100": 51.7,
+   "p_reach_120": 25.5,
+   "p_reach_160": 7.9,
+   "giveback_30m_median_pct": 48.5,
+   "giveback_60m_median_pct": 56.8,
+   "pct_fully_reversed_same_day": 39.1
+  },
+  "realtime": [
+   {
+    "condition": "all",
+    "n": 13255,
+    "reach_80_pct": 44.6,
+    "lift": 1.0
+   },
+   {
+    "condition": "at_day_extreme=False",
+    "n": 13255,
+    "reach_80_pct": 44.6,
+    "lift": 1.0
+   },
+   {
+    "condition": "near_prev_hl=False",
+    "n": 10639,
+    "reach_80_pct": 45.1,
+    "lift": 1.01
+   },
+   {
+    "condition": "near_prev_hl=True",
+    "n": 2616,
+    "reach_80_pct": 42.9,
+    "lift": 0.96
+   },
+   {
+    "condition": "near_camarilla=False",
+    "n": 10025,
+    "reach_80_pct": 45.3,
+    "lift": 1.01
+   },
+   {
+    "condition": "near_camarilla=True",
+    "n": 3230,
+    "reach_80_pct": 42.7,
+    "lift": 0.96
+   },
+   {
+    "condition": "near_round=False",
+    "n": 10648,
+    "reach_80_pct": 44.6,
+    "lift": 1.0
+   },
+   {
+    "condition": "near_round=True",
+    "n": 2607,
+    "reach_80_pct": 44.6,
+    "lift": 1.0
+   },
+   {
+    "condition": "quiet_30m=False",
+    "n": 13044,
+    "reach_80_pct": 44.9,
+    "lift": 1.01
+   },
+   {
+    "condition": "quiet_30m=True",
+    "n": 211,
+    "reach_80_pct": 28.0,
+    "lift": 0.63
+   },
+   {
+    "condition": "after_opposite_40=False",
+    "n": 11995,
+    "reach_80_pct": 44.4,
+    "lift": 1.0
+   },
+   {
+    "condition": "after_opposite_40=True",
+    "n": 1260,
+    "reach_80_pct": 46.7,
+    "lift": 1.05
+   },
+   {
+    "condition": "with_trend_vs_open=False",
+    "n": 5481,
+    "reach_80_pct": 41.3,
+    "lift": 0.92
+   },
+   {
+    "condition": "with_trend_vs_open=True",
+    "n": 7774,
+    "reach_80_pct": 47.0,
+    "lift": 1.05
+   },
+   {
+    "condition": "vix_30m_falling=False",
+    "n": 5415,
+    "reach_80_pct": 44.0,
+    "lift": 0.98
+   },
+   {
+    "condition": "vix_30m_falling=True",
+    "n": 7840,
+    "reach_80_pct": 45.1,
+    "lift": 1.01
+   },
+   {
+    "condition": "tod=09:15-09:45",
+    "n": 3147,
+    "reach_80_pct": 50.4,
+    "lift": 1.13
+   },
+   {
+    "condition": "tod=09:45-11:00",
+    "n": 3130,
+    "reach_80_pct": 47.2,
+    "lift": 1.06
+   },
+   {
+    "condition": "tod=11:00-13:00",
+    "n": 3152,
+    "reach_80_pct": 45.7,
+    "lift": 1.02
+   },
+   {
+    "condition": "tod=13:00-14:30",
+    "n": 2605,
+    "reach_80_pct": 38.5,
+    "lift": 0.86
+   },
+   {
+    "condition": "tod=14:30-15:30",
+    "n": 1221,
+    "reach_80_pct": 33.7,
+    "lift": 0.76
+   },
+   {
+    "condition": "vs_twap=against",
+    "n": 4061,
+    "reach_80_pct": 39.4,
+    "lift": 0.88
+   },
+   {
+    "condition": "vs_twap=with",
+    "n": 9194,
+    "reach_80_pct": 47.0,
+    "lift": 1.05
+   },
+   {
+    "condition": "gap=flat open",
+    "n": 7264,
+    "reach_80_pct": 42.9,
+    "lift": 0.96
+   },
+   {
+    "condition": "gap=gap down",
+    "n": 2653,
+    "reach_80_pct": 48.2,
+    "lift": 1.08
+   },
+   {
+    "condition": "gap=gap up",
+    "n": 3338,
+    "reach_80_pct": 45.5,
+    "lift": 1.02
+   },
+   {
+    "condition": "vix=13-16",
+    "n": 5750,
+    "reach_80_pct": 45.2,
+    "lift": 1.01
+   },
+   {
+    "condition": "vix=16+",
+    "n": 4226,
+    "reach_80_pct": 48.8,
+    "lift": 1.09
+   },
+   {
+    "condition": "vix=<13",
+    "n": 3279,
+    "reach_80_pct": 38.4,
+    "lift": 0.86
+   }
+  ],
+  "realtime_goal": {
+   "60": 60.1,
+   "80": 44.6,
+   "100": 34.8,
+   "120": 27.3
+  }
+ },
+ "BANKNIFTY": {
+  "describe": {
+   "days": 924,
+   "legs_per_day_80plus": 5.18,
+   "pct_days_with_80plus": 95,
+   "pct_days_with_80plus_up": 83,
+   "pct_days_with_80plus_down": 84,
+   "size_buckets_per_100_days": {
+    "25-50": 2236.9,
+    "50-80": 984.2,
+    "80-120": 370.8,
+    "120-200": 128.4,
+    "200+": 18.5
+   },
+   "duration_min_median": {
+    "80-120": 11,
+    "120+": 11
+   },
+   "duration_min_p25_p75": [
+    5,
+    21
+   ],
+   "start_time_share": {
+    "09:15-09:45": 30.0,
+    "11:00-13:00": 21.9,
+    "09:45-11:00": 20.8,
+    "13:00-14:30": 17.0,
+    "14:30-15:30": 10.3
+   }
+  },
+  "lift": [
+   {
+    "condition": "at_day_extreme",
+    "rally_starts_pct": 8.2,
+    "all_minutes_pct": 5.4,
+    "lift": 1.53
+   },
+   {
+    "condition": "near_prev_hl",
+    "rally_starts_pct": 16.8,
+    "all_minutes_pct": 19.5,
+    "lift": 0.86
+   },
+   {
+    "condition": "near_camarilla",
+    "rally_starts_pct": 20.5,
+    "all_minutes_pct": 25.4,
+    "lift": 0.8
+   },
+   {
+    "condition": "near_round",
+    "rally_starts_pct": 9.0,
+    "all_minutes_pct": 8.5,
+    "lift": 1.05
+   },
+   {
+    "condition": "quiet_30m",
+    "rally_starts_pct": 1.8,
+    "all_minutes_pct": 8.4,
+    "lift": 0.22
+   },
+   {
+    "condition": "after_opposite_40",
+    "rally_starts_pct": 26.9,
+    "all_minutes_pct": 13.2,
+    "lift": 2.04
+   },
+   {
+    "condition": "with_trend_vs_open",
+    "rally_starts_pct": 47.8,
+    "all_minutes_pct": 50.6,
+    "lift": 0.94
+   },
+   {
+    "condition": "vix_30m_falling",
+    "rally_starts_pct": 38.9,
+    "all_minutes_pct": 47.6,
+    "lift": 0.82
+   },
+   {
+    "condition": "tod=11:00-13:00",
+    "rally_starts_pct": 21.9,
+    "all_minutes_pct": 37.8,
+    "lift": 0.58
+   },
+   {
+    "condition": "tod=13:00-14:30",
+    "rally_starts_pct": 17.0,
+    "all_minutes_pct": 28.9,
+    "lift": 0.59
+   },
+   {
+    "condition": "tod=09:45-11:00",
+    "rally_starts_pct": 20.8,
+    "all_minutes_pct": 24.4,
+    "lift": 0.85
+   },
+   {
+    "condition": "tod=14:30-15:30",
+    "rally_starts_pct": 10.3,
+    "all_minutes_pct": 8.9,
+    "lift": 1.16
+   },
+   {
+    "condition": "vs_twap=with",
+    "rally_starts_pct": 45.0,
+    "all_minutes_pct": 50.3,
+    "lift": 0.89
+   },
+   {
+    "condition": "vs_twap=against",
+    "rally_starts_pct": 55.0,
+    "all_minutes_pct": 49.7,
+    "lift": 1.11
+   },
+   {
+    "condition": "gap=flat open",
+    "rally_starts_pct": 49.4,
+    "all_minutes_pct": 56.1,
+    "lift": 0.88
+   },
+   {
+    "condition": "gap=gap up",
+    "rally_starts_pct": 24.8,
+    "all_minutes_pct": 25.1,
+    "lift": 0.99
+   },
+   {
+    "condition": "gap=gap down",
+    "rally_starts_pct": 25.7,
+    "all_minutes_pct": 18.8,
+    "lift": 1.37
+   },
+   {
+    "condition": "vix=<13",
+    "rally_starts_pct": 24.9,
+    "all_minutes_pct": 45.6,
+    "lift": 0.55
+   },
+   {
+    "condition": "vix=13-16",
+    "rally_starts_pct": 43.3,
+    "all_minutes_pct": 38.1,
+    "lift": 1.14
+   },
+   {
+    "condition": "vix=16+",
+    "rally_starts_pct": 31.8,
+    "all_minutes_pct": 16.3,
+    "lift": 1.95
+   }
+  ],
+  "after": {
+   "rallies": 4783,
+   "extra_after_80_median": 21.7,
+   "p_reach_100": 52.9,
+   "p_reach_120": 28.4,
+   "p_reach_160": 9.4,
+   "giveback_30m_median_pct": 58.5,
+   "giveback_60m_median_pct": 68.9,
+   "pct_fully_reversed_same_day": 47.8
+  },
+  "realtime": [
+   {
+    "condition": "all",
+    "n": 21546,
+    "reach_80_pct": 47.3,
+    "lift": 1.0
+   },
+   {
+    "condition": "at_day_extreme=False",
+    "n": 21546,
+    "reach_80_pct": 47.3,
+    "lift": 1.0
+   },
+   {
+    "condition": "near_prev_hl=False",
+    "n": 17699,
+    "reach_80_pct": 47.6,
+    "lift": 1.01
+   },
+   {
+    "condition": "near_prev_hl=True",
+    "n": 3847,
+    "reach_80_pct": 45.9,
+    "lift": 0.97
+   },
+   {
+    "condition": "near_camarilla=False",
+    "n": 17125,
+    "reach_80_pct": 47.6,
+    "lift": 1.01
+   },
+   {
+    "condition": "near_camarilla=True",
+    "n": 4421,
+    "reach_80_pct": 45.9,
+    "lift": 0.97
+   },
+   {
+    "condition": "near_round=False",
+    "n": 19736,
+    "reach_80_pct": 47.2,
+    "lift": 1.0
+   },
+   {
+    "condition": "near_round=True",
+    "n": 1810,
+    "reach_80_pct": 47.9,
+    "lift": 1.01
+   },
+   {
+    "condition": "quiet_30m=False",
+    "n": 21099,
+    "reach_80_pct": 47.6,
+    "lift": 1.01
+   },
+   {
+    "condition": "quiet_30m=True",
+    "n": 447,
+    "reach_80_pct": 34.0,
+    "lift": 0.72
+   },
+   {
+    "condition": "after_opposite_40=False",
+    "n": 18757,
+    "reach_80_pct": 47.0,
+    "lift": 0.99
+   },
+   {
+    "condition": "after_opposite_40=True",
+    "n": 2789,
+    "reach_80_pct": 49.0,
+    "lift": 1.04
+   },
+   {
+    "condition": "with_trend_vs_open=False",
+    "n": 9138,
+    "reach_80_pct": 46.2,
+    "lift": 0.98
+   },
+   {
+    "condition": "with_trend_vs_open=True",
+    "n": 12408,
+    "reach_80_pct": 48.1,
+    "lift": 1.02
+   },
+   {
+    "condition": "vix_30m_falling=False",
+    "n": 9594,
+    "reach_80_pct": 46.7,
+    "lift": 0.99
+   },
+   {
+    "condition": "vix_30m_falling=True",
+    "n": 11952,
+    "reach_80_pct": 47.7,
+    "lift": 1.01
+   },
+   {
+    "condition": "tod=09:15-09:45",
+    "n": 4898,
+    "reach_80_pct": 54.9,
+    "lift": 1.16
+   },
+   {
+    "condition": "tod=09:45-11:00",
+    "n": 5248,
+    "reach_80_pct": 47.9,
+    "lift": 1.01
+   },
+   {
+    "condition": "tod=11:00-13:00",
+    "n": 5283,
+    "reach_80_pct": 46.8,
+    "lift": 0.99
+   },
+   {
+    "condition": "tod=13:00-14:30",
+    "n": 4315,
+    "reach_80_pct": 41.3,
+    "lift": 0.87
+   },
+   {
+    "condition": "tod=14:30-15:30",
+    "n": 1802,
+    "reach_80_pct": 40.4,
+    "lift": 0.85
+   },
+   {
+    "condition": "vs_twap=against",
+    "n": 7105,
+    "reach_80_pct": 44.2,
+    "lift": 0.93
+   },
+   {
+    "condition": "vs_twap=with",
+    "n": 14441,
+    "reach_80_pct": 48.8,
+    "lift": 1.03
+   },
+   {
+    "condition": "gap=flat open",
+    "n": 10927,
+    "reach_80_pct": 45.9,
+    "lift": 0.97
+   },
+   {
+    "condition": "gap=gap down",
+    "n": 4982,
+    "reach_80_pct": 49.5,
+    "lift": 1.05
+   },
+   {
+    "condition": "gap=gap up",
+    "n": 5637,
+    "reach_80_pct": 48.0,
+    "lift": 1.02
+   },
+   {
+    "condition": "vix=13-16",
+    "n": 9641,
+    "reach_80_pct": 48.0,
+    "lift": 1.01
+   },
+   {
+    "condition": "vix=16+",
+    "n": 6099,
+    "reach_80_pct": 51.4,
+    "lift": 1.09
+   },
+   {
+    "condition": "vix=<13",
+    "n": 5806,
+    "reach_80_pct": 41.8,
+    "lift": 0.88
+   }
+  ],
+  "realtime_goal": {
+   "60": 61.9,
+   "80": 47.3,
+   "100": 37.7,
+   "120": 30.3
+  }
+ }
+}

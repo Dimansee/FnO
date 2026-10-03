@@ -246,6 +246,19 @@ assert first and first["id"] == "race1" and second is None, "double close must b
 store.update_position({"id": "race1", "symbol": "NIFTY", "opened": "x"})
 assert all(p["id"] != "race1" for p in store.positions()), "update must not resurrect a closed position"
 assert store.ping()
+# ---------- calendar rules (round 6) ----------
+from fno import service as SV, indicators as II  # noqa: E402
+from datetime import date as _d
+assert SV.calendar_guard("BANKNIFTY", [_d(2026, 10, 27)], _d(2026, 10, 27)) is None      # rule tested and dropped
+C.SKIP_OWN_EXPIRY = ("BANKNIFTY",)
+assert SV.calendar_guard("BANKNIFTY", [_d(2026, 10, 27)], _d(2026, 10, 27))["blocked"]          # mechanism still works
+C.SKIP_OWN_EXPIRY = ()
+assert SV.calendar_guard("NIFTY", [_d(2026, 10, 27)], _d(2026, 10, 27)) is None
+assert SV.calendar_guard("NIFTY", [], _d(2027, 2, 1))["blocked"]
+assert II.pick_trading_expiry([_d(2026, 10, 6), _d(2026, 10, 13)], "weekly", _d(2026, 10, 5)) == _d(2026, 10, 13)
+assert II.pick_trading_expiry([_d(2026, 10, 6), _d(2026, 10, 13)], "weekly", _d(2026, 10, 3)) == _d(2026, 10, 6)
+assert II.demo_expiries("weekly", _d(2025, 6, 2), 1) == [_d(2025, 6, 5)]          # Thursday before Sep 2025
+print("calendar rules OK")
 # ---------- market recorder ----------
 NOW[0] = datetime(2026, 10, 1, 10, 55, tzinfo=C.IST)
 assert R.snapshot(NOW[0] .replace(minute=56))["skipped"] == "not a snapshot minute"
