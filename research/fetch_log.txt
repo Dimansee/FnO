@@ -1,31 +1,17 @@
-upstox NIFTY 2026-02-06..2026-03-07: HTTP 400 {"status":"error","errors":[{"errorCode":"UDAPI1148","message":"Invalid date range","propertyPath":null,"invalidValue":null,"error_code":"UDAPI1148","property_p
-saved NIFTY_5m_upstox: 10575 rows 2026-03-09 09:15:00 -> 2026-10-01 15:25:00
-upstox BANKNIFTY 2026-02-06..2026-03-07: HTTP 400 {"status":"error","errors":[{"errorCode":"UDAPI1148","message":"Invalid date range","propertyPath":null,"invalidValue":null,"error_code":"UDAPI1148","property_p
-saved BANKNIFTY_5m_upstox: 10575 rows 2026-03-09 09:15:00 -> 2026-10-01 15:25:00
-upstox INDIAVIX 2026-02-06..2026-03-07: HTTP 400 {"status":"error","errors":[{"errorCode":"UDAPI1148","message":"Invalid date range","propertyPath":null,"invalidValue":null,"error_code":"UDAPI1148","property_p
-saved INDIAVIX_5m_upstox: 10575 rows 2026-03-09 09:15:00 -> 2026-10-01 15:25:00
-upstox FINNIFTY 2026-02-06..2026-03-07: HTTP 400 {"status":"error","errors":[{"errorCode":"UDAPI1148","message":"Invalid date range","propertyPath":null,"invalidValue":null,"error_code":"UDAPI1148","property_p
-saved FINNIFTY_5m_upstox: 10575 rows 2026-03-09 09:15:00 -> 2026-10-01 15:25:00
-upstox RELIANCE 2026-02-06..2026-03-07: HTTP 400 {"status":"error","errors":[{"errorCode":"UDAPI1148","message":"Invalid date range","propertyPath":null,"invalidValue":null,"error_code":"UDAPI1148","property_p
-saved RELIANCE_5m_upstox: 10575 rows 2026-03-09 09:15:00 -> 2026-10-01 15:25:00
-upstox HDFCBANK 2026-02-06..2026-03-07: HTTP 400 {"status":"error","errors":[{"errorCode":"UDAPI1148","message":"Invalid date range","propertyPath":null,"invalidValue":null,"error_code":"UDAPI1148","property_p
-saved HDFCBANK_5m_upstox: 10575 rows 2026-03-09 09:15:00 -> 2026-10-01 15:25:00
-upstox ICICIBANK 2026-02-06..2026-03-07: HTTP 400 {"status":"error","errors":[{"errorCode":"UDAPI1148","message":"Invalid date range","propertyPath":null,"invalidValue":null,"error_code":"UDAPI1148","property_p
-saved ICICIBANK_5m_upstox: 10575 rows 2026-03-09 09:15:00 -> 2026-10-01 15:25:00
-upstox INFY 2026-02-06..2026-03-07: HTTP 400 {"status":"error","errors":[{"errorCode":"UDAPI1148","message":"Invalid date range","propertyPath":null,"invalidValue":null,"error_code":"UDAPI1148","property_p
-saved INFY_5m_upstox: 10575 rows 2026-03-09 09:15:00 -> 2026-10-01 15:25:00
-upstox TCS 2026-02-06..2026-03-07: HTTP 400 {"status":"error","errors":[{"errorCode":"UDAPI1148","message":"Invalid date range","propertyPath":null,"invalidValue":null,"error_code":"UDAPI1148","property_p
-saved TCS_5m_upstox: 10575 rows 2026-03-09 09:15:00 -> 2026-10-01 15:25:00
-upstox SBIN 2026-02-06..2026-03-07: HTTP 400 {"status":"error","errors":[{"errorCode":"UDAPI1148","message":"Invalid date range","propertyPath":null,"invalidValue":null,"error_code":"UDAPI1148","property_p
-saved SBIN_5m_upstox: 10575 rows 2026-03-09 09:15:00 -> 2026-10-01 15:25:00
-upstox AXISBANK 2026-02-06..2026-03-07: HTTP 400 {"status":"error","errors":[{"errorCode":"UDAPI1148","message":"Invalid date range","propertyPath":null,"invalidValue":null,"error_code":"UDAPI1148","property_p
-saved AXISBANK_5m_upstox: 10575 rows 2026-03-09 09:15:00 -> 2026-10-01 15:25:00
-upstox BHARTIARTL 2026-02-06..2026-03-07: HTTP 400 {"status":"error","errors":[{"errorCode":"UDAPI1148","message":"Invalid date range","propertyPath":null,"invalidValue":null,"error_code":"UDAPI1148","property_p
-saved BHARTIARTL_5m_upstox: 10575 rows 2026-03-09 09:15:00 -> 2026-10-01 15:25:00
-upstox LT 2026-02-06..2026-03-07: HTTP 400 {"status":"error","errors":[{"errorCode":"UDAPI1148","message":"Invalid date range","propertyPath":null,"invalidValue":null,"error_code":"UDAPI1148","property_p
-saved LT_5m_upstox: 10575 rows 2026-03-09 09:15:00 -> 2026-10-01 15:25:00
-upstox ITC 2026-02-06..2026-03-07: HTTP 400 {"status":"error","errors":[{"errorCode":"UDAPI1148","message":"Invalid date range","propertyPath":null,"invalidValue":null,"error_code":"UDAPI1148","property_p
-saved ITC_5m_upstox: 10575 rows 2026-03-09 09:15:00 -> 2026-10-01 15:25:00
+saved NIFTY_5m_upstox: 69463 rows 2023-01-02 09:15:00 -> 2026-10-01 15:25:00
+saved BANKNIFTY_5m_upstox: 69459 rows 2023-01-02 09:15:00 -> 2026-10-01 15:25:00
+saved INDIAVIX_5m_upstox: 69460 rows 2023-01-02 09:15:00 -> 2026-10-01 15:25:00
+saved FINNIFTY_5m_upstox: 69459 rows 2023-01-02 09:15:00 -> 2026-10-01 15:25:00
+saved RELIANCE_5m_upstox: 69444 rows 2023-01-02 09:15:00 -> 2026-10-01 15:25:00
+saved HDFCBANK_5m_upstox: 69453 rows 2023-01-02 09:15:00 -> 2026-10-01 15:25:00
+saved ICICIBANK_5m_upstox: 69453 rows 2023-01-02 09:15:00 -> 2026-10-01 15:25:00
+saved INFY_5m_upstox: 69453 rows 2023-01-02 09:15:00 -> 2026-10-01 15:25:00
+saved TCS_5m_upstox: 69453 rows 2023-01-02 09:15:00 -> 2026-10-01 15:25:00
+saved SBIN_5m_upstox: 69453 rows 2023-01-02 09:15:00 -> 2026-10-01 15:25:00
+saved AXISBANK_5m_upstox: 69453 rows 2023-01-02 09:15:00 -> 2026-10-01 15:25:00
+saved BHARTIARTL_5m_upstox: 69453 rows 2023-01-02 09:15:00 -> 2026-10-01 15:25:00
+saved LT_5m_upstox: 69453 rows 2023-01-02 09:15:00 -> 2026-10-01 15:25:00
+saved ITC_5m_upstox: 69449 rows 2023-01-02 09:15:00 -> 2026-10-01 15:25:00
 saved NIFTY_1d: 740 rows 2023-10-03 00:00:00 -> 2026-10-01 00:00:00
 saved BANKNIFTY_1d: 739 rows 2023-10-03 00:00:00 -> 2026-10-01 00:00:00
 saved INDIAVIX_1d: 735 rows 2023-10-03 00:00:00 -> 2026-10-01 00:00:00
