@@ -24,26 +24,26 @@ UP = {
 S = requests.Session()
 S.headers.update({"Accept": "application/json", "User-Agent": "Mozilla/5.0"})
 
-def upstox(name, key, months=15):
-    rows, end = [], date.today()
-    for m in range(months):
-        to_d = end - timedelta(days=30 * m)
-        fr_d = to_d - timedelta(days=29)
+def upstox(name, key, start=date(2023, 1, 1)):
+    """5-minute candles month by month (the API wants each request inside one calendar month)."""
+    rows, y, m = [], start.year, start.month
+    today = date.today()
+    while (y, m) <= (today.year, today.month):
+        fr = date(y, m, 1)
+        to = min(date(y + (m == 12), m % 12 + 1, 1) - timedelta(days=1), today)
         url = (f"https://api.upstox.com/v3/historical-candle/{urllib.parse.quote(key, safe='')}"
-               f"/minutes/5/{to_d.isoformat()}/{fr_d.isoformat()}")
-        for attempt in range(3):
+               f"/minutes/5/{to.isoformat()}/{fr.isoformat()}")
+        for attempt in range(4):
             r = S.get(url, timeout=30)
             if r.status_code == 429:
-                time.sleep(3); continue
+                time.sleep(3 + attempt * 3); continue
             break
-        if r.status_code != 200:
-            L(f"upstox {name} {fr_d}..{to_d}: HTTP {r.status_code} {r.text[:160]}")
-            if m == 0:
-                return None
-            break
-        c = r.json().get("data", {}).get("candles", [])
-        rows += c
-        time.sleep(0.4)
+        if r.status_code == 200:
+            rows += r.json().get("data", {}).get("candles", [])
+        else:
+            L(f"upstox {name} {fr}..{to}: HTTP {r.status_code} {r.text[:120]}")
+        y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+        time.sleep(0.35)
     if not rows:
         return None
     df = pd.DataFrame(rows, columns=["ts", "open", "high", "low", "close", "volume", "oi"][: len(rows[0])])
