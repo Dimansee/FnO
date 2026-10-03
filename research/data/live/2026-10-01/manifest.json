@@ -1,0 +1,30 @@
+{
+ "date": "2026-10-01",
+ "expiries": {
+  "NIFTY": [
+   "2026-10-06",
+   "2026-10-13"
+  ],
+  "BANKNIFTY": [
+   "2026-10-27",
+   "2026-11-23"
+  ],
+  "FINNIFTY": [
+   "2026-10-27",
+   "2026-11-23"
+  ]
+ },
+ "errors": [
+  "no chain snapshots for this day (app recorder off or NSE blocked and no broker login)"
+ ],
+ "candles": {
+  "rows": 138696,
+  "instruments": 395,
+  "options_without_data": 52
+ },
+ "bhav_fo_rows": 4113,
+ "participant_oi": true,
+ "participant_vol": true,
+ "snapshots": 0,
+ "updated": "2026-10-04T00:24:18+05:30"
+}
