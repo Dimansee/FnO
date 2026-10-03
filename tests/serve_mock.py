@@ -1,34 +1,22 @@
-"""Offline end-to-end test: in-memory DB, synthetic prices, fake brokers."""
+"""Serve the app locally on :8765 with synthetic data (for UI checks)."""
+
 import os, sys
 from datetime import date, datetime, timedelta
 
-os.environ.update(APP_PASSWORD="pw", SESSION_SECRET="s", CRON_SECRET="c", SUPABASE_URL="x", SUPABASE_KEY="k", DB_SECRET="d")
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.dirname(__file__))
+import upstash_shim  # noqa: E402  local stand-in for Upstash Redis
+_url, _tok = upstash_shim.start()
+os.environ.update(APP_PASSWORD="pw", SESSION_SECRET="s", CRON_SECRET="c", KV_REST_API_URL=_url, KV_REST_API_TOKEN=_tok)
 
 import numpy as np
 import pandas as pd
 
 from fno import config as C, store, market as M, context as X, brokers as B, strategy as S
 
-# ---------- in-memory store ----------
-DB = {"settings": {}, "pos": {}, "trades": {}}
-store.get = lambda k, d=None: DB["settings"].get(k, d)
-store.get_many = lambda ks: {k: DB["settings"][k] for k in ks if k in DB["settings"]}
-store.put = lambda k, v: DB["settings"].__setitem__(k, v)
-store.delete_setting = lambda k: DB["settings"].pop(k, None)
-store.positions = lambda: [dict(v) for v in DB["pos"].values()]
-store.insert_position = lambda p: DB["pos"].__setitem__(p["id"], p)
-store.update_position = lambda p: DB["pos"].__setitem__(p["id"], p)
-store.take_position = lambda i: DB["pos"].pop(i, None)
-store.clear_positions = lambda: DB["pos"].clear()
-store.trades = lambda: list(DB["trades"].values())
-store.insert_trade = lambda r: DB["trades"].__setitem__(r["id"], r)
-store.clear_trades = lambda: DB["trades"].clear()
-store.ping = lambda: True
-
 # ---------- synthetic market ----------
 rng = np.random.default_rng(5)
-NOW = [datetime.combine(C.today_ist(), datetime.min.time().replace(hour=11, minute=2), tzinfo=C.IST)]
+NOW = [datetime(2026, 10, 1, 11, 2, tzinfo=C.IST)]  # a Thursday, mid-session
 C.now_ist = lambda: NOW[0]
 C.today_ist = lambda: NOW[0].date()
 
@@ -59,14 +47,15 @@ X.fetch_news = lambda s=None: {"items": [{"title": "Nifty rallies <b>", "link": 
 X.fii_dii = lambda: None
 
 
-from app import app
-import fno.service as SV
-# login cookie needs Secure; serve over http locally -> relax
-import app as A
-_orig=A.login
+from app import app  # noqa: E402
+
+
 @app.after_request
-def relax(resp):
-    sc=resp.headers.get("Set-Cookie")
-    if sc: resp.headers["Set-Cookie"]=sc.replace("; Secure","")
+def relax(resp):  # local http: drop the Secure cookie flag
+    sc = resp.headers.get("Set-Cookie")
+    if sc:
+        resp.headers["Set-Cookie"] = sc.replace("; Secure", "")
     return resp
+
+
 app.run(port=8765)

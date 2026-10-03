@@ -52,6 +52,11 @@ def guard():
     return None
 
 
+@app.errorhandler(ValueError)
+def on_bad_input(e):
+    return jsonify({"error": str(e)}), 400
+
+
 @app.errorhandler(Exception)
 def on_error(e):
     traceback.print_exc()
@@ -131,7 +136,15 @@ def dashboard():
         scheduler.ensure(request.host)  # no-op once registered
     except Exception:
         traceback.print_exc()
-    return jsonify(SV.dashboard(_sym()))
+    k = request.args.get("strike")
+    return jsonify(SV.dashboard(_sym(), float(k) if k else None))
+
+
+@app.get("/api/option_candles")
+def option_candles():
+    k = request.args.get("strike")
+    return jsonify(SV.option_candles(_sym(), request.args.get("expiry") or None, float(k) if k else None,
+                                     (request.args.get("opt") or "CE").upper()))
 
 
 @app.get("/api/chain")
@@ -151,7 +164,8 @@ def portfolio():
 
 @app.post("/api/trade/signal")
 def trade_signal():
-    ok, msg = SV.place_signal(_sym())
+    k = (request.get_json(silent=True) or {}).get("strike")
+    ok, msg = SV.place_signal(_sym(), float(k) if k else None)
     return jsonify({"ok": ok, "message": msg}), (200 if ok else 400)
 
 

@@ -67,7 +67,25 @@ for ok, t in d["signal"]["checks"]:
 print("order:", d["order"] and {k: d["order"][k] for k in ("type", "entry_prem", "sl_prem", "target_prem", "lots")})
 assert len(d["chart"]) > 20
 
-r = c.post("/api/trade/signal", json={"symbol": "NIFTY"})
+# strike choice + alternatives + option candles
+print("alternatives:", [(a["strike"], a["moneyness"], a["cost_per_lot"], a["lots"], a["affordable"]) for a in d["alternatives"]])
+assert d["chain"] and d["atm"]
+otm = [a for a in d["alternatives"] if a["moneyness"].endswith("OTM")][-1]
+d2 = j(c.get(f"/api/dashboard?symbol=NIFTY&strike={otm['strike']}"))
+print("chosen strike order:", {k: d2["order"][k] for k in ("strike", "moneyness", "ltp", "entry_prem", "sl_prem", "target_prem", "lots", "cost_per_lot", "affordable")})
+assert d2["order"]["strike"] == otm["strike"] and not d2["order"]["is_default"]
+oc = j(c.get(f"/api/option_candles?symbol=NIFTY&strike={d['atm']}&opt=CE"))
+print("option candles:", oc["source"], len(oc["candles"]), oc["candles"][-1])
+assert len(oc["candles"]) == len(d["chart"])
+assert c.get("/api/option_candles?symbol=NIFTY&strike=1&opt=CE").status_code == 400
+# cash check: shrink the account so the ATM lot is unaffordable
+store.put("account", {"capital_start": 5000, "created": "x"})
+d3 = j(c.get("/api/dashboard?symbol=NIFTY"))
+print("small account:", d3["order"]["lots"], d3["order"]["affordable"], d3["order"]["note"])
+print("cheaper affordable strikes:", [a["strike"] for a in d3["alternatives"] if a["affordable"]])
+store.put("account", {"capital_start": 200000, "created": "x"})
+
+r = c.post("/api/trade/signal", json={"symbol": "NIFTY", "strike": otm["strike"]})
 print("place signal:", r.status_code, r.get_json())
 
 ch = j(c.get("/api/chain?symbol=NIFTY"))

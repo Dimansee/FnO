@@ -201,13 +201,25 @@ def _plan(opt, spot, risk):
     }
 
 
-def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=None) -> dict:
-    """Turn an underlying plan into concrete option legs, premiums and lots."""
+def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=None,
+                strike: float | None = None, cash: float | None = None) -> dict:
+    """Turn an underlying plan into concrete option legs, premiums and lots.
+
+    strike: buy this strike instead of the ATM one (e.g. a cheaper OTM strike).
+    cash:   demo cash available - lots are capped so the trade is affordable.
+    """
     opt, tag = plan["opt"], plan["opt"].lower()
     strikes = chain["strike"].values
     atm_i = int(abs(strikes - spot).argmin())
+    if strike is not None:
+        hits = [i for i, k in enumerate(strikes) if abs(float(k) - float(strike)) < 1e-6]
+        if not hits:
+            raise ValueError(f"Strike {strike:g} is not in the option chain.")
+        buy_i = hits[0]
+    else:
+        buy_i = atm_i
     use_spread = vix_level > C.VIX_SPREAD_LEVEL
-    buy = chain.iloc[atm_i]
+    buy = chain.iloc[buy_i]
 
     def px(row, side):
         v = row.get(f"{tag}_{side}")
@@ -217,12 +229,13 @@ def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=N
         v = row.get(f"{tag}_delta")
         return abs(float(v)) if v is not None and not pd.isna(v) else 0.5
 
+    ltp = float(buy[f"{tag}_ltp"]) if buy.get(f"{tag}_ltp") is not None and not pd.isna(buy.get(f"{tag}_ltp")) else None
     legs = [{"side": "BUY", "strike": float(buy["strike"]), "opt": opt, "key": buy[f"{tag}_key"], "price": px(buy, "ask")}]
     delta = dlt(buy)
     entry = legs[0]["price"]
     max_value = None
     if use_spread:
-        j = atm_i + (C.SPREAD_WIDTH_STRIKES if opt == "CE" else -C.SPREAD_WIDTH_STRIKES)
+        j = buy_i + (C.SPREAD_WIDTH_STRIKES if opt == "CE" else -C.SPREAD_WIDTH_STRIKES)
         if 0 <= j < len(chain):
             sell = chain.iloc[j]
             legs.append({"side": "SELL", "strike": float(sell["strike"]), "opt": opt, "key": sell[f"{tag}_key"],
@@ -239,6 +252,7 @@ def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=N
     if max_value:
         tgt = min(tgt, max_value * 0.85)
     risk_per_lot = (entry - sl) * lot
+    cost_per_lot = entry * lot
     allowed = capital * C.RISK_PER_TRADE
     lots = int(allowed // risk_per_lot) if risk_per_lot > 0 else 0
     note = None
@@ -246,11 +260,49 @@ def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=N
         if risk_per_lot <= 1.5 * allowed:
             lots, note = 1, f"1 lot risks ₹{risk_per_lot:,.0f} ({risk_per_lot / capital:.1%}) - slightly above the 1% rule."
         else:
-            note = f"SKIP: even 1 lot risks ₹{risk_per_lot:,.0f} ({risk_per_lot / capital:.1%} of capital). Increase capital or pick a cheaper underlying."
-    return {"type": "Debit spread" if use_spread else "Buy option", "legs": legs, "entry_prem": round(entry, 2),
+            note = f"SKIP: even 1 lot risks ₹{risk_per_lot:,.0f} ({risk_per_lot / capital:.1%} of capital). Pick a cheaper strike or underlying."
+    affordable = True
+    if cash is not None and cost_per_lot > 0:
+        max_lots_cash = int(cash // cost_per_lot)
+        if max_lots_cash < 1:
+            lots, affordable = 0, False
+            note = (f"Not enough cash: 1 lot needs ₹{cost_per_lot:,.0f}, you have ₹{cash:,.0f}. "
+                    "Pick a cheaper strike below.")
+        elif lots > max_lots_cash:
+            lots = max_lots_cash
+            note = (note + " " if note else "") + f"Lots reduced to {lots} to fit your cash."
+    # how far from ATM, in the option's own terms
+    step_n = buy_i - atm_i
+    otm_steps = step_n if opt == "CE" else -step_n
+    moneyness = "ATM" if otm_steps == 0 else (f"{otm_steps} OTM" if otm_steps > 0 else f"{-otm_steps} ITM")
+    return {"type": "Debit spread" if use_spread else "Buy option", "legs": legs, "strike": float(buy["strike"]),
+            "opt": opt, "moneyness": moneyness, "ltp": ltp, "entry_prem": round(entry, 2),
             "sl_prem": round(sl, 2), "target_prem": round(tgt, 2), "lots": lots, "lot": lot, "qty": lots * lot,
             "risk_rs": round(risk_per_lot * lots, 0), "reward_rs": round((tgt - entry) * lot * lots, 0),
-            "capital_used": round(entry * lot * lots, 0), "note": note, "delta": round(delta, 2)}
+            "capital_used": round(cost_per_lot * lots, 0), "cost_per_lot": round(cost_per_lot, 0),
+            "risk_per_lot": round(risk_per_lot, 0), "affordable": affordable, "note": note,
+            "delta": round(delta, 2), "is_default": buy_i == atm_i}
+
+
+def strike_alternatives(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, cash, itm=2, otm=6) -> list[dict]:
+    """The same trade on nearby strikes (2 ITM to 6 OTM), cheapest last."""
+    strikes = chain["strike"].values
+    atm_i = int(abs(strikes - spot).argmin())
+    sign = 1 if plan["opt"] == "CE" else -1  # OTM direction in the chain
+    out = []
+    for n in range(-itm, otm + 1):
+        i = atm_i + sign * n
+        if not 0 <= i < len(chain):
+            continue
+        try:
+            o = build_order(plan, chain, spot, vix_level, lot, capital, strike=float(strikes[i]), cash=cash)
+        except Exception:
+            continue
+        if o["entry_prem"] <= 0:
+            continue
+        out.append({k: o[k] for k in ("strike", "moneyness", "ltp", "entry_prem", "sl_prem", "target_prem",
+                                      "cost_per_lot", "risk_per_lot", "lots", "affordable", "delta", "type")})
+    return out
 
 
 def exit_check(pos: dict, spot: float, prem: float, now: datetime) -> tuple[str | None, dict]:

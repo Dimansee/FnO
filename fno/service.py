@@ -124,7 +124,14 @@ def _chart(today, hist):
     return out
 
 
-def dashboard(symbol):
+def _mini_chain(ch, spot, width=6):
+    atm_i = int((ch["strike"] - spot).abs().values.argmin())
+    view = ch.iloc[max(0, atm_i - width): atm_i + width + 1]
+    cols = ["strike"] + [f"{s}_{f}" for s in ("ce", "pe") for f in ("ltp", "oi", "chg_oi", "iv", "delta")]
+    return float(ch["strike"].iloc[atm_i]), view.reindex(columns=cols).to_dict("records")
+
+
+def dashboard(symbol, strike=None):
     m = M.Market()
     closed = manage_positions(m)
     g = _gather(symbol, m)
@@ -136,18 +143,25 @@ def dashboard(symbol):
     today, hist = S.session_frames(g["candles"], g["now"])
     prev = float(hist["close"].iloc[-1]) if not hist.empty else g["spot"]
 
-    order = None
+    order, alts = None, []
     if ev["plan"]:
         if any(p["symbol"] == symbol and p["mode"] == "signal" for p in pos):
             ev["warnings"].append("You already have an open signal trade in this instrument.")
-        order = S.build_order(ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], acct["capital_start"])
+        args = (ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], acct["capital_start"])
+        try:
+            order = S.build_order(*args, strike=strike, cash=cash)
+        except ValueError:
+            order = S.build_order(*args, cash=cash)
+        alts = S.strike_alternatives(*args, cash=cash)
+    atm, chain_rows = _mini_chain(g["chain"], g["spot"])
     ev.pop("today", None)
     return clean({
         "symbol": symbol, "label": g["meta"]["label"], "source": m.source, "live": m.live,
         "time": g["now"].strftime("%H:%M:%S"), "spot": g["spot"], "prev_close": prev,
         "vix": g["vix"], "expiry": g["trade_exp"], "lot": g["lot"], "cash": cash,
         "chain_source": g["chain"].attrs.get("source", "live"),
-        "signal": ev, "order": order, "chart": _chart(today, hist), "closed_now": closed,
+        "signal": ev, "order": order, "alternatives": alts, "atm": atm, "chain": chain_rows,
+        "chart": _chart(today, hist), "closed_now": closed,
         "errors": m.errors[-3:],
     })
 
@@ -172,7 +186,7 @@ def chain_view(symbol, expiry: str | None = None):
 # ---------------------------------------------------------------------------
 # Trading actions
 # ---------------------------------------------------------------------------
-def place_signal(symbol):
+def place_signal(symbol, strike=None):
     m = M.Market()
     g = _gather(symbol, m)
     acct, pos, tr, cash = P.snapshot()
@@ -185,7 +199,11 @@ def place_signal(symbol):
     ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, news(symbol), gcues(), fii(), g["now"], guard)
     if not ev["plan"]:
         return False, f"No valid signal right now ({ev['signal']}). The setup may have changed - refresh."
-    order = S.build_order(ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], acct["capital_start"])
+    try:
+        order = S.build_order(ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], acct["capital_start"],
+                              strike=strike, cash=cash)
+    except ValueError as e:
+        return False, str(e)
     if order["lots"] <= 0:
         return False, order["note"] or "Position size is zero."
     src = m.br.name if g["chain"].attrs.get("source") == "live" and m.br else "demo"
@@ -215,6 +233,52 @@ def place_manual(symbol, expiry, strike, opt, side, lots):
     leg = {"side": side, "strike": float(strike), "opt": opt, "key": row[f"{t}_key"], "price": float(px), "src": src}
     _, _, _, cash = P.snapshot()
     return P.open_position(cash, symbol, [leg], int(lots), g["lot"], exp, g["spot"], m.source)
+
+
+def option_candles(symbol, expiry=None, strike=None, opt="CE"):
+    """5-minute candles for one option contract next to the underlying.
+    Live broker candles when connected; otherwise a theoretical series priced
+    from the underlying candles (Black-Scholes, same model as demo prices)."""
+    if opt not in ("CE", "PE"):
+        raise ValueError("Option type must be CE or PE")
+    m = M.Market()
+    g = _gather(symbol, m)
+    exp = date.fromisoformat(expiry) if expiry else g["trade_exp"]
+    ch = g["chain"] if exp == g["trade_exp"] else m.chain(symbol, exp, g["spot"], g["vix"]["level"], g["candles"])
+    if strike is None:
+        strike = float(ch["strike"].iloc[int((ch["strike"] - g["spot"]).abs().values.argmin())])
+    row = ch[ch.strike == float(strike)]
+    if row.empty:
+        raise ValueError(f"Strike {strike:g} is not in the option chain.")
+    key = row.iloc[0][f"{opt.lower()}_key"]
+    today, hist = S.session_frames(g["candles"], g["now"])
+    under = pd.concat([hist.tail(75), today]) if not hist.empty else today
+
+    out, source = [], "theoretical"
+    if m.br and ch.attrs.get("source") == "live" and key and not str(key).startswith("DEMO|"):
+        try:
+            oc = M.cached(f"oc:{m.br.name}:{key}", 25, lambda: m.br.candles(key))
+            oc = oc[oc.index >= under.index[0]] if not oc.empty else oc
+            if not oc.empty:
+                source = "live"
+                for ts, r in oc.iterrows():
+                    out.append({"time": int(ts.timestamp()) + 19800, "open": r["open"], "high": r["high"],
+                                "low": r["low"], "close": r["close"]})
+        except Exception as e:
+            m.errors.append(f"Live option candles unavailable ({e}); showing theoretical prices.")
+    if not out:
+        vix = g["vix"]["level"]
+        for ts, r in under.iterrows():
+            t = I.years_to_expiry(exp, ts.to_pydatetime().replace(tzinfo=None) + pd.Timedelta(minutes=5))
+            def f(spot_px):
+                iv = M.demo_iv(symbol, float(strike), float(spot_px), vix, g["candles"])
+                return I.bs_price(float(spot_px), float(strike), t, iv, opt)
+            o, c, a, b = f(r["open"]), f(r["close"]), f(r["high"]), f(r["low"])
+            out.append({"time": int(ts.timestamp()) + 19800, "open": round(o, 2), "high": round(max(a, b, o, c), 2),
+                        "low": round(min(a, b, o, c), 2), "close": round(c, 2)})
+    return clean({"symbol": symbol, "label": g["meta"]["label"], "expiry": exp, "strike": float(strike), "opt": opt,
+                  "source": source, "candles": out,
+                  "ltp": row.iloc[0][f"{opt.lower()}_ltp"], "errors": m.errors[-3:]})
 
 
 def exit_position(pos_id):
