@@ -49,6 +49,11 @@ X.fii_dii = lambda: None
 
 
 from app import app  # noqa: E402
+import os as _os
+if _os.environ.get("MOCK_AI"):                       # show the AI card with a forced signal
+    from fno import ai_model as AM, store as _st
+    AM.load()["meta"]["threshold"] = -9.0
+    _st.put("prefs", {"sizing": "risk", "risk_pct": 2.0, "strategies": ["noise", "camarilla", "ai"], "auto": False, "auto_syms": ["NIFTY"]})
 
 
 @app.after_request

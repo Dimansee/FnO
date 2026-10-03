@@ -1,0 +1,77 @@
+{
+ "cfg": "v2",
+ "log": [
+  {
+   "quarter": 20241,
+   "train_rows": 28670,
+   "trades": 0,
+   "net_thr0.2": 0
+  },
+  {
+   "quarter": 20242,
+   "train_rows": 36112,
+   "trades": 0,
+   "net_thr0.2": 0
+  },
+  {
+   "quarter": 20243,
+   "train_rows": 43432,
+   "trades": 0,
+   "net_thr0.2": 0
+  },
+  {
+   "quarter": 20244,
+   "train_rows": 51240,
+   "trades": 0,
+   "net_thr0.2": 0
+  },
+  {
+   "quarter": 20251,
+   "train_rows": 58682,
+   "trades": 0,
+   "net_thr0.2": 0
+  },
+  {
+   "quarter": 20252,
+   "train_rows": 66246,
+   "trades": 0,
+   "net_thr0.2": 0
+  },
+  {
+   "quarter": 20253,
+   "train_rows": 73688,
+   "trades": 0,
+   "net_thr0.2": 0
+  },
+  {
+   "quarter": 20254,
+   "train_rows": 81496,
+   "trades": 0,
+   "net_thr0.2": 0
+  },
+  {
+   "quarter": 20261,
+   "train_rows": 88938,
+   "trades": 0,
+   "net_thr0.2": 0
+  },
+  {
+   "quarter": 20262,
+   "train_rows": 96258,
+   "trades": 0,
+   "net_thr0.2": 0
+  },
+  {
+   "quarter": 20263,
+   "train_rows": 103578,
+   "trades": 0,
+   "net_thr0.2": 0
+  },
+  {
+   "quarter": 20264,
+   "train_rows": 111508,
+   "trades": 0,
+   "net_thr0.2": 0
+  }
+ ]
+}
