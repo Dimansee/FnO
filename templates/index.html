@@ -166,13 +166,38 @@ details[open] summary::before{transform:rotate(45deg) translate(-2px,-2px)}
 .alts tr.na td{opacity:.5}
 
 /* charts */
-#chart,#ochart{height:380px}
 .cardhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .charttitle{font-size:14px;margin:14px 0 6px}
-.cmpgrid{display:grid;gap:16px}
-.cmpgrid.side{grid-template-columns:1fr 1fr}
-.cmpgrid.stack{grid-template-columns:1fr}
-@media(max-width:900px){.cmpgrid.side{grid-template-columns:1fr}#chart,#ochart{height:300px}}
+/* chart workspace */
+.ws{display:grid;gap:12px;height:var(--wsh);margin-top:12px}
+.ws.l1{--wsh:540px;grid-template-columns:1fr}
+.ws.l2v{--wsh:460px;grid-template-columns:1fr 1fr}
+.ws.l2h{--wsh:760px;grid-template-rows:1fr 1fr}
+.ws.l3l{--wsh:680px;grid-template-columns:1.45fr 1fr;grid-template-rows:1fr 1fr}.ws.l3l .pane:first-child{grid-row:1/3}
+.ws.l3t{--wsh:760px;grid-template-columns:1fr 1fr;grid-template-rows:1.35fr 1fr}.ws.l3t .pane:first-child{grid-column:1/3}
+.ws.l4{--wsh:760px;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.pane{display:flex;flex-direction:column;min-width:0;min-height:0;border:1px solid var(--line);border-radius:14px;background:var(--bg2);padding:8px;transition:border-color .2s,box-shadow .2s}
+.pane.focus{border-color:rgba(242,169,59,.55);box-shadow:0 0 0 1px rgba(242,169,59,.2)}
+.phead{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:0 2px 8px}
+.phead select{padding:4px 8px;font-size:13px;min-width:0;max-width:150px}
+.phead .seg button{padding:4px 9px;font-size:12.5px;display:inline-flex;align-items:center}
+.phead .p-fit{padding:5px 8px;display:inline-flex}
+.pchart{position:relative;flex:1;min-height:0}
+.legend{position:absolute;left:6px;top:4px;z-index:3;pointer-events:none;font-size:12px;line-height:1.45;color:var(--muted);background:rgba(11,20,27,.72);padding:3px 7px;border-radius:7px;max-width:calc(100% - 70px)}
+.legend .t{font-family:var(--display);font-weight:650;color:var(--text);font-size:12.5px}
+.legend b{color:var(--text);font-weight:600}
+.lay button svg{display:block}
+.tog{display:inline-flex;align-items:center;gap:7px;margin:0;font-size:13.5px;color:var(--text);cursor:pointer;white-space:nowrap}
+.tog input{min-width:auto}
+.hint{font-size:12.5px;margin-top:6px}
+#compareCard.max{position:fixed;inset:0;z-index:120;margin:0!important;border-radius:0;overflow:auto;padding:14px 16px}
+#compareCard.max .ws{height:calc(100vh - 118px);min-height:420px}
+body.chartmax{overflow:hidden}
+@media(max-width:760px){
+  .ws,#compareCard.max .ws{grid-template-columns:1fr!important;grid-template-rows:none!important;height:auto}
+  .ws .pane{height:360px;grid-row:auto!important;grid-column:auto!important}
+  .hint{display:none}
+}
 #eqchart,#btchart{height:240px}
 .factor-score{font-weight:700}
 
@@ -309,23 +334,15 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
     </div>
     <div class="card" style="margin-top:14px" id="compareCard">
       <div class="cardhead">
-        <h3 style="margin:0">Compare: underlying vs option</h3>
-        <div class="formrow" style="gap:8px;align-items:center">
-          <select id="cmpStrike" aria-label="Strike"></select>
-          <div class="seg" id="cmpOpt"><button data-v="CE" class="on">CE</button><button data-v="PE">PE</button></div>
-          <div class="seg" id="cmpLayout"><button data-v="side" class="on">Side by side</button><button data-v="stack">Stacked</button></div>
+        <h3 style="margin:0">Charts</h3>
+        <div class="formrow" style="gap:10px;align-items:center">
+          <div class="seg lay" id="cmpLayout" role="group" aria-label="Chart layout"><button data-v="1" title="One chart" aria-label="One chart"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="20" height="14" rx="2"/></svg></button><button data-v="2v" title="Two side by side" aria-label="Two side by side"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="9" height="14" rx="2"/><rect x="12" y="1" width="9" height="14" rx="2"/></svg></button><button data-v="2h" title="Two stacked" aria-label="Two stacked"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="20" height="6" rx="2"/><rect x="1" y="9" width="20" height="6" rx="2"/></svg></button><button data-v="3l" title="Three: big on the left" aria-label="Three: big on the left"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="11" height="14" rx="2"/><rect x="14" y="1" width="7" height="6" rx="2"/><rect x="14" y="9" width="7" height="6" rx="2"/></svg></button><button data-v="3t" title="Three: big on top" aria-label="Three: big on top"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="20" height="7" rx="2"/><rect x="1" y="10" width="9" height="5" rx="2"/><rect x="12" y="10" width="9" height="5" rx="2"/></svg></button><button data-v="4" title="Four charts" aria-label="Four charts"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="9" height="6" rx="2"/><rect x="12" y="1" width="9" height="6" rx="2"/><rect x="1" y="9" width="9" height="6" rx="2"/><rect x="12" y="9" width="9" height="6" rx="2"/></svg></button></div>
+          <label class="tog" title="When on, moving or zooming one chart moves all of them"><input type="checkbox" id="cmpSync"> Move charts together</label>
+          <button id="cmpFull">Full screen</button>
         </div>
       </div>
-      <div class="cmpgrid side" id="cmpGrid">
-        <div>
-          <div class="charttitle"><b id="uTitle">Underlying</b> <span class="muted">· VWAP <span style="color:#f2a93b">━</span> EMA 9 <span style="color:#7fb4d9">━</span> EMA 21 <span style="color:#b39ddb">━</span></span></div>
-          <div id="chart"></div>
-        </div>
-        <div>
-          <div class="charttitle"><b id="oTitle">Option</b> <span class="muted" id="oInfo"></span></div>
-          <div id="ochart"></div>
-        </div>
-      </div>
+      <div class="muted hint">Drag to move · scroll or pinch to zoom · drag the price or time axis to stretch it · double-click an axis to reset. Click a chart to select it, then click a price in the option chain to show that contract there.</div>
+      <div class="ws l2v" id="cmpGrid"></div>
       <div id="oNote" class="muted" style="font-size:12px;margin-top:8px"></div>
     </div>
   </section>
@@ -497,7 +514,7 @@ function placeInk() {
 addEventListener("resize", () => { placeInk(); if (S.dash) drawSession(S.dash, false); });
 document.fonts && document.fonts.ready.then(() => { placeInk(); if (S.dash) drawSession(S.dash, false); });
 $("#tabs").onclick = e => { const b = e.target.closest("button"); if (b) go(b.dataset.t); };
-$("#symbol").onchange = () => { S.symbol = $("#symbol").value; localStorage.setItem("sym", S.symbol); $("#btSym").value = S.symbol; S.chain = null; S.pick = null; S.cmp = null; load(); };
+$("#symbol").onchange = () => { S.symbol = $("#symbol").value; localStorage.setItem("sym", S.symbol); $("#btSym").value = S.symbol; S.chain = null; S.pick = null; CW.panes.forEach(p => { if (!p.sym) p.strike = null; }); saveCW(); load(); };
 $("#refresh").onclick = () => load();
 $("#auto").onchange = schedule;
 function schedule() {
@@ -528,8 +545,7 @@ const CH_OPTS = {
   crosshair: {mode: 0},
 };
 const CANDLE = {upColor: "#3fbf8f", downColor: "#e2675a", borderVisible: false, wickUpColor: "#3fbf8f", wickDownColor: "#e2675a"};
-let chart, cs, lv, l9, l21, priceLines = [], ochart, ocs, oLines = [], syncing = false;
-let uLevels = [], oLevels = [], fitted = {u: null, o: null};
+let syncing = false;
 // make the price scale always include SL / target lines, not just the candles
 const withLevels = levels => original => {
   const r = original(); const lv = levels();
@@ -539,38 +555,7 @@ const withLevels = levels => original => {
   return r;
 };
 S.pick = null;          // strike chosen for the trade ticket (null = recommended)
-S.cmp = null;           // {strike, opt} shown in the option chart
 S.dash = null;
-
-function ensureCharts() {
-  if (chart || !window.LightweightCharts) return;
-  chart = LightweightCharts.createChart($("#chart"), CH_OPTS);
-  cs = chart.addCandlestickSeries({...CANDLE, autoscaleInfoProvider: withLevels(() => uLevels)});
-  lv = chart.addLineSeries({color: "#f2a93b", lineWidth: 1.5, priceLineVisible: false, lastValueVisible: false});
-  l9 = chart.addLineSeries({color: "#7fb4d9", lineWidth: 1, priceLineVisible: false, lastValueVisible: false});
-  l21 = chart.addLineSeries({color: "#b39ddb", lineWidth: 1, priceLineVisible: false, lastValueVisible: false});
-  ochart = LightweightCharts.createChart($("#ochart"), CH_OPTS);
-  ocs = ochart.addCandlestickSeries({...CANDLE, autoscaleInfoProvider: withLevels(() => oLevels)});
-  // keep both charts on the same time window (by time, so different bar counts still line up)
-  const link = (a, aSeries, b, bSeries) => a.timeScale().subscribeVisibleTimeRangeChange(r => {
-    if (syncing || !r || !aSeries.data().length || !bSeries.data().length) return;
-    syncing = true; try { b.timeScale().setVisibleRange(r); } catch (e) {} syncing = false;
-  });
-  link(chart, cs, ochart, ocs); link(ochart, ocs, chart, cs);
-  const cross = (a, aSeries, b, bSeries) => a.subscribeCrosshairMove(p => {
-    if (!p || p.time === undefined) { b.clearCrosshairPosition && b.clearCrosshairPosition(); return; }
-    const bar = bSeries.data().find(x => x.time === p.time);
-    if (bar && b.setCrosshairPosition) b.setCrosshairPosition(bar.close, p.time, bSeries);
-  });
-  cross(chart, cs, ochart, ocs); cross(ochart, ocs, chart, cs);
-}
-
-function cmpContract(d) {
-  // default chart contract: the ticket's option, else ATM CE
-  if (S.cmp && S.cmp.symbol === S.symbol) return S.cmp;
-  if (d.order) return {symbol: S.symbol, strike: d.order.strike, opt: d.order.opt};
-  return {symbol: S.symbol, strike: d.atm, opt: "CE"};
-}
 
 async function loadSignal() {
   const q = S.pick ? `&strike=${S.pick}` : "";
@@ -605,8 +590,7 @@ async function loadSignal() {
   renderState(d);
   renderTicket(d);
   renderMiniChain(d);
-  renderUnderlying(d);
-  await loadOptionChart();
+  if (!PC.length) renderWorkspace(); else refreshPanes();
 }
 
 /* ---------- hero: today's session ---------- */
@@ -756,10 +740,10 @@ function renderTicket(d) {
   t.querySelectorAll("[data-pick]").forEach(r => r.onclick = () => {
     const k = +r.dataset.pick;
     S.pick = (rec && k === rec.strike) ? null : k;
-    S.cmp = {symbol: S.symbol, strike: k, opt: o.opt};
+    followTicket(o.opt);
     load();
   });
-  const rp = $("#resetPick"); if (rp) rp.onclick = () => { S.pick = null; S.cmp = null; load(); };
+  const rp = $("#resetPick"); if (rp) rp.onclick = () => { S.pick = null; followTicket(o.opt); load(); };
   const b = $("#placeSig"); if (b) b.onclick = async () => {
     b.disabled = true;
     try { const r = await post("/api/trade/signal", {symbol: S.symbol, strike: o.strike}); toast(r.message); load(); }
@@ -784,61 +768,251 @@ function renderMiniChain(d) {
         <td class="mono ${pi} pick ${curPE}" style="text-align:left" data-cs="${r.strike}" data-co="PE"><b>${n2(r.pe_ltp)}</b>${tag("PE")}</td>
         <td class="mono ${pi} ${cls(r.pe_chg_oi)}">${big(r.pe_chg_oi)}</td><td class="mono ${pi}">${big(r.pe_oi)}</td></tr>`;
     }).join("");
-  $("#cmpStrike").innerHTML = d.chain.map(r => `<option value="${r.strike}">${r.strike}</option>`).join("");
-  $("#cmpStrike").value = cur.strike;
-  setSeg("#cmpOpt", cur.opt);
 }
 
-function renderUnderlying(d) {
-  ensureCharts();
-  $("#uTitle").textContent = d.label + " (underlying)";
-  if (!chart) return;
-  const c = d.chart, sg = d.signal;
-  cs.setData(c.map(x => ({time: x.time, open: x.open, high: x.high, low: x.low, close: x.close})));
-  lv.setData(c.filter(x => x.vwap != null).map(x => ({time: x.time, value: x.vwap})));
-  l9.setData(c.filter(x => x.ema9 != null).map(x => ({time: x.time, value: x.ema9})));
-  l21.setData(c.filter(x => x.ema21 != null).map(x => ({time: x.time, value: x.ema21})));
-  priceLines.forEach(pl => cs.removePriceLine(pl)); priceLines = [];
-  const add = (price, color, title, style = 2) => priceLines.push(cs.createPriceLine({price, color, title, lineWidth: 1, lineStyle: style, axisLabelVisible: true}));
-  if (sg.orb) { add(sg.orb.high, "#8fa3b0", "ORB high"); add(sg.orb.low, "#8fa3b0", "ORB low"); }
-  if (sg.plan) { add(sg.plan.sl, "#e2675a", "Stop", 0); add(sg.plan.target, "#3fbf8f", "Target", 0); }
-  uLevels = sg.plan ? [sg.plan.sl, sg.plan.target] : [];
-  if (fitted.u !== S.symbol) { chart.timeScale().fitContent(); fitted.u = S.symbol; }
+/* ---------- chart workspace: 1-4 independent charts ---------- */
+const LAYOUTS = {"1": 1, "2v": 2, "2h": 2, "3l": 3, "3t": 3, "4": 4};
+const TFS = [5, 15, 30, 60];
+const ICON_C = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M4 1v12M10 2.5v9" stroke="currentColor"/><rect x="2.3" y="4" width="3.4" height="5" fill="currentColor"/><rect x="8.3" y="5" width="3.4" height="4" fill="none" stroke="currentColor"/></svg>';
+const ICON_L = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 11 5 6.5 8 8.5 13 2.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+const pane0 = (sym, kind) => ({sym, kind, strike: null, tf: 5, sty: "c"});
+function defaultPanes() {
+  const other = S.symbol === "NIFTY" ? "BANKNIFTY" : "NIFTY";
+  return [pane0(null, "UND"), pane0(null, "CE"), pane0(null, "PE"), pane0(other, "UND")];
 }
-
-async function loadOptionChart() {
-  const d = S.dash; if (!d) return;
-  const c = cmpContract(d);
-  $("#oTitle").textContent = `${d.label} ${c.strike} ${c.opt}`;
-  let r;
-  try { r = await api(`/api/option_candles?symbol=${S.symbol}&expiry=${d.expiry}&strike=${c.strike}&opt=${c.opt}`); }
-  catch (e) { $("#oNote").textContent = "Option chart unavailable: " + e.message; return; }
-  $("#oInfo").textContent = `· LTP ₹${n2(r.ltp)} · ${r.source === "live" ? "live candles" : "theoretical prices"}`;
-  $("#oNote").textContent = r.source === "live" ? "" :
-    "Option candles are calculated from the index price (Black-Scholes) until a broker is connected, so they show the shape of the move, not exact traded prices.";
-  ensureCharts(); if (!ochart) return;
-  oLines.forEach(pl => ocs.removePriceLine(pl)); oLines = []; oLevels = [];
-  const o = d.order;
-  if (o && o.strike === c.strike && o.opt === c.opt && o.type === "Buy option") {
-    const add = (price, color, title, style) => oLines.push(ocs.createPriceLine({price, color, title, lineWidth: 1, lineStyle: style, axisLabelVisible: true}));
-    add(o.entry_prem, "#8fa3b0", "Entry", 2); add(o.sl_prem, "#e2675a", "SL", 0); add(o.target_prem, "#3fbf8f", "TP", 0);
-    oLevels = [o.sl_prem, o.target_prem];
+const CW = (() => { try { return JSON.parse(localStorage.getItem("fno.charts")) || {}; } catch (e) { return {}; } })();
+if (!LAYOUTS[CW.layout]) CW.layout = "2v";
+CW.sync = !!CW.sync; CW.focus = 1;
+if (!Array.isArray(CW.panes) || CW.panes.length !== 4) CW.panes = defaultPanes();
+function saveCW() { try { localStorage.setItem("fno.charts", JSON.stringify({layout: CW.layout, sync: CW.sync, panes: CW.panes})); } catch (e) {} }
+let PC = [];
+const paneEl = i => document.querySelector(`#cmpGrid .pane[data-i="${i}"]`);
+const paneSym = p => p.sym || S.symbol;
+const tfName = t => t < 60 ? t + "m" : "1h";
+const segIn = (el, v) => el.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
+function autoStrike(p) {
+  const d = S.dash;
+  if (p.strike) return p.strike;
+  if (d && paneSym(p) === d.symbol) return d.order && d.order.opt === p.kind ? d.order.strike : d.atm;
+  return null;
+}
+// group 5-minute bars into 15m / 30m / 1h bars anchored at 9:15 like broker apps
+function resample(c, tf) {
+  if (tf === 5) return c.map(x => ({...x}));
+  const out = [], step = tf * 60; let cur = null;
+  for (const x of c) {
+    const open = Math.floor(x.time / 86400) * 86400 + 555 * 60;
+    const t = open + Math.floor((x.time - open) / step) * step;
+    if (!cur || cur.time !== t) { if (cur) out.push(cur); cur = {...x, time: t}; }
+    else { cur.high = Math.max(cur.high, x.high); cur.low = Math.min(cur.low, x.low); cur.close = x.close; cur.vwap = x.vwap; cur.ema9 = x.ema9; cur.ema21 = x.ema21; }
   }
-  ocs.setData(r.candles);
-  const id = `${S.symbol}|${c.strike}|${c.opt}`;
-  if (fitted.o !== id) { ochart.timeScale().fitContent(); fitted.o = id; }
-  const rng = chart && chart.timeScale().getVisibleRange();
-  if (rng) { syncing = true; try { ochart.timeScale().setVisibleRange(rng); } catch (e) {} syncing = false; }
+  if (cur) out.push(cur);
+  return out;
 }
+
+function renderWorkspace() {
+  if (!window.LightweightCharts || !S.meta) return;
+  PC.forEach(o => o && o.chart.remove()); PC = [];
+  const n = LAYOUTS[CW.layout], g = $("#cmpGrid");
+  g.className = "ws l" + CW.layout;
+  setSeg("#cmpLayout", CW.layout); $("#cmpSync").checked = CW.sync;
+  if (CW.focus >= n) CW.focus = 0;
+  const syms = S.meta.symbols.map(x => `<option value="${x.id}">${esc(x.label)}</option>`).join("");
+  g.innerHTML = Array.from({length: n}, (_, i) => `<div class="pane ${i === CW.focus ? "focus" : ""}" data-i="${i}">
+    <div class="phead">
+      <select class="p-sym" aria-label="Instrument"><option value="">Same as top</option>${syms}</select>
+      <div class="seg p-kind"><button data-v="UND">Price</button><button data-v="CE">CE</button><button data-v="PE">PE</button></div>
+      <select class="p-strike" aria-label="Strike"></select>
+      <select class="p-tf" aria-label="Candle size">${TFS.map(t => `<option value="${t}">${tfName(t)}</option>`).join("")}</select>
+      <div class="seg p-sty"><button data-v="c" title="Candles" aria-label="Candles">${ICON_C}</button><button data-v="l" title="Line" aria-label="Line">${ICON_L}</button></div>
+      <span class="spacer"></span>
+      <button class="p-fit" title="Reset zoom" aria-label="Reset zoom"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7a4.5 4.5 0 1 0 1.4-3.3M2.5 1.5v3h3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+    <div class="pchart"><div class="legend mono"></div></div>
+  </div>`).join("");
+  for (let i = 0; i < n; i++) { PC[i] = makeChart(i); syncPaneControls(i); }
+  refreshPanes();
+}
+
+function makeChart(i) {
+  const p = CW.panes[i], el = paneEl(i).querySelector(".pchart");
+  const c = LightweightCharts.createChart(el, {...CH_OPTS,
+    handleScroll: {mouseWheel: true, pressedMouseMove: true, horzTouchDrag: true, vertTouchDrag: false},
+    handleScale: {mouseWheel: true, pinch: true, axisPressedMouseMove: {time: true, price: true}, axisDoubleClickReset: {time: true, price: true}},
+    kineticScroll: {touch: true, mouse: false},
+    timeScale: {...CH_OPTS.timeScale, rightOffset: 4, barSpacing: 7, minBarSpacing: 1.2}});
+  const o = {chart: c, levels: [], pls: [], lines: [], data: [], idx: new Map(), key: null, lg: el.querySelector(".legend"), title: ""};
+  const auto = withLevels(() => o.levels);
+  o.main = p.sty === "l"
+    ? c.addAreaSeries({lineColor: "#3fbf8f", topColor: "rgba(63,191,143,.22)", bottomColor: "rgba(63,191,143,0)", lineWidth: 2, autoscaleInfoProvider: auto})
+    : c.addCandlestickSeries({...CANDLE, autoscaleInfoProvider: auto});
+  if (p.kind === "UND") o.lines = [["vwap", "#f2a93b", 1.5], ["ema9", "#7fb4d9", 1], ["ema21", "#b39ddb", 1]].map(([k, color, w]) =>
+    [k, c.addLineSeries({color, lineWidth: w, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false})]);
+  c.timeScale().subscribeVisibleTimeRangeChange(r => {
+    if (!CW.sync || syncing || !r || !o.data.length) return;
+    syncing = true;
+    PC.forEach(x => { if (x && x !== o && x.data.length) try { x.chart.timeScale().setVisibleRange(r); } catch (e) {} });
+    syncing = false;
+  });
+  c.subscribeCrosshairMove(pt => {
+    const t = pt && pt.time !== undefined ? pt.time : null;
+    legend(o, t);
+    if (!CW.sync || syncing) return;
+    syncing = true;
+    PC.forEach(x => {
+      if (!x || x === o) return;
+      const j = t != null ? x.idx.get(t) : undefined;
+      if (j != null) { x.chart.setCrosshairPosition(x.data[j].close, t, x.main); legend(x, t); }
+      else { x.chart.clearCrosshairPosition(); legend(x, null); }
+    });
+    syncing = false;
+  });
+  return o;
+}
+
+function legend(o, t) {
+  if (!o.lg) return;
+  if (o.err) { o.lg.innerHTML = `<div class="t">${esc(o.title || "Chart")}</div><span class="down">${esc(o.err)}</span>`; return; }
+  const a = o.data; if (!a.length) { o.lg.innerHTML = `<div class="t">${esc(o.title || "Loading…")}</div>`; return; }
+  let k = a.length - 1; if (t != null && o.idx.has(t)) k = o.idx.get(t);
+  const b = a[k], prev = k ? a[k - 1].close : b.open, ch = b.close - prev;
+  o.lg.innerHTML = `<div class="t">${esc(o.title)}</div>O <b>${n2(b.open)}</b> H <b>${n2(b.high)}</b> L <b>${n2(b.low)}</b> C <b class="${cls(ch)}">${n2(b.close)}</b> <span class="${cls(ch)}">${sgn(prev ? ch / prev * 100 : 0)}%</span>`;
+}
+
+function syncPaneControls(i) {
+  const p = CW.panes[i], el = paneEl(i), o = PC[i]; if (!el) return;
+  el.querySelector(".p-sym").value = p.sym || "";
+  segIn(el.querySelector(".p-kind"), p.kind); el.querySelector(".p-tf").value = String(p.tf); segIn(el.querySelector(".p-sty"), p.sty);
+  const ss = el.querySelector(".p-strike");
+  ss.classList.toggle("hidden", p.kind === "UND");
+  const list = ((o && o.strikes) || []).slice();
+  if (p.strike && !list.includes(p.strike)) list.push(p.strike);
+  list.sort((x, y) => x - y);
+  const now = o && o.strikeNow;
+  ss.innerHTML = `<option value="">Auto${!p.strike && now ? " · " + now : ""}</option>` +
+    list.map(k => `<option value="${k}">${k}${o && k === o.atm ? " ATM" : ""}</option>`).join("");
+  ss.value = p.strike ? String(p.strike) : "";
+}
+
+function refreshPanes() { PC.forEach((o, i) => o && refreshPane(i)); }
+async function refreshPane(i) {
+  const o = PC[i], p = CW.panes[i]; if (!o) return;
+  const d = S.dash, sym = paneSym(p), mine = d && d.symbol === sym;
+  let r;
+  try {
+    if (p.kind === "UND" && mine) r = {label: d.label, candles: d.chart, strike: null, source: d.live ? "live" : "delayed", strikes: o.strikes, atm: d.atm};
+    else {
+      const k = p.kind === "UND" ? null : autoStrike(p);
+      r = await api(`/api/candles?symbol=${sym}&kind=${p.kind}${k ? "&strike=" + k : ""}${mine ? "&expiry=" + d.expiry : ""}`);
+    }
+  } catch (e) { if (PC[i] === o) { o.err = e.message; legend(o, null); } return; }
+  if (PC[i] !== o) return;                       // pane was rebuilt while loading
+  o.err = null; o.strikes = r.strikes || o.strikes; o.atm = r.atm; o.source = r.source; o.strikeNow = r.strike;
+  o.title = `${r.label}${p.kind === "UND" ? "" : " " + r.strike + " " + p.kind} · ${tfName(p.tf)}`;
+  const bars = resample(r.candles || [], p.tf);
+  o.data = bars; o.idx = new Map(bars.map((b, j) => [b.time, j]));
+  if (p.sty === "l") {
+    const last = bars[bars.length - 1], day = last ? Math.floor(last.time / 86400) : 0, first = bars.find(b => Math.floor(b.time / 86400) === day);
+    const up = !last || last.close >= first.open, c = up ? "63,191,143" : "226,103,90";
+    o.main.applyOptions({lineColor: `rgb(${c})`, topColor: `rgba(${c},.22)`, bottomColor: `rgba(${c},0)`});
+    o.main.setData(bars.map(b => ({time: b.time, value: b.close})));
+  } else o.main.setData(bars.map(b => ({time: b.time, open: b.open, high: b.high, low: b.low, close: b.close})));
+  const lastDay = bars.length ? Math.floor(bars[bars.length - 1].time / 86400) : 0;
+  o.lines.forEach(([k, ser]) => ser.setData(bars.filter(b => b[k] != null && (k !== "vwap" || Math.floor(b.time / 86400) === lastDay))
+    .map(b => ({time: b.time, value: b[k]}))));   // VWAP restarts every session, so draw it for the latest one
+  o.pls.forEach(pl => o.main.removePriceLine(pl)); o.pls = []; o.levels = [];
+  const add = (price, color, title, style) => o.pls.push(o.main.createPriceLine({price, color, title, lineWidth: 1, lineStyle: style, axisLabelVisible: true}));
+  if (mine) {
+    const sg = d.signal, od = d.order;
+    if (p.kind === "UND") {
+      if (sg.orb) { add(sg.orb.high, "#8fa3b0", "ORB high", 2); add(sg.orb.low, "#8fa3b0", "ORB low", 2); }
+      if (sg.plan) { add(sg.plan.sl, "#e2675a", "Stop", 0); add(sg.plan.target, "#3fbf8f", "Target", 0); o.levels = [sg.plan.sl, sg.plan.target]; }
+    } else if (od && od.type === "Buy option" && od.strike === r.strike && od.opt === p.kind) {
+      add(od.entry_prem, "#8fa3b0", "Entry", 2); add(od.sl_prem, "#e2675a", "SL", 0); add(od.target_prem, "#3fbf8f", "TP", 0);
+      o.levels = [od.sl_prem, od.target_prem];
+    }
+  }
+  const key = [sym, p.kind, r.strike, p.tf, p.sty].join("|");
+  if (o.key !== key) {
+    o.key = key; const n = bars.length;
+    if (n > 130) o.chart.timeScale().setVisibleLogicalRange({from: n - 120, to: n + 4}); else o.chart.timeScale().fitContent();
+  }
+  syncPaneControls(i); legend(o, null); optNote();
+  if (S.dash && i === targetPane()) renderMiniChain(S.dash);
+}
+function optNote() {
+  const theo = PC.some((o, i) => o && CW.panes[i].kind !== "UND" && o.source && o.source !== "live");
+  $("#oNote").textContent = theo ? "Option candles are calculated from the index price (Black-Scholes) until a broker is connected, so they show the shape of the move, not exact traded prices." : "";
+}
+function rebuildPane(i) {
+  if (!PC[i]) return;
+  PC[i].chart.remove(); PC[i] = makeChart(i); syncPaneControls(i); legend(PC[i], null); refreshPane(i);
+}
+function setFocus(i) {
+  CW.focus = i;
+  document.querySelectorAll("#cmpGrid .pane").forEach(el => el.classList.toggle("focus", +el.dataset.i === i));
+  if (S.dash) renderMiniChain(S.dash);
+}
+// the chart that option-chain clicks go to: the selected chart if it shows an option, else the first option chart
+function targetPane() {
+  const n = PC.length || LAYOUTS[CW.layout];
+  if (CW.focus < n && CW.panes[CW.focus].kind !== "UND") return CW.focus;
+  for (let i = 0; i < n; i++) if (CW.panes[i].kind !== "UND") return i;
+  return Math.min(CW.focus, n - 1);
+}
+function cmpContract(d) {
+  const i = targetPane(), p = CW.panes[i];
+  if (p.kind === "UND" || paneSym(p) !== d.symbol) return {strike: null, opt: null};
+  return {strike: (PC[i] && PC[i].strikeNow) || autoStrike(p), opt: p.kind};
+}
+function showContract(strike, opt) {
+  const i = targetPane(), p = CW.panes[i];
+  Object.assign(p, {sym: null, kind: opt, strike});
+  saveCW(); setFocus(i); rebuildPane(i);
+}
+function followTicket(opt) {
+  const i = targetPane(), p = CW.panes[i];
+  if (paneSym(p) === S.symbol) { Object.assign(p, {sym: null, kind: opt, strike: null}); saveCW(); }
+}
+
+$("#cmpGrid").addEventListener("click", e => {
+  const el = e.target.closest(".pane"); if (!el) return;
+  const i = +el.dataset.i, p = CW.panes[i], b = e.target.closest("button");
+  if (i !== CW.focus) setFocus(i);
+  if (!b) return;
+  const seg = b.parentElement;
+  if (b.classList.contains("p-fit")) { const o = PC[i]; o.chart.timeScale().fitContent(); o.chart.priceScale("right").applyOptions({autoScale: true}); return; }
+  if (seg.classList.contains("p-kind")) { if (p.kind === b.dataset.v) return; p.kind = b.dataset.v; }
+  else if (seg.classList.contains("p-sty")) { if (p.sty === b.dataset.v) return; p.sty = b.dataset.v; }
+  else return;
+  saveCW(); rebuildPane(i);
+});
+$("#cmpGrid").addEventListener("change", e => {
+  const el = e.target.closest(".pane"); if (!el) return;
+  const i = +el.dataset.i, p = CW.panes[i];
+  if (e.target.classList.contains("p-sym")) { p.sym = e.target.value || null; p.strike = null; if (PC[i]) { PC[i].strikes = null; } }
+  else if (e.target.classList.contains("p-strike")) p.strike = +e.target.value || null;
+  else if (e.target.classList.contains("p-tf")) p.tf = +e.target.value || 5;
+  else return;
+  saveCW(); rebuildPane(i);
+});
+$("#cmpLayout").onclick = e => { const b = e.target.closest("button"); if (!b || b.dataset.v === CW.layout) return; CW.layout = b.dataset.v; saveCW(); renderWorkspace(); };
+$("#cmpSync").onchange = () => {
+  CW.sync = $("#cmpSync").checked; saveCW();
+  const src = PC[CW.focus] || PC[0], r = src && src.chart.timeScale().getVisibleRange();
+  if (CW.sync && r) PC.forEach(o => { if (o && o !== src && o.data.length) try { o.chart.timeScale().setVisibleRange(r); } catch (e) {} });
+};
+function chartMax(on) {
+  $("#compareCard").classList.toggle("max", on); document.body.classList.toggle("chartmax", on);
+  $("#cmpFull").textContent = on ? "Exit full screen" : "Full screen";
+}
+$("#cmpFull").onclick = () => chartMax(!$("#compareCard").classList.contains("max"));
+addEventListener("keydown", e => { if (e.key === "Escape" && $("#compareCard").classList.contains("max")) chartMax(false); });
 
 $("#miniChain").onclick = e => {
   const td = e.target.closest("td.pick"); if (!td) return;
-  S.cmp = {symbol: S.symbol, strike: +td.dataset.cs, opt: td.dataset.co};
-  renderMiniChain(S.dash); loadOptionChart();
+  showContract(+td.dataset.cs, td.dataset.co);
 };
-$("#cmpStrike").onchange = () => { const c = cmpContract(S.dash); S.cmp = {symbol: S.symbol, strike: +$("#cmpStrike").value, opt: c.opt}; renderMiniChain(S.dash); loadOptionChart(); };
-$("#cmpOpt").onclick = e => { const b = e.target.closest("button"); if (!b) return; const c = cmpContract(S.dash); S.cmp = {symbol: S.symbol, strike: c.strike, opt: b.dataset.v}; renderMiniChain(S.dash); loadOptionChart(); };
-$("#cmpLayout").onclick = e => { const b = e.target.closest("button"); if (!b) return; setSeg("#cmpLayout", b.dataset.v); $("#cmpGrid").className = "cmpgrid " + b.dataset.v; };
 
 /* ---------- chain ---------- */
 async function loadChain() {
@@ -870,7 +1044,7 @@ $("#expiry").onchange = () => load();
 $("#chainTbl").onclick = e => {
   const g = e.target.closest("[data-gc]");
   if (g) {
-    S.cmp = {symbol: S.symbol, strike: +g.dataset.gc, opt: g.dataset.go};
+    showContract(+g.dataset.gc, g.dataset.go);
     go("signal");
     setTimeout(() => $("#compareCard").scrollIntoView({behavior: "smooth", block: "start"}), 600);
     return;

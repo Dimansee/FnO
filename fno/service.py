@@ -235,6 +235,30 @@ def place_manual(symbol, expiry, strike, opt, side, lots):
     return P.open_position(cash, symbol, [leg], int(lots), g["lot"], exp, g["spot"], m.source)
 
 
+def candles(symbol, kind="UND", strike=None, expiry=None):
+    """Candles for one chart pane: the index/stock itself (kind UND) or one option (CE/PE).
+    Also returns the strikes around the money so the pane can offer a strike picker."""
+    kind = (kind or "UND").upper()
+    if kind != "UND":
+        r = option_candles(symbol, expiry, strike, kind)
+    else:
+        m = M.Market()
+        g = _gather(symbol, m)
+        today, hist = S.session_frames(g["candles"], g["now"])
+        r = clean({"symbol": symbol, "label": g["meta"]["label"], "expiry": g["trade_exp"], "strike": None,
+                   "opt": "UND", "source": "live" if m.live else "delayed", "candles": _chart(today, hist),
+                   "ltp": g["spot"], "errors": m.errors[-3:]})
+        r["strikes"], r["atm"] = _near(g["chain"], g["spot"])
+    r["kind"] = kind
+    return r
+
+
+def _near(ch, spot, width=12):
+    i = int((ch["strike"] - spot).abs().values.argmin())
+    view = ch.iloc[max(0, i - width): i + width + 1]
+    return [float(x) for x in view["strike"]], float(ch["strike"].iloc[i])
+
+
 def option_candles(symbol, expiry=None, strike=None, opt="CE"):
     """5-minute candles for one option contract next to the underlying.
     Live broker candles when connected; otherwise a theoretical series priced
@@ -276,8 +300,9 @@ def option_candles(symbol, expiry=None, strike=None, opt="CE"):
             o, c, a, b = f(r["open"]), f(r["close"]), f(r["high"]), f(r["low"])
             out.append({"time": int(ts.timestamp()) + 19800, "open": round(o, 2), "high": round(max(a, b, o, c), 2),
                         "low": round(min(a, b, o, c), 2), "close": round(c, 2)})
+    strikes, atm = _near(ch, g["spot"])
     return clean({"symbol": symbol, "label": g["meta"]["label"], "expiry": exp, "strike": float(strike), "opt": opt,
-                  "source": source, "candles": out,
+                  "source": source, "candles": out, "strikes": strikes, "atm": atm,
                   "ltp": row.iloc[0][f"{opt.lower()}_ltp"], "errors": m.errors[-3:]})
 
 

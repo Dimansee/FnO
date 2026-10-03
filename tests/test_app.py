@@ -78,6 +78,15 @@ oc = j(c.get(f"/api/option_candles?symbol=NIFTY&strike={d['atm']}&opt=CE"))
 print("option candles:", oc["source"], len(oc["candles"]), oc["candles"][-1])
 assert len(oc["candles"]) == len(d["chart"])
 assert c.get("/api/option_candles?symbol=NIFTY&strike=1&opt=CE").status_code == 400
+# chart panes: any instrument, price or option, with a strike list
+cu = j(c.get("/api/candles?symbol=BANKNIFTY&kind=UND"))
+assert cu["kind"] == "UND" and cu["candles"] and "vwap" in cu["candles"][-1] and cu["atm"] in cu["strikes"]
+cp = j(c.get("/api/candles?symbol=RELIANCE&kind=PE"))
+assert cp["kind"] == "PE" and cp["strike"] == cp["atm"] and len(cp["strikes"]) > 5 and cp["candles"]
+cs = j(c.get(f"/api/candles?symbol=NIFTY&kind=CE&strike={d['atm']}&expiry={d['expiry']}"))
+assert cs["strike"] == d["atm"] and len(cs["candles"]) == len(d["chart"])
+assert c.get("/api/candles?symbol=NIFTY&kind=XX").status_code == 400
+print("pane candles OK:", cu["label"], len(cu["candles"]), cp["label"], cp["strike"])
 # cash check: shrink the account so the ATM lot is unaffordable
 store.put("account", {"capital_start": 5000, "created": "x"})
 d3 = j(c.get("/api/dashboard?symbol=NIFTY"))

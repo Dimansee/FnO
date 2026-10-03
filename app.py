@@ -147,6 +147,13 @@ def option_candles():
                                      (request.args.get("opt") or "CE").upper()))
 
 
+@app.get("/api/candles")
+def candles():
+    k = request.args.get("strike")
+    return jsonify(SV.candles(_sym(), request.args.get("kind") or "UND", float(k) if k else None,
+                              request.args.get("expiry") or None))
+
+
 @app.get("/api/chain")
 def chain():
     return jsonify(SV.chain_view(_sym(), request.args.get("expiry") or None))
