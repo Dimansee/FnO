@@ -15,14 +15,14 @@ from fno import config as C, store, market as M, context as X, brokers as B, str
 
 # ---------- synthetic market ----------
 rng = np.random.default_rng(5)
-NOW = [datetime(2026, 10, 1, 11, 2, tzinfo=C.IST)]  # a Thursday, mid-session
+NOW = [datetime(2026, 10, 1, 10, 52, tzinfo=C.IST)]  # a Thursday, 7 min after the 10:45 check
 C.now_ist = lambda: NOW[0]
 C.today_ist = lambda: NOW[0].date()
 
 
 def fake(start, end_dt, trend=0.0006):
     rows, px = [], start
-    d = end_dt.date() - timedelta(days=8)
+    d = end_dt.date() - timedelta(days=30)   # the noise band needs 14+ past sessions
     while d <= end_dt.date():
         if d.weekday() < 5:
             t = datetime(d.year, d.month, d.day, 9, 15, tzinfo=C.IST)
@@ -30,7 +30,7 @@ def fake(start, end_dt, trend=0.0006):
                 if t > end_dt:
                     break
                 o = px
-                px *= 1 + trend + rng.normal(0, 0.0008)
+                px *= 1 + (trend if d == end_dt.date() else 0) + rng.normal(0, 0.0008)
                 rows.append((t, o, max(o, px) * 1.0003, min(o, px) * 0.9997, px, 0))
                 t += timedelta(minutes=5)
         d += timedelta(days=1)
@@ -96,6 +96,28 @@ store.put("account", {"capital_start": 200000, "created": "x"})
 
 r = c.post("/api/trade/signal", json={"symbol": "NIFTY", "strike": otm["strike"]})
 print("place signal:", r.status_code, r.get_json())
+assert r.status_code == 200
+# one trade per instrument per day
+d_after = j(c.get("/api/dashboard?symbol=NIFTY"))
+assert d_after["signal"]["signal"] == "NO NEW ENTRIES", d_after["signal"]["signal"]
+assert d_after["signal"]["bands"] and len(d_after["signal"]["bands"]["series"]) > 10
+# noise-band trailing exit fires only on a half-hour check bar, after entry
+pz = {"opened": "2026-10-01T10:52:00+05:30", "sl_prem": 1, "target_prem": 999,
+      "plan": {"strategy": "noise", "opt": "CE", "entry": 100.0, "risk_pts": 2.0, "sl": 98.0, "target": 108.0, "rr": 4}}
+t1 = datetime(2026, 10, 1, 11, 15, tzinfo=C.IST)
+st_in = {"is_check": True, "bar_end": t1, "close": 101.0, "vwap": 100.5, "up": 101.5, "lo": 97.0}
+why, upd = S.exit_check(pz, 101.0, 50, t1, st_in)
+assert why and why.startswith("Trailing exit"), why
+why, _ = S.exit_check(pz, 101.0, 50, t1, {**st_in, "is_check": False})
+assert why is None
+why, _ = S.exit_check(pz, 101.0, 50, t1, {**st_in, "close": 102.0})
+assert why is None
+why, _ = S.exit_check(pz, 97.9, 50, t1, None)
+assert why.startswith("Index stop-loss")
+why, _ = S.exit_check(pz, 108.1, 50, t1, None)
+assert why.startswith("Index target")
+assert S._is_check(datetime(2026, 10, 1, 10, 40, tzinfo=C.IST)) and not S._is_check(datetime(2026, 10, 1, 10, 45, tzinfo=C.IST))
+print("noise exits OK")
 
 ch = j(c.get("/api/chain?symbol=NIFTY"))
 print("chain rows", len(ch["rows"]), "atm", ch["atm"], "expiries", ch["expiries"][:2], "src", ch["source"])
@@ -158,7 +180,10 @@ print(r)
 p = j(c.get("/api/portfolio"))
 print("live portfolio:", [(x["legs"][0]["src"], x["current_prem"]) for x in p["positions"]])
 
-bt = j(c.post("/api/backtest", json={"symbol": "NIFTY", "min_score": 2, "capital": 200000}))
+bt = j(c.post("/api/backtest", json={"symbol": "NIFTY", "mult": 1.75, "capital": 200000}))
+assert c.post("/api/backtest", json={"symbol": "NIFTY", "mult": 9, "capital": 200000}).status_code == 400
+rs_ = j(c.get("/api/research"))
+assert rs_["new"]["NIFTY"]["windows"]["120"]["net"] > 0 and len(rs_["families"]) >= 8
 print("backtest keys", list(bt.keys()), bt.get("summary", {}).get("trades"))
 print("reset", j(c.post("/api/account/reset", json={"capital": 300000})))
 

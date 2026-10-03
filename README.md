@@ -8,7 +8,8 @@ fno:positions and fno:trades.
 - app.py                – Flask web app / API (Vercel entrypoint)
 - templates/index.html  – the whole dashboard UI
 - fno/config.py         – all strategy rules and settings
-- fno/strategy.py       – the rulebook (signals, order sizing, exits)
+- fno/strategy.py       – the rulebook: noise-area momentum (signals, order sizing, exits)
+- research/             – the 2023-26 strategy study that chose the rules (see research/README.md)
 - fno/market.py         – data: Upstox / Fyers / Yahoo + theoretical option prices
 - fno/brokers.py        – Upstox and Fyers API clients (read-only)
 - fno/paper.py          – demo money, positions, journal

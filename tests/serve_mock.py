@@ -16,14 +16,14 @@ from fno import config as C, store, market as M, context as X, brokers as B, str
 
 # ---------- synthetic market ----------
 rng = np.random.default_rng(5)
-NOW = [datetime(2026, 10, 1, 11, 2, tzinfo=C.IST)]  # a Thursday, mid-session
+NOW = [datetime(2026, 10, 1, 10, 52, tzinfo=C.IST)]  # a Thursday, 7 min after the 10:45 check
 C.now_ist = lambda: NOW[0]
 C.today_ist = lambda: NOW[0].date()
 
 
 def fake(start, end_dt, trend=0.0006):
     rows, px = [], start
-    d = end_dt.date() - timedelta(days=8)
+    d = end_dt.date() - timedelta(days=30)   # the noise band needs 14+ past sessions
     while d <= end_dt.date():
         if d.weekday() < 5:
             t = datetime(d.year, d.month, d.day, 9, 15, tzinfo=C.IST)
@@ -31,7 +31,7 @@ def fake(start, end_dt, trend=0.0006):
                 if t > end_dt:
                     break
                 o = px
-                px *= 1 + trend + rng.normal(0, 0.0008)
+                px *= 1 + (trend if d == end_dt.date() else 0) + rng.normal(0, 0.0008)
                 rows.append((t, o, max(o, px) * 1.0003, min(o, px) * 0.9997, px, 0))
                 t += timedelta(minutes=5)
         d += timedelta(days=1)

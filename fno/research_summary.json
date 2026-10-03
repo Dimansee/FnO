@@ -1,0 +1,715 @@
+{
+ "period": "2023-01-03 to 2026-10-01 (924 sessions of 5-minute data)",
+ "train": "2023-01-03 to 2026-04-09",
+ "test": "2026-04-10 to 2026-10-01 (never used for tuning)",
+ "capital": 200000,
+ "risk_per_trade": "1%",
+ "costs": "0.5% slippage per fill + brokerage, STT, exchange, GST, stamp",
+ "configs_tested": 5772,
+ "families": [
+  {
+   "key": "supertrend",
+   "name": "Supertrend flip + ADX",
+   "tested": 300,
+   "robust": 47,
+   "robust_oos_profitable": 10,
+   "walk_forward_net": 26017,
+   "walk_forward_sharpe": 0.39
+  },
+  {
+   "key": "noise",
+   "name": "Noise-area momentum (Zarattini/Aziz/Barbon)",
+   "tested": 300,
+   "robust": 194,
+   "robust_oos_profitable": 32,
+   "walk_forward_net": 8740,
+   "walk_forward_sharpe": 0.11
+  },
+  {
+   "key": "pdhl",
+   "name": "Previous-day high/low + narrow CPR",
+   "tested": 300,
+   "robust": 17,
+   "robust_oos_profitable": 4,
+   "walk_forward_net": -27459,
+   "walk_forward_sharpe": -0.35
+  },
+  {
+   "key": "vwap_pull",
+   "name": "VWAP / EMA pullback",
+   "tested": 300,
+   "robust": 20,
+   "robust_oos_profitable": 0,
+   "walk_forward_net": -31822,
+   "walk_forward_sharpe": -0.42
+  },
+  {
+   "key": "gap",
+   "name": "Gap-and-go / gap-fade",
+   "tested": 300,
+   "robust": 23,
+   "robust_oos_profitable": 0,
+   "walk_forward_net": -52023,
+   "walk_forward_sharpe": -1.13
+  },
+  {
+   "key": "orb_candle",
+   "name": "5-min ORB (Zarattini/Aziz)",
+   "tested": 300,
+   "robust": 24,
+   "robust_oos_profitable": 4,
+   "walk_forward_net": -84205,
+   "walk_forward_sharpe": -0.94
+  },
+  {
+   "key": "ema_adx",
+   "name": "EMA 9/21 cross + ADX",
+   "tested": 300,
+   "robust": 29,
+   "robust_oos_profitable": 15,
+   "walk_forward_net": -108399,
+   "walk_forward_sharpe": -2.32
+  },
+  {
+   "key": "orb",
+   "name": "Opening-range breakout + VWAP/trend (the old rules' family)",
+   "tested": 300,
+   "robust": 22,
+   "robust_oos_profitable": 0,
+   "walk_forward_net": -120670,
+   "walk_forward_sharpe": -0.84
+  },
+  {
+   "key": "ironfly",
+   "name": "9:20 iron fly (option selling)",
+   "tested": 300,
+   "robust": 0,
+   "robust_oos_profitable": 0,
+   "walk_forward_net": null,
+   "walk_forward_sharpe": null
+  }
+ ],
+ "chosen": {
+  "name": "Noise-area momentum",
+  "band": 1.75,
+  "stop": "2 x ATR",
+  "target": "4R",
+  "checks": "every 30 min from 09:45",
+  "filters": "close beyond band and VWAP; India VIX >= 11",
+  "trades_per_day": 1,
+  "option": "ATM, nearest expiry"
+ },
+ "new": {
+  "NIFTY": {
+   "windows": {
+    "30": {
+     "net": 2876,
+     "pf": 1.68,
+     "trades": 7,
+     "win_rate": 57
+    },
+    "60": {
+     "net": 5421,
+     "pf": 1.68,
+     "trades": 17,
+     "win_rate": 53
+    },
+    "90": {
+     "net": 9848,
+     "pf": 1.77,
+     "trades": 24,
+     "win_rate": 54
+    },
+    "120": {
+     "net": 10601,
+     "pf": 1.58,
+     "trades": 31,
+     "win_rate": 45
+    }
+   },
+   "years": {
+    "2023": 16952,
+    "2024": 57985,
+    "2025": 26594,
+    "2026": 12124
+   },
+   "all": {
+    "net": 113655,
+    "pf": 1.68,
+    "trades": 234,
+    "win_rate": 38
+   }
+  },
+  "BANKNIFTY": {
+   "windows": {
+    "30": {
+     "net": 1337,
+     "pf": 1.17,
+     "trades": 7,
+     "win_rate": 29
+    },
+    "60": {
+     "net": 5173,
+     "pf": 1.44,
+     "trades": 15,
+     "win_rate": 40
+    },
+    "90": {
+     "net": 25466,
+     "pf": 2.92,
+     "trades": 22,
+     "win_rate": 50
+    },
+    "120": {
+     "net": 8968,
+     "pf": 1.3,
+     "trades": 30,
+     "win_rate": 40
+    }
+   },
+   "years": {
+    "2023": 364,
+    "2024": 36227,
+    "2025": -20281,
+    "2026": 14218
+   },
+   "all": {
+    "net": 30528,
+    "pf": 1.14,
+    "trades": 215,
+    "win_rate": 35
+   }
+  },
+  "FINNIFTY": {
+   "windows": {
+    "30": {
+     "net": -942,
+     "pf": 0.91,
+     "trades": 8,
+     "win_rate": 25
+    },
+    "60": {
+     "net": -3207,
+     "pf": 0.82,
+     "trades": 17,
+     "win_rate": 29
+    },
+    "90": {
+     "net": 3615,
+     "pf": 1.16,
+     "trades": 22,
+     "win_rate": 36
+    },
+    "120": {
+     "net": 2060,
+     "pf": 1.07,
+     "trades": 29,
+     "win_rate": 34
+    }
+   },
+   "years": {
+    "2023": -11837,
+    "2024": -3458,
+    "2025": -9500,
+    "2026": -1939
+   },
+   "all": {
+    "net": -26734,
+    "pf": 0.88,
+    "trades": 223,
+    "win_rate": 32
+   }
+  }
+ },
+ "old": {
+  "NIFTY": {
+   "windows": {
+    "30": {
+     "net": -8494,
+     "pf": 0.84,
+     "trades": 56,
+     "win_rate": 27
+    },
+    "60": {
+     "net": -23951,
+     "pf": 0.76,
+     "trades": 108,
+     "win_rate": 26
+    },
+    "90": {
+     "net": -31905,
+     "pf": 0.79,
+     "trades": 162,
+     "win_rate": 26
+    },
+    "120": {
+     "net": -35833,
+     "pf": 0.81,
+     "trades": 212,
+     "win_rate": 26
+    }
+   },
+   "years": {
+    "2023": -28373,
+    "2024": -15978,
+    "2025": -31683,
+    "2026": -49086
+   },
+   "all": {
+    "net": -125120,
+    "pf": 0.91,
+    "trades": 1608,
+    "win_rate": 27
+   }
+  },
+  "BANKNIFTY": {
+   "windows": {
+    "30": {
+     "net": -9410,
+     "pf": 0.78,
+     "trades": 47,
+     "win_rate": 32
+    },
+    "60": {
+     "net": -41760,
+     "pf": 0.54,
+     "trades": 96,
+     "win_rate": 24
+    },
+    "90": {
+     "net": -63091,
+     "pf": 0.6,
+     "trades": 151,
+     "win_rate": 25
+    },
+    "120": {
+     "net": -89359,
+     "pf": 0.6,
+     "trades": 203,
+     "win_rate": 24
+    }
+   },
+   "years": {
+    "2023": -126866,
+    "2024": -103805,
+    "2025": -129886,
+    "2026": -101188
+   },
+   "all": {
+    "net": -461745,
+    "pf": 0.71,
+    "trades": 1575,
+    "win_rate": 26
+   }
+  }
+ },
+ "stocks": {
+  "RELIANCE": {
+   "windows": {
+    "30": {
+     "net": -4929,
+     "pf": 0.23,
+     "trades": 7,
+     "win_rate": 14
+    },
+    "60": {
+     "net": 7323,
+     "pf": 1.89,
+     "trades": 15,
+     "win_rate": 33
+    },
+    "90": {
+     "net": -756,
+     "pf": 0.96,
+     "trades": 23,
+     "win_rate": 26
+    },
+    "120": {
+     "net": 2859,
+     "pf": 1.14,
+     "trades": 29,
+     "win_rate": 31
+    }
+   },
+   "years": {
+    "2023": -313,
+    "2024": 26795,
+    "2025": -7472,
+    "2026": 22937
+   },
+   "all": {
+    "net": 41947,
+    "pf": 1.27,
+    "trades": 225,
+    "win_rate": 34
+   }
+  },
+  "HDFCBANK": {
+   "windows": {
+    "30": {
+     "net": 2968,
+     "pf": 1.73,
+     "trades": 10,
+     "win_rate": 40
+    },
+    "60": {
+     "net": 6399,
+     "pf": 1.87,
+     "trades": 14,
+     "win_rate": 36
+    },
+    "90": {
+     "net": 18095,
+     "pf": 2.59,
+     "trades": 22,
+     "win_rate": 45
+    },
+    "120": {
+     "net": 17878,
+     "pf": 2.19,
+     "trades": 28,
+     "win_rate": 39
+    }
+   },
+   "years": {
+    "2023": 3866,
+    "2024": -3559,
+    "2025": -22529,
+    "2026": 14074
+   },
+   "all": {
+    "net": -8149,
+    "pf": 0.94,
+    "trades": 204,
+    "win_rate": 32
+   }
+  },
+  "ICICIBANK": {
+   "windows": {
+    "30": {
+     "net": 12135,
+     "pf": 3.85,
+     "trades": 7,
+     "win_rate": 71
+    },
+    "60": {
+     "net": 8670,
+     "pf": 1.62,
+     "trades": 18,
+     "win_rate": 44
+    },
+    "90": {
+     "net": 7359,
+     "pf": 1.36,
+     "trades": 26,
+     "win_rate": 42
+    },
+    "120": {
+     "net": 6436,
+     "pf": 1.24,
+     "trades": 35,
+     "win_rate": 40
+    }
+   },
+   "years": {
+    "2023": -20998,
+    "2024": -21260,
+    "2025": -6854,
+    "2026": -6652
+   },
+   "all": {
+    "net": -55764,
+    "pf": 0.74,
+    "trades": 236,
+    "win_rate": 28
+   }
+  },
+  "INFY": {
+   "windows": {
+    "30": {
+     "net": -4572,
+     "pf": 0.31,
+     "trades": 6,
+     "win_rate": 17
+    },
+    "60": {
+     "net": -7472,
+     "pf": 0.5,
+     "trades": 13,
+     "win_rate": 15
+    },
+    "90": {
+     "net": -11690,
+     "pf": 0.47,
+     "trades": 22,
+     "win_rate": 18
+    },
+    "120": {
+     "net": -7889,
+     "pf": 0.71,
+     "trades": 31,
+     "win_rate": 23
+    }
+   },
+   "years": {
+    "2023": 10336,
+    "2024": -16156,
+    "2025": 6182,
+    "2026": -24701
+   },
+   "all": {
+    "net": -24339,
+    "pf": 0.87,
+    "trades": 234,
+    "win_rate": 28
+   }
+  },
+  "TCS": {
+   "windows": {
+    "30": {
+     "net": -2953,
+     "pf": 0.47,
+     "trades": 6,
+     "win_rate": 17
+    },
+    "60": {
+     "net": 7803,
+     "pf": 1.94,
+     "trades": 12,
+     "win_rate": 42
+    },
+    "90": {
+     "net": 18908,
+     "pf": 2.4,
+     "trades": 22,
+     "win_rate": 45
+    },
+    "120": {
+     "net": 17112,
+     "pf": 1.79,
+     "trades": 31,
+     "win_rate": 39
+    }
+   },
+   "years": {
+    "2023": -4008,
+    "2024": 39699,
+    "2025": -29666,
+    "2026": 24207
+   },
+   "all": {
+    "net": 30233,
+    "pf": 1.19,
+    "trades": 224,
+    "win_rate": 33
+   }
+  },
+  "SBIN": {
+   "windows": {
+    "30": {
+     "net": 5420,
+     "pf": 3.47,
+     "trades": 7,
+     "win_rate": 29
+    },
+    "60": {
+     "net": 9758,
+     "pf": 1.92,
+     "trades": 19,
+     "win_rate": 37
+    },
+    "90": {
+     "net": -3266,
+     "pf": 0.86,
+     "trades": 28,
+     "win_rate": 29
+    },
+    "120": {
+     "net": 3621,
+     "pf": 1.12,
+     "trades": 34,
+     "win_rate": 32
+    }
+   },
+   "years": {
+    "2023": 44889,
+    "2024": 7568,
+    "2025": -28877,
+    "2026": 7046
+   },
+   "all": {
+    "net": 30625,
+    "pf": 1.14,
+    "trades": 252,
+    "win_rate": 29
+   }
+  },
+  "AXISBANK": {
+   "windows": {
+    "30": {
+     "net": -2845,
+     "pf": 0.6,
+     "trades": 9,
+     "win_rate": 33
+    },
+    "60": {
+     "net": -8460,
+     "pf": 0.33,
+     "trades": 17,
+     "win_rate": 24
+    },
+    "90": {
+     "net": -17221,
+     "pf": 0.24,
+     "trades": 25,
+     "win_rate": 24
+    },
+    "120": {
+     "net": -16354,
+     "pf": 0.41,
+     "trades": 30,
+     "win_rate": 23
+    }
+   },
+   "years": {
+    "2023": 3863,
+    "2024": -2296,
+    "2025": -23482,
+    "2026": -14535
+   },
+   "all": {
+    "net": -36451,
+    "pf": 0.81,
+    "trades": 227,
+    "win_rate": 29
+   }
+  },
+  "BHARTIARTL": {
+   "windows": {
+    "30": {
+     "net": 1864,
+     "pf": 1.52,
+     "trades": 5,
+     "win_rate": 40
+    },
+    "60": {
+     "net": -4074,
+     "pf": 0.59,
+     "trades": 11,
+     "win_rate": 36
+    },
+    "90": {
+     "net": -13505,
+     "pf": 0.3,
+     "trades": 18,
+     "win_rate": 22
+    },
+    "120": {
+     "net": -12378,
+     "pf": 0.48,
+     "trades": 25,
+     "win_rate": 32
+    }
+   },
+   "years": {
+    "2023": 4445,
+    "2024": 4330,
+    "2025": 14849,
+    "2026": -29409
+   },
+   "all": {
+    "net": -5785,
+    "pf": 0.97,
+    "trades": 201,
+    "win_rate": 33
+   }
+  },
+  "LT": {
+   "windows": {
+    "30": {
+     "net": -5107,
+     "pf": 0.19,
+     "trades": 9,
+     "win_rate": 22
+    },
+    "60": {
+     "net": -15838,
+     "pf": 0.07,
+     "trades": 16,
+     "win_rate": 12
+    },
+    "90": {
+     "net": -17349,
+     "pf": 0.38,
+     "trades": 30,
+     "win_rate": 17
+    },
+    "120": {
+     "net": -25333,
+     "pf": 0.3,
+     "trades": 35,
+     "win_rate": 17
+    }
+   },
+   "years": {
+    "2023": -37242,
+    "2024": -6219,
+    "2025": -9283,
+    "2026": -17266
+   },
+   "all": {
+    "net": -70010,
+    "pf": 0.69,
+    "trades": 261,
+    "win_rate": 28
+   }
+  },
+  "ITC": {
+   "windows": {
+    "30": {
+     "net": 9163,
+     "pf": 3.19,
+     "trades": 9,
+     "win_rate": 56
+    },
+    "60": {
+     "net": 2808,
+     "pf": 1.18,
+     "trades": 23,
+     "win_rate": 39
+    },
+    "90": {
+     "net": -3693,
+     "pf": 0.86,
+     "trades": 36,
+     "win_rate": 28
+    },
+    "120": {
+     "net": -1900,
+     "pf": 0.93,
+     "trades": 42,
+     "win_rate": 29
+    }
+   },
+   "years": {
+    "2023": -11616,
+    "2024": -40984,
+    "2025": -18701,
+    "2026": 7771
+   },
+   "all": {
+    "net": -63531,
+    "pf": 0.69,
+    "trades": 242,
+    "win_rate": 27
+   }
+  }
+ },
+ "notes": [
+  "Option prices are modelled (Black-Scholes with India VIX); real option quotes for past days are not freely available.",
+  "Picking the best settings every month (walk-forward) did WORSE than holding one robust setting - chasing recent results overfits.",
+  "Market-context filters (global cues, gap, VIX change) reduced profit in testing, so they are shown for information only.",
+  "Nifty was profitable in every year tested; Bank Nifty lost money in 2025; most single stocks lost money - prefer the indices.",
+  "Option selling (9:20 iron fly) could not be judged fairly: its edge comes from IV crush near expiry, which a VIX-based model can't reproduce."
+ ]
+}

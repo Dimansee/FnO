@@ -71,6 +71,12 @@ def fii():
 # ---------------------------------------------------------------------------
 # Position management (also called every minute by the scheduler)
 # ---------------------------------------------------------------------------
+def _traded_today(symbol, positions, trades) -> bool:
+    today = C.today_ist().isoformat()
+    return any(x["symbol"] == symbol and x.get("mode") == "signal" and x["opened"][:10] == today
+               for x in list(positions) + list(trades))
+
+
 def manage_positions(m: M.Market | None = None) -> list[dict]:
     pos = store.positions()
     if not pos:
@@ -80,12 +86,18 @@ def manage_positions(m: M.Market | None = None) -> list[dict]:
     vix = m.vix()
     spots = {s: m.spot(s) for s in {p["symbol"] for p in pos}}
     prices = m.leg_prices(pos, spots, vix["level"])
+    states = {}
+    for sym in {p["symbol"] for p in pos if (p.get("plan") or {}).get("strategy") == "noise"}:
+        try:
+            states[sym] = S.noise_state(m.candles(sym), now)
+        except Exception as e:
+            m.errors.append(f"Band check failed for {sym}: {e}")
     closed = []
     for p in pos:
         if spots.get(p["symbol"]) is None or not all(l["key"] in prices for l in p["legs"]):
             continue
         prem = P.net_price(p["legs"], prices)
-        reason, upd = S.exit_check(p, spots[p["symbol"]], prem, now)
+        reason, upd = S.exit_check(p, spots[p["symbol"]], prem, now, states.get(p["symbol"]))
         if upd:
             p.update(upd)
             store.update_position(p)
@@ -139,7 +151,7 @@ def dashboard(symbol, strike=None):
     cstats = M.chain_stats(g["chain"], g["spot"])
     gc, nw, fi = gcues(), news(symbol), fii()
     guard = P.day_guard(pos, tr, acct["capital_start"])
-    ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, nw, gc, fi, g["now"], guard)
+    ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, nw, gc, fi, g["now"], guard, _traded_today(symbol, pos, tr))
     today, hist = S.session_frames(g["candles"], g["now"])
     prev = float(hist["close"].iloc[-1]) if not hist.empty else g["spot"]
 
@@ -155,6 +167,9 @@ def dashboard(symbol, strike=None):
         alts = S.strike_alternatives(*args, cash=cash)
     atm, chain_rows = _mini_chain(g["chain"], g["spot"])
     ev.pop("today", None)
+    if ev.get("bands"):
+        ev["bands"]["series"] = [{"time": int(x["ts"].timestamp()) + 19800, "up": x["up"], "lo": x["lo"]}
+                                 for x in ev["bands"]["series"]]
     return clean({
         "symbol": symbol, "label": g["meta"]["label"], "source": m.source, "live": m.live,
         "time": g["now"].strftime("%H:%M:%S"), "spot": g["spot"], "prev_close": prev,
@@ -196,7 +211,8 @@ def place_signal(symbol, strike=None):
     if any(p["symbol"] == symbol and p["mode"] == "signal" for p in pos):
         return False, "You already have an open signal trade in this instrument."
     cstats = M.chain_stats(g["chain"], g["spot"])
-    ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, news(symbol), gcues(), fii(), g["now"], guard)
+    ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, news(symbol), gcues(), fii(), g["now"], guard,
+                    _traded_today(symbol, pos, tr))
     if not ev["plan"]:
         return False, f"No valid signal right now ({ev['signal']}). The setup may have changed - refresh."
     try:
@@ -342,13 +358,14 @@ def context(symbol):
     return clean({"global": gcues(), "news": news(symbol), "fii": fii()})
 
 
-def backtest(symbol, min_score, capital):
-    res = BT.run(symbol, float(capital), int(min_score), lot=M.lot_size(symbol))
+def backtest(symbol, mult, capital):
+    res = BT.run(symbol, float(capital), float(mult), lot=M.lot_size(symbol))
     if res.get("error"):
         return {"error": res["error"]}
     t = res["trades"]
     return clean({"summary": res["summary"], "days": res.get("days"),
-                  "trades": t.to_dict("records") if hasattr(t, "to_dict") else []})
+                  "trades": t.to_dict("records") if hasattr(t, "to_dict") else [],
+                  "research": BT.research_summary()})
 
 
 def tick():

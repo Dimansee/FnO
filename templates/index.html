@@ -401,16 +401,16 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
   <!-- BACKTEST -->
   <section id="t-backtest" class="hidden">
     <div class="card">
-      <p style="margin-top:0">Replays the exact rules on the last ~60 days of 5-minute data. <b>This is the honest answer to “what is the accuracy?”</b></p>
+      <p style="margin-top:0">Replays today's rules on the latest ~60 days of 5-minute data (the first 14 sessions are only used to measure the usual move). The 3¾-year study that chose these rules is below.</p>
       <div class="formrow">
         <div><label>Instrument</label><select id="btSym" style="width:100%"></select></div>
-        <div><label>Minimum score</label><select id="btScore" style="width:100%"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></div>
+        <div><label>Band width</label><select id="btMult" style="width:100%"><option value="1.5">1.5× usual move</option><option value="1.75" selected>1.75× (the rule)</option><option value="2">2× usual move</option></select></div>
         <div><label>Capital (₹)</label><input id="btCap" type="number" value="200000" step="50000" style="width:100%"></div>
         <div style="flex:0"><button class="primary" id="btRun">▶ Run backtest</button></div>
       </div>
-      <p class="muted" style="font-size:12px;margin-bottom:0">History can't include past news, OI or FII flows, so the backtest scores 5 of the 8 factors - a threshold of 2 here roughly equals the live threshold of 3.</p>
     </div>
     <div id="btOut" style="margin-top:14px"></div>
+    <div id="study" style="margin-top:14px"></div>
   </section>
 
   <!-- RULES -->
@@ -532,6 +532,7 @@ async function load(quiet) {
     else if (S.tab === "portfolio") await loadPortfolio();
     else if (S.tab === "context") await loadContext();
     else if (S.tab === "settings") await loadSettings();
+    else if (S.tab === "backtest") await loadStudy();
   } catch (e) { if (!quiet) toast(e.message); }
   finally { sec.classList.remove("loading"); if (!quiet) pDone(); hideSplash(); }
 }
@@ -579,13 +580,13 @@ async function loadSignal() {
     "BUY PUT": "All entry conditions met for a bearish trade.", "NO TRADE TODAY": "Today's conditions fail the rulebook.",
     "NO NEW ENTRIES": "Entry window closed. Manage open trades only.", "STOP FOR TODAY": "Risk limit reached.",
     "MARKET CLOSED": "Showing the last session. Review your journal."}[s] || "";
-  const done = sg.checks.filter(c => c[0] === true).length;
-  $("#sigCard").innerHTML = `<div class="cardhead"><h3 style="margin:0">Entry checklist</h3><span class="badge ${k === "call" || k === "put" ? "ok" : "no"}">${done} of ${sg.checks.length} met</span></div>` +
+  const done = sg.checks.filter(c => c[0] === true).length, total = sg.checks.filter(c => c[0] !== null).length;
+  $("#sigCard").innerHTML = `<div class="cardhead"><h3 style="margin:0">Entry checklist</h3><span class="badge ${k === "call" || k === "put" ? "ok" : "no"}">${done} of ${total} met</span></div>` +
     `<div class="muted" style="font-size:14px;margin-top:4px">${sub}</div>` +
     (sg.warnings || []).map(w => `<div class="warn">${esc(w)}</div>`).join("");
   $("#checks").classList.toggle("still", S.checksKey === S.symbol); S.checksKey = S.symbol;
   $("#checks").innerHTML = sg.checks.map(([ok, t]) => `<li><span class="ic">${ok === true ? "✅" : ok === false ? "❌" : "👀"}</span><span>${esc(t)}</span></li>`).join("");
-  $("#orb").textContent = sg.orb ? `Opening range ${n2(sg.orb.low)} – ${n2(sg.orb.high)} (${sg.orb.width_pct.toFixed(2)}%)` : "";
+  $("#orb").textContent = sg.bands ? `Noise band now ${n2(sg.bands.lo)} – ${n2(sg.bands.up)} (${sg.bands.mult}× the usual move since the open)` : "";
   $("#factors").innerHTML = "<tr><th>Factor</th><th>Value</th><th>Score</th></tr>" + sg.factors.map(f =>
     `<tr title="${esc(f.why)}"><td>${esc(f.factor)}<div class="muted" style="font-size:11px;white-space:normal">${esc(f.why)}</div></td><td class="mono">${esc(f.value)}</td>` +
     `<td class="factor-score ${f.score > 0 ? "up" : f.score < 0 ? "down" : "muted"}">${f.score > 0 ? "+1" : f.score < 0 ? "−1" : "0"}</td></tr>`).join("");
@@ -643,9 +644,11 @@ function drawSession(d, animate) {
   cv.width = W * dpr; cv.height = H * dpr;
   const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0);
   const L = 22, R = W < 600 ? 56 : 74, T = 14, B = 24, T0 = 555, T1 = 930;
-  const sg = d.signal, plan = sg.plan, orb = sg.orb;
+  const sg = d.signal, plan = sg.plan;
+  const bnd = ((sg.bands && sg.bands.series) || []).filter(x => Math.floor(x.time / 86400) === day);
   let lo = Math.min(...bars.map(b => b.low)), hi = Math.max(...bars.map(b => b.high));
   [d.prev_close, plan && plan.sl, plan && plan.target].forEach(v => { if (v) { lo = Math.min(lo, v); hi = Math.max(hi, v); } });
+  if (bnd.length) { lo = Math.min(lo, ...bnd.map(x => x.lo)); hi = Math.max(hi, ...bnd.map(x => x.up)); }
   const pad = (hi - lo) * .1 || 1; lo -= pad; hi += pad;
   const X = m => L + (Math.min(Math.max(m, T0), T1) - T0) / (T1 - T0) * (W - L - R);
   const Y = v => T + (hi - v) / (hi - lo) * (H - T - B);
@@ -656,10 +659,20 @@ function drawSession(d, animate) {
 
   function frame(p) {
     g.clearRect(0, 0, W, H);
-    // opening range (time column + price band) and entry window
-    g.fillStyle = "rgba(242,169,59,.07)"; g.fillRect(X(555), T, X(570) - X(555), H - T - B);
-    g.fillStyle = "rgba(127,180,217,.045)"; g.fillRect(X(570), T, X(870) - X(570), H - T - B);
-    if (orb) { g.fillStyle = "rgba(242,169,59,.09)"; g.fillRect(L, Y(orb.high), W - L - R, Y(orb.low) - Y(orb.high)); }
+    // entry window and the "noise area" between the two bands
+    g.fillStyle = "rgba(127,180,217,.045)"; g.fillRect(X(585), T, X(870) - X(585), H - T - B);
+    if (bnd.length > 1) {
+      const bx = x => X((x.time % 86400) / 60 + 5);
+      g.beginPath(); bnd.forEach((x, i) => i ? g.lineTo(bx(x), Y(x.up)) : g.moveTo(bx(x), Y(x.up)));
+      for (let i = bnd.length - 1; i >= 0; i--) g.lineTo(bx(bnd[i]), Y(bnd[i].lo));
+      g.closePath(); g.fillStyle = "rgba(242,169,59,.08)"; g.fill();
+      g.save(); g.strokeStyle = "rgba(242,169,59,.75)"; g.setLineDash([4, 4]); g.lineWidth = 1.2;
+      for (const k of ["up", "lo"]) { g.beginPath(); bnd.forEach((x, i) => i ? g.lineTo(bx(x), Y(x[k])) : g.moveTo(bx(x), Y(x[k]))); g.stroke(); }
+      g.restore();
+      // half-hour check marks
+      g.fillStyle = "rgba(242,169,59,.55)";
+      for (let m = 585; m <= 855; m += 30) g.fillRect(X(m) - 0.5, H - B - 5, 1, 5);
+    }
     // time axis
     g.font = font; g.fillStyle = "#6f8593"; g.textAlign = "center";
     [[555, "9:15"], [600, "10:00"], [660, "11:00"], [720, "12:00"], [780, "13:00"], [840, "14:00"], [900, "15:00"]].forEach(([m, t]) => {
@@ -668,8 +681,8 @@ function drawSession(d, animate) {
       g.fillStyle = "rgba(143,163,176,.08)"; g.fillRect(X(m), T, 1, H - T - B); g.fillStyle = "#6f8593";
     });
     g.textAlign = "left";
-    if (orb) { g.fillStyle = "rgba(242,169,59,.8)"; g.fillText("Opening range", L + 4, Math.max(T + 12, Y(orb.high) - 6)); }
-    if (W >= 600) { g.fillStyle = "rgba(127,180,217,.65)"; g.fillText("Entry window 9:30 to 14:30", X(570) + 6, T + 12); }
+    if (bnd.length > 1) { const z = bnd[bnd.length - 1]; g.fillStyle = "rgba(242,169,59,.85)"; g.fillText("Noise area", X((z.time % 86400) / 60 + 5) + 6, (Y(z.up) + Y(z.lo)) / 2 + 4); }
+    if (W >= 600) { g.fillStyle = "rgba(127,180,217,.65)"; g.fillText("Checks every 30 min, 9:45 to 14:15", X(585) + 6, T + 12); }
     // reference lines
     const hline = (v, c, label, dash) => {
       if (!v) return; g.save(); g.strokeStyle = c; g.setLineDash(dash); g.lineWidth = 1;
@@ -719,12 +732,12 @@ function renderTicket(d) {
       ${kpi("Stop-loss (SL)", `<span class="down">₹${n2(o.sl_prem)}</span>`)}${kpi("Target (TP)", `<span class="up">₹${n2(o.target_prem)}</span>`)}
     </div>
     <div style="margin-top:10px">
-      <div class="row"><span class="muted">Underlying: entry / SL / move SL to entry at / target</span><span class="mono">${n2(p.entry)} / ${n2(p.sl)} / ${n2(p.breakeven_at)} / ${n2(p.target)}</span></div>
+      <div class="row"><span class="muted">Index: entry / stop-loss / target</span><span class="mono">${n2(p.entry)} / ${n2(p.sl)} / ${n2(p.target)}</span></div>
       <div class="row"><span class="muted">Size</span><span class="mono">${o.lots} lot(s) = ${o.qty} qty</span></div>
       <div class="row"><span class="muted">Capital needed (1 lot / this trade)</span><span class="mono">${rs(o.cost_per_lot)} / ${rs(o.capital_used)}</span></div>
       <div class="row"><span class="muted">Demo cash available</span><span class="mono ${cash >= o.cost_per_lot ? "" : "down"}">${rs(cash)}</span></div>
       <div class="row"><span class="muted">Risk / reward</span><span class="mono"><span class="down">${rs(o.risk_rs)}</span> / <span class="up">${rs(o.reward_rs)}</span></span></div>
-      <div class="muted" style="font-size:12px;margin-top:4px">Exit at whichever comes first: SL, target, time stop (no +0.5R in ${p.time_stop_min} min) or 15:15 square-off.</div>
+      <div class="muted" style="font-size:12px;margin-top:4px">Exit at whichever comes first: index stop-loss, index target (${p.rr || 4}R), a half-hour close back inside the band or across VWAP, or the 15:15 square-off. Option SL/TP above are estimates of where the premium will be at those index levels.</div>
     </div>
     ${o.note ? `<div class="warn">${esc(o.note)}</div>` : ""}
     <details ${!o.affordable || S.pick ? "open" : ""} style="margin-top:12px">
@@ -865,8 +878,12 @@ function makeChart(i) {
   o.main = p.sty === "l"
     ? c.addAreaSeries({lineColor: "#3fbf8f", topColor: "rgba(63,191,143,.22)", bottomColor: "rgba(63,191,143,0)", lineWidth: 2, autoscaleInfoProvider: auto})
     : c.addCandlestickSeries({...CANDLE, autoscaleInfoProvider: auto});
-  if (p.kind === "UND") o.lines = [["vwap", "#f2a93b", 1.5], ["ema9", "#7fb4d9", 1], ["ema21", "#b39ddb", 1]].map(([k, color, w]) =>
-    [k, c.addLineSeries({color, lineWidth: w, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false})]);
+  if (p.kind === "UND") {
+    o.lines = [["vwap", "#f2a93b", 1.5], ["ema9", "#7fb4d9", 1], ["ema21", "#b39ddb", 1]].map(([k, color, w]) =>
+      [k, c.addLineSeries({color, lineWidth: w, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false})]);
+    o.bands = ["up", "lo"].map(k => [k, c.addLineSeries({color: "rgba(242,169,59,.7)", lineWidth: 1, lineStyle: 2, priceLineVisible: false,
+      lastValueVisible: false, crosshairMarkerVisible: false, title: k === "up" ? "Band" : ""})]);
+  }
   c.timeScale().subscribeVisibleTimeRangeChange(r => {
     if (!CW.sync || syncing || !r || !o.data.length) return;
     syncing = true;
@@ -947,12 +964,16 @@ async function refreshPane(i) {
   const lastDay = bars.length ? Math.floor(bars[bars.length - 1].time / 86400) : 0;
   o.lines.forEach(([k, ser]) => ser.setData(bars.filter(b => b[k] != null && (k !== "vwap" || Math.floor(b.time / 86400) === lastDay))
     .map(b => ({time: b.time, value: b[k]}))));   // VWAP restarts every session, so draw it for the latest one
+  if (o.bands) {
+    const ser = mine && p.tf === 5 && d.signal.bands ? d.signal.bands.series : [];
+    o.bands.forEach(([k, s]) => s.setData(ser.map(x => ({time: x.time, value: x[k]}))));
+  }
   o.pls.forEach(pl => o.main.removePriceLine(pl)); o.pls = []; o.levels = [];
   const add = (price, color, title, style) => o.pls.push(o.main.createPriceLine({price, color, title, lineWidth: 1, lineStyle: style, axisLabelVisible: true}));
   if (mine) {
     const sg = d.signal, od = d.order;
     if (p.kind === "UND") {
-      if (sg.orb) { add(sg.orb.high, "#8fa3b0", "ORB high", 2); add(sg.orb.low, "#8fa3b0", "ORB low", 2); }
+
       if (sg.plan) { add(sg.plan.sl, "#e2675a", "Stop", 0); add(sg.plan.target, "#3fbf8f", "Target", 0); o.levels = [sg.plan.sl, sg.plan.target]; }
     } else if (od && od.type === "Buy option" && od.strike === r.strike && od.opt === p.kind) {
       add(od.entry_prem, "#8fa3b0", "Entry", 2); add(od.sl_prem, "#e2675a", "SL", 0); add(od.target_prem, "#3fbf8f", "TP", 0);
@@ -1164,11 +1185,35 @@ async function loadContext() {
 }
 
 /* ---------- backtest ---------- */
+async function loadStudy() {
+  if (S.study) return;
+  const r = await api("/api/research"); S.study = r;
+  if (!r.new) return;
+  const k = v => v == null ? "–" : `<span class="${cls(v)}">${v >= 0 ? "+" : "−"}₹${Math.abs(v / 1000).toFixed(1)}k</span>`;
+  const row = (name, b) => `<tr><td>${name}</td>${[30, 60, 90, 120].map(w => { const x = b.windows[w]; return `<td class="mono">${k(x.net)}<div class="muted" style="font-size:11.5px">${x.pf === "" ? "" : `PF ${x.pf ?? "–"} · `}${x.trades} trades</div></td>`; }).join("")}${[2023, 2024, 2025, 2026].map(y => `<td class="mono">${k(b.years[y])}</td>`).join("")}</tr>`;
+  const both = (a, b) => ({windows: Object.fromEntries([30, 60, 90, 120].map(w => [w, {net: a.windows[w].net + b.windows[w].net, pf: "", trades: a.windows[w].trades + b.windows[w].trades}])),
+    years: Object.fromEntries([2023, 2024, 2025, 2026].map(y => [y, a.years[y] + b.years[y]]))});
+  const head = `<tr><th></th><th>Last 30 days</th><th>60 days</th><th>90 days</th><th>120 days</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th></tr>`;
+  $("#study").innerHTML = `<div class="card"><h3>The 3¾-year study behind these rules</h3>
+    <p class="muted" style="margin-top:0">${esc(r.period)}. ${r.configs_tested.toLocaleString("en-IN")} settings tested on ₹${(r.capital / 1e5).toFixed(0)} lakh capital, ${esc(r.risk_per_trade)} risk per trade, ${esc(r.costs)}. Tuned on ${esc(r.train)}; the last 30/60/90/120-day columns are days the search <b>never saw</b>.</p>
+    <h4>New rules vs the old rules (net profit after costs)</h4>
+    <div class="tablewrap"><table>${head}
+      ${row("<b>New</b> · Nifty", r.new.NIFTY)}${row("<b>New</b> · Bank Nifty", r.new.BANKNIFTY)}${row("<b>New</b> · both indices", both(r.new.NIFTY, r.new.BANKNIFTY))}
+      ${row("Old ORB rules · both indices", both(r.old.NIFTY, r.old.BANKNIFTY))}
+      ${row("New · Fin Nifty (never used in tuning)", r.new.FINNIFTY)}</table></div>
+    <h4>Every strategy family tested</h4>
+    <div class="tablewrap"><table><tr><th>Strategy</th><th>Settings tried</th><th>Held up in training*</th><th>…of those, profitable on the unseen 120 days</th><th>Walk-forward 2024–26**</th></tr>
+      ${r.families.map(f => `<tr><td>${esc(f.name)}</td><td class="mono">${f.tested}</td><td class="mono">${f.robust}</td><td class="mono">${f.robust ? Math.round(f.robust_oos_profitable / f.robust * 100) + "%" : "–"}</td><td class="mono">${k(f.walk_forward_net)}</td></tr>`).join("")}</table></div>
+    <p class="muted" style="font-size:12px">* profitable on both indices in both halves of the training period. ** re-picking the best setting every 30 days from the previous 250 days, then trading the next 30 unseen days.</p>
+    <h4>Single stocks (same rules)</h4>
+    <div class="tablewrap"><table>${head}${Object.entries(r.stocks).map(([s, b]) => row(s, b)).join("")}</table></div>
+    <h4>Caveats</h4><ul>${r.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul></div>`;
+}
 let btc, bts;
 $("#btRun").onclick = async () => {
   const b = $("#btRun"); b.disabled = true; b.textContent = "Running… (up to a minute)";
   try {
-    const d = await post("/api/backtest", {symbol: $("#btSym").value, min_score: +$("#btScore").value, capital: +$("#btCap").value});
+    const d = await post("/api/backtest", {symbol: $("#btSym").value, mult: +$("#btMult").value, capital: +$("#btCap").value});
     if (d.error) throw new Error(d.error);
     const s = d.summary;
     if (!s.trades) { $("#btOut").innerHTML = `<div class="card empty">No trades in ${d.days} sessions with these filters.</div>`; return; }
@@ -1177,11 +1222,11 @@ $("#btRun").onclick = async () => {
       ${kpi("Max drawdown", s.max_dd_pct.toFixed(1) + "%")}${kpi("Avg R / trade", sgn(s.avg_R))}</div>
       <div class="card" style="margin-top:14px"><h3>Equity curve</h3><div id="btchart"></div></div>
       <div class="card" style="margin-top:14px"><h3>Every trade</h3><div class="tablewrap" style="max-height:60vh"><table>
-      <tr><th>Date</th><th>In</th><th>Out</th><th>Side</th><th>Type</th><th>Score</th><th>Spot in</th><th>Spot out</th><th>R</th><th>Prem in</th><th>Prem out</th><th>Lots</th><th>P&L</th><th style="text-align:left">Reason</th></tr>
-      ${d.trades.map(t => `<tr><td>${t.date}</td><td>${t.entry_time}</td><td>${t.exit_time}</td><td class="${t.side === "CALL" ? "up" : "down"}">${t.side}</td><td>${t.type}</td><td>${t.score}</td>
+      <tr><th>Date</th><th>In</th><th>Out</th><th>Side</th><th>Option</th><th>Band</th><th>Spot in</th><th>Spot out</th><th>R</th><th>Prem in</th><th>Prem out</th><th>Lots</th><th>P&L</th><th style="text-align:left">Reason</th></tr>
+      ${d.trades.map(t => `<tr><td>${t.date}</td><td>${t.entry_time}</td><td>${t.exit_time}</td><td class="${t.side === "CALL" ? "up" : "down"}">${t.side}</td><td>${t.type}</td><td>${t.band}×</td>
         <td class="mono">${n2(t.spot_in)}</td><td class="mono">${n2(t.spot_out)}</td><td class="mono ${cls(t.R)}">${sgn(t.R)}</td><td class="mono">${n2(t.prem_in)}</td><td class="mono">${n2(t.prem_out)}</td>
         <td>${t.lots}</td><td class="mono ${cls(t.pnl)}"><b>${rs(t.pnl)}</b></td><td style="text-align:left">${esc(t.reason)}</td></tr>`).join("")}</table></div>
-      <p class="muted" style="font-size:12px">Small sample (~60 days). Treat this as a sanity check, not proof. Paper-trade 30+ live signals before trusting it.</p></div>`;
+      <p class="muted" style="font-size:12px">Small sample (~45 traded days). Treat this as a sanity check; the study below covers 924 days.</p></div>`;
     if (window.LightweightCharts) { [btc, bts] = lineChart($("#btchart"));
     bts.setData(d.trades.map((t, i) => ({time: Math.floor(new Date(t.date + "T" + t.entry_time + ":00Z").getTime() / 1000) + i, value: t.equity})));
     btc.timeScale().fitContent(); }
@@ -1239,40 +1284,36 @@ $("#logout").onclick = async () => { await post("/api/logout"); location.reload(
 function renderRules() {
   const r = S.meta.rules, pct = v => Math.round(v * 100) + "%";
   $("#rulebook").innerHTML = `
-  <h3 style="font-size:18px">The rulebook – “ORB-VWAP Trend Breakout with Market-Bias Filter”</h3>
-  <p><b>Why this strategy:</b> opening-range breakouts confirmed by VWAP and trend are among the most widely taught and tested intraday methods for Nifty/Bank Nifty options. On their own they give many false breakouts, so this version adds a <b>market-bias filter</b>: it only trades when global markets, India VIX, option-chain OI, news and FII flows lean the same way. Nothing is discretionary - if the checklist isn't fully green, you don't trade.</p>
-  <h4>Before 9:30 – build the bias</h4>
-  <div class="tablewrap"><table><tr><th>Factor</th><th>+1 (bullish)</th><th>−1 (bearish)</th></tr>
-  <tr><td>Global markets (US close, US futures, Asia)</td><td>avg &gt; +0.4%</td><td>avg &lt; −0.4%</td></tr>
-  <tr><td>Opening gap vs yesterday</td><td>&gt; +0.25%</td><td>&lt; −0.25%</td></tr>
-  <tr><td>India VIX change</td><td>falls &gt; 5%</td><td>rises &gt; 5%</td></tr>
-  <tr><td>Put-Call Ratio (OI)</td><td>&gt; 1.2</td><td>&lt; 0.7</td></tr>
-  <tr><td>News headline sentiment</td><td>≥ +3</td><td>≤ −3</td></tr>
-  <tr><td>FII cash flow (previous day)</td><td>&gt; +₹1,000 cr</td><td>&lt; −₹1,000 cr</td></tr>
-  <tr><td>Price vs VWAP</td><td>above</td><td>below</td></tr>
-  <tr><td>EMA 9/21 + Supertrend</td><td>both up</td><td>both down</td></tr></table></div>
-  <h4>Entry (9:30 – 14:30), on a closed 5-minute candle</h4>
-  <ul><li><b>BUY CALL:</b> close above the 9:15–9:30 high, above VWAP, EMA9 &gt; EMA21, Supertrend up, score ≥ <b>+${r.MIN_BIAS_SCORE}</b>, VIX not spiking.</li>
-  <li><b>BUY PUT:</b> close below the 9:15–9:30 low, below VWAP, EMA9 &lt; EMA21, Supertrend down, score ≤ <b>−${r.MIN_BIAS_SCORE}</b>.</li>
-  <li><b>Skip the day</b> if the opening range is under ${r.ORB_MIN_PCT}% (dead) or over ${r.ORB_MAX_PCT}% (chaotic).</li></ul>
-  <h4>What to buy</h4>
-  <ul><li>India VIX ≤ ${r.VIX_SPREAD_LEVEL}: buy the <b>ATM option</b>.</li>
-  <li>India VIX &gt; ${r.VIX_SPREAD_LEVEL}: buy a <b>debit spread</b> (buy ATM, sell ${r.SPREAD_WIDTH_STRIKES} strikes OTM) - cheaper and less hurt by falling IV.</li>
-  <li>Expiry: Nifty - nearest weekly (Tuesday), never on expiry day itself. Bank Nifty &amp; stocks - current month, rolled 3 days before expiry.</li></ul>
-  <h4>Exit – decided before you enter</h4>
-  <ul><li><b>Stop-loss:</b> underlying back to the opening-range midpoint (kept between 0.5 and 1.5 × ATR). The option is never allowed to lose more than ${pct(r.PREMIUM_HARD_SL)}.</li>
-  <li><b>Target:</b> ${r.RR_TARGET} × risk. At +1R the stop moves to entry (free trade).</li>
-  <li><b>Time stop:</b> no +0.5R within ${r.TIME_STOP_MIN} minutes → exit (options lose time value).</li>
-  <li><b>Square off by 15:15.</b> No overnight positions. The server checks open trades every minute, even when this page is closed.</li></ul>
-  <h4>Risk – the part that keeps you in the game</h4>
-  <ul><li>Risk <b>${pct(r.RISK_PER_TRADE)} of capital per trade</b>. Lots are calculated for you.</li>
-  <li>Max <b>${r.MAX_TRADES_PER_DAY} trades a day</b>; stop after a <b>${pct(r.MAX_DAILY_LOSS)} daily loss</b> or two losers.</li>
+  <h3 style="font-size:18px">The rulebook – “Noise-Area Momentum”</h3>
+  <p><b>Why this strategy:</b> it came out on top of a research loop that replayed 9 popular intraday strategies (opening-range breakouts, VWAP pullbacks, Supertrend, previous-day high/low with CPR, EMA/ADX, gap-and-go, 9:20 iron fly and this one) in over 5,000 settings on 3¾ years of real 5-minute Nifty and Bank Nifty data, with brokerage, taxes and slippage. Settings were chosen on 2023 – April 2026 only, then judged on the last 120 trading days they never saw. The idea comes from the 2024 study <i>“Beat the Market”</i> by Zarattini, Aziz and Barbon. The full numbers are in the <b>Backtest</b> tab.</p>
+  <p><b>The idea in one line:</b> most intraday wiggles are noise. Only when the index travels clearly further from its open than it usually does at that time of day is a real trend likely, so only then do we trade, and we stay in while it keeps going.</p>
+  <h4>1 · Draw the noise band (automatic)</h4>
+  <ul><li>For every 5-minute slot of the day, take how far the index usually is from its open: the average over the last ${r.NOISE_LOOKBACK} sessions.</li>
+  <li>Upper band = the higher of today's open and yesterday's close × (1 + ${r.NOISE_MULT} × that usual move). Lower band = the lower of the two × (1 − ${r.NOISE_MULT} × usual move).</li>
+  <li>The band starts narrow and widens through the day, so early moves need less distance than late ones.</li></ul>
+  <h4>2 · Entry, only on the half hour (09:45, 10:15 … 14:15)</h4>
+  <ul><li><b>BUY CALL</b> when the 5-minute close at a check is above the upper band <b>and</b> above VWAP.</li>
+  <li><b>BUY PUT</b> when it is below the lower band <b>and</b> below VWAP.</li>
+  <li>The signal can be taken for ${r.SIGNAL_VALID_MIN} minutes after the check if price is still beyond the band.</li>
+  <li>No trades when India VIX is below ${r.VIX_MIN} (moves too small to pay for an option). <b>One trade per instrument per day.</b></li></ul>
+  <h4>3 · What to buy</h4>
+  <ul><li>The <b>ATM option</b> of the nearest expiry (Nifty weekly; never on expiry day). Too costly for your cash? The ticket lets you pick a nearby strike.</li></ul>
+  <h4>4 · Exit, decided before you enter (all on the index price)</h4>
+  <ul><li><b>Stop-loss:</b> ${r.STOP_ATR} × ATR(14) of the 5-minute chart away from entry.</li>
+  <li><b>Target:</b> ${r.RR_NOISE} × that risk.</li>
+  <li><b>Trailing exit:</b> at each half-hour check, a CALL exits if the close falls back below the upper band or VWAP (whichever is higher); a PUT exits if it rises above the lower band or VWAP (whichever is lower).</li>
+  <li><b>Square off by 15:15.</b> The server checks open trades every minute, even when this page is closed.</li></ul>
+  <h4>5 · Risk – the part that keeps you in the game</h4>
+  <ul><li>Risk <b>${pct(r.RISK_PER_TRADE)} of capital per trade</b>; lots are calculated for you.</li>
+  <li>Max <b>${r.MAX_TRADES_PER_DAY} trades a day</b> in total; stop after a <b>${pct(r.MAX_DAILY_LOSS)} daily loss</b> or two losers.</li>
   <li>On RBI policy, Union Budget or election-result days: skip, or trade half size.</li></ul>
-  <h4>About “accuracy” – read this</h4>
-  <ul><li>No public strategy, from any YouTuber or institution, wins 80–90% of the time over the long run. Those numbers come from cherry-picked screenshots, tiny samples or option <i>selling</i> with hidden blow-up risk.</li>
-  <li>A realistic win rate for this kind of breakout system is <b>roughly 40–55%</b>. It can still make money because winners (≈2R) are bigger than losers (≈1R). At 40% wins: 0.4×2 − 0.6×1 = <b>+0.2R per trade</b> before costs.</li>
-  <li>Charges, slippage and discipline decide whether that edge survives. The <b>Backtest</b> tab and your <b>paper journal</b> show the real number - trust those, not promises.</li>
-  <li>Move to real money only after <b>30+ paper trades</b> with profit factor &gt; 1.3, and start with 1 lot.</li></ul>`;
+  <h4>What the research found – read this</h4>
+  <ul><li>The old opening-range rules lost money in every window tested once costs were included. They have been replaced.</li>
+  <li>This strategy wins only about <b>40–55%</b> of trades. It makes money because winners run (up to 4R) while losers are cut at 1R. Expect losing weeks.</li>
+  <li>It was profitable on <b>Nifty in every year 2023–2026</b>. Bank Nifty was mixed (it lost in 2025), and most single stocks lost money, so <b>prefer the indices</b>.</li>
+  <li>The market score (global cues, news, PCR, FII…) is shown for context only. Using it as a filter <i>reduced</i> profit in testing.</li>
+  <li>Re-tuning the settings every month to the latest winners did <i>worse</i> than keeping one robust setting. Don't chase last month's best.</li>
+  <li>Option prices in all backtests are modelled, not real past quotes. Move to real money only after <b>30+ paper trades</b> that look like the backtest, and start with 1 lot.</li></ul>`;
 }
 
 pStart(); start().finally(pDone);

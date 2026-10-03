@@ -97,6 +97,17 @@ SQUARE_OFF = time(15, 15)
 MARKET_CLOSE = time(15, 30)
 CANDLE_MIN = 5
 
+# Noise-area momentum (chosen by the 2023-2026 research loop, see research/README.md)
+NOISE_MULT = 1.75          # band = open x (1 +/- 1.75 x typical move-since-open at this time of day)
+NOISE_LOOKBACK = 14        # past sessions used for the typical move
+NOISE_MIN_SESSIONS = 10
+CHECK_EVERY_MIN = 30       # look for entries/exits only on the half hour: 09:45, 10:15 ... 14:15
+FIRST_CHECK = time(9, 45)
+STOP_ATR = 2.0             # underlying stop = 2 x ATR(14, 5-min)
+RR_NOISE = 4.0             # underlying target = 4 x risk
+VIX_MIN = 11.0             # no trades when India VIX is below 11 (moves too small to pay for the option)
+SIGNAL_VALID_MIN = 10      # a half-hour signal can still be taken for 10 minutes if price holds beyond the band
+
 MIN_BIAS_SCORE = 3
 ORB_MIN_PCT = 0.15
 ORB_MAX_PCT = 1.20

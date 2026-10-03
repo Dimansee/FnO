@@ -1,28 +1,26 @@
 """The rulebook, in code.
 
-STRATEGY: "ORB-VWAP Trend Breakout with Market-Bias Filter"
------------------------------------------------------------
-A widely taught intraday index/stock-option method (opening-range breakout,
-confirmed by VWAP and trend), plus a scoring filter that only allows trades
-when the wider context (global markets, India VIX, option-chain OI, news, FII
-flows) agrees with the direction. Every rule is fixed in advance so the
-decision is mechanical, not emotional.
+STRATEGY: "Noise-Area Momentum" (Zarattini, Aziz & Barbon, "Beat the Market", 2024),
+adapted to Nifty / Bank Nifty options and chosen by a 3.75-year research loop
+(2,700 settings x 9 strategy families, tuned on 2023 - Apr 2026, judged on the
+last 30/60/90/120 days it never saw - see research/README.md).
 
-1. Mark the 09:15-09:30 opening range (ORB).
-2. Skip the day if the range is tiny (<0.15% - dead) or huge (>1.2% - chaos).
-3. Score the market from -8 to +8 (one point per factor, see `bias_factors`).
-4. CALL entry (09:30-14:30): a 5-min candle CLOSES above ORB high, price is
-   above VWAP, EMA9 > EMA21, Supertrend is up, and total score >= +3.
-   PUT entry is the mirror image with score <= -3.
-5. Instrument: India VIX <= 16 -> buy the ATM option.
-               India VIX  > 16 -> buy a debit spread (ATM / 2 strikes OTM)
-               because options are expensive and premium decays fast.
-6. Stop-loss on the underlying: ORB midpoint (bounded to 0.5-1.5 x ATR).
-   Option hard stop: never lose more than 30% of premium.
-7. Target: 2 x risk. At +1R move stop to entry (breakeven).
-8. Time stop: if +0.5R is not reached within 45 minutes, exit (theta).
-9. Square off everything by 15:15. Max 2 trades/day; stop at -2% day loss.
-10. Position size: risk 1% of capital per trade.
+Idea: most intraday wiggles are noise. Measure, for every time of day, how far the
+index usually is from its open (average of the last 14 sessions). Only when price
+travels well beyond that usual distance is a real trend likely - then ride it.
+
+1. Bands: upper = max(today's open, yesterday's close) x (1 + 1.75 x usual move),
+          lower = min(today's open, yesterday's close) x (1 - 1.75 x usual move).
+2. Check only on the half hour (09:45, 10:15 ... 14:15), using the 5-min close.
+3. CALL: close above the upper band AND above VWAP.  PUT: mirror image.
+4. Skip the day if India VIX < 11 (moves too small to pay for the option).
+5. Buy the ATM option of the nearest expiry (not on expiry day).
+6. Stop-loss on the index: 2 x ATR(14, 5-min). Target: 4 x that risk.
+7. Trailing exit, on each half hour: CALL exits if the close drops below
+   max(upper band, VWAP); PUT exits if it rises above min(lower band, VWAP).
+8. Square off by 15:15. One trade per instrument per day. Risk 1% of capital.
+The market-context score (global cues, news, PCR, FII...) is shown for
+information only: in the backtest, using it as a filter REDUCED profit.
 """
 from __future__ import annotations
 
@@ -111,14 +109,68 @@ def bias_factors(today, hist, vix, cstats, news, gcues, fii) -> list[dict]:
     return f
 
 
-def evaluate(symbol, candles, vix, cstats, news, gcues, fii, now: datetime, day_guard: dict | None = None) -> dict:
+def _is_check(bar_start) -> bool:
+    """A 5-min bar whose close lands on :15 or :45 (09:45, 10:15 ...)."""
+    end = bar_start + timedelta(minutes=C.CANDLE_MIN)
+    return end.minute % C.CHECK_EVERY_MIN == C.FIRST_CHECK.minute % C.CHECK_EVERY_MIN
+
+
+def noise_sigma(hist: pd.DataFrame, lookback: int = C.NOISE_LOOKBACK) -> dict:
+    """Average |close / session open - 1| at each time of day over the last `lookback` sessions."""
+    if hist.empty:
+        return {}
+    days = sorted(set(hist.index.date))[-lookback:]
+    if len(days) < C.NOISE_MIN_SESSIONS:
+        return {}
+    h = hist[pd.Index(hist.index.date).isin(days)]
+    op = h.groupby(h.index.date)["open"].transform("first")
+    mv = (h["close"] / op - 1).abs()
+    tod = h.index.hour * 60 + h.index.minute
+    return mv.groupby(tod).mean().to_dict()
+
+
+def noise_bands(today: pd.DataFrame, prev_close: float, sigma: dict, mult: float = C.NOISE_MULT) -> pd.DataFrame:
+    if today.empty or not sigma:
+        return pd.DataFrame(index=today.index, columns=["up", "lo"], dtype=float)
+    o = float(today["open"].iloc[0])
+    tod = today.index.hour * 60 + today.index.minute
+    sg = pd.Series([sigma.get(t) for t in tod], index=today.index, dtype=float)
+    return pd.DataFrame({"up": max(o, prev_close) * (1 + mult * sg), "lo": min(o, prev_close) * (1 - mult * sg)})
+
+
+def noise_state(candles: pd.DataFrame, now: datetime) -> dict | None:
+    """Latest completed bar with its bands and VWAP - used by the trailing exit."""
+    today, hist = session_frames(candles, now)
+    if today.empty or hist.empty:
+        return None
+    b = noise_bands(today, float(hist["close"].iloc[-1]), noise_sigma(hist))
+    last = today.index[-1]
+    return {"bar_start": last, "bar_end": last + timedelta(minutes=C.CANDLE_MIN), "is_check": _is_check(last),
+            "close": float(today["close"].iloc[-1]), "vwap": float(today["vwap"].iloc[-1]),
+            "up": None if b.empty or pd.isna(b["up"].iloc[-1]) else float(b["up"].iloc[-1]),
+            "lo": None if b.empty or pd.isna(b["lo"].iloc[-1]) else float(b["lo"].iloc[-1])}
+
+
+def evaluate(symbol, candles, vix, cstats, news, gcues, fii, now: datetime, day_guard: dict | None = None,
+             traded_today: bool = False) -> dict:
     today, hist = session_frames(candles, now)
     factors = bias_factors(today, hist, vix, cstats, news, gcues, fii)
     score = sum(x["score"] for x in factors)
     res = {"factors": factors, "score": score, "signal": "WAIT", "checks": [], "warnings": [],
-           "orb": None, "plan": None, "today": today}
+           "orb": None, "bands": None, "plan": None, "today": today, "strategy": "Noise-area momentum"}
+
+    # the band is useful on the chart even when no trade is possible
+    sigma = noise_sigma(hist)
+    prev_close = float(hist["close"].iloc[-1]) if not hist.empty else None
+    bands = noise_bands(today, prev_close, sigma) if prev_close else pd.DataFrame()
+    if not bands.empty and bands["up"].notna().any():
+        res["bands"] = {"up": float(bands["up"].iloc[-1]), "lo": float(bands["lo"].iloc[-1]), "mult": C.NOISE_MULT,
+                        "series": [{"ts": ts, "up": float(r.up), "lo": float(r.lo)} for ts, r in bands.dropna().iterrows()]}
 
     t = now.time()
+    if symbol in C.STOCKS:
+        res["warnings"].append("Stock signals are for practice: in the 2023-26 backtest these rules lost money on most "
+                               "single stocks. Nifty was the most consistent - see the Backtest tab.")
     if (news or {}).get("events"):
         res["warnings"].append("Event in the news: " + ", ".join(news["events"]) +
                                ". On RBI/Budget/election-result days, skip or trade half size.")
@@ -126,66 +178,64 @@ def evaluate(symbol, candles, vix, cstats, news, gcues, fii, now: datetime, day_
         res["signal"] = "STOP FOR TODAY"
         res["checks"].append((False, day_guard["reason"]))
         return res
-
     if today.empty or today.index[-1].date() != now.date():
         res["signal"] = "MARKET CLOSED"
-        res["checks"].append((None, "Showing the last session. Live signals start 09:30 on a trading day."))
+        res["checks"].append((None, "Showing the last session. Checks run every half hour from 09:45 on a trading day."))
         return res
-    if t < C.ORB_END:
-        res["signal"] = "WAIT"
-        res["checks"].append((False, "Opening range forms 09:15-09:30. Plan with the score; no trades yet."))
-        return res
-
-    orb = I.opening_range(today)
-    if orb is None:
-        res["checks"].append((False, "Opening range not available yet"))
-        return res
-    hi, lo = orb
-    mid = (hi + lo) / 2
-    spot = float(today["close"].iloc[-1])
-    width = (hi - lo) / spot * 100
-    res["orb"] = {"high": hi, "low": lo, "mid": mid, "width_pct": width}
-
-    width_ok = C.ORB_MIN_PCT <= width <= C.ORB_MAX_PCT
-    res["checks"].append((width_ok, f"Opening range {width:.2f}% (allowed {C.ORB_MIN_PCT}-{C.ORB_MAX_PCT}%)"))
-    if not width_ok:
+    if not sigma:
         res["signal"] = "NO TRADE TODAY"
+        res["checks"].append((False, f"Need {C.NOISE_MIN_SESSIONS}+ past sessions of 5-min data to measure the usual move"))
+        return res
+    vlev = float(vix.get("level") or 0)
+    vix_ok = vlev >= C.VIX_MIN
+    res["checks"].append((vix_ok, f"India VIX {vlev:.2f} ≥ {C.VIX_MIN:g} (enough movement to pay for an option)"))
+    if not vix_ok:
+        res["signal"] = "NO TRADE TODAY"
+        return res
+    if traded_today:
+        res["signal"] = "NO NEW ENTRIES"
+        res["checks"].append((False, "Already traded this instrument today - the rule is one trade per day"))
+        return res
+    if t < C.FIRST_CHECK:
+        res["checks"].append((None, "First check at 09:45 - the noise band needs the first half hour"))
         return res
     if t > C.LAST_ENTRY:
         res["signal"] = "NO NEW ENTRIES"
         res["checks"].append((False, f"After {C.LAST_ENTRY:%H:%M} - only manage open trades"))
         return res
 
+    # latest half-hour check bar
+    checks = [ts for ts in today.index if _is_check(ts)]
+    if not checks:
+        res["checks"].append((None, "Waiting for the 09:45 check"))
+        return res
+    cb = checks[-1]
+    bar = today.loc[cb]
+    end = cb + timedelta(minutes=C.CANDLE_MIN)
+    up, lo = float(bands.loc[cb, "up"]), float(bands.loc[cb, "lo"])
     last = today.iloc[-1]
-    long_c = [
-        (last["close"] > hi, f"5-min close {last['close']:.1f} above ORB high {hi:.1f}"),
-        (last["close"] > last["vwap"], "Price above VWAP"),
-        (last["ema9"] > last["ema21"], "EMA9 above EMA21"),
-        (last["st"] > 0, "Supertrend up"),
-        (score >= C.MIN_BIAS_SCORE, f"Market score {score:+d} ≥ +{C.MIN_BIAS_SCORE}"),
-        (vix.get("chg_pct", 0) <= C.VIX_SPIKE_PCT, f"No VIX spike (>{C.VIX_SPIKE_PCT}%)"),
-    ]
-    short_c = [
-        (last["close"] < lo, f"5-min close {last['close']:.1f} below ORB low {lo:.1f}"),
-        (last["close"] < last["vwap"], "Price below VWAP"),
-        (last["ema9"] < last["ema21"], "EMA9 below EMA21"),
-        (last["st"] < 0, "Supertrend down"),
-        (score <= -C.MIN_BIAS_SCORE, f"Market score {score:+d} ≤ -{C.MIN_BIAS_SCORE}"),
-    ]
+    spot = float(last["close"])
+    fresh = (now - end).total_seconds() / 60 <= C.SIGNAL_VALID_MIN
+    nxt = end + timedelta(minutes=C.CHECK_EVERY_MIN)
+    res["checks"].append((None, f"Last check {end:%H:%M} (next {nxt:%H:%M}) · band {lo:.1f} – {up:.1f}"))
+    long_c = [(bar["close"] > up, f"{end:%H:%M} close {bar['close']:.1f} above upper band {up:.1f}"),
+              (bar["close"] > bar["vwap"], f"Above VWAP {bar['vwap']:.1f}"),
+              (fresh and spot > up, "Still above the band now (signal valid 10 min after the check)")]
+    short_c = [(bar["close"] < lo, f"{end:%H:%M} close {bar['close']:.1f} below lower band {lo:.1f}"),
+               (bar["close"] < bar["vwap"], f"Below VWAP {bar['vwap']:.1f}"),
+               (fresh and spot < lo, "Still below the band now (signal valid 10 min after the check)")]
     a = float(last["atr"])
+    risk = min(max(C.STOP_ATR * a, 1.0 * a), 2.5 * a)
     if all(c for c, _ in long_c):
         res["signal"], res["checks"] = "BUY CALL", res["checks"] + long_c
-        risk = min(max(spot - mid, 0.5 * a), 1.5 * a)
         res["plan"] = _plan("CE", spot, risk)
     elif all(c for c, _ in short_c):
         res["signal"], res["checks"] = "BUY PUT", res["checks"] + short_c
-        risk = min(max(mid - spot, 0.5 * a), 1.5 * a)
         res["plan"] = _plan("PE", spot, risk)
     else:
-        # show the side that is closer to triggering
-        lp, sp = sum(c for c, _ in long_c), sum(c for c, _ in short_c)
+        lp, sp = sum(bool(c) for c, _ in long_c), sum(bool(c) for c, _ in short_c)
         side = long_c if lp >= sp else short_c
-        res["checks"].append((None, f"Watching {'CALL' if lp >= sp else 'PUT'} setup ({max(lp, sp)}/{len(side)} conditions met):"))
+        res["checks"].append((None, f"Watching {'CALL' if lp >= sp else 'PUT'} side ({max(lp, sp)}/{len(side)} conditions met):"))
         res["checks"] += side
     return res
 
@@ -193,11 +243,9 @@ def evaluate(symbol, candles, vix, cstats, news, gcues, fii, now: datetime, day_
 def _plan(opt, spot, risk):
     sign = 1 if opt == "CE" else -1
     return {
-        "opt": opt, "entry": spot, "risk_pts": risk,
-        "sl": spot - sign * risk,
-        "breakeven_at": spot + sign * risk,
-        "target": spot + sign * C.RR_TARGET * risk,
-        "time_stop_min": C.TIME_STOP_MIN,
+        "strategy": "noise", "opt": opt, "entry": spot, "risk_pts": risk,
+        "sl": spot - sign * risk, "target": spot + sign * C.RR_NOISE * risk, "rr": C.RR_NOISE,
+        "trail": "noise band / VWAP on the half hour",
     }
 
 
@@ -218,7 +266,7 @@ def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=N
         buy_i = hits[0]
     else:
         buy_i = atm_i
-    use_spread = vix_level > C.VIX_SPREAD_LEVEL
+    use_spread = False   # research: the tested rules buy the plain option (no spread)
     buy = chain.iloc[buy_i]
 
     def px(row, side):
@@ -246,9 +294,9 @@ def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=N
         else:
             use_spread = False
 
-    floor = 0.60 if use_spread else 1 - C.PREMIUM_HARD_SL
+    floor = 0.60 if use_spread else 0.15
     sl = max(entry - delta * plan["risk_pts"], entry * floor)
-    tgt = entry + delta * C.RR_TARGET * plan["risk_pts"]
+    tgt = entry + delta * plan.get("rr", C.RR_TARGET) * plan["risk_pts"]
     if max_value:
         tgt = min(tgt, max_value * 0.85)
     risk_per_lot = (entry - sl) * lot
@@ -305,34 +353,47 @@ def strike_alternatives(plan, chain: pd.DataFrame, spot, vix_level, lot, capital
     return out
 
 
-def exit_check(pos: dict, spot: float, prem: float, now: datetime) -> tuple[str | None, dict]:
-    """Return (exit_reason or None, updates). Applied to open paper positions
-    that were opened from a signal (positions with a `plan`)."""
+def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict | None = None) -> tuple[str | None, dict]:
+    """Return (exit_reason or None, updates) for an open paper position.
+    Signal trades exit on the INDEX levels (as backtested); manual trades on premium."""
     plan = pos.get("plan")
     upd = {}
     t = now.time()
     if t >= C.SQUARE_OFF or pos["opened"][:10] < now.date().isoformat():
         return "Square-off 15:15", upd
-    if prem <= pos["sl_prem"]:
-        return "Premium stop-loss hit", upd
-    if prem >= pos["target_prem"]:
-        return "Premium target hit", upd
-    if not plan:
-        return None, upd
+    if not plan or plan.get("strategy") != "noise":
+        if prem <= pos["sl_prem"]:
+            return "Premium stop-loss hit", upd
+        if prem >= pos["target_prem"]:
+            return "Premium target hit", upd
+        if not plan:
+            return None, upd
     long_ = plan["opt"] == "CE"
     sl = pos.get("live_sl", plan["sl"])
     if (long_ and spot <= sl) or (not long_ and spot >= sl):
-        return ("Breakeven stop" if pos.get("at_breakeven") else "Underlying stop-loss hit"), upd
+        return "Index stop-loss hit (2 × ATR)", upd
     if (long_ and spot >= plan["target"]) or (not long_ and spot <= plan["target"]):
-        return "Underlying target (2R) hit", upd
-    if not pos.get("at_breakeven") and ((long_ and spot >= plan["breakeven_at"]) or (not long_ and spot <= plan["breakeven_at"])):
-        upd.update({"at_breakeven": True, "live_sl": plan["entry"]})
-    opened = datetime.fromisoformat(pos["opened"])
-    half_r = plan["entry"] + (0.5 if long_ else -0.5) * plan["risk_pts"]
-    reached = pos.get("reached_half_r") or (long_ and spot >= half_r) or (not long_ and spot <= half_r)
-    if reached and not pos.get("reached_half_r"):
-        upd["reached_half_r"] = True
-    mins = (now.replace(tzinfo=None) - opened.replace(tzinfo=None)).total_seconds() / 60
-    if not reached and mins >= plan["time_stop_min"]:
-        return f"Time stop ({plan['time_stop_min']} min, no follow-through)", upd
+        return f"Index target ({plan.get('rr', C.RR_TARGET):g}R) hit", upd
+    if plan.get("strategy") == "noise" and state and state.get("is_check"):
+        opened = datetime.fromisoformat(pos["opened"])
+        if state["bar_end"].replace(tzinfo=None) > opened.replace(tzinfo=None) and pos.get("last_check") != state["bar_end"].isoformat():
+            upd["last_check"] = state["bar_end"].isoformat()
+            c, vw = state["close"], state["vwap"]
+            if long_ and state.get("up") is not None and c < max(state["up"], vw):
+                return f"Trailing exit at {state['bar_end']:%H:%M}: back inside the band / below VWAP", upd
+            if not long_ and state.get("lo") is not None and c > min(state["lo"], vw):
+                return f"Trailing exit at {state['bar_end']:%H:%M}: back inside the band / above VWAP", upd
+    if plan.get("strategy") != "noise":
+        if not pos.get("at_breakeven") and plan.get("breakeven_at") and (
+                (long_ and spot >= plan["breakeven_at"]) or (not long_ and spot <= plan["breakeven_at"])):
+            upd.update({"at_breakeven": True, "live_sl": plan["entry"]})
+        if plan.get("time_stop_min"):
+            opened = datetime.fromisoformat(pos["opened"])
+            half_r = plan["entry"] + (0.5 if long_ else -0.5) * plan["risk_pts"]
+            reached = pos.get("reached_half_r") or (long_ and spot >= half_r) or (not long_ and spot <= half_r)
+            if reached and not pos.get("reached_half_r"):
+                upd["reached_half_r"] = True
+            mins = (now.replace(tzinfo=None) - opened.replace(tzinfo=None)).total_seconds() / 60
+            if not reached and mins >= plan["time_stop_min"]:
+                return f"Time stop ({plan['time_stop_min']} min, no follow-through)", upd
     return None, upd

@@ -379,6 +379,10 @@ def s_noise(d: Day, j, p, st):
                 continue
             if not _ctx_ok(d, side, p):
                 continue
+            if p.get("st_agree") and d.st[i] != side:
+                continue
+            if p.get("adx", 0) and d.adx[i] < p["adx"]:
+                continue
             stop = c - side * p.get("stop_atr", 1.5) * d.atr[i]
             stop = _risk_clip(d, i, c, stop, side, {"rmin": 0.5, "rmax": 3})
             r = abs(c - stop)
@@ -514,6 +518,8 @@ def run(days: list[Day], sym: str, strat: str, p: dict, capital=CAPITAL):
     fn = STRATS[strat]
     st, out = {}, []
     for d in days:
+        if not (p.get("vix_min", 0) <= d.vix[0] <= p.get("vix_max", 99)):
+            continue
         j, n, losses = 0, 0, 0
         while n < p.get("max_trades", 2) and losses < p.get("max_losses", 2):
             s = fn(d, j, p, st)
@@ -529,7 +535,9 @@ def run(days: list[Day], sym: str, strat: str, p: dict, capital=CAPITAL):
                 out.append(tr)
                 n += 1
                 losses += tr["pnl"] < 0
-            j = k + 1
+                j = k + 1
+            else:
+                j = s.i + 1          # couldn't size it (too risky/costly): keep looking from the next bar
             if j >= len(d.t):
                 break
     return out
