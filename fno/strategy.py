@@ -460,7 +460,7 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
     t = now.time()
     if t >= C.SQUARE_OFF or pos["opened"][:10] < now.date().isoformat():
         return "Square-off 15:15", upd
-    if not plan or plan.get("strategy") not in ("noise", "camarilla"):
+    if not plan or plan.get("strategy") not in ("noise", "camarilla", "ai"):
         if prem <= pos["sl_prem"]:
             return "Premium stop-loss hit", upd
         if prem >= pos["target_prem"]:
@@ -472,7 +472,8 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
     if (long_ and spot <= sl) or (not long_ and spot >= sl):
         if pos.get("at_breakeven"):
             return "Breakeven stop (moved to entry at +1R)", upd
-        return ("Index stop-loss hit (2 × ATR)" if plan.get("strategy") == "noise" else "Index stop-loss hit"), upd
+        return ("Index stop-loss hit (2 × ATR)" if plan.get("strategy") == "noise" else
+                f"Index stop-loss hit ({plan.get('stop_k', 1):g} × ATR)" if plan.get("strategy") == "ai" else "Index stop-loss hit"), upd
     if plan.get("target") is not None and ((long_ and spot >= plan["target"]) or (not long_ and spot <= plan["target"])):
         return f"Index target ({plan.get('rr', C.RR_TARGET):g}R) hit", upd
     if plan.get("strategy") == "noise" and state and state.get("is_check"):

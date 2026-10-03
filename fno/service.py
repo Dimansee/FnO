@@ -16,6 +16,7 @@ from . import market as M
 from . import paper as P
 from . import store
 from . import strategy as S
+from . import ai as AI
 
 ALL_SYMBOLS = list(C.INDICES) + list(C.STOCKS)
 
@@ -137,6 +138,47 @@ def _gather(symbol, m: M.Market):
                 trade_exp=trade_exp, chain=chain)
 
 
+def _vix_prev_chg() -> float:
+    """Yesterday's India VIX change vs the day before (%), a model input."""
+    def f():
+        d = M.yahoo_daily(C.INDIA_VIX_YAHOO, "10d")["close"].dropna()
+        if len(d) < 3:
+            return 0.0
+        last = d.index[-1].date() if hasattr(d.index[-1], "date") else d.index[-1]
+        if last == C.today_ist():
+            d = d.iloc[:-1]
+        return float((d.iloc[-1] / d.iloc[-2] - 1) * 100) if len(d) >= 2 else 0.0
+    try:
+        return M.cached("vix:prevchg", 900, f)
+    except Exception:
+        return 0.0
+
+
+def _with_ai(symbol, g, ev, pf, traded):
+    """Runs the AI model when enabled; its plan is used only when the rules have none (the rules keep priority)."""
+    if "ai" not in (pf.get("strategies") or []):
+        return ev
+    if ev["signal"] in ("STOP FOR TODAY",):
+        return ev
+    try:
+        res = AI.evaluate(symbol, g["candles"], g["vix"], gcues(), g["now"], g["trade_exp"],
+                          trades_today=traded.get("ai", 0) if isinstance(traded, dict) else 0, vix_chg_prev=_vix_prev_chg())
+    except Exception as e:                                        # the model must never break the page
+        ev["checks"].append((False, f"AI model error: {str(e)[:120]}"))
+        return ev
+    ev["ai"] = res.get("ai")
+    ev["ai_enabled"] = True
+    ev["checks"].append((None, "AI model:"))
+    ev["checks"] += res["checks"]
+    if ev["signal"] == "MARKET CLOSED":
+        return ev
+    if not ev["plan"] and res["plan"]:
+        ev["signal"], ev["plan"], ev["strategy"] = res["signal"], res["plan"], "AI model"
+    elif ev["signal"] in ("NO TRADE TODAY", "NO NEW ENTRIES") and res["signal"] == "WAIT":
+        ev["signal"] = "WAIT"
+    return ev
+
+
 def calendar_guard(symbol, exps, today) -> dict | None:
     """Days the research says to sit out (round 6): Union Budget day, and Bank Nifty on its own expiry day."""
     if today in C.BUDGET_DAYS:
@@ -175,8 +217,9 @@ def dashboard(symbol, strike=None):
     if not guard.get("blocked"):
         guard = calendar_guard(symbol, g["exps"], g["now"].date()) or guard
     pf = prefs()
-    ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, nw, gc, fi, g["now"], guard, _traded_today(symbol, pos, tr),
-                    pf["strategies"])
+    traded = _traded_today(symbol, pos, tr)
+    ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, nw, gc, fi, g["now"], guard, traded, pf["strategies"])
+    ev = _with_ai(symbol, g, ev, pf, traded)
     today, hist = S.session_frames(g["candles"], g["now"])
     prev = float(hist["close"].iloc[-1]) if not hist.empty else g["spot"]
 
@@ -239,8 +282,9 @@ def place_signal(symbol, strike=None, auto=False):
         return False, "You already have an open signal trade in this instrument."
     cstats = M.chain_stats(g["chain"], g["spot"])
     pf = prefs()
-    ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, news(symbol), gcues(), fii(), g["now"], guard,
-                    _traded_today(symbol, pos, tr), pf["strategies"])
+    traded = _traded_today(symbol, pos, tr)
+    ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, news(symbol), gcues(), fii(), g["now"], guard, traded, pf["strategies"])
+    ev = _with_ai(symbol, g, ev, pf, traded)
     if not ev["plan"]:
         return False, f"No valid signal right now ({ev['signal']}). The setup may have changed - refresh."
     try:

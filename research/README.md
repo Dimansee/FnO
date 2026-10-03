@@ -159,3 +159,19 @@ New data: 1-minute Nifty / Bank Nifty / India VIX 2023-01 → 2026-10 from Upsto
   Generic entries: "stop then target" is ~5 points *less* common on real prices than on a shuffled random market,
   every year (independently confirmed) — no sign of stop hunting beyond chance. On real near-expiry option premiums
   (12 days so far) a 20–40% premium stop is rarely followed by the target the same day.
+
+## Round 8 — an AI model instead of rules? (`ai_data.py`, `ai_data_trail.py`, `ai_train.py`, `ai_policy*.py`, `ai_export.py`, `fno/ai.py`)
+Gradient-boosted trees (LightGBM) on 111,630 decision points (every 5-min close 09:30–14:30, both indices, 2023-01 → 2026-10),
+64 inputs (price vs open/VWAP/EMAs, noise band, Camarilla & PDH/PDL, RSI/ADX/MACD/Supertrend/HA/Bollinger, VIX, gap, global
+cues, time, expiry, today's structure, the two rule signals). The model scores six candidate trades per bar (CALL/PUT ×
+stop 1/1.5/2 ATR, target 2R, hold to 15:15). Judged walk-forward: trained only on quarters before each test quarter, 2024-Q1 → 2026-Q4,
+option P&L with the corrected premiums and costs.
+- v1 (R of the stop/target trade): one seed +₹62k at threshold 0.3 but two other seeds −₹21k; 3-seed average
+  +₹21k (PF 1.12, 2025 −₹14k, last 120 days +₹6k) vs the rules' +₹192k on the same period.
+- v2 (predict the move to the close, heavier regularisation): no skill; its top inputs (weekday, VIX, CPR width) are overfit;
+  as a filter on the rules it removed good trades. v3 (learn entries with the rules' own exits): scores ≈ 0 out of sample.
+- Policies (validation-picked thresholds, top-x% of past scores, half-hour bars only, win-probability gates, smoothing): none stable.
+- Shipped as an optional, off-by-default strategy ("AI model" in Settings) with a 3-seed ensemble exported to numpy
+  (`fno/ai_model.npz`, 1.1 MB) trained on data **before 2026-04-09**; the app's AI backtest trades only days after that cutoff,
+  so it never shows in-sample results (in-sample, the same model shows 90%+ wins — a trap worth naming).
+Retrain: `python ai_data.py && python ai_data_trail.py && for s in 11 12 13; do AI_SEED=$s AI_FINAL_ONLY=1 python ai_train.py; done && python ai_export.py ",_s12,_s13" 0.3 && python make_round8.py`

@@ -15,3 +15,9 @@ r7_scalp*.json
 r7_legs_*.pkl
 r7_rt_*.pkl
 r7_scalp*.pkl
+ai_rows.parquet
+ai_*.npy
+ai_reg*.txt
+ai_cls*.txt
+ai_fwd*.txt
+ai_trades_oos.pkl

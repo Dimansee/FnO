@@ -246,6 +246,47 @@ assert first and first["id"] == "race1" and second is None, "double close must b
 store.update_position({"id": "race1", "symbol": "NIFTY", "opened": "x"})
 assert all(p["id"] != "race1" for p in store.positions()), "update must not resurrect a closed position"
 assert store.ping()
+# ---------- AI strategy (round 8) ----------
+from fno import ai as AI, ai_model as AM  # noqa: E402
+assert AI.available() and AI.train_until().isoformat() == "2026-04-09"
+j(c.post("/api/account/reset", json={"capital": 200000}))
+store.clear_positions(); store.clear_trades()
+assert j(c.post("/api/settings", json={"prefs": {"sizing": "risk", "risk_pct": 2, "strategies": ["ai"], "auto": True, "auto_syms": ["NIFTY"]}}))["ok"]
+NOW[0] = datetime(2026, 10, 1, 10, 36, tzinfo=C.IST)        # 1 minute after the 10:35 close (an AI decision bar)
+CANDLES.clear(); M._cache.clear()
+dd_ = j(c.get("/api/dashboard?symbol=NIFTY"))
+ai_ = dd_["signal"]["ai"]
+assert ai_ and len(ai_["candidates"]) == 6 and ai_["bar_end"] == "10:35" and len(ai_["reasons"]) >= 3, dd_["signal"]["checks"]
+assert all(abs(x["exp_r"]) < 3 and 0 <= x["p_win"] <= 1 for x in ai_["candidates"])
+assert "Camarilla" not in " ".join(t for _, t in dd_["signal"]["checks"])
+print("AI scores:", [(x["side"], x["stop_k"], round(x["exp_r"], 2), round(x["p_win"], 2)) for x in ai_["candidates"]], "best", ai_["best"])
+# force a signal by lowering the threshold, place it, then stop it out on the index level
+AM.load()["meta"]["threshold"] = -9.0
+dd_ = j(c.get("/api/dashboard?symbol=NIFTY"))
+pl = dd_["signal"]["plan"]
+assert pl and pl["strategy"] == "ai" and pl["rr"] == 2 and dd_["signal"]["signal"] in ("BUY CALL", "BUY PUT") and dd_["order"], dd_["signal"]["checks"]
+assert abs(abs(pl["target"] - pl["entry"]) / abs(pl["entry"] - pl["sl"]) - 2) < 1e-6
+tk = j(c.post("/api/tick", headers={"x-cron-secret": "c"}))
+assert tk.get("placed") and tk["placed"][0].get("message"), tk
+pos_ = store.positions()
+assert len(pos_) == 1 and pos_[0]["plan"]["strategy"] == "ai" and pos_[0]["plan"]["auto"]
+dd_ = j(c.get("/api/dashboard?symbol=NIFTY"))
+assert "already took" not in " ".join(t for _, t in dd_["signal"]["checks"])      # 1 of 2 allowed today
+pa = pos_[0]
+sign_ = 1 if pa["plan"]["opt"] == "CE" else -1
+why, upd = S.exit_check(pa, pa["plan"]["entry"] + sign_ * 0.5 * pa["plan"]["risk_pts"], 10, datetime(2026, 10, 1, 10, 50, tzinfo=C.IST))
+assert why is None and not upd, (why, upd)                                            # no premium exits, no breakeven, no time stop
+why, _ = S.exit_check(pa, pa["plan"]["sl"] - sign_ * 0.1, 10, datetime(2026, 10, 1, 10, 50, tzinfo=C.IST))
+assert why and "stop-loss" in why.lower() and "ATR" in why, why
+why, _ = S.exit_check(pa, pa["plan"]["target"] + sign_ * 0.1, 10, datetime(2026, 10, 1, 10, 50, tzinfo=C.IST))
+assert why and "2R" in why, why
+hist_ = [{"reason": why}]
+AM.load()["meta"]["threshold"] = 0.3
+bt_ai = j(c.post("/api/backtest", json={"symbol": "NIFTY", "capital": 200000, "strategy": "ai", "days": 30}))
+assert "summary" in bt_ai and bt_ai["summary"].get("train_until") == "2026-04-09" and bt_ai["summary"]["note"], bt_ai
+print("AI OK: exit", hist_[-1]["reason"], "| backtest days", bt_ai["summary"]["days"], "trades", bt_ai["summary"]["trades"])
+assert j(c.post("/api/settings", json={"prefs": {"strategies": ["noise", "camarilla"], "auto": False}}))["ok"]
+store.clear_positions(); store.clear_trades()
 # ---------- calendar rules (round 6) ----------
 from fno import service as SV, indicators as II  # noqa: E402
 from datetime import date as _d

@@ -25,6 +25,7 @@ from . import indicators as I
 from . import market as D
 from . import pricing as PR
 from . import strategy as S
+from . import ai as AI
 
 SLIP = 0.005
 
@@ -94,6 +95,9 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
     trade_from = frames[-days][0] if days and days < len(frames) else None
     trades, equity = [], capital
     skips = {"risk": 0, "cash": 0}
+    if strategy == "ai":
+        return _run_ai(symbol, meta, candles, vix_intraday, vix_daily, lot, capital, sizing, otm, days, risk_pct, frames,
+                       trade_from, source, skips)
     step = meta["step"]
     traded_days = 0
     vx = vix_intraday.sort_index() if vix_intraday is not None and len(vix_intraday) else None
@@ -180,6 +184,103 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
                                           "win_rate": float((g.pnl > 0).mean() * 100),
                                           "profit_factor": float(g.pnl[g.pnl > 0].sum() / -g.pnl[g.pnl <= 0].sum()) if (g.pnl <= 0).any() and g.pnl[g.pnl <= 0].sum() < 0 else None}
                                          for k, g in t.groupby("strategy")]
+    return out
+
+
+def _run_ai(symbol, meta, candles, vix_intraday, vix_daily, lot, capital, sizing, otm, days, risk_pct, frames, trade_from,
+            source, skips):
+    """The AI strategy on the same history and pricing as the rules."""
+    if not AI.available():
+        return {"error": "AI model file missing on the server."}
+    step = meta["step"]
+    budget_pct = (risk_pct or C.RISK_PER_TRADE * 100) / 100
+    vx = vix_intraday.sort_index() if vix_intraday is not None and len(vix_intraday) else None
+    state = {"equity": capital}
+
+    def vix_at(ts, d):
+        if vx is not None:
+            i = vx.index.searchsorted(ts, side="right") - 1
+            if i >= 0:
+                return float(vx.iloc[i])
+        if vix_daily is not None and len(vix_daily):
+            v = vix_daily[vix_daily.index < pd.Timestamp(d)]
+            if len(v):
+                return float(v.iloc[-1])
+        return 14.0
+
+    def exp_for_day(d):
+        if d in C.BUDGET_DAYS:
+            return None
+        return I.pick_trading_expiry(I.demo_expiries(meta["expiry"], d, 3), meta["expiry"], d)
+
+    def price_trade(day, i_in, opt, sl, tgt, exp, i_out, x_spot, reason, best):
+        d = day.index[0].date()
+        if exp is None or vix_at(day.index[0], d) < C.VIX_MIN:
+            return None
+        idx = list(day.index)
+        ts_in, x_bar = idx[i_in], idx[i_out]
+        spot = float(day["close"].iloc[i_in])
+        sign = 1 if opt == "CE" else -1
+        t_in = ts_in + timedelta(minutes=C.CANDLE_MIN)
+        x_ts = x_bar + timedelta(minutes=C.CANDLE_MIN)
+        k = round(spot / step) * step + sign * otm * step
+
+        def iv_of(ts, s_, k_, o_):
+            return PR.iv(symbol, vix_at(ts, d), s_, k_, o_, (exp - d).days, step, meta["iv_mult"]) if meta["iv_mult"] else 0.25
+
+        def prem(s_, when, ts):
+            t = I.years_to_expiry(exp, when.to_pydatetime().replace(tzinfo=None))
+            return I.bs_price(s_, k, max(t, 1 / (365 * 24 * 12)), iv_of(ts, s_, k, opt), opt)
+
+        p_in = prem(spot, t_in, ts_in) * (1 + SLIP)
+        risk_unit = max(p_in - prem(sl, t_in, ts_in), p_in * 0.05)
+        cost = p_in * lot
+        if cost > capital:
+            return ("skip", i_in, "cash")
+        if sizing == "one_lot":
+            lots = 1
+        else:
+            budget = capital * budget_pct
+            lots = int(budget // (risk_unit * lot))
+            if lots == 0 and risk_unit * lot <= 1.5 * budget:
+                lots = 1
+            if lots == 0:
+                return ("skip", i_in, "risk")
+            lots = min(lots, int(capital // cost))
+        p_raw = prem(float(x_spot), x_ts, x_bar)
+        p_out = PR.real_adjust(p_in / (1 + SLIP), p_raw, (exp - d).days, (x_ts - t_in).total_seconds() / 3600) * (1 - SLIP)
+        qty = lots * lot
+        pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty)
+        state["equity"] += pnl
+        risk = abs(spot - sl)
+        return {"date": d.isoformat(), "entry_time": t_in.strftime("%H:%M"), "exit_time": x_ts.strftime("%H:%M"),
+                "side": "CALL" if opt == "CE" else "PUT", "type": "ATM option" if not otm else (f"{otm} OTM option" if otm > 0 else f"{-otm} ITM option"),
+                "band": None, "spot_in": round(spot, 1), "spot_out": round(float(x_spot), 1), "R": round(sign * (x_spot - spot) / risk, 2),
+                "prem_in": round(p_in, 2), "prem_out": round(p_out, 2), "lots": lots, "pnl": round(pnl, 0), "reason": reason,
+                "equity": round(state["equity"], 0), "strategy": "AI model", "exp_r": round(best["exp_r"], 2), "p_win": round(best["p_win"], 2)}
+
+    def log_skip(w):
+        skips[w] += 1
+
+    trades = AI.backtest_days(symbol, candles, vix_intraday, vix_daily, trade_from, exp_for_day, price_trade, log_skip)
+    cutoff = AI.train_until()
+    traded_days = len([1 for d, g in frames if (not trade_from or d >= trade_from) and (not cutoff or d >= cutoff) and len(g) >= 60])
+    out = _summary(trades, capital, max(traded_days, 1))
+    out["summary"]["train_until"] = cutoff.isoformat() if cutoff else None
+    out["summary"]["note"] = (f"The AI model was trained on data up to {cutoff:%d %b %Y}. Only days after that are shown here - "
+                              f"earlier days would be in-sample and look far better than they are. {traded_days} such session(s) in this period.") if cutoff else None
+    out["summary"]["skipped"] = skips
+    out["summary"]["sizing"] = sizing
+    out["summary"]["source"] = source
+    out["summary"]["period"] = [str(frames[-min(days or len(frames), len(frames))][0]), str(frames[-1][0])] if frames else None
+    if trades:
+        t = pd.DataFrame(trades)
+        t["month"] = t["date"].str[:7]
+        out["summary"]["by_month"] = [{"month": m, "trades": int(len(g)), "net": float(g.pnl.sum()), "win_rate": float((g.pnl > 0).mean() * 100)}
+                                      for m, g in t.groupby("month")]
+        out["summary"]["by_strategy"] = [{"strategy": "AI model", "trades": int(len(t)), "net": float(t.pnl.sum()),
+                                          "win_rate": float((t.pnl > 0).mean() * 100),
+                                          "profit_factor": float(t.pnl[t.pnl > 0].sum() / -t.pnl[t.pnl <= 0].sum()) if (t.pnl <= 0).any() and t.pnl[t.pnl <= 0].sum() < 0 else None}]
     return out
 
 

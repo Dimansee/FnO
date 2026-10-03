@@ -1967,5 +1967,159 @@
     }
    }
   }
+ },
+ "ai": {
+  "what": "Gradient-boosted trees (LightGBM, 3 seeds averaged, 64 inputs) score six candidate trades at every 5-minute close 09:30-14:30 - buy CALL or PUT with a stop of 1.0 / 1.5 / 2.0 ATR and a 2R target, held to 15:15 - and recommend the best when its expected R clears a threshold. Inputs: price vs open / VWAP / EMAs, the noise band, Camarilla and yesterday's levels, RSI / ADX / MACD / Supertrend / Heikin-Ashi / Bollinger, VIX level and changes, gap and global cues, time of day, expiry, today's structure so far, and the two rule signals themselves.",
+  "method": "Trained on 111,630 decision points (both indices, Jan 2023 - Oct 2026). Walk-forward: for every quarter from 2024-Q1 the model was trained only on the quarters before it and traded the quarter it had never seen; the 11 quarters are stitched together. Trades priced as the 1-ITM option with the real-price-corrected premiums, slippage and charges, \u20b92 lakh, 1% risk, max 2 trades and 2 losers per index per day.",
+  "threshold": 0.3,
+  "train_until": "2026-04-09",
+  "oos": {
+   "ensemble": {
+    "fixed 0.2": {
+     "trades": 231,
+     "net": -9462,
+     "win": 37.7,
+     "pf": 0.97,
+     "max_dd": -96644,
+     "years": {
+      "2024": 21123,
+      "2025": -42991,
+      "2026": 12407
+     },
+     "last120": 17257
+    },
+    "fixed 0.3": {
+     "trades": 128,
+     "net": 21229,
+     "win": 40.6,
+     "pf": 1.12,
+     "max_dd": -48594,
+     "years": {
+      "2024": 46191,
+      "2025": -13927,
+      "2026": -11035
+     },
+     "last120": 6020
+    },
+    "fixed 0.4": {
+     "trades": 83,
+     "net": 13526,
+     "win": 38.6,
+     "pf": 1.11,
+     "max_dd": -40983,
+     "years": {
+      "2024": 24098,
+      "2025": -6851,
+      "2026": -3721
+     },
+     "last120": 6065
+    }
+   },
+   "single_seed_0.3": {
+    "trades": 238,
+    "net": 61738,
+    "win": 42.9,
+    "pf": 1.22,
+    "years": {
+     "2024": 70636,
+     "2025": -4010,
+     "2026": -4888
+    },
+    "last120": -3804
+   },
+   "other_two_seeds_0.3": {
+    "trades": 160,
+    "net": -20926,
+    "win": 36.2,
+    "pf": 0.91,
+    "years": {
+     "2024": 602,
+     "2025": -22341,
+     "2026": 813
+    },
+    "last120": 13020
+   }
+  },
+  "rules_same_period": {
+   "net": 191900,
+   "years": {
+    "2024": 95934,
+    "2025": 15670,
+    "2026": 80332
+   },
+   "last120": 56500,
+   "pf": 1.32,
+   "win": 30.6,
+   "trades": 657
+  },
+  "versions": [
+   {
+    "name": "v1 - plain stop/target outcomes (shipped, as a 3-seed average)",
+    "result": "the only version with any out-of-sample skill; a single seed looked good (+\u20b962k) but two other seeds of the same setup lost \u20b921k - the average is about break-even"
+   },
+   {
+    "name": "v2 - predict the move to the 15:15 close, heavier regularisation",
+    "result": "no skill: its favourite inputs were weekday, VIX and CPR width, which it overfits; as a filter on the rules it only removed good trades"
+   },
+   {
+    "name": "v3 - learn when to enter using the rules' own exits (2 ATR stop, 4R target, band trailing)",
+    "result": "scores sat near zero out of sample; no usable edge as a strategy or as a filter"
+   },
+   {
+    "name": "policies: validation-picked thresholds, top-x% of past scores, half-hour bars only, win-probability gates, smoothing",
+    "result": "none stable across years"
+   }
+  ],
+  "importance": [
+   {
+    "feature": "India VIX level",
+    "pct": 11.8
+   },
+   {
+    "feature": "yesterday's VIX change",
+    "pct": 10.7
+   },
+   {
+    "feature": "yesterday's CPR width",
+    "pct": 8.8
+   },
+   {
+    "feature": "opening gap",
+    "pct": 6.9
+   },
+   {
+    "feature": "stop size asked about",
+    "pct": 5.7
+   },
+   {
+    "feature": "today's range so far",
+    "pct": 4.5
+   },
+   {
+    "feature": "days to expiry",
+    "pct": 3.9
+   },
+   {
+    "feature": "yesterday's return",
+    "pct": 3.6
+   },
+   {
+    "feature": "yesterday's candle body",
+    "pct": 3.5
+   },
+   {
+    "feature": "VIX change today",
+    "pct": 3.4
+   },
+   {
+    "feature": "body_so_far",
+    "pct": 2.0
+   },
+   {
+    "feature": "time of day",
+    "pct": 1.8
+   }
+  ],
+  "verdict": "On days it never saw, the AI did not beat the two rules: about break-even over 2024-26 with a losing 2025, versus the rules' +\u20b9192k. It is shipped as an optional, off-by-default strategy so it can be watched paper-trading, and every number it shows in the app is from after its training cutoff. Use its probability as information, not as confirmation."
  }
 }

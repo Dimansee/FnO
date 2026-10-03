@@ -326,6 +326,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
       </div>
       <div class="grid" style="align-content:start">
         <div class="card ticket hidden" id="ticket"></div>
+        <div class="card hidden" id="aiCard"></div>
         <div class="card">
           <h3>Market score breakdown</h3>
           <div class="tablewrap"><table id="factors"></table></div>
@@ -409,7 +410,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
       <p style="margin-top:0">Replays today's rules on the latest ~60 days of 5-minute data (the first 14 sessions are only used to measure the usual move). The 3¾-year study that chose these rules is below.</p>
       <div class="formrow">
         <div><label>Instrument</label><select id="btSym" style="width:100%"></select></div>
-        <div><label>Strategy</label><select id="btStrat" style="width:100%"><option value="both" selected>Both (the rule)</option><option value="noise">Noise band only</option><option value="camarilla">Camarilla breakout only</option></select></div>
+        <div><label>Strategy</label><select id="btStrat" style="width:100%"><option value="both" selected>Both (the rule)</option><option value="noise">Noise band only</option><option value="camarilla">Camarilla breakout only</option><option value="ai">AI model (experimental)</option></select></div>
         <div><label>Period</label><select id="btDays" style="width:100%"><option value="30">Last 30 trading days</option><option value="60" selected>Last 60 days</option><option value="90">Last 90 days</option><option value="120">Last 120 days</option><option value="180">Last 180 days</option><option value="250">Last 1 year (250 days)</option><option value="500">Last 2 years (500 days)</option></select></div>
         <div><label>Band width</label><select id="btMult" style="width:100%"><option value="1.5">1.5× usual move</option><option value="1.75" selected>1.75× (the rule)</option><option value="2">2× usual move</option></select></div>
         <div><label>Capital (₹)</label><input id="btCap" type="number" value="200000" min="1000" step="5000" style="width:100%"></div>
@@ -450,6 +451,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
         <label style="margin-top:12px">Strategies</label>
         <label class="tog"><input type="checkbox" id="pfNoise"> Noise-band momentum</label>
         <label class="tog" style="margin-left:14px"><input type="checkbox" id="pfCam"> Camarilla breakout</label>
+        <label class="tog" style="margin-left:14px"><input type="checkbox" id="pfAI"> AI model (experimental - see its record in Backtest)</label>
         <label style="margin-top:12px">Auto paper-trading</label>
         <label class="tog"><input type="checkbox" id="pfAuto"> Place signal trades automatically, even when this page is closed</label>
         <div style="margin-top:6px" id="pfSyms"></div>
@@ -621,6 +623,7 @@ async function loadSignal() {
 
   renderState(d);
   renderTicket(d);
+  renderAI(d);
   renderMiniChain(d);
   if (!PC.length) renderWorkspace(); else refreshPanes();
 }
@@ -786,6 +789,34 @@ function drawSession(d, animate) {
   sessAnim = requestAnimationFrame(step);
 }
 
+function renderAI(d) {
+  const card = $("#aiCard"), ai = d.signal.ai, on = !!d.signal.ai_enabled;
+  if (!on) { card.classList.add("hidden"); return; }
+  card.classList.remove("hidden");
+  if (!ai) {
+    const line = (d.signal.checks || []).find(c => /AI/.test(c[1]) && c[1] !== "AI model:");
+    card.innerHTML = `<h3>AI model</h3><div class="muted">${line ? esc(line[1]) : "Scores every completed 5-minute candle from 09:30 to 14:30 on a trading day."}</div>`;
+    return;
+  }
+  const best = ai.candidates[ai.best], go = best.exp_r >= ai.threshold;
+  const maxEff = Math.max(...ai.reasons.map(r => Math.abs(r.effect)), 0.01);
+  card.innerHTML = `<div class="cardhead"><h3 style="margin:0">AI model · ${ai.bar_end} candle</h3><span class="badge ${go ? "ok" : "no"}">${go ? "Trade" : "No trade"}</span></div>
+    <div class="k4" style="margin-top:8px">
+      ${kpi("Best trade", `${best.side === "CE" ? "Buy CALL" : "Buy PUT"}`, `stop ${best.stop_k} × ATR, target 2R`, "muted")}
+      ${kpi("Expected R", `<span class="${cls(best.exp_r)}">${sgn(best.exp_r)}</span>`, `needs ≥ ${ai.threshold.toFixed(2)}`, "muted")}
+      ${kpi("Win chance", `${Math.round(best.p_win * 100)}%`, "model's estimate", "muted")}
+      ${kpi("Entry / SL / TP", n2(ai.levels.entry), `${n2(ai.levels.sl)} / ${n2(ai.levels.target)} (ATR ${n2(ai.levels.atr)})`, "muted")}
+    </div>
+    ${go && d.signal.plan && d.signal.plan.strategy !== "ai" ? `<div class="muted" style="font-size:12px;margin-top:6px">A rule signal is active, so the ticket shows that one - the rules keep priority. The AI would ${best.side === "CE" ? "buy a CALL" : "buy a PUT"} at these levels.</div>` : ""}
+    <div class="muted" style="font-size:12px;margin-top:10px">What moved the score (each factor compared with a "neutral" market):</div>
+    ${ai.reasons.map(r => `<div style="display:flex;align-items:center;gap:8px;margin-top:4px;font-size:12.5px"><span style="flex:0 0 190px">${esc(r.factor)}</span>
+      <span style="flex:1;height:8px;background:rgba(36,56,74,.6);border-radius:4px;position:relative"><span style="position:absolute;top:0;bottom:0;${r.effect >= 0 ? "left:50%" : "right:50%"};width:${Math.round(Math.abs(r.effect) / maxEff * 50)}%;background:${r.effect >= 0 ? "var(--green)" : "var(--red)"};border-radius:4px"></span></span>
+      <span class="mono ${cls(r.effect)}" style="flex:0 0 56px;text-align:right">${sgn(r.effect)}R</span></div>`).join("")}
+    <details style="margin-top:10px"><summary style="cursor:pointer;font-weight:600">All six candidates</summary>
+      <div class="tablewrap"><table><tr><th>Trade</th><th>Stop</th><th>Expected R</th><th>Win chance</th></tr>
+      ${ai.candidates.map((c, i) => `<tr${i === ai.best ? ' style="background:rgba(242,169,59,.08)"' : ""}><td>${c.side === "CE" ? "Buy CALL" : "Buy PUT"}</td><td class="mono">${c.stop_k} × ATR</td><td class="mono ${cls(c.exp_r)}">${sgn(c.exp_r)}</td><td class="mono">${Math.round(c.p_win * 100)}%</td></tr>`).join("")}</table></div></details>
+    <p class="muted" style="font-size:12px;margin:8px 0 0">A probability, not a certainty. The model's record on days it never saw is in the Backtest tab; the rules keep priority when both fire.</p>`;
+}
 function renderTicket(d) {
   const t = $("#ticket"), sg = d.signal;
   if (!(d.order && sg.plan)) {
@@ -809,7 +840,9 @@ function renderTicket(d) {
       <div class="row"><span class="muted">Capital needed (1 lot / this trade)</span><span class="mono">${rs(o.cost_per_lot)} / ${rs(o.capital_used)}</span></div>
       <div class="row"><span class="muted">Demo cash available</span><span class="mono ${cash >= o.cost_per_lot ? "" : "down"}">${rs(cash)}</span></div>
       <div class="row"><span class="muted">Risk / reward</span><span class="mono"><span class="down">${rs(o.risk_rs)}</span> / <span class="up">${rs(o.reward_rs)}</span></span></div>
-      <div class="muted" style="font-size:12px;margin-top:4px">${p.strategy === "camarilla"
+      <div class="muted" style="font-size:12px;margin-top:4px">${p.strategy === "ai"
+        ? `AI model: exit at the index stop-loss (${p.stop_k} × ATR), the index target (2R) or the 15:15 square-off. The model expected ${sgn(p.exp_r)}R with a ${Math.round(p.p_win * 100)}% chance of a positive result.`
+        : p.strategy === "camarilla"
         ? "Camarilla breakout: exit on the index stop (H3/L3), move the stop to entry once the trade is +1R, exit if +0.5R isn't reached within 45 minutes, otherwise hold to 15:15. The option TP shown is only a 3R estimate - there is no fixed target."
         : `Noise band: exit at whichever comes first - index stop-loss, index target (${p.rr || 4}R), a half-hour close back inside the band or across VWAP, or the 15:15 square-off. Option SL/TP above are estimates of where the premium will be at those index levels.`}</div>
     </div>
@@ -1230,7 +1263,7 @@ async function loadPortfolio() {
     eqs.setData(s.equity.map((e, i) => ({time: Math.floor(new Date(e.t).getTime() / 1000) + 19800 + i, value: e.v})));
     eqc.timeScale().fitContent();
   }
-  const stratOf = h => h.mode !== "signal" ? "Manual" : ((h.plan || {}).strategy === "camarilla" ? "Camarilla" : "Noise band") + ((h.plan || {}).auto ? " (auto)" : "");
+  const stratOf = h => h.mode !== "signal" ? "Manual" : ({camarilla: "Camarilla", ai: "AI model"}[(h.plan || {}).strategy] || "Noise band") + ((h.plan || {}).auto ? " (auto)" : "");
   const groups = {};
   d.history.forEach(h => { const k = stratOf(h).replace(" (auto)", ""); (groups[k] = groups[k] || []).push(h.pnl); });
   const ex = d.expected || {};
@@ -1281,6 +1314,21 @@ function downloadCsv(name, rows, cols) {
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([csv], {type: "text/csv"})); a.download = name;
   document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+function studyAI(a, k) {
+  const yrs = [2024, 2025, 2026];
+  const row = (name, b, hi) => `<tr${hi ? ' style="background:rgba(242,169,59,.08)"' : ""}><td>${name}</td><td class="mono">${b.trades}</td><td class="mono">${k(b.net)}</td>${yrs.map(y => `<td class="mono">${k(b.years[y])}</td>`).join("")}<td class="mono">${k(b.last120)}</td><td class="mono">${b.pf ?? "–"}</td><td class="mono">${b.win}%</td></tr>`;
+  const e = a.oos.ensemble;
+  return `<h4>The AI model (round 8) - judged the same honest way</h4>
+    <p style="margin-top:0">${esc(a.what)}</p>
+    <p class="muted" style="font-size:12.5px">${esc(a.method)}</p>
+    <div class="tablewrap"><table><tr><th>2024 → Oct 2026, both indices (days never seen)</th><th>Trades</th><th>Net</th>${yrs.map(y => `<th>${y}</th>`).join("")}<th>Last 120 days</th><th>PF</th><th>Win</th></tr>
+      ${row("<b>The two rules</b> (same period, tuned on it until Apr 2026)", a.rules_same_period, true)}
+      ${row("AI, trade when expected R ≥ 0.2", e["fixed 0.2"])}${row("<b>AI, expected R ≥ 0.3 (the setting used)</b>", e["fixed 0.3"], true)}${row("AI, expected R ≥ 0.4", e["fixed 0.4"])}
+      ${row("AI, one seed alone at 0.3 (looked good)", a.oos["single_seed_0.3"])}${row("AI, the other two seeds at 0.3 (did not)", a.oos["other_two_seeds_0.3"])}</table></div>
+    <p><b>Verdict:</b> ${esc(a.verdict)}</p>
+    <div class="tablewrap"><table class="prose"><tr><th>What was tried</th><th>What happened</th></tr>${a.versions.map(v => `<tr><td>${esc(v.name)}</td><td>${esc(v.result)}</td></tr>`).join("")}</table></div>
+    <p class="muted" style="font-size:12px">What the model leans on most (share of its decisions): ${a.importance.slice(0, 8).map(x => `${esc(x.feature)} ${x.pct}%`).join(" · ")}. The model file was trained on data up to ${esc(a.train_until)}; the Backtest tab's "AI model" option only trades days after that, so it never shows in-sample results.</p>`;
 }
 function studyR7(x, k) {
   const R = x.rules, yrs = [2023, 2024, 2025, 2026];
@@ -1352,6 +1400,7 @@ async function loadStudy() {
       ${r.portfolio.map((x, i) => `<tr${i === 2 ? ' style="background:rgba(242,169,59,.08)"' : ""}><td>${i === 2 ? "<b>" + esc(x.name) + "</b>" : esc(x.name)}</td>${[30, 60, 90, 120].map(w => `<td class="mono">${k(x.windows[w].net)}</td>`).join("")}${[2023, 2024, 2025, 2026].map(y => `<td class="mono">${k(x.years[y])}</td>`).join("")}<td class="mono down">₹${Math.abs(x.max_dd / 1000).toFixed(0)}k</td><td class="mono">${x.sharpe}</td></tr>`).join("")}</table></div>
     <p class="muted" style="font-size:12px">The two systems' daily results are only weakly related (correlation ≈ 0.3), so together they were positive in every year. The deepest fall is on ₹2 lakh capital.</p>` : ""}
     ${r.round7 ? studyR7(r.round7, k) : ""}
+    ${r.ai ? studyAI(r.ai, k) : ""}
     ${r.combos ? `<h4>Does stacking indicators make it more accurate? (${r.combos.tested} combinations tested)</h4>
     <p style="margin-top:0">Each of: ${esc(r.combos.filters)} - added to the noise-band signal alone, in pairs, in threes, and as "k of n must agree" votes.</p>
     <ul><li><b>Win rate barely moved:</b> ${r.combos.base_win}% without filters vs ${r.combos.three_filter_win}% with three filters.</li>
@@ -1437,6 +1486,7 @@ async function loadSettings() {
   S.prefs = pf;
   $("#pfSize").value = pf.sizing || "risk"; $("#pfRisk").value = String(pf.risk_pct ?? 1);
   $("#pfNoise").checked = (pf.strategies || []).includes("noise"); $("#pfCam").checked = (pf.strategies || []).includes("camarilla");
+  $("#pfAI").checked = (pf.strategies || []).includes("ai");
   $("#pfAuto").checked = !!pf.auto;
   $("#pfSyms").innerHTML = ["NIFTY", "BANKNIFTY"].map(x => `<label class="tog" style="margin-right:14px"><input type="checkbox" data-asym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${x === "NIFTY" ? "Nifty 50" : "Bank Nifty"}</label>`).join("");
   $("#fiiIn").value = d.fii_manual ? d.fii_manual.value : "";
@@ -1470,7 +1520,7 @@ document.addEventListener("click", async e => {
   if (d) { await post("/api/settings", {broker: d.dataset.disc, disconnect: true}); toast("Disconnected"); loadSettings(); }
 });
 $("#pfSave").onclick = async () => {
-  const strategies = [$("#pfNoise").checked && "noise", $("#pfCam").checked && "camarilla"].filter(Boolean);
+  const strategies = [$("#pfNoise").checked && "noise", $("#pfCam").checked && "camarilla", $("#pfAI").checked && "ai"].filter(Boolean);
   const auto_syms = [...document.querySelectorAll("[data-asym]")].filter(x => x.checked).map(x => x.dataset.asym);
   try {
     await post("/api/settings", {prefs: {sizing: $("#pfSize").value, risk_pct: +$("#pfRisk").value, strategies, auto: $("#pfAuto").checked, auto_syms}});
@@ -1522,6 +1572,10 @@ function renderRules() {
   <li>Max <b>${r.MAX_TRADES_PER_DAY} trades a day</b> in total; stop after a <b>${pct(r.MAX_DAILY_LOSS)} daily loss</b> or two losers.</li>
   <li><b>Sit out Union Budget day</b> - the app blocks new signals then (every Budget day in the 2023-26 test lost). Expiry days are fine to trade: Bank Nifty lost on its old weekly expiry days, but that effect hasn't shown up since it became monthly-only in Nov 2024.</li>
   <li>Keep the stop where it is. Moving it 25-50% wider or 25% tighter both earned less in testing, and fixed profit-booking at +80/+100/+120 Nifty points earned less than letting winners run.</li></ul>
+  <h4>Optional · the AI model (off by default)</h4>
+  <ul><li>A machine-learning model (gradient-boosted trees) that looks at 64 things at every 5-minute close from 09:30 to 14:30 - price vs open/VWAP/EMAs, the noise band, Camarilla and yesterday's levels, RSI/ADX/MACD/Supertrend, VIX, gap, global cues, time, expiry, today's structure - and scores six candidate trades: buy CALL or PUT with a stop of 1, 1.5 or 2 × ATR and a 2R target.</li>
+  <li>It recommends the best candidate when its expected R is at least 0.3, shows the win chance and which factors moved the score, and can paper-trade automatically like the rules (switch it on in Settings; up to 2 AI trades per index per day; exits on the index stop, the 2R target or 15:15).</li>
+  <li><b>Its honest record:</b> judged on quarters it never saw (2024 – Oct 2026), about break-even - roughly +₹21k with a losing 2025, against +₹192k for the two rules. Three other model designs and many decision policies did no better. It is here so you can watch it, not because it is better. A probability is not a confirmation.</li></ul>
   <h4>What the research found – read this</h4>
   <ul><li>The old opening-range rules lost money in every window tested once costs were included. They have been replaced.</li>
   <li>The two strategies together win only about <b>30%</b> of trades. They make money because winners run (up to 4R) while losers are cut at 1R. All of the profit came from <b>trend days</b> (the close far from the open); range days lost. Expect losing weeks - in a luck test, a normal year saw a 15-35% fall from a peak at 1% risk per trade.</li>
