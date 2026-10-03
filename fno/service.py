@@ -71,6 +71,13 @@ def fii():
 # ---------------------------------------------------------------------------
 # Position management (also called every minute by the scheduler)
 # ---------------------------------------------------------------------------
+PREF_DEFAULTS = {"sizing": "risk", "risk_pct": 1.0, "strategies": ["noise", "camarilla"], "auto": False, "auto_syms": ["NIFTY"]}
+
+
+def prefs() -> dict:
+    return {**PREF_DEFAULTS, **(store.get("prefs") or {})}
+
+
 def _traded_today(symbol, positions, trades) -> dict:
     """Which strategies already traded this instrument today (one trade per strategy per instrument)."""
     today = C.today_ist().isoformat()
@@ -155,7 +162,9 @@ def dashboard(symbol, strike=None):
     cstats = M.chain_stats(g["chain"], g["spot"])
     gc, nw, fi = gcues(), news(symbol), fii()
     guard = P.day_guard(pos, tr, acct["capital_start"])
-    ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, nw, gc, fi, g["now"], guard, _traded_today(symbol, pos, tr))
+    pf = prefs()
+    ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, nw, gc, fi, g["now"], guard, _traded_today(symbol, pos, tr),
+                    pf["strategies"])
     today, hist = S.session_frames(g["candles"], g["now"])
     prev = float(hist["close"].iloc[-1]) if not hist.empty else g["spot"]
 
@@ -165,10 +174,10 @@ def dashboard(symbol, strike=None):
             ev["warnings"].append("You already have an open signal trade in this instrument.")
         args = (ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], acct["capital_start"])
         try:
-            order = S.build_order(*args, strike=strike, cash=cash)
+            order = S.build_order(*args, strike=strike, cash=cash, prefs=pf)
         except ValueError:
-            order = S.build_order(*args, cash=cash)
-        alts = S.strike_alternatives(*args, cash=cash)
+            order = S.build_order(*args, cash=cash, prefs=pf)
+        alts = S.strike_alternatives(*args, cash=cash, prefs=pf)
     atm, chain_rows = _mini_chain(g["chain"], g["spot"])
     ev.pop("today", None)
     if ev.get("bands"):
@@ -205,7 +214,7 @@ def chain_view(symbol, expiry: str | None = None):
 # ---------------------------------------------------------------------------
 # Trading actions
 # ---------------------------------------------------------------------------
-def place_signal(symbol, strike=None):
+def place_signal(symbol, strike=None, auto=False):
     m = M.Market()
     g = _gather(symbol, m)
     acct, pos, tr, cash = P.snapshot()
@@ -215,13 +224,14 @@ def place_signal(symbol, strike=None):
     if any(p["symbol"] == symbol and p["mode"] == "signal" for p in pos):
         return False, "You already have an open signal trade in this instrument."
     cstats = M.chain_stats(g["chain"], g["spot"])
+    pf = prefs()
     ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, news(symbol), gcues(), fii(), g["now"], guard,
-                    _traded_today(symbol, pos, tr))
+                    _traded_today(symbol, pos, tr), pf["strategies"])
     if not ev["plan"]:
         return False, f"No valid signal right now ({ev['signal']}). The setup may have changed - refresh."
     try:
         order = S.build_order(ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], acct["capital_start"],
-                              strike=strike, cash=cash)
+                              strike=strike, cash=cash, prefs=pf)
     except ValueError as e:
         return False, str(e)
     if order["lots"] <= 0:
@@ -229,7 +239,7 @@ def place_signal(symbol, strike=None):
     src = m.br.name if g["chain"].attrs.get("source") == "live" and m.br else "demo"
     legs = [{**lg, "src": src} for lg in order["legs"]]
     return P.open_position(cash, symbol, legs, order["lots"], g["lot"], g["trade_exp"], g["spot"], m.source,
-                           clean(order), clean(ev["plan"]))
+                           clean(order), clean({**ev["plan"], "auto": auto}))
 
 
 def place_manual(symbol, expiry, strike, opt, side, lots):
@@ -354,16 +364,23 @@ def portfolio():
         "capital_start": acct["capital_start"], "cash": cash, "unrealised": unreal,
         "realised": sum(t["pnl"] for t in tr), "account_value": cash + sum(p["margin"] for p in pos) + unreal,
         "positions": out, "history": list(reversed(tr)), "stats": P.stats(tr, acct["capital_start"]),
-        "closed_now": closed, "source": m.source, "errors": m.errors[-3:],
+        "closed_now": closed, "source": m.source, "errors": m.errors[-3:], "expected": _expected(),
     })
+
+
+def _expected() -> dict:
+    """Win rate / profit factor the 2023-26 backtest showed per strategy (both indices), for the journal comparison."""
+    r = BT.research_summary().get("expected") or {}
+    return r
 
 
 def context(symbol):
     return clean({"global": gcues(), "news": news(symbol), "fii": fii()})
 
 
-def backtest(symbol, mult, capital, sizing="risk", otm=-1, strategy="both"):
-    res = BT.run(symbol, float(capital), float(mult), lot=M.lot_size(symbol), sizing=sizing, otm=int(otm), strategy=strategy)
+def backtest(symbol, mult, capital, sizing="risk", otm=-1, strategy="both", days=60):
+    res = BT.run(symbol, float(capital), float(mult), lot=M.lot_size(symbol), sizing=sizing, otm=int(otm), strategy=strategy,
+                 days=int(days), risk_pct=prefs()["risk_pct"])
     if res.get("error"):
         return {"error": res["error"]}
     t = res["trades"]
@@ -379,4 +396,16 @@ def tick():
         return {"skipped": "weekend"}
     if not (C.MARKET_OPEN <= now.time() <= C.MARKET_CLOSE):
         return {"skipped": "outside market hours"}
-    return {"closed": manage_positions(), "time": now.isoformat(timespec="seconds")}
+    closed = manage_positions()
+    placed = []
+    pf = prefs()
+    t = now.time()
+    if pf.get("auto") and C.FIRST_ENTRY_ANY <= t <= C.LAST_ENTRY_ANY:
+        for sym in pf.get("auto_syms") or []:
+            try:
+                ok, msg = place_signal(sym, auto=True)
+                if ok:
+                    placed.append({"symbol": sym, "message": msg})
+            except Exception as e:                       # one instrument failing must not stop the others
+                placed.append({"symbol": sym, "error": str(e)[:120]})
+    return {"closed": closed, "placed": placed, "time": now.isoformat(timespec="seconds")}

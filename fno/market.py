@@ -5,7 +5,7 @@ from __future__ import annotations
 import gzip
 import json
 import time as _t
-from datetime import date
+from datetime import date, timedelta
 
 import numpy as np
 import pandas as pd
@@ -50,6 +50,31 @@ def yahoo_candles(ticker: str, period="5d", interval="5m") -> pd.DataFrame:
         return df
     df.index = df.index.tz_convert(IST) if df.index.tz is not None else df.index.tz_localize("UTC").tz_convert(IST)
     return df.rename(columns=str.lower)[["open", "high", "low", "close", "volume"]].dropna()
+
+
+def upstox_public_history(key: str, cal_days: int) -> pd.DataFrame:
+    """Completed 5-minute candles from Upstox's public historical API (no login needed),
+    asked one calendar month at a time (the API rejects some cross-month ranges)."""
+    import requests
+    from urllib.parse import quote
+    end = C.today_ist() - timedelta(days=1)
+    start = end - timedelta(days=cal_days)
+    rows, a = [], start
+    sess = requests.Session()
+    while a <= end:
+        b = min(date(a.year + (a.month == 12), a.month % 12 + 1, 1) - timedelta(days=1), end)
+        r = sess.get(f"https://api.upstox.com/v3/historical-candle/{quote(key, safe='')}/minutes/5/{b}/{a}",
+                     headers={"Accept": "application/json"}, timeout=20)
+        if r.status_code == 200:
+            rows += r.json().get("data", {}).get("candles", [])
+        a = b + timedelta(days=1)
+    if not rows:
+        return pd.DataFrame()
+    df = pd.DataFrame([x[:6] for x in rows], columns=["ts", "open", "high", "low", "close", "volume"])
+    df["ts"] = pd.to_datetime(df["ts"], utc=True).dt.tz_convert(IST)
+    df = df.drop_duplicates("ts").set_index("ts").sort_index().astype(float)
+    t = df.index.time
+    return df[(t >= C.MARKET_OPEN) & (t < C.MARKET_CLOSE)]
 
 
 def yahoo_daily(ticker: str, period="1mo") -> pd.DataFrame:

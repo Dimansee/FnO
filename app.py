@@ -215,10 +215,13 @@ def backtest():
     otm = int(b["otm"]) if b.get("otm") is not None else -C.STRIKE_ITM
     capital = float(b.get("capital", C.DEFAULT_CAPITAL))
     strategy = b.get("strategy") or "both"
+    days = int(b.get("days") or 60)
+    if days not in (30, 60, 90, 120, 180, 250, 500):
+        raise ValueError("Pick a backtest period from the list.")
     if sizing not in ("risk", "one_lot") or otm not in (-1, 0, 1, 2) or not 1000 <= capital <= 1e9 \
             or strategy not in ("both", "noise", "camarilla"):
         raise ValueError("Invalid backtest settings.")
-    return jsonify(SV.backtest(_sym(), mult, capital, sizing, otm, strategy))
+    return jsonify(SV.backtest(_sym(), mult, capital, sizing, otm, strategy, days))
 
 
 # ---------------------------------------------------------------------------
@@ -241,7 +244,7 @@ def settings_get():
     return jsonify({
         "upstox": {**_status(s.get("upstox") or {}, "api_key"), "redirect": f"{_base()}/api/upstox/callback"},
         "fyers": {**_status(s.get("fyers") or {}, "app_id"), "redirect": f"{_base()}/api/fyers/callback"},
-        "broker_pref": s.get("broker_pref") or "auto", "fii_manual": s.get("fii_manual"),
+        "broker_pref": s.get("broker_pref") or "auto", "fii_manual": s.get("fii_manual"), "prefs": SV.prefs(),
     })
 
 
@@ -266,6 +269,25 @@ def settings_post():
         store.put(name, cur)
     if "broker_pref" in b and b["broker_pref"] in ("auto", "upstox", "fyers"):
         store.put("broker_pref", b["broker_pref"])
+    if "prefs" in b:
+        p, cur = b["prefs"] or {}, SV.prefs()
+        if p.get("sizing") in ("risk", "one_lot"):
+            cur["sizing"] = p["sizing"]
+        if "risk_pct" in p:
+            r = float(p["risk_pct"])
+            if not 0.25 <= r <= 5:
+                raise ValueError("Risk per trade must be between 0.25% and 5%.")
+            cur["risk_pct"] = r
+        if "strategies" in p:
+            st = [x for x in p["strategies"] if x in ("noise", "camarilla")]
+            if not st:
+                raise ValueError("Keep at least one strategy switched on.")
+            cur["strategies"] = st
+        if "auto" in p:
+            cur["auto"] = bool(p["auto"])
+        if "auto_syms" in p:
+            cur["auto_syms"] = [x for x in p["auto_syms"] if x in SV.ALL_SYMBOLS][:4]
+        store.put("prefs", cur)
     if "fii_manual" in b:
         v = b["fii_manual"]
         if v in (None, ""):

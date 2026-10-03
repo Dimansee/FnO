@@ -583,6 +583,18 @@
   ],
   "filters": "Supertrend 5m/15m, EMA 9>21>50 stack, MACD, RSI>50, ADX>20, Heikin-Ashi colour, Bollinger width rising, strong close, beyond yesterday's high/low, gap direction, global/VIX context, price vs 50 EMA"
  },
+ "expected": {
+  "Noise band": {
+   "win_rate": 36,
+   "pf": 1.32,
+   "trades": 444
+  },
+  "Camarilla": {
+   "win_rate": 26,
+   "pf": 1.28,
+   "trades": 647
+  }
+ },
  "portfolio": [
   {
    "name": "Noise band only",
