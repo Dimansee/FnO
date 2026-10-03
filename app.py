@@ -220,7 +220,7 @@ def backtest():
     if days not in (30, 60, 90, 120, 180, 250, 500):
         raise ValueError("Pick a backtest period from the list.")
     if sizing not in ("risk", "one_lot") or otm not in (-1, 0, 1, 2) or not 1000 <= capital <= 1e9 \
-            or strategy not in ("both", "noise", "camarilla"):
+            or strategy not in ("both", "noise", "camarilla", "ai"):
         raise ValueError("Invalid backtest settings.")
     return jsonify(SV.backtest(_sym(), mult, capital, sizing, otm, strategy, days))
 
@@ -280,7 +280,7 @@ def settings_post():
                 raise ValueError("Risk per trade must be between 0.25% and 5%.")
             cur["risk_pct"] = r
         if "strategies" in p:
-            st = [x for x in p["strategies"] if x in ("noise", "camarilla")]
+            st = [x for x in p["strategies"] if x in ("noise", "camarilla", "ai")]
             if not st:
                 raise ValueError("Keep at least one strategy switched on.")
             cur["strategies"] = st
