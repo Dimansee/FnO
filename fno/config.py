@@ -107,6 +107,7 @@ STOP_ATR = 2.0             # underlying stop = 2 x ATR(14, 5-min)
 RR_NOISE = 4.0             # underlying target = 4 x risk
 VIX_MIN = 11.0             # no trades when India VIX is below 11 (moves too small to pay for the option)
 SIGNAL_VALID_MIN = 10      # a half-hour signal can still be taken for 10 minutes if price holds beyond the band
+STRIKE_ITM = 1             # buy 1 strike in-the-money: on real option prices it loses less to time decay than ATM
 
 MIN_BIAS_SCORE = 3
 ORB_MIN_PCT = 0.15

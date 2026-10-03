@@ -407,7 +407,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
         <div><label>Band width</label><select id="btMult" style="width:100%"><option value="1.5">1.5× usual move</option><option value="1.75" selected>1.75× (the rule)</option><option value="2">2× usual move</option></select></div>
         <div><label>Capital (₹)</label><input id="btCap" type="number" value="200000" min="1000" step="5000" style="width:100%"></div>
         <div><label>Position size</label><select id="btSize" style="width:100%"><option value="risk" selected>Risk 1% per trade (the rule)</option><option value="one_lot">Always 1 lot (small accounts)</option></select></div>
-        <div><label>Strike</label><select id="btOtm" style="width:100%"><option value="0" selected>ATM</option><option value="1">1 strike OTM (cheaper)</option><option value="2">2 strikes OTM (cheapest)</option></select></div>
+        <div><label>Strike</label><select id="btOtm" style="width:100%"><option value="-1" selected>1 strike ITM (the rule)</option><option value="0">ATM</option><option value="1">1 strike OTM (cheaper)</option><option value="2">2 strikes OTM (cheapest)</option></select></div>
         <div style="flex:0"><button class="primary" id="btRun">▶ Run backtest</button></div>
       </div>
     </div>
@@ -724,7 +724,7 @@ function renderTicket(d) {
     t.classList.remove("hidden");
     return;
   }
-  const o = d.order, p = sg.plan, rec = d.alternatives.find(a => a.moneyness === "ATM");
+  const o = d.order, p = sg.plan, rec = d.alternatives.find(a => a.is_default);
   const cash = d.cash;
   t.innerHTML = `<div class="cardhead"><h3 style="margin:0">Trade ticket – ${esc(o.type)}</h3>
       ${o.affordable && o.lots > 0 ? `<span class="badge ok">Affordable</span>` : `<span class="badge no">Not affordable</span>`}</div>
@@ -771,7 +771,7 @@ function renderTicket(d) {
 
 function renderMiniChain(d) {
   $("#mcExp").textContent = "· " + new Date(d.expiry).toLocaleDateString("en-IN", {day: "2-digit", month: "short"}) + " expiry";
-  const rec = d.order ? {strike: d.alternatives.find(a => a.moneyness === "ATM")?.strike, opt: d.order.opt} : null;
+  const rec = d.order ? {strike: d.alternatives.find(a => a.is_default)?.strike, opt: d.order.opt} : null;
   const cur = cmpContract(d);
   $("#miniChain").innerHTML = `<tr><th>OI</th><th>ΔOI</th><th>Call LTP</th><th class="strike">Strike · spot ${n2(d.spot)}</th><th style="text-align:left">Put LTP</th><th>ΔOI</th><th>OI</th></tr>` +
     d.chain.map(r => {
@@ -1198,6 +1198,12 @@ async function loadStudy() {
   const head = `<tr><th></th><th>Last 30 days</th><th>60 days</th><th>90 days</th><th>120 days</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th></tr>`;
   $("#study").innerHTML = `<div class="card"><h3>The 3¾-year study behind these rules</h3>
     <p class="muted" style="margin-top:0">${esc(r.period)}. ${r.configs_tested.toLocaleString("en-IN")} settings tested on ₹${(r.capital / 1e5).toFixed(0)} lakh capital, ${esc(r.risk_per_trade)} risk per trade, ${esc(r.costs)}. Tuned on ${esc(r.train)}; the last 30/60/90/120-day columns are days the search <b>never saw</b>.</p>
+    ${r.real_prices && r.real_prices.calibrated ? `<div class="note" style="margin:10px 0">
+      <b>Profit is measured on the option you buy, not on Nifty points.</b> Every number here is the option premium you would pay and get back (× lot size), after costs.
+      Those premiums were checked against <b>real NSE prices</b>: ${r.real_prices.bhavcopy_contracts.toLocaleString("en-IN")} official closing prices of Nifty/Bank Nifty options over ${r.real_prices.bhavcopy_days} trading days, and ${r.real_prices.intraday_windows.toLocaleString("en-IN")} real 5-minute holding windows.
+      The plain formula priced 3–14-day options about ${r.real_prices.nifty_formula_overprice_3_14d}% too high and, on sideways stretches, decayed too slowly (real ${r.real_prices.flat_day_real_vs_formula[0]} pts vs formula ${r.real_prices.flat_day_real_vs_formula[1]} pts).
+      Both are now corrected: IV is set from what real prices implied, and extra time decay is charged per hour held (${Object.entries(r.real_prices.extra_decay_per_hour).map(([k, v]) => `${v} at ${k}`).join(", ")} to expiry).
+      ${r.real_prices.replay_NIFTY ? `On the ${r.real_prices.replay_NIFTY.trades + (r.real_prices.replay_BANKNIFTY || {trades: 0}).trades} recent trades where real 5-minute option candles exist, real P&L was ₹${(r.real_prices.replay_NIFTY.real + (r.real_prices.replay_BANKNIFTY || {real: 0}).real).toLocaleString("en-IN")} vs ₹${(r.real_prices.replay_NIFTY.formula + (r.real_prices.replay_BANKNIFTY || {formula: 0}).formula).toLocaleString("en-IN")} from the corrected formula on the same contracts - a small sample, so treat the numbers below as the optimistic side.` : ""}</div>` : ""}
     <h4>New rules vs the old rules (net profit after costs)</h4>
     <div class="tablewrap"><table>${head}
       ${row("<b>New</b> · Nifty", r.new.NIFTY)}${row("<b>New</b> · Bank Nifty", r.new.BANKNIFTY)}${row("<b>New</b> · both indices", both(r.new.NIFTY, r.new.BANKNIFTY))}
@@ -1211,7 +1217,7 @@ async function loadStudy() {
     <p class="muted" style="font-size:12px">Both indices combined, ₹2 lakh, 1% risk. † the setting that scored best on the training days, run on the last 120 days it never saw. * profitable on both indices in both halves of the training period. ** re-picking the best setting every 30 days from the previous 250 days, then trading the next 30 unseen days.</p>
     ${r.small_account ? `<h4>Small account: ₹${r.small_account.capital.toLocaleString("en-IN")}, 1 lot per signal</h4>
     <div class="tablewrap"><table><tr><th></th><th>Cost of 1 lot</th><th>Trades</th><th>Last 120 days</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>Worst trade</th><th>Deepest fall</th></tr>
-      ${r.small_account.rows.map(x => `<tr><td>${x.symbol === "NIFTY" ? "Nifty" : "Bank Nifty"} · ${x.otm ? x.otm + " OTM" : "ATM"}</td><td class="mono">₹${(x.cost_per_lot || 0).toLocaleString("en-IN")}</td><td class="mono">${x.trades}</td><td class="mono">${k(x.last120)}</td>${[2023, 2024, 2025, 2026].map(y => `<td class="mono">${k(x.years[y])}</td>`).join("")}<td class="mono down">₹${x.worst_trade.toLocaleString("en-IN")}</td><td class="mono down">${x.max_dd_pct}%</td></tr>`).join("")}</table></div>
+      ${r.small_account.rows.map(x => `<tr><td>${x.symbol === "NIFTY" ? "Nifty" : "Bank Nifty"} · ${x.otm > 0 ? x.otm + " OTM" : x.otm < 0 ? -x.otm + " ITM" : "ATM"}</td><td class="mono">₹${(x.cost_per_lot || 0).toLocaleString("en-IN")}</td><td class="mono">${x.trades}</td><td class="mono">${k(x.last120)}</td>${[2023, 2024, 2025, 2026].map(y => `<td class="mono">${k(x.years[y])}</td>`).join("")}<td class="mono down">₹${x.worst_trade.toLocaleString("en-IN")}</td><td class="mono down">${x.max_dd_pct <= -100 ? "account wiped out" : x.max_dd_pct + "%"}</td></tr>`).join("")}</table></div>
     <p class="muted" style="font-size:12px">With ₹15,000 one lot already risks 10–40% of the account per trade, so the account can fall by half on a bad run even though the rules make money over a year. Bank Nifty lots mostly cost more than ₹15,000, so it barely trades.</p>` : ""}
     <h4>Single stocks (same rules)</h4>
     <div class="tablewrap"><table>${head}${Object.entries(r.stocks).map(([s, b]) => row(s, b)).join("")}</table></div>
@@ -1314,7 +1320,9 @@ function renderRules() {
   <li>The signal can be taken for ${r.SIGNAL_VALID_MIN} minutes after the check if price is still beyond the band.</li>
   <li>No trades when India VIX is below ${r.VIX_MIN} (moves too small to pay for an option). <b>One trade per instrument per day.</b></li></ul>
   <h4>3 · What to buy</h4>
-  <ul><li>The <b>ATM option</b> of the nearest expiry (Nifty weekly; never on expiry day). Too costly for your cash? The ticket lets you pick a nearby strike.</li></ul>
+  <ul><li>The option <b>1 strike in-the-money</b> of the nearest expiry (Nifty weekly; never on expiry day): for a CALL the strike just below the price, for a PUT the strike just above.</li>
+  <li>Why not ATM: on real NSE option prices, ATM options lost noticeably more to time decay on sideways days; the in-the-money option moves more with Nifty and decays less per rupee of movement.</li>
+  <li>Too costly for your cash? The ticket lets you pick a nearby strike (cheaper OTM strikes decay faster).</li></ul>
   <h4>4 · Exit, decided before you enter (all on the index price)</h4>
   <ul><li><b>Stop-loss:</b> ${r.STOP_ATR} × ATR(14) of the 5-minute chart away from entry.</li>
   <li><b>Target:</b> ${r.RR_NOISE} × that risk.</li>
@@ -1330,7 +1338,8 @@ function renderRules() {
   <li>It was profitable on <b>Nifty in every year 2023–2026</b>. Bank Nifty was mixed (it lost in 2025), and most single stocks lost money, so <b>prefer the indices</b>.</li>
   <li>The market score (global cues, news, PCR, FII…) is shown for context only. Using it as a filter <i>reduced</i> profit in testing.</li>
   <li>Re-tuning the settings every month to the latest winners did <i>worse</i> than keeping one robust setting. Don't chase last month's best.</li>
-  <li>Option prices in all backtests are modelled, not real past quotes. Move to real money only after <b>30+ paper trades</b> that look like the backtest, and start with 1 lot.</li></ul>`;
+  <li>Profit is always measured on the <b>option premium</b>, never on Nifty points. Option prices were checked against real NSE closing prices (3 years) and real 5-minute option candles, and corrected for the faster decay real options show on sideways days. That correction is why the rule buys <b>1 strike in-the-money</b>.</li>
+  <li>Move to real money only after <b>30+ paper trades</b> that look like the backtest, and start with 1 lot.</li></ul>`;
 }
 
 pStart(); start().finally(pDone);

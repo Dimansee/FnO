@@ -17,7 +17,7 @@ assert DATES == [d.d for d in DAYS["BANKNIFTY"]]
 POS = {d: i for i, d in enumerate(DATES)}
 TRAIN = int(sys.argv[1]) if len(sys.argv) > 1 else 250
 STEP = 30
-CACHE = Path("daily_pnl.pkl")
+CACHE = Path("daily_pnl_cal.pkl" if E.CALIB else "daily_pnl.pkl")
 
 
 def daily(job):
@@ -108,4 +108,4 @@ if __name__ == "__main__":
         print(f"{st:11s} OOS {rep['oos_from']}→  net ₹{a['net']/1000:+7.1f}k  sharpe {a['sharpe']:+.2f}  pf(days) {a['pf_days']:.2f}  "
               f"maxDD ₹{a['dd']/1000:.0f}k  trades {a['trades']}  flat {rep['flat_blocks']}/{rep['blocks']} | last "
               + " ".join(f"{w}d:{rep['windows'][w]['net']/1000:+.0f}k" for w in (30, 60, 90, 120)))
-    json.dump(report, open(f"wf_report_{TRAIN}.json", "w"), default=str, indent=1)
+    json.dump(report, open(f"wf_report_{TRAIN}{'_cal' if E.CALIB else ''}.json", "w"), default=str, indent=1)

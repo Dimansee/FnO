@@ -70,3 +70,20 @@ The 1% rule allows ₹150 risk, but one lot risks ₹1,500–6,000, so the defau
 no trades. With "Always 1 lot": Nifty 1-OTM made money every year 2023–26 (+₹10.6k on the last
 120 days) but fell up to 47% from a peak, and the worst single trade lost ₹5.7k. Bank Nifty lots
 mostly cost more than ₹15,000.
+
+## Round 4 — checked against REAL option prices (`fetch_options.py`, `calib.py`, `intraday_fit.py`, `realcheck.py`)
+Profit was always computed on the option premium, but from a formula. Now checked against:
+- NSE's official F&O bhavcopy (free): 52,191 closing prices of near-the-money Nifty/Bank Nifty
+  options over 735 trading days (Oct 2023 → Oct 2026). The plain formula priced 3–14-day Nifty options
+  ~9.5% too high and 1-day options ~7.5% too low → IV is now VIX × the real implied/VIX ratio by
+  days-to-expiry and moneyness (`fno/iv_calibration.csv`).
+- Upstox public 5-minute candles of all still-listed Nifty/Bank Nifty options (May–Oct 2026, 5,592
+  real holding windows): after the IV fix the formula tracked real premium changes within ~4% on moving
+  days, but real options lost more on sideways stretches → extra decay charged per hour held
+  (1.3% / 0.6% / 0.16% / 0.1% of premium at 1–2 / 3–7 / 8–14 / 15+ days to expiry).
+- All loops re-run with the corrected premiums (`FNO_CALIB=1`). Same winner; buying **1 strike in-the-money**
+  beat ATM on the training years and on the unseen days, so the rule now buys 1 ITM.
+  Unseen last 30/60/90/120 days, both indices: +₹5.6k / +₹11.3k / +₹35.2k / +₹19.0k (old ORB rules −₹144k).
+- 11 recent trades had real 5-minute option candles: real P&L ₹3.7k vs ₹7.3k from the corrected formula on
+  the same contracts — small sample, but a reminder the backtest is on the optimistic side.
+Real intraday history of *expired* options needs the paid Upstox Plus plan (API returns 401 without it).

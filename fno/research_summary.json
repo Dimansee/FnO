@@ -12,93 +12,123 @@
   "rows": [
    {
     "symbol": "NIFTY",
-    "otm": 0,
-    "trades": 233,
+    "otm": -1,
+    "trades": 232,
     "years": {
-     "2023": 11298,
-     "2024": 36785,
-     "2025": 29702,
-     "2026": 10357
+     "2023": 8834,
+     "2024": 37244,
+     "2025": 27531,
+     "2026": 15843
     },
-    "last120": 5098,
-    "max_dd_pct": -50,
-    "worst_trade": -6345,
-    "cost_per_lot": 8791
+    "last120": 9634,
+    "max_dd_pct": -62,
+    "worst_trade": -6504,
+    "cost_per_lot": 9775
+   },
+   {
+    "symbol": "NIFTY",
+    "otm": 0,
+    "trades": 239,
+    "years": {
+     "2023": 8070,
+     "2024": 36387,
+     "2025": 22379,
+     "2026": 14673
+    },
+    "last120": 9168,
+    "max_dd_pct": -58,
+    "worst_trade": -5793,
+    "cost_per_lot": 8095
    },
    {
     "symbol": "NIFTY",
     "otm": 1,
-    "trades": 239,
+    "trades": 240,
     "years": {
-     "2023": 9912,
-     "2024": 36047,
-     "2025": 25196,
-     "2026": 14338
+     "2023": 7462,
+     "2024": 33091,
+     "2025": 20992,
+     "2026": 9821
     },
-    "last120": 10647,
-    "max_dd_pct": -47,
-    "worst_trade": -5728,
-    "cost_per_lot": 7370
+    "last120": 8048,
+    "max_dd_pct": -52,
+    "worst_trade": -5344,
+    "cost_per_lot": 6603
    },
    {
     "symbol": "NIFTY",
     "otm": 2,
-    "trades": 239,
+    "trades": 241,
     "years": {
-     "2023": 8107,
-     "2024": 33319,
-     "2025": 23612,
-     "2026": 12845
+     "2023": 6675,
+     "2024": 30718,
+     "2025": 21492,
+     "2026": 7115
     },
-    "last120": 9380,
-    "max_dd_pct": -43,
-    "worst_trade": -5126,
-    "cost_per_lot": 6068
+    "last120": 7277,
+    "max_dd_pct": -45,
+    "worst_trade": -4783,
+    "cost_per_lot": 5327
+   },
+   {
+    "symbol": "BANKNIFTY",
+    "otm": -1,
+    "trades": 51,
+    "years": {
+     "2023": 394,
+     "2024": -7453,
+     "2025": 1697,
+     "2026": -3975
+    },
+    "last120": -1337,
+    "max_dd_pct": -88,
+    "worst_trade": -3307,
+    "cost_per_lot": 13231
    },
    {
     "symbol": "BANKNIFTY",
     "otm": 0,
-    "trades": 49,
+    "trades": 66,
     "years": {
-     "2023": 338,
-     "2024": -5142,
-     "2025": 2801,
-     "2026": -2895
+     "2023": 819,
+     "2024": -3791,
+     "2025": 3831,
+     "2026": 9990
     },
-    "last120": -580,
-    "max_dd_pct": -82,
-    "worst_trade": -3172,
-    "cost_per_lot": 12911
+    "last120": 12741,
+    "max_dd_pct": -72,
+    "worst_trade": -3160,
+    "cost_per_lot": 12443
    },
    {
     "symbol": "BANKNIFTY",
     "otm": 1,
-    "trades": 62,
+    "trades": 92,
     "years": {
-     "2023": -2513,
-     "2024": -5975,
-     "2025": 4935,
-     "2026": 10942
+     "2023": -6184,
+     "2024": -593,
+     "2025": 3191,
+     "2026": 12859
     },
-    "last120": 13124,
-    "max_dd_pct": -95,
-    "worst_trade": -3194,
-    "cost_per_lot": 12208
+    "last120": 16432,
+    "max_dd_pct": -125,
+    "worst_trade": -3082,
+    "cost_per_lot": 12230
    },
    {
     "symbol": "BANKNIFTY",
     "otm": 2,
-    "trades": 79,
+    "trades": 109,
     "years": {
-     "2023": -5466,
-     "2024": 1577,
-     "2025": 5637,
-     "2026": 8413
+     "2023": -7726,
+     "2024": -2709,
+     "2025": 3266,
+     "2026": 17578
     },
-    "last120": 11355,
-    "max_dd_pct": -103,
-    "worst_trade": -3081,
-    "cost_per_lot": 12043
+    "last120": 18400,
+    "max_dd_pct": -145,
+    "worst_trade": -2902,
+    "cost_per_lot": 11645
    }
   ]
  },
@@ -107,101 +137,91 @@
    "key": "noise",
    "name": "Noise-area momentum (Zarattini/Aziz/Barbon)",
    "tested": 300,
-   "robust": 194,
-   "robust_oos_profitable": 32,
-   "best_train_setting_last120": 19569,
-   "walk_forward_net": 8740,
-   "walk_forward_sharpe": 0.11
+   "robust": 152,
+   "robust_oos_profitable": 14,
+   "best_train_setting_last120": 19025,
+   "walk_forward_net": -11096,
+   "walk_forward_sharpe": -0.15
   },
   {
    "key": "ema_adx",
    "name": "EMA 9/21 cross + ADX",
    "tested": 300,
-   "robust": 29,
-   "robust_oos_profitable": 15,
-   "best_train_setting_last120": -3401,
-   "walk_forward_net": -108399,
-   "walk_forward_sharpe": -2.32
+   "robust": 22,
+   "robust_oos_profitable": 9,
+   "best_train_setting_last120": -4874,
+   "walk_forward_net": -110430,
+   "walk_forward_sharpe": -3.04
   },
   {
    "key": "pdhl",
    "name": "Previous-day high/low + narrow CPR",
    "tested": 300,
-   "robust": 17,
-   "robust_oos_profitable": 4,
-   "best_train_setting_last120": -7416,
-   "walk_forward_net": -27459,
-   "walk_forward_sharpe": -0.35
+   "robust": 10,
+   "robust_oos_profitable": 1,
+   "best_train_setting_last120": -12030,
+   "walk_forward_net": -18850,
+   "walk_forward_sharpe": -0.25
   },
   {
    "key": "rsi6040",
    "name": "RSI 60/40 momentum (Vishal Malkan style)",
    "tested": 400,
-   "robust": 76,
-   "robust_oos_profitable": 15,
-   "best_train_setting_last120": -12445,
-   "walk_forward_net": -20591,
-   "walk_forward_sharpe": -0.14
+   "robust": 20,
+   "robust_oos_profitable": 2,
+   "best_train_setting_last120": -12794,
+   "walk_forward_net": -57014,
+   "walk_forward_sharpe": -0.41
   },
   {
    "key": "supertrend",
    "name": "Supertrend flip + ADX",
    "tested": 300,
-   "robust": 47,
-   "robust_oos_profitable": 10,
-   "best_train_setting_last120": -12844,
-   "walk_forward_net": 26017,
-   "walk_forward_sharpe": 0.39
+   "robust": 36,
+   "robust_oos_profitable": 5,
+   "best_train_setting_last120": -13090,
+   "walk_forward_net": 11749,
+   "walk_forward_sharpe": 0.18
   },
   {
    "key": "inside",
    "name": "Inside-bar breakout (Bank Nifty creators, e.g. Ghanshyam Tech)",
    "tested": 400,
-   "robust": 21,
-   "robust_oos_profitable": 9,
-   "best_train_setting_last120": -13137,
-   "walk_forward_net": -66897,
-   "walk_forward_sharpe": -0.58
-  },
-  {
-   "key": "gap",
-   "name": "Gap-and-go / gap-fade",
-   "tested": 300,
-   "robust": 23,
-   "robust_oos_profitable": 0,
-   "best_train_setting_last120": -16174,
-   "walk_forward_net": -52023,
-   "walk_forward_sharpe": -1.13
-  },
-  {
-   "key": "ema5",
-   "name": "5 EMA (Power of Stocks / Subasish Pani)",
-   "tested": 400,
-   "robust": 32,
-   "robust_oos_profitable": 2,
-   "best_train_setting_last120": -21144,
-   "walk_forward_net": 12654,
-   "walk_forward_sharpe": 0.05
-  },
-  {
-   "key": "orb_candle",
-   "name": "5-min ORB (Zarattini/Aziz)",
-   "tested": 300,
-   "robust": 24,
+   "robust": 9,
    "robust_oos_profitable": 4,
-   "best_train_setting_last120": -29286,
-   "walk_forward_net": -84205,
-   "walk_forward_sharpe": -0.94
+   "best_train_setting_last120": -13298,
+   "walk_forward_net": -89135,
+   "walk_forward_sharpe": -0.88
   },
   {
    "key": "fib",
    "name": "Fibonacci 50-61.8% pullback (Magicfibs style)",
    "tested": 400,
-   "robust": 64,
-   "robust_oos_profitable": 11,
-   "best_train_setting_last120": -37141,
-   "walk_forward_net": 26270,
-   "walk_forward_sharpe": 0.29
+   "robust": 23,
+   "robust_oos_profitable": 4,
+   "best_train_setting_last120": -15307,
+   "walk_forward_net": -53857,
+   "walk_forward_sharpe": -0.65
+  },
+  {
+   "key": "gap",
+   "name": "Gap-and-go / gap-fade",
+   "tested": 300,
+   "robust": 21,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": -19148,
+   "walk_forward_net": -46399,
+   "walk_forward_sharpe": -1.31
+  },
+  {
+   "key": "orb_candle",
+   "name": "5-min ORB (Zarattini/Aziz)",
+   "tested": 300,
+   "robust": 16,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": -33171,
+   "walk_forward_net": -142758,
+   "walk_forward_sharpe": -1.79
   },
   {
    "key": "ma44",
@@ -209,39 +229,49 @@
    "tested": 400,
    "robust": 0,
    "robust_oos_profitable": 0,
-   "best_train_setting_last120": -42555,
-   "walk_forward_net": -71066,
-   "walk_forward_sharpe": -1.79
-  },
-  {
-   "key": "orb",
-   "name": "Opening-range breakout + VWAP/trend (the old rules' family)",
-   "tested": 300,
-   "robust": 22,
-   "robust_oos_profitable": 0,
-   "best_train_setting_last120": -57861,
-   "walk_forward_net": -120670,
-   "walk_forward_sharpe": -0.84
+   "best_train_setting_last120": -45704,
+   "walk_forward_net": -17765,
+   "walk_forward_sharpe": -0.61
   },
   {
    "key": "vwap_pull",
    "name": "VWAP / EMA pullback",
    "tested": 300,
-   "robust": 20,
+   "robust": 11,
    "robust_oos_profitable": 0,
-   "best_train_setting_last120": -68743,
-   "walk_forward_net": -31822,
-   "walk_forward_sharpe": -0.42
+   "best_train_setting_last120": -70431,
+   "walk_forward_net": -115655,
+   "walk_forward_sharpe": -1.77
+  },
+  {
+   "key": "orb",
+   "name": "Opening-range breakout + VWAP/trend (the old rules' family)",
+   "tested": 300,
+   "robust": 5,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": -76299,
+   "walk_forward_net": -126039,
+   "walk_forward_sharpe": -1.04
+  },
+  {
+   "key": "ema5",
+   "name": "5 EMA (Power of Stocks / Subasish Pani)",
+   "tested": 400,
+   "robust": 19,
+   "robust_oos_profitable": 1,
+   "best_train_setting_last120": -128062,
+   "walk_forward_net": 10570,
+   "walk_forward_sharpe": 0.04
   },
   {
    "key": "mtf",
    "name": "15-min bias + 5-min breakout (Booming Bulls style)",
    "tested": 400,
-   "robust": 20,
+   "robust": 0,
    "robust_oos_profitable": 0,
-   "best_train_setting_last120": -111626,
-   "walk_forward_net": -75552,
-   "walk_forward_sharpe": -0.54
+   "best_train_setting_last120": -136196,
+   "walk_forward_net": -144059,
+   "walk_forward_sharpe": -1.2
   },
   {
    "key": "ironfly",
@@ -262,127 +292,155 @@
   "checks": "every 30 min from 09:45",
   "filters": "close beyond band and VWAP; India VIX >= 11",
   "trades_per_day": 1,
-  "option": "ATM, nearest expiry"
+  "option": "1 strike in-the-money, nearest expiry"
+ },
+ "real_prices": {
+  "calibrated": true,
+  "bhavcopy_days": 735,
+  "bhavcopy_contracts": 52191,
+  "nifty_formula_overprice_3_14d": 9.5,
+  "nifty_formula_underprice_1d": -7.5,
+  "intraday_windows": 5592,
+  "flat_day_real_vs_formula": [
+   -3.2,
+   -2.3
+  ],
+  "replay_NIFTY": {
+   "trades": 6,
+   "real": 1421,
+   "formula": 3471
+  },
+  "replay_BANKNIFTY": {
+   "trades": 5,
+   "real": 2292,
+   "formula": 3822
+  },
+  "extra_decay_per_hour": {
+   "1-2 days": "1.3%",
+   "3-7 days": "0.6%",
+   "8-14 days": "0.16%",
+   "15+ days": "0.1%"
+  }
  },
  "new": {
   "NIFTY": {
    "windows": {
     "30": {
-     "net": 2876,
-     "pf": 1.68,
+     "net": 4122,
+     "pf": 2.21,
      "trades": 7,
      "win_rate": 57
     },
     "60": {
-     "net": 5421,
-     "pf": 1.68,
+     "net": 6337,
+     "pf": 1.84,
      "trades": 17,
-     "win_rate": 53
+     "win_rate": 41
     },
     "90": {
-     "net": 9848,
-     "pf": 1.77,
+     "net": 10919,
+     "pf": 1.86,
      "trades": 24,
-     "win_rate": 54
+     "win_rate": 46
     },
     "120": {
-     "net": 10601,
-     "pf": 1.58,
+     "net": 10934,
+     "pf": 1.57,
      "trades": 31,
-     "win_rate": 45
+     "win_rate": 39
     }
    },
    "years": {
-    "2023": 16952,
-    "2024": 57985,
-    "2025": 26594,
-    "2026": 12124
+    "2023": 8003,
+    "2024": 60764,
+    "2025": 24143,
+    "2026": 6886
    },
    "all": {
-    "net": 113655,
-    "pf": 1.68,
-    "trades": 234,
-    "win_rate": 38
+    "net": 99797,
+    "pf": 1.55,
+    "trades": 233,
+    "win_rate": 36
    }
   },
   "BANKNIFTY": {
    "windows": {
     "30": {
-     "net": 1337,
-     "pf": 1.17,
+     "net": 1523,
+     "pf": 1.2,
      "trades": 7,
      "win_rate": 29
     },
     "60": {
-     "net": 5173,
-     "pf": 1.44,
+     "net": 4943,
+     "pf": 1.43,
      "trades": 15,
      "win_rate": 40
     },
     "90": {
-     "net": 25466,
-     "pf": 2.92,
-     "trades": 22,
-     "win_rate": 50
+     "net": 24327,
+     "pf": 2.87,
+     "trades": 21,
+     "win_rate": 48
     },
     "120": {
-     "net": 8968,
-     "pf": 1.3,
-     "trades": 30,
-     "win_rate": 40
+     "net": 8091,
+     "pf": 1.27,
+     "trades": 29,
+     "win_rate": 38
     }
    },
    "years": {
-    "2023": 364,
-    "2024": 36227,
-    "2025": -20281,
-    "2026": 14218
+    "2023": 1974,
+    "2024": 34974,
+    "2025": -22811,
+    "2026": 12997
    },
    "all": {
-    "net": 30528,
-    "pf": 1.14,
-    "trades": 215,
-    "win_rate": 35
+    "net": 27134,
+    "pf": 1.13,
+    "trades": 211,
+    "win_rate": 36
    }
   },
   "FINNIFTY": {
    "windows": {
     "30": {
-     "net": -942,
-     "pf": 0.91,
+     "net": -1372,
+     "pf": 0.87,
      "trades": 8,
      "win_rate": 25
     },
     "60": {
-     "net": -3207,
-     "pf": 0.82,
+     "net": -4390,
+     "pf": 0.76,
      "trades": 17,
      "win_rate": 29
     },
     "90": {
-     "net": 3615,
-     "pf": 1.16,
+     "net": 2246,
+     "pf": 1.1,
      "trades": 22,
-     "win_rate": 36
+     "win_rate": 32
     },
     "120": {
-     "net": 2060,
-     "pf": 1.07,
+     "net": 3852,
+     "pf": 1.12,
      "trades": 29,
-     "win_rate": 34
+     "win_rate": 31
     }
    },
    "years": {
-    "2023": -11837,
-    "2024": -3458,
-    "2025": -9500,
-    "2026": -1939
+    "2023": -15498,
+    "2024": -9205,
+    "2025": -20048,
+    "2026": -2319
    },
    "all": {
-    "net": -26734,
-    "pf": 0.88,
+    "net": -47070,
+    "pf": 0.8,
     "trades": 223,
-    "win_rate": 32
+    "win_rate": 30
    }
   }
  },
@@ -390,81 +448,81 @@
   "NIFTY": {
    "windows": {
     "30": {
-     "net": -8494,
-     "pf": 0.84,
+     "net": -13924,
+     "pf": 0.74,
      "trades": 56,
      "win_rate": 27
     },
     "60": {
-     "net": -23951,
-     "pf": 0.76,
+     "net": -34148,
+     "pf": 0.67,
      "trades": 108,
      "win_rate": 26
     },
     "90": {
-     "net": -31905,
-     "pf": 0.79,
+     "net": -43853,
+     "pf": 0.71,
      "trades": 162,
      "win_rate": 26
     },
     "120": {
-     "net": -35833,
-     "pf": 0.81,
+     "net": -51486,
+     "pf": 0.73,
      "trades": 212,
      "win_rate": 26
     }
    },
    "years": {
-    "2023": -28373,
-    "2024": -15978,
-    "2025": -31683,
-    "2026": -49086
+    "2023": -66071,
+    "2024": -40852,
+    "2025": -58465,
+    "2026": -70829
    },
    "all": {
-    "net": -125120,
-    "pf": 0.91,
+    "net": -236217,
+    "pf": 0.83,
     "trades": 1608,
-    "win_rate": 27
+    "win_rate": 26
    }
   },
   "BANKNIFTY": {
    "windows": {
     "30": {
-     "net": -9410,
-     "pf": 0.78,
+     "net": -13123,
+     "pf": 0.69,
      "trades": 47,
      "win_rate": 32
     },
     "60": {
-     "net": -41760,
-     "pf": 0.54,
+     "net": -44755,
+     "pf": 0.5,
      "trades": 96,
-     "win_rate": 24
+     "win_rate": 23
     },
     "90": {
-     "net": -63091,
-     "pf": 0.6,
+     "net": -65779,
+     "pf": 0.57,
      "trades": 151,
-     "win_rate": 25
+     "win_rate": 24
     },
     "120": {
-     "net": -89359,
-     "pf": 0.6,
+     "net": -92641,
+     "pf": 0.57,
      "trades": 203,
-     "win_rate": 24
+     "win_rate": 23
     }
    },
    "years": {
-    "2023": -126866,
-    "2024": -103805,
-    "2025": -129886,
-    "2026": -101188
+    "2023": -128194,
+    "2024": -108474,
+    "2025": -133215,
+    "2026": -105384
    },
    "all": {
-    "net": -461745,
-    "pf": 0.71,
-    "trades": 1575,
-    "win_rate": 26
+    "net": -475267,
+    "pf": 0.69,
+    "trades": 1576,
+    "win_rate": 25
    }
   }
  },
@@ -472,406 +530,406 @@
   "RELIANCE": {
    "windows": {
     "30": {
-     "net": -4929,
-     "pf": 0.23,
+     "net": -5706,
+     "pf": 0.2,
      "trades": 7,
      "win_rate": 14
     },
     "60": {
-     "net": 7323,
-     "pf": 1.89,
+     "net": 4274,
+     "pf": 1.46,
      "trades": 15,
      "win_rate": 33
     },
     "90": {
-     "net": -756,
-     "pf": 0.96,
+     "net": -6380,
+     "pf": 0.69,
      "trades": 23,
      "win_rate": 26
     },
     "120": {
-     "net": 2859,
-     "pf": 1.14,
+     "net": -2925,
+     "pf": 0.88,
      "trades": 29,
      "win_rate": 31
     }
    },
    "years": {
-    "2023": -313,
-    "2024": 26795,
-    "2025": -7472,
-    "2026": 22937
+    "2023": -5102,
+    "2024": 23437,
+    "2025": -12506,
+    "2026": 10451
    },
    "all": {
-    "net": 41947,
-    "pf": 1.27,
-    "trades": 225,
-    "win_rate": 34
+    "net": 16281,
+    "pf": 1.1,
+    "trades": 223,
+    "win_rate": 33
    }
   },
   "HDFCBANK": {
    "windows": {
     "30": {
-     "net": 2968,
-     "pf": 1.73,
+     "net": 3725,
+     "pf": 2.01,
      "trades": 10,
      "win_rate": 40
     },
     "60": {
-     "net": 6399,
-     "pf": 1.87,
+     "net": 5774,
+     "pf": 1.86,
      "trades": 14,
      "win_rate": 36
     },
     "90": {
-     "net": 18095,
-     "pf": 2.59,
+     "net": 13788,
+     "pf": 2.33,
      "trades": 22,
      "win_rate": 45
     },
     "120": {
-     "net": 17878,
-     "pf": 2.19,
+     "net": 11800,
+     "pf": 1.79,
      "trades": 28,
      "win_rate": 39
     }
    },
    "years": {
-    "2023": 3866,
-    "2024": -3559,
-    "2025": -22529,
-    "2026": 14074
+    "2023": 3075,
+    "2024": -11681,
+    "2025": -25336,
+    "2026": 6966
    },
    "all": {
-    "net": -8149,
-    "pf": 0.94,
+    "net": -26976,
+    "pf": 0.81,
     "trades": 204,
-    "win_rate": 32
+    "win_rate": 30
    }
   },
   "ICICIBANK": {
    "windows": {
     "30": {
-     "net": 12135,
-     "pf": 3.85,
+     "net": 12618,
+     "pf": 3.68,
      "trades": 7,
      "win_rate": 71
     },
     "60": {
-     "net": 8670,
-     "pf": 1.62,
-     "trades": 18,
-     "win_rate": 44
+     "net": 10209,
+     "pf": 1.73,
+     "trades": 17,
+     "win_rate": 47
     },
     "90": {
-     "net": 7359,
-     "pf": 1.36,
-     "trades": 26,
-     "win_rate": 42
+     "net": 6076,
+     "pf": 1.3,
+     "trades": 25,
+     "win_rate": 44
     },
     "120": {
-     "net": 6436,
-     "pf": 1.24,
-     "trades": 35,
-     "win_rate": 40
+     "net": 2294,
+     "pf": 1.07,
+     "trades": 34,
+     "win_rate": 41
     }
    },
    "years": {
-    "2023": -20998,
-    "2024": -21260,
-    "2025": -6854,
-    "2026": -6652
+    "2023": -22997,
+    "2024": -31808,
+    "2025": -14347,
+    "2026": -14283
    },
    "all": {
-    "net": -55764,
-    "pf": 0.74,
-    "trades": 236,
-    "win_rate": 28
+    "net": -83434,
+    "pf": 0.66,
+    "trades": 228,
+    "win_rate": 27
    }
   },
   "INFY": {
    "windows": {
     "30": {
-     "net": -4572,
-     "pf": 0.31,
+     "net": -3736,
+     "pf": 0.42,
      "trades": 6,
      "win_rate": 17
     },
     "60": {
-     "net": -7472,
-     "pf": 0.5,
+     "net": -6953,
+     "pf": 0.58,
      "trades": 13,
      "win_rate": 15
     },
     "90": {
-     "net": -11690,
-     "pf": 0.47,
+     "net": -12816,
+     "pf": 0.5,
      "trades": 22,
      "win_rate": 18
     },
     "120": {
-     "net": -7889,
-     "pf": 0.71,
+     "net": -8878,
+     "pf": 0.72,
      "trades": 31,
      "win_rate": 23
     }
    },
    "years": {
-    "2023": 10336,
-    "2024": -16156,
-    "2025": 6182,
-    "2026": -24701
+    "2023": 5642,
+    "2024": -22980,
+    "2025": 984,
+    "2026": -23389
    },
    "all": {
-    "net": -24339,
-    "pf": 0.87,
-    "trades": 234,
-    "win_rate": 28
+    "net": -39742,
+    "pf": 0.81,
+    "trades": 225,
+    "win_rate": 27
    }
   },
   "TCS": {
    "windows": {
     "30": {
-     "net": -2953,
-     "pf": 0.47,
+     "net": -2792,
+     "pf": 0.51,
      "trades": 6,
      "win_rate": 17
     },
     "60": {
-     "net": 7803,
-     "pf": 1.94,
+     "net": 6766,
+     "pf": 1.77,
      "trades": 12,
      "win_rate": 42
     },
     "90": {
-     "net": 18908,
-     "pf": 2.4,
+     "net": 17658,
+     "pf": 2.27,
      "trades": 22,
      "win_rate": 45
     },
     "120": {
-     "net": 17112,
-     "pf": 1.79,
+     "net": 16447,
+     "pf": 1.75,
      "trades": 31,
      "win_rate": 39
     }
    },
    "years": {
-    "2023": -4008,
-    "2024": 39699,
-    "2025": -29666,
-    "2026": 24207
+    "2023": -4966,
+    "2024": 40943,
+    "2025": -32064,
+    "2026": 23725
    },
    "all": {
-    "net": 30233,
-    "pf": 1.19,
+    "net": 27637,
+    "pf": 1.17,
     "trades": 224,
-    "win_rate": 33
+    "win_rate": 31
    }
   },
   "SBIN": {
    "windows": {
     "30": {
-     "net": 5420,
-     "pf": 3.47,
+     "net": 5383,
+     "pf": 3.12,
      "trades": 7,
      "win_rate": 29
     },
     "60": {
-     "net": 9758,
-     "pf": 1.92,
+     "net": 9161,
+     "pf": 1.77,
      "trades": 19,
      "win_rate": 37
     },
     "90": {
-     "net": -3266,
-     "pf": 0.86,
+     "net": -5053,
+     "pf": 0.81,
      "trades": 28,
      "win_rate": 29
     },
     "120": {
-     "net": 3621,
-     "pf": 1.12,
+     "net": 1795,
+     "pf": 1.05,
      "trades": 34,
      "win_rate": 32
     }
    },
    "years": {
-    "2023": 44889,
-    "2024": 7568,
-    "2025": -28877,
-    "2026": 7046
+    "2023": 41351,
+    "2024": 5185,
+    "2025": -25663,
+    "2026": 5519
    },
    "all": {
-    "net": 30625,
-    "pf": 1.14,
-    "trades": 252,
-    "win_rate": 29
+    "net": 26392,
+    "pf": 1.12,
+    "trades": 248,
+    "win_rate": 28
    }
   },
   "AXISBANK": {
    "windows": {
     "30": {
-     "net": -2845,
-     "pf": 0.6,
+     "net": -5605,
+     "pf": 0.32,
      "trades": 9,
      "win_rate": 33
     },
     "60": {
-     "net": -8460,
-     "pf": 0.33,
+     "net": -12270,
+     "pf": 0.18,
      "trades": 17,
-     "win_rate": 24
+     "win_rate": 18
     },
     "90": {
-     "net": -17221,
-     "pf": 0.24,
+     "net": -22451,
+     "pf": 0.15,
      "trades": 25,
-     "win_rate": 24
+     "win_rate": 20
     },
     "120": {
-     "net": -16354,
-     "pf": 0.41,
+     "net": -21524,
+     "pf": 0.33,
      "trades": 30,
-     "win_rate": 23
+     "win_rate": 20
     }
    },
    "years": {
-    "2023": 3863,
-    "2024": -2296,
-    "2025": -23482,
-    "2026": -14535
+    "2023": 3115,
+    "2024": -9964,
+    "2025": -37316,
+    "2026": -35285
    },
    "all": {
-    "net": -36451,
-    "pf": 0.81,
-    "trades": 227,
-    "win_rate": 29
+    "net": -79450,
+    "pf": 0.65,
+    "trades": 221,
+    "win_rate": 27
    }
   },
   "BHARTIARTL": {
    "windows": {
     "30": {
-     "net": 1864,
-     "pf": 1.52,
+     "net": 1860,
+     "pf": 1.43,
      "trades": 5,
      "win_rate": 40
     },
     "60": {
-     "net": -4074,
-     "pf": 0.59,
-     "trades": 11,
-     "win_rate": 36
+     "net": -733,
+     "pf": 0.9,
+     "trades": 9,
+     "win_rate": 44
     },
     "90": {
-     "net": -13505,
-     "pf": 0.3,
-     "trades": 18,
-     "win_rate": 22
+     "net": -10360,
+     "pf": 0.4,
+     "trades": 15,
+     "win_rate": 27
     },
     "120": {
-     "net": -12378,
-     "pf": 0.48,
-     "trades": 25,
-     "win_rate": 32
+     "net": -12491,
+     "pf": 0.47,
+     "trades": 21,
+     "win_rate": 33
     }
    },
    "years": {
-    "2023": 4445,
-    "2024": 4330,
-    "2025": 14849,
-    "2026": -29409
+    "2023": 4295,
+    "2024": -11959,
+    "2025": 8591,
+    "2026": -18180
    },
    "all": {
-    "net": -5785,
-    "pf": 0.97,
-    "trades": 201,
-    "win_rate": 33
+    "net": -17253,
+    "pf": 0.91,
+    "trades": 188,
+    "win_rate": 34
    }
   },
   "LT": {
    "windows": {
     "30": {
-     "net": -5107,
+     "net": -4947,
      "pf": 0.19,
      "trades": 9,
      "win_rate": 22
     },
     "60": {
-     "net": -15838,
+     "net": -14632,
      "pf": 0.07,
      "trades": 16,
      "win_rate": 12
     },
     "90": {
-     "net": -17349,
-     "pf": 0.38,
+     "net": -18317,
+     "pf": 0.37,
      "trades": 30,
      "win_rate": 17
     },
     "120": {
-     "net": -25333,
-     "pf": 0.3,
+     "net": -24577,
+     "pf": 0.31,
      "trades": 35,
      "win_rate": 17
     }
    },
    "years": {
-    "2023": -37242,
-    "2024": -6219,
-    "2025": -9283,
-    "2026": -17266
+    "2023": -45073,
+    "2024": -8543,
+    "2025": -11587,
+    "2026": -18726
    },
    "all": {
-    "net": -70010,
-    "pf": 0.69,
-    "trades": 261,
-    "win_rate": 28
+    "net": -83928,
+    "pf": 0.65,
+    "trades": 260,
+    "win_rate": 27
    }
   },
   "ITC": {
    "windows": {
     "30": {
-     "net": 9163,
-     "pf": 3.19,
+     "net": 5125,
+     "pf": 2.14,
      "trades": 9,
      "win_rate": 56
     },
     "60": {
-     "net": 2808,
-     "pf": 1.18,
+     "net": -3754,
+     "pf": 0.77,
      "trades": 23,
-     "win_rate": 39
+     "win_rate": 35
     },
     "90": {
-     "net": -3693,
-     "pf": 0.86,
+     "net": -9413,
+     "pf": 0.65,
      "trades": 36,
-     "win_rate": 28
+     "win_rate": 25
     },
     "120": {
-     "net": -1900,
-     "pf": 0.93,
+     "net": -8199,
+     "pf": 0.73,
      "trades": 42,
-     "win_rate": 29
+     "win_rate": 26
     }
    },
    "years": {
-    "2023": -11616,
-    "2024": -40984,
-    "2025": -18701,
-    "2026": 7771
+    "2023": -12940,
+    "2024": -41229,
+    "2025": -16705,
+    "2026": 1993
    },
    "all": {
-    "net": -63531,
-    "pf": 0.69,
-    "trades": 242,
+    "net": -68881,
+    "pf": 0.67,
+    "trades": 234,
     "win_rate": 27
    }
   }
  },
  "notes": [
-  "Option prices are modelled (Black-Scholes with India VIX); real option quotes for past days are not freely available.",
+  "Profit is measured on the option premium. Premiums come from a formula corrected against 3 years of real NSE option closing prices and real 5-minute option candles; real intraday history of expired options needs the paid Upstox Plus plan.",
   "Picking the best settings every month (walk-forward) did WORSE than holding one robust setting - chasing recent results overfits.",
   "Market-context filters (global cues, gap, VIX change) reduced profit in testing, so they are shown for information only.",
   "Nifty was profitable in every year tested; Bank Nifty lost money in 2025; most single stocks lost money - prefer the indices.",

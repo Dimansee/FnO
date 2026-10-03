@@ -23,6 +23,7 @@ import pandas as pd
 from . import config as C
 from . import indicators as I
 from . import market as D
+from . import pricing as PR
 from . import strategy as S
 
 SLIP = 0.005
@@ -53,10 +54,10 @@ def _vix_series():
 
 def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_MULT, candles: pd.DataFrame | None = None,
         vix_intraday: pd.Series | None = None, vix_daily: pd.Series | None = None, lot: int | None = None,
-        sizing: str = "risk", otm: int = 0):
+        sizing: str = "risk", otm: int = -C.STRIKE_ITM):
     """sizing: "risk" = lots so that 1% of capital is at risk (1 lot allowed up to 1.5%);
     "one_lot" = always 1 lot if the premium fits in the cash (small accounts - much riskier).
-    otm: 0 = ATM, 1/2 = that many strikes out of the money (cheaper)."""
+    otm: -1 = 1 strike in the money (the rule), 0 = ATM, 1/2 = that many strikes out of the money (cheaper)."""
     meta = D.instrument(symbol)
     lot = lot or meta["lot"]
     if candles is None:
@@ -96,10 +97,13 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
         if vix_at(day.index[0]) < C.VIX_MIN:
             continue
         if meta["iv_mult"]:
-            iv_of = lambda ts: min(max(vix_at(ts) / 100 * meta["iv_mult"], 0.06), 0.9)  # noqa: E731
+            # VIX corrected by the real-option-price table (days to expiry, moneyness)
+            iv_of = lambda ts, s=None, k=None, opt=None: PR.iv(symbol, vix_at(ts), s, k, opt, (exp - d).days,  # noqa: E731
+                                                               meta["step"], meta["iv_mult"]) if s else \
+                min(max(vix_at(ts) / 100 * meta["iv_mult"], 0.06), 0.9)
         else:
             rv = D.realised_vol(hist.tail(375)) or 0.25
-            iv_of = lambda ts: min(max(rv, 0.08), 0.9)  # noqa: E731
+            iv_of = lambda ts, s=None, k=None, opt=None: min(max(rv, 0.08), 0.9)  # noqa: E731
         exp = I.pick_trading_expiry(I.demo_expiries(meta["expiry"], d, 3), meta["expiry"], d)
         idx = list(day.index)
         start, day_why = 0, set()
@@ -156,7 +160,7 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
 
         def prem(s, when, ts):
             t = I.years_to_expiry(exp, when.to_pydatetime().replace(tzinfo=None))
-            return I.bs_price(s, k, max(t, 1 / (365 * 24 * 12)), iv_of(ts), opt)
+            return I.bs_price(s, k, max(t, 1 / (365 * 24 * 12)), iv_of(ts, s, k, opt), opt)
 
         p_in = prem(spot, t_in, ts_in) * (1 + SLIP)
         risk_unit = max(p_in - prem(sl, t_in, ts_in), p_in * 0.05)
@@ -194,13 +198,14 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
         if reason is None:
             x_bar = idx[-1]
             reason, x_spot, x_ts = "Square-off", float(day["close"].iloc[-1]), idx[-1] + timedelta(minutes=5)
-        p_out = prem(x_spot, x_ts, x_bar) * (1 - SLIP)
+        p_raw = prem(x_spot, x_ts, x_bar)
+        p_out = PR.real_adjust(p_in / (1 + SLIP), p_raw, (exp - d).days, (x_ts - t_in).total_seconds() / 3600) * (1 - SLIP)
         qty = lots * lot
         pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty)
         equity += pnl
         return {
             "date": d.isoformat(), "entry_time": t_in.strftime("%H:%M"), "exit_time": x_ts.strftime("%H:%M"),
-            "side": "CALL" if opt == "CE" else "PUT", "type": "ATM option" if not otm else f"{otm} OTM option", "band": mult,
+            "side": "CALL" if opt == "CE" else "PUT", "type": "ATM option" if not otm else (f"{otm} OTM option" if otm > 0 else f"{-otm} ITM option"), "band": mult,
             "spot_in": round(spot, 1), "spot_out": round(float(x_spot), 1), "R": round(sign * (x_spot - spot) / risk, 2),
             "prem_in": round(p_in, 2), "prem_out": round(p_out, 2), "lots": lots, "pnl": round(pnl, 0),
             "reason": reason, "equity": round(equity, 0),

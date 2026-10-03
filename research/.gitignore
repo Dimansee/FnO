@@ -6,3 +6,7 @@ wf_report_*.json
 __pycache__/
 results_creators.json
 wf_creators.json
+calib_rows.csv.gz
+intraday_fit.csv.gz
+realcheck_*.csv
+*_cal.json

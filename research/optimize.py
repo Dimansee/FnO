@@ -97,4 +97,4 @@ if __name__ == "__main__":
     for r in res:
         r["score"] = score(r)
     print("done in", round(time.time() - t), "s")
-    json.dump(res, open("results.json", "w"), default=str)
+    json.dump(res, open("results_cal.json" if E.CALIB else "results.json", "w"), default=str)
