@@ -1,5 +1,5 @@
 import engine as E, numpy as np, itertools
-WIN = dict(mult=1.75, stop_atr=2.0, rr=4.0, vwap=1, max_trades=1, vix_min=11, last_entry=870, otm=0,
+WIN = dict(mult=1.75, stop_atr=2.0, rr=4.0, vwap=1, max_trades=1, vix_min=11, last_entry=870, otm=-1 if E.CALIB else 0,
            be=0, ctx=-9, rmin=1.0, rmax=2.5, vix_max=99)
 BASE = dict(or_min=15, rr=2.0, stop="mid", vwap=1, trend=1, be=1.0, tstop=45, ctx=-9, max_trades=2)   # app today (approx.)
 D = {s: E.load_days(s) for s in ("NIFTY", "BANKNIFTY", "FINNIFTY")}
@@ -25,7 +25,7 @@ print("== double slippage (1% per fill)")
 E.SLIP = 0.01; show("NEW 2xslip", "noise", WIN); E.SLIP = 0.005
 print("== neighbours (one setting changed): last-120d total for both indices")
 G = {"mult": [1.5, 1.75, 2.0], "stop_atr": [1.5, 2.0, 2.5], "rr": [3.0, 4.0, None], "vwap": [0, 1], "max_trades": [1, 2],
-     "vix_min": [0, 11, 12, 13], "last_entry": [810, 870], "otm": [0, -1]}
+     "vix_min": [0, 11, 12, 13], "last_entry": [810, 870], "otm": [0, -1, -2]}
 res = []
 for k, vals in G.items():
     for v in vals:

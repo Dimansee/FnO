@@ -8,7 +8,7 @@ import wf as W
 
 if __name__ == "__main__":
     O.N_PER = 400
-    cache = Path("daily_pnl_creators.pkl")
+    cache = Path("daily_pnl_creators_cal.pkl" if O.E.CALIB else "daily_pnl_creators.pkl")
     if cache.exists():
         rows = pickle.load(open(cache, "rb"))
     else:
@@ -27,4 +27,4 @@ if __name__ == "__main__":
         s = W.summarise(v[250:], n[250:])
         rep[st] = {"net": s["net"], "sharpe": s["sharpe"]}
         print(f"{st:9s} walk-forward OOS 2024-26: net ₹{s['net']/1000:+.1f}k sharpe {s['sharpe']:+.2f} trades {s['trades']} | last 120d ₹{v[-120:].sum()/1000:+.1f}k")
-    json.dump(rep, open("wf_creators.json", "w"))
+    json.dump(rep, open("wf_creators_cal.json" if O.E.CALIB else "wf_creators.json", "w"))

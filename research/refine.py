@@ -43,13 +43,13 @@ def sh(v, ndays):
 if __name__ == "__main__":
     combos = list(itertools.product(*GRID.values()))
     import os, pickle
-    if os.path.exists("refine_rows.pkl"):
+    if os.path.exists("refine_rows.pkl") and not E.CALIB:
         rows = pickle.load(open("refine_rows.pkl", "rb"))
     else:
         t = time.time()
         with Pool(2) as pool:
             rows = pool.map(run_one, combos, chunksize=16)
-        pickle.dump(rows, open("refine_rows.pkl", "wb"))
+        pickle.dump(rows, open("refine_rows_cal.pkl" if E.CALIB else "refine_rows.pkl", "wb"))
         print(len(rows), "configs simulated in", round(time.time() - t), "s")
     ntr = len([d for d in DATES if d < SPLIT_DATE])
     yrs = sorted({d.year for d in DATES})
@@ -92,7 +92,7 @@ if __name__ == "__main__":
             for y in yrs:
                 r["years"].setdefault(s, {})[y] = round(sum(x[1] for x in out[s] if x[0].year == y))
         res.append(r)
-    json.dump(res, open("refine.json", "w"), default=str, indent=1)
+    json.dump(res, open("refine_cal.json" if E.CALIB else "refine.json", "w"), default=str, indent=1)
     allnets = [sum(x[1] for s in SYMS for x in out[s] if x[0] >= SPLIT_DATE) for _, out in rows]
     print("test-120 profitable share across ALL", len(rows), "settings:", round(np.mean(np.array(allnets) > 0) * 100), "%  median ₹",
           round(float(np.median(allnets))))

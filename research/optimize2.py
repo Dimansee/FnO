@@ -38,4 +38,4 @@ if __name__ == "__main__":
     for r in res:
         r["score"] = O.score(r)
     print("done in", round(time.time() - t), "s")
-    json.dump(res, open("results_creators.json", "w"), default=str)
+    json.dump(res, open("results_creators_cal.json" if O.E.CALIB else "results_creators.json", "w"), default=str)

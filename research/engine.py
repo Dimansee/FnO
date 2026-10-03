@@ -199,6 +199,49 @@ def _t(exp: date, d: date, minute: int):
     return I.years_to_expiry(exp, now)
 
 
+CALIB = None           # real-price correction table (fno/iv_calibration.csv), switched on by use_calibration()
+
+
+def use_calibration(on=True):
+    global CALIB
+    if not on:
+        CALIB = None
+        return
+    t = pd.read_csv(ROOT.parent / "fno" / "iv_calibration.csv")
+    CALIB = {(r.sym, str(r.dteb), int(r.otm)): float(r.ratio) for r in t.itertuples()}
+
+
+def _dteb(days):
+    return "1" if days <= 1 else "2" if days <= 2 else "3-4" if days <= 4 else "5-7" if days <= 7 else "8-14" if days <= 14 else "15+"
+
+
+def iv_for(sym, d: Day, vix, spot, k, opt, expiry=None):
+    """IV used to price an option: VIX x instrument factor, or (calibrated) VIX x the median
+    real-IV/VIX ratio NSE closing prices showed for that days-to-expiry and moneyness."""
+    meta = META[sym]
+    if CALIB is None:
+        return max(vix / 100 * meta["iv_mult"], 0.06)
+    e = expiry or d.expiry
+    m = int(round((k - spot) / meta["step"])) * (1 if opt == "CE" else -1)
+    m = max(-4, min(4, m))
+    r = CALIB.get((sym, _dteb((e - d.d).days), m)) or CALIB.get((sym, _dteb((e - d.d).days), 0)) or meta["iv_mult"]
+    return max(vix / 100 * r, 0.06)
+
+
+# extra intraday premium loss real options showed beyond the formula (fit on real 5-min candles,
+# intraday_fit.py): % of premium per hour held, by days to expiry. 1-2 DTE had no live data -> 2x the 3-7 value.
+EXTRA_DECAY = [(2, 0.0126), (7, 0.0063), (14, 0.0016), (999, 0.0010)]
+CHG_SCALE = 0.97
+
+
+def real_adjust(prem_in, prem_out, dte, hours):
+    """Bend a formula exit price toward what real option prices did (only when calibrated)."""
+    if CALIB is None:
+        return prem_out
+    rate = next(r for lim, r in EXTRA_DECAY if dte <= lim)
+    return max(prem_in + CHG_SCALE * (prem_out - prem_in) - prem_in * rate * hours, 0.05)
+
+
 def opt_price(spot, k, d: Day, minute, iv, opt):
     return I.bs_price(spot, k, max(_t(d.expiry, d.d, minute), 1 / (365 * 24 * 12)), iv, opt)
 
@@ -262,10 +305,11 @@ def trade_pnl(d: Day, s: Sig, k_exit, px_exit, meta, p, capital=CAPITAL):
     side, entry = s.side, (s.px if s.px is not None else d.c[s.i])
     opt = "CE" if side > 0 else "PE"
     m_in, m_out = d.t[s.i] + 5, d.t[k_exit] + 5
-    iv_in = max(d.vix[s.i] / 100 * meta["iv_mult"], 0.06)
-    iv_out = max(d.vix[k_exit] / 100 * meta["iv_mult"], 0.06)
     step = meta["step"]
     k = round(entry / step) * step + side * p.get("otm", 0) * step
+    sym = next(n for n, m in META.items() if m is meta)
+    iv_in = iv_for(sym, d, d.vix[s.i], entry, k, opt)
+    iv_out = iv_for(sym, d, d.vix[k_exit], px_exit, k, opt)
     prem_in = opt_price(entry, k, d, m_in, iv_in, opt) * (1 + SLIP)
     prem_stop = opt_price(s.stop, k, d, m_in, iv_in, opt)
     risk_unit = max(prem_in - prem_stop, prem_in * 0.05)
@@ -284,7 +328,8 @@ def trade_pnl(d: Day, s: Sig, k_exit, px_exit, meta, p, capital=CAPITAL):
         lots = min(lots, int(capital * 0.6 // (prem_in * lot)) or 0)   # cannot spend more than 60% of capital
         if lots == 0:
             return None
-    prem_out = opt_price(px_exit, k, d, m_out, iv_out, opt) * (1 - SLIP)
+    prem_out = opt_price(px_exit, k, d, m_out, iv_out, opt)
+    prem_out = real_adjust(prem_in / (1 + SLIP), prem_out, (d.expiry - d.d).days, (m_out - m_in) / 60) * (1 - SLIP)
     qty = lots * lot
     pnl = (prem_out - prem_in) * qty - I.charges(prem_in, prem_out, qty)
     r_under = side * (px_exit - entry) / abs(entry - s.stop)
@@ -857,3 +902,8 @@ def stats(trades: list[dict], ndays: int, capital=CAPITAL):
     return {"n": len(pnl), "net": float(pnl.sum()), "pf": float(w.sum() / -l.sum()) if l.sum() < 0 else 99.0,
             "win": float(len(w) / len(pnl) * 100), "dd": dd, "sharpe": sh,
             "avgR": float(np.mean([t["budget_R"] for t in trades])), "ret": float(pnl.sum() / capital * 100), "days": ndays}
+
+
+import os as _os  # noqa: E402
+if _os.environ.get("FNO_CALIB"):
+    use_calibration()

@@ -14,7 +14,8 @@ travels well beyond that usual distance is a real trend likely - then ride it.
 2. Check only on the half hour (09:45, 10:15 ... 14:15), using the 5-min close.
 3. CALL: close above the upper band AND above VWAP.  PUT: mirror image.
 4. Skip the day if India VIX < 11 (moves too small to pay for the option).
-5. Buy the ATM option of the nearest expiry (not on expiry day).
+5. Buy the option 1 strike IN-the-money of the nearest expiry (not on expiry day).
+   Checked on real NSE option prices: ITM loses less to time decay on range days.
 6. Stop-loss on the index: 2 x ATR(14, 5-min). Target: 4 x that risk.
 7. Trailing exit, on each half hour: CALL exits if the close drops below
    max(upper band, VWAP); PUT exits if it rises above min(lower band, VWAP).
@@ -259,13 +260,15 @@ def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=N
     opt, tag = plan["opt"], plan["opt"].lower()
     strikes = chain["strike"].values
     atm_i = int(abs(strikes - spot).argmin())
+    # the rule: 1 strike in-the-money (lower strike for a CALL, higher for a PUT)
+    def_i = min(max(atm_i + (-C.STRIKE_ITM if opt == "CE" else C.STRIKE_ITM), 0), len(strikes) - 1)
     if strike is not None:
         hits = [i for i, k in enumerate(strikes) if abs(float(k) - float(strike)) < 1e-6]
         if not hits:
             raise ValueError(f"Strike {strike:g} is not in the option chain.")
         buy_i = hits[0]
     else:
-        buy_i = atm_i
+        buy_i = def_i
     use_spread = False   # research: the tested rules buy the plain option (no spread)
     buy = chain.iloc[buy_i]
 
@@ -329,7 +332,7 @@ def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=N
             "risk_rs": round(risk_per_lot * lots, 0), "reward_rs": round((tgt - entry) * lot * lots, 0),
             "capital_used": round(cost_per_lot * lots, 0), "cost_per_lot": round(cost_per_lot, 0),
             "risk_per_lot": round(risk_per_lot, 0), "affordable": affordable, "note": note,
-            "delta": round(delta, 2), "is_default": buy_i == atm_i}
+            "delta": round(delta, 2), "is_default": buy_i == def_i}
 
 
 def strike_alternatives(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, cash, itm=2, otm=6) -> list[dict]:
@@ -349,7 +352,7 @@ def strike_alternatives(plan, chain: pd.DataFrame, spot, vix_level, lot, capital
         if o["entry_prem"] <= 0:
             continue
         out.append({k: o[k] for k in ("strike", "moneyness", "ltp", "entry_prem", "sl_prem", "target_prem",
-                                      "cost_per_lot", "risk_per_lot", "lots", "affordable", "delta", "type")})
+                                      "cost_per_lot", "risk_per_lot", "lots", "affordable", "delta", "type", "is_default")})
     return out
 
 

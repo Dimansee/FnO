@@ -212,9 +212,9 @@ def backtest():
     if not 1.0 <= mult <= 3.0:
         raise ValueError("Band multiplier must be between 1 and 3.")
     sizing = b.get("sizing") or "risk"
-    otm = int(b.get("otm") or 0)
+    otm = int(b["otm"]) if b.get("otm") is not None else -C.STRIKE_ITM
     capital = float(b.get("capital", C.DEFAULT_CAPITAL))
-    if sizing not in ("risk", "one_lot") or otm not in (0, 1, 2) or not 1000 <= capital <= 1e9:
+    if sizing not in ("risk", "one_lot") or otm not in (-1, 0, 1, 2) or not 1000 <= capital <= 1e9:
         raise ValueError("Invalid backtest settings.")
     return jsonify(SV.backtest(_sym(), mult, capital, sizing, otm))
 
