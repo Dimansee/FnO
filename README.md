@@ -26,7 +26,8 @@ QSTASH_TOKEN, QSTASH_URL (added by the Upstash QStash integration)
 
 ## Scheduler
 Upstash QStash schedule "fno-tick" calls /api/tick every minute on weekdays
-(registered automatically by the app); the app only acts 09:15-15:30 IST.
+09:30-15:29 IST (~360 calls/day, under the 500/day free limit), registered
+automatically by the app.
 
 ## Deploying changes
 This repo is connected to the Vercel project: every push to `main` deploys automatically.
