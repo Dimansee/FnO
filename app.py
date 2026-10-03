@@ -214,9 +214,11 @@ def backtest():
     sizing = b.get("sizing") or "risk"
     otm = int(b["otm"]) if b.get("otm") is not None else -C.STRIKE_ITM
     capital = float(b.get("capital", C.DEFAULT_CAPITAL))
-    if sizing not in ("risk", "one_lot") or otm not in (-1, 0, 1, 2) or not 1000 <= capital <= 1e9:
+    strategy = b.get("strategy") or "both"
+    if sizing not in ("risk", "one_lot") or otm not in (-1, 0, 1, 2) or not 1000 <= capital <= 1e9 \
+            or strategy not in ("both", "noise", "camarilla"):
         raise ValueError("Invalid backtest settings.")
-    return jsonify(SV.backtest(_sym(), mult, capital, sizing, otm))
+    return jsonify(SV.backtest(_sym(), mult, capital, sizing, otm, strategy))
 
 
 # ---------------------------------------------------------------------------

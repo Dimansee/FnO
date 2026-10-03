@@ -153,12 +153,97 @@ def noise_state(candles: pd.DataFrame, now: datetime) -> dict | None:
 
 
 def evaluate(symbol, candles, vix, cstats, news, gcues, fii, now: datetime, day_guard: dict | None = None,
-             traded_today: bool = False) -> dict:
+             traded_today=False) -> dict:
+    """Runs both strategies. Noise-area momentum has priority; Camarilla breakout is the second system."""
+    tt = traded_today if isinstance(traded_today, dict) else {"noise": bool(traded_today), "camarilla": bool(traded_today)}
+    res = _evaluate_noise(symbol, candles, vix, cstats, news, gcues, fii, now, day_guard, tt.get("noise", False))
+    today, hist = res["today"], res.pop("hist")
+    cam = evaluate_camarilla(today, hist, vix, now, tt.get("camarilla", False))
+    res["camarilla"] = {k: cam[k] for k in ("levels", "signal")}
+    if res["signal"] in ("STOP FOR TODAY", "MARKET CLOSED"):
+        return res
+    res["checks"].append((None, "Second strategy - Camarilla breakout:"))
+    res["checks"] += cam["checks"]
+    if not res["plan"] and cam["plan"]:
+        res["signal"], res["plan"], res["strategy"] = cam["signal"], cam["plan"], "Camarilla breakout"
+    elif res["signal"] in ("NO TRADE TODAY", "NO NEW ENTRIES") and cam["signal"] == "WAIT":
+        res["signal"] = "WAIT"
+    return res
+
+
+def camarilla_levels(hist: pd.DataFrame) -> dict | None:
+    if hist.empty:
+        return None
+    last = hist[hist.index.date == hist.index[-1].date()]
+    h, l, c = float(last["high"].max()), float(last["low"].min()), float(last["close"].iloc[-1])
+    r = (h - l) * 1.1
+    return {"h4": c + r / 2, "h3": c + r / 4, "l3": c - r / 4, "l4": c - r / 2, "pivot": (h + l + c) / 3}
+
+
+def evaluate_camarilla(today, hist, vix, now: datetime, traded_today=False) -> dict:
+    """Camarilla breakout: a 5-min close crossing yesterday's H4 (buy CALL) or L4 (buy PUT), 09:20-13:00,
+    India VIX 11-22. Stop at H3/L3 (1-3 x ATR), stop to entry after +1R, 45-min time stop, no fixed target."""
+    out = {"levels": camarilla_levels(hist), "signal": "WAIT", "checks": [], "plan": None}
+    lv = out["levels"]
+    if not lv or today.empty or today.index[-1].date() != now.date():
+        return out
+    vlev = float(vix.get("level") or 0)
+    ok = C.VIX_MIN <= vlev <= C.CAM_VIX_MAX
+    out["checks"].append((ok, f"India VIX {vlev:.2f} between {C.VIX_MIN:g} and {C.CAM_VIX_MAX:g}"))
+    if not ok:
+        out["signal"] = "NO TRADE TODAY"
+        return out
+    if traded_today:
+        out["signal"] = "NO NEW ENTRIES"
+        out["checks"].append((False, "Camarilla trade already taken in this instrument today"))
+        return out
+    if now.time() > C.CAM_LAST_ENTRY:
+        out["signal"] = "NO NEW ENTRIES"
+        out["checks"].append((False, f"Camarilla entries only until {C.CAM_LAST_ENTRY:%H:%M}"))
+        return out
+    if len(today) < 2:
+        out["checks"].append((None, f"Levels: H4 {lv['h4']:.1f} / L4 {lv['l4']:.1f} - waiting for the first candles"))
+        return out
+    spot, last = float(today["close"].iloc[-1]), today.iloc[-1]
+    out["checks"].append((None, f"Yesterday's levels: H4 {lv['h4']:.1f} · H3 {lv['h3']:.1f} · L3 {lv['l3']:.1f} · L4 {lv['l4']:.1f}"))
+    hit = None
+    for k in (len(today) - 1, len(today) - 2):           # cross on the last bar, or the one before (10-min window)
+        if k < 1:
+            continue
+        c0, c1 = float(today["close"].iloc[k - 1]), float(today["close"].iloc[k])
+        end = today.index[k] + timedelta(minutes=C.CANDLE_MIN)
+        if (now - end).total_seconds() / 60 > C.SIGNAL_VALID_MIN:
+            continue
+        if c0 <= lv["h4"] < c1 and spot > lv["h4"]:
+            hit = ("CE", end)
+        elif c0 >= lv["l4"] > c1 and spot < lv["l4"]:
+            hit = ("PE", end)
+        if hit:
+            break
+    a = float(last["atr"])
+    if hit:
+        opt, end = hit
+        sign = 1 if opt == "CE" else -1
+        ref = lv["h3"] if opt == "CE" else lv["l3"]
+        risk = min(max(abs(spot - ref), C.CAM_RMIN * a), C.CAM_RMAX * a)
+        out["signal"] = "BUY CALL" if opt == "CE" else "BUY PUT"
+        out["checks"].append((True, f"{end:%H:%M} close crossed {'above H4' if opt == 'CE' else 'below L4'}"))
+        out["plan"] = {"strategy": "camarilla", "opt": opt, "entry": spot, "risk_pts": risk, "sl": spot - sign * risk,
+                       "target": None, "rr": None, "breakeven_at": spot + sign * C.CAM_BE_R * risk,
+                       "time_stop_min": C.CAM_TIME_STOP, "trail": "stop to entry at +1R; 45-min time stop"}
+    else:
+        side = "above H4" if spot >= lv["pivot"] else "below L4"
+        out["checks"].append((False, f"Waiting for a 5-min close {side} (now {spot:.1f})"))
+    return out
+
+
+def _evaluate_noise(symbol, candles, vix, cstats, news, gcues, fii, now: datetime, day_guard: dict | None = None,
+                    traded_today: bool = False) -> dict:
     today, hist = session_frames(candles, now)
     factors = bias_factors(today, hist, vix, cstats, news, gcues, fii)
     score = sum(x["score"] for x in factors)
     res = {"factors": factors, "score": score, "signal": "WAIT", "checks": [], "warnings": [],
-           "orb": None, "bands": None, "plan": None, "today": today, "strategy": "Noise-area momentum"}
+           "orb": None, "bands": None, "plan": None, "today": today, "hist": hist, "strategy": "Noise-area momentum"}
 
     # the band is useful on the chart even when no trade is possible
     sigma = noise_sigma(hist)
@@ -299,7 +384,7 @@ def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=N
 
     floor = 0.60 if use_spread else 0.15
     sl = max(entry - delta * plan["risk_pts"], entry * floor)
-    tgt = entry + delta * plan.get("rr", C.RR_TARGET) * plan["risk_pts"]
+    tgt = entry + delta * (plan.get("rr") or 3.0) * plan["risk_pts"]   # no fixed target -> show a 3R estimate
     if max_value:
         tgt = min(tgt, max_value * 0.85)
     risk_per_lot = (entry - sl) * lot
@@ -364,7 +449,7 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
     t = now.time()
     if t >= C.SQUARE_OFF or pos["opened"][:10] < now.date().isoformat():
         return "Square-off 15:15", upd
-    if not plan or plan.get("strategy") != "noise":
+    if not plan or plan.get("strategy") not in ("noise", "camarilla"):
         if prem <= pos["sl_prem"]:
             return "Premium stop-loss hit", upd
         if prem >= pos["target_prem"]:
@@ -374,8 +459,10 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
     long_ = plan["opt"] == "CE"
     sl = pos.get("live_sl", plan["sl"])
     if (long_ and spot <= sl) or (not long_ and spot >= sl):
-        return "Index stop-loss hit (2 × ATR)", upd
-    if (long_ and spot >= plan["target"]) or (not long_ and spot <= plan["target"]):
+        if pos.get("at_breakeven"):
+            return "Breakeven stop (moved to entry at +1R)", upd
+        return ("Index stop-loss hit (2 × ATR)" if plan.get("strategy") == "noise" else "Index stop-loss hit"), upd
+    if plan.get("target") is not None and ((long_ and spot >= plan["target"]) or (not long_ and spot <= plan["target"])):
         return f"Index target ({plan.get('rr', C.RR_TARGET):g}R) hit", upd
     if plan.get("strategy") == "noise" and state and state.get("is_check"):
         opened = datetime.fromisoformat(pos["opened"])
@@ -387,7 +474,7 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
             if not long_ and state.get("lo") is not None and c > min(state["lo"], vw):
                 return f"Trailing exit at {state['bar_end']:%H:%M}: back inside the band / above VWAP", upd
     if plan.get("strategy") != "noise":
-        if not pos.get("at_breakeven") and plan.get("breakeven_at") and (
+        if not pos.get("at_breakeven") and plan.get("breakeven_at") is not None and (
                 (long_ and spot >= plan["breakeven_at"]) or (not long_ and spot <= plan["breakeven_at"])):
             upd.update({"at_breakeven": True, "live_sl": plan["entry"]})
         if plan.get("time_stop_min"):

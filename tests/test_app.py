@@ -99,7 +99,20 @@ print("place signal:", r.status_code, r.get_json())
 assert r.status_code == 200
 # one trade per instrument per day
 d_after = j(c.get("/api/dashboard?symbol=NIFTY"))
-assert d_after["signal"]["signal"] == "NO NEW ENTRIES", d_after["signal"]["signal"]
+assert any("one trade per day" in t for _, t in d_after["signal"]["checks"]), d_after["signal"]["checks"]
+assert d_after["signal"]["signal"] in ("WAIT", "NO NEW ENTRIES", "BUY CALL", "BUY PUT")
+assert d_after["signal"]["camarilla"]["levels"]["h4"] > d_after["signal"]["camarilla"]["levels"]["l4"]
+# camarilla plan + exits: breakeven after +1R, 45-min time stop, no premium target exit
+pc = {"opened": "2026-10-01T10:00:00+05:30", "sl_prem": 1, "target_prem": 2,
+      "plan": {"strategy": "camarilla", "opt": "CE", "entry": 100.0, "risk_pts": 2.0, "sl": 98.0, "target": None,
+               "breakeven_at": 102.0, "time_stop_min": 45}}
+why, upd = S.exit_check(pc, 102.5, 50, datetime(2026, 10, 1, 10, 20, tzinfo=C.IST))
+assert why is None and upd.get("at_breakeven") and upd.get("live_sl") == 100.0, (why, upd)
+why, _ = S.exit_check({**pc, **upd}, 99.9, 50, datetime(2026, 10, 1, 10, 25, tzinfo=C.IST))
+assert why.startswith("Breakeven"), why
+why, _ = S.exit_check(pc, 100.5, 50, datetime(2026, 10, 1, 10, 50, tzinfo=C.IST))
+assert why and why.startswith("Time stop"), why
+print("camarilla exits OK")
 assert d_after["signal"]["bands"] and len(d_after["signal"]["bands"]["series"]) > 10
 # noise-band trailing exit fires only on a half-hour check bar, after entry
 pz = {"opened": "2026-10-01T10:52:00+05:30", "sl_prem": 1, "target_prem": 999,
@@ -181,6 +194,9 @@ p = j(c.get("/api/portfolio"))
 print("live portfolio:", [(x["legs"][0]["src"], x["current_prem"]) for x in p["positions"]])
 
 bt = j(c.post("/api/backtest", json={"symbol": "NIFTY", "mult": 1.75, "capital": 200000}))
+for st_ in ("noise", "camarilla"):
+    assert "summary" in j(c.post("/api/backtest", json={"symbol": "NIFTY", "capital": 200000, "strategy": st_}))
+assert c.post("/api/backtest", json={"symbol": "NIFTY", "capital": 200000, "strategy": "magic"}).status_code == 400
 assert c.post("/api/backtest", json={"symbol": "NIFTY", "mult": 9, "capital": 200000}).status_code == 400
 small = j(c.post("/api/backtest", json={"symbol": "NIFTY", "mult": 1.75, "capital": 15000}))
 assert "skipped" in small["summary"], small["summary"]

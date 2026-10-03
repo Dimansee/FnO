@@ -134,12 +134,24 @@
  },
  "families": [
   {
+   "key": "camarilla",
+   "name": "Camarilla pivots (H4/L4 breakout, H3/L3 reversal)",
+   "tested": 300,
+   "robust": 5,
+   "robust_oos_profitable": 4,
+   "best_train_setting_last120": 41626,
+   "passed": true,
+   "walk_forward_net": null,
+   "walk_forward_sharpe": null
+  },
+  {
    "key": "noise",
    "name": "Noise-area momentum (Zarattini/Aziz/Barbon)",
-   "tested": 300,
-   "robust": 152,
-   "robust_oos_profitable": 14,
+   "tested": 3372,
+   "robust": 53,
+   "robust_oos_profitable": 32,
    "best_train_setting_last120": 19025,
+   "passed": true,
    "walk_forward_net": -11096,
    "walk_forward_sharpe": -0.15
   },
@@ -147,9 +159,10 @@
    "key": "ema_adx",
    "name": "EMA 9/21 cross + ADX",
    "tested": 300,
-   "robust": 22,
-   "robust_oos_profitable": 9,
+   "robust": 2,
+   "robust_oos_profitable": 0,
    "best_train_setting_last120": -4874,
+   "passed": true,
    "walk_forward_net": -110430,
    "walk_forward_sharpe": -3.04
   },
@@ -157,49 +170,32 @@
    "key": "pdhl",
    "name": "Previous-day high/low + narrow CPR",
    "tested": 300,
-   "robust": 10,
-   "robust_oos_profitable": 1,
+   "robust": 1,
+   "robust_oos_profitable": 0,
    "best_train_setting_last120": -12030,
+   "passed": true,
    "walk_forward_net": -18850,
    "walk_forward_sharpe": -0.25
-  },
-  {
-   "key": "rsi6040",
-   "name": "RSI 60/40 momentum (Vishal Malkan style)",
-   "tested": 400,
-   "robust": 20,
-   "robust_oos_profitable": 2,
-   "best_train_setting_last120": -12794,
-   "walk_forward_net": -57014,
-   "walk_forward_sharpe": -0.41
   },
   {
    "key": "supertrend",
    "name": "Supertrend flip + ADX",
    "tested": 300,
-   "robust": 36,
-   "robust_oos_profitable": 5,
+   "robust": 1,
+   "robust_oos_profitable": 0,
    "best_train_setting_last120": -13090,
+   "passed": true,
    "walk_forward_net": 11749,
    "walk_forward_sharpe": 0.18
-  },
-  {
-   "key": "inside",
-   "name": "Inside-bar breakout (Bank Nifty creators, e.g. Ghanshyam Tech)",
-   "tested": 400,
-   "robust": 9,
-   "robust_oos_profitable": 4,
-   "best_train_setting_last120": -13298,
-   "walk_forward_net": -89135,
-   "walk_forward_sharpe": -0.88
   },
   {
    "key": "fib",
    "name": "Fibonacci 50-61.8% pullback (Magicfibs style)",
    "tested": 400,
-   "robust": 23,
-   "robust_oos_profitable": 4,
+   "robust": 1,
+   "robust_oos_profitable": 0,
    "best_train_setting_last120": -15307,
+   "passed": true,
    "walk_forward_net": -53857,
    "walk_forward_sharpe": -0.65
   },
@@ -207,71 +203,56 @@
    "key": "gap",
    "name": "Gap-and-go / gap-fade",
    "tested": 300,
-   "robust": 21,
+   "robust": 2,
    "robust_oos_profitable": 0,
    "best_train_setting_last120": -19148,
+   "passed": true,
    "walk_forward_net": -46399,
    "walk_forward_sharpe": -1.31
-  },
-  {
-   "key": "orb_candle",
-   "name": "5-min ORB (Zarattini/Aziz)",
-   "tested": 300,
-   "robust": 16,
-   "robust_oos_profitable": 0,
-   "best_train_setting_last120": -33171,
-   "walk_forward_net": -142758,
-   "walk_forward_sharpe": -1.79
-  },
-  {
-   "key": "ma44",
-   "name": "44 moving average (Siddharth Bhanushali)",
-   "tested": 400,
-   "robust": 0,
-   "robust_oos_profitable": 0,
-   "best_train_setting_last120": -45704,
-   "walk_forward_net": -17765,
-   "walk_forward_sharpe": -0.61
-  },
-  {
-   "key": "vwap_pull",
-   "name": "VWAP / EMA pullback",
-   "tested": 300,
-   "robust": 11,
-   "robust_oos_profitable": 0,
-   "best_train_setting_last120": -70431,
-   "walk_forward_net": -115655,
-   "walk_forward_sharpe": -1.77
-  },
-  {
-   "key": "orb",
-   "name": "Opening-range breakout + VWAP/trend (the old rules' family)",
-   "tested": 300,
-   "robust": 5,
-   "robust_oos_profitable": 0,
-   "best_train_setting_last120": -76299,
-   "walk_forward_net": -126039,
-   "walk_forward_sharpe": -1.04
   },
   {
    "key": "ema5",
    "name": "5 EMA (Power of Stocks / Subasish Pani)",
    "tested": 400,
-   "robust": 19,
-   "robust_oos_profitable": 1,
+   "robust": 1,
+   "robust_oos_profitable": 0,
    "best_train_setting_last120": -128062,
+   "passed": true,
    "walk_forward_net": 10570,
    "walk_forward_sharpe": 0.04
   },
   {
-   "key": "mtf",
-   "name": "15-min bias + 5-min breakout (Booming Bulls style)",
-   "tested": 400,
+   "key": "orb",
+   "name": "Opening-range breakout + VWAP/trend (the old rules' family)",
+   "tested": 300,
    "robust": 0,
    "robust_oos_profitable": 0,
-   "best_train_setting_last120": -136196,
-   "walk_forward_net": -144059,
-   "walk_forward_sharpe": -1.2
+   "best_train_setting_last120": null,
+   "passed": false,
+   "walk_forward_net": -126039,
+   "walk_forward_sharpe": -1.04
+  },
+  {
+   "key": "orb_candle",
+   "name": "5-min ORB (Zarattini/Aziz)",
+   "tested": 300,
+   "robust": 0,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": null,
+   "passed": false,
+   "walk_forward_net": -142758,
+   "walk_forward_sharpe": -1.79
+  },
+  {
+   "key": "vwap_pull",
+   "name": "VWAP / EMA pullback",
+   "tested": 300,
+   "robust": 0,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": null,
+   "passed": false,
+   "walk_forward_net": -115655,
+   "walk_forward_sharpe": -1.77
   },
   {
    "key": "ironfly",
@@ -279,13 +260,135 @@
    "tested": 300,
    "robust": 0,
    "robust_oos_profitable": 0,
-   "best_train_setting_last120": -241528,
+   "best_train_setting_last120": null,
+   "passed": false,
+   "walk_forward_net": null,
+   "walk_forward_sharpe": null
+  },
+  {
+   "key": "inside",
+   "name": "Inside-bar breakout (Bank Nifty creators, e.g. Ghanshyam Tech)",
+   "tested": 400,
+   "robust": 0,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": null,
+   "passed": false,
+   "walk_forward_net": -89135,
+   "walk_forward_sharpe": -0.88
+  },
+  {
+   "key": "ma44",
+   "name": "44 moving average (Siddharth Bhanushali)",
+   "tested": 400,
+   "robust": 0,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": null,
+   "passed": false,
+   "walk_forward_net": -17765,
+   "walk_forward_sharpe": -0.61
+  },
+  {
+   "key": "rsi6040",
+   "name": "RSI 60/40 momentum (Vishal Malkan style)",
+   "tested": 400,
+   "robust": 0,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": null,
+   "passed": false,
+   "walk_forward_net": -57014,
+   "walk_forward_sharpe": -0.41
+  },
+  {
+   "key": "mtf",
+   "name": "15-min bias + 5-min breakout (Booming Bulls style)",
+   "tested": 400,
+   "robust": 0,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": null,
+   "passed": false,
+   "walk_forward_net": -144059,
+   "walk_forward_sharpe": -1.2
+  },
+  {
+   "key": "ema_trend",
+   "name": "EMA formulas: 9/21/50 stack pullback, 20/50 cross, triple-EMA cross",
+   "tested": 300,
+   "robust": 0,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": null,
+   "passed": false,
+   "walk_forward_net": null,
+   "walk_forward_sharpe": null
+  },
+  {
+   "key": "macd",
+   "name": "MACD (12,26,9) histogram flip",
+   "tested": 300,
+   "robust": 0,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": null,
+   "passed": false,
+   "walk_forward_net": null,
+   "walk_forward_sharpe": null
+  },
+  {
+   "key": "bb",
+   "name": "Bollinger Bands squeeze breakout / band reversion",
+   "tested": 300,
+   "robust": 0,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": null,
+   "passed": false,
+   "walk_forward_net": null,
+   "walk_forward_sharpe": null
+  },
+  {
+   "key": "candle",
+   "name": "Candlestick reversals (engulfing, hammer, shooting star) at VWAP/EMA/BB",
+   "tested": 300,
+   "robust": 0,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": null,
+   "passed": false,
+   "walk_forward_net": null,
+   "walk_forward_sharpe": null
+  },
+  {
+   "key": "heikin",
+   "name": "Heikin-Ashi trend flip",
+   "tested": 300,
+   "robust": 0,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": null,
+   "passed": false,
+   "walk_forward_net": null,
+   "walk_forward_sharpe": null
+  },
+  {
+   "key": "donchian",
+   "name": "Donchian 'turtle' N-bar breakout",
+   "tested": 300,
+   "robust": 0,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": null,
+   "passed": false,
+   "walk_forward_net": null,
+   "walk_forward_sharpe": null
+  },
+  {
+   "key": "vwap_sd",
+   "name": "VWAP \u00b1 sigma bands (reversion / breakout)",
+   "tested": 300,
+   "robust": 0,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": null,
+   "passed": false,
    "walk_forward_net": null,
    "walk_forward_sharpe": null
   }
  ],
  "chosen": {
-  "name": "Noise-area momentum",
+  "name": "Noise-area momentum + Camarilla breakout",
   "band": 1.75,
   "stop": "2 x ATR",
   "target": "4R",
@@ -326,124 +429,291 @@
   "NIFTY": {
    "windows": {
     "30": {
-     "net": 4122,
-     "pf": 2.21,
-     "trades": 7,
-     "win_rate": 57
+     "net": 8522,
+     "pf": 2.4,
+     "trades": 12,
+     "win_rate": 58
     },
     "60": {
-     "net": 6337,
-     "pf": 1.84,
-     "trades": 17,
-     "win_rate": 41
+     "net": 4211,
+     "pf": 1.23,
+     "trades": 34,
+     "win_rate": 29
     },
     "90": {
-     "net": 10919,
-     "pf": 1.86,
-     "trades": 24,
-     "win_rate": 46
+     "net": 35905,
+     "pf": 2.15,
+     "trades": 51,
+     "win_rate": 33
     },
     "120": {
-     "net": 10934,
-     "pf": 1.57,
-     "trades": 31,
-     "win_rate": 39
+     "net": 43444,
+     "pf": 1.89,
+     "trades": 69,
+     "win_rate": 33
     }
    },
    "years": {
-    "2023": 8003,
-    "2024": 60764,
-    "2025": 24143,
-    "2026": 6886
+    "2023": 994,
+    "2024": 40492,
+    "2025": 49174,
+    "2026": 49826
    },
    "all": {
-    "net": 99797,
-    "pf": 1.55,
-    "trades": 233,
-    "win_rate": 36
+    "net": 140486,
+    "pf": 1.35,
+    "trades": 508,
+    "win_rate": 29
    }
   },
   "BANKNIFTY": {
    "windows": {
     "30": {
-     "net": 1523,
-     "pf": 1.2,
-     "trades": 7,
-     "win_rate": 29
+     "net": -4052,
+     "pf": 0.69,
+     "trades": 12,
+     "win_rate": 25
     },
     "60": {
-     "net": 4943,
-     "pf": 1.43,
-     "trades": 15,
-     "win_rate": 40
+     "net": 1067,
+     "pf": 1.04,
+     "trades": 28,
+     "win_rate": 29
     },
     "90": {
-     "net": 24327,
-     "pf": 2.87,
-     "trades": 21,
-     "win_rate": 48
+     "net": 17693,
+     "pf": 1.47,
+     "trades": 42,
+     "win_rate": 31
     },
     "120": {
-     "net": 8091,
-     "pf": 1.27,
-     "trades": 29,
-     "win_rate": 38
+     "net": 10220,
+     "pf": 1.19,
+     "trades": 52,
+     "win_rate": 29
     }
    },
    "years": {
-    "2023": 1974,
-    "2024": 34974,
-    "2025": -22811,
-    "2026": 12997
+    "2023": 30337,
+    "2024": 55993,
+    "2025": -34448,
+    "2026": 21281
    },
    "all": {
-    "net": 27134,
-    "pf": 1.13,
-    "trades": 211,
-    "win_rate": 36
+    "net": 73163,
+    "pf": 1.18,
+    "trades": 407,
+    "win_rate": 29
    }
   },
   "FINNIFTY": {
    "windows": {
     "30": {
-     "net": -1372,
-     "pf": 0.87,
-     "trades": 8,
-     "win_rate": 25
+     "net": -3801,
+     "pf": 0.72,
+     "trades": 13,
+     "win_rate": 31
     },
     "60": {
-     "net": -4390,
-     "pf": 0.76,
-     "trades": 17,
+     "net": -3991,
+     "pf": 0.85,
+     "trades": 31,
+     "win_rate": 23
+    },
+    "90": {
+     "net": -8747,
+     "pf": 0.82,
+     "trades": 50,
+     "win_rate": 24
+    },
+    "120": {
+     "net": -7448,
+     "pf": 0.89,
+     "trades": 66,
+     "win_rate": 24
+    }
+   },
+   "years": {
+    "2023": -26952,
+    "2024": 2122,
+    "2025": -11654,
+    "2026": -5921
+   },
+   "all": {
+    "net": -42406,
+    "pf": 0.91,
+    "trades": 464,
+    "win_rate": 25
+   }
+  }
+ },
+ "combos": {
+  "tested": 395,
+  "beat_base_train": 134,
+  "also_beat_unseen": 3,
+  "base_win": 35.4,
+  "three_filter_win": 35.8,
+  "base_unseen120": 19025,
+  "top": [
+   {
+    "tag": "vote 8/8",
+    "train": 145779,
+    "unseen120": -688
+   },
+   {
+    "tag": "ema_stack+ha+gap_dir",
+    "train": 103041,
+    "unseen120": -20631
+   },
+   {
+    "tag": "ha+gap_dir",
+    "train": 99354,
+    "unseen120": -14347
+   },
+   {
+    "tag": "st+ha+gap_dir",
+    "train": 99354,
+    "unseen120": -16024
+   },
+   {
+    "tag": "rsi50+ha+gap_dir",
+    "train": 99354,
+    "unseen120": -18380
+   }
+  ],
+  "filters": "Supertrend 5m/15m, EMA 9>21>50 stack, MACD, RSI>50, ADX>20, Heikin-Ashi colour, Bollinger width rising, strong close, beyond yesterday's high/low, gap direction, global/VIX context, price vs 50 EMA"
+ },
+ "portfolio": [
+  {
+   "name": "Noise band only",
+   "windows": {
+    "30": {
+     "net": 5645,
+     "pf": 1.52,
+     "trades": 14,
+     "win_rate": 43
+    },
+    "60": {
+     "net": 11280,
+     "pf": 1.59,
+     "trades": 32,
+     "win_rate": 41
+    },
+    "90": {
+     "net": 35246,
+     "pf": 2.37,
+     "trades": 45,
+     "win_rate": 47
+    },
+    "120": {
+     "net": 19025,
+     "pf": 1.39,
+     "trades": 60,
+     "win_rate": 38
+    }
+   },
+   "years": {
+    "2023": 9977,
+    "2024": 95738,
+    "2025": 1332,
+    "2026": 19883
+   },
+   "all": {
+    "net": 126930,
+    "pf": 1.32,
+    "trades": 444,
+    "win_rate": 36
+   },
+   "max_dd": -42409,
+   "sharpe": 0.88
+  },
+  {
+   "name": "Camarilla only",
+   "windows": {
+    "30": {
+     "net": -3279,
+     "pf": 0.69,
+     "trades": 13,
+     "win_rate": 38
+    },
+    "60": {
+     "net": -3651,
+     "pf": 0.88,
+     "trades": 38,
+     "win_rate": 24
+    },
+    "90": {
+     "net": 20619,
+     "pf": 1.41,
+     "trades": 62,
+     "win_rate": 24
+    },
+    "120": {
+     "net": 41626,
+     "pf": 1.65,
+     "trades": 79,
+     "win_rate": 28
+    }
+   },
+   "years": {
+    "2023": 38938,
+    "2024": 62993,
+    "2025": -6416,
+    "2026": 62572
+   },
+   "all": {
+    "net": 158086,
+    "pf": 1.28,
+    "trades": 647,
+    "win_rate": 26
+   },
+   "max_dd": -78160,
+   "sharpe": 0.93
+  },
+  {
+   "name": "Both strategies (the rule)",
+   "windows": {
+    "30": {
+     "net": 4470,
+     "pf": 1.23,
+     "trades": 24,
+     "win_rate": 42
+    },
+    "60": {
+     "net": 5278,
+     "pf": 1.12,
+     "trades": 62,
      "win_rate": 29
     },
     "90": {
-     "net": 2246,
-     "pf": 1.1,
-     "trades": 22,
+     "net": 53599,
+     "pf": 1.78,
+     "trades": 93,
      "win_rate": 32
     },
     "120": {
-     "net": 3852,
-     "pf": 1.12,
-     "trades": 29,
+     "net": 53664,
+     "pf": 1.52,
+     "trades": 121,
      "win_rate": 31
     }
    },
    "years": {
-    "2023": -15498,
-    "2024": -9205,
-    "2025": -20048,
-    "2026": -2319
+    "2023": 31331,
+    "2024": 96485,
+    "2025": 14727,
+    "2026": 71106
    },
    "all": {
-    "net": -47070,
-    "pf": 0.8,
-    "trades": 223,
-    "win_rate": 30
-   }
+    "net": 213649,
+    "pf": 1.27,
+    "trades": 915,
+    "win_rate": 29
+   },
+   "max_dd": -64206,
+   "sharpe": 1.04
   }
- },
+ ],
  "old": {
   "NIFTY": {
    "windows": {
