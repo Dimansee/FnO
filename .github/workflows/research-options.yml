@@ -1,0 +1,27 @@
+name: research-options
+on:
+  push:
+    branches: [research-data]
+    paths: ["research/fetch_options.py", ".github/workflows/research-options.yml"]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas requests
+      - run: python research/fetch_options.py
+      - name: commit data
+        if: always()
+        run: |
+          git config user.name "fno-data-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/data research/options_log.txt || true
+          git commit -m "option data [skip ci]" || echo "nothing to commit"
+          git pull --rebase -q || true
+          git push
