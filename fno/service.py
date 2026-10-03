@@ -137,6 +137,16 @@ def _gather(symbol, m: M.Market):
                 trade_exp=trade_exp, chain=chain)
 
 
+def calendar_guard(symbol, exps, today) -> dict | None:
+    """Days the research says to sit out (round 6): Union Budget day, and Bank Nifty on its own expiry day."""
+    if today in C.BUDGET_DAYS:
+        return {"blocked": True, "reason": "Union Budget day - no new signal trades (every Budget day in the 2023-26 test lost)."}
+    if symbol in C.SKIP_OWN_EXPIRY and today in set(exps or []):
+        return {"blocked": True, "reason": f"{M.instrument(symbol)['label']} expiry day - no new signals in it today "
+                                           "(it lost in 3 of 4 years 2023-26 on these days). Nifty is still allowed."}
+    return None
+
+
 def _chart(today, hist):
     df = pd.concat([hist.tail(75), today]) if not hist.empty else today
     out = []
@@ -162,6 +172,8 @@ def dashboard(symbol, strike=None):
     cstats = M.chain_stats(g["chain"], g["spot"])
     gc, nw, fi = gcues(), news(symbol), fii()
     guard = P.day_guard(pos, tr, acct["capital_start"])
+    if not guard.get("blocked"):
+        guard = calendar_guard(symbol, g["exps"], g["now"].date()) or guard
     pf = prefs()
     ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, nw, gc, fi, g["now"], guard, _traded_today(symbol, pos, tr),
                     pf["strategies"])
@@ -219,6 +231,8 @@ def place_signal(symbol, strike=None, auto=False):
     g = _gather(symbol, m)
     acct, pos, tr, cash = P.snapshot()
     guard = P.day_guard(pos, tr, acct["capital_start"])
+    if not guard.get("blocked"):
+        guard = calendar_guard(symbol, g["exps"], g["now"].date()) or guard
     if guard.get("blocked"):
         return False, guard["reason"]
     if any(p["symbol"] == symbol and p["mode"] == "signal" for p in pos):

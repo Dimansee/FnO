@@ -11,3 +11,7 @@ intraday_fit.csv.gz
 realcheck_*.csv
 *_cal.json
 results_r5_cal.json
+r7_scalp*.json
+r7_legs_*.pkl
+r7_rt_*.pkl
+r7_scalp*.pkl

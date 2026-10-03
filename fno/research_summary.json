@@ -1218,5 +1218,754 @@
   "Creator setups (5 EMA, inside bar, 44 MA, RSI 60/40, multi-timeframe breakout, Fibonacci) were coded as written and tested the same way; none beat the noise-area rules on the unseen days.",
   "Option-selling styles (straddles/strangles, iron condors, adjustments) and OI/PCR-based methods need historical option quotes and OI, which are not freely available, so they could not be tested honestly.",
   "Option selling (9:20 iron fly) could not be judged fairly: its edge comes from IV crush near expiry, which a VIX-based model can't reproduce."
- ]
+ ],
+ "round7": {
+  "rules": {
+   "before": {
+    "trades": 915,
+    "net": 213649,
+    "win": 29.2,
+    "pf": 1.27,
+    "max_dd": -64206,
+    "unseen120": 53664,
+    "years": {
+     "2023": 31331,
+     "2024": 96485,
+     "2025": 14727,
+     "2026": 71106
+    }
+   },
+   "after": {
+    "trades": 909,
+    "net": 223015,
+    "win": 29.5,
+    "pf": 1.28,
+    "max_dd": -58101,
+    "unseen120": 56503,
+    "years": {
+     "2023": 31078,
+     "2024": 95934,
+     "2025": 15670,
+     "2026": 80332
+    }
+   },
+   "windows": {
+    "30": [
+     4242,
+     4470
+    ],
+    "60": [
+     5141,
+     5278
+    ],
+    "90": [
+     53290,
+     53599
+    ],
+    "120": [
+     56503,
+     53664
+    ]
+   },
+   "noise_range": [
+    196983,
+    240443
+   ],
+   "changes": [
+    "Nifty: when the nearest weekly expiry has 1 day or less left, buy the next week's",
+    "No new signals on Union Budget day"
+   ]
+  },
+  "checks": [
+   {
+    "check": "Expiry days and days to expiry",
+    "found": "Bank Nifty on its expiry day: 52 trades, profit factor 0.53 (lost in 3 of 4 years). Nifty on its expiry day: PF 1.13. Options with 1 day left: PF 0.87; 3-7 days left: PF 1.6.",
+    "action": "Rule added: roll Nifty to next week with 1 day left. Skipping Bank Nifty's expiry day was tested and not adopted: the losses came from its weekly-expiry era (to Nov 2024) and an independent check found expiry days only slightly more range-bound (not significant)."
+   },
+   {
+    "check": "Entering late",
+    "found": "On the same 840 trades, buying 1 minute after the signal (real 1-minute prices) changed profit by \u20b94.4k and the premium paid by about 0.1%. Small changes reshuffle which marginal trades get sized in or out: starting capital \u00b13% moved the 3\u00be-year total between \u20b9197.0k and \u20b9240.4k.",
+    "action": "Entering within 1-2 minutes is fine. Treat differences smaller than about \u00b1\u20b920k between rule variants as noise."
+   },
+   {
+    "check": "Luck test (5,000 reshuffled years)",
+    "found": "At 1% risk: a typical year made \u20b955.7k on \u20b92 lakh; 13.5% of years lost money; the usual deepest fall was 17.8% of capital, 1 year in 20 saw 34.6%. At 2% risk the 1-in-20 fall was 67.4% and profit was lower.",
+    "action": "Keep 1% risk per trade. Expect a 15-35% fall from a peak at some point in a year."
+   },
+   {
+    "check": "Event days",
+    "found": "Budget days: 4 trades, all lost (\u2212\u20b96.3k). Day after a US Fed decision: PF 0.73 (26 trades). RBI policy days: PF 2.28 (22 trades).",
+    "action": "Skip Budget day. Fed and RBI samples are too small to act on."
+   },
+   {
+    "check": "Where the profit comes from",
+    "found": "Trend days (close far from the open, 36% of days): \u20b9532.1k, PF 3.02. Range days: \u2212\u20b9213.4k. Mixed days: \u2212\u20b9105.0k. VIX 20+ at the open: PF 0.26 (21 trades).",
+    "action": "These are trend-catching rules: most days lose a little, trend days pay for them."
+   },
+   {
+    "check": "Real contract history",
+    "found": "With the expiries actually listed (Bank Nifty weeklies until Nov 2024), the lot sizes and the STT of each period: \u20b9195.5k vs \u20b9213.6k with today's; unseen 120 days \u20b954.8k vs \u20b953.7k.",
+    "action": "Results hold."
+   }
+  ],
+  "rally": {
+   "NIFTY": {
+    "legs_per_day_80plus": 3.29,
+    "pct_days_with_80plus": 88,
+    "duration_min_median": {
+     "80-120": 17,
+     "120+": 19
+    },
+    "duration_min_p25_p75": [
+     8,
+     36
+    ],
+    "start_time_share": {
+     "09:15-09:45": 28.7,
+     "11:00-13:00": 23.3,
+     "09:45-11:00": 22.1,
+     "13:00-14:30": 16.8,
+     "14:30-15:30": 9.1
+    },
+    "size_per_100_days": {
+     "25-50": 1360.1,
+     "50-80": 630.0,
+     "80-120": 245.2,
+     "120-200": 74.9,
+     "200+": 9.0
+    },
+    "after": {
+     "rallies": 3041,
+     "extra_after_80_median": 21.0,
+     "p_reach_100": 51.7,
+     "p_reach_120": 25.5,
+     "p_reach_160": 7.9,
+     "giveback_30m_median_pct": 48.5,
+     "giveback_60m_median_pct": 56.8,
+     "pct_fully_reversed_same_day": 39.1
+    },
+    "realtime_goal": {
+     "60": 60.1,
+     "80": 44.6,
+     "100": 34.8,
+     "120": 27.3
+    },
+    "lift": [
+     {
+      "condition": "at_day_extreme",
+      "rally_starts_pct": 16.0,
+      "all_minutes_pct": 9.1,
+      "lift": 1.77
+     },
+     {
+      "condition": "near_prev_hl",
+      "rally_starts_pct": 19.0,
+      "all_minutes_pct": 21.7,
+      "lift": 0.88
+     },
+     {
+      "condition": "near_camarilla",
+      "rally_starts_pct": 25.3,
+      "all_minutes_pct": 31.3,
+      "lift": 0.81
+     },
+     {
+      "condition": "quiet_30m",
+      "rally_starts_pct": 0.9,
+      "all_minutes_pct": 9.9,
+      "lift": 0.09
+     },
+     {
+      "condition": "after_opposite_40",
+      "rally_starts_pct": 24.6,
+      "all_minutes_pct": 9.4,
+      "lift": 2.61
+     },
+     {
+      "condition": "tod=11:00-13:00",
+      "rally_starts_pct": 23.3,
+      "all_minutes_pct": 37.8,
+      "lift": 0.62
+     },
+     {
+      "condition": "gap=gap down",
+      "rally_starts_pct": 21.4,
+      "all_minutes_pct": 14.5,
+      "lift": 1.48
+     },
+     {
+      "condition": "vix=<13",
+      "rally_starts_pct": 25.5,
+      "all_minutes_pct": 45.6,
+      "lift": 0.56
+     },
+     {
+      "condition": "vix=16+",
+      "rally_starts_pct": 33.4,
+      "all_minutes_pct": 16.3,
+      "lift": 2.05
+     }
+    ],
+    "realtime": [
+     {
+      "condition": "all",
+      "n": 13255,
+      "reach_80_pct": 44.6,
+      "lift": 1.0
+     },
+     {
+      "condition": "quiet_30m=True",
+      "n": 211,
+      "reach_80_pct": 28.0,
+      "lift": 0.63
+     },
+     {
+      "condition": "with_trend_vs_open=True",
+      "n": 7774,
+      "reach_80_pct": 47.0,
+      "lift": 1.05
+     },
+     {
+      "condition": "tod=09:15-09:45",
+      "n": 3147,
+      "reach_80_pct": 50.4,
+      "lift": 1.13
+     },
+     {
+      "condition": "tod=14:30-15:30",
+      "n": 1221,
+      "reach_80_pct": 33.7,
+      "lift": 0.76
+     },
+     {
+      "condition": "vs_twap=against",
+      "n": 4061,
+      "reach_80_pct": 39.4,
+      "lift": 0.88
+     },
+     {
+      "condition": "vix=16+",
+      "n": 4226,
+      "reach_80_pct": 48.8,
+      "lift": 1.09
+     },
+     {
+      "condition": "vix=<13",
+      "n": 3279,
+      "reach_80_pct": 38.4,
+      "lift": 0.86
+     }
+    ]
+   },
+   "BANKNIFTY": {
+    "legs_per_day_80plus": 5.18,
+    "pct_days_with_80plus": 95,
+    "duration_min_median": {
+     "80-120": 11,
+     "120+": 11
+    },
+    "duration_min_p25_p75": [
+     5,
+     21
+    ],
+    "start_time_share": {
+     "09:15-09:45": 30.0,
+     "11:00-13:00": 21.9,
+     "09:45-11:00": 20.8,
+     "13:00-14:30": 17.0,
+     "14:30-15:30": 10.3
+    },
+    "size_per_100_days": {
+     "25-50": 2236.9,
+     "50-80": 984.2,
+     "80-120": 370.8,
+     "120-200": 128.4,
+     "200+": 18.5
+    },
+    "after": {
+     "rallies": 4783,
+     "extra_after_80_median": 21.7,
+     "p_reach_100": 52.9,
+     "p_reach_120": 28.4,
+     "p_reach_160": 9.4,
+     "giveback_30m_median_pct": 58.5,
+     "giveback_60m_median_pct": 68.9,
+     "pct_fully_reversed_same_day": 47.8
+    },
+    "realtime_goal": {
+     "60": 61.9,
+     "80": 47.3,
+     "100": 37.7,
+     "120": 30.3
+    },
+    "lift": [
+     {
+      "condition": "at_day_extreme",
+      "rally_starts_pct": 8.2,
+      "all_minutes_pct": 5.4,
+      "lift": 1.53
+     },
+     {
+      "condition": "near_prev_hl",
+      "rally_starts_pct": 16.8,
+      "all_minutes_pct": 19.5,
+      "lift": 0.86
+     },
+     {
+      "condition": "near_camarilla",
+      "rally_starts_pct": 20.5,
+      "all_minutes_pct": 25.4,
+      "lift": 0.8
+     },
+     {
+      "condition": "quiet_30m",
+      "rally_starts_pct": 1.8,
+      "all_minutes_pct": 8.4,
+      "lift": 0.22
+     },
+     {
+      "condition": "after_opposite_40",
+      "rally_starts_pct": 26.9,
+      "all_minutes_pct": 13.2,
+      "lift": 2.04
+     },
+     {
+      "condition": "tod=11:00-13:00",
+      "rally_starts_pct": 21.9,
+      "all_minutes_pct": 37.8,
+      "lift": 0.58
+     },
+     {
+      "condition": "gap=gap down",
+      "rally_starts_pct": 25.7,
+      "all_minutes_pct": 18.8,
+      "lift": 1.37
+     },
+     {
+      "condition": "vix=<13",
+      "rally_starts_pct": 24.9,
+      "all_minutes_pct": 45.6,
+      "lift": 0.55
+     },
+     {
+      "condition": "vix=16+",
+      "rally_starts_pct": 31.8,
+      "all_minutes_pct": 16.3,
+      "lift": 1.95
+     }
+    ],
+    "realtime": [
+     {
+      "condition": "all",
+      "n": 21546,
+      "reach_80_pct": 47.3,
+      "lift": 1.0
+     },
+     {
+      "condition": "quiet_30m=True",
+      "n": 447,
+      "reach_80_pct": 34.0,
+      "lift": 0.72
+     },
+     {
+      "condition": "with_trend_vs_open=True",
+      "n": 12408,
+      "reach_80_pct": 48.1,
+      "lift": 1.02
+     },
+     {
+      "condition": "tod=09:15-09:45",
+      "n": 4898,
+      "reach_80_pct": 54.9,
+      "lift": 1.16
+     },
+     {
+      "condition": "tod=14:30-15:30",
+      "n": 1802,
+      "reach_80_pct": 40.4,
+      "lift": 0.85
+     },
+     {
+      "condition": "vs_twap=against",
+      "n": 7105,
+      "reach_80_pct": 44.2,
+      "lift": 0.93
+     },
+     {
+      "condition": "vix=16+",
+      "n": 6099,
+      "reach_80_pct": 51.4,
+      "lift": 1.09
+     },
+     {
+      "condition": "vix=<13",
+      "n": 5806,
+      "reach_80_pct": 41.8,
+      "lift": 0.88
+     }
+    ]
+   }
+  },
+  "scalp": {
+   "tested": 1458,
+   "by_family": {
+    "chase": 648,
+    "fade": 324,
+    "vrev": 486
+   },
+   "profitable_after_costs": 0,
+   "profitable_low_slippage": 0,
+   "positive_in_points_pct": 43,
+   "best_points_per_trade": 1.34,
+   "best": {
+    "family": "fade",
+    "X": 0,
+    "T": 50,
+    "S": 0,
+    "H": 30,
+    "train": -118228.27297455491,
+    "unseen": -12541.505487035298,
+    "n": 422
+   }
+  },
+  "stops": {
+   "A": {
+    "trades": 909,
+    "touched_stop": 468,
+    "touched_stop_pct": 51.5,
+    "after_stop_back_to_entry_pct": 48.9,
+    "after_stop_reached_1R_pct": 20.1,
+    "after_stop_reached_2R_pct": 7.5,
+    "after_stop_reached_target_pct_noise": 1.3,
+    "beyond_stop_before_1R_median_R": 0.47,
+    "beyond_stop_before_1R_quartiles_pts": [
+     9.3,
+     26.4,
+     53.3
+    ],
+    "share_of_stop_then_1R_within_0.25R_beyond": 31.9,
+    "winners_mae_R_quartiles": [
+     0.31,
+     0.54,
+     0.92
+    ],
+    "by_strategy": {
+     "camarilla": {
+      "stopped": 318,
+      "then_1R_pct": 21.7,
+      "back_to_entry_pct": 51.3
+     },
+     "noise": {
+      "stopped": 150,
+      "then_1R_pct": 16.7,
+      "back_to_entry_pct": 44.0
+     }
+    }
+   },
+   "B": [
+    {
+     "name": "stop as now",
+     "trades": 909,
+     "net": 223015,
+     "train": 166512,
+     "unseen120": 56503,
+     "win": 29.5,
+     "pf": 1.28,
+     "max_dd": -58101,
+     "years": {
+      "2023": 31078,
+      "2024": 95934,
+      "2025": 15670,
+      "2026": 80332
+     }
+    },
+    {
+     "name": "stop 0.75x as far",
+     "trades": 978,
+     "net": 96310,
+     "train": 89202,
+     "unseen120": 7108,
+     "win": 25.6,
+     "pf": 1.11,
+     "max_dd": -57017,
+     "years": {
+      "2023": 14641,
+      "2024": 60765,
+      "2025": -13469,
+      "2026": 34373
+     }
+    },
+    {
+     "name": "stop 1.25x as far",
+     "trades": 796,
+     "net": 157095,
+     "train": 118287,
+     "unseen120": 38807,
+     "win": 30.9,
+     "pf": 1.24,
+     "max_dd": -41022,
+     "years": {
+      "2023": 33653,
+      "2024": 50313,
+      "2025": 10464,
+      "2026": 62664
+     }
+    },
+    {
+     "name": "stop 1.5x as far",
+     "trades": 654,
+     "net": 43336,
+     "train": 32435,
+     "unseen120": 10901,
+     "win": 30.3,
+     "pf": 1.08,
+     "max_dd": -58389,
+     "years": {
+      "2023": 8481,
+      "2024": 26079,
+      "2025": -19335,
+      "2026": 28112
+     }
+    },
+    {
+     "name": "stop on 5-min close (hard 1.5x)",
+     "trades": 905,
+     "net": 176041,
+     "train": 120519,
+     "unseen120": 55522,
+     "win": 30.6,
+     "pf": 1.21,
+     "max_dd": -48477,
+     "years": {
+      "2023": 19784,
+      "2024": 61771,
+      "2025": 15574,
+      "2026": 78912
+     }
+    },
+    {
+     "name": "book profit at +80 Nifty pts",
+     "trades": 960,
+     "net": 43628,
+     "train": 23998,
+     "unseen120": 19630,
+     "win": 37.4,
+     "pf": 1.06,
+     "max_dd": -51893,
+     "years": {
+      "2023": -15342,
+      "2024": 53834,
+      "2025": -21896,
+      "2026": 27031
+     }
+    },
+    {
+     "name": "book profit at +100",
+     "trades": 947,
+     "net": 102194,
+     "train": 86872,
+     "unseen120": 15322,
+     "win": 34.7,
+     "pf": 1.13,
+     "max_dd": -44698,
+     "years": {
+      "2023": 5086,
+      "2024": 78046,
+      "2025": 35,
+      "2026": 19027
+     }
+    },
+    {
+     "name": "book profit at +120",
+     "trades": 937,
+     "net": 108268,
+     "train": 96731,
+     "unseen120": 11538,
+     "win": 32.1,
+     "pf": 1.14,
+     "max_dd": -47930,
+     "years": {
+      "2023": 1505,
+      "2024": 85814,
+      "2025": -2249,
+      "2026": 23198
+     }
+    }
+   ],
+   "C": {
+    "S10_R1": {
+     "stop_pts": 10,
+     "target_pts": 10,
+     "n": 77616,
+     "target_first": 49.6,
+     "stop_then_target": 38.7,
+     "stop_never_target": 11.7,
+     "neither": 0.0,
+     "of_stopped_then_target_pct": 76.8,
+     "random_market_stop_then_target": 40.4,
+     "random_market_target_first": 49.1,
+     "depth_beyond_stop_median_pts": 19.2,
+     "depth_within_5pts_pct": 18.7
+    },
+    "S10_R2": {
+     "stop_pts": 10,
+     "target_pts": 20,
+     "n": 77616,
+     "target_first": 33.4,
+     "stop_then_target": 43.7,
+     "stop_never_target": 22.8,
+     "neither": 0.1,
+     "of_stopped_then_target_pct": 65.6,
+     "random_market_stop_then_target": 46.7,
+     "random_market_target_first": 33.5,
+     "depth_beyond_stop_median_pts": 22.9,
+     "depth_within_5pts_pct": 15.3
+    },
+    "S20_R2": {
+     "stop_pts": 20,
+     "target_pts": 40,
+     "n": 77616,
+     "target_first": 31.6,
+     "stop_then_target": 25.3,
+     "stop_never_target": 39.9,
+     "neither": 3.2,
+     "of_stopped_then_target_pct": 37.0,
+     "random_market_stop_then_target": 30.9,
+     "random_market_target_first": 32.3,
+     "depth_beyond_stop_median_pts": 29.4,
+     "depth_within_5pts_pct": 12.2
+    },
+    "S30_R2": {
+     "stop_pts": 30,
+     "target_pts": 60,
+     "n": 77616,
+     "target_first": 27.6,
+     "stop_then_target": 14.1,
+     "stop_never_target": 45.9,
+     "neither": 12.4,
+     "of_stopped_then_target_pct": 19.5,
+     "random_market_stop_then_target": 19.8,
+     "random_market_target_first": 29.9,
+     "depth_beyond_stop_median_pts": 34.1,
+     "depth_within_5pts_pct": 10.6
+    },
+    "S40_R2": {
+     "stop_pts": 40,
+     "target_pts": 80,
+     "n": 77616,
+     "target_first": 22.8,
+     "stop_then_target": 8.1,
+     "stop_never_target": 45.4,
+     "neither": 23.8,
+     "of_stopped_then_target_pct": 10.4,
+     "random_market_stop_then_target": 11.9,
+     "random_market_target_first": 25.7,
+     "depth_beyond_stop_median_pts": 40.1,
+     "depth_within_5pts_pct": 9.9
+    },
+    "S60_R2": {
+     "stop_pts": 60,
+     "target_pts": 120,
+     "n": 77616,
+     "target_first": 14.5,
+     "stop_then_target": 3.0,
+     "stop_never_target": 37.6,
+     "neither": 45.0,
+     "of_stopped_then_target_pct": 3.5,
+     "random_market_stop_then_target": 4.0,
+     "random_market_target_first": 17.4,
+     "depth_beyond_stop_median_pts": 47.6,
+     "depth_within_5pts_pct": 7.8
+    }
+   },
+   "D": {
+    "days_5min": 8,
+    "days_1min": 4,
+    "rows": {
+     "SL-20% TP+20%": {
+      "entries": 308,
+      "target_first": 39.0,
+      "stop_then_target": 9.1,
+      "stop_never_target": 31.8,
+      "neither": 20.1,
+      "of_stopped_then_target": 14.9,
+      "depth_below_stop_median_pct": 5.4,
+      "depth_within_2pct_share": 10.7
+     },
+     "SL-20% TP+40%": {
+      "entries": 308,
+      "target_first": 19.2,
+      "stop_then_target": 5.2,
+      "stop_never_target": 41.9,
+      "neither": 33.8,
+      "of_stopped_then_target": 6.4,
+      "depth_below_stop_median_pct": 4.8,
+      "depth_within_2pct_share": 18.8
+     },
+     "SL-30% TP+40%": {
+      "entries": 308,
+      "target_first": 22.7,
+      "stop_then_target": 1.6,
+      "stop_never_target": 26.3,
+      "neither": 49.4,
+      "of_stopped_then_target": 2.1,
+      "depth_below_stop_median_pct": 3.6,
+      "depth_within_2pct_share": 40.0
+     },
+     "SL-40% TP+40%": {
+      "entries": 308,
+      "target_first": 24.4,
+      "stop_then_target": 0.0,
+      "stop_never_target": 17.5,
+      "neither": 58.1,
+      "of_stopped_then_target": 0.0,
+      "depth_below_stop_median_pct": null,
+      "depth_within_2pct_share": null
+     }
+    },
+    "rows_5min": {
+     "SL-20% TP+20%": {
+      "entries": 484,
+      "target_first": 37.8,
+      "stop_then_target": 6.2,
+      "stop_never_target": 30.8,
+      "neither": 25.2,
+      "of_stopped_then_target": 10.0,
+      "depth_below_stop_median_pct": 4.9,
+      "depth_within_2pct_share": 13.3
+     },
+     "SL-20% TP+40%": {
+      "entries": 484,
+      "target_first": 18.0,
+      "stop_then_target": 3.3,
+      "stop_never_target": 38.8,
+      "neither": 39.9,
+      "of_stopped_then_target": 4.0,
+      "depth_below_stop_median_pct": 4.8,
+      "depth_within_2pct_share": 18.8
+     },
+     "SL-30% TP+40%": {
+      "entries": 484,
+      "target_first": 20.2,
+      "stop_then_target": 1.0,
+      "stop_never_target": 21.7,
+      "neither": 57.0,
+      "of_stopped_then_target": 1.3,
+      "depth_below_stop_median_pct": 3.6,
+      "depth_within_2pct_share": 40.0
+     },
+     "SL-40% TP+40%": {
+      "entries": 484,
+      "target_first": 21.3,
+      "stop_then_target": 0.0,
+      "stop_never_target": 11.2,
+      "neither": 67.6,
+      "of_stopped_then_target": 0.0,
+      "depth_below_stop_median_pct": null,
+      "depth_within_2pct_share": null
+     }
+    }
+   }
+  }
+ }
 }

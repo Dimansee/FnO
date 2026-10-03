@@ -121,6 +121,9 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
 
         if vix_at(day.index[0]) < C.VIX_MIN:
             continue
+        day_exps = I.demo_expiries(meta["expiry"], d, 3)
+        if d in C.BUDGET_DAYS or (symbol in C.SKIP_OWN_EXPIRY and day_exps and day_exps[0] == d):
+            continue                                  # calendar rules (research round 6)
         if meta["iv_mult"]:
             # VIX corrected by the real-option-price table (days to expiry, moneyness)
             iv_of = lambda ts, s=None, k=None, opt=None: PR.iv(symbol, vix_at(ts), s, k, opt, (exp - d).days,  # noqa: E731
@@ -129,7 +132,7 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
         else:
             rv = D.realised_vol(hist.tail(375)) or 0.25
             iv_of = lambda ts, s=None, k=None, opt=None: min(max(rv, 0.08), 0.9)  # noqa: E731
-        exp = I.pick_trading_expiry(I.demo_expiries(meta["expiry"], d, 3), meta["expiry"], d)
+        exp = I.pick_trading_expiry(day_exps, meta["expiry"], d)
         idx = list(day.index)
         lv = S.camarilla_levels(hist)
         day_trades = []

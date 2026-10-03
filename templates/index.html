@@ -149,6 +149,9 @@ tbody tr,table tr{transition:background .15s var(--ease)}
 .ticket{border-color:rgba(242,169,59,.35);box-shadow:inset 3px 0 0 var(--gold)}
 .ticket .row{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px dashed rgba(36,56,74,.6)}
 .ticket .row:last-of-type{border-bottom:none}
+.prose td,.prose th{white-space:normal;vertical-align:top;line-height:1.45;text-align:left}
+.prose td:first-child{min-width:140px}
+.entryhow{margin-top:12px;padding:10px 12px;border-radius:8px;background:rgba(242,169,59,.08);font-size:13px;line-height:1.5}
 .legs{margin:8px 0 12px}
 .leg{display:flex;gap:10px;align-items:center;padding:9px 12px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r-md);margin-bottom:6px}
 .tag{font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px}
@@ -799,6 +802,7 @@ function renderTicket(d) {
       ${kpi("LTP", "₹" + n2(o.ltp))}${kpi("Entry", "₹" + n2(o.entry_prem))}
       ${kpi("Stop-loss (SL)", `<span class="down">₹${n2(o.sl_prem)}</span>`)}${kpi("Target (TP)", `<span class="up">₹${n2(o.target_prem)}</span>`)}
     </div>
+    <div class="entryhow"><b>How to enter:</b> buy within 1-2 minutes of the signal at about <b>₹${n2(o.ltp)}</b>. On real 1-minute prices, a minute's delay made no measurable difference to the same trades. Keep the stop where it is: in testing, moving it wider or tighter both earned less.</div>
     <div style="margin-top:10px">
       <div class="row"><span class="muted">Index: entry / stop-loss / target</span><span class="mono">${n2(p.entry)} / ${n2(p.sl)} / ${p.target != null ? n2(p.target) : "no fixed target"}</span></div>
       <div class="row"><span class="muted">Size</span><span class="mono">${o.lots} lot(s) = ${o.qty} qty</span></div>
@@ -1278,6 +1282,40 @@ function downloadCsv(name, rows, cols) {
   a.href = URL.createObjectURL(new Blob([csv], {type: "text/csv"})); a.download = name;
   document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
 }
+function studyR7(x, k) {
+  const R = x.rules, yrs = [2023, 2024, 2025, 2026];
+  const rrow = (name, b, hi) => `<tr${hi ? ' style="background:rgba(242,169,59,.08)"' : ""}><td>${name}</td><td class="mono">${k(b.net)}</td>${yrs.map(y => `<td class="mono">${k(b.years[y])}</td>`).join("")}<td class="mono">${k(b.unseen120)}</td><td class="mono">${b.pf}</td><td class="mono">${b.win}%</td><td class="mono down">₹${Math.abs(b.max_dd / 1000).toFixed(0)}k</td></tr>`;
+  const N = x.rally.NIFTY, B = x.rally.BANKNIFTY, st = x.stops, A = st.A;
+  const lift = (arr, c) => (arr.find(z => z.condition === c) || {}).lift;
+  const rt = (arr, c) => (arr.find(z => z.condition === c) || {}).reach_80_pct;
+  const pc = v => v == null ? "–" : v + "%";
+  return `<h4>Stress tests, and two calendar rules added (round 6)</h4>
+    <div class="tablewrap"><table class="prose"><tr><th>Check</th><th>What the data showed</th><th>What changed</th></tr>
+      ${x.checks.map(c => `<tr><td><b>${esc(c.check)}</b></td><td>${esc(c.found)}</td><td>${esc(c.action)}</td></tr>`).join("")}</table></div>
+    <div class="tablewrap" style="margin-top:10px"><table><tr><th>Both strategies, both indices</th><th>3¾ years</th>${yrs.map(y => `<th>${y}</th>`).join("")}<th>Unseen 120 days</th><th>PF</th><th>Win</th><th>Deepest fall</th></tr>
+      ${rrow("Before", R.before)}${rrow("<b>With the calendar rules (now used)</b>", R.after, true)}</table></div>
+    <p class="muted" style="font-size:12px">New rules: ${R.changes.map(esc).join("; ")}. The gain is small - inside the ±₹20k the total moves from tiny changes - so they are kept for their reasons (1-day options lose fast to time decay; Budget days lost every time), not for the extra rupees. The deepest fall did shrink.</p>
+
+    <h4>80-120 point rallies: what comes before, what comes after (1-minute data, 924 trading days 2023-26)</h4>
+    <ul>
+      <li><b>They are common:</b> Nifty makes a move of 80+ points (start to top before a 25-point pull-back) about <b>${Math.round(N.legs_per_day_80plus)} times a day</b>, on ${N.pct_days_with_80plus}% of days; the typical one takes ${N.duration_min_median["80-120"]} minutes (half take ${N.duration_min_p25_p75[0]}-${N.duration_min_p25_p75[1]}). ${N.start_time_share["09:15-09:45"]}% start in the first half hour. Bank Nifty, measured in the same % size, has ${B.legs_per_day_80plus} a day.</li>
+      <li><b>What comes before:</b> rallies start ${lift(N.lift, "after_opposite_40")}× more often than normal right after a 40+ point move the other way (a V-turn), ${lift(N.lift, "vix=16+")}× more often when VIX is above 16, ${lift(N.lift, "gap=gap down")}× on gap-down days, and ${lift(N.lift, "at_day_extreme")}× from the day's high/low. They rarely start after a quiet spell (${lift(N.lift, "quiet_30m")}×) - the "squeeze before the move" idea didn't show up. Yesterday's high/low and Camarilla levels were <i>not</i> special starting points (${lift(N.lift, "near_prev_hl")}×, ${lift(N.lift, "near_camarilla")}×).</li>
+      <li><b>Can you tell early?</b> Once Nifty is 30 points off a low, it went on to +80 before falling back to that low ${rt(N.realtime, "all")}% of the time. The best conditions only nudge that: ${rt(N.realtime, "tod=09:15-09:45")}% in the first half hour, ${rt(N.realtime, "vix=16+")}% with VIX above 16; worst ${rt(N.realtime, "tod=14:30-15:30")}% after 14:30 and ${rt(N.realtime, "vix=<13")}% with VIX below 13.</li>
+      <li><b>What comes after:</b> once a rally has done +80, it went on to +100 ${N.after.p_reach_100}% of the time, +120 ${N.after.p_reach_120}%, +160 ${N.after.p_reach_160}%. After the top it typically gave back ${N.after.giveback_30m_median_pct}% of the move within 30 minutes, and ${N.after.pct_fully_reversed_same_day}% were fully reversed the same day.</li>
+      <li><b>Scalping them:</b> ${x.scalp.tested.toLocaleString("en-IN")} scalping rules were tested on the option (chase the move, fade it after a fast run, buy the bounce after a sharp fall; targets 20-80 points, stops 15-25 points or the swing, 15-60 minute limits, time/trend/VIX filters). <b>${x.scalp.profitable_after_costs} made money</b> on the training years after costs - not even with near-zero slippage (${x.scalp.profitable_low_slippage}). In index points before costs ${x.scalp.positive_in_points_pct}% were slightly positive, at best about ${x.scalp.best_points_per_trade} points a trade - less than brokerage, taxes, the spread and time decay of a bought option. The existing strategies already catch the rallies that turn into trend days.</li>
+    </ul>
+
+    <h4>"My stop-loss got hit, then price went to my target"</h4>
+    <ul>
+      <li><b>The app's trades (real 1-minute prices):</b> ${A.touched_stop_pct}% touched their stop. Of those, ${A.after_stop_back_to_entry_pct}% came back to the entry price later that day, ${A.after_stop_reached_1R_pct}% reached +1R and ${A.after_stop_reached_2R_pct}% +2R; only ${A.after_stop_reached_target_pct_noise}% of stopped noise-band trades reached the 4R target. Before recovering to +1R, price usually went well past the stop (median ${A.beyond_stop_before_1R_median_R}R, about ${A.beyond_stop_before_1R_quartiles_pts[1]} Nifty points) - only ${A.share_of_stop_then_1R_within_0_25R_beyond ?? A["share_of_stop_then_1R_within_0.25R_beyond"]}% were near-misses within 0.25R.</li>
+      <li><b>Would another stop have paid?</b> (option P&L, lots resized to keep 1% risk)
+        <div class="tablewrap" style="margin-top:6px"><table><tr><th></th><th>3¾ years</th><th>Unseen 120 days</th><th>PF</th><th>Deepest fall</th></tr>
+        ${st.B.map((b, i) => `<tr${i === 0 ? ' style="background:rgba(242,169,59,.08)"' : ""}><td>${esc(b.name)}</td><td class="mono">${k(b.net)}</td><td class="mono">${k(b.unseen120)}</td><td class="mono">${b.pf}</td><td class="mono down">₹${Math.abs(b.max_dd / 1000).toFixed(0)}k</td></tr>`).join("")}</table></div>
+        The current stop earned the most. A stop that waits for a 5-minute close beyond the level had a smaller deepest fall but earned less; wider, tighter and fixed profit-booking all earned less.</li>
+      <li><b>Is it stop hunting?</b> Entries every 15 minutes in both directions, any stop size: "stop first, target later" happened <i>less</i> often on real prices than on a random market made from the same day's moves shuffled - about 5 percentage points less with a 20-point stop and 40-point target, in every year (confirmed by a separate check). Real stops are followed through more than chance, not hunted more. Tight stops get hit then recover very often (10-point stop: ${st.C.S10_R1.of_stopped_then_target_pct}% of stop-outs later reached a 10-point target) - that is ordinary noise, which is why the app sets the stop from ATR instead of a fixed small number.</li>
+      <li><b>On real option premiums</b> (${st.D.days_1min} days of 1-minute and ${st.D.days_5min} of 5-minute near-expiry contracts so far): with a 20% premium stop, ${st.D.rows["SL-20% TP+20%"].of_stopped_then_target}% of stop-outs later reached +20% and ${st.D.rows["SL-20% TP+40%"].of_stopped_then_target}% reached +40%; with a 30-40% stop almost none did. A bought option that has fallen 20-30% rarely comes back above entry the same day - time decay works against it. The recorder is collecting more days to confirm this.</li>
+    </ul>`;
+}
 async function loadStudy() {
   if (!S.btDefaults) {
     try { const st = await api("/api/settings"); S.prefs = st.prefs || {}; $("#btSize").value = S.prefs.sizing || "risk"; S.btDefaults = true; } catch (e) {}
@@ -1313,6 +1351,7 @@ async function loadStudy() {
     <div class="tablewrap"><table><tr><th></th><th>Last 30</th><th>60</th><th>90</th><th>120 days</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>Deepest fall</th><th>Sharpe</th></tr>
       ${r.portfolio.map((x, i) => `<tr${i === 2 ? ' style="background:rgba(242,169,59,.08)"' : ""}><td>${i === 2 ? "<b>" + esc(x.name) + "</b>" : esc(x.name)}</td>${[30, 60, 90, 120].map(w => `<td class="mono">${k(x.windows[w].net)}</td>`).join("")}${[2023, 2024, 2025, 2026].map(y => `<td class="mono">${k(x.years[y])}</td>`).join("")}<td class="mono down">₹${Math.abs(x.max_dd / 1000).toFixed(0)}k</td><td class="mono">${x.sharpe}</td></tr>`).join("")}</table></div>
     <p class="muted" style="font-size:12px">The two systems' daily results are only weakly related (correlation ≈ 0.3), so together they were positive in every year. The deepest fall is on ₹2 lakh capital.</p>` : ""}
+    ${r.round7 ? studyR7(r.round7, k) : ""}
     ${r.combos ? `<h4>Does stacking indicators make it more accurate? (${r.combos.tested} combinations tested)</h4>
     <p style="margin-top:0">Each of: ${esc(r.combos.filters)} - added to the noise-band signal alone, in pairs, in threes, and as "k of n must agree" votes.</p>
     <ul><li><b>Win rate barely moved:</b> ${r.combos.base_win}% without filters vs ${r.combos.three_filter_win}% with three filters.</li>
@@ -1461,9 +1500,10 @@ function renderRules() {
   <ul><li><b>BUY CALL</b> when the 5-minute close at a check is above the upper band <b>and</b> above VWAP.</li>
   <li><b>BUY PUT</b> when it is below the lower band <b>and</b> below VWAP.</li>
   <li>The signal can be taken for ${r.SIGNAL_VALID_MIN} minutes after the check if price is still beyond the band.</li>
-  <li>No trades when India VIX is below ${r.VIX_MIN} (moves too small to pay for an option). <b>One trade per instrument per day.</b></li></ul>
+  <li>No trades when India VIX is below ${r.VIX_MIN} (moves too small to pay for an option). <b>One trade per instrument per day.</b></li>
+  <li><b>How to enter:</b> within 1-2 minutes of the signal. Checked on real 1-minute prices, a minute's delay made no measurable difference to the same trades.</li></ul>
   <h4>3 · What to buy</h4>
-  <ul><li>The option <b>1 strike in-the-money</b> of the nearest expiry (Nifty weekly; never on expiry day): for a CALL the strike just below the price, for a PUT the strike just above.</li>
+  <ul><li>The option <b>1 strike in-the-money</b> of the nearest expiry (Nifty weekly): for a CALL the strike just below the price, for a PUT the strike just above. <b>When that expiry has 1 day or less left, buy the next week's</b> - 1-day options lost money in testing because of time decay.</li>
   <li>Why not ATM: on real NSE option prices, ATM options lost noticeably more to time decay on sideways days; the in-the-money option moves more with Nifty and decays less per rupee of movement.</li>
   <li>Too costly for your cash? The ticket lets you pick a nearby strike (cheaper OTM strikes decay faster).</li></ul>
   <h4>4 · Exit, decided before you enter (all on the index price)</h4>
@@ -1480,10 +1520,11 @@ function renderRules() {
   <h4>5 · Risk – the part that keeps you in the game</h4>
   <ul><li>Risk <b>${pct(r.RISK_PER_TRADE)} of capital per trade</b>; lots are calculated for you.</li>
   <li>Max <b>${r.MAX_TRADES_PER_DAY} trades a day</b> in total; stop after a <b>${pct(r.MAX_DAILY_LOSS)} daily loss</b> or two losers.</li>
-  <li>On RBI policy, Union Budget or election-result days: skip, or trade half size.</li></ul>
+  <li><b>Sit out Union Budget day</b> - the app blocks new signals then (every Budget day in the 2023-26 test lost). Expiry days are fine to trade: Bank Nifty lost on its old weekly expiry days, but that effect hasn't shown up since it became monthly-only in Nov 2024.</li>
+  <li>Keep the stop where it is. Moving it 25-50% wider or 25% tighter both earned less in testing, and fixed profit-booking at +80/+100/+120 Nifty points earned less than letting winners run.</li></ul>
   <h4>What the research found – read this</h4>
   <ul><li>The old opening-range rules lost money in every window tested once costs were included. They have been replaced.</li>
-  <li>This strategy wins only about <b>40–55%</b> of trades. It makes money because winners run (up to 4R) while losers are cut at 1R. Expect losing weeks.</li>
+  <li>The two strategies together win only about <b>30%</b> of trades. They make money because winners run (up to 4R) while losers are cut at 1R. All of the profit came from <b>trend days</b> (the close far from the open); range days lost. Expect losing weeks - in a luck test, a normal year saw a 15-35% fall from a peak at 1% risk per trade.</li>
   <li>It was profitable on <b>Nifty in every year 2023–2026</b>. Bank Nifty was mixed (it lost in 2025), and most single stocks lost money, so <b>prefer the indices</b>.</li>
   <li>The market score (global cues, news, PCR, FII…) is shown for context only. Using it as a filter <i>reduced</i> profit in testing.</li>
   <li>Re-tuning the settings every month to the latest winners did <i>worse</i> than keeping one robust setting. Don't chase last month's best.</li>

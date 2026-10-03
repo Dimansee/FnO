@@ -129,10 +129,10 @@ def years_to_expiry(expiry: date, now: datetime | None = None) -> float:
 # Nifty: weekly Tuesday. Bank Nifty & stocks: last Tuesday of the month.
 # Exchange holidays are not modelled here (expiry would move a day earlier).
 # ---------------------------------------------------------------------------
-def _last_tuesday(y, m):
+def _last_tuesday(y, m, wd=1):
     nxt = date(y + (m == 12), m % 12 + 1, 1)
     d = nxt - timedelta(days=1)
-    while d.weekday() != 1:
+    while d.weekday() != wd:
         d -= timedelta(days=1)
     return d
 
@@ -140,16 +140,17 @@ def _last_tuesday(y, m):
 def demo_expiries(kind: str, today: date | None = None, n: int = 4) -> list[date]:
     today = today or C.today_ist()
     out = []
+    wd = 1 if today >= date(2025, 9, 1) else 3          # NSE expiries moved from Thursday to Tuesday in Sep 2025
     if kind == "weekly":
         d = today
         while len(out) < n:
-            if d.weekday() == 1 and d >= today:
+            if d.weekday() == wd and d >= today:
                 out.append(d)
             d += timedelta(days=1)
     else:
         y, m = today.year, today.month
         while len(out) < n:
-            lt = _last_tuesday(y, m)
+            lt = _last_tuesday(y, m, wd)
             if lt >= today:
                 out.append(lt)
             y, m = (y + 1, 1) if m == 12 else (y, m + 1)
@@ -157,13 +158,13 @@ def demo_expiries(kind: str, today: date | None = None, n: int = 4) -> list[date
 
 
 def pick_trading_expiry(expiries: list[date], kind: str, today: date | None = None) -> date:
-    """Avoid expiry-day gamma: on weekly expiry day use next week; for monthly
-    contracts roll when fewer than 3 calendar days remain."""
+    """Avoid the last day's time decay: weekly contracts roll to the next week when 1 day or less
+    is left (research round 6: 1-day options lost money), monthly ones when fewer than 3 days remain."""
     today = today or C.today_ist()
     future = sorted(e for e in expiries if e >= today)
     if not future:
         return None
-    min_days = 1 if kind == "weekly" else 3
+    min_days = 2 if kind == "weekly" else 3
     for e in future:
         if (e - today).days >= min_days:
             return e

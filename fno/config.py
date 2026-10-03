@@ -5,7 +5,7 @@ is connected, lot sizes and expiries come from the broker / exchange master and
 these defaults are only a fallback.
 """
 import os
-from datetime import datetime, time
+from datetime import date, datetime, time
 from zoneinfo import ZoneInfo
 
 IST = ZoneInfo("Asia/Kolkata")
@@ -119,6 +119,10 @@ CAM_RMIN, CAM_RMAX = 1.0, 3.0   # stop distance kept between 1 and 3 x ATR
 RECORD_EVERY_MIN = 5       # one snapshot every 5 minutes, 09:15-15:30
 RECORD_STRIKES = 15        # strikes each side of the money
 RECORD_KEEP_DAYS = 45      # Redis copy expires after this; the nightly job keeps a permanent copy
+# Calendar rules (research round 6, research/README.md)
+BUDGET_DAYS = {date(2023, 2, 1), date(2024, 2, 1), date(2024, 7, 23), date(2025, 2, 1), date(2026, 2, 1), date(2027, 2, 1)}   # Union Budget: no new signal trades (all 4 test-period Budget days lost). Update yearly.
+SKIP_OWN_EXPIRY = ()              # indices to sit out on their own expiry day. Tested for Bank Nifty: the losses came from its old
+                                  # weekly-expiry era (to Nov 2024) and an independent check found no clear effect since, so none.
 STRIKE_ITM = 1             # buy 1 strike in-the-money: on real option prices it loses less to time decay than ATM
 
 MIN_BIAS_SCORE = 3
