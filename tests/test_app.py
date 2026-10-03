@@ -45,6 +45,15 @@ M.upstox_public_history = lambda key, cal_days: pd.DataFrame()   # offline: back
 X.global_cues = lambda: {"markets": {"S&P 500": {"last": 6000, "chg_pct": 0.8, "date": "2026-10-01"}}, "avg_equity_chg": 0.8, "notes": []}
 X.fetch_news = lambda s=None: {"items": [{"title": "Nifty rallies <b>", "link": "http://x", "when": None, "score": 4}], "score": 4, "events": [], "notes": []}
 X.fii_dii = lambda: None
+from fno import recorder as R  # noqa: E402
+REC_CALLS = []
+def _fake_nse(sym, n_exp=2):
+    REC_CALLS.append(sym)
+    spot = 24800 if sym == "NIFTY" else 52000
+    step = 50 if sym == "NIFTY" else 100
+    rows = [[spot + k * step, 120.5 - k, 120, 121, 1000 + k, 50, 13.1, 110.25 + k, 110, 111, 900, 40, 13.4] for k in range(-30, 31)]
+    return [("2026-10-06", spot, rows), ("2026-10-13", spot, rows)]
+R.nse_chain = _fake_nse
 
 from app import app  # noqa: E402
 
@@ -237,5 +246,22 @@ assert first and first["id"] == "race1" and second is None, "double close must b
 store.update_position({"id": "race1", "symbol": "NIFTY", "opened": "x"})
 assert all(p["id"] != "race1" for p in store.positions()), "update must not resurrect a closed position"
 assert store.ping()
+# ---------- market recorder ----------
+NOW[0] = datetime(2026, 10, 1, 10, 55, tzinfo=C.IST)
+assert R.snapshot(NOW[0] .replace(minute=56))["skipped"] == "not a snapshot minute"
+st = R.snapshot(NOW[0])                                   # no broker -> NSE path
+assert st["saved"] == 4 and st["src"] == ["nse"], st
+dd = j(c.get("/api/recorder/day?date=2026-10-01"))
+snaps = dd["snapshots"]
+assert len(snaps) >= 4 and len(snaps[-1]["rows"]) == 2 * C.RECORD_STRIKES + 1 and len(snaps[-1]["rows"][0]) == len(R.FIELDS)
+assert c.get("/api/recorder/day?date=bad").status_code == 400
+rs = j(c.get("/api/recorder/status"))
+assert rs["days"][-1]["date"] == "2026-10-01" and rs["last_ok"].startswith("2026-10-01T10:55"), rs
+R.nse_chain = lambda *a, **k: (_ for _ in ()).throw(RuntimeError("NSE 403"))
+st2 = R.snapshot(NOW[0].replace(minute=0, hour=11))
+assert st2["saved"] == 0 and st2["errors"] and st2["last_ok"].startswith("2026-10-01T10:55"), st2
+assert R.snapshot(datetime(2026, 10, 3, 11, 0, tzinfo=C.IST))["skipped"] == "market closed"
+R.nse_chain = _fake_nse
+print("recorder OK:", len(snaps), "snapshots,", rs["days"])
 print("redis edge cases OK; positions", len(store.positions()), "trades", len(store.trades()))
 print("ALL OK")

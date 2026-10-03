@@ -16,6 +16,7 @@ from fno import config as C
 from fno import service as SV
 from fno import scheduler
 from fno import store
+from fno import recorder as REC
 
 app = Flask(__name__)
 INDEX_HTML = (Path(__file__).parent / "templates" / "index.html").read_text(encoding="utf-8")
@@ -40,7 +41,7 @@ def _authed() -> bool:
         return False
 
 
-PUBLIC = {"/", "/api/login", "/api/health", "/api/tick"}
+PUBLIC = {"/", "/api/login", "/api/health", "/api/tick", "/api/recorder/day", "/api/recorder/probe"}
 
 
 @app.before_request
@@ -337,6 +338,37 @@ def broker_callback(name):
 # ---------------------------------------------------------------------------
 # Scheduler hook (called every minute by Upstash QStash during market hours)
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Market recorder
+# ---------------------------------------------------------------------------
+@app.get("/api/recorder/status")
+def recorder_status():
+    return jsonify(SV.clean(REC.status()))
+
+
+@app.get("/api/recorder/day")
+def recorder_day():
+    """Public, read-only: recorded market data for one day (used by the nightly GitHub job)."""
+    return jsonify(SV.clean(REC.day(request.args.get("date", ""))))
+
+
+_probe = {"t": 0.0, "v": None}
+
+
+@app.get("/api/recorder/probe")
+def recorder_probe():
+    """Can the server reach NSE's public option chain right now? (cached 60 s)"""
+    if time.time() - _probe["t"] > 60:
+        try:
+            ch = REC.nse_chain("NIFTY")
+            v = {"ok": True, "expiries": [(e, sp, len(r)) for e, sp, r in ch],
+                 "sample": next((r[len(r) // 2] for _, _, r in ch if r), None), "fields": REC.FIELDS}
+        except Exception as e:
+            v = {"ok": False, "error": str(e)[:300]}
+        _probe.update(t=time.time(), v=v)
+    return jsonify(_probe["v"])
+
+
 @app.route("/api/tick", methods=["GET", "POST"])
 def tick():
     if not C.CRON_SECRET or not hmac.compare_digest(request.headers.get("x-cron-secret", ""), C.CRON_SECRET):
