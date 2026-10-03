@@ -2,7 +2,7 @@ name: research-data
 on:
   push:
     branches: [research-data]
-    paths: ["research/fetch_data.py", ".github/workflows/research-data.yml"]
+    paths: ["research/fetch_data.py", "research/probe.py", ".github/workflows/research-data.yml"]
 permissions:
   contents: write
 jobs:
@@ -15,11 +15,13 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install yfinance pandas requests
+      - run: python research/probe.py
       - run: python research/fetch_data.py
+        if: ${{ hashFiles('research/.skip_fetch') == '' }}
       - name: commit data
         run: |
           git config user.name "fno-data-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add research/data research/fetch_log.txt
+          git add research/data research/fetch_log.txt research/probe_log.txt
           git commit -m "research data [skip ci]" || echo "nothing to commit"
           git push
