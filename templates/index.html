@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0e1922">
 <title>F&amp;O Trainer</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2211%22%20fill%3D%22%230e1922%22/%3E%3Cg%20fill%3D%22%23f2a93b%22%3E%3Cpath%20d%3D%22M16%2017.5C9%2017.5%203.5%2013%204.5%204.5%206.5%2010%2010.5%2012.6%2017.5%2013.2Z%22/%3E%3Cpath%20d%3D%22M32%2017.5C39%2017.5%2044.5%2013%2043.5%204.5%2041.5%2010%2037.5%2012.6%2030.5%2013.2Z%22/%3E%3Cpath%20d%3D%22M11%2019.5c2-1.6%204.4-1.6%205.5-.6-.6%202-2.6%203.3-5.5.6Z%22/%3E%3Cpath%20d%3D%22M37%2019.5c-2-1.6-4.4-1.6-5.5-.6.6%202%202.6%203.3%205.5.6Z%22/%3E%3Cpath%20d%3D%22M17.5%2012.6c3.8-1.6%209.2-1.6%2013%200%201.9%201.2%202.8%203.4%202.6%206.4-.4%205-2.6%209.4-3.2%2014.2.9%201.4%201.3%203%201.1%204.6-.5%203.4-3.8%205-7%205s-6.5-1.6-7-5c-.2-1.6.2-3.2%201.1-4.6-.6-4.8-2.8-9.2-3.2-14.2-.2-3%20.7-5.2%202.6-6.4Z%22/%3E%3C/g%3E%3Cg%20fill%3D%22%230e1922%22%3E%3Cellipse%20cx%3D%2219.6%22%20cy%3D%2222.6%22%20rx%3D%221.3%22%20ry%3D%221.6%22/%3E%3Cellipse%20cx%3D%2228.4%22%20cy%3D%2222.6%22%20rx%3D%221.3%22%20ry%3D%221.6%22/%3E%3Cellipse%20cx%3D%2221.4%22%20cy%3D%2237.6%22%20rx%3D%221.2%22%20ry%3D%221.7%22/%3E%3Cellipse%20cx%3D%2226.6%22%20cy%3D%2237.6%22%20rx%3D%221.2%22%20ry%3D%221.7%22/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
@@ -196,12 +197,40 @@ details[open] summary::before{transform:rotate(45deg) translate(-2px,-2px)}
 .empty{color:var(--muted);padding:16px 0}
 button.mini{padding:1px 7px;font-size:12px;border-radius:6px;margin-left:4px;background:transparent}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* loading bar with the bull */
+:root{--p:0}
+#pbar{position:fixed;top:0;left:0;right:0;height:3px;z-index:200;pointer-events:none;opacity:0;transition:opacity .3s}
+body.busy #pbar{opacity:1}
+body:has(#splash:not(.gone)) #pbar{opacity:0}
+#pbar .fill,.strack .fill{height:100%;width:calc(var(--p) * 1%);background:linear-gradient(90deg,rgba(242,169,59,.35),var(--gold));border-radius:0 3px 3px 0;box-shadow:0 0 10px rgba(242,169,59,.6);transition:width .25s var(--ease)}
+.pbull{position:absolute;top:4px;left:calc(var(--p) * 1%);width:28px;height:28px;margin-left:-14px;transition:left .25s var(--ease);filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alternate}
+@keyframes gallop{from{transform:translateY(0) rotate(-6deg)}to{transform:translateY(-3px) rotate(6deg)}}
+#splash{position:fixed;inset:0;z-index:150;background:radial-gradient(600px 300px at 50% 40%,rgba(242,169,59,.10),transparent 70%),var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .5s var(--ease),visibility .5s}
+#splash.gone{opacity:0;visibility:hidden}
+#splash .big{width:84px;height:84px;animation:rise .9s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(10px) scale(.9)}to{opacity:1;transform:none}}
+#splash .name{font-size:22px;font-weight:750;letter-spacing:-.02em}#splash .name span{color:var(--gold)}
+.strack{position:relative;width:min(260px,70vw);height:4px;background:var(--panel2);border-radius:4px;margin-top:24px}
+.strack .pbull{top:-28px;width:26px;height:26px;margin-left:-13px}
+#splash .msg{font-size:13.5px;color:var(--muted)}
+@media(prefers-reduced-motion:reduce){.pbull,#splash .big{animation:none!important}}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="bull" viewBox="0 0 48 48"><g fill="#f2a93b"><path d="M16 17.5C9 17.5 3.5 13 4.5 4.5 6.5 10 10.5 12.6 17.5 13.2Z"/><path d="M32 17.5C39 17.5 44.5 13 43.5 4.5 41.5 10 37.5 12.6 30.5 13.2Z"/><path d="M11 19.5c2-1.6 4.4-1.6 5.5-.6-.6 2-2.6 3.3-5.5.6Z"/><path d="M37 19.5c-2-1.6-4.4-1.6-5.5-.6.6 2 2.6 3.3 5.5.6Z"/><path d="M17.5 12.6c3.8-1.6 9.2-1.6 13 0 1.9 1.2 2.8 3.4 2.6 6.4-.4 5-2.6 9.4-3.2 14.2.9 1.4 1.3 3 1.1 4.6-.5 3.4-3.8 5-7 5s-6.5-1.6-7-5c-.2-1.6.2-3.2 1.1-4.6-.6-4.8-2.8-9.2-3.2-14.2-.2-3 .7-5.2 2.6-6.4Z"/></g><g fill="#0e1922"><ellipse cx="19.6" cy="22.6" rx="1.3" ry="1.6"/><ellipse cx="28.4" cy="22.6" rx="1.3" ry="1.6"/><ellipse cx="21.4" cy="37.6" rx="1.2" ry="1.7"/><ellipse cx="26.6" cy="37.6" rx="1.2" ry="1.7"/></g></symbol></svg>
+<div id="pbar" aria-hidden="true"><div class="fill"></div><svg class="pbull"><use href="#bull"/></svg></div>
+<div id="splash" role="status" aria-label="Loading">
+  <svg class="big"><use href="#bull"/></svg>
+  <div class="name">F&amp;O <span>Trainer</span></div>
+  <div class="strack"><div class="fill"></div><svg class="pbull"><use href="#bull"/></svg></div>
+  <div class="msg" id="splashMsg">Loading live prices…</div>
+</div>
 
 <div id="login" class="login hidden">
   <div class="card">
+    <svg width="44" height="44" aria-hidden="true" style="display:block;margin-bottom:8px"><use href="#bull"/></svg>
     <h3 style="font-size:18px">F&amp;O <span style="color:var(--accent)">Trainer</span></h3>
     <p class="muted" style="margin-top:0">Paper trading with demo money.</p>
     <form id="loginForm">
@@ -416,10 +445,24 @@ async function api(path, opts = {}) {
   if (!r.ok) throw new Error(j.message || j.error || ("HTTP " + r.status));
   return j;
 }
-const post = (p, b) => api(p, {method: "POST", body: JSON.stringify(b || {})});
+const post = async (p, b) => { pStart(); try { return await api(p, {method: "POST", body: JSON.stringify(b || {})}); } finally { pDone(); } };
+/* loading bar: the bull runs along it while data loads */
+const P = {v: 0, n: 0, t: 0};
+function setP(v) { P.v = v; document.documentElement.style.setProperty("--p", v.toFixed(1)); }
+function pStart() {
+  if (P.n++) return;
+  clearTimeout(P.h); document.body.classList.add("busy"); setP(P.v >= 100 ? 8 : Math.max(P.v, 8));
+  clearInterval(P.t); P.t = setInterval(() => setP(P.v + (90 - P.v) * .035), 200);
+}
+function pDone() {
+  if (!P.n || --P.n) return;
+  clearInterval(P.t); setP(100);
+  P.h = setTimeout(() => { document.body.classList.remove("busy"); P.h = setTimeout(() => setP(0), 300); }, 380);
+}
+function hideSplash() { const sp = $("#splash"); if (sp && !sp.classList.contains("gone")) setTimeout(() => sp.classList.add("gone"), 250); }
 
 /* ---------- login ---------- */
-function showLogin() { $("#app").classList.add("hidden"); $("#login").classList.remove("hidden"); }
+function showLogin() { hideSplash(); $("#app").classList.add("hidden"); $("#login").classList.remove("hidden"); }
 $("#loginForm").onsubmit = async e => {
   e.preventDefault(); $("#loginErr").classList.add("hidden");
   try { await post("/api/login", {password: $("#pw").value}); start(); }
@@ -428,7 +471,8 @@ $("#loginForm").onsubmit = async e => {
 
 /* ---------- shell ---------- */
 async function start() {
-  try { S.meta = await api("/api/meta"); } catch (e) { return; }
+  try { S.meta = await api("/api/meta"); }
+  catch (e) { if ($("#login").classList.contains("hidden")) $("#splashMsg").textContent = "Couldn't reach the server. Refresh the page to try again."; return; }
   $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
   const opts = S.meta.symbols.map(s => `<option value="${s.id}">${esc(s.label)}</option>`).join("");
   $("#symbol").innerHTML = opts; $("#btSym").innerHTML = opts;
@@ -461,7 +505,7 @@ function schedule() {
   if ($("#auto").checked && ["signal", "portfolio", "chain"].includes(S.tab)) S.timer = setInterval(() => !document.hidden && load(true), 30000);
 }
 async function load(quiet) {
-  const sec = $("#t-" + S.tab); if (!quiet) sec.classList.add("loading");
+  const sec = $("#t-" + S.tab); if (!quiet) { sec.classList.add("loading"); pStart(); }
   try {
     if (S.tab === "signal") await loadSignal();
     else if (S.tab === "chain") await loadChain();
@@ -469,7 +513,7 @@ async function load(quiet) {
     else if (S.tab === "context") await loadContext();
     else if (S.tab === "settings") await loadSettings();
   } catch (e) { if (!quiet) toast(e.message); }
-  finally { sec.classList.remove("loading"); }
+  finally { sec.classList.remove("loading"); if (!quiet) pDone(); hideSplash(); }
 }
 function setSource(src, live) {
   const p = $("#srcPill"); p.className = "pill " + (live ? "live" : "demo"); p.lastElementChild.textContent = src;
@@ -1028,7 +1072,7 @@ function renderRules() {
   <li>Move to real money only after <b>30+ paper trades</b> with profit factor &gt; 1.3, and start with 1 lot.</li></ul>`;
 }
 
-start();
+pStart(); start().finally(pDone);
 </script>
 </body>
 </html>
