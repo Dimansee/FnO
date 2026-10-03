@@ -404,6 +404,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
       <p style="margin-top:0">Replays today's rules on the latest ~60 days of 5-minute data (the first 14 sessions are only used to measure the usual move). The 3¾-year study that chose these rules is below.</p>
       <div class="formrow">
         <div><label>Instrument</label><select id="btSym" style="width:100%"></select></div>
+        <div><label>Strategy</label><select id="btStrat" style="width:100%"><option value="both" selected>Both (the rule)</option><option value="noise">Noise band only</option><option value="camarilla">Camarilla breakout only</option></select></div>
         <div><label>Band width</label><select id="btMult" style="width:100%"><option value="1.5">1.5× usual move</option><option value="1.75" selected>1.75× (the rule)</option><option value="2">2× usual move</option></select></div>
         <div><label>Capital (₹)</label><input id="btCap" type="number" value="200000" min="1000" step="5000" style="width:100%"></div>
         <div><label>Position size</label><select id="btSize" style="width:100%"><option value="risk" selected>Risk 1% per trade (the rule)</option><option value="one_lot">Always 1 lot (small accounts)</option></select></div>
@@ -649,7 +650,7 @@ function drawSession(d, animate) {
   const sg = d.signal, plan = sg.plan;
   const bnd = ((sg.bands && sg.bands.series) || []).filter(x => Math.floor(x.time / 86400) === day);
   let lo = Math.min(...bars.map(b => b.low)), hi = Math.max(...bars.map(b => b.high));
-  [d.prev_close, plan && plan.sl, plan && plan.target].forEach(v => { if (v) { lo = Math.min(lo, v); hi = Math.max(hi, v); } });
+  [d.prev_close, plan && plan.sl, plan && plan.target].forEach(v => { if (v != null && v) { lo = Math.min(lo, v); hi = Math.max(hi, v); } });
   if (bnd.length) { lo = Math.min(lo, ...bnd.map(x => x.lo)); hi = Math.max(hi, ...bnd.map(x => x.up)); }
   const pad = (hi - lo) * .1 || 1; lo -= pad; hi += pad;
   const X = m => L + (Math.min(Math.max(m, T0), T1) - T0) / (T1 - T0) * (W - L - R);
@@ -692,7 +693,7 @@ function drawSession(d, animate) {
       g.fillStyle = c; g.textAlign = "left"; g.fillText(label, W - R + 6, Y(v) + 4);
     };
     hline(d.prev_close, "rgba(143,163,176,.55)", "Prev", [3, 4]);
-    if (plan) { hline(plan.target, "#3fbf8f", "Target", []); hline(plan.sl, "#e2675a", "Stop", []); }
+    if (plan) { if (plan.target != null) hline(plan.target, "#3fbf8f", "Target", []); hline(plan.sl, "#e2675a", "Stop", []); }
     if (!pts.length) return;
     // path up to progress p
     const n = Math.max(1, Math.floor(p * (pts.length - 1)) + 1), vis = pts.slice(0, n);
@@ -726,7 +727,7 @@ function renderTicket(d) {
   }
   const o = d.order, p = sg.plan, rec = d.alternatives.find(a => a.is_default);
   const cash = d.cash;
-  t.innerHTML = `<div class="cardhead"><h3 style="margin:0">Trade ticket – ${esc(o.type)}</h3>
+  t.innerHTML = `<div class="cardhead"><h3 style="margin:0">Trade ticket – ${esc(sg.strategy || o.type)}</h3>
       ${o.affordable && o.lots > 0 ? `<span class="badge ok">Affordable</span>` : `<span class="badge no">Not affordable</span>`}</div>
     <div class="legs" style="margin-top:10px">${o.legs.map(l => `<div class="leg"><span class="tag ${l.side.toLowerCase()}">${l.side}</span><span><b>${esc(d.label)} ${l.strike} ${l.opt}</b> <span class="muted">· ${new Date(d.expiry).toLocaleDateString("en-IN", {day: "2-digit", month: "short"})} expiry${l.side === "BUY" ? " · " + esc(o.moneyness) : ""}</span></span><span class="spacer"></span><span class="mono">₹${n2(l.price)}</span></div>`).join("")}</div>
     <div class="k4">
@@ -734,12 +735,14 @@ function renderTicket(d) {
       ${kpi("Stop-loss (SL)", `<span class="down">₹${n2(o.sl_prem)}</span>`)}${kpi("Target (TP)", `<span class="up">₹${n2(o.target_prem)}</span>`)}
     </div>
     <div style="margin-top:10px">
-      <div class="row"><span class="muted">Index: entry / stop-loss / target</span><span class="mono">${n2(p.entry)} / ${n2(p.sl)} / ${n2(p.target)}</span></div>
+      <div class="row"><span class="muted">Index: entry / stop-loss / target</span><span class="mono">${n2(p.entry)} / ${n2(p.sl)} / ${p.target != null ? n2(p.target) : "no fixed target"}</span></div>
       <div class="row"><span class="muted">Size</span><span class="mono">${o.lots} lot(s) = ${o.qty} qty</span></div>
       <div class="row"><span class="muted">Capital needed (1 lot / this trade)</span><span class="mono">${rs(o.cost_per_lot)} / ${rs(o.capital_used)}</span></div>
       <div class="row"><span class="muted">Demo cash available</span><span class="mono ${cash >= o.cost_per_lot ? "" : "down"}">${rs(cash)}</span></div>
       <div class="row"><span class="muted">Risk / reward</span><span class="mono"><span class="down">${rs(o.risk_rs)}</span> / <span class="up">${rs(o.reward_rs)}</span></span></div>
-      <div class="muted" style="font-size:12px;margin-top:4px">Exit at whichever comes first: index stop-loss, index target (${p.rr || 4}R), a half-hour close back inside the band or across VWAP, or the 15:15 square-off. Option SL/TP above are estimates of where the premium will be at those index levels.</div>
+      <div class="muted" style="font-size:12px;margin-top:4px">${p.strategy === "camarilla"
+        ? "Camarilla breakout: exit on the index stop (H3/L3), move the stop to entry once the trade is +1R, exit if +0.5R isn't reached within 45 minutes, otherwise hold to 15:15. The option TP shown is only a 3R estimate - there is no fixed target."
+        : `Noise band: exit at whichever comes first - index stop-loss, index target (${p.rr || 4}R), a half-hour close back inside the band or across VWAP, or the 15:15 square-off. Option SL/TP above are estimates of where the premium will be at those index levels.`}</div>
     </div>
     ${o.note ? `<div class="warn">${esc(o.note)}</div>` : ""}
     <details ${!o.affordable || S.pick ? "open" : ""} style="margin-top:12px">
@@ -976,7 +979,9 @@ async function refreshPane(i) {
     const sg = d.signal, od = d.order;
     if (p.kind === "UND") {
 
-      if (sg.plan) { add(sg.plan.sl, "#e2675a", "Stop", 0); add(sg.plan.target, "#3fbf8f", "Target", 0); o.levels = [sg.plan.sl, sg.plan.target]; }
+      if (sg.plan) { add(sg.plan.sl, "#e2675a", "Stop", 0); if (sg.plan.target != null) add(sg.plan.target, "#3fbf8f", "Target", 0); o.levels = [sg.plan.sl, sg.plan.target].filter(v => v != null); }
+      const cam = sg.camarilla && sg.camarilla.levels;
+      if (cam && p.tf === 5) { add(cam.h4, "rgba(127,180,217,.8)", "H4", 3); add(cam.l4, "rgba(127,180,217,.8)", "L4", 3); }
     } else if (od && od.type === "Buy option" && od.strike === r.strike && od.opt === p.kind) {
       add(od.entry_prem, "#8fa3b0", "Entry", 2); add(od.sl_prem, "#e2675a", "SL", 0); add(od.target_prem, "#3fbf8f", "TP", 0);
       o.levels = [od.sl_prem, od.target_prem];
@@ -1211,10 +1216,19 @@ async function loadStudy() {
       ${row("New · Fin Nifty (never used in tuning)", r.new.FINNIFTY)}</table></div>
     <h4>Every strategy family tested</h4>
     <div class="tablewrap"><table><tr><th>Strategy</th><th>Settings tried</th><th>Held up in training*</th><th>Unseen 120 days†</th><th>Held-up settings profitable there</th><th>Walk-forward 2024–26**</th></tr>
-      ${r.families.map((f, i) => `<tr${i === 0 ? ' style="background:rgba(242,169,59,.08)"' : ""}><td>${i === 0 ? "<b>" + esc(f.name) + " · chosen</b>" : esc(f.name)}</td><td class="mono">${f.tested}</td><td class="mono">${f.robust}</td>
-        <td class="mono">${f.key === "ironfly" ? '<span class="muted">model can\'t judge</span>' : k(f.best_train_setting_last120)}</td>
+      ${r.families.map((f, i) => `<tr${i < 2 ? ' style="background:rgba(242,169,59,.08)"' : ""}><td>${i < 2 ? "<b>" + esc(f.name) + " · used</b>" : esc(f.name)}</td><td class="mono">${f.tested}</td><td class="mono">${f.robust}</td>
+        <td class="mono">${f.key === "ironfly" ? '<span class="muted">model can\'t judge</span>' : f.passed === false ? '<span class="muted">no setting passed training</span>' : k(f.best_train_setting_last120)}</td>
         <td class="mono">${f.robust ? Math.round(f.robust_oos_profitable / f.robust * 100) + "%" : "–"}</td><td class="mono">${k(f.walk_forward_net)}</td></tr>`).join("")}</table></div>
     <p class="muted" style="font-size:12px">Both indices combined, ₹2 lakh, 1% risk. † the setting that scored best on the training days, run on the last 120 days it never saw. * profitable on both indices in both halves of the training period. ** re-picking the best setting every 30 days from the previous 250 days, then trading the next 30 unseen days.</p>
+    ${r.portfolio ? `<h4>Two strategies side by side (both indices, app risk rules)</h4>
+    <div class="tablewrap"><table><tr><th></th><th>Last 30</th><th>60</th><th>90</th><th>120 days</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>Deepest fall</th><th>Sharpe</th></tr>
+      ${r.portfolio.map((x, i) => `<tr${i === 2 ? ' style="background:rgba(242,169,59,.08)"' : ""}><td>${i === 2 ? "<b>" + esc(x.name) + "</b>" : esc(x.name)}</td>${[30, 60, 90, 120].map(w => `<td class="mono">${k(x.windows[w].net)}</td>`).join("")}${[2023, 2024, 2025, 2026].map(y => `<td class="mono">${k(x.years[y])}</td>`).join("")}<td class="mono down">₹${Math.abs(x.max_dd / 1000).toFixed(0)}k</td><td class="mono">${x.sharpe}</td></tr>`).join("")}</table></div>
+    <p class="muted" style="font-size:12px">The two systems' daily results are only weakly related (correlation ≈ 0.3), so together they were positive in every year. The deepest fall is on ₹2 lakh capital.</p>` : ""}
+    ${r.combos ? `<h4>Does stacking indicators make it more accurate? (${r.combos.tested} combinations tested)</h4>
+    <p style="margin-top:0">Each of: ${esc(r.combos.filters)} - added to the noise-band signal alone, in pairs, in threes, and as "k of n must agree" votes.</p>
+    <ul><li><b>Win rate barely moved:</b> ${r.combos.base_win}% without filters vs ${r.combos.three_filter_win}% with three filters.</li>
+      <li><b>${r.combos.beat_base_train}</b> combinations beat the plain rule on the training years, but only <b>${r.combos.also_beat_unseen}</b> of them also beat it on the unseen 120 days - the rest were fitting old noise.</li>
+      <li>The combinations that looked best on old data: ${r.combos.top.map(t => `${esc(t.tag)} (unseen ${k(t.unseen120)})`).join(", ")} - versus ${k(r.combos.base_unseen120)} for the plain rule.</li></ul>` : ""}
     ${r.small_account ? `<h4>Small account: ₹${r.small_account.capital.toLocaleString("en-IN")}, 1 lot per signal</h4>
     <div class="tablewrap"><table><tr><th></th><th>Cost of 1 lot</th><th>Trades</th><th>Last 120 days</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>Worst trade</th><th>Deepest fall</th></tr>
       ${r.small_account.rows.map(x => `<tr><td>${x.symbol === "NIFTY" ? "Nifty" : "Bank Nifty"} · ${x.otm > 0 ? x.otm + " OTM" : x.otm < 0 ? -x.otm + " ITM" : "ATM"}</td><td class="mono">₹${(x.cost_per_lot || 0).toLocaleString("en-IN")}</td><td class="mono">${x.trades}</td><td class="mono">${k(x.last120)}</td>${[2023, 2024, 2025, 2026].map(y => `<td class="mono">${k(x.years[y])}</td>`).join("")}<td class="mono down">₹${x.worst_trade.toLocaleString("en-IN")}</td><td class="mono down">${x.max_dd_pct <= -100 ? "account wiped out" : x.max_dd_pct + "%"}</td></tr>`).join("")}</table></div>
@@ -1227,7 +1241,7 @@ let btc, bts;
 $("#btRun").onclick = async () => {
   const b = $("#btRun"); b.disabled = true; b.textContent = "Running… (up to a minute)";
   try {
-    const d = await post("/api/backtest", {symbol: $("#btSym").value, mult: +$("#btMult").value, capital: +$("#btCap").value, sizing: $("#btSize").value, otm: +$("#btOtm").value});
+    const d = await post("/api/backtest", {symbol: $("#btSym").value, mult: +$("#btMult").value, capital: +$("#btCap").value, sizing: $("#btSize").value, otm: +$("#btOtm").value, strategy: $("#btStrat").value});
     if (d.error) throw new Error(d.error);
     const s = d.summary;
     const sk = s.skipped || {risk: 0, cash: 0}, cap = +$("#btCap").value;
@@ -1244,8 +1258,8 @@ $("#btRun").onclick = async () => {
       ${kpi("Max drawdown", s.max_dd_pct.toFixed(1) + "%")}${kpi("Avg R / trade", sgn(s.avg_R))}</div>
       <div class="card" style="margin-top:14px"><h3>Equity curve</h3><div id="btchart"></div></div>
       <div class="card" style="margin-top:14px"><h3>Every trade</h3><div class="tablewrap" style="max-height:60vh"><table>
-      <tr><th>Date</th><th>In</th><th>Out</th><th>Side</th><th>Option</th><th>Band</th><th>Spot in</th><th>Spot out</th><th>R</th><th>Prem in</th><th>Prem out</th><th>Lots</th><th>P&L</th><th style="text-align:left">Reason</th></tr>
-      ${d.trades.map(t => `<tr><td>${t.date}</td><td>${t.entry_time}</td><td>${t.exit_time}</td><td class="${t.side === "CALL" ? "up" : "down"}">${t.side}</td><td>${t.type}</td><td>${t.band}×</td>
+      <tr><th>Date</th><th>In</th><th>Out</th><th>Strategy</th><th>Side</th><th>Option</th><th>Spot in</th><th>Spot out</th><th>R</th><th>Prem in</th><th>Prem out</th><th>Lots</th><th>P&L</th><th style="text-align:left">Reason</th></tr>
+      ${d.trades.map(t => `<tr><td>${t.date}</td><td>${t.entry_time}</td><td>${t.exit_time}</td><td>${esc(t.strategy || "")}</td><td class="${t.side === "CALL" ? "up" : "down"}">${t.side}</td><td>${t.type}</td>
         <td class="mono">${n2(t.spot_in)}</td><td class="mono">${n2(t.spot_out)}</td><td class="mono ${cls(t.R)}">${sgn(t.R)}</td><td class="mono">${n2(t.prem_in)}</td><td class="mono">${n2(t.prem_out)}</td>
         <td>${t.lots}</td><td class="mono ${cls(t.pnl)}"><b>${rs(t.pnl)}</b></td><td style="text-align:left">${esc(t.reason)}</td></tr>`).join("")}</table></div>
       ${sk.risk || sk.cash ? `<p class="muted" style="font-size:12px">Days with a skipped signal: ${sk.risk} too risky for the 1% rule, ${sk.cash} too costly for your cash.</p>` : ""}
@@ -1328,6 +1342,12 @@ function renderRules() {
   <li><b>Target:</b> ${r.RR_NOISE} × that risk.</li>
   <li><b>Trailing exit:</b> at each half-hour check, a CALL exits if the close falls back below the upper band or VWAP (whichever is higher); a PUT exits if it rises above the lower band or VWAP (whichever is lower).</li>
   <li><b>Square off by 15:15.</b> The server checks open trades every minute, even when this page is closed.</li></ul>
+  <h4>Second strategy · Camarilla breakout (runs alongside)</h4>
+  <ul><li>From yesterday's high, low and close: <b>H4 = close + 1.1 × range ÷ 2</b>, <b>L4 = close − 1.1 × range ÷ 2</b> (H3/L3 use ÷ 4). The app draws H4/L4 on the Nifty chart.</li>
+  <li><b>BUY CALL</b> when a 5-minute candle closes above H4 (the one before closed at or below it). <b>BUY PUT</b> when it closes below L4. Only between 09:20 and 13:00, and only when India VIX is between 11 and 22.</li>
+  <li><b>Stop:</b> H3 for a call / L3 for a put (kept between 1 and 3 × ATR). <b>At +1R</b> the stop moves to entry. <b>Time stop:</b> if +0.5R isn't reached within 45 minutes, exit. No fixed target - otherwise hold to 15:15.</li>
+  <li>Same option rule (1 strike in-the-money), one Camarilla trade per instrument per day, and never two open trades in the same instrument.</li>
+  <li>Why two strategies: their daily results are only weakly related (correlation ≈ 0.3), so one often makes money when the other doesn't. Together they were profitable in every year 2023–2026 under the app's risk rules.</li></ul>
   <h4>5 · Risk – the part that keeps you in the game</h4>
   <ul><li>Risk <b>${pct(r.RISK_PER_TRADE)} of capital per trade</b>; lots are calculated for you.</li>
   <li>Max <b>${r.MAX_TRADES_PER_DAY} trades a day</b> in total; stop after a <b>${pct(r.MAX_DAILY_LOSS)} daily loss</b> or two losers.</li>
@@ -1338,6 +1358,7 @@ function renderRules() {
   <li>It was profitable on <b>Nifty in every year 2023–2026</b>. Bank Nifty was mixed (it lost in 2025), and most single stocks lost money, so <b>prefer the indices</b>.</li>
   <li>The market score (global cues, news, PCR, FII…) is shown for context only. Using it as a filter <i>reduced</i> profit in testing.</li>
   <li>Re-tuning the settings every month to the latest winners did <i>worse</i> than keeping one robust setting. Don't chase last month's best.</li>
+  <li>Stacking more indicators on one signal (EMA, MACD, RSI, Heikin-Ashi, Supertrend, candle patterns…) did <b>not</b> raise accuracy: the win rate stayed ~35–36%, and the combinations that looked best on old data mostly lost on new data. Running two <i>different</i> strategies side by side helped; piling filters onto one did not.</li>
   <li>Profit is always measured on the <b>option premium</b>, never on Nifty points. Option prices were checked against real NSE closing prices (3 years) and real 5-minute option candles, and corrected for the faster decay real options show on sideways days. That correction is why the rule buys <b>1 strike in-the-money</b>.</li>
   <li>Move to real money only after <b>30+ paper trades</b> that look like the backtest, and start with 1 lot.</li></ul>`;
 }

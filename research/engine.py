@@ -114,7 +114,9 @@ class Day:
     vix_chg: float
     expiry: date = None
     idx: dict = field(default_factory=dict)
-    b15: list = field(default_factory=list)   # completed 15m bars: (i5_close_index, o, h, l, c, e5, e20, s44, rsi)
+    b15: list = field(default_factory=list)
+    x: dict = field(default_factory=dict)      # round-5 indicator arrays (e50, macdh, bb*, ha_*, dch/dcl, vsd)
+    cam: dict = field(default_factory=dict)    # Camarilla levels from yesterday   # completed 15m bars: (i5_close_index, o, h, l, c, e5, e20, s44, rsi)
 
 
 def load_days(sym: str) -> list[Day]:
@@ -137,6 +139,28 @@ def load_days(sym: str) -> list[Day]:
         d15["close"].rolling(44).mean(), _rsi(d15["close"])
     d15["bar_end"] = d15.index + pd.Timedelta(minutes=15)
     df["e5"], df["s44"], df["e20"] = I.ema(df["close"], 5), df["close"].rolling(44).mean(), I.ema(df["close"], 20)
+    # ---- round 5 indicators
+    df["e50"] = I.ema(df["close"], 50)
+    m12, m26 = I.ema(df["close"], 12), I.ema(df["close"], 26)
+    df["macd"] = m12 - m26
+    df["macdh"] = df["macd"] - I.ema(df["macd"], 9)
+    mid, sd = df["close"].rolling(20).mean(), df["close"].rolling(20).std()
+    df["bbu"], df["bbl"], df["bbm"] = mid + 2 * sd, mid - 2 * sd, mid
+    df["bbw"] = (4 * sd / mid).fillna(0)
+    df["bbw_min"] = df["bbw"].rolling(60).min()
+    ha_c = (df["open"] + df["high"] + df["low"] + df["close"]) / 4
+    ha_o = ha_c.copy()
+    vo, vc = df["open"].values, ha_c.values
+    hv = ha_o.to_numpy(copy=True)
+    hv[0] = (vo[0] + vc[0]) / 2
+    for q in range(1, len(hv)):
+        hv[q] = (hv[q - 1] + vc[q - 1]) / 2
+    df["ha_o"], df["ha_c"] = hv, ha_c
+    df["dch"], df["dcl"] = df["high"].rolling(20).max().shift(1), df["low"].rolling(20).min().shift(1)
+    tp = (df["high"] + df["low"] + df["close"]) / 3
+    g = tp.groupby(df.index.date)
+    cm = g.transform(lambda z: z.expanding().mean())
+    df["vsd"] = ((tp - cm) ** 2).groupby(df.index.date).transform(lambda z: z.expanding().mean()) ** 0.5
     df["vix"] = vix.ffill().fillna(14)
     # noise-area sigma by time-of-day (Zarattini et al. "Beat the Market")
     day = df.index.date
@@ -182,6 +206,9 @@ def load_days(sym: str) -> list[Day]:
                  prev_close=pc, prev_high=ph, prev_low=pl, cpr_w=abs(tc - bc) / pc * 100, pivot=pv, ctx=ctx,
                  gap=gap, vix_chg=vcl, expiry=expiry_for(d, meta["kind"]))
         dd.idx = {t: i for i, t in enumerate(dd.t)}
+        dd.x = {k: list(x[k]) for k in ("e50", "macd", "macdh", "bbu", "bbl", "bbm", "bbw", "bbw_min", "ha_o", "ha_c", "dch", "dcl", "vsd")}
+        rngp = ph - pl
+        dd.cam = {"h3": pc + rngp * 1.1 / 4, "l3": pc - rngp * 1.1 / 4, "h4": pc + rngp * 1.1 / 2, "l4": pc - rngp * 1.1 / 2}
         q = d15[d15.index.date == d]
         for ts, r in q.iterrows():
             end = r["bar_end"]
@@ -793,7 +820,217 @@ def s_fib(d: Day, j, p, st):
     return None
 
 
-STRATS = {"ema5": s_ema5, "inside": s_inside, "ma44": s_ma44, "rsi6040": s_rsi6040, "mtf": s_mtf, "fib": s_fib,
+# ---------------------------------------------------------------- round 5: more families + confirmation filters
+def _body(d, i):
+    return abs(d.c[i] - d.o[i])
+
+
+def _pattern(d, i, side):
+    """Candlestick reversal in `side` direction at bar i: engulfing, hammer/shooting star, or strong close."""
+    if i < 1:
+        return None
+    o, h, l, c = d.o[i], d.h[i], d.l[i], d.c[i]
+    po, pc_ = d.o[i - 1], d.c[i - 1]
+    rng = max(h - l, 1e-9)
+    if side > 0:
+        if pc_ < po and c > o and c >= po and o <= pc_:
+            return "engulfing"
+        if (min(o, c) - l) >= 2 * _body(d, i) and (h - max(o, c)) <= 0.3 * rng and c >= o:
+            return "hammer"
+    else:
+        if pc_ > po and c < o and c <= po and o >= pc_:
+            return "engulfing"
+        if (h - max(o, c)) >= 2 * _body(d, i) and (min(o, c) - l) <= 0.3 * rng and c <= o:
+            return "shooting star"
+    return None
+
+
+FILTERS = {
+    "st": lambda d, i, s: d.st[i] == s,
+    "st15": lambda d, i, s: d.st15[i] == s,
+    "ema_stack": lambda d, i, s: s * (d.e9[i] - d.e21[i]) > 0 and s * (d.e21[i] - d.x["e50"][i]) > 0,
+    "macd": lambda d, i, s: s * d.x["macdh"][i] > 0,
+    "rsi50": lambda d, i, s: s * (d.rsi[i] - 50) > 0,
+    "adx20": lambda d, i, s: d.adx[i] >= 20,
+    "ha": lambda d, i, s: s * (d.x["ha_c"][i] - d.x["ha_o"][i]) > 0,
+    "bbw_up": lambda d, i, s: i >= 3 and d.x["bbw"][i] > d.x["bbw"][i - 3],
+    "strong_close": lambda d, i, s: (d.c[i] - d.l[i]) / max(d.h[i] - d.l[i], 1e-9) >= 0.7 if s > 0 else (d.h[i] - d.c[i]) / max(d.h[i] - d.l[i], 1e-9) >= 0.7,
+    "beyond_pdhl": lambda d, i, s: d.c[i] > d.prev_high if s > 0 else d.c[i] < d.prev_low,
+    "gap_dir": lambda d, i, s: s * d.gap > 0,
+    "ctx": lambda d, i, s: s * d.ctx >= 1,
+    "e50": lambda d, i, s: s * (d.c[i] - d.x["e50"][i]) > 0,
+}
+
+
+def s_ema_trend(d: Day, j, p, st):
+    """EMA formulas: 'stack' = 9>21>50 then pullback to the 9/21 EMA and close back in trend;
+    'cross' = 20 EMA crossing the 50 EMA; 'triple' = close crossing all of 9/21/50 at once."""
+    mode = p.get("mode", "stack")
+    for i in range(max(j, 2), len(d.t)):
+        if not _window_ok(d, i, p):
+            continue
+        e50 = d.x["e50"]
+        for side in (1, -1):
+            if mode == "stack":
+                ok = side * (d.e9[i] - d.e21[i]) > 0 and side * (d.e21[i] - e50[i]) > 0
+                line = d.e9[i] if p.get("line", 9) == 9 else d.e21[i]
+                touch = d.l[i] <= line if side > 0 else d.h[i] >= line
+                ok = ok and touch and side * (d.c[i] - line) > 0 and side * (d.c[i] - d.o[i]) > 0
+            elif mode == "cross":
+                a0, a1 = d.e20[i - 1] - e50[i - 1], d.e20[i] - e50[i]
+                ok = side * a1 > 0 >= side * a0
+            else:
+                lvl = max(d.e9[i], d.e21[i], e50[i]) if side > 0 else min(d.e9[i], d.e21[i], e50[i])
+                prev = max(d.e9[i - 1], d.e21[i - 1], e50[i - 1]) if side > 0 else min(d.e9[i - 1], d.e21[i - 1], e50[i - 1])
+                ok = side * (d.c[i] - lvl) > 0 and side * (d.c[i - 1] - prev) <= 0
+            if ok and _ctx_ok(d, side, p) and (not p.get("vwap", 1) or side * (d.c[i] - d.vwap[i]) > 0):
+                sw = min(d.l[max(0, i - 3): i + 1]) if side > 0 else max(d.h[max(0, i - 3): i + 1])
+                return _sig(d, i, side, d.c[i], sw, p, "ema_trend")
+    return None
+
+
+def s_macd(d: Day, j, p, st):
+    """MACD (12,26,9) histogram flip, optionally only on the right side of the zero line."""
+    h = d.x["macdh"]; m = d.x["macd"]
+    for i in range(max(j, 2), len(d.t)):
+        if not _window_ok(d, i, p):
+            continue
+        for side in (1, -1):
+            if side * h[i] > 0 >= side * h[i - 1] and (not p.get("zero", 1) or side * m[i] > 0):
+                if p.get("vwap", 1) and side * (d.c[i] - d.vwap[i]) <= 0:
+                    continue
+                if not _ctx_ok(d, side, p):
+                    continue
+                return _sig(d, i, side, d.c[i], d.c[i] - side * p.get("stop_atr", 1.5) * d.atr[i], p, "macd")
+    return None
+
+
+def s_bb(d: Day, j, p, st):
+    """Bollinger Bands: 'squeeze' = width near its 60-bar low, then a close outside the band (breakout);
+    'revert' = a close outside the band followed by a close back inside (fade to the middle)."""
+    X = d.x
+    for i in range(max(j, 2), len(d.t)):
+        if not _window_ok(d, i, p) or math.isnan(X["bbu"][i]):
+            continue
+        if p.get("mode", "squeeze") == "squeeze":
+            tight = X["bbw"][i - 1] <= X["bbw_min"][i - 1] * p.get("sq", 1.2) if not math.isnan(X["bbw_min"][i - 1]) else False
+            for side, band in ((1, X["bbu"][i]), (-1, X["bbl"][i])):
+                if tight and side * (d.c[i] - band) > 0 and _ctx_ok(d, side, p):
+                    return _sig(d, i, side, d.c[i], X["bbm"][i], p, "bb")
+        else:
+            for side, band, pband in ((1, X["bbl"][i], X["bbl"][i - 1]), (-1, X["bbu"][i], X["bbu"][i - 1])):
+                if side * (d.c[i - 1] - pband) < 0 and side * (d.c[i] - band) > 0 and _ctx_ok(d, side, p):
+                    s = _sig(d, i, side, d.c[i], d.l[i - 1] if side > 0 else d.h[i - 1], p, "bb")
+                    s.target = X["bbm"][i] if p.get("rr") is None else s.target
+                    return s
+    return None
+
+
+def s_candle(d: Day, j, p, st):
+    """Candlestick reversal (engulfing / hammer / shooting star) at a level: VWAP, 21 EMA or the BB band,
+    in the direction of the bigger trend (50 EMA) if asked."""
+    for i in range(max(j, 2), len(d.t)):
+        if not _window_ok(d, i, p):
+            continue
+        for side in (1, -1):
+            pat = _pattern(d, i, side)
+            if not pat or (p.get("only") and pat != p["only"]):
+                continue
+            lvl = {"vwap": d.vwap[i], "ema21": d.e21[i], "bb": d.x["bbl"][i] if side > 0 else d.x["bbu"][i]}[p.get("at", "vwap")]
+            near = (d.l[i] <= lvl * (1 + p.get("tol", 0.0005))) if side > 0 else (d.h[i] >= lvl * (1 - p.get("tol", 0.0005)))
+            if not near or (p.get("trend", 1) and side * (d.c[i] - d.x["e50"][i]) <= 0):
+                continue
+            if not _ctx_ok(d, side, p):
+                continue
+            ext = min(d.l[i - 1], d.l[i]) if side > 0 else max(d.h[i - 1], d.h[i])
+            return _sig(d, i, side, d.c[i], ext, p, "candle")
+    return None
+
+
+def s_heikin(d: Day, j, p, st):
+    """Heikin-Ashi trend: HA candle flips colour with no wick on the 'wrong' side (a strong HA candle)."""
+    o, c = d.x["ha_o"], d.x["ha_c"]
+    for i in range(max(j, 2), len(d.t)):
+        if not _window_ok(d, i, p):
+            continue
+        for side in (1, -1):
+            flip = side * (c[i] - o[i]) > 0 and side * (c[i - 1] - o[i - 1]) <= 0
+            if p.get("n_same", 1) > 1:
+                flip = all(side * (c[i - q] - o[i - q]) > 0 for q in range(p["n_same"])) and side * (c[i - p["n_same"]] - o[i - p["n_same"]]) <= 0
+            if not flip:
+                continue
+            hi_, lo_ = max(d.h[i], o[i], c[i]), min(d.l[i], o[i], c[i])
+            nowick = (min(o[i], c[i]) - lo_ <= 0.1 * (hi_ - lo_)) if side > 0 else (hi_ - max(o[i], c[i]) <= 0.1 * (hi_ - lo_))
+            if p.get("nowick", 1) and not nowick:
+                continue
+            if p.get("vwap", 1) and side * (d.c[i] - d.vwap[i]) <= 0:
+                continue
+            if not _ctx_ok(d, side, p):
+                continue
+            return _sig(d, i, side, d.c[i], d.c[i] - side * p.get("stop_atr", 1.5) * d.atr[i], p, "heikin")
+    return None
+
+
+def s_donchian(d: Day, j, p, st):
+    """Donchian / 'turtle' intraday: close beyond the last N-bar high or low."""
+    n = p.get("n", 20)
+    for i in range(max(j, n), len(d.t)):
+        if not _window_ok(d, i, p):
+            continue
+        hi_, lo_ = max(d.h[i - n:i]), min(d.l[i - n:i])
+        for side, lvl, opp in ((1, hi_, lo_), (-1, lo_, hi_)):
+            if side * (d.c[i] - lvl) > 0 and _ctx_ok(d, side, p) and (not p.get("vwap", 1) or side * (d.c[i] - d.vwap[i]) > 0):
+                mid = (hi_ + lo_) / 2
+                return _sig(d, i, side, d.c[i], mid if p.get("stop") == "mid" else opp, p, "donchian")
+    return None
+
+
+def s_vwap_sd(d: Day, j, p, st):
+    """VWAP standard-deviation bands: 'revert' fades a close beyond VWAP +/- k sigma back inside;
+    'break' trades a close beyond the band."""
+    k = p.get("k", 2.0)
+    for i in range(max(j, 6), len(d.t)):
+        if not _window_ok(d, i, p):
+            continue
+        sd = d.x["vsd"][i]
+        if not sd or math.isnan(sd):
+            continue
+        up, lo = d.vwap[i] + k * sd, d.vwap[i] - k * sd
+        if p.get("mode", "revert") == "revert":
+            pup, plo = d.vwap[i - 1] + k * d.x["vsd"][i - 1], d.vwap[i - 1] - k * d.x["vsd"][i - 1]
+            for side, a, b in ((1, d.c[i - 1] < plo, d.c[i] > lo), (-1, d.c[i - 1] > pup, d.c[i] < up)):
+                if a and b and _ctx_ok(d, side, p):
+                    s = _sig(d, i, side, d.c[i], d.l[i - 1] if side > 0 else d.h[i - 1], p, "vwap_sd")
+                    if p.get("rr") is None:
+                        s.target = d.vwap[i]
+                    return s
+        else:
+            for side, band in ((1, up), (-1, lo)):
+                if side * (d.c[i] - band) > 0 and _ctx_ok(d, side, p):
+                    return _sig(d, i, side, d.c[i], d.vwap[i], p, "vwap_sd")
+    return None
+
+
+def s_camarilla(d: Day, j, p, st):
+    """Camarilla pivots: 'break' = close beyond H4/L4; 'revert' = rejection at H3/L3 back toward the pivot."""
+    cm = d.cam
+    for i in range(max(j, 1), len(d.t)):
+        if not _window_ok(d, i, p):
+            continue
+        if p.get("mode", "break") == "break":
+            for side, lvl, stp in ((1, cm["h4"], cm["h3"]), (-1, cm["l4"], cm["l3"])):
+                if side * (d.c[i] - lvl) > 0 and side * (d.c[i - 1] - lvl) <= 0 and _ctx_ok(d, side, p):
+                    return _sig(d, i, side, d.c[i], stp, p, "camarilla")
+        else:
+            for side, lvl, stp in ((-1, cm["h3"], cm["h4"]), (1, cm["l3"], cm["l4"])):
+                touched = d.h[i] >= lvl if side < 0 else d.l[i] <= lvl
+                if touched and side * (d.c[i] - lvl) > 0 and _ctx_ok(d, side, p):
+                    return _sig(d, i, side, d.c[i], stp, p, "camarilla")
+    return None
+
+
+STRATS = {"ema_trend": s_ema_trend, "macd": s_macd, "bb": s_bb, "candle": s_candle, "heikin": s_heikin,
+          "donchian": s_donchian, "vwap_sd": s_vwap_sd, "camarilla": s_camarilla, "ema5": s_ema5, "inside": s_inside, "ma44": s_ma44, "rsi6040": s_rsi6040, "mtf": s_mtf, "fib": s_fib,
           "orb": s_orb, "orb_candle": s_orb_candle, "noise": s_noise, "vwap_pull": s_vwap_pull,
           "supertrend": s_supertrend, "pdhl": s_pdhl, "ema_adx": s_ema_adx, "gap": s_gap}
 
@@ -810,6 +1047,14 @@ def run(days: list[Day], sym: str, strat: str, p: dict, capital=CAPITAL):
             s = fn(d, j, p, st)
             if s is None:
                 break
+            if p.get("vote"):
+                need, fl = p["vote"]
+                if sum(FILTERS[f](d, s.i, s.side) for f in fl) < need:
+                    j = s.i + 1
+                    continue
+            if p.get("filters") and not all(FILTERS[f](d, s.i, s.side) for f in p["filters"]):
+                j = s.i + 1                    # confirmation missing: keep scanning
+                continue
             up = lo = None
             if s.trail == "noise":
                 up, lo = st[("nb", d.d, p["mult"])]

@@ -107,6 +107,12 @@ STOP_ATR = 2.0             # underlying stop = 2 x ATR(14, 5-min)
 RR_NOISE = 4.0             # underlying target = 4 x risk
 VIX_MIN = 11.0             # no trades when India VIX is below 11 (moves too small to pay for the option)
 SIGNAL_VALID_MIN = 10      # a half-hour signal can still be taken for 10 minutes if price holds beyond the band
+# Second strategy: Camarilla breakout (research round 5, research/README.md)
+CAM_LAST_ENTRY = time(13, 0)
+CAM_VIX_MAX = 22.0
+CAM_BE_R = 1.0             # stop moves to entry after +1R
+CAM_TIME_STOP = 45         # exit if +0.5R not reached within 45 minutes
+CAM_RMIN, CAM_RMAX = 1.0, 3.0   # stop distance kept between 1 and 3 x ATR
 STRIKE_ITM = 1             # buy 1 strike in-the-money: on real option prices it loses less to time decay than ATM
 
 MIN_BIAS_SCORE = 3
@@ -121,7 +127,7 @@ SPREAD_WIDTH_STRIKES = 2
 
 RISK_PER_TRADE = 0.01
 MAX_DAILY_LOSS = 0.02
-MAX_TRADES_PER_DAY = 2
+MAX_TRADES_PER_DAY = 4   # two strategies x two indices; the 2-loser and 2% daily-loss stops still apply
 
 DEFAULT_CAPITAL = 200_000
 RISK_FREE = 0.065

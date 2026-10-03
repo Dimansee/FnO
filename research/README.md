@@ -87,3 +87,21 @@ Profit was always computed on the option premium, but from a formula. Now checke
 - 11 recent trades had real 5-minute option candles: real P&L ₹3.7k vs ₹7.3k from the corrected formula on
   the same contracts — small sample, but a reminder the backtest is on the optimistic side.
 Real intraday history of *expired* options needs the paid Upstox Plus plan (API returns 401 without it).
+
+## Round 5 — remaining families + combining signals (`optimize3.py`, real-price-corrected premiums)
+New families (300 settings each): EMA formulas (9/21/50 stack pullback, 20/50 cross, triple-EMA cross), MACD,
+Bollinger squeeze/reversion, candlestick reversals (engulfing/hammer/shooting star at VWAP/EMA/BB), Heikin-Ashi,
+Donchian breakout, VWAP σ-bands, Camarilla pivots. Only **Camarilla H4/L4 breakout** passed training on both
+indices and stayed profitable on the unseen days (best training setting: +₹41.6k on the last 120 days;
+14 of 15 neighbouring settings also profitable).
+
+Combining: the noise rule + 13 confirmation filters (Supertrend 5m/15m, EMA stack, MACD, RSI>50, ADX, Heikin-Ashi,
+BB width, strong close, beyond PDH/PDL, gap, context, 50 EMA) alone, in pairs, threes and k-of-n votes — 395 combos.
+Win rate 35.4% → 35.8% with three filters; 134 combos beat the plain rule on training, only 3 also on unseen days.
+Stacking filters = overfitting, not accuracy.
+
+What did help: running Camarilla breakout **alongside** noise-area momentum (daily P&L correlation ≈ 0.3).
+Both indices, app risk rules (one open trade per instrument, max 4/day, stop after 2 losers or −2%):
+every year positive (2023 +₹31k, 2024 +₹96k, 2025 +₹15k, 2026 +₹71k); unseen 30/60/90/120 days
++₹4.5k / +₹5.3k / +₹53.6k / +₹53.7k (noise alone +₹5.6k / +₹11.3k / +₹35.2k / +₹19.0k); deepest fall ₹64k.
+Fin Nifty (never tuned on) lost ₹7.4k on the last 120 days with both strategies — the edge is index-specific.

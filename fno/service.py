@@ -71,10 +71,14 @@ def fii():
 # ---------------------------------------------------------------------------
 # Position management (also called every minute by the scheduler)
 # ---------------------------------------------------------------------------
-def _traded_today(symbol, positions, trades) -> bool:
+def _traded_today(symbol, positions, trades) -> dict:
+    """Which strategies already traded this instrument today (one trade per strategy per instrument)."""
     today = C.today_ist().isoformat()
-    return any(x["symbol"] == symbol and x.get("mode") == "signal" and x["opened"][:10] == today
-               for x in list(positions) + list(trades))
+    done = {"noise": False, "camarilla": False}
+    for x in list(positions) + list(trades):
+        if x["symbol"] == symbol and x.get("mode") == "signal" and x["opened"][:10] == today:
+            done[((x.get("plan") or {}).get("strategy")) or "noise"] = True
+    return done
 
 
 def manage_positions(m: M.Market | None = None) -> list[dict]:
@@ -358,8 +362,8 @@ def context(symbol):
     return clean({"global": gcues(), "news": news(symbol), "fii": fii()})
 
 
-def backtest(symbol, mult, capital, sizing="risk", otm=-1):
-    res = BT.run(symbol, float(capital), float(mult), lot=M.lot_size(symbol), sizing=sizing, otm=int(otm))
+def backtest(symbol, mult, capital, sizing="risk", otm=-1, strategy="both"):
+    res = BT.run(symbol, float(capital), float(mult), lot=M.lot_size(symbol), sizing=sizing, otm=int(otm), strategy=strategy)
     if res.get("error"):
         return {"error": res["error"]}
     t = res["trades"]
