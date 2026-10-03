@@ -5,61 +5,113 @@
  "capital": 200000,
  "risk_per_trade": "1%",
  "costs": "0.5% slippage per fill + brokerage, STT, exchange, GST, stamp",
- "configs_tested": 5772,
+ "configs_tested": 8172,
+ "small_account": {
+  "capital": 15000,
+  "sizing": "1 lot per signal",
+  "rows": [
+   {
+    "symbol": "NIFTY",
+    "otm": 0,
+    "trades": 233,
+    "years": {
+     "2023": 11298,
+     "2024": 36785,
+     "2025": 29702,
+     "2026": 10357
+    },
+    "last120": 5098,
+    "max_dd_pct": -50,
+    "worst_trade": -6345,
+    "cost_per_lot": 8791
+   },
+   {
+    "symbol": "NIFTY",
+    "otm": 1,
+    "trades": 239,
+    "years": {
+     "2023": 9912,
+     "2024": 36047,
+     "2025": 25196,
+     "2026": 14338
+    },
+    "last120": 10647,
+    "max_dd_pct": -47,
+    "worst_trade": -5728,
+    "cost_per_lot": 7370
+   },
+   {
+    "symbol": "NIFTY",
+    "otm": 2,
+    "trades": 239,
+    "years": {
+     "2023": 8107,
+     "2024": 33319,
+     "2025": 23612,
+     "2026": 12845
+    },
+    "last120": 9380,
+    "max_dd_pct": -43,
+    "worst_trade": -5126,
+    "cost_per_lot": 6068
+   },
+   {
+    "symbol": "BANKNIFTY",
+    "otm": 0,
+    "trades": 49,
+    "years": {
+     "2023": 338,
+     "2024": -5142,
+     "2025": 2801,
+     "2026": -2895
+    },
+    "last120": -580,
+    "max_dd_pct": -82,
+    "worst_trade": -3172,
+    "cost_per_lot": 12911
+   },
+   {
+    "symbol": "BANKNIFTY",
+    "otm": 1,
+    "trades": 62,
+    "years": {
+     "2023": -2513,
+     "2024": -5975,
+     "2025": 4935,
+     "2026": 10942
+    },
+    "last120": 13124,
+    "max_dd_pct": -95,
+    "worst_trade": -3194,
+    "cost_per_lot": 12208
+   },
+   {
+    "symbol": "BANKNIFTY",
+    "otm": 2,
+    "trades": 79,
+    "years": {
+     "2023": -5466,
+     "2024": 1577,
+     "2025": 5637,
+     "2026": 8413
+    },
+    "last120": 11355,
+    "max_dd_pct": -103,
+    "worst_trade": -3081,
+    "cost_per_lot": 12043
+   }
+  ]
+ },
  "families": [
-  {
-   "key": "supertrend",
-   "name": "Supertrend flip + ADX",
-   "tested": 300,
-   "robust": 47,
-   "robust_oos_profitable": 10,
-   "walk_forward_net": 26017,
-   "walk_forward_sharpe": 0.39
-  },
   {
    "key": "noise",
    "name": "Noise-area momentum (Zarattini/Aziz/Barbon)",
    "tested": 300,
    "robust": 194,
    "robust_oos_profitable": 32,
+   "best_train_setting_last120": 19569,
    "walk_forward_net": 8740,
    "walk_forward_sharpe": 0.11
-  },
-  {
-   "key": "pdhl",
-   "name": "Previous-day high/low + narrow CPR",
-   "tested": 300,
-   "robust": 17,
-   "robust_oos_profitable": 4,
-   "walk_forward_net": -27459,
-   "walk_forward_sharpe": -0.35
-  },
-  {
-   "key": "vwap_pull",
-   "name": "VWAP / EMA pullback",
-   "tested": 300,
-   "robust": 20,
-   "robust_oos_profitable": 0,
-   "walk_forward_net": -31822,
-   "walk_forward_sharpe": -0.42
-  },
-  {
-   "key": "gap",
-   "name": "Gap-and-go / gap-fade",
-   "tested": 300,
-   "robust": 23,
-   "robust_oos_profitable": 0,
-   "walk_forward_net": -52023,
-   "walk_forward_sharpe": -1.13
-  },
-  {
-   "key": "orb_candle",
-   "name": "5-min ORB (Zarattini/Aziz)",
-   "tested": 300,
-   "robust": 24,
-   "robust_oos_profitable": 4,
-   "walk_forward_net": -84205,
-   "walk_forward_sharpe": -0.94
   },
   {
    "key": "ema_adx",
@@ -67,8 +119,99 @@
    "tested": 300,
    "robust": 29,
    "robust_oos_profitable": 15,
+   "best_train_setting_last120": -3401,
    "walk_forward_net": -108399,
    "walk_forward_sharpe": -2.32
+  },
+  {
+   "key": "pdhl",
+   "name": "Previous-day high/low + narrow CPR",
+   "tested": 300,
+   "robust": 17,
+   "robust_oos_profitable": 4,
+   "best_train_setting_last120": -7416,
+   "walk_forward_net": -27459,
+   "walk_forward_sharpe": -0.35
+  },
+  {
+   "key": "rsi6040",
+   "name": "RSI 60/40 momentum (Vishal Malkan style)",
+   "tested": 400,
+   "robust": 76,
+   "robust_oos_profitable": 15,
+   "best_train_setting_last120": -12445,
+   "walk_forward_net": -20591,
+   "walk_forward_sharpe": -0.14
+  },
+  {
+   "key": "supertrend",
+   "name": "Supertrend flip + ADX",
+   "tested": 300,
+   "robust": 47,
+   "robust_oos_profitable": 10,
+   "best_train_setting_last120": -12844,
+   "walk_forward_net": 26017,
+   "walk_forward_sharpe": 0.39
+  },
+  {
+   "key": "inside",
+   "name": "Inside-bar breakout (Bank Nifty creators, e.g. Ghanshyam Tech)",
+   "tested": 400,
+   "robust": 21,
+   "robust_oos_profitable": 9,
+   "best_train_setting_last120": -13137,
+   "walk_forward_net": -66897,
+   "walk_forward_sharpe": -0.58
+  },
+  {
+   "key": "gap",
+   "name": "Gap-and-go / gap-fade",
+   "tested": 300,
+   "robust": 23,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": -16174,
+   "walk_forward_net": -52023,
+   "walk_forward_sharpe": -1.13
+  },
+  {
+   "key": "ema5",
+   "name": "5 EMA (Power of Stocks / Subasish Pani)",
+   "tested": 400,
+   "robust": 32,
+   "robust_oos_profitable": 2,
+   "best_train_setting_last120": -21144,
+   "walk_forward_net": 12654,
+   "walk_forward_sharpe": 0.05
+  },
+  {
+   "key": "orb_candle",
+   "name": "5-min ORB (Zarattini/Aziz)",
+   "tested": 300,
+   "robust": 24,
+   "robust_oos_profitable": 4,
+   "best_train_setting_last120": -29286,
+   "walk_forward_net": -84205,
+   "walk_forward_sharpe": -0.94
+  },
+  {
+   "key": "fib",
+   "name": "Fibonacci 50-61.8% pullback (Magicfibs style)",
+   "tested": 400,
+   "robust": 64,
+   "robust_oos_profitable": 11,
+   "best_train_setting_last120": -37141,
+   "walk_forward_net": 26270,
+   "walk_forward_sharpe": 0.29
+  },
+  {
+   "key": "ma44",
+   "name": "44 moving average (Siddharth Bhanushali)",
+   "tested": 400,
+   "robust": 0,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": -42555,
+   "walk_forward_net": -71066,
+   "walk_forward_sharpe": -1.79
   },
   {
    "key": "orb",
@@ -76,8 +219,29 @@
    "tested": 300,
    "robust": 22,
    "robust_oos_profitable": 0,
+   "best_train_setting_last120": -57861,
    "walk_forward_net": -120670,
    "walk_forward_sharpe": -0.84
+  },
+  {
+   "key": "vwap_pull",
+   "name": "VWAP / EMA pullback",
+   "tested": 300,
+   "robust": 20,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": -68743,
+   "walk_forward_net": -31822,
+   "walk_forward_sharpe": -0.42
+  },
+  {
+   "key": "mtf",
+   "name": "15-min bias + 5-min breakout (Booming Bulls style)",
+   "tested": 400,
+   "robust": 20,
+   "robust_oos_profitable": 0,
+   "best_train_setting_last120": -111626,
+   "walk_forward_net": -75552,
+   "walk_forward_sharpe": -0.54
   },
   {
    "key": "ironfly",
@@ -85,6 +249,7 @@
    "tested": 300,
    "robust": 0,
    "robust_oos_profitable": 0,
+   "best_train_setting_last120": -241528,
    "walk_forward_net": null,
    "walk_forward_sharpe": null
   }
@@ -710,6 +875,8 @@
   "Picking the best settings every month (walk-forward) did WORSE than holding one robust setting - chasing recent results overfits.",
   "Market-context filters (global cues, gap, VIX change) reduced profit in testing, so they are shown for information only.",
   "Nifty was profitable in every year tested; Bank Nifty lost money in 2025; most single stocks lost money - prefer the indices.",
+  "Creator setups (5 EMA, inside bar, 44 MA, RSI 60/40, multi-timeframe breakout, Fibonacci) were coded as written and tested the same way; none beat the noise-area rules on the unseen days.",
+  "Option-selling styles (straddles/strangles, iron condors, adjustments) and OI/PCR-based methods need historical option quotes and OI, which are not freely available, so they could not be tested honestly.",
   "Option selling (9:20 iron fly) could not be judged fairly: its edge comes from IV crush near expiry, which a VIX-based model can't reproduce."
  ]
 }

@@ -358,8 +358,8 @@ def context(symbol):
     return clean({"global": gcues(), "news": news(symbol), "fii": fii()})
 
 
-def backtest(symbol, mult, capital):
-    res = BT.run(symbol, float(capital), float(mult), lot=M.lot_size(symbol))
+def backtest(symbol, mult, capital, sizing="risk", otm=0):
+    res = BT.run(symbol, float(capital), float(mult), lot=M.lot_size(symbol), sizing=sizing, otm=int(otm))
     if res.get("error"):
         return {"error": res["error"]}
     t = res["trades"]

@@ -4,3 +4,5 @@ results.json
 refine.json
 wf_report_*.json
 __pycache__/
+results_creators.json
+wf_creators.json

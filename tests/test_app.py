@@ -182,6 +182,11 @@ print("live portfolio:", [(x["legs"][0]["src"], x["current_prem"]) for x in p["p
 
 bt = j(c.post("/api/backtest", json={"symbol": "NIFTY", "mult": 1.75, "capital": 200000}))
 assert c.post("/api/backtest", json={"symbol": "NIFTY", "mult": 9, "capital": 200000}).status_code == 400
+small = j(c.post("/api/backtest", json={"symbol": "NIFTY", "mult": 1.75, "capital": 15000}))
+assert "skipped" in small["summary"], small["summary"]
+small1 = j(c.post("/api/backtest", json={"symbol": "NIFTY", "mult": 1.75, "capital": 15000, "sizing": "one_lot", "otm": 2}))
+print("small account:", small["summary"].get("trades"), small["summary"]["skipped"], "| one lot 2 OTM:", small1["summary"].get("trades"))
+assert c.post("/api/backtest", json={"symbol": "NIFTY", "capital": 15000, "sizing": "all-in"}).status_code == 400
 rs_ = j(c.get("/api/research"))
 assert rs_["new"]["NIFTY"]["windows"]["120"]["net"] > 0 and len(rs_["families"]) >= 8
 print("backtest keys", list(bt.keys()), bt.get("summary", {}).get("trades"))

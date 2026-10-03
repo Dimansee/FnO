@@ -51,3 +51,22 @@ Honest caveats
 - Option prices are modelled, not historical quotes.
 
 Re-run: `python optimize.py 300 && python wf.py 250 && python refine.py && python checks.py && python make_summary.py`
+
+## Round 3 — strategies popular Indian F&O creators teach (`optimize2.py`, `wf2.py`)
+Coded as written and run through the same loop (400 settings each, 2,400 total):
+5 EMA (Power of Stocks), inside-bar breakout (Bank Nifty creators), 44 MA
+(Siddharth Bhanushali), RSI 60/40 with a 15-min bias (Vishal Malkan style), 15-min bias +
+5-min swing breakout (Booming Bulls style), Fibonacci 50–61.8% pullback (Magicfibs style).
+
+Best-on-training setting, run on the unseen last 120 days (both indices, ₹2 lakh):
+EMA/ADX −₹3.4k, RSI 60/40 −₹12.4k, inside bar −₹13.1k, 5 EMA −₹21.1k, Fibonacci −₹37.1k,
+44 MA −₹42.6k, multi-timeframe breakout −₹111.6k — versus **+₹19.6k for noise-area momentum**.
+Walk-forward: Fibonacci +₹26k and 5 EMA +₹13k over 2024–26 (≈ break-even per trade), the rest negative.
+Not testable with free data: option selling (straddles, strangles, iron condors, adjustments)
+and OI/PCR-driven methods.
+
+## Small accounts (₹15,000, 1 lot per signal)
+The 1% rule allows ₹150 risk, but one lot risks ₹1,500–6,000, so the default backtest takes
+no trades. With "Always 1 lot": Nifty 1-OTM made money every year 2023–26 (+₹10.6k on the last
+120 days) but fell up to 47% from a peak, and the worst single trade lost ₹5.7k. Bank Nifty lots
+mostly cost more than ₹15,000.
