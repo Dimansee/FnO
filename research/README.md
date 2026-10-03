@@ -105,3 +105,17 @@ Both indices, app risk rules (one open trade per instrument, max 4/day, stop aft
 every year positive (2023 +₹31k, 2024 +₹96k, 2025 +₹15k, 2026 +₹71k); unseen 30/60/90/120 days
 +₹4.5k / +₹5.3k / +₹53.6k / +₹53.7k (noise alone +₹5.6k / +₹11.3k / +₹35.2k / +₹19.0k); deepest fall ₹64k.
 Fin Nifty (never tuned on) lost ₹7.4k on the last 120 days with both strategies — the edge is index-specific.
+
+## Market recorder (from 28 Sep 2026) — collecting what free history doesn't keep
+Intraday prices of *expired* options, bid/ask spreads, the whole chain's OI/IV through the day and
+participant positioning can't be backtested from free sources, so they are now saved as they happen:
+- **App, every 5 min in market hours** (`fno/recorder.py`, from the scheduler tick): Nifty & Bank Nifty option
+  chain, nearest 2 expiries, 15 strikes each side — LTP, bid, ask, OI, volume, IV. Source: NSE's public option
+  chain (works from the Mumbai server without login) or the connected broker. Kept 45 days in Redis.
+- **GitHub job every evening** (`record_day.py`, `.github/workflows/record-day.yml` on main): writes
+  `research/data/live/<date>/` — 1-minute OHLCV + OI for Nifty / Bank Nifty / Fin Nifty, India VIX, near futures
+  and every option of the nearest 2 expiries within ±4%; NSE F&O bhavcopy; participant-wise OI and volume
+  (FII / DII / Pro / Client); the day's chain snapshots. Catches up on missed days (7-day look-back).
+  ~1.7 MB per day.
+Ideas to test once 15–20 days exist: expiry-day premium decay and straddle selling, OI build-up / PCR shifts
+before trend days, FII index-option positioning vs next-day direction, real bid/ask cost per strike, IV crush.
