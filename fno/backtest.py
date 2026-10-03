@@ -52,32 +52,56 @@ def _vix_series():
         return None, pd.Series(dtype=float)
 
 
+def history(symbol: str, days: int):
+    """5-minute candles for the last `days` sessions + ~20 warm-up sessions, plus India VIX.
+    Upstox's public history (no login needed) covers years; Yahoo (60 days max) is the fallback."""
+    meta = D.instrument(symbol)
+    cal_days = int((days + 22) * 1.5) + 5
+    try:
+        key = meta.get("upstox_key") or meta.get("upstox")
+        c = D.cached(f"hist:{symbol}:{cal_days}", 600, lambda: D.upstox_public_history(key, cal_days))
+        v = D.cached(f"hist:VIX:{cal_days}", 600, lambda: D.upstox_public_history(C.INDIA_VIX_UPSTOX, cal_days))
+        if c is not None and len(c) > 75 * 15:
+            return c, (v["close"] if v is not None and len(v) else None), "Upstox history"
+    except Exception:
+        pass
+    c = D.yahoo_candles(meta["yahoo"], period="60d", interval="5m")
+    return c, None, "Yahoo (60 days max)"
+
+
 def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_MULT, candles: pd.DataFrame | None = None,
         vix_intraday: pd.Series | None = None, vix_daily: pd.Series | None = None, lot: int | None = None,
-        sizing: str = "risk", otm: int = -C.STRIKE_ITM, strategy: str = "both"):
+        sizing: str = "risk", otm: int = -C.STRIKE_ITM, strategy: str = "both", days: int | None = None,
+        risk_pct: float | None = None):
     """sizing: "risk" = lots so that 1% of capital is at risk (1 lot allowed up to 1.5%);
     "one_lot" = always 1 lot if the premium fits in the cash (small accounts - much riskier).
     otm: -1 = 1 strike in the money (the rule), 0 = ATM, 1/2 = that many strikes out of the money (cheaper).
-    strategy: "noise", "camarilla" or "both" (one open trade per instrument at a time, like the live app)."""
+    strategy: "noise", "camarilla" or "both" (one open trade per instrument at a time, like the live app).
+    days: only trade the last N sessions (earlier sessions are used to warm up the indicators)."""
     meta = D.instrument(symbol)
     lot = lot or meta["lot"]
+    source = "given"
     if candles is None:
-        candles = D.yahoo_candles(meta["yahoo"], period="60d", interval="5m")
+        candles, vix_hist, source = history(symbol, days or 45)
+        if vix_intraday is None and vix_daily is None and vix_hist is not None and len(vix_hist) > 100:
+            vix_intraday = vix_hist
     if candles is None or candles.empty:
         return {"error": "No historical candles returned."}
     if vix_intraday is None and vix_daily is None:
         vix_intraday, vix_daily = _vix_series()
     df = I.add_indicators(candles)
-    days = sorted(set(df.index.date))
+    frames = [(d, g) for d, g in df.groupby(df.index.date)]
+    trade_from = frames[-days][0] if days and days < len(frames) else None
     trades, equity = [], capital
     skips = {"risk": 0, "cash": 0}
     step = meta["step"]
     traded_days = 0
-    for n, d in enumerate(days):
-        hist = df[df.index.date < d]
-        day = df[df.index.date == d]
-        if len(day) < 60 or hist.empty:
+    vx = vix_intraday.sort_index() if vix_intraday is not None and len(vix_intraday) else None
+    budget_pct = (risk_pct or C.RISK_PER_TRADE * 100) / 100
+    for n, (d, day) in enumerate(frames):
+        if n == 0 or len(day) < 60 or (trade_from and d < trade_from):
             continue
+        hist = pd.concat([g for _, g in frames[max(0, n - 15):n]])
         sigma = S.noise_sigma(hist)
         if not sigma:
             continue
@@ -85,10 +109,10 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
         bands = S.noise_bands(day, float(hist["close"].iloc[-1]), sigma, mult)
 
         def vix_at(ts):
-            if vix_intraday is not None and len(vix_intraday):
-                v = vix_intraday[vix_intraday.index <= ts]
-                if len(v):
-                    return float(v.iloc[-1])
+            if vx is not None:
+                i = vx.index.searchsorted(ts, side="right") - 1
+                if i >= 0:
+                    return float(vx.iloc[i])
             if vix_daily is not None and len(vix_daily):
                 v = vix_daily[vix_daily.index < pd.Timestamp(d)]
                 if len(v):
@@ -115,7 +139,7 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
             start, day_why = 0, set()
             while True:
                 res = _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d, mult, sizing, otm,
-                                 strat, lv)
+                                 strat, lv, budget_pct)
                 if res is None:
                     break
                 if isinstance(res, tuple):          # ("skip", bar, why): too risky/costly for this capital, keep looking
@@ -142,11 +166,22 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
     out = _summary(trades, capital, traded_days)
     out["summary"]["skipped"] = skips
     out["summary"]["sizing"] = sizing
+    out["summary"]["source"] = source
+    out["summary"]["period"] = [str(frames[-min(days or len(frames), len(frames))][0]), str(frames[-1][0])] if frames else None
+    if trades:
+        t = pd.DataFrame(trades)
+        t["month"] = t["date"].str[:7]
+        out["summary"]["by_month"] = [{"month": m, "trades": int(len(g)), "net": float(g.pnl.sum()), "win_rate": float((g.pnl > 0).mean() * 100)}
+                                      for m, g in t.groupby("month")]
+        out["summary"]["by_strategy"] = [{"strategy": k, "trades": int(len(g)), "net": float(g.pnl.sum()),
+                                          "win_rate": float((g.pnl > 0).mean() * 100),
+                                          "profit_factor": float(g.pnl[g.pnl > 0].sum() / -g.pnl[g.pnl <= 0].sum()) if (g.pnl <= 0).any() and g.pnl[g.pnl <= 0].sum() < 0 else None}
+                                         for k, g in t.groupby("strategy")]
     return out
 
 
 def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d, mult, sizing="risk", otm=0,
-               strat="noise", lv=None):
+               strat="noise", lv=None, budget_pct=C.RISK_PER_TRADE):
         entry_i = None
         for i, ts in enumerate(idx):
             if i < start:
@@ -207,7 +242,7 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
         if sizing == "one_lot":
             lots = 1
         else:
-            budget = capital * C.RISK_PER_TRADE
+            budget = capital * budget_pct
             lots = int(budget // (risk_unit * lot))
             if lots == 0 and risk_unit * lot <= 1.5 * budget:
                 lots = 1

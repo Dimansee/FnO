@@ -307,6 +307,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
         <div class="hero-state">
           <div class="state" id="hState"><i></i><span>Loading</span></div>
           <div class="state-sub" id="hSub"></div>
+          <div class="state-sub" style="margin-top:8px"><span id="nextCheck"></span> <button id="alertBtn" class="mini" style="margin-left:6px">🔔 Alerts off</button></div>
         </div>
       </div>
       <span class="now-dot" id="nowDot"></span>
@@ -382,7 +383,8 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
       <div id="eqchart" style="margin-top:12px"></div>
       <p class="muted" style="font-size:12px">Judge yourself after 30+ trades: profit factor above 1.3 and max drawdown under 10% is a reasonable bar before risking real money.</p>
     </div>
-    <div class="card" style="margin-top:14px"><h3>Trade journal</h3><div class="tablewrap"><table id="journal"></table></div></div>
+    <div class="card" style="margin-top:14px" id="byStrat"></div>
+    <div class="card" style="margin-top:14px"><div class="cardhead"><h3 style="margin:0">Trade journal</h3><button id="jCsv">⬇ Download journal (CSV)</button></div><div class="tablewrap" style="margin-top:10px"><table id="journal"></table></div></div>
   </section>
 
   <!-- CONTEXT -->
@@ -405,6 +407,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
       <div class="formrow">
         <div><label>Instrument</label><select id="btSym" style="width:100%"></select></div>
         <div><label>Strategy</label><select id="btStrat" style="width:100%"><option value="both" selected>Both (the rule)</option><option value="noise">Noise band only</option><option value="camarilla">Camarilla breakout only</option></select></div>
+        <div><label>Period</label><select id="btDays" style="width:100%"><option value="30">Last 30 trading days</option><option value="60" selected>Last 60 days</option><option value="90">Last 90 days</option><option value="120">Last 120 days</option><option value="180">Last 180 days</option><option value="250">Last 1 year (250 days)</option><option value="500">Last 2 years (500 days)</option></select></div>
         <div><label>Band width</label><select id="btMult" style="width:100%"><option value="1.5">1.5× usual move</option><option value="1.75" selected>1.75× (the rule)</option><option value="2">2× usual move</option></select></div>
         <div><label>Capital (₹)</label><input id="btCap" type="number" value="200000" min="1000" step="5000" style="width:100%"></div>
         <div><label>Position size</label><select id="btSize" style="width:100%"><option value="risk" selected>Risk 1% per trade (the rule)</option><option value="one_lot">Always 1 lot (small accounts)</option></select></div>
@@ -434,6 +437,21 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
           <label>Previous day FII cash net (₹ crore) - only needed if the automatic NSE fetch fails</label>
           <div class="copy"><input id="fiiIn" type="number" step="100" placeholder="e.g. -1250"><button id="fiiSave">Save</button></div>
         </div>
+      </div>
+      <div class="card" id="prefCard">
+        <h3>Trading preferences</h3>
+        <div class="formrow">
+          <div><label>Position size</label><select id="pfSize" style="width:100%"><option value="risk">Risk a % of capital per trade (recommended)</option><option value="one_lot">Always 1 lot (small accounts - riskier)</option></select></div>
+          <div><label>Risk per trade</label><select id="pfRisk" style="width:100%"><option value="0.5">0.5%</option><option value="1">1% (the rule)</option><option value="1.5">1.5%</option><option value="2">2%</option></select></div>
+        </div>
+        <label style="margin-top:12px">Strategies</label>
+        <label class="tog"><input type="checkbox" id="pfNoise"> Noise-band momentum</label>
+        <label class="tog" style="margin-left:14px"><input type="checkbox" id="pfCam"> Camarilla breakout</label>
+        <label style="margin-top:12px">Auto paper-trading</label>
+        <label class="tog"><input type="checkbox" id="pfAuto"> Place signal trades automatically, even when this page is closed</label>
+        <div style="margin-top:6px" id="pfSyms"></div>
+        <p class="muted" style="font-size:12px;margin-bottom:0">The server checks every minute in market hours. Auto trades follow exactly the same rules and exits, so your journal builds a real paper track record.</p>
+        <button class="primary" id="pfSave" style="margin-top:10px">Save preferences</button>
       </div>
       <div class="card">
         <h3>Demo account</h3>
@@ -624,6 +642,46 @@ function renderHero(d, chg, pct) {
   drawSession(d, S.drawnKey !== S.symbol);
   S.drawnKey = S.symbol;
 }
+/* next-check countdown + signal alerts */
+function nextCheckText() {
+  const n = new Date(Date.now() + (330 + new Date().getTimezoneOffset()) * 60000);   // IST wall clock
+  const m = n.getHours() * 60 + n.getMinutes(), s = n.getSeconds();
+  const day = n.getDay();
+  if (day === 0 || day === 6) return "Market closed today";
+  let nxt = null;
+  for (let c = 585; c <= 855; c += 30) if (c > m || (c === m && s === 0)) { nxt = c; break; }
+  if (m < 555) return "Market opens 09:15";
+  if (nxt === null) return m < 930 ? "No new entries after 14:30" : "Market closed";
+  const left = (nxt - m) * 60 - s;
+  return `Next noise-band check ${String(Math.floor(nxt / 60)).padStart(2, "0")}:${String(nxt % 60).padStart(2, "0")} · in ${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}` +
+    (m >= 560 && m < 780 ? " · Camarilla watching every 5 min" : "");
+}
+setInterval(() => { const e = $("#nextCheck"); if (e) e.textContent = nextCheckText(); }, 1000);
+let ALERTS = false;
+try { ALERTS = localStorage.getItem("fno.alerts") === "1"; } catch (e) {}
+function alertBtn() { const b = $("#alertBtn"); if (b) b.textContent = ALERTS ? "🔔 Alerts on" : "🔕 Alerts off"; }
+alertBtn();
+$("#alertBtn").onclick = async () => {
+  if (!ALERTS && "Notification" in window && Notification.permission === "default") { try { await Notification.requestPermission(); } catch (e) {} }
+  ALERTS = !ALERTS; try { localStorage.setItem("fno.alerts", ALERTS ? "1" : "0"); } catch (e) {}
+  alertBtn(); toast(ALERTS ? "You'll get a sound and a notification when a signal appears (keep this page open)." : "Alerts off");
+  if (ALERTS) beep();
+};
+function beep() {
+  try {
+    const a = new (window.AudioContext || window.webkitAudioContext)(), o = a.createOscillator(), g = a.createGain();
+    o.connect(g); g.connect(a.destination); o.frequency.value = 880; g.gain.setValueAtTime(0.15, a.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, a.currentTime + 0.6); o.start(); o.stop(a.currentTime + 0.6);
+  } catch (e) {}
+}
+function signalAlert(d) {
+  if (!ALERTS) return;
+  const o = d.order, txt = `${d.label}: ${d.signal.signal} ${o ? o.strike + " " + o.opt + " at ₹" + n2(o.entry_prem) : ""} (${d.signal.strategy})`;
+  beep();
+  try { if ("Notification" in window && Notification.permission === "granted") new Notification("F&O Trainer signal", {body: txt}); } catch (e) {}
+  toast(txt, 8000);
+}
+
 function renderState(d) {
   const s = d.signal.signal, el = $("#hState");
   const k = s === "BUY CALL" ? "call" : s === "BUY PUT" ? "put" : ["STOP FOR TODAY", "NO TRADE TODAY"].includes(s) ? "stop" : "";
@@ -634,7 +692,10 @@ function renderState(d) {
     {"WAIT": "Every checklist item has to turn green before an entry.", "NO NEW ENTRIES": "Entry window closed at 14:30. Manage open trades only.",
      "MARKET CLOSED": "Showing the last session.", "NO TRADE TODAY": "Today's conditions fail the rulebook.", "STOP FOR TODAY": "Daily risk limit reached."}[s] || "";
   const key = S.symbol + s;
-  if ((k === "call" || k === "put") && S.lastSig !== key && !RM.matches) { el.classList.remove("armed"); void el.offsetWidth; el.classList.add("armed"); }
+  if ((k === "call" || k === "put") && S.lastSig !== key) {
+    if (!RM.matches) { el.classList.remove("armed"); void el.offsetWidth; el.classList.add("armed"); }
+    if (S.lastSig !== null && S.lastSig.startsWith(S.symbol)) signalAlert(d);
+  }
   S.lastSig = key;
 }
 let sessAnim = 0;
@@ -1155,13 +1216,27 @@ async function loadPortfolio() {
     kpi("Avg win / loss", `<span class="up">${rs(s.avg_win)}</span> / <span class="down">${rs(s.avg_loss)}</span>`) +
     kpi("Profit factor", s.profit_factor == null ? "∞" : s.profit_factor.toFixed(2)) + kpi("Max drawdown", s.max_dd_pct.toFixed(1) + "%")
     : `<div class="empty">Your statistics appear after your first closed trade.</div>`;
+  $("#eqchart").style.display = s.equity && s.equity.length ? "" : "none";
   if (s.equity && s.equity.length && window.LightweightCharts) {
     if (!eqc) [eqc, eqs] = lineChart($("#eqchart"));
     eqs.setData(s.equity.map((e, i) => ({time: Math.floor(new Date(e.t).getTime() / 1000) + 19800 + i, value: e.v})));
     eqc.timeScale().fitContent();
   }
-  $("#journal").innerHTML = d.history.length ? "<tr><th>Opened</th><th>Closed</th><th>Instrument</th><th>Legs</th><th>Lots</th><th>Entry</th><th>Exit</th><th>Charges</th><th>Net P&L</th><th style='text-align:left'>Reason</th></tr>" +
-    d.history.map(h => `<tr><td>${h.opened.slice(0, 16).replace("T", " ")}</td><td>${h.closed.slice(11, 16)}</td><td>${esc(h.symbol)}</td>
+  const stratOf = h => h.mode !== "signal" ? "Manual" : ((h.plan || {}).strategy === "camarilla" ? "Camarilla" : "Noise band") + ((h.plan || {}).auto ? " (auto)" : "");
+  const groups = {};
+  d.history.forEach(h => { const k = stratOf(h).replace(" (auto)", ""); (groups[k] = groups[k] || []).push(h.pnl); });
+  const ex = d.expected || {};
+  $("#byStrat").innerHTML = `<h3>Your paper results vs what the backtest expects</h3>
+    ${Object.keys(groups).length ? `<div class="tablewrap"><table><tr><th>Strategy</th><th>Trades</th><th>Win rate</th><th>Profit factor</th><th>Net P&L</th><th>Backtest expects</th></tr>
+    ${Object.entries(groups).map(([k, v]) => { const w = v.filter(x => x > 0), l = v.filter(x => x <= 0), pf = l.length ? w.reduce((a, b) => a + b, 0) / -l.reduce((a, b) => a + b, 0) : null, e = ex[k];
+      return `<tr><td>${esc(k)}</td><td class="mono">${v.length}</td><td class="mono">${(w.length / v.length * 100).toFixed(0)}%</td><td class="mono">${pf == null ? "∞" : pf.toFixed(2)}</td><td class="mono ${cls(v.reduce((a, b) => a + b, 0))}">${rs(v.reduce((a, b) => a + b, 0))}</td>
+        <td class="muted">${e ? `win ≈ ${e.win_rate}% · PF ≈ ${e.pf}` : "–"}</td></tr>`; }).join("")}</table></div>
+    <p class="muted" style="font-size:12px;margin-bottom:0">Judge after 30+ trades per strategy: with ~35% winners, 10 trades can easily look bad (or great) by luck. If after 30+ trades your win rate or profit factor is far below the backtest, stop and review before risking money.</p>`
+    : `<div class="empty">Closed signal trades will be compared with the backtest here. Turn on auto paper-trading in Settings to build a track record without watching the screen.</div>`}`;
+  $("#jCsv").onclick = () => downloadCsv("paper_journal.csv", d.history, [h => h.opened, h => h.closed, "symbol", stratOf,
+    h => h.legs.map(l => l.side + " " + l.strike + l.opt).join(" / "), "lots", "entry_prem", "exit_prem", "charges", "pnl", "reason"]);
+  $("#journal").innerHTML = d.history.length ? "<tr><th>Opened</th><th>Closed</th><th>Instrument</th><th>Strategy</th><th>Legs</th><th>Lots</th><th>Entry</th><th>Exit</th><th>Charges</th><th>Net P&L</th><th style='text-align:left'>Reason</th></tr>" +
+    d.history.map(h => `<tr><td>${h.opened.slice(0, 16).replace("T", " ")}</td><td>${h.closed.slice(11, 16)}</td><td>${esc(h.symbol)}</td><td>${esc(stratOf(h))}</td>
       <td>${h.legs.map(l => l.side[0] + " " + l.strike + l.opt).join(" / ")}</td><td>${h.lots}</td><td class="mono">${n2(h.entry_prem)}</td><td class="mono">${n2(h.exit_prem)}</td>
       <td class="mono">${rs(h.charges)}</td><td class="mono ${cls(h.pnl)}"><b>${rs(h.pnl)}</b></td><td style="text-align:left">${esc(h.reason)}</td></tr>`).join("")
     : `<tr><td class="empty">Closed trades will appear here.</td></tr>`;
@@ -1192,7 +1267,17 @@ async function loadContext() {
 }
 
 /* ---------- backtest ---------- */
+function downloadCsv(name, rows, cols) {
+  const q = v => { const t = v == null ? "" : String(v); return /[",\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; };
+  const csv = [cols.join(","), ...rows.map(r => cols.map(c => q(typeof c === "function" ? c(r) : r[c])).join(","))].join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], {type: "text/csv"})); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
 async function loadStudy() {
+  if (!S.btDefaults) {
+    try { const st = await api("/api/settings"); S.prefs = st.prefs || {}; $("#btSize").value = S.prefs.sizing || "risk"; S.btDefaults = true; } catch (e) {}
+  }
   if (S.study) return;
   const r = await api("/api/research"); S.study = r;
   if (!r.new) return;
@@ -1239,9 +1324,10 @@ async function loadStudy() {
 }
 let btc, bts;
 $("#btRun").onclick = async () => {
-  const b = $("#btRun"); b.disabled = true; b.textContent = "Running… (up to a minute)";
+  const b = $("#btRun"); b.disabled = true; b.textContent = +$("#btDays").value > 120 ? "Running… (up to a minute)" : "Running…";
   try {
-    const d = await post("/api/backtest", {symbol: $("#btSym").value, mult: +$("#btMult").value, capital: +$("#btCap").value, sizing: $("#btSize").value, otm: +$("#btOtm").value, strategy: $("#btStrat").value});
+    const d = await post("/api/backtest", {symbol: $("#btSym").value, mult: +$("#btMult").value, capital: +$("#btCap").value, sizing: $("#btSize").value, otm: +$("#btOtm").value, strategy: $("#btStrat").value, days: +$("#btDays").value});
+    S.btLast = d;
     if (d.error) throw new Error(d.error);
     const s = d.summary;
     const sk = s.skipped || {risk: 0, cash: 0}, cap = +$("#btCap").value;
@@ -1263,7 +1349,16 @@ $("#btRun").onclick = async () => {
         <td class="mono">${n2(t.spot_in)}</td><td class="mono">${n2(t.spot_out)}</td><td class="mono ${cls(t.R)}">${sgn(t.R)}</td><td class="mono">${n2(t.prem_in)}</td><td class="mono">${n2(t.prem_out)}</td>
         <td>${t.lots}</td><td class="mono ${cls(t.pnl)}"><b>${rs(t.pnl)}</b></td><td style="text-align:left">${esc(t.reason)}</td></tr>`).join("")}</table></div>
       ${sk.risk || sk.cash ? `<p class="muted" style="font-size:12px">Days with a skipped signal: ${sk.risk} too risky for the 1% rule, ${sk.cash} too costly for your cash.</p>` : ""}
-      <p class="muted" style="font-size:12px">Small sample (~45 traded days). Treat this as a sanity check; the study below covers 924 days.</p></div>`;
+      <p class="muted" style="font-size:12px">Data: ${esc(s.source || "")} · ${s.period ? esc(s.period[0]) + " to " + esc(s.period[1]) : ""}. Option prices: formula corrected against real NSE option prices.</p></div>
+      ${s.by_strategy ? `<div class="grid g2" style="margin-top:14px">
+        <div class="card"><h3>By strategy</h3><div class="tablewrap"><table><tr><th>Strategy</th><th>Trades</th><th>Win rate</th><th>Profit factor</th><th>Net P&L</th></tr>
+          ${s.by_strategy.map(x => `<tr><td>${esc(x.strategy)}</td><td class="mono">${x.trades}</td><td class="mono">${x.win_rate.toFixed(0)}%</td><td class="mono">${x.profit_factor == null ? "∞" : x.profit_factor.toFixed(2)}</td><td class="mono ${cls(x.net)}">${rs(x.net)}</td></tr>`).join("")}</table></div></div>
+        <div class="card"><h3>By month</h3><div class="tablewrap" style="max-height:320px"><table><tr><th>Month</th><th>Trades</th><th>Win rate</th><th>Net P&L</th></tr>
+          ${s.by_month.map(x => `<tr><td>${esc(x.month)}</td><td class="mono">${x.trades}</td><td class="mono">${x.win_rate.toFixed(0)}%</td><td class="mono ${cls(x.net)}">${rs(x.net)}</td></tr>`).join("")}</table></div>
+          <p class="muted" style="font-size:12px;margin-bottom:0">${s.by_month.filter(x => x.net > 0).length} of ${s.by_month.length} months profitable.</p></div></div>` : ""}
+      <div style="margin-top:10px"><button id="btCsv">⬇ Download trades (CSV)</button></div>`;
+    $("#btCsv").onclick = () => downloadCsv(`backtest_${$("#btSym").value}_${$("#btDays").value}d.csv`, d.trades,
+      ["date", "strategy", "entry_time", "exit_time", "side", "type", "spot_in", "spot_out", "R", "prem_in", "prem_out", "lots", "pnl", "reason", "equity"]);
     if (window.LightweightCharts) { [btc, bts] = lineChart($("#btchart"));
     bts.setData(d.trades.map((t, i) => ({time: Math.floor(new Date(t.date + "T" + t.entry_time + ":00Z").getTime() / 1000) + i, value: t.equity})));
     btc.timeScale().fitContent(); }
@@ -1295,6 +1390,12 @@ async function loadSettings() {
   $("#fyCard").innerHTML = brokerCard("fyers", "Fyers", "App ID (e.g. ABCD1234-100)", d.fyers,
     `<li>Open <a href="https://myapi.fyers.in/dashboard" target="_blank" rel="noopener">myapi.fyers.in/dashboard</a> → Create App.</li><li>Paste the redirect URL below, create the app, copy the App ID &amp; Secret here and save.</li><li>Click Log in each trading morning.</li>`);
   $("#pref").value = d.broker_pref;
+  const pf = d.prefs || {};
+  S.prefs = pf;
+  $("#pfSize").value = pf.sizing || "risk"; $("#pfRisk").value = String(pf.risk_pct ?? 1);
+  $("#pfNoise").checked = (pf.strategies || []).includes("noise"); $("#pfCam").checked = (pf.strategies || []).includes("camarilla");
+  $("#pfAuto").checked = !!pf.auto;
+  $("#pfSyms").innerHTML = ["NIFTY", "BANKNIFTY"].map(x => `<label class="tog" style="margin-right:14px"><input type="checkbox" data-asym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${x === "NIFTY" ? "Nifty 50" : "Bank Nifty"}</label>`).join("");
   $("#fiiIn").value = d.fii_manual ? d.fii_manual.value : "";
 }
 document.addEventListener("click", async e => {
@@ -1309,6 +1410,14 @@ document.addEventListener("click", async e => {
   const d = e.target.closest("[data-disc]");
   if (d) { await post("/api/settings", {broker: d.dataset.disc, disconnect: true}); toast("Disconnected"); loadSettings(); }
 });
+$("#pfSave").onclick = async () => {
+  const strategies = [$("#pfNoise").checked && "noise", $("#pfCam").checked && "camarilla"].filter(Boolean);
+  const auto_syms = [...document.querySelectorAll("[data-asym]")].filter(x => x.checked).map(x => x.dataset.asym);
+  try {
+    await post("/api/settings", {prefs: {sizing: $("#pfSize").value, risk_pct: +$("#pfRisk").value, strategies, auto: $("#pfAuto").checked, auto_syms}});
+    toast("Preferences saved"); loadSettings();
+  } catch (e) { toast(e.message); }
+};
 $("#pref").onchange = async () => { await post("/api/settings", {broker_pref: $("#pref").value}); toast("Saved"); };
 $("#fiiSave").onclick = async () => { await post("/api/settings", {fii_manual: $("#fiiIn").value}); toast("Saved"); };
 $("#resetBtn").onclick = async () => {

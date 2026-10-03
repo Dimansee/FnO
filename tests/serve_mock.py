@@ -42,6 +42,7 @@ CANDLES = {}
 M.yahoo_candles = lambda t, period="5d", interval="5m": CANDLES.setdefault(t, fake(1300 if ".NS" in t else 24800, NOW[0]))
 M.yahoo_daily = lambda t, period="1mo": pd.DataFrame({"close": [14.0, 13.2]}, index=pd.to_datetime(["2026-09-30", "2026-10-01"]))
 M.master = lambda: {"lots": {"NIFTY": 65}, "eq_keys": {}}
+M.upstox_public_history = lambda key, cal_days: pd.DataFrame()   # offline: backtest falls back to the (fake) Yahoo data
 X.global_cues = lambda: {"markets": {"S&P 500": {"last": 6000, "chg_pct": 0.8, "date": "2026-10-01"}}, "avg_equity_chg": 0.8, "notes": []}
 X.fetch_news = lambda s=None: {"items": [{"title": "Nifty rallies <b>", "link": "http://x", "when": None, "score": 4}], "score": 4, "events": [], "notes": []}
 X.fii_dii = lambda: None

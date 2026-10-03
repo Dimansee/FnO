@@ -153,14 +153,19 @@ def noise_state(candles: pd.DataFrame, now: datetime) -> dict | None:
 
 
 def evaluate(symbol, candles, vix, cstats, news, gcues, fii, now: datetime, day_guard: dict | None = None,
-             traded_today=False) -> dict:
+             traded_today=False, enabled=("noise", "camarilla")) -> dict:
     """Runs both strategies. Noise-area momentum has priority; Camarilla breakout is the second system."""
     tt = traded_today if isinstance(traded_today, dict) else {"noise": bool(traded_today), "camarilla": bool(traded_today)}
     res = _evaluate_noise(symbol, candles, vix, cstats, news, gcues, fii, now, day_guard, tt.get("noise", False))
     today, hist = res["today"], res.pop("hist")
+    if "noise" not in enabled and res["signal"] not in ("STOP FOR TODAY", "MARKET CLOSED"):
+        res["plan"], res["signal"] = None, "WAIT"
+        res["checks"] = [(None, "Noise-band strategy is switched off in Settings")]
     cam = evaluate_camarilla(today, hist, vix, now, tt.get("camarilla", False))
     res["camarilla"] = {k: cam[k] for k in ("levels", "signal")}
     if res["signal"] in ("STOP FOR TODAY", "MARKET CLOSED"):
+        return res
+    if "camarilla" not in enabled:
         return res
     res["checks"].append((None, "Second strategy - Camarilla breakout:"))
     res["checks"] += cam["checks"]
@@ -336,7 +341,7 @@ def _plan(opt, spot, risk):
 
 
 def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=None,
-                strike: float | None = None, cash: float | None = None) -> dict:
+                strike: float | None = None, cash: float | None = None, prefs: dict | None = None) -> dict:
     """Turn an underlying plan into concrete option legs, premiums and lots.
 
     strike: buy this strike instead of the ATM one (e.g. a cheaper OTM strike).
@@ -389,14 +394,20 @@ def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=N
         tgt = min(tgt, max_value * 0.85)
     risk_per_lot = (entry - sl) * lot
     cost_per_lot = entry * lot
-    allowed = capital * C.RISK_PER_TRADE
+    prefs = prefs or {}
+    rp = float(prefs.get("risk_pct") or C.RISK_PER_TRADE * 100) / 100
+    allowed = capital * rp
     lots = int(allowed // risk_per_lot) if risk_per_lot > 0 else 0
     note = None
-    if lots == 0:
+    if prefs.get("sizing") == "one_lot":
+        lots = 1
+        note = f"1-lot mode: this trade risks about ₹{risk_per_lot:,.0f} ({risk_per_lot / capital:.1%} of capital)."
+    elif lots == 0:
         if risk_per_lot <= 1.5 * allowed:
-            lots, note = 1, f"1 lot risks ₹{risk_per_lot:,.0f} ({risk_per_lot / capital:.1%}) - slightly above the 1% rule."
+            lots, note = 1, f"1 lot risks ₹{risk_per_lot:,.0f} ({risk_per_lot / capital:.1%}) - slightly above your {rp:.1%} rule."
         else:
-            note = f"SKIP: even 1 lot risks ₹{risk_per_lot:,.0f} ({risk_per_lot / capital:.1%} of capital). Pick a cheaper strike or underlying."
+            note = (f"SKIP: even 1 lot risks ₹{risk_per_lot:,.0f} ({risk_per_lot / capital:.1%} of capital). Pick a cheaper strike, "
+                    "or switch Settings → Position size to 'Always 1 lot' if you accept the bigger risk.")
     affordable = True
     if cash is not None and cost_per_lot > 0:
         max_lots_cash = int(cash // cost_per_lot)
@@ -420,7 +431,7 @@ def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=N
             "delta": round(delta, 2), "is_default": buy_i == def_i}
 
 
-def strike_alternatives(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, cash, itm=2, otm=6) -> list[dict]:
+def strike_alternatives(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, cash, itm=2, otm=6, prefs=None) -> list[dict]:
     """The same trade on nearby strikes (2 ITM to 6 OTM), cheapest last."""
     strikes = chain["strike"].values
     atm_i = int(abs(strikes - spot).argmin())
@@ -431,7 +442,7 @@ def strike_alternatives(plan, chain: pd.DataFrame, spot, vix_level, lot, capital
         if not 0 <= i < len(chain):
             continue
         try:
-            o = build_order(plan, chain, spot, vix_level, lot, capital, strike=float(strikes[i]), cash=cash)
+            o = build_order(plan, chain, spot, vix_level, lot, capital, strike=float(strikes[i]), cash=cash, prefs=prefs)
         except Exception:
             continue
         if o["entry_prem"] <= 0:

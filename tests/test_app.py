@@ -41,6 +41,7 @@ CANDLES = {}
 M.yahoo_candles = lambda t, period="5d", interval="5m": CANDLES.setdefault(t, fake(1300 if ".NS" in t else 24800, NOW[0]))
 M.yahoo_daily = lambda t, period="1mo": pd.DataFrame({"close": [14.0, 13.2]}, index=pd.to_datetime(["2026-09-30", "2026-10-01"]))
 M.master = lambda: {"lots": {"NIFTY": 65}, "eq_keys": {}}
+M.upstox_public_history = lambda key, cal_days: pd.DataFrame()   # offline: backtest falls back to the (fake) Yahoo data
 X.global_cues = lambda: {"markets": {"S&P 500": {"last": 6000, "chg_pct": 0.8, "date": "2026-10-01"}}, "avg_equity_chg": 0.8, "notes": []}
 X.fetch_news = lambda s=None: {"items": [{"title": "Nifty rallies <b>", "link": "http://x", "when": None, "score": 4}], "score": 4, "events": [], "notes": []}
 X.fii_dii = lambda: None
@@ -207,6 +208,26 @@ rs_ = j(c.get("/api/research"))
 assert rs_["new"]["NIFTY"]["windows"]["120"]["net"] > 0 and len(rs_["families"]) >= 8
 print("backtest keys", list(bt.keys()), bt.get("summary", {}).get("trades"))
 print("reset", j(c.post("/api/account/reset", json={"capital": 300000})))
+# preferences: validation, 1-lot sizing, strategies on/off, auto paper-trading by the scheduler
+assert c.post("/api/settings", json={"prefs": {"risk_pct": 9}}).status_code == 400
+assert c.post("/api/settings", json={"prefs": {"strategies": []}}).status_code == 400
+assert j(c.post("/api/settings", json={"prefs": {"sizing": "one_lot", "risk_pct": 0.5, "strategies": ["noise"], "auto": True, "auto_syms": ["NIFTY", "XYZ"]}}))["ok"]
+pf_ = j(c.get("/api/settings"))["prefs"]
+assert pf_["sizing"] == "one_lot" and pf_["auto_syms"] == ["NIFTY"] and pf_["strategies"] == ["noise"], pf_
+NOW[0] = datetime(2026, 10, 1, 10, 52, tzinfo=C.IST)
+dd_ = j(c.get("/api/dashboard?symbol=NIFTY"))
+assert "camarilla" not in " ".join(t for _, t in dd_["signal"]["checks"]).lower()
+if dd_["order"]:
+    assert dd_["order"]["lots"] == 1 and "1-lot mode" in (dd_["order"]["note"] or ""), dd_["order"]
+tk = j(c.post("/api/tick", headers={"x-cron-secret": "c"}))
+print("auto tick:", tk.get("placed"))
+pos_ = store.positions()
+assert any((p_.get("plan") or {}).get("auto") for p_ in pos_) == bool(tk.get("placed") and "message" in tk["placed"][0]), (tk, pos_)
+assert j(c.post("/api/settings", json={"prefs": {"auto": False, "sizing": "risk", "risk_pct": 1, "strategies": ["noise", "camarilla"]}}))["ok"]
+assert c.post("/api/backtest", json={"symbol": "NIFTY", "capital": 200000, "days": 45}).status_code == 400
+b30 = j(c.post("/api/backtest", json={"symbol": "NIFTY", "capital": 200000, "days": 30}))
+assert b30["summary"].get("source") and "period" in b30["summary"], b30["summary"]
+print("prefs / auto / periods OK")
 
 # ---------- Redis store edge cases ----------
 store.insert_position({"id": "race1", "symbol": "NIFTY", "opened": "2026-10-02T10:00:00+05:30"})

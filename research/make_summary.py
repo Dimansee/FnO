@@ -103,6 +103,15 @@ def combos():
                        "strong close, beyond yesterday's high/low, gap direction, global/VIX context, price vs 50 EMA"}
 
 
+def expected():
+    out = {}
+    for lab, strat, p in (("Noise band", "noise", W), ("Camarilla", "camarilla", CA)):
+        tr = [t for s_ in ("NIFTY", "BANKNIFTY") for t in E.run(D[s_], s_, strat, p)]
+        pn = np.array([t["pnl"] for t in tr])
+        out[lab] = {"win_rate": round(float((pn > 0).mean() * 100)), "pf": round(float(pn[pn > 0].sum() / -pn[pn <= 0].sum()), 2), "trades": len(tr)}
+    return out
+
+
 def portfolio():
     rows = []
     for lab, fn in (("Noise band only", lambda s: E.run(D[s], s, "noise", W)),
@@ -212,6 +221,7 @@ out = {
     "real_prices": real_prices(),
     "new": {s: (block_tr(both_trades(s)) if E.CALIB else block(s, "noise", W)) for s in ("NIFTY", "BANKNIFTY", "FINNIFTY")},
     "combos": combos(),
+    "expected": expected(),
     "portfolio": portfolio() if E.CALIB else None,
     "old": {s: block(s, "orb", OLD) for s in ("NIFTY", "BANKNIFTY")},
     "stocks": {s: block(s, "noise", W) for s in C.STOCKS},

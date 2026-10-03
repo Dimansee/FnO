@@ -109,6 +109,8 @@ VIX_MIN = 11.0             # no trades when India VIX is below 11 (moves too sma
 SIGNAL_VALID_MIN = 10      # a half-hour signal can still be taken for 10 minutes if price holds beyond the band
 # Second strategy: Camarilla breakout (research round 5, research/README.md)
 CAM_LAST_ENTRY = time(13, 0)
+FIRST_ENTRY_ANY = time(9, 20)   # auto paper-trading looks for signals between these times
+LAST_ENTRY_ANY = time(14, 40)
 CAM_VIX_MAX = 22.0
 CAM_BE_R = 1.0             # stop moves to entry after +1R
 CAM_TIME_STOP = 45         # exit if +0.5R not reached within 45 minutes
