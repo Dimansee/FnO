@@ -21,3 +21,5 @@ ai_reg*.txt
 ai_cls*.txt
 ai_fwd*.txt
 ai_trades_oos.pkl
+evr_results.json
+evr_results.pkl
