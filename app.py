@@ -17,6 +17,7 @@ from fno import service as SV
 from fno import scheduler
 from fno import store
 from fno import recorder as REC
+from fno import journal as JR
 
 app = Flask(__name__)
 INDEX_HTML = (Path(__file__).parent / "templates" / "index.html").read_text(encoding="utf-8")
@@ -41,7 +42,7 @@ def _authed() -> bool:
         return False
 
 
-PUBLIC = {"/", "/api/login", "/api/health", "/api/tick", "/api/recorder/day", "/api/recorder/probe"}
+PUBLIC = {"/", "/api/login", "/api/health", "/api/tick", "/api/recorder/day", "/api/recorder/probe", "/api/journal/day"}
 
 
 @app.before_request
@@ -341,6 +342,27 @@ def broker_callback(name):
 # ---------------------------------------------------------------------------
 # Market recorder
 # ---------------------------------------------------------------------------
+@app.get("/api/journal")
+def journal_days():
+    return jsonify({"days": JR.days()})
+
+
+@app.get("/api/journal/day")
+def journal_day():
+    """Public, read-only (used by the nightly GitHub job too): the day's context, recommendations with outcomes, AI scores, paper trades."""
+    return jsonify(SV.clean(JR.day(request.args.get("date", ""))))
+
+
+@app.post("/api/journal/scan")
+def journal_scan():
+    """Record the current recommendations now (same as the scheduler does every 5 minutes)."""
+    out = {}
+    for sym in JR.SYMS:
+        g, ev, order, pf = SV.scan(sym)
+        out[sym] = JR.record(sym, ev, order, g, pf)
+    return jsonify(out)
+
+
 @app.get("/api/recorder/status")
 def recorder_status():
     return jsonify(SV.clean(REC.status()))

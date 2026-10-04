@@ -290,6 +290,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
       <button data-t="portfolio">💼 Portfolio</button>
       <button data-t="context">🌍 Market context</button>
       <button data-t="backtest">🧪 Backtest</button>
+      <button data-t="journal">📓 Journal</button>
       <button data-t="rules">📘 Rulebook</button>
       <button data-t="settings">⚙️ Settings</button>
       <span class="ink" id="ink"></span>
@@ -424,6 +425,14 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
   </section>
 
   <!-- RULES -->
+  <section id="t-journal" class="hidden">
+    <div class="card">
+      <div class="cardhead"><h3 style="margin:0">Session journal</h3>
+        <div style="display:flex;gap:8px;align-items:center"><select id="jrDay" style="min-width:150px"></select><button id="jrScan" title="Record what the strategies say right now">Record now</button><button id="jrJson">⬇ JSON</button></div></div>
+      <p class="muted" style="margin:6px 0 0">From the open, the server writes down the day's levels and context, every recommendation (rules and AI) with its checklist and order, the AI's view at every 5-minute candle, and after the close what each recommendation would have done on the index and on the option. Nothing here is a trade - the paper trades are in Portfolio.</p>
+    </div>
+    <div id="jrBody"></div>
+  </section>
   <section id="t-rules" class="hidden"><div class="card rule" id="rulebook"></div></section>
 
   <!-- SETTINGS -->
@@ -562,6 +571,7 @@ async function load(quiet) {
     else if (S.tab === "portfolio") await loadPortfolio();
     else if (S.tab === "context") await loadContext();
     else if (S.tab === "settings") await loadSettings();
+    else if (S.tab === "journal") await loadJournal();
     else if (S.tab === "backtest") await loadStudy();
   } catch (e) { if (!quiet) toast(e.message); }
   finally { sec.classList.remove("loading"); if (!quiet) pDone(); hideSplash(); }
@@ -1474,6 +1484,46 @@ function brokerCard(name, title, idLabel, st, steps) {
       ${st.connected ? `<button class="danger" data-disc="${name}">Disconnect</button>` : ""}
     </div>
     ${st.logged_in_at ? `<div class="muted" style="font-size:12px;margin-top:8px">Last login ${esc(st.logged_in_at.replace("T", " ").slice(0, 16))} IST · logins expire every night around 3:30 AM.</div>` : ""}`;
+}
+async function loadJournal() {
+  const sel = $("#jrDay");
+  if (!S.jrDays) {
+    S.jrDays = (await api("/api/journal")).days.slice().reverse();
+    sel.innerHTML = S.jrDays.length ? S.jrDays.map(d => `<option value="${d}">${d}</option>`).join("") : `<option value="">no sessions yet</option>`;
+    sel.onchange = () => { S.jrSel = sel.value; loadJournal(); };
+    $("#jrScan").onclick = async () => { $("#jrScan").disabled = true; try { const r = await post("/api/journal/scan", {}); toast("Recorded: " + JSON.stringify(r)); S.jrDays = null; await loadJournal(); } catch (e) { toast(e.message); } $("#jrScan").disabled = false; };
+    $("#jrJson").onclick = () => { if (!S.jr) return; const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(S.jr, null, 1)], {type: "application/json"})); a.download = `journal-${S.jr.date}.json`; a.click(); };
+  }
+  const d = S.jrSel || S.jrDays[0];
+  if (!d) { $("#jrBody").innerHTML = `<div class="card"><div class="empty">The journal starts on the next trading day at 09:16. Come back after the open.</div></div>`; return; }
+  sel.value = d;
+  const j = await api("/api/journal/day?date=" + d); S.jr = j;
+  const sm = j.summary, ctxCard = sym => {
+    const c = j.context[sym]; if (!c) return `<div class="card"><h3>${sym === "NIFTY" ? "Nifty 50" : "Bank Nifty"}</h3><div class="muted">No context recorded (the server writes it at 09:16).</div></div>`;
+    const cam = c.camarilla || {};
+    return `<div class="card"><h3>${sym === "NIFTY" ? "Nifty 50" : "Bank Nifty"} · at ${esc(c.time)}</h3>
+      <div class="k4">${kpi("Open", n2(c.open), `gap ${c.gap_pct == null ? "–" : sgn(c.gap_pct) + "%"}`, "muted")}${kpi("Yesterday", n2(c.prev_close), `H ${n2(c.prev_high)} · L ${n2(c.prev_low)}`, "muted")}${kpi("India VIX", n2((c.vix || {}).level), `${sgn((c.vix || {}).chg_pct)}% vs yesterday`, "muted")}${kpi("Put/call OI", c.pcr_prev_close == null ? "–" : n2(c.pcr_prev_close), "yesterday's close", "muted")}</div>
+      <div class="row"><span class="muted">Camarilla H4 / H3 / L3 / L4</span><span class="mono">${n2(cam.h4)} / ${n2(cam.h3)} / ${n2(cam.l3)} / ${n2(cam.l4)}</span></div>
+      <div class="row"><span class="muted">CPR top / bottom (width)</span><span class="mono">${n2((c.cpr || {}).tc)} / ${n2((c.cpr || {}).bc)} (${(c.cpr || {}).width_pct ?? "–"}%)</span></div>
+      <div class="row"><span class="muted">Noise band at checks (lo – up)</span><span class="mono" style="font-size:11.5px">${c.noise_band_at ? Object.entries(c.noise_band_at).map(([t, v]) => `${t} ${v[0]}–${v[1]}`).join(" · ") : "–"}</span></div>
+      <div class="row"><span class="muted">Global cues / FII</span><span class="mono">${(c.global || {}).avg_equity_chg == null ? "–" : sgn(c.global.avg_equity_chg) + "%"} / ${c.fii && c.fii.value != null ? "₹" + Math.round(c.fii.value).toLocaleString("en-IN") + " cr" : "–"}</span></div>
+      <div class="row"><span class="muted">Expiry traded · strategies on · auto</span><span class="mono">${esc(c.expiry)} · ${(c.prefs.strategies || []).join(", ")} · ${c.prefs.auto ? (c.prefs.auto_syms || []).join(", ") : "off"}</span></div>
+      ${c.calendar && c.calendar.blocked ? `<div class="warn">${esc(c.calendar.reason)}</div>` : ""}</div>`;
+  };
+  const recoRow = r => { const o = r.result; return `<tr><td class="mono">${esc(r.time.slice(0, 5))}</td><td>${r.symbol === "NIFTY" ? "Nifty" : "Bank Nifty"}</td><td>${{noise: "Noise band", camarilla: "Camarilla", ai: "AI model"}[r.strategy] || esc(r.strategy)}</td>
+    <td class="${r.opt === "CE" ? "up" : "down"}">${r.opt === "CE" ? "Buy CALL" : "Buy PUT"} ${r.option.strike}</td><td class="mono">₹${n2(r.option.entry_prem)}</td>
+    <td class="mono">${n2(r.index.entry)} / ${n2(r.index.sl)} / ${r.index.target == null ? "–" : n2(r.index.target)}</td>
+    <td class="mono">${r.basis.exp_r != null ? sgn(r.basis.exp_r) + "R · " + Math.round(r.basis.p_win * 100) + "%" : (r.basis.score != null ? "score " + r.basis.score : "–")}</td>
+    <td>${o ? `<span class="badge ${o.index_outcome === "target" ? "ok" : o.index_outcome === "stop" ? "no" : ""}">${o.index_outcome}</span> ${esc(o.at)} · <span class="mono ${cls(o.R)}">${sgn(o.R)}R</span><div class="muted" style="font-size:11px">best ${sgn(o.mfe_pts)} / worst −${n2(o.mae_pts)} pts${o.premium ? ` · premium ₹${n2(o.premium.entry)} → high ₹${n2(o.premium.high)} (${sgn(o.premium.max_gain_pct)}%) low ₹${n2(o.premium.low)} (${sgn(o.premium.max_loss_pct)}%) · at exit ₹${n2(o.premium.at_exit)}` : ""}</div>` : `<span class="muted">pending (settled after 15:15)</span>`}</td>
+    <td><details><summary style="cursor:pointer">basis</summary><ul class="checks" style="font-size:12px">${r.basis.checks.map(([ok, t]) => `<li><span class="ic">${ok === true ? "✅" : ok === false ? "❌" : "👀"}</span><span>${esc(t)}</span></li>`).join("")}</ul>${r.basis.ai ? `<div class="muted" style="font-size:12px">${r.basis.ai.reasons.map(x => `${esc(x.factor)} ${sgn(x.effect)}R`).join(" · ")}</div>` : ""}</details></td></tr>`; };
+  const aiRows = sym => (j.ai[sym] || []).map(x => `<tr><td class="mono">${esc(x.bar)}</td><td class="mono">${n2(x.spot)}</td><td class="${x.side === "CE" ? "up" : "down"}">${x.side === "CE" ? "CALL" : "PUT"} · ${x.stop_k}×ATR</td><td class="mono ${cls(x.exp_r)}">${sgn(x.exp_r)}</td><td class="mono">${Math.round(x.p_win * 100)}%</td><td>${x.trade ? '<span class="badge ok">trade</span>' : '<span class="muted">wait</span>'}</td></tr>`).join("");
+  $("#jrBody").innerHTML = `
+    <div class="k4" style="margin-top:14px">${kpi("Recommendations", sm.recommendations, `${sm.settled} settled`, "muted")}${kpi("Outcomes", `${sm.by_outcome.target} / ${sm.by_outcome.stop} / ${sm.by_outcome["square-off"]}`, "target / stop / square-off", "muted")}${kpi("Sum of R", sm.sum_R == null ? "–" : sgn(sm.sum_R), "on the index path", "muted")}${kpi("Paper trades", sm.paper_trades, `P&L ${rs(sm.paper_pnl)}`, "muted")}</div>
+    <div class="grid g2" style="margin-top:14px">${ctxCard("NIFTY")}${ctxCard("BANKNIFTY")}</div>
+    <div class="card" style="margin-top:14px"><h3>Recommendations and what happened</h3>
+      ${j.recommendations.length ? `<div class="tablewrap"><table class="prose"><tr><th>Time</th><th>Index</th><th>Strategy</th><th>Option</th><th>Entry prem</th><th>Index entry / SL / target</th><th>Confidence</th><th>Outcome</th><th></th></tr>${j.recommendations.map(recoRow).join("")}</table></div>` : `<div class="empty">No recommendations recorded for this day${j.context.NIFTY ? " - the strategies did not fire" : ""}.</div>`}</div>
+    <div class="grid g2" style="margin-top:14px">${["NIFTY", "BANKNIFTY"].map(sym => `<div class="card"><h3>AI view through the day · ${sym === "NIFTY" ? "Nifty" : "Bank Nifty"}</h3>${(j.ai[sym] || []).length ? `<div class="tablewrap" style="max-height:320px;overflow:auto"><table><tr><th>Candle</th><th>Spot</th><th>Best</th><th>Exp. R</th><th>Win</th><th></th></tr>${aiRows(sym)}</table></div>` : `<div class="muted">No AI scores recorded (switch the AI model on in Settings to log its view).</div>`}</div>`).join("")}</div>
+    ${j.paper_trades.length ? `<div class="card" style="margin-top:14px"><h3>Paper trades closed this day</h3><div class="tablewrap"><table><tr><th>Opened</th><th>Index</th><th>Strategy</th><th>Legs</th><th>Lots</th><th>In → out</th><th>P&L</th><th>Reason</th></tr>${j.paper_trades.map(t => `<tr><td class="mono">${esc((t.opened || "").slice(11, 16))}</td><td>${esc(t.symbol)}</td><td>${t.mode !== "signal" ? "Manual" : ({camarilla: "Camarilla", ai: "AI model"}[(t.plan || {}).strategy] || "Noise band")}</td><td>${(t.legs || []).map(l => `${l.side} ${l.strike}${l.opt}`).join(" / ")}</td><td>${t.lots}</td><td class="mono">₹${n2(t.entry_prem)} → ₹${n2(t.exit_prem)}</td><td class="mono ${cls(t.pnl)}">${rs(t.pnl)}</td><td>${esc(t.reason)}</td></tr>`).join("")}</table></div></div>` : ""}`;
 }
 async function loadSettings() {
   const d = await api("/api/settings");
