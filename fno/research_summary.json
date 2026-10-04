@@ -385,6 +385,16 @@
    "passed": false,
    "walk_forward_net": null,
    "walk_forward_sharpe": null
+  },
+  {
+   "name": "EMA + volume + RSI combinations (EMA/SMA/DEMA/TEMA/HMA \u00d7 cross/stack/pullback/bounce \u00d7 RSI rules \u00d7 relative volume)",
+   "key": "evr",
+   "tested": 1200,
+   "robust": 3,
+   "robust_oos_profitable": 0,
+   "passed": true,
+   "best_train_setting_last120": -38480,
+   "walk_forward_net": null
   }
  ],
  "chosen": {
@@ -1217,7 +1227,8 @@
   "Nifty was profitable in every year tested; Bank Nifty lost money in 2025; most single stocks lost money - prefer the indices.",
   "Creator setups (5 EMA, inside bar, 44 MA, RSI 60/40, multi-timeframe breakout, Fibonacci) were coded as written and tested the same way; none beat the noise-area rules on the unseen days.",
   "Option-selling styles (straddles/strangles, iron condors, adjustments) and OI/PCR-based methods need historical option quotes and OI, which are not freely available, so they could not be tested honestly.",
-  "Option selling (9:20 iron fly) could not be judged fairly: its edge comes from IV crush near expiry, which a VIX-based model can't reproduce."
+  "Option selling (9:20 iron fly) could not be judged fairly: its edge comes from IV crush near expiry, which a VIX-based model can't reproduce.",
+  "EMA + volume + RSI (round 9): 1,200 combinations of five moving-average types, four entry styles, five RSI rules and relative volume (10-heavyweight turnover vs its usual level, since the index itself has no volume). 228 made money on the training years, 3 held up in both halves of training and every year, none of those made money on the unseen 120 days. The volume filter mainly removed trades; it did not pick better ones."
  ],
  "round7": {
   "rules": {
