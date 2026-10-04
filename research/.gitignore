@@ -23,3 +23,5 @@ ai_fwd*.txt
 ai_trades_oos.pkl
 evr_results.json
 evr_results.pkl
+combo_results.json
+combo_results.pkl

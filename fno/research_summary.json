@@ -395,6 +395,16 @@
    "passed": true,
    "best_train_setting_last120": -38480,
    "walk_forward_net": null
+  },
+  {
+   "name": "VWAP + EMA 20/50 + RSI + ADX + volume + ATR + CPR + OI, every combination (5 triggers \u00d7 256 confirmation subsets \u00d7 2 exits, plus k-of-8 votes)",
+   "key": "combo",
+   "tested": 2572,
+   "robust": 24,
+   "robust_oos_profitable": 8,
+   "passed": true,
+   "best_train_setting_last120": 46251,
+   "walk_forward_net": null
   }
  ],
  "chosen": {
@@ -1228,7 +1238,8 @@
   "Creator setups (5 EMA, inside bar, 44 MA, RSI 60/40, multi-timeframe breakout, Fibonacci) were coded as written and tested the same way; none beat the noise-area rules on the unseen days.",
   "Option-selling styles (straddles/strangles, iron condors, adjustments) and OI/PCR-based methods need historical option quotes and OI, which are not freely available, so they could not be tested honestly.",
   "Option selling (9:20 iron fly) could not be judged fairly: its edge comes from IV crush near expiry, which a VIX-based model can't reproduce.",
-  "EMA + volume + RSI (round 9): 1,200 combinations of five moving-average types, four entry styles, five RSI rules and relative volume (10-heavyweight turnover vs its usual level, since the index itself has no volume). 228 made money on the training years, 3 held up in both halves of training and every year, none of those made money on the unseen 120 days. The volume filter mainly removed trades; it did not pick better ones."
+  "EMA + volume + RSI (round 9): 1,200 combinations of five moving-average types, four entry styles, five RSI rules and relative volume (10-heavyweight turnover vs its usual level, since the index itself has no volume). 228 made money on the training years, 3 held up in both halves of training and every year, none of those made money on the unseen 120 days. The volume filter mainly removed trades; it did not pick better ones.",
+  "Eight-ingredient combinations (round 10, Oct 2023 - Oct 2026 because OI data starts then): 2,572 runs. 24 held up in both halves of training and every year, 8 of those were also positive on the unseen 120 days. The two best - VWAP cross confirmed by expanding ATR, high volume and yesterday's put/call OI (trail on VWAP; 101 trades, PF 2.0, unseen +\u20b96k on 8 trades) and a CPR breakout confirmed by expanding ATR, a narrow CPR, OI and RSI (2R; 85 trades, PF 2.1, 54% wins, unseen +\u20b94.5k on 6 trades) - trade about once a week, barely overlap with the rules (correlation \u2248 0.1) and survived small threshold changes, but 6-8 unseen trades is too few to call them proven. Across all runs: ATR expansion and volume filters raised the share of profitable settings most (by cutting trades), EMA 20/50 and ADX lowered it, OI was neutral; 4-5 confirmations was the sweet spot; 'k of 8 must agree' votes lost money at every k."
  ],
  "round7": {
   "rules": {
