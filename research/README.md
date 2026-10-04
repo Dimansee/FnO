@@ -184,3 +184,15 @@ exits (2R, 3R, trail on the fast average) — 1,200 of the 5,250 settings, both 
 228 profitable on training, 3 robust (both indices, both halves, every year 2023-25), 0 of those profitable on the unseen 120 days;
 the best training setting (DEMA 5/20/200 stack, RSI > 60, volume ≥ 1.3, 3R) made ₹183k training and −₹38k unseen.
 The volume filter raised the share of profitable settings from 1% (no filter) to 45% (≥ 2× usual) by removing trades, not by picking better ones.
+
+## Round 10 — VWAP + EMA 20/50 + RSI + ADX + volume + ATR + CPR/pivot + OI, in every combination (`combo.py`, `combo_check.py`)
+Period Oct 2023 → Oct 2026 (NSE OI data starts then); tuned before 2026-04-09, judged on the unseen last 120 days.
+5 triggers (EMA 20/50 cross, VWAP cross, CPR top/bottom cross, momentum candle, "all chosen filters turn true") × all 256 subsets of the
+8 confirmations × 2 exits (2R, trail on VWAP) + "at least k of 8" votes = 2,572 runs, both indices, corrected premiums and costs.
+- 1,306 profitable on training, 24 robust (both indices, both halves, 2024 and 2025 positive), 8 of those positive on the unseen days.
+- Best survivors: **VWAP cross + ATR expanding + volume ≥ 1.3× + yesterday's PCR on side, trail VWAP** — 101 trades, PF 2.04, train +₹81k,
+  unseen +₹6k (8 trades), correlation with the rules' daily P&L 0.14, rules + it: unseen +₹62.5k vs +₹56.5k; and **CPR cross + ATR expanding +
+  narrow CPR + PCR + RSI > 55, 2R** — 85 trades, PF 2.07, 54% wins, unseen +₹4.5k (6 trades). Both survived threshold nudges on training;
+  unseen samples are too small to conclude. Status: watch-list, re-test after ~60 more sessions.
+- Ingredient effects (median training P&L with vs without): ATR expansion +₹13k vs −₹13k, volume +₹11k vs −₹15k (both mostly by cutting trades);
+  EMA 20/50 and ADX slightly negative; OI, CPR, VWAP, RSI ≈ neutral. 4–5 confirmations best; 7–8 too few trades. Votes (k of 8): negative at every k.
