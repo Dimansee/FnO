@@ -1,0 +1,573 @@
+{
+ "A_slots": [
+  {
+   "slot": "09:15",
+   "avg_ret_pct": -0.036,
+   "green_pct": 45.022,
+   "avg_range_pct": 0.436,
+   "n": 924
+  },
+  {
+   "slot": "09:45",
+   "avg_ret_pct": -0.005,
+   "green_pct": 50.0,
+   "avg_range_pct": 0.278,
+   "n": 924
+  },
+  {
+   "slot": "10:15",
+   "avg_ret_pct": -0.002,
+   "green_pct": 51.407,
+   "avg_range_pct": 0.242,
+   "n": 924
+  },
+  {
+   "slot": "10:45",
+   "avg_ret_pct": 0.004,
+   "green_pct": 53.463,
+   "avg_range_pct": 0.215,
+   "n": 924
+  },
+  {
+   "slot": "11:15",
+   "avg_ret_pct": 0.001,
+   "green_pct": 49.459,
+   "avg_range_pct": 0.202,
+   "n": 924
+  },
+  {
+   "slot": "11:45",
+   "avg_ret_pct": -0.002,
+   "green_pct": 50.649,
+   "avg_range_pct": 0.192,
+   "n": 924
+  },
+  {
+   "slot": "12:15",
+   "avg_ret_pct": -0.003,
+   "green_pct": 52.706,
+   "avg_range_pct": 0.202,
+   "n": 924
+  },
+  {
+   "slot": "12:45",
+   "avg_ret_pct": -0.001,
+   "green_pct": 51.299,
+   "avg_range_pct": 0.189,
+   "n": 924
+  },
+  {
+   "slot": "13:15",
+   "avg_ret_pct": -0.005,
+   "green_pct": 49.675,
+   "avg_range_pct": 0.205,
+   "n": 924
+  },
+  {
+   "slot": "13:45",
+   "avg_ret_pct": 0.005,
+   "green_pct": 51.732,
+   "avg_range_pct": 0.212,
+   "n": 924
+  },
+  {
+   "slot": "14:15",
+   "avg_ret_pct": -0.003,
+   "green_pct": 47.835,
+   "avg_range_pct": 0.222,
+   "n": 924
+  },
+  {
+   "slot": "14:45",
+   "avg_ret_pct": -0.001,
+   "green_pct": 49.134,
+   "avg_range_pct": 0.258,
+   "n": 924
+  },
+  {
+   "slot": "15:15",
+   "avg_ret_pct": 0.006,
+   "green_pct": 50.0,
+   "avg_range_pct": 0.137,
+   "n": 924
+  }
+ ],
+ "A_weekday": [
+  {
+   "dow": 0,
+   "avg_ret_pct": 0.017,
+   "green_pct": 51.913,
+   "n": 183
+  },
+  {
+   "dow": 1,
+   "avg_ret_pct": -0.182,
+   "green_pct": 38.172,
+   "n": 186
+  },
+  {
+   "dow": 2,
+   "avg_ret_pct": 0.028,
+   "green_pct": 54.301,
+   "n": 186
+  },
+  {
+   "dow": 3,
+   "avg_ret_pct": -0.048,
+   "green_pct": 42.935,
+   "n": 184
+  },
+  {
+   "dow": 4,
+   "avg_ret_pct": 0.01,
+   "green_pct": 50.549,
+   "n": 182
+  },
+  {
+   "dow": 5,
+   "avg_ret_pct": -0.366,
+   "green_pct": 0.0,
+   "n": 2
+  },
+  {
+   "dow": 6,
+   "avg_ret_pct": -2.233,
+   "green_pct": 0.0,
+   "n": 1
+  }
+ ],
+ "A_big_open": {
+  "days": 15,
+  "reverted_pct": 60.0,
+  "avg_rest_same_sign_pct": 0.086
+ },
+ "B": {
+  "NIFTY": {
+   "15:00 sign of open->15:00, exit 15:28": {
+    "n": 924,
+    "win_pct": 52.3,
+    "avg_pts": 0.8,
+    "pts_total": 706,
+    "pnl_1lot": -141535,
+    "pnl_train": -127764,
+    "pnl_unseen120": -13771,
+    "years": {
+     "2023": -38552,
+     "2024": -81361,
+     "2025": -11172,
+     "2026": -10449
+    }
+   },
+   "same, only if |move| >= 0.3%": {
+    "n": 514,
+    "win_pct": 50.4,
+    "avg_pts": -0.1,
+    "pts_total": -61,
+    "pnl_1lot": -97257,
+    "pnl_train": -84438,
+    "pnl_unseen120": -12819,
+    "years": {
+     "2023": -28196,
+     "2024": -52236,
+     "2025": -4321,
+     "2026": -12504
+    }
+   },
+   "same, only if |move| >= 0.6%": {
+    "n": 251,
+    "win_pct": 50.2,
+    "avg_pts": -0.5,
+    "pts_total": -115,
+    "pnl_1lot": -50146,
+    "pnl_train": -44999,
+    "pnl_unseen120": -5147,
+    "years": {
+     "2023": -14207,
+     "2024": -37977,
+     "2025": 1303,
+     "2026": 736
+    }
+   },
+   "14:30 entry": {
+    "n": 924,
+    "win_pct": 51.7,
+    "avg_pts": 2.4,
+    "pts_total": 2207,
+    "pnl_1lot": -98329,
+    "pnl_train": -72426,
+    "pnl_unseen120": -25903,
+    "years": {
+     "2023": -24300,
+     "2024": -71992,
+     "2025": -2203,
+     "2026": 167
+    }
+   },
+   "first half-hour sign, 15:00 entry": {
+    "n": 924,
+    "win_pct": 52.2,
+    "avg_pts": 1.1,
+    "pts_total": 1034,
+    "pnl_1lot": -132064,
+    "pnl_train": -102622,
+    "pnl_unseen120": -29443,
+    "years": {
+     "2023": -46762,
+     "2024": -54319,
+     "2025": -22158,
+     "2026": -8825
+    }
+   },
+   "fade instead (opposite side)": {
+    "n": 924,
+    "win_pct": 47.7,
+    "avg_pts": -0.8,
+    "pts_total": -706,
+    "pnl_1lot": 0,
+    "pnl_train": 0,
+    "pnl_unseen120": 0,
+    "years": {
+     "2023": 0,
+     "2024": 0,
+     "2025": 0,
+     "2026": 0
+    }
+   }
+  },
+  "BANKNIFTY": {
+   "15:00 sign of open->15:00, exit 15:28": {
+    "n": 924,
+    "win_pct": 50.0,
+    "avg_pts": 0.2,
+    "pts_total": 194,
+    "pnl_1lot": -296842,
+    "pnl_train": -246898,
+    "pnl_unseen120": -49944,
+    "years": {
+     "2023": -58732,
+     "2024": -139643,
+     "2025": -53924,
+     "2026": -44543
+    }
+   },
+   "same, only if |move| >= 0.3%": {
+    "n": 556,
+    "win_pct": 51.6,
+    "avg_pts": 1.5,
+    "pts_total": 850,
+    "pnl_1lot": -155301,
+    "pnl_train": -125395,
+    "pnl_unseen120": -29906,
+    "years": {
+     "2023": -20578,
+     "2024": -90917,
+     "2025": -25556,
+     "2026": -18249
+    }
+   },
+   "same, only if |move| >= 0.6%": {
+    "n": 312,
+    "win_pct": 51.9,
+    "avg_pts": 3.0,
+    "pts_total": 944,
+    "pnl_1lot": -79761,
+    "pnl_train": -68414,
+    "pnl_unseen120": -11347,
+    "years": {
+     "2023": -9405,
+     "2024": -68781,
+     "2025": -10407,
+     "2026": 8833
+    }
+   },
+   "14:30 entry": {
+    "n": 924,
+    "win_pct": 47.7,
+    "avg_pts": -0.8,
+    "pts_total": -693,
+    "pnl_1lot": -350684,
+    "pnl_train": -292721,
+    "pnl_unseen120": -57963,
+    "years": {
+     "2023": -67027,
+     "2024": -172986,
+     "2025": -78690,
+     "2026": -31982
+    }
+   },
+   "first half-hour sign, 15:00 entry": {
+    "n": 924,
+    "win_pct": 48.7,
+    "avg_pts": -0.2,
+    "pts_total": -203,
+    "pnl_1lot": -313331,
+    "pnl_train": -273266,
+    "pnl_unseen120": -40065,
+    "years": {
+     "2023": -94928,
+     "2024": -124150,
+     "2025": -52911,
+     "2026": -41342
+    }
+   },
+   "fade instead (opposite side)": {
+    "n": 924,
+    "win_pct": 50.0,
+    "avg_pts": -0.2,
+    "pts_total": -194,
+    "pnl_1lot": 0,
+    "pnl_train": 0,
+    "pnl_unseen120": 0,
+    "years": {
+     "2023": 0,
+     "2024": 0,
+     "2025": 0,
+     "2026": 0
+    }
+   }
+  }
+ },
+ "C": {
+  "NIFTY": {
+   "high_set_in_first_hour_pct": 40.8,
+   "low_set_in_first_hour_pct": 41.5,
+   "either_pct": 77.4,
+   "ib_extension_all": {
+    "n": 859,
+    "win_pct": 46.2,
+    "pnl": -115572,
+    "train": -74468,
+    "unseen120": -41104,
+    "years": {
+     "2023": -25102,
+     "2024": -59602,
+     "2025": 17167,
+     "2026": -48035
+    }
+   },
+   "ib_extension_medium_ib": {
+    "n": 291,
+    "win_pct": 44.0,
+    "pnl": -71883,
+    "train": -48450,
+    "unseen120": -23433,
+    "years": {
+     "2023": 892,
+     "2024": -37274,
+     "2025": -10004,
+     "2026": -25497
+    }
+   },
+   "ib_extension_narrow_ib": {
+    "n": 371,
+    "win_pct": 42.6,
+    "pnl": -105972,
+    "train": -75607,
+    "unseen120": -30365,
+    "years": {
+     "2023": -10694,
+     "2024": -44507,
+     "2025": -12331,
+     "2026": -38440
+    }
+   }
+  },
+  "BANKNIFTY": {
+   "high_set_in_first_hour_pct": 42.4,
+   "low_set_in_first_hour_pct": 42.7,
+   "either_pct": 79.8,
+   "ib_extension_all": {
+    "n": 848,
+    "win_pct": 45.5,
+    "pnl": -40333,
+    "train": -29118,
+    "unseen120": -11215,
+    "years": {
+     "2023": -10286,
+     "2024": -7666,
+     "2025": -9764,
+     "2026": -12617
+    }
+   },
+   "ib_extension_medium_ib": {
+    "n": 277,
+    "win_pct": 46.6,
+    "pnl": -18983,
+    "train": -15951,
+    "unseen120": -3032,
+    "years": {
+     "2023": 2905,
+     "2024": 3738,
+     "2025": -18440,
+     "2026": -7186
+    }
+   },
+   "ib_extension_narrow_ib": {
+    "n": 349,
+    "win_pct": 46.1,
+    "pnl": -26020,
+    "train": -22430,
+    "unseen120": -3590,
+    "years": {
+     "2023": 6761,
+     "2024": -12304,
+     "2025": -17220,
+     "2026": -3257
+    }
+   }
+  }
+ },
+ "D": {
+  "rules": {
+   "n": 909,
+   "net": 223015,
+   "train": 166512,
+   "unseen120": 56503,
+   "pf": 1.28,
+   "years": {
+    "2023": 31078,
+    "2024": 95934,
+    "2025": 15670,
+    "2026": 80332
+   }
+  },
+  "VIX pct >= 0.75 only": {
+   "n": 139,
+   "net": 31768,
+   "train": 23691,
+   "unseen120": 8078,
+   "pf": 1.22,
+   "years": {
+    "2023": 0,
+    "2024": 27192,
+    "2025": -7530,
+    "2026": 12106
+   }
+  },
+  "VIX pct >= 0.5 only": {
+   "n": 312,
+   "net": 134997,
+   "train": 84848,
+   "unseen120": 50149,
+   "pf": 1.46,
+   "years": {
+    "2023": 0,
+    "2024": 39886,
+    "2025": 17127,
+    "2026": 77985
+   }
+  },
+  "VIX pct <= 0.5 only": {
+   "n": 272,
+   "net": 24362,
+   "train": 18008,
+   "unseen120": 6354,
+   "pf": 1.1,
+   "years": {
+    "2023": 0,
+    "2024": 12636,
+    "2025": 9379,
+    "2026": 2348
+   }
+  },
+  "VIX pct <= 0.25 only": {
+   "n": 113,
+   "net": -1968,
+   "train": 1412,
+   "unseen120": -3380,
+   "pf": 0.98,
+   "years": {
+    "2023": 0,
+    "2024": 19823,
+    "2025": -13401,
+    "2026": -8390
+   }
+  },
+  "VIX level < 14 only": {
+   "n": 405,
+   "net": 21809,
+   "train": -6136,
+   "unseen120": 27945,
+   "pf": 1.06,
+   "years": {
+    "2023": -13308,
+    "2024": -11398,
+    "2025": -1360,
+    "2026": 47875
+   }
+  },
+  "VIX level >= 14 only": {
+   "n": 310,
+   "net": 154373,
+   "train": 125815,
+   "unseen120": 28558,
+   "pf": 1.51,
+   "years": {
+    "2023": -3092,
+    "2024": 107531,
+    "2025": 17476,
+    "2026": 32457
+   }
+  },
+  "by_bucket": {
+   "0-25": {
+    "n": 110,
+    "net": -2851,
+    "per_trade": -26
+   },
+   "100-125": {
+    "n": 8,
+    "net": 16961,
+    "per_trade": 2120
+   },
+   "25-50": {
+    "n": 160,
+    "net": 16824,
+    "per_trade": 105
+   },
+   "50-75": {
+    "n": 173,
+    "net": 103229,
+    "per_trade": 597
+   },
+   "75-100": {
+    "n": 131,
+    "net": 14807,
+    "per_trade": 113
+   },
+   "no pct": {
+    "n": 327,
+    "net": 74044,
+    "per_trade": 226
+   }
+  }
+ },
+ "E": {
+  "NIFTY": {
+   "rv_15:00-15:30_expiry": 0.56,
+   "rv_15:00-15:30_other": 0.49,
+   "abs_move_14:00-close_expiry_pct": 0.204,
+   "abs_move_14:00-close_other_pct": 0.198,
+   "expiry_days": 157,
+   "max_oi_cross_after_1330": {
+    "n": 23,
+    "win_pct": 65.2,
+    "avg_pts": 37.7,
+    "pnl_1lot_atm": 28449
+   }
+  },
+  "BANKNIFTY": {
+   "rv_15:00-15:30_expiry": 0.81,
+   "rv_15:00-15:30_other": 0.67,
+   "abs_move_14:00-close_expiry_pct": 0.273,
+   "abs_move_14:00-close_other_pct": 0.248,
+   "expiry_days": 85,
+   "max_oi_cross_after_1330": {
+    "n": 11,
+    "win_pct": 36.4,
+    "avg_pts": -15.6,
+    "pnl_1lot_atm": -11807
+   }
+  }
+ }
+}
