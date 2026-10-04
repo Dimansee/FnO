@@ -3,7 +3,7 @@ function returns plain JSON-safe dicts for the API."""
 from __future__ import annotations
 
 import math
-from datetime import date
+from datetime import date, time
 
 import numpy as np
 import pandas as pd
@@ -466,10 +466,74 @@ def tick():
                     placed.append({"symbol": sym, "message": msg})
             except Exception as e:                       # one instrument failing must not stop the others
                 placed.append({"symbol": sym, "error": str(e)[:120]})
+    try:                                                     # session journal: context at the open, recommendations, outcomes
+        jr = journal_tick(now)
+    except Exception as e:
+        jr = {"error": str(e)[:160]}
     try:                                                     # market recorder (every RECORD_EVERY_MIN minutes)
         from . import recorder
         from .market import Market
         rec = recorder.snapshot(now, market=Market())
     except Exception as e:
         rec = {"error": str(e)[:160]}
-    return {"closed": closed, "placed": placed, "recorded": rec, "time": now.isoformat(timespec="seconds")}
+    return {"closed": closed, "placed": placed, "recorded": rec, "journal": jr, "time": now.isoformat(timespec="seconds")}
+
+
+def scan(symbol, m=None, prefs_=None, want_order=True):
+    """What the strategies say right now (no side effects): the same evaluation the Signal page shows."""
+    from . import journal as J
+    m = m or M.Market()
+    g = _gather(symbol, m)
+    acct, pos, tr, cash = P.snapshot()
+    cstats = M.chain_stats(g["chain"], g["spot"])
+    guard = P.day_guard(pos, tr, acct["capital_start"])
+    if not guard.get("blocked"):
+        guard = calendar_guard(symbol, g["exps"], g["now"].date()) or guard
+    pf = prefs_ or prefs()
+    traded = _traded_today(symbol, pos, tr)
+    ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, None, gcues(), fii(), g["now"], guard, traded, pf["strategies"])
+    ev = _with_ai(symbol, g, ev, pf, traded)
+    order = None
+    if ev["plan"] and want_order:
+        try:
+            order = S.build_order(ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], acct["capital_start"], cash=cash, prefs=pf)
+        except ValueError:
+            order = None
+    return g, ev, order, pf
+
+
+def journal_tick(now):
+    """Runs inside tick(): writes the day's context once, recommendations at 5-minute boundaries, outcomes after the close."""
+    from . import journal as J
+    t = now.time()
+    day = now.date().isoformat()
+    out = {}
+    if time(9, 16) <= t <= time(9, 29):
+        for sym in J.SYMS:
+            if J._get(day, f"ctx:{sym}") is None:
+                m = M.Market()
+                g = _gather(sym, m)
+                J.write_context(sym, g, gcues(), fii(), prefs())
+                out[f"ctx:{sym}"] = "written"
+        return out or {"skipped": "context already written"}
+    if time(9, 30) <= t <= time(14, 50) and now.minute % 5 == 1:
+        m = M.Market()
+        pf = prefs()
+        for sym in J.SYMS:
+            try:
+                g, ev, order, _ = scan(sym, m, pf)
+                out[sym] = J.record(sym, ev, order, g, pf)
+            except Exception as e:
+                out[sym] = f"error: {str(e)[:100]}"
+        return out
+    if t >= time(15, 16) and J._get(day, "settled") is None and (store._cmd("HLEN", J._key(day)) or 0) > 0:
+        m = M.Market()
+        cands = {}
+        for sym in J.SYMS:
+            try:
+                c = m.candles(sym)
+                cands[sym] = c[c.index.date == now.date()]
+            except Exception:
+                pass
+        return {"settled": J.settle(day, cands)}
+    return {"skipped": "nothing due"}

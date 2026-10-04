@@ -184,8 +184,20 @@ def record_snapshots(d: date, out: str, man: dict):
         man["errors"].append(f"snapshots: {e}")
 
 
+def record_journal(d: date, out: str, man: dict):
+    try:
+        r = requests.get(f"{APP}/api/journal/day", params={"date": d.isoformat()}, timeout=60)
+        j = r.json()
+        n = len(j.get("recommendations") or [])
+        if n or j.get("context", {}).get("NIFTY"):
+            json.dump(j, open(f"{out}/journal.json", "w"), indent=1)
+        man["journal_recos"] = n
+    except Exception as e:
+        man["errors"].append(f"journal: {e}")
+
+
 def complete(out):
-    return all(os.path.exists(f"{out}/{f}") for f in ("candles_1m.csv.gz", "bhav_fo.csv.gz", "participant_oi.csv", "snapshots.json.gz"))
+    return all(os.path.exists(f"{out}/{f}") for f in ("candles_1m.csv.gz", "bhav_fo.csv.gz", "participant_oi.csv", "snapshots.json.gz", "journal.json"))
 
 
 def run(d: date):
@@ -205,6 +217,8 @@ def run(d: date):
     record_nse(d, out, man)
     if not os.path.exists(f"{out}/snapshots.json.gz"):
         record_snapshots(d, out, man)
+    if not os.path.exists(f"{out}/journal.json"):
+        record_journal(d, out, man)
     man["updated"] = datetime.now(IST).isoformat(timespec="seconds")
     json.dump(man, open(man_path, "w"), indent=1)
     log(d, "saved:", {k: v for k, v in man.items() if k not in ("errors",)}, "| errors:", man["errors"])

@@ -287,6 +287,39 @@ assert "summary" in bt_ai and bt_ai["summary"].get("train_until") == "2026-04-09
 print("AI OK: exit", hist_[-1]["reason"], "| backtest days", bt_ai["summary"]["days"], "trades", bt_ai["summary"]["trades"])
 assert j(c.post("/api/settings", json={"prefs": {"strategies": ["noise", "camarilla"], "auto": False}}))["ok"]
 store.clear_positions(); store.clear_trades()
+# ---------- session journal ----------
+from fno import journal as JR  # noqa: E402
+store.clear_positions(); store.clear_trades()
+assert j(c.post("/api/settings", json={"prefs": {"sizing": "risk", "risk_pct": 2, "strategies": ["noise", "camarilla", "ai"], "auto": False}}))["ok"]
+NOW[0] = datetime(2026, 10, 1, 9, 17, tzinfo=C.IST); CANDLES.clear(); M._cache.clear()
+tk = j(c.post("/api/tick", headers={"x-cron-secret": "c"}))
+assert tk["journal"].get("ctx:NIFTY") == "written" and tk["journal"].get("ctx:BANKNIFTY") == "written", tk["journal"]
+jd = j(c.get("/api/journal/day?date=2026-10-01"))
+cx = jd["context"]["NIFTY"]
+assert cx and cx["prev_close"] and cx["camarilla"]["h4"] > cx["camarilla"]["l4"] and cx["cpr"]["tc"] >= cx["cpr"]["bc"] and cx["expiry"], cx
+assert cx["noise_band_at"] and "09:45" in cx["noise_band_at"], cx["noise_band_at"]
+assert j(c.post("/api/tick", headers={"x-cron-secret": "c"}))["journal"].get("skipped")            # context not rewritten
+NOW[0] = datetime(2026, 10, 1, 10, 51, tzinfo=C.IST); CANDLES.clear(); M._cache.clear()         # a :01 minute -> scan
+AM.load()["meta"]["threshold"] = -9.0
+tk = j(c.post("/api/tick", headers={"x-cron-secret": "c"}))
+assert isinstance(tk["journal"].get("NIFTY"), int) and tk["journal"]["NIFTY"] >= 1, tk["journal"]
+jd = j(c.get("/api/journal/day?date=2026-10-01"))
+assert jd["recommendations"] and jd["recommendations"][0]["basis"]["checks"] and jd["recommendations"][0]["option"]["strike"] and jd["ai"]["NIFTY"], jd["summary"]
+n_before = len(jd["recommendations"])
+tk = j(c.post("/api/tick", headers={"x-cron-secret": "c"}))                                       # same candle -> no duplicate
+assert len(j(c.get("/api/journal/day?date=2026-10-01"))["recommendations"]) == n_before
+assert j(c.post("/api/journal/scan", json={}))
+NOW[0] = datetime(2026, 10, 1, 15, 17, tzinfo=C.IST); CANDLES.clear(); M._cache.clear()
+tk = j(c.post("/api/tick", headers={"x-cron-secret": "c"}))
+assert tk["journal"].get("settled", 0) >= 1, tk["journal"]
+jd = j(c.get("/api/journal/day?date=2026-10-01"))
+r0 = jd["recommendations"][0]["result"]
+assert r0 and r0["index_outcome"] in ("target", "stop", "square-off") and "R" in r0 and jd["summary"]["settled"] >= 1, r0
+assert "2026-10-01" in j(c.get("/api/journal"))["days"]
+assert c.get("/api/journal/day?date=nope").status_code == 400
+print("journal OK:", jd["summary"])
+AM.load()["meta"]["threshold"] = 0.3
+assert j(c.post("/api/settings", json={"prefs": {"strategies": ["noise", "camarilla"], "auto": False}}))["ok"]
 # ---------- calendar rules (round 6) ----------
 from fno import service as SV, indicators as II  # noqa: E402
 from datetime import date as _d
