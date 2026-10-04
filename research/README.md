@@ -175,3 +175,12 @@ option P&L with the corrected premiums and costs.
   (`fno/ai_model.npz`, 1.1 MB) trained on data **before 2026-04-09**; the app's AI backtest trades only days after that cutoff,
   so it never shows in-sample results (in-sample, the same model shows 90%+ wins — a trap worth naming).
 Retrain: `python ai_data.py && python ai_data_trail.py && for s in 11 12 13; do AI_SEED=$s AI_FINAL_ONLY=1 python ai_train.py; done && python ai_export.py ",_s12,_s13" 0.3 && python make_round8.py`
+
+## Round 9 — EMA + volume + RSI combinations (`evr.py`)
+Five moving-average types (EMA, SMA, DEMA, TEMA, HMA) × pairs 5/13, 9/21, 9/21/50, 8/34, 20/50, 5/20/200, 13/50/200 × four
+entry styles (cross, stack, pullback to the fast average, RSI bounce) × five RSI rules (>50, >55, >60, cross 50, cross 60) ×
+relative volume ≥ 1 / 1.3 / 1.6 / 2 (10-heavyweight 5-min turnover vs its usual level at that time of day, 20 sessions) ×
+exits (2R, 3R, trail on the fast average) — 1,200 of the 5,250 settings, both indices, corrected premiums and costs.
+228 profitable on training, 3 robust (both indices, both halves, every year 2023-25), 0 of those profitable on the unseen 120 days;
+the best training setting (DEMA 5/20/200 stack, RSI > 60, volume ≥ 1.3, 3R) made ₹183k training and −₹38k unseen.
+The volume filter raised the share of profitable settings from 1% (no filter) to 45% (≥ 2× usual) by removing trades, not by picking better ones.
