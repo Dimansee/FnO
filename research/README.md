@@ -196,3 +196,18 @@ Period Oct 2023 → Oct 2026 (NSE OI data starts then); tuned before 2026-04-09,
   unseen samples are too small to conclude. Status: watch-list, re-test after ~60 more sessions.
 - Ingredient effects (median training P&L with vs without): ATR expansion +₹13k vs −₹13k, volume +₹11k vs −₹15k (both mostly by cutting trades);
   EMA 20/50 and ADX slightly negative; OI, CPR, VWAP, RSI ≈ neutral. 4–5 confirmations best; 7–8 too few trades. Votes (k of 8): negative at every k.
+
+## Round 11 — rules from a web review, tested on 1-minute data (`round11.py`, results `round11.json`)
+- **Last-half-hour momentum** (sign of open→15:00, trade 15:00→15:28; variants 14:30 entry, |move| filters, first-half-hour sign): 50–52% wins,
+  < 1 index point a trade, option P&L (1 lot, 1-ITM) −₹50k to −₹350k over 3¾ years — decay and costs eat it. Not for options.
+- **Initial balance** (09:15–10:15): day's high set in the first hour 41%, low 41.5%, either 77%. Extension trade (close beyond IB after 10:15,
+  stop IB mid, target 0.8×IB) lost in all IB-width variants on both indices.
+- **Time of day / weekday audit:** 09:15–09:45 avg −0.04%, 45% green, range 0.44% (double any other slot); 12:00–13:30 quietest (0.19–0.20%);
+  14:15–14:45 48% green; no 2:30–3:30 effect. Tuesday avg −0.18%, 38% green (186 days); Thursday −0.05%, 43%. Opening move ≥ 0.7% by 09:30:
+  15 days, 60% reverted — too few.
+- **VIX gate on the rules:** VIX ≥ 14 days PF 1.51 (train +₹126k) vs < 14 PF 1.06 (train −₹6k) — but < 14 made +₹28k on the unseen 120 days
+  (2026 +₹48k), so the floor stays at 11. By one-year VIX percentile: 0–25 −₹26/trade, 25–50 +₹105, 50–75 +₹597, 75–100 +₹113.
+- **Expiry afternoons:** realised vol 15:00–15:30 is 0.56 vs 0.49 (Nifty) and 0.81 vs 0.67 (Bank Nifty) on expiry vs other days. Previous-day
+  max-OI strike crossed after 13:30 on expiry: Nifty 23 trades 65% wins +₹28k (1 ATM lot), Bank Nifty 11 trades 36% −₹12k. Watch-list; needs
+  intraday OI (now being recorded) for a real test.
+- Not testable yet (need the recorder's 5-min option data): straddle-premium VWAP cross, ΔOI-PCR intraday cross, IV-percentile entries.
