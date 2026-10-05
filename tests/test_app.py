@@ -291,6 +291,7 @@ store.clear_positions(); store.clear_trades()
 from fno import journal as JR  # noqa: E402
 store.clear_positions(); store.clear_trades()
 assert j(c.post("/api/settings", json={"prefs": {"sizing": "risk", "risk_pct": 2, "strategies": ["noise", "camarilla", "ai"], "auto": False}}))["ok"]
+store._cmd("DEL", JR._key("2026-10-01"))
 NOW[0] = datetime(2026, 10, 1, 9, 17, tzinfo=C.IST); CANDLES.clear(); M._cache.clear()
 tk = j(c.post("/api/tick", headers={"x-cron-secret": "c"}))
 assert tk["journal"].get("ctx:NIFTY") == "written" and tk["journal"].get("ctx:BANKNIFTY") == "written", tk["journal"]
@@ -298,7 +299,7 @@ jd = j(c.get("/api/journal/day?date=2026-10-01"))
 cx = jd["context"]["NIFTY"]
 assert cx and cx["prev_close"] and cx["camarilla"]["h4"] > cx["camarilla"]["l4"] and cx["cpr"]["tc"] >= cx["cpr"]["bc"] and cx["expiry"], cx
 assert cx["noise_band_at"] and "09:45" in cx["noise_band_at"], cx["noise_band_at"]
-assert j(c.post("/api/tick", headers={"x-cron-secret": "c"}))["journal"].get("skipped")            # context not rewritten
+assert "ctx:NIFTY" not in j(c.post("/api/tick", headers={"x-cron-secret": "c"}))["journal"]            # context not rewritten
 NOW[0] = datetime(2026, 10, 1, 10, 51, tzinfo=C.IST); CANDLES.clear(); M._cache.clear()         # a :01 minute -> scan
 AM.load()["meta"]["threshold"] = -9.0
 tk = j(c.post("/api/tick", headers={"x-cron-secret": "c"}))
