@@ -165,7 +165,12 @@ print("after: positions", len(p["positions"]), "trades", len(p["history"]), "sta
 pid = None
 
 print("context:", list(j(c.get("/api/context?symbol=RELIANCE")).keys()))
-print("stock dash:", j(c.get("/api/dashboard?symbol=RELIANCE"))["signal"]["signal"])
+sd = j(c.get("/api/dashboard?symbol=RELIANCE"))["signal"]
+print("stock dash:", sd["signal"], "| limit tip:", any("Daily risk limit" in w for w in sd["warnings"]))
+assert sd["signal"] != "STOP FOR TODAY"                                   # demo account: limits are a tip by default
+assert j(c.post("/api/settings", json={"prefs": {"enforce_limits": True}}))["ok"]
+assert j(c.get("/api/dashboard?symbol=RELIANCE"))["signal"]["signal"] == "STOP FOR TODAY"
+assert j(c.post("/api/settings", json={"prefs": {"enforce_limits": False}}))["ok"]
 
 # settings + broker login redirects
 j(c.post("/api/settings", json={"broker": "upstox", "id": "KEY", "secret": "SEC"}))

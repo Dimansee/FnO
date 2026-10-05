@@ -287,6 +287,8 @@ def settings_post():
             cur["strategies"] = st
         if "auto" in p:
             cur["auto"] = bool(p["auto"])
+        if "enforce_limits" in p:
+            cur["enforce_limits"] = bool(p["enforce_limits"])
         if "auto_syms" in p:
             cur["auto_syms"] = [x for x in p["auto_syms"] if x in SV.ALL_SYMBOLS][:4]
         store.put("prefs", cur)

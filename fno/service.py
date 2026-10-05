@@ -72,7 +72,8 @@ def fii():
 # ---------------------------------------------------------------------------
 # Position management (also called every minute by the scheduler)
 # ---------------------------------------------------------------------------
-PREF_DEFAULTS = {"sizing": "risk", "risk_pct": 1.0, "strategies": ["noise", "camarilla"], "auto": False, "auto_syms": ["NIFTY"]}
+PREF_DEFAULTS = {"sizing": "risk", "risk_pct": 1.0, "strategies": ["noise", "camarilla"], "auto": False, "auto_syms": ["NIFTY"],
+                 "enforce_limits": False}   # demo account: the daily risk limits are shown as a tip unless switched on
 
 
 def prefs() -> dict:
@@ -179,6 +180,16 @@ def _with_ai(symbol, g, ev, pf, traded):
     return ev
 
 
+def risk_guard(pos, tr, capital, pf) -> dict:
+    """The daily risk limits (two losers / -2% / max trades). On the demo account they only advise unless enforced in Settings."""
+    g = P.day_guard(pos, tr, capital)
+    if g.get("blocked") and not pf.get("enforce_limits"):
+        return {"blocked": False, "tip": "Daily risk limit reached - on a real account you would stop now: " + g["reason"] +
+                " (This demo account carries on; switch 'Enforce daily limits' on in Settings to stop for the day.)",
+                "pnl_today": g.get("pnl_today"), "trades_today": g.get("trades_today")}
+    return g
+
+
 def calendar_guard(symbol, exps, today) -> dict | None:
     """Days the research says to sit out (round 6): Union Budget day, and Bank Nifty on its own expiry day."""
     if today in C.BUDGET_DAYS:
@@ -213,10 +224,10 @@ def dashboard(symbol, strike=None):
     acct, pos, tr, cash = P.snapshot()
     cstats = M.chain_stats(g["chain"], g["spot"])
     gc, nw, fi = gcues(), news(symbol), fii()
-    guard = P.day_guard(pos, tr, acct["capital_start"])
+    pf = prefs()
+    guard = risk_guard(pos, tr, acct["capital_start"], pf)
     if not guard.get("blocked"):
         guard = calendar_guard(symbol, g["exps"], g["now"].date()) or guard
-    pf = prefs()
     traded = _traded_today(symbol, pos, tr)
     ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, nw, gc, fi, g["now"], guard, traded, pf["strategies"])
     ev = _with_ai(symbol, g, ev, pf, traded)
@@ -273,7 +284,8 @@ def place_signal(symbol, strike=None, auto=False):
     m = M.Market()
     g = _gather(symbol, m)
     acct, pos, tr, cash = P.snapshot()
-    guard = P.day_guard(pos, tr, acct["capital_start"])
+    pf = prefs()
+    guard = risk_guard(pos, tr, acct["capital_start"], pf)
     if not guard.get("blocked"):
         guard = calendar_guard(symbol, g["exps"], g["now"].date()) or guard
     if guard.get("blocked"):
@@ -281,7 +293,6 @@ def place_signal(symbol, strike=None, auto=False):
     if any(p["symbol"] == symbol and p["mode"] == "signal" for p in pos):
         return False, "You already have an open signal trade in this instrument."
     cstats = M.chain_stats(g["chain"], g["spot"])
-    pf = prefs()
     traded = _traded_today(symbol, pos, tr)
     ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, news(symbol), gcues(), fii(), g["now"], guard, traded, pf["strategies"])
     ev = _with_ai(symbol, g, ev, pf, traded)
@@ -486,10 +497,10 @@ def scan(symbol, m=None, prefs_=None, want_order=True):
     g = _gather(symbol, m)
     acct, pos, tr, cash = P.snapshot()
     cstats = M.chain_stats(g["chain"], g["spot"])
-    guard = P.day_guard(pos, tr, acct["capital_start"])
+    pf = prefs_ or prefs()
+    guard = risk_guard(pos, tr, acct["capital_start"], pf)
     if not guard.get("blocked"):
         guard = calendar_guard(symbol, g["exps"], g["now"].date()) or guard
-    pf = prefs_ or prefs()
     traded = _traded_today(symbol, pos, tr)
     ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, None, gcues(), fii(), g["now"], guard, traded, pf["strategies"])
     ev = _with_ai(symbol, g, ev, pf, traded)

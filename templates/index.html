@@ -461,6 +461,8 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
         <label class="tog"><input type="checkbox" id="pfNoise"> Noise-band momentum</label>
         <label class="tog" style="margin-left:14px"><input type="checkbox" id="pfCam"> Camarilla breakout</label>
         <label class="tog" style="margin-left:14px"><input type="checkbox" id="pfAI"> AI model (experimental - see its record in Backtest)</label>
+        <label style="margin-top:12px">Daily risk limits</label>
+        <label class="tog"><input type="checkbox" id="pfLimits"> Enforce them (stop for the day after 2 losers, a 2% loss or 4 trades). Off = shown as a tip only, since this is a demo account</label>
         <label style="margin-top:12px">Auto paper-trading</label>
         <label class="tog"><input type="checkbox" id="pfAuto"> Place signal trades automatically, even when this page is closed</label>
         <div style="margin-top:6px" id="pfSyms"></div>
@@ -1537,7 +1539,7 @@ async function loadSettings() {
   $("#pfSize").value = pf.sizing || "risk"; $("#pfRisk").value = String(pf.risk_pct ?? 1);
   $("#pfNoise").checked = (pf.strategies || []).includes("noise"); $("#pfCam").checked = (pf.strategies || []).includes("camarilla");
   $("#pfAI").checked = (pf.strategies || []).includes("ai");
-  $("#pfAuto").checked = !!pf.auto;
+  $("#pfAuto").checked = !!pf.auto; $("#pfLimits").checked = !!pf.enforce_limits;
   $("#pfSyms").innerHTML = ["NIFTY", "BANKNIFTY"].map(x => `<label class="tog" style="margin-right:14px"><input type="checkbox" data-asym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${x === "NIFTY" ? "Nifty 50" : "Bank Nifty"}</label>`).join("");
   $("#fiiIn").value = d.fii_manual ? d.fii_manual.value : "";
   loadRecorder();
@@ -1573,7 +1575,7 @@ $("#pfSave").onclick = async () => {
   const strategies = [$("#pfNoise").checked && "noise", $("#pfCam").checked && "camarilla", $("#pfAI").checked && "ai"].filter(Boolean);
   const auto_syms = [...document.querySelectorAll("[data-asym]")].filter(x => x.checked).map(x => x.dataset.asym);
   try {
-    await post("/api/settings", {prefs: {sizing: $("#pfSize").value, risk_pct: +$("#pfRisk").value, strategies, auto: $("#pfAuto").checked, auto_syms}});
+    await post("/api/settings", {prefs: {sizing: $("#pfSize").value, risk_pct: +$("#pfRisk").value, strategies, auto: $("#pfAuto").checked, auto_syms, enforce_limits: $("#pfLimits").checked}});
     toast("Preferences saved"); loadSettings();
   } catch (e) { toast(e.message); }
 };

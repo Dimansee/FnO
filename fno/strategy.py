@@ -265,6 +265,8 @@ def _evaluate_noise(symbol, candles, vix, cstats, news, gcues, fii, now: datetim
     if (news or {}).get("events"):
         res["warnings"].append("Event in the news: " + ", ".join(news["events"]) +
                                ". On RBI/Budget/election-result days, skip or trade half size.")
+    if day_guard and day_guard.get("tip"):
+        res["warnings"].append(day_guard["tip"])
     if day_guard and day_guard.get("blocked"):
         res["signal"] = "STOP FOR TODAY"
         res["checks"].append((False, day_guard["reason"]))
