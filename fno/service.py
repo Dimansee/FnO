@@ -508,14 +508,16 @@ def journal_tick(now):
     t = now.time()
     day = now.date().isoformat()
     out = {}
-    if time(9, 16) <= t <= time(9, 29):
+    if time(9, 16) <= t <= time(13, 0):                     # the scheduler may only start at 09:30: write it on the first tick that finds it missing
+        m = None
         for sym in J.SYMS:
             if J._get(day, f"ctx:{sym}") is None:
-                m = M.Market()
+                m = m or M.Market()
                 g = _gather(sym, m)
                 J.write_context(sym, g, gcues(), fii(), prefs())
                 out[f"ctx:{sym}"] = "written"
-        return out or {"skipped": "context already written"}
+        if t < time(9, 30):
+            return out or {"skipped": "context already written"}
     if time(9, 30) <= t <= time(14, 50) and now.minute % 5 == 1:
         m = M.Market()
         pf = prefs()
