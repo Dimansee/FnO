@@ -1,0 +1,390 @@
+{
+ "ai": {
+  "BANKNIFTY": [],
+  "NIFTY": []
+ },
+ "context": {
+  "BANKNIFTY": {
+   "atr_5m": 77.95894488431627,
+   "calendar": null,
+   "camarilla": {
+    "h3": 54939.58759765625,
+    "h4": 55165.0736328125,
+    "l3": 54488.61552734375,
+    "l4": 54263.1294921875,
+    "pivot": 54758.884114583336
+   },
+   "cpr": {
+    "bc": 54781.275390625,
+    "tc": 54736.49283854167,
+    "width_pct": 0.082
+   },
+   "expiries": [
+    "2026-10-27",
+    "2026-11-24",
+    "2026-12-29"
+   ],
+   "expiry": "2026-10-27",
+   "fii": {
+    "date": "05-Oct-2026",
+    "dii": 5181.62,
+    "fii": -4699.14,
+    "source": "NSE"
+   },
+   "gap_pct": 0.39,
+   "global": {
+    "avg_equity_chg": 0.47,
+    "notes": []
+   },
+   "lot": 30,
+   "noise_band_at": {
+    "09:45": [
+     54281.0,
+     55341.1
+    ],
+    "10:15": [
+     54245.5,
+     55376.8
+    ],
+    "11:15": [
+     54214.8,
+     55407.6
+    ],
+    "12:15": [
+     54179.1,
+     55443.4
+    ],
+    "13:15": [
+     54186.9,
+     55435.6
+    ],
+    "14:15": [
+     54154.1,
+     55468.5
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 54906.55078125,
+   "pcr_prev_close": 1.06,
+   "pivot": 54758.884114583336,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY"
+    ],
+    "risk_pct": 2.0,
+    "sizing": "risk",
+    "strategies": [
+     "noise",
+     "camarilla"
+    ]
+   },
+   "prev_close": 54714.1015625,
+   "prev_high": 55191.25,
+   "prev_low": 54371.30078125,
+   "symbol": "BANKNIFTY",
+   "time": "09:30",
+   "vix": {
+    "chg_pct": -2.84167851070396,
+    "level": 14.359999656677246
+   }
+  },
+  "NIFTY": {
+   "atr_5m": 24.965623369946357,
+   "calendar": null,
+   "camarilla": {
+    "h3": 22617.43271484375,
+    "h4": 22679.1154296875,
+    "l3": 22494.06728515625,
+    "l4": 22432.3845703125,
+    "pivot": 22525.016927083332
+   },
+   "cpr": {
+    "bc": 22509.650390625,
+    "tc": 22540.383463541664,
+    "width_pct": 0.136
+   },
+   "expiries": [
+    "2026-10-06",
+    "2026-10-13",
+    "2026-10-20"
+   ],
+   "expiry": "2026-10-13",
+   "fii": {
+    "date": "05-Oct-2026",
+    "dii": 5181.62,
+    "fii": -4699.14,
+    "source": "NSE"
+   },
+   "gap_pct": 0.18,
+   "global": {
+    "avg_equity_chg": 0.47,
+    "notes": []
+   },
+   "lot": 65,
+   "noise_band_at": {
+    "09:45": [
+     22453.5,
+     22705.7
+    ],
+    "10:15": [
+     22439.0,
+     22720.3
+    ],
+    "11:15": [
+     22437.2,
+     22722.1
+    ],
+    "12:15": [
+     22406.9,
+     22752.4
+    ],
+    "13:15": [
+     22379.4,
+     22779.9
+    ],
+    "14:15": [
+     22360.1,
+     22799.3
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 22603.25,
+   "pcr_prev_close": 0.88,
+   "pivot": 22525.016927083332,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY"
+    ],
+    "risk_pct": 2.0,
+    "sizing": "risk",
+    "strategies": [
+     "noise",
+     "camarilla"
+    ]
+   },
+   "prev_close": 22555.75,
+   "prev_high": 22621.80078125,
+   "prev_low": 22397.5,
+   "symbol": "NIFTY",
+   "time": "09:30",
+   "vix": {
+    "chg_pct": -2.84167851070396,
+    "level": 14.359999656677246
+   }
+  }
+ },
+ "date": "2026-10-06",
+ "paper_trades": [
+  {
+   "charges": 72.6,
+   "closed": "2026-10-06T11:56:00+05:30",
+   "entry_prem": 212.35,
+   "exit_prem": 209.56,
+   "expiry": "2026-10-13",
+   "gross_pnl": -181.35,
+   "id": "90365d5d",
+   "legs": [
+    {
+     "key": "DEMO|NIFTY|2026-10-13|22650|CE",
+     "opt": "CE",
+     "price": 212.35,
+     "side": "BUY",
+     "src": "demo",
+     "strike": 22650.0
+    }
+   ],
+   "lot": 65,
+   "lots": 1,
+   "margin": 13803.0,
+   "mode": "signal",
+   "opened": "2026-10-06T11:10:02+05:30",
+   "plan": {
+    "auto": true,
+    "breakeven_at": 22743.321250740788,
+    "entry": 22682.150390625,
+    "opt": "CE",
+    "risk_pts": 61.17086011578705,
+    "rr": null,
+    "sl": 22620.979530509212,
+    "strategy": "camarilla",
+    "target": null,
+    "time_stop_min": 45,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "pnl": -253.95,
+   "qty": 65,
+   "reason": "Time stop (45 min, no follow-through)",
+   "sl_prem": 178.22,
+   "source": "DEMO \u00b7 Yahoo + theoretical prices",
+   "spot_at_entry": 22682.150390625,
+   "symbol": "NIFTY",
+   "target_prem": 314.75
+  }
+ ],
+ "recommendations": [
+  {
+   "auto_enabled": false,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 13.93 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 12:45 (next 13:15) \u00b7 band 54175.1 \u2013 55442.1"
+     ],
+     [
+      null,
+      "Watching CALL side (1/3 conditions met):"
+     ],
+     [
+      "False",
+      "12:45 close 55172.9 above upper band 55442.1"
+     ],
+     [
+      "True",
+      "Above VWAP 55010.8"
+     ],
+     [
+      false,
+      "Still above the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 13.93 between 11 and 22"
+     ],
+     [
+      null,
+      "Yesterday's levels: H4 55166.2 \u00b7 H3 54940.2 \u00b7 L3 54488.0 \u00b7 L4 54262.0"
+     ],
+     [
+      true,
+      "12:45 close crossed above H4"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": 0,
+      "value": "+0.40% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 1,
+      "value": "+0.34%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 1,
+      "value": "13.93 (-5.8%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "0.93"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-4,699 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": 1,
+      "value": "55172.9 vs 55010.8"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": 1,
+      "value": "Up"
+     }
+    ],
+    "p_win": null,
+    "score": 3,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "id": "BANKNIFTY:camarilla:12:45",
+   "index": {
+    "entry": 55172.95,
+    "risk_pts": 159.47549076311327,
+    "rr": null,
+    "sl": 55013.47450923688,
+    "target": null
+   },
+   "opt": "CE",
+   "option": {
+    "cost_per_lot": 28929.0,
+    "delta": 0.57,
+    "entry_prem": 964.3,
+    "expiry": "2026-10-27",
+    "lots": 1,
+    "ltp": 962.0,
+    "sl_prem": 873.91,
+    "strike": 55100.0,
+    "target_prem": 1235.47
+   },
+   "result": {
+    "R": -1.0,
+    "at": "14:30",
+    "close_15_15": 55001.85,
+    "exit_spot": 55013.5,
+    "index_outcome": "stop",
+    "mae_pts": 217.6,
+    "mfe_pts": 5.1,
+    "premium": {
+     "at_exit": 842.9,
+     "entry": 964.3,
+     "high": 945.05,
+     "last": 822.9,
+     "low": 822.9,
+     "max_gain_pct": -2.0,
+     "max_loss_pct": -14.7,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY CALL",
+   "signal_bar": "12:45",
+   "spot": 55172.95,
+   "strategy": "camarilla",
+   "symbol": "BANKNIFTY",
+   "time": "12:46:00",
+   "vix": 13.93
+  }
+ ],
+ "settled": {
+  "at": "2026-10-06T15:16:01+05:30",
+  "recos": 1
+ },
+ "summary": {
+  "by_outcome": {
+   "square-off": 0,
+   "stop": 1,
+   "target": 0
+  },
+  "by_strategy": {
+   "camarilla": {
+    "R": -1.0,
+    "n": 1
+   }
+  },
+  "paper_pnl": -254.0,
+  "paper_trades": 1,
+  "recommendations": 1,
+  "settled": 1,
+  "sum_R": -1.0
+ }
+}
