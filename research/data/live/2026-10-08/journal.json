@@ -1,0 +1,3554 @@
+{
+ "ai": {
+  "BANKNIFTY": [
+   {
+    "bar": "12:25",
+    "exp_r": -0.243,
+    "p_win": 0.434,
+    "side": "PE",
+    "spot": 54755.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:30",
+    "exp_r": -0.22,
+    "p_win": 0.446,
+    "side": "PE",
+    "spot": 54772.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:35",
+    "exp_r": -0.227,
+    "p_win": 0.442,
+    "side": "PE",
+    "spot": 54730.4,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:40",
+    "exp_r": -0.222,
+    "p_win": 0.439,
+    "side": "PE",
+    "spot": 54720.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:45",
+    "exp_r": -0.226,
+    "p_win": 0.435,
+    "side": "PE",
+    "spot": 54755.4,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:50",
+    "exp_r": -0.223,
+    "p_win": 0.44,
+    "side": "PE",
+    "spot": 54735.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:55",
+    "exp_r": -0.223,
+    "p_win": 0.435,
+    "side": "PE",
+    "spot": 54749.9,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:00",
+    "exp_r": -0.223,
+    "p_win": 0.441,
+    "side": "PE",
+    "spot": 54688.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:05",
+    "exp_r": -0.21,
+    "p_win": 0.435,
+    "side": "PE",
+    "spot": 54753.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:10",
+    "exp_r": -0.206,
+    "p_win": 0.442,
+    "side": "PE",
+    "spot": 54728.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:15",
+    "exp_r": -0.215,
+    "p_win": 0.446,
+    "side": "PE",
+    "spot": 54709.6,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:20",
+    "exp_r": -0.214,
+    "p_win": 0.451,
+    "side": "PE",
+    "spot": 54625.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:25",
+    "exp_r": -0.186,
+    "p_win": 0.444,
+    "side": "PE",
+    "spot": 54675.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:30",
+    "exp_r": -0.205,
+    "p_win": 0.436,
+    "side": "PE",
+    "spot": 54595.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:35",
+    "exp_r": -0.177,
+    "p_win": 0.459,
+    "side": "PE",
+    "spot": 54660.6,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:40",
+    "exp_r": -0.165,
+    "p_win": 0.466,
+    "side": "PE",
+    "spot": 54691.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:45",
+    "exp_r": -0.171,
+    "p_win": 0.46,
+    "side": "PE",
+    "spot": 54585.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:50",
+    "exp_r": -0.158,
+    "p_win": 0.455,
+    "side": "PE",
+    "spot": 54550.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:55",
+    "exp_r": -0.153,
+    "p_win": 0.457,
+    "side": "PE",
+    "spot": 54563.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:00",
+    "exp_r": -0.142,
+    "p_win": 0.461,
+    "side": "PE",
+    "spot": 54541.6,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:05",
+    "exp_r": -0.149,
+    "p_win": 0.458,
+    "side": "PE",
+    "spot": 54444.9,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:10",
+    "exp_r": -0.14,
+    "p_win": 0.458,
+    "side": "PE",
+    "spot": 54429.9,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:15",
+    "exp_r": -0.123,
+    "p_win": 0.46,
+    "side": "PE",
+    "spot": 54457.6,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:20",
+    "exp_r": -0.103,
+    "p_win": 0.469,
+    "side": "PE",
+    "spot": 54418.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:25",
+    "exp_r": -0.104,
+    "p_win": 0.468,
+    "side": "PE",
+    "spot": 54433.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:30",
+    "exp_r": -0.098,
+    "p_win": 0.481,
+    "side": "PE",
+    "spot": 54471.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:35",
+    "exp_r": -0.097,
+    "p_win": 0.491,
+    "side": "PE",
+    "spot": 54517.0,
+    "stop_k": 2.0,
+    "trade": false
+   }
+  ],
+  "NIFTY": [
+   {
+    "bar": "12:25",
+    "exp_r": -0.232,
+    "p_win": 0.389,
+    "side": "PE",
+    "spot": 22313.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:30",
+    "exp_r": -0.187,
+    "p_win": 0.414,
+    "side": "PE",
+    "spot": 22300.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:35",
+    "exp_r": -0.181,
+    "p_win": 0.42,
+    "side": "PE",
+    "spot": 22293.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:40",
+    "exp_r": -0.206,
+    "p_win": 0.413,
+    "side": "PE",
+    "spot": 22275.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:45",
+    "exp_r": -0.183,
+    "p_win": 0.411,
+    "side": "PE",
+    "spot": 22293.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:50",
+    "exp_r": -0.187,
+    "p_win": 0.411,
+    "side": "PE",
+    "spot": 22286.0,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:55",
+    "exp_r": -0.165,
+    "p_win": 0.42,
+    "side": "PE",
+    "spot": 22288.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:00",
+    "exp_r": -0.191,
+    "p_win": 0.42,
+    "side": "PE",
+    "spot": 22266.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:05",
+    "exp_r": -0.183,
+    "p_win": 0.406,
+    "side": "PE",
+    "spot": 22292.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:10",
+    "exp_r": -0.173,
+    "p_win": 0.411,
+    "side": "PE",
+    "spot": 22282.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:15",
+    "exp_r": -0.187,
+    "p_win": 0.42,
+    "side": "PE",
+    "spot": 22277.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:20",
+    "exp_r": -0.196,
+    "p_win": 0.422,
+    "side": "PE",
+    "spot": 22243.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:25",
+    "exp_r": -0.171,
+    "p_win": 0.426,
+    "side": "PE",
+    "spot": 22264.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:30",
+    "exp_r": -0.174,
+    "p_win": 0.424,
+    "side": "PE",
+    "spot": 22236.0,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:35",
+    "exp_r": -0.142,
+    "p_win": 0.438,
+    "side": "PE",
+    "spot": 22268.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:40",
+    "exp_r": -0.152,
+    "p_win": 0.44,
+    "side": "PE",
+    "spot": 22281.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:45",
+    "exp_r": -0.148,
+    "p_win": 0.451,
+    "side": "PE",
+    "spot": 22250.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:50",
+    "exp_r": -0.144,
+    "p_win": 0.45,
+    "side": "PE",
+    "spot": 22239.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:55",
+    "exp_r": -0.142,
+    "p_win": 0.451,
+    "side": "PE",
+    "spot": 22236.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:00",
+    "exp_r": -0.153,
+    "p_win": 0.417,
+    "side": "PE",
+    "spot": 22240.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:05",
+    "exp_r": -0.164,
+    "p_win": 0.423,
+    "side": "PE",
+    "spot": 22212.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:10",
+    "exp_r": -0.159,
+    "p_win": 0.421,
+    "side": "PE",
+    "spot": 22216.6,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:15",
+    "exp_r": -0.138,
+    "p_win": 0.443,
+    "side": "PE",
+    "spot": 22236.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:20",
+    "exp_r": -0.127,
+    "p_win": 0.428,
+    "side": "PE",
+    "spot": 22214.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:25",
+    "exp_r": -0.099,
+    "p_win": 0.448,
+    "side": "PE",
+    "spot": 22209.0,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:30",
+    "exp_r": -0.102,
+    "p_win": 0.452,
+    "side": "PE",
+    "spot": 22214.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:35",
+    "exp_r": -0.102,
+    "p_win": 0.472,
+    "side": "PE",
+    "spot": 22235.5,
+    "stop_k": 2.0,
+    "trade": false
+   }
+  ]
+ },
+ "context": {
+  "BANKNIFTY": {
+   "atr_5m": 83.3353520294886,
+   "calendar": null,
+   "camarilla": {
+    "h3": 55248.10556640625,
+    "h4": 55440.6603515625,
+    "l3": 54862.99599609375,
+    "l4": 54670.4412109375,
+    "pivot": 55010.317708333336
+   },
+   "cpr": {
+    "bc": 54987.701171875,
+    "tc": 55032.93424479167,
+    "width_pct": 0.082
+   },
+   "expiries": [
+    "2026-10-27",
+    "2026-11-24",
+    "2026-12-29"
+   ],
+   "expiry": "2026-10-27",
+   "fii": {
+    "date": "07-Oct-2026",
+    "dii": 4596.57,
+    "fii": -6121.37,
+    "source": "NSE"
+   },
+   "gap_pct": -0.29,
+   "global": {
+    "avg_equity_chg": -0.63,
+    "notes": []
+   },
+   "lot": 30,
+   "noise_band_at": {
+    "09:45": [
+     54639.2,
+     55459.3
+    ],
+    "10:15": [
+     54638.8,
+     55459.7
+    ],
+    "11:15": [
+     54595.8,
+     55502.7
+    ],
+    "12:15": [
+     54589.4,
+     55509.2
+    ],
+    "13:15": [
+     54601.8,
+     55496.8
+    ],
+    "14:15": [
+     54596.9,
+     55501.7
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 55042.8984375,
+   "pcr_prev_close": 1.03,
+   "pivot": 55010.317708333336,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY"
+    ],
+    "risk_pct": 2.0,
+    "sizing": "risk",
+    "strategies": [
+     "noise",
+     "camarilla"
+    ]
+   },
+   "prev_close": 55055.55078125,
+   "prev_high": 55337.80078125,
+   "prev_low": 54637.6015625,
+   "symbol": "BANKNIFTY",
+   "time": "09:30",
+   "vix": {
+    "chg_pct": 1.4398834004441197,
+    "level": 14.09000015258789
+   }
+  },
+  "NIFTY": {
+   "atr_5m": 26.050485239679716,
+   "calendar": null,
+   "camarilla": {
+    "h3": 22649.99306640625,
+    "h4": 22696.9353515625,
+    "l3": 22556.10849609375,
+    "l4": 22509.1662109375,
+    "pivot": 22622.283854166668
+   },
+   "cpr": {
+    "bc": 22631.900390625,
+    "tc": 22612.667317708336,
+    "width_pct": 0.085
+   },
+   "expiries": [
+    "2026-10-13",
+    "2026-10-20",
+    "2026-10-27"
+   ],
+   "expiry": "2026-10-13",
+   "fii": {
+    "date": "07-Oct-2026",
+    "dii": 4596.57,
+    "fii": -6121.37,
+    "source": "NSE"
+   },
+   "gap_pct": -0.42,
+   "global": {
+    "avg_equity_chg": -0.63,
+    "notes": []
+   },
+   "lot": 65,
+   "noise_band_at": {
+    "09:45": [
+     22511.3,
+     22690.8
+    ],
+    "10:15": [
+     22491.7,
+     22710.4
+    ],
+    "11:15": [
+     22504.6,
+     22697.5
+    ],
+    "12:15": [
+     22472.3,
+     22729.8
+    ],
+    "13:15": [
+     22435.5,
+     22766.6
+    ],
+    "14:15": [
+     22417.8,
+     22784.3
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 22599.05078125,
+   "pcr_prev_close": 0.79,
+   "pivot": 22622.283854166668,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY"
+    ],
+    "risk_pct": 2.0,
+    "sizing": "risk",
+    "strategies": [
+     "noise",
+     "camarilla"
+    ]
+   },
+   "prev_close": 22603.05078125,
+   "prev_high": 22717.25,
+   "prev_low": 22546.55078125,
+   "symbol": "NIFTY",
+   "time": "09:30",
+   "vix": {
+    "chg_pct": 1.4398834004441197,
+    "level": 14.09000015258789
+   }
+  }
+ },
+ "date": "2026-10-08",
+ "paper_trades": [
+  {
+   "charges": 68.71,
+   "closed": "2026-10-08T13:14:59+05:30",
+   "entry_prem": 175.4,
+   "exit_prem": 178.8,
+   "expiry": "2026-10-13",
+   "gross_pnl": 221.0,
+   "id": "43357428",
+   "legs": [
+    {
+     "key": "NSE_FO|44601",
+     "opt": "PE",
+     "price": 175.4,
+     "side": "BUY",
+     "src": "upstox",
+     "strike": 22350.0
+    }
+   ],
+   "lot": 65,
+   "lots": 1,
+   "margin": 11401.0,
+   "mode": "manual",
+   "opened": "2026-10-08T12:52:50+05:30",
+   "plan": null,
+   "pnl": 152.29,
+   "qty": 65,
+   "reason": "Manual exit",
+   "sl_prem": 122.78,
+   "source": "LIVE \u00b7 Upstox",
+   "spot_at_entry": 22284.1,
+   "symbol": "NIFTY",
+   "target_prem": 280.64
+  },
+  {
+   "at_breakeven": true,
+   "charges": 124.28,
+   "closed": "2026-10-08T15:15:03+05:30",
+   "entry_prem": 163.75,
+   "exit_prem": 367.73,
+   "expiry": "2026-10-13",
+   "gross_pnl": 26517.4,
+   "id": "43cd3877",
+   "legs": [
+    {
+     "key": "DEMO|NIFTY|2026-10-13|22550|PE",
+     "opt": "PE",
+     "price": 163.75,
+     "side": "BUY",
+     "src": "demo",
+     "strike": 22550.0
+    }
+   ],
+   "live_sl": 22504.099609375,
+   "lot": 65,
+   "lots": 2,
+   "margin": 21288.0,
+   "mode": "signal",
+   "opened": "2026-10-08T09:30:14+05:30",
+   "plan": {
+    "auto": true,
+    "breakeven_at": 22452.09072265625,
+    "entry": 22504.099609375,
+    "opt": "PE",
+    "risk_pts": 52.008886718751455,
+    "rr": null,
+    "sl": 22556.10849609375,
+    "strategy": "camarilla",
+    "target": null,
+    "time_stop_min": 45,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "pnl": 26393.12,
+   "qty": 130,
+   "reached_half_r": true,
+   "reason": "Square-off 15:15",
+   "sl_prem": 136.81,
+   "source": "DEMO \u00b7 Yahoo + theoretical prices",
+   "spot_at_entry": 22508.150390625,
+   "symbol": "NIFTY",
+   "target_prem": 244.57
+  },
+  {
+   "charges": 90.09,
+   "closed": "2026-10-08T15:15:03+05:30",
+   "entry_prem": 731.55,
+   "exit_prem": 780.8,
+   "expiry": "2026-10-27",
+   "gross_pnl": 1477.5,
+   "id": "8d4da38c",
+   "last_check": "2026-10-08T14:45:00+05:30",
+   "legs": [
+    {
+     "key": "NSE_FO|49432",
+     "opt": "PE",
+     "price": 731.55,
+     "side": "BUY",
+     "src": "upstox",
+     "strike": 54700.0
+    }
+   ],
+   "lot": 30,
+   "lots": 1,
+   "margin": 21946.0,
+   "mode": "signal",
+   "opened": "2026-10-08T13:45:04+05:30",
+   "plan": {
+    "auto": true,
+    "entry": 54595.85,
+    "opt": "PE",
+    "risk_pts": 162.40638877564626,
+    "rr": 4.0,
+    "sl": 54758.25638877565,
+    "strategy": "noise",
+    "target": 53946.224444897416,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "pnl": 1387.41,
+   "qty": 30,
+   "reason": "Square-off 15:15",
+   "sl_prem": 656.49,
+   "source": "LIVE \u00b7 Upstox",
+   "spot_at_entry": 54595.85,
+   "symbol": "BANKNIFTY",
+   "target_prem": 1031.81
+  }
+ ],
+ "recommendations": [
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 14.17 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 09:45 (next 10:15) \u00b7 band 22511.3 \u2013 22690.8"
+     ],
+     [
+      "True",
+      "09:45 close 22472.4 below lower band 22511.3"
+     ],
+     [
+      "True",
+      "Below VWAP 22511.2"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 14.17 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.68% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 0,
+      "value": "14.17 (+2.0%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22472.4 vs 22511.2"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -4,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:09:46",
+   "index": {
+    "entry": 22472.44921875,
+    "risk_pts": 54.13734942808042,
+    "rr": 4.0,
+    "sl": 22526.58656817808,
+    "target": 22255.899821037678
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 10865.0,
+    "delta": 0.52,
+    "entry_prem": 167.15,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 166.5,
+    "sl_prem": 138.78,
+    "strike": 22500.0,
+    "target_prem": 280.62
+   },
+   "result": {
+    "R": 4.0,
+    "at": "13:00",
+    "close_15_15": 22216.0,
+    "exit_spot": 22255.9,
+    "index_outcome": "target",
+    "mae_pts": 25.7,
+    "mfe_pts": 292.5,
+    "premium": {
+     "at_exit": 277.4,
+     "entry": 167.15,
+     "high": 313.1,
+     "last": 288.2,
+     "low": 135.05,
+     "max_gain_pct": 87.3,
+     "max_loss_pct": -19.2,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "09:46",
+   "spot": 22452.599609375,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "09:46:00",
+   "vix": 14.170000076293945
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 14.28 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 09:45 (next 10:15) \u00b7 band 22511.3 \u2013 22690.8"
+     ],
+     [
+      "True",
+      "09:45 close 22472.4 below lower band 22511.3"
+     ],
+     [
+      "True",
+      "Below VWAP 22511.2"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 14.28 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.68% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 0,
+      "value": "14.28 (+2.8%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22468.9 vs 22504.3"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -4,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:09:51",
+   "index": {
+    "entry": 22468.94921875,
+    "risk_pts": 54.249190540360395,
+    "rr": 4.0,
+    "sl": 22523.198409290362,
+    "target": 22251.95245658856
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 10400.0,
+    "delta": 0.51,
+    "entry_prem": 160.0,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 159.35,
+    "sl_prem": 132.44,
+    "strike": 22500.0,
+    "target_prem": 270.23
+   },
+   "result": {
+    "R": 4.0,
+    "at": "13:20",
+    "close_15_15": 22216.0,
+    "exit_spot": 22252.0,
+    "index_outcome": "target",
+    "mae_pts": 29.2,
+    "mfe_pts": 289.0,
+    "premium": {
+     "at_exit": 292.2,
+     "entry": 160.0,
+     "high": 313.1,
+     "last": 288.2,
+     "low": 135.05,
+     "max_gain_pct": 95.7,
+     "max_loss_pct": -15.6,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "09:51",
+   "spot": 22468.150390625,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "09:51:01",
+   "vix": 14.27750015258789
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 14.10 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 10:15 (next 10:45) \u00b7 band 22491.7 \u2013 22710.4"
+     ],
+     [
+      "True",
+      "10:15 close 22487.1 below lower band 22491.7"
+     ],
+     [
+      "True",
+      "Below VWAP 22492.1"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 14.10 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.60% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 0,
+      "value": "14.10 (+1.5%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22487.1 vs 22492.1"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -4,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:10:16",
+   "index": {
+    "entry": 22487.05078125,
+    "risk_pts": 52.053329982872256,
+    "rr": 4.0,
+    "sl": 22539.10411123287,
+    "target": 22278.83746131851
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 11368.0,
+    "delta": 0.54,
+    "entry_prem": 174.9,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 174.2,
+    "sl_prem": 146.79,
+    "strike": 22550.0,
+    "target_prem": 287.34
+   },
+   "result": {
+    "R": 4.0,
+    "at": "12:40",
+    "close_15_15": 22216.0,
+    "exit_spot": 22278.8,
+    "index_outcome": "target",
+    "mae_pts": -16.0,
+    "mfe_pts": 307.2,
+    "premium": {
+     "at_exit": 318.7,
+     "entry": 174.9,
+     "high": 351.9,
+     "last": 326.5,
+     "low": 171.1,
+     "max_gain_pct": 101.2,
+     "max_loss_pct": -2.2,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "10:16",
+   "spot": 22487.349609375,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "10:16:01",
+   "vix": 14.100000381469727
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 14.16 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 10:15 (next 10:45) \u00b7 band 22491.7 \u2013 22710.4"
+     ],
+     [
+      "True",
+      "10:15 close 22487.1 below lower band 22491.7"
+     ],
+     [
+      "True",
+      "Below VWAP 22492.1"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 14.16 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.60% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 0,
+      "value": "14.16 (+2.0%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22460.8 vs 22490.6"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -4,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:10:21",
+   "index": {
+    "entry": 22460.80078125,
+    "risk_pts": 53.163639001952816,
+    "rr": 4.0,
+    "sl": 22513.964420251952,
+    "target": 22248.146225242188
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 11148.0,
+    "delta": 0.53,
+    "entry_prem": 171.5,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 170.8,
+    "sl_prem": 143.16,
+    "strike": 22500.0,
+    "target_prem": 284.84
+   },
+   "result": {
+    "R": 4.0,
+    "at": "13:20",
+    "close_15_15": 22216.0,
+    "exit_spot": 22248.1,
+    "index_outcome": "target",
+    "mae_pts": 10.3,
+    "mfe_pts": 280.9,
+    "premium": {
+     "at_exit": 292.2,
+     "entry": 171.5,
+     "high": 313.1,
+     "last": 288.2,
+     "low": 146.65,
+     "max_gain_pct": 82.6,
+     "max_loss_pct": -14.5,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "10:21",
+   "spot": 22444.150390625,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "10:21:01",
+   "vix": 14.164999961853027
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 14.30 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 10:45 (next 11:15) \u00b7 band 22491.8 \u2013 22710.3"
+     ],
+     [
+      "True",
+      "10:45 close 22434.7 below lower band 22491.8"
+     ],
+     [
+      "True",
+      "Below VWAP 22478.6"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 14.30 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.52% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 0,
+      "value": "14.30 (+3.0%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22434.7 vs 22478.6"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -4,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:10:46",
+   "index": {
+    "entry": 22434.69921875,
+    "risk_pts": 52.70483225637397,
+    "rr": 4.0,
+    "sl": 22487.404051006375,
+    "target": 22223.879889724503
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 11382.0,
+    "delta": 0.54,
+    "entry_prem": 175.1,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 174.4,
+    "sl_prem": 146.8,
+    "strike": 22500.0,
+    "target_prem": 288.31
+   },
+   "result": {
+    "R": 4.0,
+    "at": "14:05",
+    "close_15_15": 22216.0,
+    "exit_spot": 22223.9,
+    "index_outcome": "target",
+    "mae_pts": 25.4,
+    "mfe_pts": 254.8,
+    "premium": {
+     "at_exit": 313.1,
+     "entry": 175.1,
+     "high": 313.1,
+     "last": 288.2,
+     "low": 154.05,
+     "max_gain_pct": 78.8,
+     "max_loss_pct": -12.0,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "10:46",
+   "spot": 22439.849609375,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "10:46:02",
+   "vix": 14.302499771118164
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 14.22 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 10:45 (next 11:15) \u00b7 band 22491.8 \u2013 22710.3"
+     ],
+     [
+      "True",
+      "10:45 close 22434.7 below lower band 22491.8"
+     ],
+     [
+      "True",
+      "Below VWAP 22478.6"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 14.22 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.52% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 0,
+      "value": "14.22 (+2.4%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22457.5 vs 22477.1"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -4,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:10:51",
+   "index": {
+    "entry": 22457.5,
+    "risk_pts": 52.89751164877583,
+    "rr": 4.0,
+    "sl": 22510.397511648775,
+    "target": 22245.9099534049
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 10774.0,
+    "delta": 0.52,
+    "entry_prem": 165.75,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 165.1,
+    "sl_prem": 138.14,
+    "strike": 22500.0,
+    "target_prem": 276.2
+   },
+   "result": {
+    "R": 4.0,
+    "at": "13:20",
+    "close_15_15": 22216.0,
+    "exit_spot": 22245.9,
+    "index_outcome": "target",
+    "mae_pts": 1.5,
+    "mfe_pts": 277.6,
+    "premium": {
+     "at_exit": 292.2,
+     "entry": 165.75,
+     "high": 313.1,
+     "last": 288.2,
+     "low": 155.95,
+     "max_gain_pct": 88.9,
+     "max_loss_pct": -5.9,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "10:51",
+   "spot": 22455.099609375,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "10:51:01",
+   "vix": 14.217499732971191
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 14.22 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 11:15 (next 11:45) \u00b7 band 22504.6 \u2013 22697.5"
+     ],
+     [
+      "True",
+      "11:15 close 22440.4 below lower band 22504.6"
+     ],
+     [
+      "True",
+      "Below VWAP 22470.1"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 14.22 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.45% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 0,
+      "value": "14.22 (+2.4%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22440.4 vs 22470.1"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -4,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:11:16",
+   "index": {
+    "entry": 22440.400390625,
+    "risk_pts": 49.604233650813605,
+    "rr": 4.0,
+    "sl": 22490.004624275814,
+    "target": 22241.983456021746
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 11030.0,
+    "delta": 0.53,
+    "entry_prem": 169.7,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 169.0,
+    "sl_prem": 143.41,
+    "strike": 22500.0,
+    "target_prem": 274.86
+   },
+   "result": {
+    "R": 4.0,
+    "at": "13:25",
+    "close_15_15": 22216.0,
+    "exit_spot": 22242.0,
+    "index_outcome": "target",
+    "mae_pts": 4.4,
+    "mfe_pts": 260.5,
+    "premium": {
+     "at_exit": 278.6,
+     "entry": 169.7,
+     "high": 313.1,
+     "last": 288.2,
+     "low": 156.1,
+     "max_gain_pct": 84.5,
+     "max_loss_pct": -8.0,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "11:16",
+   "spot": 22447.650390625,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "11:16:01",
+   "vix": 14.22249984741211
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 14.22 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 11:15 (next 11:45) \u00b7 band 22504.6 \u2013 22697.5"
+     ],
+     [
+      "True",
+      "11:15 close 22440.4 below lower band 22504.6"
+     ],
+     [
+      "True",
+      "Below VWAP 22470.1"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 14.22 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.45% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 0,
+      "value": "14.22 (+2.3%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22443.3 vs 22469.2"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -4,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:11:21",
+   "index": {
+    "entry": 22443.30078125,
+    "risk_pts": 48.453931247184066,
+    "rr": 4.0,
+    "sl": 22491.754712497182,
+    "target": 22249.485056261263
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 11645.0,
+    "delta": 0.55,
+    "entry_prem": 179.15,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 178.45,
+    "sl_prem": 152.65,
+    "strike": 22500.0,
+    "target_prem": 285.17
+   },
+   "result": {
+    "R": 4.0,
+    "at": "13:20",
+    "close_15_15": 22216.0,
+    "exit_spot": 22249.5,
+    "index_outcome": "target",
+    "mae_pts": -44.1,
+    "mfe_pts": 263.4,
+    "premium": {
+     "at_exit": 292.2,
+     "entry": 179.15,
+     "high": 313.1,
+     "last": 288.2,
+     "low": 187.45,
+     "max_gain_pct": 74.8,
+     "max_loss_pct": 4.6,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "11:21",
+   "spot": 22430.400390625,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "11:21:00",
+   "vix": 14.21500015258789
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 14.60 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 11:45 (next 12:15) \u00b7 band 22489.4 \u2013 22712.7"
+     ],
+     [
+      "True",
+      "11:45 close 22372.7 below lower band 22489.4"
+     ],
+     [
+      "True",
+      "Below VWAP 22452.7"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 14.60 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.66% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": -1,
+      "value": "14.60 (+5.1%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": -1,
+      "value": "0.63"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22372.7 vs 22452.7"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -6,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:11:46",
+   "index": {
+    "entry": 22372.7,
+    "risk_pts": 58.2562592905871,
+    "rr": 4.0,
+    "sl": 22430.95625929059,
+    "target": 22139.674962837653
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 10091.0,
+    "delta": 0.52,
+    "entry_prem": 155.25,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 155.55,
+    "sl_prem": 125.12,
+    "strike": 22400.0,
+    "target_prem": 275.77
+   },
+   "result": {
+    "R": 2.69,
+    "at": "15:15",
+    "close_15_15": 22216.0,
+    "exit_spot": 22215.8,
+    "index_outcome": "square-off",
+    "mae_pts": 10.0,
+    "mfe_pts": 192.8,
+    "premium": {
+     "at_exit": 215.8,
+     "entry": 155.25,
+     "high": 241.6,
+     "last": 215.8,
+     "low": 153.55,
+     "max_gain_pct": 55.6,
+     "max_loss_pct": -1.1,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "11:46",
+   "spot": 22372.7,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "11:46:01",
+   "vix": 14.6
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 14.57 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 11:45 (next 12:15) \u00b7 band 22489.4 \u2013 22712.7"
+     ],
+     [
+      "True",
+      "11:45 close 22372.7 below lower band 22489.4"
+     ],
+     [
+      "True",
+      "Below VWAP 22452.7"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 14.57 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.66% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 0,
+      "value": "14.57 (+4.9%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": -1,
+      "value": "0.63"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22373.0 vs 22450.1"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -5,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:11:51",
+   "index": {
+    "entry": 22372.95,
+    "risk_pts": 56.48081219840242,
+    "rr": 4.0,
+    "sl": 22429.430812198403,
+    "target": 22147.02675120639
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 9990.0,
+    "delta": 0.51,
+    "entry_prem": 153.7,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 153.5,
+    "sl_prem": 124.82,
+    "strike": 22400.0,
+    "target_prem": 269.21
+   },
+   "result": {
+    "R": 2.78,
+    "at": "15:15",
+    "close_15_15": 22216.0,
+    "exit_spot": 22215.8,
+    "index_outcome": "square-off",
+    "mae_pts": 3.8,
+    "mfe_pts": 193.0,
+    "premium": {
+     "at_exit": 215.8,
+     "entry": 153.7,
+     "high": 241.6,
+     "last": 215.8,
+     "low": 157.0,
+     "max_gain_pct": 57.2,
+     "max_loss_pct": 2.1,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "11:51",
+   "spot": 22372.95,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "11:51:01",
+   "vix": 14.57
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 14.72 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 12:15 (next 12:45) \u00b7 band 22472.1 \u2013 22730.0"
+     ],
+     [
+      "True",
+      "12:15 close 22347.5 below lower band 22472.1"
+     ],
+     [
+      "True",
+      "Below VWAP 22437.3"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 14.72 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.75% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": -1,
+      "value": "14.72 (+6.0%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": -1,
+      "value": "0.63"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22347.5 vs 22437.3"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -6,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:12:16",
+   "index": {
+    "entry": 22347.45,
+    "risk_pts": 50.94805792151613,
+    "rr": 4.0,
+    "sl": 22398.398057921517,
+    "target": 22143.657768313937
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 11229.0,
+    "delta": 0.54,
+    "entry_prem": 172.75,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 172.8,
+    "sl_prem": 145.05,
+    "strike": 22400.0,
+    "target_prem": 283.55
+   },
+   "result": {
+    "R": 2.58,
+    "at": "15:15",
+    "close_15_15": 22216.0,
+    "exit_spot": 22215.8,
+    "index_outcome": "square-off",
+    "mae_pts": -5.4,
+    "mfe_pts": 167.5,
+    "premium": {
+     "at_exit": 215.8,
+     "entry": 172.75,
+     "high": 241.6,
+     "last": 215.8,
+     "low": 183.85,
+     "max_gain_pct": 39.9,
+     "max_loss_pct": 6.4,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "12:16",
+   "spot": 22347.45,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "12:16:01",
+   "vix": 14.72
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 14.76 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 12:15 (next 12:45) \u00b7 band 22472.1 \u2013 22730.0"
+     ],
+     [
+      "True",
+      "12:15 close 22347.5 below lower band 22472.1"
+     ],
+     [
+      "True",
+      "Below VWAP 22437.3"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 14.76 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.75% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": -1,
+      "value": "14.76 (+6.3%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": -1,
+      "value": "0.62"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22324.8 vs 22434.4"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -6,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:12:21",
+   "index": {
+    "entry": 22324.85,
+    "risk_pts": 51.98033949855028,
+    "rr": 4.0,
+    "sl": 22376.83033949855,
+    "target": 22116.928642005798
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 9922.0,
+    "delta": 0.5,
+    "entry_prem": 152.65,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 152.15,
+    "sl_prem": 126.55,
+    "strike": 22350.0,
+    "target_prem": 257.05
+   },
+   "result": {
+    "R": 2.1,
+    "at": "15:15",
+    "close_15_15": 22216.0,
+    "exit_spot": 22215.8,
+    "index_outcome": "square-off",
+    "mae_pts": 5.5,
+    "mfe_pts": 144.9,
+    "premium": {
+     "at_exit": 184.45,
+     "entry": 152.65,
+     "high": 208.25,
+     "last": 184.45,
+     "low": 161.1,
+     "max_gain_pct": 36.4,
+     "max_loss_pct": 5.5,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "12:21",
+   "spot": 22324.85,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "12:21:00",
+   "vix": 14.76
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 15.06 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 12:45 (next 13:15) \u00b7 band 22446.6 \u2013 22755.5"
+     ],
+     [
+      "True",
+      "12:45 close 22293.3 below lower band 22446.6"
+     ],
+     [
+      "True",
+      "Below VWAP 22418.8"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 15.06 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ],
+     [
+      null,
+      "AI model:"
+     ],
+     [
+      null,
+      "12:45 candle scored \u00b7 best: buy PUT, stop 2 \u00d7 ATR \u00b7 expected -0.18R \u00b7 win chance 41%"
+     ],
+     [
+      false,
+      "Expected R -0.18 < threshold 0.30"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.88% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": -1,
+      "value": "15.06 (+8.4%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": -1,
+      "value": "0.61"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22293.3 vs 22418.8"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -6,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:12:46",
+   "index": {
+    "entry": 22293.3,
+    "risk_pts": 54.72661371272914,
+    "rr": 4.0,
+    "sl": 22348.02661371273,
+    "target": 22074.393545149083
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 11342.0,
+    "delta": 0.54,
+    "entry_prem": 174.5,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 173.9,
+    "sl_prem": 144.84,
+    "strike": 22350.0,
+    "target_prem": 293.13
+   },
+   "result": {
+    "R": 1.42,
+    "at": "15:15",
+    "close_15_15": 22216.0,
+    "exit_spot": 22215.8,
+    "index_outcome": "square-off",
+    "mae_pts": 0.6,
+    "mfe_pts": 113.4,
+    "premium": {
+     "at_exit": 184.45,
+     "entry": 174.5,
+     "high": 208.25,
+     "last": 184.45,
+     "low": 167.0,
+     "max_gain_pct": 19.3,
+     "max_loss_pct": -4.3,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "12:46",
+   "spot": 22293.3,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "12:46:01",
+   "vix": 15.06
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 15.08 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 12:45 (next 13:15) \u00b7 band 22446.6 \u2013 22755.5"
+     ],
+     [
+      "True",
+      "12:45 close 22293.3 below lower band 22446.6"
+     ],
+     [
+      "True",
+      "Below VWAP 22418.8"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 15.08 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ],
+     [
+      null,
+      "AI model:"
+     ],
+     [
+      null,
+      "12:50 candle scored \u00b7 best: buy PUT, stop 2 \u00d7 ATR \u00b7 expected -0.19R \u00b7 win chance 41%"
+     ],
+     [
+      false,
+      "Expected R -0.19 < threshold 0.30"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.93% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": -1,
+      "value": "15.08 (+8.6%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": -1,
+      "value": "0.61"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22286.0 vs 22415.9"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -6,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:12:51",
+   "index": {
+    "entry": 22286.0,
+    "risk_pts": 53.97471273324828,
+    "rr": 4.0,
+    "sl": 22339.97471273325,
+    "target": 22070.101149067006
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 11492.0,
+    "delta": 0.55,
+    "entry_prem": 176.8,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 176.4,
+    "sl_prem": 147.2,
+    "strike": 22350.0,
+    "target_prem": 295.2
+   },
+   "result": {
+    "R": 1.3,
+    "at": "15:15",
+    "close_15_15": 22216.0,
+    "exit_spot": 22215.8,
+    "index_outcome": "square-off",
+    "mae_pts": 7.9,
+    "mfe_pts": 106.1,
+    "premium": {
+     "at_exit": 184.45,
+     "entry": 176.8,
+     "high": 208.25,
+     "last": 184.45,
+     "low": 167.0,
+     "max_gain_pct": 17.8,
+     "max_loss_pct": -5.5,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "12:51",
+   "spot": 22286.0,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "12:51:02",
+   "vix": 15.08
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 15.08 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 13:15 (next 13:45) \u00b7 band 22435.4 \u2013 22766.7"
+     ],
+     [
+      "True",
+      "13:15 close 22277.5 below lower band 22435.4"
+     ],
+     [
+      "True",
+      "Below VWAP 22401.7"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 15.08 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ],
+     [
+      null,
+      "AI model:"
+     ],
+     [
+      null,
+      "13:15 candle scored \u00b7 best: buy PUT, stop 2 \u00d7 ATR \u00b7 expected -0.19R \u00b7 win chance 42%"
+     ],
+     [
+      false,
+      "Expected R -0.19 < threshold 0.30"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.91% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": -1,
+      "value": "15.08 (+8.6%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": -1,
+      "value": "0.60"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22277.5 vs 22401.7"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -6,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:13:16",
+   "index": {
+    "entry": 22277.5,
+    "risk_pts": 52.4627776277485,
+    "rr": 4.0,
+    "sl": 22329.96277762775,
+    "target": 22067.648889489006
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 12259.0,
+    "delta": 0.57,
+    "entry_prem": 188.6,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 187.05,
+    "sl_prem": 158.79,
+    "strike": 22350.0,
+    "target_prem": 307.86
+   },
+   "result": {
+    "R": 1.18,
+    "at": "15:15",
+    "close_15_15": 22216.0,
+    "exit_spot": 22215.8,
+    "index_outcome": "square-off",
+    "mae_pts": 13.6,
+    "mfe_pts": 97.6,
+    "premium": {
+     "at_exit": 184.45,
+     "entry": 188.6,
+     "high": 208.25,
+     "last": 184.45,
+     "low": 167.0,
+     "max_gain_pct": 10.4,
+     "max_loss_pct": -11.5,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "13:16",
+   "spot": 22277.5,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "13:16:02",
+   "vix": 15.08
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 15.13 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 13:15 (next 13:45) \u00b7 band 22435.4 \u2013 22766.7"
+     ],
+     [
+      "True",
+      "13:15 close 22277.5 below lower band 22435.4"
+     ],
+     [
+      "True",
+      "Below VWAP 22401.7"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 15.13 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ],
+     [
+      null,
+      "AI model:"
+     ],
+     [
+      null,
+      "13:20 candle scored \u00b7 best: buy PUT, stop 2 \u00d7 ATR \u00b7 expected -0.20R \u00b7 win chance 42%"
+     ],
+     [
+      false,
+      "Expected R -0.20 < threshold 0.30"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.91% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": -1,
+      "value": "15.13 (+8.9%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": -1,
+      "value": "0.59"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22243.7 vs 22398.7"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -6,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:13:21",
+   "index": {
+    "entry": 22243.65,
+    "risk_pts": 53.736864940052385,
+    "rr": 4.0,
+    "sl": 22297.386864940054,
+    "target": 22028.702540239792
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 10865.0,
+    "delta": 0.53,
+    "entry_prem": 167.15,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 168.8,
+    "sl_prem": 138.43,
+    "strike": 22300.0,
+    "target_prem": 282.04
+   },
+   "result": {
+    "R": 0.52,
+    "at": "15:15",
+    "close_15_15": 22216.0,
+    "exit_spot": 22215.8,
+    "index_outcome": "square-off",
+    "mae_pts": 47.4,
+    "mfe_pts": 63.8,
+    "premium": {
+     "at_exit": 156.65,
+     "entry": 167.15,
+     "high": 179.0,
+     "last": 156.65,
+     "low": 141.9,
+     "max_gain_pct": 7.1,
+     "max_loss_pct": -15.1,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "13:21",
+   "spot": 22243.65,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "13:21:01",
+   "vix": 15.13
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 15.19 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 13:45 (next 14:15) \u00b7 band 22433.3 \u2013 22768.9"
+     ],
+     [
+      "True",
+      "13:45 close 22250.8 below lower band 22433.3"
+     ],
+     [
+      "True",
+      "Below VWAP 22385.8"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 15.19 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ],
+     [
+      null,
+      "AI model:"
+     ],
+     [
+      null,
+      "13:45 candle scored \u00b7 best: buy PUT, stop 2 \u00d7 ATR \u00b7 expected -0.15R \u00b7 win chance 45%"
+     ],
+     [
+      false,
+      "Expected R -0.15 < threshold 0.30"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.96% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": -1,
+      "value": "15.19 (+9.4%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": -1,
+      "value": "0.61"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22250.8 vs 22385.8"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -6,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:13:46",
+   "index": {
+    "entry": 22250.85,
+    "risk_pts": 58.570875963487154,
+    "rr": 4.0,
+    "sl": 22309.420875963486,
+    "target": 22016.56649614605
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 10748.0,
+    "delta": 0.54,
+    "entry_prem": 165.35,
+    "expiry": "2026-10-13",
+    "lots": 1,
+    "ltp": 165.2,
+    "sl_prem": 133.58,
+    "strike": 22300.0,
+    "target_prem": 292.45
+   },
+   "result": {
+    "R": 0.6,
+    "at": "15:15",
+    "close_15_15": 22216.0,
+    "exit_spot": 22215.8,
+    "index_outcome": "square-off",
+    "mae_pts": 5.2,
+    "mfe_pts": 70.9,
+    "premium": {
+     "at_exit": 156.65,
+     "entry": 165.35,
+     "high": 179.0,
+     "last": 156.65,
+     "low": 147.15,
+     "max_gain_pct": 8.3,
+     "max_loss_pct": -11.0,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "13:46",
+   "spot": 22250.85,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "13:46:01",
+   "vix": 15.19
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 15.20 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 13:45 (next 14:15) \u00b7 band 22433.3 \u2013 22768.9"
+     ],
+     [
+      "True",
+      "13:45 close 22250.8 below lower band 22433.3"
+     ],
+     [
+      "True",
+      "Below VWAP 22385.8"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 15.20 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ],
+     [
+      null,
+      "AI model:"
+     ],
+     [
+      null,
+      "13:50 candle scored \u00b7 best: buy PUT, stop 2 \u00d7 ATR \u00b7 expected -0.14R \u00b7 win chance 45%"
+     ],
+     [
+      false,
+      "Expected R -0.14 < threshold 0.30"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.96% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": -1,
+      "value": "15.20 (+9.4%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": -1,
+      "value": "0.61"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22239.8 vs 22383.2"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -6,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:13:51",
+   "index": {
+    "entry": 22239.85,
+    "risk_pts": 57.258670537524104,
+    "rr": 4.0,
+    "sl": 22297.108670537524,
+    "target": 22010.8153178499
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 10647.0,
+    "delta": 0.53,
+    "entry_prem": 163.8,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 163.2,
+    "sl_prem": 133.21,
+    "strike": 22300.0,
+    "target_prem": 286.17
+   },
+   "result": {
+    "R": 0.42,
+    "at": "15:15",
+    "close_15_15": 22216.0,
+    "exit_spot": 22215.8,
+    "index_outcome": "square-off",
+    "mae_pts": 16.2,
+    "mfe_pts": 59.9,
+    "premium": {
+     "at_exit": 156.65,
+     "entry": 163.8,
+     "high": 179.0,
+     "last": 156.65,
+     "low": 147.15,
+     "max_gain_pct": 9.3,
+     "max_loss_pct": -10.2,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "13:51",
+   "spot": 22239.85,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "13:51:01",
+   "vix": 15.2
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 15.21 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 14:15 (next 14:45) \u00b7 band 22417.7 \u2013 22784.5"
+     ],
+     [
+      "True",
+      "14:15 close 22236.2 below lower band 22417.7"
+     ],
+     [
+      "True",
+      "Below VWAP 22370.3"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 15.21 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ],
+     [
+      null,
+      "AI model:"
+     ],
+     [
+      null,
+      "14:15 candle scored \u00b7 best: buy PUT, stop 2 \u00d7 ATR \u00b7 expected -0.14R \u00b7 win chance 44%"
+     ],
+     [
+      false,
+      "Expected R -0.14 < threshold 0.30"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.91% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": -1,
+      "value": "15.21 (+9.5%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": -1,
+      "value": "0.61"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22236.2 vs 22370.3"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -6,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:14:16",
+   "index": {
+    "entry": 22236.15,
+    "risk_pts": 54.00129216972245,
+    "rr": 4.0,
+    "sl": 22290.151292169725,
+    "target": 22020.14483132111
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 10306.0,
+    "delta": 0.53,
+    "entry_prem": 158.55,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 158.0,
+    "sl_prem": 129.79,
+    "strike": 22300.0,
+    "target_prem": 273.57
+   },
+   "result": {
+    "R": 0.38,
+    "at": "15:15",
+    "close_15_15": 22216.0,
+    "exit_spot": 22215.8,
+    "index_outcome": "square-off",
+    "mae_pts": 19.8,
+    "mfe_pts": 56.2,
+    "premium": {
+     "at_exit": 156.65,
+     "entry": 158.55,
+     "high": 176.3,
+     "last": 156.65,
+     "low": 147.15,
+     "max_gain_pct": 11.2,
+     "max_loss_pct": -7.2,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "14:16",
+   "spot": 22236.15,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "14:16:00",
+   "vix": 15.21
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 15.36 \u2265 11 (enough movement to pay for an option)"
+     ],
+     [
+      null,
+      "Last check 14:15 (next 14:45) \u00b7 band 22417.7 \u2013 22784.5"
+     ],
+     [
+      "True",
+      "14:15 close 22236.2 below lower band 22417.7"
+     ],
+     [
+      "True",
+      "Below VWAP 22370.3"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 15.36 between 11 and 22"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ],
+     [
+      null,
+      "AI model:"
+     ],
+     [
+      null,
+      "14:20 candle scored \u00b7 best: buy PUT, stop 2 \u00d7 ATR \u00b7 expected -0.13R \u00b7 win chance 43%"
+     ],
+     [
+      false,
+      "Expected R -0.13 < threshold 0.30"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-0.91% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "-0.02%"
+     },
+     {
+      "factor": "India VIX",
+      "score": -1,
+      "value": "15.36 (+10.6%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": -1,
+      "value": "0.62"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-6,121 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "22214.5 vs 22367.9"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -6,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:14:21",
+   "index": {
+    "entry": 22214.5,
+    "risk_pts": 54.90834272902778,
+    "rr": 4.0,
+    "sl": 22269.408342729028,
+    "target": 21994.86662908389
+   },
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 9782.0,
+    "delta": 0.52,
+    "entry_prem": 150.5,
+    "expiry": "2026-10-13",
+    "lots": 2,
+    "ltp": 150.0,
+    "sl_prem": 121.96,
+    "strike": 22250.0,
+    "target_prem": 264.67
+   },
+   "result": {
+    "R": -0.02,
+    "at": "15:15",
+    "close_15_15": 22216.0,
+    "exit_spot": 22215.8,
+    "index_outcome": "square-off",
+    "mae_pts": 41.5,
+    "mfe_pts": 34.6,
+    "premium": {
+     "at_exit": 132.1,
+     "entry": 150.5,
+     "high": 150.45,
+     "last": 132.1,
+     "low": 123.75,
+     "max_gain_pct": -0.0,
+     "max_loss_pct": -17.8,
+     "pnl_1lot_if_followed": null
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "14:21",
+   "spot": 22214.5,
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "14:21:01",
+   "vix": 15.36
+  }
+ ],
+ "settled": {
+  "at": "2026-10-08T15:16:02+05:30",
+  "recos": 20
+ },
+ "summary": {
+  "by_outcome": {
+   "square-off": 12,
+   "stop": 0,
+   "target": 8
+  },
+  "by_strategy": {
+   "noise": {
+    "R": 47.95,
+    "n": 20
+   }
+  },
+  "paper_pnl": 27933.0,
+  "paper_trades": 3,
+  "recommendations": 20,
+  "settled": 20,
+  "sum_R": 47.95
+ }
+}

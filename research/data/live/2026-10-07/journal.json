@@ -1,0 +1,244 @@
+{
+ "ai": {
+  "BANKNIFTY": [],
+  "NIFTY": []
+ },
+ "context": {
+  "BANKNIFTY": {
+   "atr_5m": 74.31929455433146,
+   "calendar": null,
+   "camarilla": {
+    "h3": 55228.60908203125,
+    "h4": 55328.8197265625,
+    "l3": 55028.18779296875,
+    "l4": 54927.9771484375,
+    "pivot": 55055.233072916664
+   },
+   "cpr": {
+    "bc": 55018.650390625,
+    "tc": 55091.81575520833,
+    "width_pct": 0.133
+   },
+   "expiries": [
+    "2026-10-27",
+    "2026-11-24",
+    "2026-12-29"
+   ],
+   "expiry": "2026-10-27",
+   "fii": {
+    "date": "06-Oct-2026",
+    "dii": 5088.92,
+    "fii": -2961.3,
+    "source": "NSE"
+   },
+   "gap_pct": -0.72,
+   "global": {
+    "avg_equity_chg": 0.05,
+    "notes": []
+   },
+   "lot": 30,
+   "noise_band_at": {
+    "09:45": [
+     54562.5,
+     55525.3
+    ],
+    "10:15": [
+     54550.1,
+     55537.7
+    ],
+    "11:15": [
+     54529.5,
+     55558.3
+    ],
+    "12:15": [
+     54504.5,
+     55583.4
+    ],
+    "13:15": [
+     54488.6,
+     55599.4
+    ],
+    "14:15": [
+     54484.0,
+     55604.0
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 54958.1484375,
+   "pcr_prev_close": 1.03,
+   "pivot": 55055.233072916664,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY"
+    ],
+    "risk_pct": 2.0,
+    "sizing": "risk",
+    "strategies": [
+     "noise",
+     "camarilla"
+    ]
+   },
+   "prev_close": 55128.3984375,
+   "prev_high": 55200.8515625,
+   "prev_low": 54836.44921875,
+   "symbol": "BANKNIFTY",
+   "time": "09:30",
+   "vix": {
+    "chg_pct": 3.6921421508712804,
+    "level": 14.112500190734863
+   }
+  },
+  "NIFTY": {
+   "atr_5m": 26.27234683069831,
+   "calendar": null,
+   "camarilla": {
+    "h3": 22835.031787109376,
+    "h4": 22893.96396484375,
+    "l3": 22717.167431640624,
+    "l4": 22658.23525390625,
+    "pivot": 22704.666666666668
+   },
+   "cpr": {
+    "bc": 22668.9501953125,
+    "tc": 22740.383138020836,
+    "width_pct": 0.314
+   },
+   "expiries": [
+    "2026-10-13",
+    "2026-10-20",
+    "2026-10-27"
+   ],
+   "expiry": "2026-10-13",
+   "fii": {
+    "date": "06-Oct-2026",
+    "dii": 5088.92,
+    "fii": -2961.3,
+    "source": "NSE"
+   },
+   "gap_pct": -0.69,
+   "global": {
+    "avg_equity_chg": 0.05,
+    "notes": []
+   },
+   "lot": 65,
+   "noise_band_at": {
+    "09:45": [
+     22601.7,
+     22865.2
+    ],
+    "10:15": [
+     22589.7,
+     22877.3
+    ],
+    "11:15": [
+     22589.6,
+     22877.4
+    ],
+    "12:15": [
+     22561.2,
+     22905.8
+    ],
+    "13:15": [
+     22533.3,
+     22933.9
+    ],
+    "14:15": [
+     22520.3,
+     22946.9
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 22690.44921875,
+   "pcr_prev_close": 0.98,
+   "pivot": 22704.666666666668,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY"
+    ],
+    "risk_pct": 2.0,
+    "sizing": "risk",
+    "strategies": [
+     "noise",
+     "camarilla"
+    ]
+   },
+   "prev_close": 22776.099609375,
+   "prev_high": 22776.099609375,
+   "prev_low": 22561.80078125,
+   "symbol": "NIFTY",
+   "time": "09:30",
+   "vix": {
+    "chg_pct": 3.6921421508712804,
+    "level": 14.112500190734863
+   }
+  }
+ },
+ "date": "2026-10-07",
+ "paper_trades": [
+  {
+   "charges": 86.42,
+   "closed": "2026-10-07T11:20:03+05:30",
+   "entry_prem": 171.15,
+   "exit_prem": 159.48,
+   "expiry": "2026-10-13",
+   "gross_pnl": -1517.1,
+   "id": "82376d6b",
+   "legs": [
+    {
+     "key": "DEMO|NIFTY|2026-10-13|22700|PE",
+     "opt": "PE",
+     "price": 171.15,
+     "side": "BUY",
+     "src": "demo",
+     "strike": 22700.0
+    }
+   ],
+   "lot": 65,
+   "lots": 2,
+   "margin": 22250.0,
+   "mode": "signal",
+   "opened": "2026-10-07T10:35:01+05:30",
+   "plan": {
+    "auto": true,
+    "breakeven_at": 22598.434130859376,
+    "entry": 22657.80078125,
+    "opt": "PE",
+    "risk_pts": 59.36665039062427,
+    "rr": null,
+    "sl": 22717.167431640624,
+    "strategy": "camarilla",
+    "target": null,
+    "time_stop_min": 45,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "pnl": -1603.52,
+   "qty": 130,
+   "reason": "Time stop (45 min, no follow-through)",
+   "sl_prem": 140.69,
+   "source": "DEMO \u00b7 Yahoo + theoretical prices",
+   "spot_at_entry": 22657.849609375,
+   "symbol": "NIFTY",
+   "target_prem": 262.52
+  }
+ ],
+ "recommendations": [],
+ "settled": {
+  "at": "2026-10-07T15:16:01+05:30",
+  "recos": 0
+ },
+ "summary": {
+  "by_outcome": {
+   "square-off": 0,
+   "stop": 0,
+   "target": 0
+  },
+  "by_strategy": {},
+  "paper_pnl": -1604.0,
+  "paper_trades": 1,
+  "recommendations": 0,
+  "settled": 0,
+  "sum_R": null
+ }
+}
