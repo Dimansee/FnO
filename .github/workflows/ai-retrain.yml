@@ -50,7 +50,16 @@ jobs:
         working-directory: research
         run: python ai_export.py ",_s12,_s13" 0.3
       - name: app tests
-        run: python tests/test_app.py
+        run: python tests/test_app.py 2>&1 | tee research/ai_retrain_log.txt
+      - name: keep the log on research-data when the tests fail
+        if: failure()
+        run: |
+          git config user.name "fno-data-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          tail -60 research/ai_retrain_log.txt > /tmp/l && mv /tmp/l research/ai_retrain_log.txt
+          git add research/ai_retrain_log.txt && git commit -m "AI retrain failed $(date -u +%F) - test log [skip ci]" || true
+          git pull --rebase -q origin research-data || true
+          git push origin HEAD:research-data || true
       - name: commit to research-data
         run: |
           git config user.name "fno-data-bot"
