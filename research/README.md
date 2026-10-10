@@ -211,3 +211,31 @@ Period Oct 2023 → Oct 2026 (NSE OI data starts then); tuned before 2026-04-09,
   max-OI strike crossed after 13:30 on expiry: Nifty 23 trades 65% wins +₹28k (1 ATM lot), Bank Nifty 11 trades 36% −₹12k. Watch-list; needs
   intraday OI (now being recorded) for a real test.
 - Not testable yet (need the recorder's 5-min option data): straddle-premium VWAP cross, ΔOI-PCR intraday cross, IV-percentile entries.
+
+## Round 12 — the recorded live sessions, and the AI retrained on them (`live_study.py` → `live_study.json`, `ai_models.py` → `ai_models.json`, `.github/workflows/ai-retrain.yml`)
+Nine recorded sessions (2026-09-28 → 10-09: 1-minute index candles with OI, NSE bhavcopy, participant OI, and the app's 5-minute
+option-chain snapshots from 10-05) plus the journal. **Nine days is a sample for leads, not for proof** — every number below needs
+the recorder to keep running before it can change a rule.
+- **Journal (deduplicated per signal candle):** 13 distinct recommendations. Noise-area 10: 2 targets, 1 stop, 7 squared off at 15:15,
+  sum +12.4R, average exit +16.7% on the premium (08-10 Nifty PUTs 22500/22550 made +66% / +82%). Camarilla 3: 0 targets, 1 stop, +0.5R.
+  Before the dedupe fix the same Nifty PUT idea was logged 6 times on 10-08; now one record per strategy per day.
+- **Formula vs real premium** (792 snapshot rows, calibrated BS vs mid price): median −2.7% (Nifty −3.8%, Bank Nifty −2.4%), steady through
+  the day; **−15% with 1 day to expiry** — the formula under-prices expiry-day options, which is why the 1-day expiry rule (round 6)
+  stays and why demo prices and broker prices differed by ~10 points before the Portfolio relink fix.
+- **Bid–ask spread:** 0.26% of premium at the money (Nifty 0.24%, Bank Nifty 0.29%), the same from 3 strikes ITM to 3 OTM and from 09:30 to 15:30 —
+  the app's slippage allowance is well above it.
+- **ATM straddle through the day** (non-expiry days): 100 → 101–104% by 12:00–13:00 (Nifty peaked 109% on 10-08's fall), back to 97–99% by 15:25 —
+  on these days there was no steady morning decay to sell; decay is a last-hour effect.
+- **OI and option volume vs the next 30 minutes** (708 Nifty/Bank Nifty snapshots): ΔPCR crosses and extremes ≈ nothing (corr 0.009).
+  PCR level < 0.8 → next 30 min −23 pts, up only 27% (n 45); PCR > 1.2 → +8.9 pts, up 56% (n 57). CE share of option volume > 60% → +12 pts (n 19);
+  PE share > 60% → −6 pts (n 122). Spot 2+ strikes above the max-OI strike → −6 pts (n 47). Closing within ±36 pts of the 13:30 max-OI strike
+  on 3 of 5 Nifty days, never on Bank Nifty. **Watch-list:** the PCR-level and volume-share leads fit the usual "writers are right" story and
+  are the only intraday-OI effects with a plausible mechanism; they need 40+ sessions.
+- **Straddle vs its running average:** below average → next 30 min −0.29%, above → +0.28% (5 days) — a premium-momentum lead, too small to use.
+- **Index 1-minute volume** (1,044 five-minute windows): a 2× volume burst says nothing about direction (corr 0.03) and nothing about the size of
+  the next 30-minute move either (|move| corr 0.029); 3× bursts (n 11) were followed by −10 pts. Same answer as round 9's proxy volume.
+- **AI retrained on everything to 2026-10-01** (3 seeds, cutoff rolled to **2026-07-09** = latest − 60 sessions, same features, threshold 0.3).
+  On the 60 sessions neither model saw (07-09 → 10-01): old model 1 trade +₹3.3k, retrained 4 trades, 3 wins, +₹3.2k. The retrained model
+  ships (`fno/ai_model.npz`); the app's AI backtest now starts 2026-07-09. `ai-retrain.yml` (on main, monthly + manual) refreshes the
+  5-minute history, rebuilds the table, retrains, exports, runs the tests and pushes the model to both branches with the cutoff kept at
+  latest − 60 sessions, so the backtest shown in the app is always out of sample.

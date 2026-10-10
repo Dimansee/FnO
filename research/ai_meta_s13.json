@@ -73,8 +73,8 @@
  ],
  "rr": 2.0,
  "trail": false,
- "train_until": "2026-04-09",
- "train_rows": 96868,
+ "train_until": "2026-07-09",
+ "train_rows": 104310,
  "medians": {
   "sym": 0.5,
   "tod": 720.0,

@@ -3,6 +3,7 @@ on:
   push:
     branches: [research-data]
     paths: ["research/fetch_data.py", "research/probe.py", ".github/workflows/research-data.yml"]
+  workflow_dispatch: {}
 permissions:
   contents: write
 jobs:

@@ -1,0 +1,70 @@
+name: ai-retrain
+# Retrains the AI strategy on everything recorded so far and ships the new model to main.
+#   1. refresh the 5-minute history (Upstox, open internet on GitHub) and rebuild the feature table
+#   2. train the 3-seed LightGBM ensemble on all sessions before a rolling cutoff
+#      (latest session minus 60), so the app's AI backtest always shows ~3 months the model never saw
+#   3. export fno/ai_model.npz, run the app tests, commit the model to research-data and main
+# Scheduled workflows only run from the default branch, so this file lives on main and checks
+# out research-data (where the data and research scripts live).
+on:
+  schedule:
+    - cron: "30 2 1 * *"       # 08:00 IST on the 1st of every month
+  workflow_dispatch:
+    inputs:
+      holdout:
+        description: "Sessions to hold out after the training cutoff (the app backtests only these)"
+        required: false
+        default: "60"
+permissions:
+  contents: write
+concurrency:
+  group: ai-retrain
+  cancel-in-progress: false
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research-data
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt yfinance requests pandas numpy numba lightgbm pyarrow fakeredis pytest
+      - name: refresh 5-minute history
+        run: python research/fetch_data.py
+        continue-on-error: true
+      - name: feature table
+        working-directory: research
+        run: python ai_data.py
+      - name: train 3 seeds
+        working-directory: research
+        run: |
+          HOLD="${{ github.event.inputs.holdout }}"; HOLD="${HOLD:-60}"
+          CUT=$(python -c "import pandas as pd;d=pd.read_parquet('ai_rows.parquet');u=sorted(set(pd.to_datetime(d.date).dt.date));print(u[-int('$HOLD')])")
+          echo "cutoff $CUT"
+          for s in 11 12 13; do AI_FINAL_ONLY=1 AI_CUTOFF=$CUT AI_SEED=$s python ai_train.py | tail -3; done
+      - name: export numpy model
+        working-directory: research
+        run: python ai_export.py ",_s12,_s13" 0.3
+      - name: app tests
+        run: python tests/test_app.py
+      - name: commit to research-data
+        run: |
+          git config user.name "fno-data-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add fno/ai_model.npz research/data research/fetch_log.txt research/ai_meta*.json || true
+          git commit -m "AI model retrained $(date -u +%F) [skip ci]" || echo "nothing to commit"
+          git pull --rebase -q origin research-data || true
+          git push origin HEAD:research-data
+      - name: ship the model to main
+        run: |
+          cp fno/ai_model.npz /tmp/ai_model.npz
+          git fetch origin main
+          git checkout -B main origin/main
+          cp /tmp/ai_model.npz fno/ai_model.npz
+          git add fno/ai_model.npz
+          git commit -m "AI model retrained $(date -u +%F)" || echo "nothing to commit"
+          git push origin main
