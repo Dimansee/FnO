@@ -1422,6 +1422,10 @@ async function loadStudy() {
     <p class="muted" style="font-size:12px">The two systems' daily results are only weakly related (correlation ≈ 0.3), so together they were positive in every year. The deepest fall is on ₹2 lakh capital.</p>` : ""}
     ${r.round7 ? studyR7(r.round7, k) : ""}
     ${r.ai ? studyAI(r.ai, k) : ""}
+    ${r.other_models ? `<h4>Do other kinds of model find more? (same inputs, same unseen quarters, same option pricing)</h4>
+    <div class="tablewrap"><table><tr><th>Model</th><th>Best policy</th><th>Trades</th><th>Net 2024-26</th><th>PF</th><th>Win</th></tr>
+      ${Object.entries(r.other_models.best).sort((a, b) => b[1].net - a[1].net).map(([n, b]) => `<tr${n === "lightgbm" ? ' style="background:rgba(242,169,59,.08)"' : ""}><td>${esc({ridge: "Ridge regression", logistic: "Logistic regression", random_forest: "Random forest", extra_trees: "Extra trees", hist_gb: "Histogram boosting", mlp: "Neural net (64×32)", knn: "400 nearest neighbours", lightgbm: "LightGBM (shipped)"}[n] || n)}</td><td>${esc(b.policy)}</td><td class="mono">${b.trades}</td><td class="mono">${k(b.net)}</td><td class="mono">${b.pf}</td><td class="mono">${b.win}%</td></tr>`).join("")}</table></div>
+    <p class="muted" style="font-size:12px">${esc(r.other_models.verdict)}</p>` : ""}
     ${r.live ? studyLive(r.live, k) : ""}
     ${r.combos ? `<h4>Does stacking indicators make it more accurate? (${r.combos.tested} combinations tested)</h4>
     <p style="margin-top:0">Each of: ${esc(r.combos.filters)} - added to the noise-band signal alone, in pairs, in threes, and as "k of n must agree" votes.</p>
