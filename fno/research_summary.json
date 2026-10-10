@@ -377,7 +377,7 @@
   },
   {
    "key": "vwap_sd",
-   "name": "VWAP \u00b1 sigma bands (reversion / breakout)",
+   "name": "VWAP ± sigma bands (reversion / breakout)",
    "tested": 300,
    "robust": 0,
    "robust_oos_profitable": 0,
@@ -387,7 +387,7 @@
    "walk_forward_sharpe": null
   },
   {
-   "name": "EMA + volume + RSI combinations (EMA/SMA/DEMA/TEMA/HMA \u00d7 cross/stack/pullback/bounce \u00d7 RSI rules \u00d7 relative volume)",
+   "name": "EMA + volume + RSI combinations (EMA/SMA/DEMA/TEMA/HMA × cross/stack/pullback/bounce × RSI rules × relative volume)",
    "key": "evr",
    "tested": 1200,
    "robust": 3,
@@ -397,7 +397,7 @@
    "walk_forward_net": null
   },
   {
-   "name": "VWAP + EMA 20/50 + RSI + ADX + volume + ATR + CPR + OI, every combination (5 triggers \u00d7 256 confirmation subsets \u00d7 2 exits, plus k-of-8 votes)",
+   "name": "VWAP + EMA 20/50 + RSI + ADX + volume + ATR + CPR + OI, every combination (5 triggers × 256 confirmation subsets × 2 exits, plus k-of-8 votes)",
    "key": "combo",
    "tested": 2572,
    "robust": 24,
@@ -1239,8 +1239,8 @@
   "Option-selling styles (straddles/strangles, iron condors, adjustments) and OI/PCR-based methods need historical option quotes and OI, which are not freely available, so they could not be tested honestly.",
   "Option selling (9:20 iron fly) could not be judged fairly: its edge comes from IV crush near expiry, which a VIX-based model can't reproduce.",
   "EMA + volume + RSI (round 9): 1,200 combinations of five moving-average types, four entry styles, five RSI rules and relative volume (10-heavyweight turnover vs its usual level, since the index itself has no volume). 228 made money on the training years, 3 held up in both halves of training and every year, none of those made money on the unseen 120 days. The volume filter mainly removed trades; it did not pick better ones.",
-  "Eight-ingredient combinations (round 10, Oct 2023 - Oct 2026 because OI data starts then): 2,572 runs. 24 held up in both halves of training and every year, 8 of those were also positive on the unseen 120 days. The two best - VWAP cross confirmed by expanding ATR, high volume and yesterday's put/call OI (trail on VWAP; 101 trades, PF 2.0, unseen +\u20b96k on 8 trades) and a CPR breakout confirmed by expanding ATR, a narrow CPR, OI and RSI (2R; 85 trades, PF 2.1, 54% wins, unseen +\u20b94.5k on 6 trades) - trade about once a week, barely overlap with the rules (correlation \u2248 0.1) and survived small threshold changes, but 6-8 unseen trades is too few to call them proven. Across all runs: ATR expansion and volume filters raised the share of profitable settings most (by cutting trades), EMA 20/50 and ADX lowered it, OI was neutral; 4-5 confirmations was the sweet spot; 'k of 8 must agree' votes lost money at every k.",
-  "Round 11 (ideas from a web review; 1-minute data 2023-26): last-half-hour intraday momentum (the Gao/Baltussen rule) has no edge on Nifty or Bank Nifty (52% / 50% wins, under 1 point a trade, and a 28-minute option hold loses to decay and costs); initial-balance extension trades lost in every version; the day's high or low is set in the first hour only 41% of the time each (77% either). Time of day: the first half hour is the only slot with a clear tilt (45% green, biggest range); 12:00-13:30 is the quietest; no 2:30-3:30 effect. Tuesdays (expiry) averaged -0.18%, 38% green. The two rules earn most when VIX is above its one-year median (PF 1.46) or above 14 (PF 1.51), but VIX-below-14 days still made +\u20b928k on the unseen 120 days, so the VIX 11 floor stays. Expiry afternoons are 15-20% more volatile in the last half hour; crossing the previous day's max-OI strike after 13:30 on expiry day won 65% on Nifty (23 trades) and lost on Bank Nifty (11) - too few to use yet; the recorder's intraday OI will allow a proper test later."
+  "Eight-ingredient combinations (round 10, Oct 2023 - Oct 2026 because OI data starts then): 2,572 runs. 24 held up in both halves of training and every year, 8 of those were also positive on the unseen 120 days. The two best - VWAP cross confirmed by expanding ATR, high volume and yesterday's put/call OI (trail on VWAP; 101 trades, PF 2.0, unseen +₹6k on 8 trades) and a CPR breakout confirmed by expanding ATR, a narrow CPR, OI and RSI (2R; 85 trades, PF 2.1, 54% wins, unseen +₹4.5k on 6 trades) - trade about once a week, barely overlap with the rules (correlation ≈ 0.1) and survived small threshold changes, but 6-8 unseen trades is too few to call them proven. Across all runs: ATR expansion and volume filters raised the share of profitable settings most (by cutting trades), EMA 20/50 and ADX lowered it, OI was neutral; 4-5 confirmations was the sweet spot; 'k of 8 must agree' votes lost money at every k.",
+  "Round 11 (ideas from a web review; 1-minute data 2023-26): last-half-hour intraday momentum (the Gao/Baltussen rule) has no edge on Nifty or Bank Nifty (52% / 50% wins, under 1 point a trade, and a 28-minute option hold loses to decay and costs); initial-balance extension trades lost in every version; the day's high or low is set in the first hour only 41% of the time each (77% either). Time of day: the first half hour is the only slot with a clear tilt (45% green, biggest range); 12:00-13:30 is the quietest; no 2:30-3:30 effect. Tuesdays (expiry) averaged -0.18%, 38% green. The two rules earn most when VIX is above its one-year median (PF 1.46) or above 14 (PF 1.51), but VIX-below-14 days still made +₹28k on the unseen 120 days, so the VIX 11 floor stays. Expiry afternoons are 15-20% more volatile in the last half hour; crossing the previous day's max-OI strike after 13:30 on expiry day won 65% on Nifty (23 trades) and lost on Bank Nifty (11) - too few to use yet; the recorder's intraday OI will allow a proper test later."
  ],
  "round7": {
   "rules": {
@@ -1307,27 +1307,27 @@
    },
    {
     "check": "Entering late",
-    "found": "On the same 840 trades, buying 1 minute after the signal (real 1-minute prices) changed profit by \u20b94.4k and the premium paid by about 0.1%. Small changes reshuffle which marginal trades get sized in or out: starting capital \u00b13% moved the 3\u00be-year total between \u20b9197.0k and \u20b9240.4k.",
-    "action": "Entering within 1-2 minutes is fine. Treat differences smaller than about \u00b1\u20b920k between rule variants as noise."
+    "found": "On the same 840 trades, buying 1 minute after the signal (real 1-minute prices) changed profit by ₹4.4k and the premium paid by about 0.1%. Small changes reshuffle which marginal trades get sized in or out: starting capital ±3% moved the 3¾-year total between ₹197.0k and ₹240.4k.",
+    "action": "Entering within 1-2 minutes is fine. Treat differences smaller than about ±₹20k between rule variants as noise."
    },
    {
     "check": "Luck test (5,000 reshuffled years)",
-    "found": "At 1% risk: a typical year made \u20b955.7k on \u20b92 lakh; 13.5% of years lost money; the usual deepest fall was 17.8% of capital, 1 year in 20 saw 34.6%. At 2% risk the 1-in-20 fall was 67.4% and profit was lower.",
+    "found": "At 1% risk: a typical year made ₹55.7k on ₹2 lakh; 13.5% of years lost money; the usual deepest fall was 17.8% of capital, 1 year in 20 saw 34.6%. At 2% risk the 1-in-20 fall was 67.4% and profit was lower.",
     "action": "Keep 1% risk per trade. Expect a 15-35% fall from a peak at some point in a year."
    },
    {
     "check": "Event days",
-    "found": "Budget days: 4 trades, all lost (\u2212\u20b96.3k). Day after a US Fed decision: PF 0.73 (26 trades). RBI policy days: PF 2.28 (22 trades).",
+    "found": "Budget days: 4 trades, all lost (−₹6.3k). Day after a US Fed decision: PF 0.73 (26 trades). RBI policy days: PF 2.28 (22 trades).",
     "action": "Skip Budget day. Fed and RBI samples are too small to act on."
    },
    {
     "check": "Where the profit comes from",
-    "found": "Trend days (close far from the open, 36% of days): \u20b9532.1k, PF 3.02. Range days: \u2212\u20b9213.4k. Mixed days: \u2212\u20b9105.0k. VIX 20+ at the open: PF 0.26 (21 trades).",
+    "found": "Trend days (close far from the open, 36% of days): ₹532.1k, PF 3.02. Range days: −₹213.4k. Mixed days: −₹105.0k. VIX 20+ at the open: PF 0.26 (21 trades).",
     "action": "These are trend-catching rules: most days lose a little, trend days pay for them."
    },
    {
     "check": "Real contract history",
-    "found": "With the expiries actually listed (Bank Nifty weeklies until Nov 2024), the lot sizes and the STT of each period: \u20b9195.5k vs \u20b9213.6k with today's; unseen 120 days \u20b954.8k vs \u20b953.7k.",
+    "found": "With the expiries actually listed (Bank Nifty weeklies until Nov 2024), the lot sizes and the STT of each period: ₹195.5k vs ₹213.6k with today's; unseen 120 days ₹54.8k vs ₹53.7k.",
     "action": "Results hold."
    }
   ],
@@ -1993,9 +1993,9 @@
  },
  "ai": {
   "what": "Gradient-boosted trees (LightGBM, 3 seeds averaged, 64 inputs) score six candidate trades at every 5-minute close 09:30-14:30 - buy CALL or PUT with a stop of 1.0 / 1.5 / 2.0 ATR and a 2R target, held to 15:15 - and recommend the best when its expected R clears a threshold. Inputs: price vs open / VWAP / EMAs, the noise band, Camarilla and yesterday's levels, RSI / ADX / MACD / Supertrend / Heikin-Ashi / Bollinger, VIX level and changes, gap and global cues, time of day, expiry, today's structure so far, and the two rule signals themselves.",
-  "method": "Trained on 111,630 decision points (both indices, Jan 2023 - Oct 2026). Walk-forward: for every quarter from 2024-Q1 the model was trained only on the quarters before it and traded the quarter it had never seen; the 11 quarters are stitched together. Trades priced as the 1-ITM option with the real-price-corrected premiums, slippage and charges, \u20b92 lakh, 1% risk, max 2 trades and 2 losers per index per day.",
+  "method": "Trained on 111,630 decision points (both indices, Jan 2023 - Oct 2026). Walk-forward: for every quarter from 2024-Q1 the model was trained only on the quarters before it and traded the quarter it had never seen; the 11 quarters are stitched together. Trades priced as the 1-ITM option with the real-price-corrected premiums, slippage and charges, ₹2 lakh, 1% risk, max 2 trades and 2 losers per index per day.",
   "threshold": 0.3,
-  "train_until": "2026-04-09",
+  "train_until": "2026-07-09",
   "oos": {
    "ensemble": {
     "fixed 0.2": {
@@ -2078,7 +2078,7 @@
   "versions": [
    {
     "name": "v1 - plain stop/target outcomes (shipped, as a 3-seed average)",
-    "result": "the only version with any out-of-sample skill; a single seed looked good (+\u20b962k) but two other seeds of the same setup lost \u20b921k - the average is about break-even"
+    "result": "the only version with any out-of-sample skill; a single seed looked good (+₹62k) but two other seeds of the same setup lost ₹21k - the average is about break-even"
    },
    {
     "name": "v2 - predict the move to the 15:15 close, heavier regularisation",
@@ -2143,6 +2143,75 @@
     "pct": 1.8
    }
   ],
-  "verdict": "On days it never saw, the AI did not beat the two rules: about break-even over 2024-26 with a losing 2025, versus the rules' +\u20b9192k. It is shipped as an optional, off-by-default strategy so it can be watched paper-trading, and every number it shows in the app is from after its training cutoff. Use its probability as information, not as confirmation."
+  "verdict": "On days it never saw, the AI did not beat the two rules: about break-even over 2024-26 with a losing 2025, versus the rules' +₹192k. It is shipped as an optional, off-by-default strategy so it can be watched paper-trading, and every number it shows in the app is from after its training cutoff. Use its probability as information, not as confirmation.",
+  "retrained": "Retrained on all sessions to 2026-10-01 with the cutoff rolled to 2026-07-09 (latest minus 60 sessions). On the 60 sessions neither version saw (09 Jul - 01 Oct 2026): previous model 1 trade +₹3.3k, retrained model 4 trades, 3 wins, +₹3.2k. A monthly job retrains and keeps the cutoff 60 sessions behind the latest data, so the Backtest tab's AI result is always out of sample."
+ },
+ "live": {
+  "sessions": 9,
+  "from": "2026-09-28",
+  "to": "2026-10-09",
+  "journal": {
+   "recommendations": 13,
+   "noise": {
+    "n": 10,
+    "targets": 2,
+    "stops": 1,
+    "sum_R": 12.4,
+    "avg_exit_pct": 16.7
+   },
+   "camarilla": {
+    "n": 3,
+    "targets": 0,
+    "stops": 1,
+    "sum_R": 0.5,
+    "avg_exit_pct": 3.9
+   }
+  },
+  "findings": [
+   [
+    "Formula vs real premium",
+    "Median −2.7% (Nifty −3.8%, Bank Nifty −2.4%); −15% with one day to expiry",
+    "Keeps the 1-day-expiry rule; Portfolio now prices from the live contract when a broker is connected"
+   ],
+   [
+    "Bid–ask spread",
+    "0.26% of premium at the money (Nifty 0.24%, Bank Nifty 0.29%), flat across strikes and hours",
+    "The slippage allowance in backtests is well above it"
+   ],
+   [
+    "ATM straddle through the day",
+    "Non-expiry days: 100 → 101–104% by midday, back to 97–99% by 15:25",
+    "No steady morning decay to sell; decay is a last-hour effect"
+   ],
+   [
+    "Put-call ratio level",
+    "PCR < 0.8 → next 30 min −23 pts, up 27% (45 cases); PCR > 1.2 → +9 pts, up 56% (57)",
+    "Watch-list lead; needs 40+ sessions"
+   ],
+   [
+    "Option volume share",
+    "Calls > 60% of volume → +12 pts next 30 min (19 cases); puts > 60% → −6 pts (122)",
+    "Watch-list lead"
+   ],
+   [
+    "ΔPCR crosses, max-OI strike",
+    "ΔPCR crosses and extremes ≈ no edge (corr 0.009); spot 2+ strikes above max-OI → −6 pts (47)",
+    "Nothing to act on"
+   ],
+   [
+    "Index volume bursts",
+    "2× bursts: no direction (corr 0.03) and no bigger next move (corr 0.03); 3× bursts (11) → −10 pts",
+    "Same answer as the proxy-volume round: volume does not predict"
+   ],
+   [
+    "Straddle vs its average",
+    "Below average → −0.29% next 30 min, above → +0.28% (5 days)",
+    "Too small to use"
+   ]
+  ],
+  "note": "Nine sessions are a sample for leads, not proof. The recorder keeps adding days; these checks rerun on the saved data (research/live_study.py)."
+ },
+ "other_models": {
+  "note": "pending"
  }
 }

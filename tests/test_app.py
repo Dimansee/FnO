@@ -253,7 +253,7 @@ assert all(p["id"] != "race1" for p in store.positions()), "update must not resu
 assert store.ping()
 # ---------- AI strategy (round 8) ----------
 from fno import ai as AI, ai_model as AM  # noqa: E402
-assert AI.available() and AI.train_until().isoformat() == "2026-04-09"
+assert AI.available() and AI.train_until() >= date(2026, 4, 9)   # retrains roll the cutoff forward
 j(c.post("/api/account/reset", json={"capital": 200000}))
 store.clear_positions(); store.clear_trades()
 assert j(c.post("/api/settings", json={"prefs": {"sizing": "risk", "risk_pct": 2, "strategies": ["ai"], "auto": True, "auto_syms": ["NIFTY"]}}))["ok"]
@@ -288,7 +288,7 @@ assert why and "2R" in why, why
 hist_ = [{"reason": why}]
 AM.load()["meta"]["threshold"] = 0.3
 bt_ai = j(c.post("/api/backtest", json={"symbol": "NIFTY", "capital": 200000, "strategy": "ai", "days": 30}))
-assert "summary" in bt_ai and bt_ai["summary"].get("train_until") == "2026-04-09" and bt_ai["summary"]["note"], bt_ai
+assert "summary" in bt_ai and bt_ai["summary"].get("train_until") == AI.train_until().isoformat() and bt_ai["summary"]["note"], bt_ai
 print("AI OK: exit", hist_[-1]["reason"], "| backtest days", bt_ai["summary"]["days"], "trades", bt_ai["summary"]["trades"])
 assert j(c.post("/api/settings", json={"prefs": {"strategies": ["noise", "camarilla"], "auto": False}}))["ok"]
 store.clear_positions(); store.clear_trades()

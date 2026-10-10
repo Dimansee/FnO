@@ -1328,6 +1328,14 @@ function downloadCsv(name, rows, cols) {
   a.href = URL.createObjectURL(new Blob([csv], {type: "text/csv"})); a.download = name;
   document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
 }
+function studyLive(x, k) {
+  const j = x.journal;
+  return `<h4>What the recorded live sessions show (${x.sessions} sessions, ${esc(x.from)} → ${esc(x.to)})</h4>
+    <p style="margin-top:0">Journal so far: ${j.recommendations} recommendations - noise-area ${j.noise.n} (${j.noise.targets} targets, ${j.noise.stops} stops, ${j.noise.sum_R > 0 ? "+" : ""}${j.noise.sum_R}R, average exit ${j.noise.avg_exit_pct > 0 ? "+" : ""}${j.noise.avg_exit_pct}% on the premium), Camarilla ${j.camarilla.n} (${j.camarilla.targets} targets, ${j.camarilla.stops} stops, ${j.camarilla.sum_R > 0 ? "+" : ""}${j.camarilla.sum_R}R).</p>
+    <div class="tablewrap"><table class="prose"><tr><th>Check</th><th>What the data showed</th><th>What it means</th></tr>
+      ${x.findings.map(f => `<tr><td><b>${esc(f[0])}</b></td><td>${esc(f[1])}</td><td>${esc(f[2])}</td></tr>`).join("")}</table></div>
+    <p class="muted" style="font-size:12px">${esc(x.note)}</p>`;
+}
 function studyAI(a, k) {
   const yrs = [2024, 2025, 2026];
   const row = (name, b, hi) => `<tr${hi ? ' style="background:rgba(242,169,59,.08)"' : ""}><td>${name}</td><td class="mono">${b.trades}</td><td class="mono">${k(b.net)}</td>${yrs.map(y => `<td class="mono">${k(b.years[y])}</td>`).join("")}<td class="mono">${k(b.last120)}</td><td class="mono">${b.pf ?? "–"}</td><td class="mono">${b.win}%</td></tr>`;
@@ -1341,7 +1349,7 @@ function studyAI(a, k) {
       ${row("AI, one seed alone at 0.3 (looked good)", a.oos["single_seed_0.3"])}${row("AI, the other two seeds at 0.3 (did not)", a.oos["other_two_seeds_0.3"])}</table></div>
     <p><b>Verdict:</b> ${esc(a.verdict)}</p>
     <div class="tablewrap"><table class="prose"><tr><th>What was tried</th><th>What happened</th></tr>${a.versions.map(v => `<tr><td>${esc(v.name)}</td><td>${esc(v.result)}</td></tr>`).join("")}</table></div>
-    <p class="muted" style="font-size:12px">What the model leans on most (share of its decisions): ${a.importance.slice(0, 8).map(x => `${esc(x.feature)} ${x.pct}%`).join(" · ")}. The model file was trained on data up to ${esc(a.train_until)}; the Backtest tab's "AI model" option only trades days after that, so it never shows in-sample results.</p>`;
+    <p class="muted" style="font-size:12px">What the model leans on most (share of its decisions): ${a.importance.slice(0, 8).map(x => `${esc(x.feature)} ${x.pct}%`).join(" · ")}. The model file was trained on data up to ${esc(a.train_until)}; the Backtest tab's "AI model" option only trades days after that, so it never shows in-sample results.${a.retrained ? " " + esc(a.retrained) : ""}</p>`;
 }
 function studyR7(x, k) {
   const R = x.rules, yrs = [2023, 2024, 2025, 2026];
@@ -1414,6 +1422,7 @@ async function loadStudy() {
     <p class="muted" style="font-size:12px">The two systems' daily results are only weakly related (correlation ≈ 0.3), so together they were positive in every year. The deepest fall is on ₹2 lakh capital.</p>` : ""}
     ${r.round7 ? studyR7(r.round7, k) : ""}
     ${r.ai ? studyAI(r.ai, k) : ""}
+    ${r.live ? studyLive(r.live, k) : ""}
     ${r.combos ? `<h4>Does stacking indicators make it more accurate? (${r.combos.tested} combinations tested)</h4>
     <p style="margin-top:0">Each of: ${esc(r.combos.filters)} - added to the noise-band signal alone, in pairs, in threes, and as "k of n must agree" votes.</p>
     <ul><li><b>Win rate barely moved:</b> ${r.combos.base_win}% without filters vs ${r.combos.three_filter_win}% with three filters.</li>
