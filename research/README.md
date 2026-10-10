@@ -239,3 +239,9 @@ the recorder to keep running before it can change a rule.
   ships (`fno/ai_model.npz`); the app's AI backtest now starts 2026-07-09. `ai-retrain.yml` (on main, monthly + manual) refreshes the
   5-minute history, rebuilds the table, retrains, exports, runs the tests and pushes the model to both branches with the cutoff kept at
   latest − 60 sessions, so the backtest shown in the app is always out of sample.
+- **Other model families on the same table, same walk-forward, same pricing** (`ai_models.py`): ridge regression, logistic (P(win) ranked),
+  random forest, extra trees, histogram gradient boosting, a 64×32 neural net, 400-nearest-neighbours; policies fixed 0.2 / top 5% / top 2% of
+  each model's own past scores. Best of each over 2024-26 (option P&L, ₹2 lakh): ridge +₹9k (top 5%, 222 trades, PF 1.03), neural net −₹9k
+  (top 2%, PF 0.98), extra trees −₹15k, boosting −₹30k, kNN −₹65k, logistic −₹64k, random forest −₹71k; LightGBM +₹24k (fixed 0.2, PF 1.08).
+  Every family lands between PF 0.7 and 1.1 — the inputs carry very little predictable signal, and no model family finds more of it than the
+  trees already shipped. The rules' +₹192k on the same period stands.

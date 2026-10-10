@@ -1,0 +1,377 @@
+{
+ "ridge": {
+  "policies": {
+   "fixed 0.2": {
+    "name": "ridge / fixed 0.2",
+    "trades": 39,
+    "net": -1477,
+    "win": 33.3,
+    "pf": 0.97,
+    "max_dd": -25652,
+    "years": {
+     "2024": -24190,
+     "2025": 22713,
+     "2026": 0
+    },
+    "last120": 0
+   },
+   "top 5% of past scores": {
+    "name": "ridge / top 5% of past scores",
+    "trades": 222,
+    "net": 9288,
+    "win": 36.0,
+    "pf": 1.03,
+    "max_dd": -59191,
+    "years": {
+     "2024": -40372,
+     "2025": 13405,
+     "2026": 36255
+    },
+    "last120": 36535
+   },
+   "top 2% of past scores": {
+    "name": "ridge / top 2% of past scores",
+    "trades": 87,
+    "net": -13825,
+    "win": 34.5,
+    "pf": 0.89,
+    "max_dd": -33421,
+    "years": {
+     "2024": -16200,
+     "2025": 4870,
+     "2026": -2494
+    },
+    "last120": -2494
+   }
+  },
+  "seconds": 38
+ },
+ "lightgbm": {
+  "policies": {
+   "fixed 0.2": {
+    "name": "lightgbm / fixed 0.2",
+    "trades": 239,
+    "net": 24072,
+    "win": 39.3,
+    "pf": 1.08,
+    "max_dd": -73591,
+    "years": {
+     "2024": 60877,
+     "2025": -55245,
+     "2026": 18440
+    },
+    "last120": -1666
+   },
+   "top 5% of past scores": {
+    "name": "lightgbm / top 5% of past scores",
+    "trades": 217,
+    "net": 6450,
+    "win": 38.2,
+    "pf": 1.02,
+    "max_dd": -74233,
+    "years": {
+     "2024": 43455,
+     "2025": -58640,
+     "2026": 21636
+    },
+    "last120": -4078
+   },
+   "top 2% of past scores": {
+    "name": "lightgbm / top 2% of past scores",
+    "trades": 101,
+    "net": -11527,
+    "win": 33.7,
+    "pf": 0.92,
+    "max_dd": -71465,
+    "years": {
+     "2024": -150,
+     "2025": -25457,
+     "2026": 14080
+    },
+    "last120": 6417
+   }
+  }
+ },
+ "logistic": {
+  "policies": {
+   "fixed 0.2": {
+    "name": "logistic / fixed 0.2",
+    "trades": 2271,
+    "net": -446123,
+    "win": 35.0,
+    "pf": 0.85,
+    "max_dd": -483602,
+    "years": {
+     "2024": -197916,
+     "2025": -221507,
+     "2026": -26700
+    },
+    "last120": -25231
+   },
+   "top 5% of past scores": {
+    "name": "logistic / top 5% of past scores",
+    "trades": 524,
+    "net": -96983,
+    "win": 35.9,
+    "pf": 0.85,
+    "max_dd": -103662,
+    "years": {
+     "2024": -55130,
+     "2025": -30539,
+     "2026": -11314
+    },
+    "last120": -8966
+   },
+   "top 2% of past scores": {
+    "name": "logistic / top 2% of past scores",
+    "trades": 260,
+    "net": -64018,
+    "win": 30.4,
+    "pf": 0.82,
+    "max_dd": -70801,
+    "years": {
+     "2024": -32414,
+     "2025": -14667,
+     "2026": -16938
+    },
+    "last120": -10511
+   }
+  },
+  "seconds": 61
+ },
+ "hist_gb": {
+  "policies": {
+   "fixed 0.2": {
+    "name": "hist_gb / fixed 0.2",
+    "trades": 1103,
+    "net": -274221,
+    "win": 34.5,
+    "pf": 0.8,
+    "max_dd": -288946,
+    "years": {
+     "2024": -85807,
+     "2025": -180984,
+     "2026": -7431
+    },
+    "last120": -20567
+   },
+   "top 5% of past scores": {
+    "name": "hist_gb / top 5% of past scores",
+    "trades": 292,
+    "net": -68782,
+    "win": 32.5,
+    "pf": 0.83,
+    "max_dd": -78691,
+    "years": {
+     "2024": -31098,
+     "2025": -16118,
+     "2026": -21565
+    },
+    "last120": -19018
+   },
+   "top 2% of past scores": {
+    "name": "hist_gb / top 2% of past scores",
+    "trades": 215,
+    "net": -29849,
+    "win": 34.9,
+    "pf": 0.89,
+    "max_dd": -42219,
+    "years": {
+     "2024": -24024,
+     "2025": -8810,
+     "2026": 2986
+    },
+    "last120": 3174
+   }
+  },
+  "seconds": 123
+ },
+ "extra_trees": {
+  "policies": {
+   "fixed 0.2": {
+    "name": "extra_trees / fixed 0.2",
+    "trades": 941,
+    "net": -182781,
+    "win": 35.4,
+    "pf": 0.84,
+    "max_dd": -206631,
+    "years": {
+     "2024": -75016,
+     "2025": -90595,
+     "2026": -17170
+    },
+    "last120": -59096
+   },
+   "top 5% of past scores": {
+    "name": "extra_trees / top 5% of past scores",
+    "trades": 402,
+    "net": -92593,
+    "win": 31.1,
+    "pf": 0.82,
+    "max_dd": -115009,
+    "years": {
+     "2024": -11824,
+     "2025": -23294,
+     "2026": -57475
+    },
+    "last120": -50549
+   },
+   "top 2% of past scores": {
+    "name": "extra_trees / top 2% of past scores",
+    "trades": 223,
+    "net": -14841,
+    "win": 34.5,
+    "pf": 0.95,
+    "max_dd": -42914,
+    "years": {
+     "2024": 17307,
+     "2025": -875,
+     "2026": -31273
+    },
+    "last120": -25574
+   }
+  },
+  "seconds": 1386
+ },
+ "random_forest": {
+  "policies": {
+   "fixed 0.2": {
+    "name": "random_forest / fixed 0.2",
+    "trades": 1542,
+    "net": -240679,
+    "win": 35.1,
+    "pf": 0.86,
+    "max_dd": -279920,
+    "years": {
+     "2024": -72120,
+     "2025": -142288,
+     "2026": -26271
+    },
+    "last120": -52863
+   },
+   "top 5% of past scores": {
+    "name": "random_forest / top 5% of past scores",
+    "trades": 568,
+    "net": -121450,
+    "win": 33.5,
+    "pf": 0.82,
+    "max_dd": -159890,
+    "years": {
+     "2024": -37856,
+     "2025": -80415,
+     "2026": -3179
+    },
+    "last120": -12635
+   },
+   "top 2% of past scores": {
+    "name": "random_forest / top 2% of past scores",
+    "trades": 284,
+    "net": -71349,
+    "win": 30.6,
+    "pf": 0.8,
+    "max_dd": -97181,
+    "years": {
+     "2024": -1410,
+     "2025": -50628,
+     "2026": -19311
+    },
+    "last120": -22888
+   }
+  },
+  "seconds": 3263
+ },
+ "mlp": {
+  "policies": {
+   "fixed 0.2": {
+    "name": "mlp / fixed 0.2",
+    "trades": 2513,
+    "net": -793690,
+    "win": 32.6,
+    "pf": 0.75,
+    "max_dd": -824364,
+    "years": {
+     "2024": -252776,
+     "2025": -291239,
+     "2026": -249676
+    },
+    "last120": -205983
+   },
+   "top 5% of past scores": {
+    "name": "mlp / top 5% of past scores",
+    "trades": 542,
+    "net": -46881,
+    "win": 37.8,
+    "pf": 0.92,
+    "max_dd": -80172,
+    "years": {
+     "2024": -33455,
+     "2025": 6002,
+     "2026": -19428
+    },
+    "last120": -9168
+   },
+   "top 2% of past scores": {
+    "name": "mlp / top 2% of past scores",
+    "trades": 362,
+    "net": -9187,
+    "win": 38.1,
+    "pf": 0.98,
+    "max_dd": -37754,
+    "years": {
+     "2024": 10053,
+     "2025": -11331,
+     "2026": -7909
+    },
+    "last120": 1287
+   }
+  },
+  "seconds": 731
+ },
+ "knn": {
+  "policies": {
+   "fixed 0.2": {
+    "name": "knn / fixed 0.2",
+    "trades": 1740,
+    "net": -576735,
+    "win": 32.6,
+    "pf": 0.73,
+    "max_dd": -591551,
+    "years": {
+     "2024": -221923,
+     "2025": -215830,
+     "2026": -138982
+    },
+    "last120": -100667
+   },
+   "top 5% of past scores": {
+    "name": "knn / top 5% of past scores",
+    "trades": 702,
+    "net": -134251,
+    "win": 35.2,
+    "pf": 0.83,
+    "max_dd": -150018,
+    "years": {
+     "2024": -82633,
+     "2025": -48298,
+     "2026": -3320
+    },
+    "last120": -10850
+   },
+   "top 2% of past scores": {
+    "name": "knn / top 2% of past scores",
+    "trades": 356,
+    "net": -64725,
+    "win": 33.4,
+    "pf": 0.84,
+    "max_dd": -85272,
+    "years": {
+     "2024": -64273,
+     "2025": -1687,
+     "2026": 1235
+    },
+    "last120": -11306
+   }
+  },
+  "seconds": 219
+ }
+}

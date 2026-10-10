@@ -2212,6 +2212,65 @@
   "note": "Nine sessions are a sample for leads, not proof. The recorder keeps adding days; these checks rerun on the saved data (research/live_study.py)."
  },
  "other_models": {
-  "note": "pending"
+  "what": "Seven model families trained on the same 64 inputs with the same quarterly walk-forward and option pricing as the LightGBM model: ridge regression, logistic regression, random forest, extra trees, histogram gradient boosting, a small neural net and k-nearest neighbours.",
+  "best": {
+   "ridge": {
+    "policy": "top 5% of past scores",
+    "net": 9288,
+    "trades": 222,
+    "pf": 1.03,
+    "win": 36.0
+   },
+   "lightgbm": {
+    "policy": "fixed 0.2",
+    "net": 24072,
+    "trades": 239,
+    "pf": 1.08,
+    "win": 39.3
+   },
+   "logistic": {
+    "policy": "top 2% of past scores",
+    "net": -64018,
+    "trades": 260,
+    "pf": 0.82,
+    "win": 30.4
+   },
+   "hist_gb": {
+    "policy": "top 2% of past scores",
+    "net": -29849,
+    "trades": 215,
+    "pf": 0.89,
+    "win": 34.9
+   },
+   "extra_trees": {
+    "policy": "top 2% of past scores",
+    "net": -14841,
+    "trades": 223,
+    "pf": 0.95,
+    "win": 34.5
+   },
+   "random_forest": {
+    "policy": "top 2% of past scores",
+    "net": -71349,
+    "trades": 284,
+    "pf": 0.8,
+    "win": 30.6
+   },
+   "mlp": {
+    "policy": "top 2% of past scores",
+    "net": -9187,
+    "trades": 362,
+    "pf": 0.98,
+    "win": 38.1
+   },
+   "knn": {
+    "policy": "top 2% of past scores",
+    "net": -64725,
+    "trades": 356,
+    "pf": 0.84,
+    "win": 33.4
+   }
+  },
+  "verdict": "Every family scored between PF 0.7 and 1.1 on the unseen quarters - the best was ridge at +₹9k and LightGBM at +₹24k, against the rules' +₹192k. No model family finds a pattern the trees missed; the inputs carry little predictable signal."
  }
 }
