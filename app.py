@@ -197,6 +197,18 @@ def trade_exit():
     return jsonify({"ok": ok, "message": msg}), (200 if ok else 400)
 
 
+@app.post("/api/account/capital")
+def account_capital():
+    """Change the demo capital without clearing positions, trades or the journal."""
+    cap = float((request.get_json(force=True) or {}).get("capital", C.DEFAULT_CAPITAL))
+    if not 10_000 <= cap <= 100_000_000:
+        return jsonify({"ok": False, "message": "Capital must be between ₹10,000 and ₹10 crore."}), 400
+    from fno import paper as P
+    a = P.account()
+    store.put("account", {**a, "capital_start": cap})
+    return jsonify({"ok": True, "message": f"Demo capital set to ₹{cap:,.0f} (positions and journal kept)."})
+
+
 @app.post("/api/account/reset")
 def account_reset():
     cap = float((request.get_json(force=True) or {}).get("capital", C.DEFAULT_CAPITAL))
@@ -220,7 +232,7 @@ def backtest():
     days = int(b.get("days") or 60)
     if days not in (30, 60, 90, 120, 180, 250, 500):
         raise ValueError("Pick a backtest period from the list.")
-    if sizing not in ("risk", "one_lot") or otm not in (-1, 0, 1, 2) or not 1000 <= capital <= 1e9 \
+    if sizing not in ("risk", "one_lot", "all_in") or otm not in (-1, 0, 1, 2) or not 1000 <= capital <= 1e9 \
             or strategy not in ("both", "noise", "camarilla", "ai"):
         raise ValueError("Invalid backtest settings.")
     return jsonify(SV.backtest(_sym(), mult, capital, sizing, otm, strategy, days))
@@ -273,7 +285,7 @@ def settings_post():
         store.put("broker_pref", b["broker_pref"])
     if "prefs" in b:
         p, cur = b["prefs"] or {}, SV.prefs()
-        if p.get("sizing") in ("risk", "one_lot"):
+        if p.get("sizing") in ("risk", "one_lot", "all_in"):
             cur["sizing"] = p["sizing"]
         if "risk_pct" in p:
             r = float(p["risk_pct"])

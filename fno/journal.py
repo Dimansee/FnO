@@ -90,11 +90,11 @@ def record(symbol, ev, order, g, prefs):
     n = 0
     plan = ev.get("plan")
     if plan and order:
-        bar = (ev.get("ai") or {}).get("bar_end") if plan.get("strategy") == "ai" else None
-        checks = [t for ok, t in ev.get("checks", []) if ok is True]
-        stamp = bar or next((t[:5] for t in checks if t[:5].replace(":", "").isdigit()), g["now"].strftime("%H:%M"))
+        stamp = plan.get("signal_bar") or g["now"].strftime("%H:%M")
         rid = f"{symbol}:{plan.get('strategy')}:{stamp}"
-        if _get(day, f"reco:{rid}") is None:
+        # one record per signal candle; the rule strategies also allow only one trade per day, so one record per day for them
+        existing = [f for f in (store._cmd("HKEYS", _key(day)) or []) if f.startswith(f"reco:{symbol}:{plan.get('strategy')}:")]
+        if _get(day, f"reco:{rid}") is None and not (plan.get("strategy") in ("noise", "camarilla") and existing):
             rec = {"id": rid, "symbol": symbol, "time": g["now"].strftime("%H:%M:%S"), "signal_bar": stamp, "strategy": plan.get("strategy"),
                    "signal": ev.get("signal"), "opt": plan.get("opt"), "index": {"entry": plan.get("entry"), "sl": plan.get("sl"), "target": plan.get("target"),
                                                                                "risk_pts": plan.get("risk_pts"), "rr": plan.get("rr")},
@@ -105,7 +105,7 @@ def record(symbol, ev, order, g, prefs):
                              "factors": [{"factor": f["factor"], "value": f["value"], "score": f["score"]} for f in ev.get("factors", [])][:12],
                              "ai": {k: (ev.get("ai") or {}).get(k) for k in ("candidates", "best", "reasons", "threshold")} if plan.get("strategy") == "ai" else None,
                              "exp_r": plan.get("exp_r"), "p_win": plan.get("p_win"), "trail": plan.get("trail")},
-                   "spot": g["spot"], "vix": g["vix"].get("level"), "auto_enabled": bool(prefs.get("auto")) and symbol in (prefs.get("auto_syms") or []),
+                   "spot": g["spot"], "vix": g["vix"].get("level"), "lot": g["lot"], "auto_enabled": bool(prefs.get("auto")) and symbol in (prefs.get("auto_syms") or []),
                    "result": None}
             _put(day, f"reco:{rid}", rec)
             n += 1

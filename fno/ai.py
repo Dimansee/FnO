@@ -292,7 +292,7 @@ def evaluate(symbol, candles, vix: dict, gcues, now: datetime, expiry: date, tra
         return out
     if ok:
         out["signal"] = "BUY CALL" if sign > 0 else "BUY PUT"
-        out["plan"] = {"strategy": "ai", "opt": best["side"], "entry": spot, "risk_pts": risk, "sl": spot - sign * risk,
+        out["plan"] = {"strategy": "ai", "opt": best["side"], "entry": spot, "risk_pts": risk, "sl": spot - sign * risk, "signal_bar": end.strftime("%H:%M"),
                        "target": spot + sign * RR * risk, "rr": RR, "exp_r": best["exp_r"], "p_win": best["p_win"],
                        "stop_k": best["stop_k"], "trail": "fixed stop and 2R target, square-off 15:15",
                        "reasons": sc["reasons"]}
