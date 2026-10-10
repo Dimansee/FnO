@@ -233,7 +233,7 @@ def evaluate_camarilla(today, hist, vix, now: datetime, traded_today=False) -> d
         risk = min(max(abs(spot - ref), C.CAM_RMIN * a), C.CAM_RMAX * a)
         out["signal"] = "BUY CALL" if opt == "CE" else "BUY PUT"
         out["checks"].append((True, f"{end:%H:%M} close crossed {'above H4' if opt == 'CE' else 'below L4'}"))
-        out["plan"] = {"strategy": "camarilla", "opt": opt, "entry": spot, "risk_pts": risk, "sl": spot - sign * risk,
+        out["plan"] = {"strategy": "camarilla", "opt": opt, "entry": spot, "risk_pts": risk, "sl": spot - sign * risk, "signal_bar": end.strftime("%H:%M"),
                        "target": None, "rr": None, "breakeven_at": spot + sign * C.CAM_BE_R * risk,
                        "time_stop_min": C.CAM_TIME_STOP, "trail": "stop to entry at +1R; 45-min time stop"}
     else:
@@ -321,10 +321,10 @@ def _evaluate_noise(symbol, candles, vix, cstats, news, gcues, fii, now: datetim
     risk = min(max(C.STOP_ATR * a, 1.0 * a), 2.5 * a)
     if all(c for c, _ in long_c):
         res["signal"], res["checks"] = "BUY CALL", res["checks"] + long_c
-        res["plan"] = _plan("CE", spot, risk)
+        res["plan"] = {**_plan("CE", spot, risk), "signal_bar": end.strftime("%H:%M")}
     elif all(c for c, _ in short_c):
         res["signal"], res["checks"] = "BUY PUT", res["checks"] + short_c
-        res["plan"] = _plan("PE", spot, risk)
+        res["plan"] = {**_plan("PE", spot, risk), "signal_bar": end.strftime("%H:%M")}
     else:
         lp, sp = sum(bool(c) for c, _ in long_c), sum(bool(c) for c, _ in short_c)
         side = long_c if lp >= sp else short_c
@@ -404,6 +404,10 @@ def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=N
     if prefs.get("sizing") == "one_lot":
         lots = 1
         note = f"1-lot mode: this trade risks about ₹{risk_per_lot:,.0f} ({risk_per_lot / capital:.1%} of capital)."
+    elif prefs.get("sizing") == "all_in":
+        lots = max(1, int((cash if cash is not None else capital) // cost_per_lot)) if cost_per_lot > 0 else 0
+        note = (f"All-in experiment: {lots} lot(s) use ₹{lots * cost_per_lot:,.0f} of your cash and risk about ₹{lots * risk_per_lot:,.0f} "
+                f"({lots * risk_per_lot / capital:.0%} of capital) on this one trade.")
     elif lots == 0:
         if risk_per_lot <= 1.5 * allowed:
             lots, note = 1, f"1 lot risks ₹{risk_per_lot:,.0f} ({risk_per_lot / capital:.1%}) - slightly above your {rp:.1%} rule."

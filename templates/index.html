@@ -454,7 +454,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
       <div class="card" id="prefCard">
         <h3>Trading preferences</h3>
         <div class="formrow">
-          <div><label>Position size</label><select id="pfSize" style="width:100%"><option value="risk">Risk a % of capital per trade (recommended)</option><option value="one_lot">Always 1 lot (small accounts - riskier)</option></select></div>
+          <div><label>Position size</label><select id="pfSize" style="width:100%"><option value="risk">Risk a % of capital per trade (recommended)</option><option value="one_lot">Always 1 lot (small accounts - riskier)</option><option value="all_in">Experiment: all available cash in every trade (very risky)</option></select></div>
           <div><label>Risk per trade</label><select id="pfRisk" style="width:100%"><option value="0.5">0.5%</option><option value="1">1% (the rule)</option><option value="1.5">1.5%</option><option value="2">2%</option></select></div>
         </div>
         <label style="margin-top:12px">Strategies</label>
@@ -475,8 +475,9 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
       </div>
       <div class="card">
         <h3>Demo account</h3>
-        <label>Reset with new starting capital (₹) - clears all positions and the journal</label>
-        <div class="copy"><input id="capIn" type="number" value="200000" step="50000"><button class="danger" id="resetBtn">Reset</button></div>
+        <label>Demo capital (₹)</label>
+        <div class="copy"><input id="capIn" type="number" value="200000" step="50000"><button class="primary" id="capSave" title="Change the capital, keep positions and the journal">Save</button><button class="danger" id="resetBtn" title="Clears all positions and the journal">Reset account</button></div>
+        <p class="muted" style="font-size:12px;margin:6px 0 0">Save changes the capital and keeps everything else. Reset starts over with this capital and clears all positions and the trade journal.</p>
         <div style="margin-top:18px"><button id="logout">Sign out</button></div>
       </div>
     </div>
@@ -1260,7 +1261,7 @@ async function loadPortfolio() {
     <div class="leg" style="flex-wrap:wrap;gap:10px;padding:10px 12px">
       <div style="flex:2;min-width:200px"><b>${esc(p.symbol)}</b> ${p.legs.map(l => `<span class="tag ${l.side.toLowerCase()}">${l.side}</span> ${l.strike}${l.opt}`).join(" / ")}
         <div class="muted" style="font-size:12px">exp ${p.expiry} · ${p.lots} lot(s) · ${p.mode} · opened ${p.opened.slice(11, 16)} · SL ₹${n2(p.sl_prem)} · target ₹${n2(p.target_prem)}${p.at_breakeven ? " · stop at breakeven" : ""}</div></div>
-      <div class="mono" style="flex:1">₹${n2(p.entry_prem)} → ₹${n2(p.current_prem)}</div>
+      <div class="mono" style="flex:1">₹${n2(p.entry_prem)} → ₹${n2(p.current_prem)}<div class="muted" style="font-size:11px">${p.price_src === "live" ? "live broker price" : "formula price (no broker login)"}</div></div>
       <div class="mono ${cls(p.unrealised)}" style="flex:1;font-weight:700">${rs(p.unrealised)}</div>
       <button class="danger" data-exit="${p.id}">Exit</button>
     </div>`).join("") : `<div class="empty">No open positions.</div>`;
@@ -1489,6 +1490,7 @@ function brokerCard(name, title, idLabel, st, steps) {
 }
 async function loadJournal() {
   const sel = $("#jrDay");
+  if (!S.study) { try { S.study = await api("/api/research"); } catch (e) {} }
   if (!S.jrDays) {
     S.jrDays = (await api("/api/journal")).days.slice().reverse();
     sel.innerHTML = S.jrDays.length ? S.jrDays.map(d => `<option value="${d}">${d}</option>`).join("") : `<option value="">no sessions yet</option>`;
@@ -1512,18 +1514,22 @@ async function loadJournal() {
       <div class="row"><span class="muted">Expiry traded · strategies on · auto</span><span class="mono">${esc(c.expiry)} · ${(c.prefs.strategies || []).join(", ")} · ${c.prefs.auto ? (c.prefs.auto_syms || []).join(", ") : "off"}</span></div>
       ${c.calendar && c.calendar.blocked ? `<div class="warn">${esc(c.calendar.reason)}</div>` : ""}</div>`;
   };
-  const recoRow = r => { const o = r.result; return `<tr><td class="mono">${esc(r.time.slice(0, 5))}</td><td>${r.symbol === "NIFTY" ? "Nifty" : "Bank Nifty"}</td><td>${{noise: "Noise band", camarilla: "Camarilla", ai: "AI model"}[r.strategy] || esc(r.strategy)}</td>
-    <td class="${r.opt === "CE" ? "up" : "down"}">${r.opt === "CE" ? "Buy CALL" : "Buy PUT"} ${r.option.strike}</td><td class="mono">₹${n2(r.option.entry_prem)}</td>
+  const exW = (S.study && S.study.expected) || {}, winOf = r => r.strategy === "ai" ? (r.basis.p_win != null ? Math.round(r.basis.p_win * 100) + "%" : "–") : ((exW[r.strategy === "camarilla" ? "Camarilla" : "Noise band"] || {}).win_rate != null ? exW[r.strategy === "camarilla" ? "Camarilla" : "Noise band"].win_rate + "%" : "–");
+  const recoRow = r => { const o = r.result; return `<tr><td class="mono">${esc(r.time.slice(0, 5))}<div class="muted" style="font-size:11px">candle ${esc(r.signal_bar)}</div></td><td>${r.symbol === "NIFTY" ? "Nifty" : "Bank Nifty"}</td><td>${{noise: "Noise band", camarilla: "Camarilla", ai: "AI model"}[r.strategy] || esc(r.strategy)}</td>
+    <td class="${r.opt === "CE" ? "up" : "down"}">${r.opt === "CE" ? "Buy CALL" : "Buy PUT"} ${r.option.strike}<div class="muted" style="font-size:11px">${esc(r.option.expiry)} · ${r.option.lots} lot(s)</div></td><td class="mono">₹${n2(r.option.entry_prem)} / <span class="down">₹${n2(r.option.sl_prem)}</span> / <span class="up">${r.option.target_prem == null ? "–" : "₹" + n2(r.option.target_prem)}</span></td>
     <td class="mono">${n2(r.index.entry)} / ${n2(r.index.sl)} / ${r.index.target == null ? "–" : n2(r.index.target)}</td>
-    <td class="mono">${r.basis.exp_r != null ? sgn(r.basis.exp_r) + "R · " + Math.round(r.basis.p_win * 100) + "%" : (r.basis.score != null ? "score " + r.basis.score : "–")}</td>
-    <td>${o ? `<span class="badge ${o.index_outcome === "target" ? "ok" : o.index_outcome === "stop" ? "no" : ""}">${o.index_outcome}</span> ${esc(o.at)} · <span class="mono ${cls(o.R)}">${sgn(o.R)}R</span><div class="muted" style="font-size:11px">best ${sgn(o.mfe_pts)} / worst −${n2(o.mae_pts)} pts${o.premium ? ` · premium ₹${n2(o.premium.entry)} → high ₹${n2(o.premium.high)} (${sgn(o.premium.max_gain_pct)}%) low ₹${n2(o.premium.low)} (${sgn(o.premium.max_loss_pct)}%) · at exit ₹${n2(o.premium.at_exit)}` : ""}</div>` : `<span class="muted">pending (settled after 15:15)</span>`}</td>
+    <td class="mono">${winOf(r)}</td>
+    <td class="mono" style="font-size:12px">${r.basis.exp_r != null ? "expected " + sgn(r.basis.exp_r) + "R" : (r.basis.score != null ? "market score " + sgn(r.basis.score) : "–")}</td>
+    <td>${o ? `<span class="badge ${o.index_outcome === "target" ? "ok" : o.index_outcome === "stop" ? "no" : ""}">${o.index_outcome}</span> ${esc(o.at)} · <span class="mono ${cls(o.R)}">${sgn(o.R)}R</span><div class="muted" style="font-size:11px">best ${sgn(o.mfe_pts)} / worst −${n2(o.mae_pts)} pts${o.premium ? ` · premium high ₹${n2(o.premium.high)} (${sgn(o.premium.max_gain_pct)}%), low ₹${n2(o.premium.low)} (${sgn(o.premium.max_loss_pct)}%)` : ""}</div>` : `<span class="muted">pending (settled after 15:15)</span>`}</td>
+    <td class="mono">${o && o.premium ? `₹${n2(o.premium.at_exit)}<div class="${cls(o.premium.at_exit - r.option.entry_prem)}" style="font-size:11px">${sgn((o.premium.at_exit / r.option.entry_prem - 1) * 100)}%${r.lot ? " · " + rs((o.premium.at_exit - r.option.entry_prem) * r.lot * (r.option.lots || 1)) : ""}</div>` : o ? `<span class="muted">no chain record</span>` : "–"}</td>
     <td><details><summary style="cursor:pointer">basis</summary><ul class="checks" style="font-size:12px">${r.basis.checks.map(([ok, t]) => `<li><span class="ic">${ok === true ? "✅" : ok === false ? "❌" : "👀"}</span><span>${esc(t)}</span></li>`).join("")}</ul>${r.basis.ai ? `<div class="muted" style="font-size:12px">${r.basis.ai.reasons.map(x => `${esc(x.factor)} ${sgn(x.effect)}R`).join(" · ")}</div>` : ""}</details></td></tr>`; };
   const aiRows = sym => (j.ai[sym] || []).map(x => `<tr><td class="mono">${esc(x.bar)}</td><td class="mono">${n2(x.spot)}</td><td class="${x.side === "CE" ? "up" : "down"}">${x.side === "CE" ? "CALL" : "PUT"} · ${x.stop_k}×ATR</td><td class="mono ${cls(x.exp_r)}">${sgn(x.exp_r)}</td><td class="mono">${Math.round(x.p_win * 100)}%</td><td>${x.trade ? '<span class="badge ok">trade</span>' : '<span class="muted">wait</span>'}</td></tr>`).join("");
   $("#jrBody").innerHTML = `
-    <div class="k4" style="margin-top:14px">${kpi("Recommendations", sm.recommendations, `${sm.settled} settled`, "muted")}${kpi("Outcomes", `${sm.by_outcome.target} / ${sm.by_outcome.stop} / ${sm.by_outcome["square-off"]}`, "target / stop / square-off", "muted")}${kpi("Sum of R", sm.sum_R == null ? "–" : sgn(sm.sum_R), "on the index path", "muted")}${kpi("Paper trades", sm.paper_trades, `P&L ${rs(sm.paper_pnl)}`, "muted")}</div>
+    <div class="k4" style="margin-top:14px;grid-template-columns:repeat(5,1fr)">${kpi("Recommendations", sm.recommendations, `${sm.settled} settled`, "muted")}${kpi("Outcomes", `${sm.by_outcome.target} / ${sm.by_outcome.stop} / ${sm.by_outcome["square-off"]}`, "target / stop / square-off", "muted")}${kpi("Sum of R", sm.sum_R == null ? "–" : sgn(sm.sum_R), "on the index path", "muted")}${kpi("Win % (this day)", sm.settled ? Math.round(sm.by_outcome.target / sm.settled * 100) + "%" : "–", "targets ÷ settled", "muted")}${kpi("Paper trades", sm.paper_trades, `P&L ${rs(sm.paper_pnl)}`, "muted")}</div>
     <div class="grid g2" style="margin-top:14px">${ctxCard("NIFTY")}${ctxCard("BANKNIFTY")}</div>
     <div class="card" style="margin-top:14px"><h3>Recommendations and what happened</h3>
-      ${j.recommendations.length ? `<div class="tablewrap"><table class="prose"><tr><th>Time</th><th>Index</th><th>Strategy</th><th>Option</th><th>Entry prem</th><th>Index entry / SL / target</th><th>Confidence</th><th>Outcome</th><th></th></tr>${j.recommendations.map(recoRow).join("")}</table></div>` : `<div class="empty">No recommendations recorded for this day${j.context.NIFTY ? " - the strategies did not fire" : ""}.</div>`}</div>
+      ${j.recommendations.length ? `<div class="tablewrap"><table class="prose"><tr><th>Time</th><th>Index</th><th>Strategy</th><th>Option</th><th>Premium entry / SL / target</th><th>Index entry / SL / target</th><th>Win % (backtest)</th><th>Basis</th><th>Outcome</th><th>Exit prem</th><th></th></tr>${j.recommendations.map(recoRow).join("")}</table></div>
+      <p class="muted" style="font-size:12px">Win % is the strategy's historical win rate from the 2023-26 backtest (the AI's is its own estimate for that candle). "Market score" is the context score on the Signal page (global cues, gap, VIX, put/call ratio, news, FII) - shown for information, it does not decide trades. Premium SL / target are the option-price estimates of the index levels; the exit premium comes from the recorded 5-minute chain.</p>` : `<div class="empty">No recommendations recorded for this day${j.context.NIFTY ? " - the strategies did not fire" : ""}.</div>`}</div>
     <div class="grid g2" style="margin-top:14px">${["NIFTY", "BANKNIFTY"].map(sym => `<div class="card"><h3>AI view through the day · ${sym === "NIFTY" ? "Nifty" : "Bank Nifty"}</h3>${(j.ai[sym] || []).length ? `<div class="tablewrap" style="max-height:320px;overflow:auto"><table><tr><th>Candle</th><th>Spot</th><th>Best</th><th>Exp. R</th><th>Win</th><th></th></tr>${aiRows(sym)}</table></div>` : `<div class="muted">No AI scores recorded (switch the AI model on in Settings to log its view).</div>`}</div>`).join("")}</div>
     ${j.paper_trades.length ? `<div class="card" style="margin-top:14px"><h3>Paper trades closed this day</h3><div class="tablewrap"><table><tr><th>Opened</th><th>Index</th><th>Strategy</th><th>Legs</th><th>Lots</th><th>In → out</th><th>P&L</th><th>Reason</th></tr>${j.paper_trades.map(t => `<tr><td class="mono">${esc((t.opened || "").slice(11, 16))}</td><td>${esc(t.symbol)}</td><td>${t.mode !== "signal" ? "Manual" : ({camarilla: "Camarilla", ai: "AI model"}[(t.plan || {}).strategy] || "Noise band")}</td><td>${(t.legs || []).map(l => `${l.side} ${l.strike}${l.opt}`).join(" / ")}</td><td>${t.lots}</td><td class="mono">₹${n2(t.entry_prem)} → ₹${n2(t.exit_prem)}</td><td class="mono ${cls(t.pnl)}">${rs(t.pnl)}</td><td>${esc(t.reason)}</td></tr>`).join("")}</table></div></div>` : ""}`;
 }
@@ -1581,6 +1587,7 @@ $("#pfSave").onclick = async () => {
 };
 $("#pref").onchange = async () => { await post("/api/settings", {broker_pref: $("#pref").value}); toast("Saved"); };
 $("#fiiSave").onclick = async () => { await post("/api/settings", {fii_manual: $("#fiiIn").value}); toast("Saved"); };
+$("#capSave").onclick = async () => { try { const r = await post("/api/account/capital", {capital: +$("#capIn").value}); toast(r.message); } catch (e) { toast(e.message); } };
 $("#resetBtn").onclick = async () => {
   if (!confirm("Reset the demo account? This deletes all positions and the trade journal.")) return;
   try { const r = await post("/api/account/reset", {capital: +$("#capIn").value}); toast(r.message); } catch (e) { toast(e.message); }

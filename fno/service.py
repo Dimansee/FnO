@@ -428,7 +428,8 @@ def portfolio():
     for p in pos:
         u = P.unrealised(p, prices)
         unreal += u
-        out.append({**p, "current_prem": round(P.net_price(p["legs"], prices), 2), "unrealised": round(u, 2)})
+        out.append({**p, "current_prem": round(P.net_price(p["legs"], prices), 2), "unrealised": round(u, 2),
+                    "price_src": "live" if all(l.get("src", "demo") in m.clients for l in p["legs"]) else "formula"})
     return clean({
         "capital_start": acct["capital_start"], "cash": cash, "unrealised": unreal,
         "realised": sum(t["pnl"] for t in tr), "account_value": cash + sum(p["margin"] for p in pos) + unreal,

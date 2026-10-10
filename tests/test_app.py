@@ -312,8 +312,13 @@ assert isinstance(tk["journal"].get("NIFTY"), int) and tk["journal"]["NIFTY"] >=
 jd = j(c.get("/api/journal/day?date=2026-10-01"))
 assert jd["recommendations"] and jd["recommendations"][0]["basis"]["checks"] and jd["recommendations"][0]["option"]["strike"] and jd["ai"]["NIFTY"], jd["summary"]
 n_before = len(jd["recommendations"])
+assert all(r["signal_bar"] for r in jd["recommendations"]) and all(r.get("lot") for r in jd["recommendations"])
 tk = j(c.post("/api/tick", headers={"x-cron-secret": "c"}))                                       # same candle -> no duplicate
 assert len(j(c.get("/api/journal/day?date=2026-10-01"))["recommendations"]) == n_before
+NOW[0] = datetime(2026, 10, 1, 10, 56, tzinfo=C.IST); CANDLES.clear(); M._cache.clear()         # next scan, same rule signal -> still one per rule
+tk = j(c.post("/api/tick", headers={"x-cron-secret": "c"}))
+recs = j(c.get("/api/journal/day?date=2026-10-01"))["recommendations"]
+assert len([r for r in recs if r["strategy"] == "noise" and r["symbol"] == "NIFTY"]) <= 1, [(r["strategy"], r["signal_bar"]) for r in recs]
 assert j(c.post("/api/journal/scan", json={}))
 NOW[0] = datetime(2026, 10, 1, 15, 17, tzinfo=C.IST); CANDLES.clear(); M._cache.clear()
 tk = j(c.post("/api/tick", headers={"x-cron-secret": "c"}))
@@ -326,6 +331,17 @@ assert c.get("/api/journal/day?date=nope").status_code == 400
 print("journal OK:", jd["summary"])
 AM.load()["meta"]["threshold"] = 0.3
 assert j(c.post("/api/settings", json={"prefs": {"strategies": ["noise", "camarilla"], "auto": False}}))["ok"]
+# ---------- all-in sizing and capital change ----------
+assert j(c.post("/api/settings", json={"prefs": {"sizing": "all_in"}}))["ok"]
+NOW[0] = datetime(2026, 10, 1, 10, 52, tzinfo=C.IST); CANDLES.clear(); M._cache.clear()
+store.clear_positions(); store.clear_trades()
+da = j(c.get("/api/dashboard?symbol=NIFTY"))
+assert da["order"] and da["order"]["lots"] >= 2 and "All-in" in (da["order"]["note"] or ""), da["order"]
+assert j(c.post("/api/account/capital", json={"capital": 250000}))["ok"]
+assert j(c.get("/api/portfolio"))["capital_start"] == 250000 and j(c.get("/api/journal/day?date=2026-10-01"))["recommendations"]
+assert c.post("/api/account/capital", json={"capital": 5}).status_code == 400
+assert j(c.post("/api/settings", json={"prefs": {"sizing": "risk"}}))["ok"]
+print("all-in / capital OK")
 # ---------- calendar rules (round 6) ----------
 from fno import service as SV, indicators as II  # noqa: E402
 from datetime import date as _d

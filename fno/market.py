@@ -285,6 +285,22 @@ class Market:
         """Current price of each leg. Live broker LTP when the leg came from the
         connected broker; otherwise a Black-Scholes estimate."""
         prices, by_broker = {}, {}
+        if self.br:                                          # legs opened on theoretical prices: switch them to the live contract
+            for p in positions:
+                for lg in p["legs"]:
+                    if lg.get("src", "demo") in self.clients:
+                        continue
+                    try:
+                        ch = self.chain(p["symbol"], date.fromisoformat(p["expiry"]), spots.get(p["symbol"]), vix_level)
+                        if ch is None or ch.empty or ch.attrs.get("source") != "live":
+                            continue
+                        row = ch[ch["strike"] == float(lg["strike"])]
+                        key = row.iloc[0].get(f"{lg['opt'].lower()}_key") if len(row) else None
+                        if key:
+                            lg["key"], lg["src"] = key, self.br.name
+                            p["_relinked"] = True
+                    except Exception as e:
+                        self.errors.append(f"Could not link {p['symbol']} {lg['strike']:g}{lg['opt']} to the live contract: {e}")
         for p in positions:
             for lg in p["legs"]:
                 src = lg.get("src", "demo")
@@ -304,4 +320,11 @@ class Market:
                 exp = date.fromisoformat(p["expiry"])
                 iv = demo_iv(p["symbol"], lg["strike"], sp, vix_level)
                 prices[lg["key"]] = round(I.bs_price(sp, lg["strike"], I.years_to_expiry(exp), iv, lg["opt"]), 2)
+                lg["price_src"] = "formula"
+        for p in positions:
+            if p.pop("_relinked", False):
+                try:
+                    store.update_position(p)
+                except Exception:
+                    pass
         return prices
