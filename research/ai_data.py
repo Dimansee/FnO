@@ -94,12 +94,19 @@ def build():
             ranges.append(max(d.h) - min(d.l))
         print(sym, "rows", len(out), flush=True)
     df = pd.DataFrame(out)
-    old = pd.read_parquet("ai_rows.parquet")
-    df["R_T_L"], df["R_T_S"], df["X_T_L"], df["X_T_S"] = old["R_T_L"].values, old["R_T_S"].values, old["X_T_L"].values, old["X_T_S"].values
-    common = [c for c in old.columns if c in df.columns and c not in ("date",)]
-    diff = {c: float(np.nanmax(np.abs(pd.to_numeric(df[c]) - pd.to_numeric(old[c])))) for c in common if np.issubdtype(df[c].dtype, np.number)}
-    bad = {k: v for k, v in diff.items() if v > 1e-9}
-    print("columns differing from the saved table:", bad or "none", "| dropped:", [c for c in old.columns if c not in df.columns])
+    if os.path.exists("ai_rows.parquet"):
+        # keep the rule-exit labels (ai_data_trail.py) for rows already in the saved table; new sessions get NaN until it reruns
+        old = pd.read_parquet("ai_rows.parquet")
+        old["date"] = pd.to_datetime(old["date"]).dt.date
+        trail = [c for c in ("R_T_L", "R_T_S", "X_T_L", "X_T_S") if c in old.columns]
+        key = ["sym", "date", "i"]
+        df = df.merge(old[key + trail], on=key, how="left") if trail else df
+        both = df.merge(old, on=key, how="inner", suffixes=("", "_old"))
+        common = [c for c in old.columns if c in df.columns and c not in key + trail and np.issubdtype(df[c].dtype, np.number)]
+        diff = {c: float(np.nanmax(np.abs(pd.to_numeric(both[c]) - pd.to_numeric(both[c + "_old"])))) for c in common if len(both)}
+        bad = {k: v for k, v in diff.items() if v > 1e-9}
+        print(f"rows new {len(df) - len(both)}; columns differing from the saved table on shared rows:", bad or "none",
+              "| dropped:", [c for c in old.columns if c not in df.columns])
     df.to_parquet("ai_rows.parquet", index=False)
     print(df.shape, df["date"].min(), df["date"].max())
     return df
