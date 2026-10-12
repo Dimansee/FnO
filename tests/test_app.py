@@ -326,6 +326,7 @@ assert tk["journal"].get("settled", 0) >= 1, tk["journal"]
 jd = j(c.get("/api/journal/day?date=2026-10-01"))
 r0 = jd["recommendations"][0]["result"]
 assert r0 and r0["index_outcome"] in ("target", "stop", "square-off") and "R" in r0 and jd["summary"]["settled"] >= 1, r0
+assert jd["settled"].get("lesson") and "recommendation" in jd["settled"]["lesson"] and "Carry forward" in jd["settled"]["lesson"], jd["settled"]
 assert "2026-10-01" in j(c.get("/api/journal"))["days"]
 assert c.get("/api/journal/day?date=nope").status_code == 400
 print("journal OK:", jd["summary"])
@@ -372,6 +373,33 @@ assert st2["saved"] == 0 and st2["errors"] and st2["last_ok"].startswith("2026-1
 assert R.snapshot(datetime(2026, 10, 3, 11, 0, tzinfo=C.IST))["skipped"] == "market closed"
 R.nse_chain = _fake_nse
 print("recorder OK:", len(snaps), "snapshots,", rs["days"])
+# ---------- options flow (GEX profile + OI heatmap from the recorded snapshots) ----------
+def _fake_nse2(sym, n_exp=2):                              # second snapshot: OI shifts, one IV missing
+    out = _fake_nse(sym, n_exp)
+    for i, r in enumerate(out[0][2]):                      # both expiries share one rows list
+        r[4] = r[4] + 200 * (1 if i % 2 else -1); r[10] = r[10] + 150; r[6] = None
+    return out
+R.nse_chain = _fake_nse2
+st3 = R.snapshot(NOW[0].replace(hour=11, minute=5))
+assert st3["saved"] == 4, st3
+R.nse_chain = _fake_nse
+fl = j(c.get("/api/flow?symbol=NIFTY&date=2026-10-01"))
+assert not fl.get("empty"), fl
+pf, hm = fl["profile"], fl["heatmap"]
+assert pf["strikes"] and len(pf["strikes"]) == len(pf["net_gex"]) == len(pf["call_gex"]) == len(pf["put_gex"])
+assert isinstance(pf["total_net"], (int, float)) and pf["expiry"] == "2026-10-06" and pf["lot"] == 65
+assert all(x >= 0 for x in pf["call_gex"]) and all(x <= 0 for x in pf["put_gex"])
+assert pf["call_wall"] in pf["strikes"] and pf["put_wall"] in pf["strikes"] and len(pf["series"]) >= 2
+assert len(hm["times"]) >= 2 and len(hm["strikes"]) == len(hm["pe_minus_ce"]) and len(hm["pcr"]) == len(hm["times"])
+assert all(v == 0 for v in hm["ce_change"][0][:1]) and hm["pe_change"][0][-1] == 150, hm["pe_change"][0]
+assert fl["text"] and "zero-gamma" in fl["text"]
+from fno import flow as FL  # noqa: E402
+assert FL._fill_iv([None, 13.0, None], 14.0) == [0.13, 0.13, 0.13] and FL._fill_iv([None], 14.0) == [0.14]
+em = j(c.get("/api/flow?symbol=NIFTY&date=2026-09-30"))
+assert em["empty"] and em["reason"]
+assert j(c.get("/api/flow?symbol=RELIANCE&date=2026-10-01"))["empty"]
+assert c.get("/api/flow?symbol=NIFTY&date=bad").status_code == 400
+print("options flow OK: zero gamma", pf["zero_gamma"], "walls", pf["call_wall"], pf["put_wall"], "·", fl["text"][:90])
 print("redis edge cases OK; positions", len(store.positions()), "trades", len(store.trades()))
 print("ALL OK")
 

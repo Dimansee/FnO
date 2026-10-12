@@ -455,6 +455,23 @@ def recorder_day():
     return jsonify(SV.clean(REC.day(request.args.get("date", ""))))
 
 
+@app.get("/api/flow")
+def flow():
+    """Options flow from the day's recorded snapshots: GEX profile by strike, OI-change heatmap, plain reading."""
+    from fno import flow as FL
+    sym = _sym()
+    d = request.args.get("date") or C.today_ist().isoformat()
+    day = REC.day(d)
+    if not day["snapshots"]:
+        return jsonify({"empty": True, "reason": "No snapshots yet today - the recorder starts at 09:15; shown from the first snapshot.",
+                        "date": d, "symbol": sym})
+    prof = FL.gex_profile(day, sym)
+    if prof is None:
+        return jsonify({"empty": True, "reason": f"No {sym} snapshots recorded on {d} (the recorder covers Nifty and Bank Nifty).",
+                        "date": d, "symbol": sym})
+    return jsonify(SV.clean({"profile": prof, "heatmap": FL.oi_heatmap(day, sym), "text": FL.read(prof), "date": d, "symbol": sym}))
+
+
 _probe = {"t": 0.0, "v": None}
 
 

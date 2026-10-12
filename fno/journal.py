@@ -185,8 +185,59 @@ def settle(day, candles_by_sym):
         rec["result"] = res
         _put(day, f, rec)
         done += 1
-    _put(day, "settled", {"at": C.now_ist().isoformat(timespec="seconds"), "recos": done})
+    lesson = None
+    try:
+        lesson = reflect(day, candles_by_sym)
+    except Exception as e:
+        lesson = f"(reflection failed: {str(e)[:80]})"
+    _put(day, "settled", {"at": C.now_ist().isoformat(timespec="seconds"), "recos": done, "lesson": lesson})
+    if lesson and done:
+        try:
+            from . import push as PUSH
+            PUSH.send("Session wrap-up", lesson[:220], event_id=f"lesson:{day}", url="/#journal")
+        except Exception:
+            pass
     return done
+
+
+def reflect(day, candles_by_sym) -> str | None:
+    """A short, rule-based 'what happened today' note written after the close (no AI, no advice).
+    It names what the recommendations did, what the context said, and the one thing to carry forward."""
+    fields = store._cmd("HKEYS", _key(day)) or []
+    recos = [r for r in (_get(day, f) for f in fields if f.startswith("reco:")) if r and r.get("result")]
+    if not recos:
+        return None
+    parts = []
+    outs = [r["result"]["index_outcome"] for r in recos]
+    rs = [r["result"]["R"] for r in recos]
+    parts.append(f"{len(recos)} recommendation{'s' if len(recos) != 1 else ''}: {outs.count('target')} target, {outs.count('stop')} stop, "
+                 f"{outs.count('square-off')} squared off; {sum(rs):+.1f}R in total.")
+    best = max(recos, key=lambda r: r["result"]["R"]); worst = min(recos, key=lambda r: r["result"]["R"])
+    if best["result"]["R"] > 0:
+        parts.append(f"Best: {best['symbol']} {best['opt']} {best['option']['strike']:g} at {best['time'][:5]} ({best['result']['R']:+.1f}R, "
+                     f"ran {best['result']['mfe_pts']:.0f} pts in favour).")
+    if worst["result"]["R"] < 0 and worst is not best:
+        pr = worst["result"].get("premium") or {}
+        gain = pr.get("max_gain_pct")
+        parts.append(f"Worst: {worst['symbol']} {worst['opt']} {worst['option']['strike']:g} at {worst['time'][:5]} ({worst['result']['R']:+.1f}R"
+                     + (f"; the premium was up {gain:.0f}% at one point before the stop" if gain and gain > 10 else "") + ").")
+    sq = [r for r in recos if r["result"]["index_outcome"] == "square-off"]
+    if sq:
+        left = [r for r in sq if r["result"]["mfe_pts"] >= 2 * (r["index"].get("risk_pts") or 1)]
+        if left:
+            parts.append(f"{len(left)} squared-off trade{'s' if len(left) != 1 else ''} reached 2R during the day and gave part of it back - the rules hold to 15:15 by design; the backtest says trailing earlier did not help.")
+    ctx = {s: _get(day, f"ctx:{s}") for s in SYMS}
+    vix = next((c.get("vix", {}).get("level") for c in ctx.values() if c and c.get("vix")), None)
+    if vix is not None:
+        parts.append(f"India VIX was {vix:.1f} at the open" + (" - below 11, where the rules stand aside." if vix < 11 else
+                     " - the band where the rules did best historically (50-75th percentile) is roughly 13-16." if 13 <= vix <= 16 else "."))
+    scores = [r.get("basis", {}).get("score") for r in recos if r.get("basis", {}).get("score") is not None]
+    if scores:
+        hi = [r for r in recos if (r.get("basis", {}).get("score") or 0) >= 3]
+        if hi:
+            parts.append(f"{sum(1 for r in hi if r['result']['R'] > 0)} of {len(hi)} high-score (3+) ideas ended positive.")
+    parts.append("Carry forward: one trade per rule per day, the index-level stop decides, premium paths are shown so you can see where the plan and the option diverged.")
+    return " ".join(parts)
 
 
 # ---------------------------------------------------------------- read

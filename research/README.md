@@ -245,3 +245,46 @@ the recorder to keep running before it can change a rule.
   (top 2%, PF 0.98), extra trees −₹15k, boosting −₹30k, kNN −₹65k, logistic −₹64k, random forest −₹71k; LightGBM +₹24k (fixed 0.2, PF 1.08).
   Every family lands between PF 0.7 and 1.1 — the inputs carry very little predictable signal, and no model family finds more of it than the
   trees already shipped. The rules' +₹192k on the same period stands.
+
+## Round 13 — sizing, exits, strike, re-entry, Bank Nifty tuning, Market Profile (`round13.py` → `round13.json`, log `round13.log`)
+Baseline = the round 6 book (noise W + Camarilla CA, both indices, corrected premiums): **training** (2023-01 → 2026-04-17, 809 sessions)
+796 trades +₹163.1k PF 1.23 maxDD ₹64k; **unseen** (last 120 sessions, 2026-04-20 → 10-09) 126 trades +₹60.6k PF 1.56 maxDD ₹23k.
+Nifty +₹100k / +₹51k, Bank Nifty +₹63k / +₹9k. "Beats" below = more net than that on BOTH halves; nothing was tuned on the unseen half.
+One correction to the brief: the shipped noise rule already trails on the Zarattini half-hour band (`s_noise` hard-codes `trail="noise"`,
+178 of 303 book exits) — "no trail" is a variant, not the baseline.
+- **A. Sizing by regime** (same trades, P&L × a multiplier known at entry; lot rounding ignored). Training per-trade P&L by trailing-250-session
+  VIX percentile: <25 ₹128, 25–50 ₹114, **50–75 ₹380**, 75+ ₹66; unseen: ₹−936 (n 5), ₹211, **₹1,047 (n 57)**, ₹−53. Multipliers 0.5/1/1.5/1
+  (average exposure 1.04×): train +₹188.6k, net/maxDD 2.79 vs 2.54; unseen +₹92.7k, 3.56 vs 2.65 — the only scheme family better in net *and*
+  net/DD on both halves (also 0.5/1/1.5/1.5). Two caveats: the 50–75 band was first seen in round 11 on data that included these unseen days,
+  and ₹59.7k of the ₹60.6k unseen baseline came from that band — one bucket, one half-year. Opening-range quartiles: narrow ranges worst
+  (₹44 then ₹−232 a trade) but no fixed scheme improved net/DD on both halves. Days to expiry: 5–7 DTE best on both halves (₹330, ₹1,222 a trade),
+  1–2 and 8+ weak (₹86/₹−373, ₹92/₹−227) — still no scheme better on both by net/DD. Kelly on training says 2× the 1 % budget in every
+  bucket (the cap binds): that is just "risk 2 %" — train DD ₹126k (63 % of capital), net/DD 2.26 vs 2.54. Half-Kelly ≈ flat. **Ship nothing
+  yet; the VIX 50–75 overweight is the one lead, re-test after ~60 more sessions.**
+- **B. Exits** (69 configs: noise target 3/4/5/none × breakeven off/1R/1.5R × trail none/noise/ATR×2/ATR×3, 12 partial-exit variants, Camarilla
+  time stop 30/45/60 × be off/1/1.5). 3 of 48 noise configs beat the base on both halves, all "be 1R + noise trail": +₹0.4k on training and
+  +₹3.1k unseen — noise, not an improvement. Best on training (no target, be 1.5R, ATR×3 trail) +₹186.6k then ₹49.4k unseen (−₹11k).
+  Dropping the noise trail: −₹11k train / −₹16k unseen; ATR×2 trail worst (₹147.7k / ₹23.5k). Half out at 2R: 0/12 (best ₹170k / ₹55k).
+  Camarilla time stop 60: better unseen (₹74.5k) but −₹28k on training; 30: worse on both. **Keep the exits.**
+- **C. Strike** (both rules, both indices): 2 ITM ₹148.7k / ₹66.1k, **1 ITM ₹163.1k / ₹60.6k**, ATM ₹137.0k / ₹43.8k, 1 OTM ₹115.2k / ₹42.0k.
+  Average Nifty premium ₹186 / 155 / 128 / 106, lots 1.0–1.3. Square-off (15:15) exits are 18 % of noise trades but 37 % (Nifty) / 25 % (Bank Nifty)
+  of gross P&L (+₹3.9k / +₹3.2k a trade) and 23 % of Camarilla trades, 58 % / 54 % of gross (+₹4.5k / +₹5.2k); their per-trade P&L falls with
+  moneyness (Nifty noise ₹4,054 → ₹3,466 from 2 ITM to 1 OTM) — decay costs the held-to-close trades most, as expected. Bank Nifty noise at 1 OTM is negative. **1 ITM stays.**
+- **D. Re-entry** (max_trades 2 / 3, max_losses 2): book ₹156.4k / ₹50.5k (PF 1.18 / 1.34, unseen DD ₹34k vs ₹23k) — worse on both.
+  Second attempts: after a noise-trail exit ₹−163 a trade (n 84), after a Camarilla time stop ₹−283 (n 92), after breakeven ₹−646 (n 28);
+  **after a Camarilla stop +₹565 (n 65: train +₹20.2k on 56, unseen +₹16.6k on 9)**. A post-hoc book with only that re-entry: ₹183.1k / ₹77.2k,
+  PF 1.25 / 1.66, DD ₹61k / ₹26k — picked after seeing the table, 9 unseen trades. **Watch-list, not shipped.**
+- **E. Bank Nifty on its own** (noise mult 1.5–2.25 × stop 1.5–2.5 ATR × rr 3–5 = 36; Camarilla vix_max 18/22/26 × time stop 30/45/60 = 9, picked on
+  training). Noise default ₹19.0k / ₹8.5k; best on training (mult 1.75, stop 2.5, rr 5) ₹29.0k / ₹2.1k (24 unseen trades); 0/36 beat the
+  default on both. Camarilla default ₹53.3k / ₹−3.4k; best (vix_max 18, 45 min) ₹65.0k / ₹−11.4k; 0/9. BN book tuned ₹78.9k / ₹−8.4k vs ₹62.9k /
+  ₹9.0k. **The Nifty-tuned settings stay on Bank Nifty.**
+- **F. Market Profile** (yesterday's TPO profile from 5-min bars, 10-pt / 25-pt buckets, POC + 70 % value area; VA width median 0.36 % Nifty /
+  0.44 % Bank Nifty; the open is inside yesterday's VA on 32 % of days; entries 09:45–14:30, VIX ≥ 11, 1 ITM, one trade a day, costs as the app).
+  80 % rule (open outside VA, two closes back inside, target the far side): 451 training trades ₹−239.5k PF 0.57, unseen ₹−31.4k (4R target
+  ₹−218k / ₹−46k). Acceptance (two closes beyond VAH/VAL, 2×ATR, 4R): 763 trades ₹−261.7k PF 0.75, unseen ₹−45.8k. Rejection (tail beyond,
+  close back, fade to POC): 840 trades ₹−308.2k PF 0.60, unseen ₹−1.3k (4R: ₹−244k / ₹−6k). Open-drive continuation: 39 trades ₹−29.7k, 5 unseen.
+  POC-migration filter on the noise rule (today's developing POC vs yesterday's): 328 of 448 trades kept, training ₹112.2k vs ₹107.9k, unseen
+  ₹0.8k vs ₹29.5k; fixed 90-minute POC with entries from 10:45: book ₹204.7k / ₹30.0k vs ₹163.1k / ₹60.6k. **No profile rule or filter beats the
+  base on both halves; the four entry rules lose on every year 2023–25.**
+- Sample sizes: 796 / 126 book trades; per-rule-per-index unseen counts are 24–55, so a Bank Nifty or a single-rule "win" of ±₹10k on the unseen
+  half is inside noise. Nothing from this round changes the app's rules.
