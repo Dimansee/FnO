@@ -374,3 +374,23 @@ R.nse_chain = _fake_nse
 print("recorder OK:", len(snaps), "snapshots,", rs["days"])
 print("redis edge cases OK; positions", len(store.positions()), "trades", len(store.trades()))
 print("ALL OK")
+
+
+# ---------- push notifications ----------
+from fno import push as PUSH  # noqa: E402
+import json  # noqa: E402
+assert c.get("/sw.js").status_code == 200 and c.get("/manifest.webmanifest").status_code == 200 and c.get("/icon.svg").status_code == 200
+k = j(c.get("/api/push/key"))
+assert k["configured"] is False
+PUSH.PUBLIC_KEY, PUSH.PRIVATE_KEY = PUSH.generate_keys()["VAPID_PUBLIC_KEY"], PUSH.generate_keys()["VAPID_PRIVATE_KEY"]
+sub = {"endpoint": "https://fcm.googleapis.com/fcm/send/test1", "keys": {"p256dh": PUSH._b64e(PUSH._pub_bytes(__import__("cryptography.hazmat.primitives.asymmetric.ec", fromlist=["ec"]).generate_private_key(__import__("cryptography.hazmat.primitives.asymmetric.ec", fromlist=["ec"]).SECP256R1()).public_key())), "auth": PUSH._b64e(os.urandom(16))}}
+assert j(c.post("/api/push/subscribe", json={"subscription": sub, "label": "test phone"}))["devices"] == 1
+assert c.post("/api/push/subscribe", json={"subscription": {"endpoint": "http://bad"}}).status_code == 400
+sent_log = []
+PUSH.deliver = lambda s_, payload, ttl=600: (sent_log.append(json.loads(payload)) or (201, ""))
+r = PUSH.send("t", "b", event_id="evt1")
+assert r["sent"] == 1 and sent_log[-1]["title"] == "t", r
+assert PUSH.send("t", "b", event_id="evt1")["skipped"] == "already sent"              # idempotent per event
+PUSH.deliver = lambda s_, payload, ttl=600: (410, "gone")
+assert PUSH.send("t", "b", event_id="evt2")["removed"] == 1 and j(c.get("/api/push/key"))["devices"] == 0
+print("push OK")

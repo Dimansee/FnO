@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0e1922">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="F&amp;O Trainer">
+<link rel="apple-touch-icon" href="/icon.svg">
 <title>F&amp;O Trainer</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2211%22%20fill%3D%22%230e1922%22/%3E%3Cg%20fill%3D%22%23f2a93b%22%3E%3Cpath%20d%3D%22M16%2017.5C9%2017.5%203.5%2013%204.5%204.5%206.5%2010%2010.5%2012.6%2017.5%2013.2Z%22/%3E%3Cpath%20d%3D%22M32%2017.5C39%2017.5%2044.5%2013%2043.5%204.5%2041.5%2010%2037.5%2012.6%2030.5%2013.2Z%22/%3E%3Cpath%20d%3D%22M11%2019.5c2-1.6%204.4-1.6%205.5-.6-.6%202-2.6%203.3-5.5.6Z%22/%3E%3Cpath%20d%3D%22M37%2019.5c-2-1.6-4.4-1.6-5.5-.6.6%202%202.6%203.3%205.5.6Z%22/%3E%3Cpath%20d%3D%22M17.5%2012.6c3.8-1.6%209.2-1.6%2013%200%201.9%201.2%202.8%203.4%202.6%206.4-.4%205-2.6%209.4-3.2%2014.2.9%201.4%201.3%203%201.1%204.6-.5%203.4-3.8%205-7%205s-6.5-1.6-7-5c-.2-1.6.2-3.2%201.1-4.6-.6-4.8-2.8-9.2-3.2-14.2-.2-3%20.7-5.2%202.6-6.4Z%22/%3E%3C/g%3E%3Cg%20fill%3D%22%230e1922%22%3E%3Cellipse%20cx%3D%2219.6%22%20cy%3D%2222.6%22%20rx%3D%221.3%22%20ry%3D%221.6%22/%3E%3Cellipse%20cx%3D%2228.4%22%20cy%3D%2222.6%22%20rx%3D%221.3%22%20ry%3D%221.6%22/%3E%3Cellipse%20cx%3D%2221.4%22%20cy%3D%2237.6%22%20rx%3D%221.2%22%20ry%3D%221.7%22/%3E%3Cellipse%20cx%3D%2226.6%22%20cy%3D%2237.6%22%20rx%3D%221.2%22%20ry%3D%221.7%22/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -468,6 +472,13 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
         <div style="margin-top:6px" id="pfSyms"></div>
         <p class="muted" style="font-size:12px;margin-bottom:0">The server checks every minute in market hours. Auto trades follow exactly the same rules and exits, so your journal builds a real paper track record.</p>
         <button class="primary" id="pfSave" style="margin-top:10px">Save preferences</button>
+        <label style="margin-top:16px">Push notifications</label>
+        <p class="muted" style="font-size:12px;margin:0 0 6px">Signals, paper trades placed and exits reach this phone or laptop even when the app is closed. Turn it on separately on each device. On iPhone, first add the app to the Home Screen (Share → Add to Home Screen), open it from there, then turn this on.</p>
+        <div id="pushRow" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <button class="mini" id="pushBtn">📲 Checking…</button>
+          <button class="mini" id="pushTest" style="display:none">Send a test</button>
+          <span class="muted" id="pushInfo" style="font-size:12px"></span>
+        </div>
       </div>
       <div class="card" id="recCard">
         <h3>Market recorder</h3>
@@ -690,6 +701,47 @@ $("#alertBtn").onclick = async () => {
   alertBtn(); toast(ALERTS ? "You'll get a sound and a notification when a signal appears (keep this page open)." : "Alerts off");
   if (ALERTS) beep();
 };
+/* push notifications (service worker + Web Push) */
+let PUSH_SUB = null;
+function b64u(s) { const b = atob((s + "=".repeat((4 - s.length % 4) % 4)).replace(/-/g, "+").replace(/_/g, "/")); return Uint8Array.from(b, c => c.charCodeAt(0)); }
+function pushUI(state, info) {
+  const b = $("#pushBtn"), t = $("#pushTest"), i = $("#pushInfo");
+  if (!b) return;
+  b.textContent = state === "on" ? "📲 Push on for this device - turn off" : state === "off" ? "📲 Turn on push for this device" : state;
+  b.disabled = !(state === "on" || state === "off");
+  t.style.display = state === "on" ? "" : "none";
+  i.textContent = info || "";
+}
+async function pushInit() {
+  if (!$("#pushBtn")) return;
+  if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+    const ios = /iPhone|iPad/.test(navigator.userAgent) && !window.navigator.standalone;
+    return pushUI("Not available in this browser", ios ? "On iPhone: add to Home Screen first, then open the app from there." : "Use Chrome, Edge or Firefox.");
+  }
+  try {
+    const k = await api("/api/push/key");
+    if (!k.configured) return pushUI("Push not set up on the server", "Add the VAPID keys to the Vercel project.");
+    const reg = await navigator.serviceWorker.register("/sw.js");
+    PUSH_SUB = await reg.pushManager.getSubscription();
+    pushUI(PUSH_SUB ? "on" : "off", `${k.devices} device${k.devices === 1 ? "" : "s"} registered`);
+    $("#pushBtn").onclick = async () => {
+      try {
+        if (PUSH_SUB) {
+          await post("/api/push/unsubscribe", {subscription: PUSH_SUB.toJSON()});
+          await PUSH_SUB.unsubscribe(); PUSH_SUB = null; pushUI("off", "Turned off on this device"); return;
+        }
+        const perm = await Notification.requestPermission();
+        if (perm !== "granted") return toast("Notifications are blocked for this site - allow them in the browser's site settings.");
+        PUSH_SUB = await reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: b64u(k.key)});
+        const label = (/Android/.test(navigator.userAgent) ? "Android" : /iPhone|iPad/.test(navigator.userAgent) ? "iPhone" : /Windows/.test(navigator.userAgent) ? "Windows" : /Mac/.test(navigator.userAgent) ? "Mac" : "device") + " · " + (/Edg\//.test(navigator.userAgent) ? "Edge" : /Firefox/.test(navigator.userAgent) ? "Firefox" : /Chrome/.test(navigator.userAgent) ? "Chrome" : "Safari");
+        const r = await post("/api/push/subscribe", {subscription: PUSH_SUB.toJSON(), label});
+        pushUI("on", `${r.devices} device${r.devices === 1 ? "" : "s"} registered`); toast("Push is on for this device.");
+      } catch (e) { toast("Push failed: " + (e.message || e)); }
+    };
+    $("#pushTest").onclick = async () => { const r = await post("/api/push/test"); toast(r.sent ? `Test sent to ${r.sent} device(s)` : "Not sent: " + JSON.stringify(r.errors || r)); };
+  } catch (e) { pushUI("Push unavailable", String(e.message || e)); }
+}
+let PUSH_INIT = false;
 function beep() {
   try {
     const a = new (window.AudioContext || window.webkitAudioContext)(), o = a.createOscillator(), g = a.createGain();
@@ -1559,6 +1611,7 @@ async function loadSettings() {
   $("#pfNoise").checked = (pf.strategies || []).includes("noise"); $("#pfCam").checked = (pf.strategies || []).includes("camarilla");
   $("#pfAI").checked = (pf.strategies || []).includes("ai");
   $("#pfAuto").checked = !!pf.auto; $("#pfLimits").checked = !!pf.enforce_limits;
+  if (!PUSH_INIT) { PUSH_INIT = true; pushInit(); }
   $("#pfSyms").innerHTML = ["NIFTY", "BANKNIFTY"].map(x => `<label class="tog" style="margin-right:14px"><input type="checkbox" data-asym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${x === "NIFTY" ? "Nifty 50" : "Bank Nifty"}</label>`).join("");
   $("#fiiIn").value = d.fii_manual ? d.fii_manual.value : "";
   loadRecorder();
