@@ -2272,5 +2272,44 @@
    }
   },
   "verdict": "Every family scored between PF 0.7 and 1.1 on the unseen quarters - the best was ridge at +₹9k and LightGBM at +₹24k, against the rules' +₹192k. No model family finds a pattern the trees missed; the inputs carry little predictable signal."
+ },
+ "round13": {
+  "baseline": {
+   "train": "796 trades +₹163k, PF 1.23, deepest fall ₹64k",
+   "unseen": "126 trades +₹61k, PF 1.56, deepest fall ₹23k"
+  },
+  "items": [
+   [
+    "Position size by regime (VIX percentile, opening range, days to expiry)",
+    "Overweighting the VIX 50-75th percentile band (0.5/1/1.5/1) raised net and net-per-drawdown on both halves - but almost all the unseen gain sits in that one bucket, which was first noticed on these same days",
+    "Watch-list; re-test after ~60 more sessions"
+   ],
+   [
+    "Exit management (targets 3/4/5/none, breakeven, ATR and band trails, partial exits, Camarilla time stops; 69 configs)",
+    "3 of 48 noise variants 'won' by under ₹3k - noise; the best on training (ATR×3 trail) lost on the unseen days; partial exits 0 of 12",
+    "Exits unchanged"
+   ],
+   [
+    "Strike choice (2 ITM / 1 ITM / ATM / 1 OTM)",
+    "1 ITM: ₹163k / ₹61k; 2 ITM ₹149k / ₹66k; ATM ₹137k / ₹44k; 1 OTM ₹115k / ₹42k",
+    "1 ITM stays"
+   ],
+   [
+    "Re-entry after a stop (2nd and 3rd trade per day)",
+    "Second attempts lose after noise exits, time stops and breakevens; only after a Camarilla stop did they pay (+₹565 a trade, 9 unseen trades)",
+    "Watch-list, too few trades"
+   ],
+   [
+    "Bank Nifty with its own settings (36 noise + 9 Camarilla grids)",
+    "No setting beat the Nifty-tuned defaults on both halves",
+    "Defaults stay"
+   ],
+   [
+    "Market Profile / Auction rules (80% rule, value-area acceptance, rejection to POC, open-drive, POC-migration filter)",
+    "All four entry rules lost in every year 2023-25 (PF 0.57-0.75, -₹30k to -₹308k); the POC filter cut the unseen result from ₹29.5k to ₹0.8k",
+    "Nothing ships"
+   ]
+  ],
+  "verdict": "No item beats the baseline on both the training years and the unseen 120 sessions, so the app's rules are unchanged. Two leads go on the watch-list: more size in the VIX 50-75th percentile band, and a second Camarilla attempt after a stop."
  }
 }

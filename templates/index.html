@@ -102,6 +102,12 @@ main section{animation:secIn .35s var(--ease)}
 @keyframes armed{0%{box-shadow:0 0 0 0 transparent}25%{box-shadow:0 0 0 10px color-mix(in srgb,currentColor 22%,transparent)}100%{box-shadow:0 0 0 24px transparent}}
 .state-sub{font-size:13.5px;color:var(--muted);margin-top:6px;max-width:34ch;margin-left:auto}
 #session{display:block;width:100%;height:230px;margin-top:8px}
+.flowcv{display:block;width:100%;height:320px;margin-top:6px;border-radius:var(--r-md)}
+.flowhead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px}
+.flowleg{font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.flowleg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 2px 0 6px;vertical-align:-1px}
+.flowleg i.ln{width:14px;height:0;border-top:2px solid;border-radius:0}.flowleg i.dash{border-top-style:dashed}
+@media(max-width:600px){.flowcv{height:260px}}
 .now-dot{position:absolute;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:currentColor;color:var(--gold);box-shadow:0 0 0 0 currentColor;animation:beat 2s infinite;pointer-events:none;opacity:0;transition:opacity .4s}
 .now-dot.on{opacity:1}
 @media(max-width:600px){#session{height:180px}.hero-state{text-align:left}.state-sub{margin-left:0}}
@@ -345,6 +351,28 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
       </div>
       <div class="tablewrap" style="margin-top:10px"><table class="chain mini" id="miniChain"></table></div>
     </div>
+    <div class="card" style="margin-top:14px" id="flowCard">
+      <div class="cardhead">
+        <h3 style="margin:0">Options flow <span class="muted" style="font-weight:400">(gamma exposure and open interest)</span></h3>
+        <span class="muted mono" style="font-size:12px" id="flowMeta"></span>
+      </div>
+      <div id="flowEmpty" class="empty hidden"></div>
+      <div id="flowBody" class="hidden">
+        <div class="grid g2" style="margin-top:10px">
+          <div>
+            <div class="flowhead"><span>Net GEX by strike <span class="muted">· ₹ crore per 1% move</span></span><span class="flowleg"><i style="background:var(--green)"></i>calls <i style="background:var(--red)"></i>puts <i class="ln" style="border-color:var(--gold)"></i>spot <i class="ln dash" style="border-color:var(--blue)"></i>zero gamma</span></div>
+            <canvas id="gexCv" class="flowcv" aria-label="Net gamma exposure per strike: call bars to the right, put bars to the left, with the spot and zero-gamma levels marked"></canvas>
+          </div>
+          <div>
+            <div class="flowhead"><span>OI change since first snapshot <span class="muted">· put − call</span></span><span class="flowleg"><i style="background:var(--red)"></i>call OI building <i style="background:var(--green)"></i>put OI building <i class="ln" style="border-color:var(--gold)"></i>spot</span></div>
+            <canvas id="oiCv" class="flowcv" aria-label="Heatmap of open-interest change by strike and time: green where put OI grew more than call OI, red where call OI grew more"></canvas>
+          </div>
+        </div>
+        <div class="k4" style="margin-top:12px" id="flowKpis"></div>
+        <p id="flowText" style="margin:12px 0 0"></p>
+      </div>
+      <p class="muted" style="font-size:12px;margin:10px 0 0">GEX (gamma exposure) estimates how much option dealers must buy or sell as the index moves 1% - Black-Scholes gamma × open interest × lot × spot² × 1%, calls counted positive and puts negative (the usual dealer-sign convention, which assumes dealers are long calls and short puts versus customers). Above the zero-gamma level moves tend to be dampened, below it amplified; the largest bars are the "call wall" and "put wall". Computed from this app's own 5-minute snapshots of the nearest expiry, so it fills in through the session. Educational only, not advice.</p>
+    </div>
     <div class="card" style="margin-top:14px" id="compareCard">
       <div class="cardhead">
         <h3 style="margin:0">Charts</h3>
@@ -567,8 +595,8 @@ function placeInk() {
   ink.style.left = (b.offsetLeft + 10) + "px"; ink.style.width = (b.offsetWidth - 20) + "px";
   b.scrollIntoView({block: "nearest", inline: "nearest"});
 }
-addEventListener("resize", () => { placeInk(); if (S.dash) drawSession(S.dash, false); });
-document.fonts && document.fonts.ready.then(() => { placeInk(); if (S.dash) drawSession(S.dash, false); });
+addEventListener("resize", () => { placeInk(); if (S.dash) drawSession(S.dash, false); drawFlow(); });
+document.fonts && document.fonts.ready.then(() => { placeInk(); if (S.dash) drawSession(S.dash, false); drawFlow(); });
 $("#tabs").onclick = e => { const b = e.target.closest("button"); if (b) go(b.dataset.t); };
 $("#symbol").onchange = () => { S.symbol = $("#symbol").value; localStorage.setItem("sym", S.symbol); $("#btSym").value = S.symbol; S.chain = null; S.pick = null; CW.panes.forEach(p => { if (!p.sym) p.strike = null; }); saveCW(); load(); };
 $("#refresh").onclick = () => load();
@@ -675,6 +703,104 @@ function renderHero(d, chg, pct) {
     cell("Demo cash", rs(d.cash), null);
   drawSession(d, S.drawnKey !== S.symbol);
   S.drawnKey = S.symbol;
+  loadFlow();                              // own request: a flow error never blocks the dashboard
+}
+
+/* ---------- options flow: GEX profile + OI heatmap from the recorder's snapshots ---------- */
+S.flow = null;
+const cr = v => { if (v == null) return "–"; const c = v / 1e7, a = Math.abs(c); return (c < 0 ? "−" : "") + (a >= 1e5 ? (a / 1e5).toFixed(2) + " L cr" : a >= 100 ? Math.round(a).toLocaleString("en-IN") + " cr" : a.toFixed(1) + " cr"); };
+async function loadFlow() {
+  const sym = S.symbol;
+  let f;
+  try { f = await api("/api/flow?symbol=" + sym); } catch (e) { f = {empty: true, reason: "Options flow unavailable: " + e.message}; }
+  if (sym !== S.symbol) return;
+  S.flow = f;
+  $("#flowEmpty").classList.toggle("hidden", !f.empty); $("#flowBody").classList.toggle("hidden", !!f.empty);
+  if (f.empty) { $("#flowEmpty").textContent = f.reason || "No snapshots yet today - the recorder starts at 09:15; shown from the first snapshot."; $("#flowMeta").textContent = ""; return; }
+  const p = f.profile, h = f.heatmap;
+  $("#flowMeta").textContent = `${p.time} IST · expiry ${p.expiry} · ${p.snapshots} snapshot${p.snapshots === 1 ? "" : "s"}${p.source ? " · " + (p.source === "nse" ? "NSE public chain" : p.source) : ""}`;
+  const pcr = h.pcr[h.pcr.length - 1], pcr0 = h.pcr[0];
+  $("#flowKpis").innerHTML = kpi("Net GEX", cr(p.total_net), p.zero_gamma != null ? (p.spot >= p.zero_gamma ? "spot above zero gamma" : "spot below zero gamma") : "no zero-gamma crossing", p.total_net >= 0 ? "up" : "down") +
+    kpi("Zero gamma", p.zero_gamma != null ? Math.round(p.zero_gamma).toLocaleString("en-IN") : "–", `spot ${Math.round(p.spot).toLocaleString("en-IN")}`, "muted") +
+    kpi("Call wall / put wall", `${p.call_wall != null ? p.call_wall : "–"} / ${p.put_wall != null ? p.put_wall : "–"}`, "largest + and − strikes", "muted") +
+    kpi("Put/call OI", pcr != null ? pcr.toFixed(2) : "–", pcr0 != null && pcr != null ? `${pcr0.toFixed(2)} at ${h.times[0]} → ${pcr.toFixed(2)} at ${h.times[h.times.length - 1]}` : "", pcr != null && pcr0 != null ? (pcr >= pcr0 ? "up" : "down") : "muted");
+  $("#flowText").textContent = f.text || "";
+  drawFlow();
+}
+function cvSetup(cv) {
+  const dpr = devicePixelRatio || 1, W = cv.clientWidth, H = cv.clientHeight;
+  if (!W || !H) return null;
+  cv.width = W * dpr; cv.height = H * dpr;
+  const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);
+  g.font = "11px 'IBM Plex Mono', ui-monospace, monospace";
+  return {g, W, H};
+}
+function drawFlow() {
+  const f = S.flow; if (!f || f.empty) return;
+  drawGex(f.profile); drawOiHeat(f.heatmap, f.profile);
+}
+function drawGex(p) {
+  const cv = $("#gexCv"), c = cvSetup(cv); if (!c) return;
+  const {g, W, H} = c, ks = p.strikes, n = ks.length; if (!n) return;
+  const L = 8, R = W < 520 ? 58 : 70, T = 10, B = 22;
+  const maxAbs = Math.max(1, ...p.call_gex.map(Math.abs), ...p.put_gex.map(Math.abs));
+  const kLo = ks[0], kHi = ks[n - 1], step = n > 1 ? (kHi - kLo) / (n - 1) : 1;
+  const Y = k => T + (kHi + step / 2 - k) / (kHi - kLo + step) * (H - T - B);        // high strikes at the top
+  const X = v => L + (W - L - R) / 2 + v / maxAbs * (W - L - R) / 2;
+  const rowH = (H - T - B) / n, bh = Math.max(2, rowH * .62);
+  g.strokeStyle = "#24384a"; g.lineWidth = 1;
+  [-1, -.5, 0, .5, 1].forEach(v => { g.beginPath(); g.moveTo(X(v * maxAbs) + .5, T); g.lineTo(X(v * maxAbs) + .5, H - B); g.stroke(); });
+  g.fillStyle = "#5d7484"; g.textBaseline = "top";
+  [-1, 0, 1].forEach(v => { g.textAlign = v < 0 ? "left" : v > 0 ? "right" : "center"; g.fillText(cr(v * maxAbs).replace(" cr", ""), X(v * maxAbs), H - B + 5); });
+  g.textAlign = "left"; g.textBaseline = "middle";
+  const every = Math.max(1, Math.ceil(13 / rowH)), gap = Math.ceil(13 / rowH);
+  const walls = ks.map((k, i) => k === p.call_wall || k === p.put_wall ? i : -1).filter(i => i >= 0);
+  const nearWall = i => walls.some(w => w !== i && Math.abs(w - i) < gap);          // regular labels make room for the walls
+  ks.forEach((k, i) => {
+    const y = Y(k), ce = p.call_gex[i], pe = p.put_gex[i], net = p.net_gex[i], wall = walls.includes(i);
+    g.fillStyle = "rgba(63,191,143,.85)"; g.fillRect(X(0), y - bh / 2, X(ce) - X(0), bh);
+    g.fillStyle = "rgba(226,103,90,.85)"; g.fillRect(X(pe), y - bh / 2, X(0) - X(pe), bh);
+    g.fillStyle = "#e8eef0"; g.fillRect(X(net) - 1, y - bh / 2 - 1, 2, bh + 2);        // net marker
+    if (wall || (i % every === 0 && !nearWall(i))) {
+      g.fillStyle = wall ? "#e8eef0" : "#8fa3b0";
+      g.fillText(String(k) + (wall ? (k === p.call_wall ? " ▲" : " ▼") : ""), W - R + 6, y);
+    }
+  });
+  const line = (v, col, dash, label, below) => {
+    if (v == null || v < kLo - step / 2 || v > kHi + step / 2) return;
+    const y = Y(v); g.save(); g.strokeStyle = col; g.lineWidth = 1.5; g.setLineDash(dash); g.beginPath(); g.moveTo(L, y); g.lineTo(W - R, y); g.stroke(); g.restore();
+    const tw = g.measureText(label).width, ty = below ? y + 2 : y - 15;
+    g.fillStyle = "rgba(21,36,48,.8)"; g.fillRect(W - R - 8 - tw, ty, tw + 8, 13);
+    g.fillStyle = col; g.textAlign = "right"; g.textBaseline = below ? "top" : "bottom"; g.fillText(label, W - R - 4, y + (below ? 3 : -3)); g.textAlign = "left"; g.textBaseline = "middle";
+  };
+  line(p.zero_gamma, "#7fb4d9", [4, 3], "zero γ " + Math.round(p.zero_gamma), p.zero_gamma != null && p.zero_gamma < p.spot);
+  line(p.spot, "#f2a93b", [], "spot " + Math.round(p.spot), !(p.zero_gamma != null && p.zero_gamma < p.spot));
+}
+function drawOiHeat(h, p) {
+  const cv = $("#oiCv"), c = cvSetup(cv); if (!c) return;
+  const {g, W, H} = c, ks = h.strikes, ts = h.times, n = ks.length, m = ts.length; if (!n || !m) return;
+  const L = W < 520 ? 48 : 58, R = 8, T = 10, B = 24;
+  const cw = (W - L - R) / m, rh = (H - T - B) / n;
+  const maxAbs = h.max_abs_change || 1;
+  const kLo = ks[0], kHi = ks[n - 1], step = n > 1 ? (kHi - kLo) / (n - 1) : 1;
+  const Yk = k => T + (kHi + step / 2 - k) / (kHi - kLo + step) * (H - T - B);
+  for (let j = 0; j < m; j++) for (let i = 0; i < n; i++) {
+    const v = h.pe_minus_ce[i][j], y = T + (n - 1 - i) * rh;
+    if (v == null) { g.fillStyle = "rgba(255,255,255,.03)"; g.fillRect(L + j * cw, y, cw, rh); continue; }
+    const a = Math.min(1, Math.abs(v) / maxAbs);
+    g.fillStyle = v >= 0 ? `rgba(63,191,143,${(.08 + a * .85).toFixed(3)})` : `rgba(226,103,90,${(.08 + a * .85).toFixed(3)})`;
+    g.fillRect(L + j * cw, y, Math.ceil(cw), Math.ceil(rh));
+  }
+  g.fillStyle = "#8fa3b0"; g.textAlign = "right"; g.textBaseline = "middle";
+  const every = Math.max(1, Math.ceil(13 / rh));
+  ks.forEach((k, i) => { if (i % every === 0) g.fillText(String(k), L - 4, T + (n - 1 - i) * rh + rh / 2); });
+  g.textAlign = "center"; g.textBaseline = "top"; g.fillStyle = "#5d7484";
+  const tev = Math.max(1, Math.ceil(44 / cw));
+  ts.forEach((t, j) => { if (j % tev === 0 || j === m - 1) g.fillText(t, L + j * cw + cw / 2, H - B + 6); });
+  g.strokeStyle = "#f2a93b"; g.lineWidth = 1.5; g.beginPath(); let started = false;                 // spot path
+  h.spots.forEach((s, j) => { if (s == null) return; const x = L + j * cw + cw / 2, y = Yk(s); started ? g.lineTo(x, y) : g.moveTo(x, y); started = true; });
+  g.stroke();
+  const sl = h.spots[m - 1]; if (sl != null) { g.fillStyle = "#f2a93b"; g.beginPath(); g.arc(L + (m - 1) * cw + cw / 2, Yk(sl), 3, 0, 7); g.fill(); }
 }
 /* next-check countdown + signal alerts */
 function nextCheckText() {
@@ -1478,6 +1604,11 @@ async function loadStudy() {
     <div class="tablewrap"><table><tr><th>Model</th><th>Best policy</th><th>Trades</th><th>Net 2024-26</th><th>PF</th><th>Win</th></tr>
       ${Object.entries(r.other_models.best).sort((a, b) => b[1].net - a[1].net).map(([n, b]) => `<tr${n === "lightgbm" ? ' style="background:rgba(242,169,59,.08)"' : ""}><td>${esc({ridge: "Ridge regression", logistic: "Logistic regression", random_forest: "Random forest", extra_trees: "Extra trees", hist_gb: "Histogram boosting", mlp: "Neural net (64×32)", knn: "400 nearest neighbours", lightgbm: "LightGBM (shipped)"}[n] || n)}</td><td>${esc(b.policy)}</td><td class="mono">${b.trades}</td><td class="mono">${k(b.net)}</td><td class="mono">${b.pf}</td><td class="mono">${b.win}%</td></tr>`).join("")}</table></div>
     <p class="muted" style="font-size:12px">${esc(r.other_models.verdict)}</p>` : ""}
+    ${r.round13 ? `<h4>Round 13 - sizing, exits, strike, re-entry, Bank Nifty settings, Market Profile</h4>
+    <p style="margin-top:0">Baseline: training ${esc(r.round13.baseline.train)}; unseen 120 sessions ${esc(r.round13.baseline.unseen)}.</p>
+    <div class="tablewrap"><table class="prose"><tr><th>Tested</th><th>What the data showed</th><th>Decision</th></tr>
+      ${r.round13.items.map(f => `<tr><td><b>${esc(f[0])}</b></td><td>${esc(f[1])}</td><td>${esc(f[2])}</td></tr>`).join("")}</table></div>
+    <p class="muted" style="font-size:12px">${esc(r.round13.verdict)}</p>` : ""}
     ${r.live ? studyLive(r.live, k) : ""}
     ${r.combos ? `<h4>Does stacking indicators make it more accurate? (${r.combos.tested} combinations tested)</h4>
     <p style="margin-top:0">Each of: ${esc(r.combos.filters)} - added to the noise-band signal alone, in pairs, in threes, and as "k of n must agree" votes.</p>
@@ -1591,6 +1722,7 @@ async function loadJournal() {
   const aiRows = sym => (j.ai[sym] || []).map(x => `<tr><td class="mono">${esc(x.bar)}</td><td class="mono">${n2(x.spot)}</td><td class="${x.side === "CE" ? "up" : "down"}">${x.side === "CE" ? "CALL" : "PUT"} · ${x.stop_k}×ATR</td><td class="mono ${cls(x.exp_r)}">${sgn(x.exp_r)}</td><td class="mono">${Math.round(x.p_win * 100)}%</td><td>${x.trade ? '<span class="badge ok">trade</span>' : '<span class="muted">wait</span>'}</td></tr>`).join("");
   $("#jrBody").innerHTML = `
     <div class="k4" style="margin-top:14px;grid-template-columns:repeat(5,1fr)">${kpi("Recommendations", sm.recommendations, `${sm.settled} settled`, "muted")}${kpi("Outcomes", `${sm.by_outcome.target} / ${sm.by_outcome.stop} / ${sm.by_outcome["square-off"]}`, "target / stop / square-off", "muted")}${kpi("Sum of R", sm.sum_R == null ? "–" : sgn(sm.sum_R), "on the index path", "muted")}${kpi("Win % (this day)", sm.settled ? Math.round(sm.by_outcome.target / sm.settled * 100) + "%" : "–", "targets ÷ settled", "muted")}${kpi("Paper trades", sm.paper_trades, `P&L ${rs(sm.paper_pnl)}`, "muted")}</div>
+    ${j.settled && j.settled.lesson ? `<div class="card" style="margin-top:14px;border-left:3px solid var(--accent,#f2a93b)"><h3>Session wrap-up</h3><p style="margin:0">${esc(j.settled.lesson)}</p><p class="muted" style="font-size:12px;margin:6px 0 0">Written by rules from the day's journal after the close (no AI) - what the recommendations did, the context, and the one thing to carry forward.</p></div>` : ""}
     <div class="grid g2" style="margin-top:14px">${ctxCard("NIFTY")}${ctxCard("BANKNIFTY")}</div>
     <div class="card" style="margin-top:14px"><h3>Recommendations and what happened</h3>
       ${j.recommendations.length ? `<div class="tablewrap"><table class="prose"><tr><th>Time</th><th>Index</th><th>Strategy</th><th>Option</th><th>Premium entry / SL / target</th><th>Index entry / SL / target</th><th>Win % (backtest)</th><th>Basis</th><th>Outcome</th><th>Exit prem</th><th></th></tr>${j.recommendations.map(recoRow).join("")}</table></div>
