@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import hmac
 import secrets
 import time
@@ -18,6 +19,7 @@ from fno import scheduler
 from fno import store
 from fno import recorder as REC
 from fno import journal as JR
+from fno import push as PUSH
 
 app = Flask(__name__)
 INDEX_HTML = (Path(__file__).parent / "templates" / "index.html").read_text(encoding="utf-8")
@@ -68,6 +70,71 @@ def on_error(e):
 @app.get("/")
 def index():
     return Response(INDEX_HTML, mimetype="text/html", headers={"Cache-Control": "no-store"})
+
+
+SW_JS = """// F&O Trainer service worker: shows push notifications and opens the app when tapped.
+self.addEventListener("install", () => self.skipWaiting());
+self.addEventListener("activate", e => e.waitUntil(self.clients.claim()));
+self.addEventListener("push", e => {
+  let d = {title: "F&O Trainer", body: "", url: "/", tag: "fno"};
+  try { d = Object.assign(d, e.data.json()); } catch (err) { if (e.data) d.body = e.data.text(); }
+  e.waitUntil(self.registration.showNotification(d.title, {body: d.body, tag: d.tag, renotify: true, requireInteraction: true,
+    vibrate: [200, 100, 200, 100, 400], data: {url: d.url}, icon: "/icon.svg", badge: "/icon.svg"}));
+});
+self.addEventListener("notificationclick", e => {
+  e.notification.close();
+  const url = new URL((e.notification.data || {}).url || "/", self.location.origin).href;
+  e.waitUntil(self.clients.matchAll({type: "window", includeUncontrolled: true}).then(list => {
+    for (const c of list) { if (c.url.startsWith(self.location.origin) && "focus" in c) { c.navigate(url); return c.focus(); } }
+    return self.clients.openWindow(url);
+  }));
+});
+"""
+ICON_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#13202e"/>
+<path d="M12 44 L24 30 L33 37 L52 16" fill="none" stroke="#f2a93b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="52" cy="16" r="5" fill="#f2a93b"/></svg>"""
+MANIFEST = {"name": "F&O Trainer", "short_name": "F&O", "start_url": "/", "display": "standalone", "background_color": "#0f1721",
+            "theme_color": "#13202e", "icons": [{"src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}]}
+
+
+@app.get("/sw.js")
+def service_worker():
+    return Response(SW_JS, mimetype="application/javascript", headers={"Cache-Control": "no-cache", "Service-Worker-Allowed": "/"})
+
+
+@app.get("/icon.svg")
+def icon():
+    return Response(ICON_SVG, mimetype="image/svg+xml", headers={"Cache-Control": "public, max-age=86400"})
+
+
+@app.get("/manifest.webmanifest")
+def manifest():
+    return Response(json.dumps(MANIFEST), mimetype="application/manifest+json")
+
+
+@app.get("/api/push/key")
+def push_key():
+    return jsonify({"configured": PUSH.configured(), "key": PUSH.PUBLIC_KEY, "devices": len(PUSH.subscriptions()) if PUSH.configured() else 0})
+
+
+@app.post("/api/push/subscribe")
+def push_subscribe():
+    body = request.get_json(force=True) or {}
+    sid = PUSH.subscribe(body.get("subscription"), body.get("label", ""))
+    return jsonify({"ok": True, "id": sid, "devices": len(PUSH.subscriptions())})
+
+
+@app.post("/api/push/unsubscribe")
+def push_unsubscribe():
+    body = request.get_json(force=True) or {}
+    PUSH.unsubscribe(body.get("subscription") or body.get("id") or "")
+    return jsonify({"ok": True, "devices": len(PUSH.subscriptions())})
+
+
+@app.post("/api/push/test")
+def push_test():
+    import time as _t
+    return jsonify(PUSH.send("F&O Trainer test", "Push notifications are working on this device.", event_id=f"test:{int(_t.time())}", url="/"))
 
 
 @app.post("/api/login")

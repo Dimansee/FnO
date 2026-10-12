@@ -13,6 +13,7 @@ from . import config as C
 from . import context as X
 from . import indicators as I
 from . import market as M
+from . import push as PUSH
 from . import paper as P
 from . import store
 from . import strategy as S
@@ -117,7 +118,7 @@ def manage_positions(m: M.Market | None = None) -> list[dict]:
         if reason and (p["mode"] == "signal" or reason.startswith("Square-off")):
             rec = P.close_position(p["id"], prices, reason)
             if rec:
-                closed.append({"symbol": rec["symbol"], "reason": reason, "pnl": rec["pnl"]})
+                closed.append({"symbol": rec["symbol"], "reason": reason, "pnl": rec["pnl"], "id": p["id"]})
     return closed
 
 
@@ -459,6 +460,21 @@ def backtest(symbol, mult, capital, sizing="risk", otm=-1, strategy="both", days
                   "research": BT.research_summary()})
 
 
+def _push_safe(title, body, event_id, url="/"):
+    try:
+        return PUSH.send(title, body, event_id=event_id, url=url)
+    except Exception as e:                                   # notifications must never break the tick
+        return {"error": str(e)[:120]}
+
+
+def _push_signal(sym, ev, order, g):
+    plan = ev["plan"]
+    name = {"noise": "Noise-area", "camarilla": "Camarilla", "ai": "AI model"}.get(plan.get("strategy"), plan.get("strategy"))
+    body = (f"{name}: {order.get('strike'):g} {plan.get('opt')} @ ₹{order.get('entry_prem')} (SL ₹{order.get('sl_prem')}, target ₹{order.get('target_prem')}) "
+            f"| index {plan.get('entry'):.0f} SL {plan.get('sl'):.0f} T {plan.get('target'):.0f} | score {ev.get('score')}")
+    return _push_safe(f"{sym} {ev.get('signal')}", body, f"reco:{sym}:{plan.get('strategy')}:{plan.get('signal_bar') or g['now'].strftime('%H:%M')}:{g['now'].date()}", "/#journal")
+
+
 def tick():
     """Called every minute by the database scheduler during market hours."""
     now = C.now_ist()
@@ -467,6 +483,8 @@ def tick():
     if not (C.MARKET_OPEN <= now.time() <= C.MARKET_CLOSE):
         return {"skipped": "outside market hours"}
     closed = manage_positions()
+    for c in closed:
+        _push_safe(f"{c['symbol']} position closed", f"{c['reason']} - P&L ₹{c['pnl']:+,.0f}", f"close:{c.get('id') or c['symbol']}:{now.strftime('%H%M')}", "/#portfolio")
     placed = []
     pf = prefs()
     t = now.time()
@@ -476,6 +494,7 @@ def tick():
                 ok, msg = place_signal(sym, auto=True)
                 if ok:
                     placed.append({"symbol": sym, "message": msg})
+                    _push_safe(f"{sym}: paper trade placed", str(msg)[:160], f"placed:{sym}:{now.strftime('%H%M')}", "/#portfolio")
             except Exception as e:                       # one instrument failing must not stop the others
                 placed.append({"symbol": sym, "error": str(e)[:120]})
     try:                                                     # session journal: context at the open, recommendations, outcomes
@@ -537,6 +556,8 @@ def journal_tick(now):
             try:
                 g, ev, order, _ = scan(sym, m, pf)
                 out[sym] = J.record(sym, ev, order, g, pf)
+                if out[sym] and ev.get("plan") and order:
+                    _push_signal(sym, ev, order, g)
             except Exception as e:
                 out[sym] = f"error: {str(e)[:100]}"
         return out
