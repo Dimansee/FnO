@@ -1,0 +1,624 @@
+{
+ "generated": "2026-10-13",
+ "data_to": "2026-10-12",
+ "buy_on": "next trading day's open",
+ "rule": "Close above the 200-day average and down more than 10% over the last three closes, among the 150 most liquid Nifty 500 names. Buy at the next open (equity \u00f7 10 per name), +5% limit sell at once, sell at the open after the 5th close if not filled. No stop. Paper only.",
+ "expected": "Backtest 2021-26: 64-69% of trades hit +5%, average +1.4% a trade after costs, ~7 signals a month, 1-3 names open at a time; plan on 8-12% a year on the allotted capital. Survivorship-exposed (today's index list), so treat the record as an upper bound.",
+ "today": [],
+ "record_last_60_sessions": {
+  "n": 29,
+  "win_pct": 52.0,
+  "avg_ret_pct": -0.72,
+  "target_hit_pct": 38.0
+ },
+ "history": [
+  {
+   "signal_date": "2026-07-20",
+   "buy_date": "2026-07-21",
+   "picks": [
+    {
+     "sym": "MTARTECH",
+     "name": "MTAR Technologies Ltd.",
+     "industry": "Capital Goods",
+     "close": 5744.0,
+     "drop_3d_pct": -14.2,
+     "above_200dma_pct": 38.2,
+     "turnover_cr": 877.9,
+     "result": {
+      "entry": 5457.0,
+      "exit": 5729.85,
+      "exit_date": "2026-07-21",
+      "how": "target +5%",
+      "ret_pct": 4.8
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-07-21",
+   "buy_date": "2026-07-22",
+   "picks": [
+    {
+     "sym": "MTARTECH",
+     "name": "MTAR Technologies Ltd.",
+     "industry": "Capital Goods",
+     "close": 5573.5,
+     "drop_3d_pct": -12.4,
+     "above_200dma_pct": 33.5,
+     "turnover_cr": 877.9,
+     "result": {
+      "entry": 5845.0,
+      "exit": 5270.0,
+      "exit_date": "2026-07-29",
+      "how": "time exit (6th open)",
+      "ret_pct": -10.04
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-07-22",
+   "buy_date": "2026-07-23",
+   "picks": [
+    {
+     "sym": "BANDHANBNK",
+     "name": "Bandhan Bank Ltd.",
+     "industry": "Financial Services",
+     "close": 172.01,
+     "drop_3d_pct": -18.6,
+     "above_200dma_pct": 1.0,
+     "turnover_cr": 182.8,
+     "result": {
+      "entry": 172.06,
+      "exit": 171.71,
+      "exit_date": "2026-07-30",
+      "how": "time exit (6th open)",
+      "ret_pct": -0.4
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-07-27",
+   "buy_date": "2026-07-28",
+   "picks": [
+    {
+     "sym": "HFCL",
+     "name": "HFCL Ltd.",
+     "industry": "Telecommunication",
+     "close": 192.36,
+     "drop_3d_pct": -11.6,
+     "above_200dma_pct": 81.4,
+     "turnover_cr": 591.8,
+     "result": {
+      "entry": 186.83,
+      "exit": 196.17,
+      "exit_date": "2026-07-28",
+      "how": "target +5%",
+      "ret_pct": 4.8
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-07-29",
+   "buy_date": "2026-07-30",
+   "picks": [
+    {
+     "sym": "MTARTECH",
+     "name": "MTAR Technologies Ltd.",
+     "industry": "Capital Goods",
+     "close": 5194.0,
+     "drop_3d_pct": -10.5,
+     "above_200dma_pct": 21.2,
+     "turnover_cr": 667.7,
+     "result": {
+      "entry": 5277.0,
+      "exit": 5726.0,
+      "exit_date": "2026-07-31",
+      "how": "target +5%",
+      "ret_pct": 8.31
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-08-04",
+   "buy_date": "2026-08-05",
+   "picks": [
+    {
+     "sym": "ZEEL",
+     "name": "Zee Entertainment Enterprises Ltd.",
+     "industry": "Media Entertainment & Publication",
+     "close": 97.23,
+     "drop_3d_pct": -11.3,
+     "above_200dma_pct": 6.1,
+     "turnover_cr": 271.2,
+     "result": {
+      "entry": 98.04,
+      "exit": 90.34,
+      "exit_date": "2026-08-12",
+      "how": "time exit (6th open)",
+      "ret_pct": -8.05
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-08-05",
+   "buy_date": "2026-08-06",
+   "picks": [
+    {
+     "sym": "ZEEL",
+     "name": "Zee Entertainment Enterprises Ltd.",
+     "industry": "Media Entertainment & Publication",
+     "close": 92.34,
+     "drop_3d_pct": -17.5,
+     "above_200dma_pct": 0.8,
+     "turnover_cr": 273.9,
+     "result": {
+      "entry": 92.78,
+      "exit": 95.27,
+      "exit_date": "2026-08-13",
+      "how": "time exit (6th open)",
+      "ret_pct": 2.48
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-08-20",
+   "buy_date": "2026-08-21",
+   "picks": [
+    {
+     "sym": "HSCL",
+     "name": "Himadri Speciality Chemical Ltd.",
+     "industry": "Chemicals",
+     "close": 704.2,
+     "drop_3d_pct": -10.6,
+     "above_200dma_pct": 27.9,
+     "turnover_cr": 630.2,
+     "result": {
+      "entry": 705.1,
+      "exit": 677.15,
+      "exit_date": "2026-08-28",
+      "how": "time exit (6th open)",
+      "ret_pct": -4.16
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-08-21",
+   "buy_date": "2026-08-24",
+   "picks": [
+    {
+     "sym": "HSCL",
+     "name": "Himadri Speciality Chemical Ltd.",
+     "industry": "Chemicals",
+     "close": 654.4,
+     "drop_3d_pct": -16.3,
+     "above_200dma_pct": 18.7,
+     "turnover_cr": 630.2,
+     "result": {
+      "entry": 660.45,
+      "exit": 673.0,
+      "exit_date": "2026-08-31",
+      "how": "time exit (6th open)",
+      "ret_pct": 1.7
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-08-24",
+   "buy_date": "2026-08-25",
+   "picks": [
+    {
+     "sym": "HSCL",
+     "name": "Himadri Speciality Chemical Ltd.",
+     "industry": "Chemicals",
+     "close": 662.2,
+     "drop_3d_pct": -11.7,
+     "above_200dma_pct": 19.9,
+     "turnover_cr": 630.2,
+     "result": {
+      "entry": 662.5,
+      "exit": 660.35,
+      "exit_date": "2026-09-01",
+      "how": "time exit (6th open)",
+      "ret_pct": -0.52
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-08-31",
+   "buy_date": "2026-09-01",
+   "picks": [
+    {
+     "sym": "ZEEL",
+     "name": "Zee Entertainment Enterprises Ltd.",
+     "industry": "Media Entertainment & Publication",
+     "close": 91.4,
+     "drop_3d_pct": -10.4,
+     "above_200dma_pct": 0.1,
+     "turnover_cr": 254.8,
+     "result": {
+      "entry": 91.81,
+      "exit": 83.8,
+      "exit_date": "2026-09-08",
+      "how": "time exit (6th open)",
+      "ret_pct": -8.92
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-09-01",
+   "buy_date": "2026-09-02",
+   "picks": [
+    {
+     "sym": "ADANIENSOL",
+     "name": "Adani Energy Solutions Ltd.",
+     "industry": "Power",
+     "close": 1382.0,
+     "drop_3d_pct": -14.5,
+     "above_200dma_pct": 11.1,
+     "turnover_cr": 363.9,
+     "result": {
+      "entry": 1374.6,
+      "exit": 1406.0,
+      "exit_date": "2026-09-09",
+      "how": "time exit (6th open)",
+      "ret_pct": 2.08
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-09-02",
+   "buy_date": "2026-09-03",
+   "picks": [
+    {
+     "sym": "ADANIENSOL",
+     "name": "Adani Energy Solutions Ltd.",
+     "industry": "Power",
+     "close": 1396.6,
+     "drop_3d_pct": -11.7,
+     "above_200dma_pct": 12.1,
+     "turnover_cr": 367.5,
+     "result": {
+      "entry": 1398.0,
+      "exit": 1439.4,
+      "exit_date": "2026-09-10",
+      "how": "time exit (6th open)",
+      "ret_pct": 2.76
+     }
+    },
+    {
+     "sym": "HFCL",
+     "name": "HFCL Ltd.",
+     "industry": "Telecommunication",
+     "close": 226.06,
+     "drop_3d_pct": -10.0,
+     "above_200dma_pct": 80.1,
+     "turnover_cr": 423.9,
+     "result": {
+      "entry": 229.78,
+      "exit": 241.26,
+      "exit_date": "2026-09-07",
+      "how": "target +5%",
+      "ret_pct": 4.8
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-09-03",
+   "buy_date": "2026-09-04",
+   "picks": [
+    {
+     "sym": "HFCL",
+     "name": "HFCL Ltd.",
+     "industry": "Telecommunication",
+     "close": 220.21,
+     "drop_3d_pct": -11.5,
+     "above_200dma_pct": 74.5,
+     "turnover_cr": 416.6,
+     "result": {
+      "entry": 225.79,
+      "exit": 238.78,
+      "exit_date": "2026-09-07",
+      "how": "target +5%",
+      "ret_pct": 5.55
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-09-09",
+   "buy_date": "2026-09-10",
+   "picks": [
+    {
+     "sym": "IFCI",
+     "name": "IFCI Ltd.",
+     "industry": "Financial Services",
+     "close": 88.96,
+     "drop_3d_pct": -12.3,
+     "above_200dma_pct": 37.7,
+     "turnover_cr": 173.6,
+     "result": {
+      "entry": 89.34,
+      "exit": 77.56,
+      "exit_date": "2026-09-18",
+      "how": "time exit (6th open)",
+      "ret_pct": -13.39
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-09-10",
+   "buy_date": "2026-09-11",
+   "picks": [
+    {
+     "sym": "IFCI",
+     "name": "IFCI Ltd.",
+     "industry": "Financial Services",
+     "close": 85.15,
+     "drop_3d_pct": -16.9,
+     "above_200dma_pct": 31.5,
+     "turnover_cr": 173.6,
+     "result": {
+      "entry": 83.8,
+      "exit": 75.35,
+      "exit_date": "2026-09-21",
+      "how": "time exit (6th open)",
+      "ret_pct": -10.28
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-09-11",
+   "buy_date": "2026-09-15",
+   "picks": [
+    {
+     "sym": "IFCI",
+     "name": "IFCI Ltd.",
+     "industry": "Financial Services",
+     "close": 82.29,
+     "drop_3d_pct": -11.1,
+     "above_200dma_pct": 26.8,
+     "turnover_cr": 191.7,
+     "result": {
+      "entry": 83.0,
+      "exit": 74.45,
+      "exit_date": "2026-09-22",
+      "how": "time exit (6th open)",
+      "ret_pct": -10.5
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-09-15",
+   "buy_date": "2026-09-16",
+   "picks": [
+    {
+     "sym": "IFCI",
+     "name": "IFCI Ltd.",
+     "industry": "Financial Services",
+     "close": 76.95,
+     "drop_3d_pct": -13.5,
+     "above_200dma_pct": 18.3,
+     "turnover_cr": 191.7,
+     "result": {
+      "entry": 77.2,
+      "exit": 76.3,
+      "exit_date": "2026-09-23",
+      "how": "time exit (6th open)",
+      "ret_pct": -1.37
+     }
+    },
+    {
+     "sym": "DATAPATTNS",
+     "name": "Data Patterns (India) Ltd.",
+     "industry": "Capital Goods",
+     "close": 4358.8,
+     "drop_3d_pct": -10.7,
+     "above_200dma_pct": 20.1,
+     "turnover_cr": 270.1,
+     "result": {
+      "entry": 4380.5,
+      "exit": 4599.53,
+      "exit_date": "2026-09-22",
+      "how": "target +5%",
+      "ret_pct": 4.8
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-09-16",
+   "buy_date": "2026-09-17",
+   "picks": [
+    {
+     "sym": "WELCORP",
+     "name": "Welspun Corp Ltd.",
+     "industry": "Capital Goods",
+     "close": 2424.5,
+     "drop_3d_pct": -12.7,
+     "above_200dma_pct": 93.3,
+     "turnover_cr": 209.1,
+     "result": {
+      "entry": 2420.0,
+      "exit": 2541.0,
+      "exit_date": "2026-09-18",
+      "how": "target +5%",
+      "ret_pct": 4.8
+     }
+    },
+    {
+     "sym": "IFCI",
+     "name": "IFCI Ltd.",
+     "industry": "Financial Services",
+     "close": 75.06,
+     "drop_3d_pct": -11.8,
+     "above_200dma_pct": 15.2,
+     "turnover_cr": 208.6,
+     "result": {
+      "entry": 75.21,
+      "exit": 78.97,
+      "exit_date": "2026-09-17",
+      "how": "target +5%",
+      "ret_pct": 4.8
+     }
+    },
+    {
+     "sym": "CHENNPETRO",
+     "name": "Chennai Petroleum Corporation Ltd.",
+     "industry": "Oil Gas & Consumable Fuels",
+     "close": 1456.0,
+     "drop_3d_pct": -10.5,
+     "above_200dma_pct": 42.0,
+     "turnover_cr": 207.2,
+     "result": {
+      "entry": 1456.0,
+      "exit": 1385.7,
+      "exit_date": "2026-09-24",
+      "how": "time exit (6th open)",
+      "ret_pct": -5.03
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-09-17",
+   "buy_date": "2026-09-18",
+   "picks": [
+    {
+     "sym": "HFCL",
+     "name": "HFCL Ltd.",
+     "industry": "Telecommunication",
+     "close": 209.25,
+     "drop_3d_pct": -10.4,
+     "above_200dma_pct": 57.0,
+     "turnover_cr": 386.8,
+     "result": {
+      "entry": 213.7,
+      "exit": 224.39,
+      "exit_date": "2026-09-22",
+      "how": "target +5%",
+      "ret_pct": 4.8
+     }
+    },
+    {
+     "sym": "CHENNPETRO",
+     "name": "Chennai Petroleum Corporation Ltd.",
+     "industry": "Oil Gas & Consumable Fuels",
+     "close": 1414.1,
+     "drop_3d_pct": -10.1,
+     "above_200dma_pct": 37.5,
+     "turnover_cr": 219.5,
+     "result": {
+      "entry": 1414.0,
+      "exit": 1372.8,
+      "exit_date": "2026-09-25",
+      "how": "time exit (6th open)",
+      "ret_pct": -3.11
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-09-21",
+   "buy_date": "2026-09-22",
+   "picks": [
+    {
+     "sym": "CUPID",
+     "name": "Cupid Ltd.",
+     "industry": "Fast Moving Consumer Goods",
+     "close": 251.3,
+     "drop_3d_pct": -10.2,
+     "above_200dma_pct": 72.4,
+     "turnover_cr": 552.6,
+     "result": {
+      "entry": 251.0,
+      "exit": 263.55,
+      "exit_date": "2026-09-22",
+      "how": "target +5%",
+      "ret_pct": 4.8
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-09-28",
+   "buy_date": "2026-09-29",
+   "picks": [
+    {
+     "sym": "IFCI",
+     "name": "IFCI Ltd.",
+     "industry": "Financial Services",
+     "close": 70.55,
+     "drop_3d_pct": -11.2,
+     "above_200dma_pct": 6.7,
+     "turnover_cr": 289.7,
+     "result": {
+      "entry": 70.06,
+      "exit": 65.3,
+      "exit_date": "2026-10-07",
+      "how": "time exit (6th open)",
+      "ret_pct": -6.99
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-09-29",
+   "buy_date": "2026-09-30",
+   "picks": [
+    {
+     "sym": "OLAELEC",
+     "name": "Ola Electric Mobility Ltd.",
+     "industry": "Automobile and Auto Components",
+     "close": 37.42,
+     "drop_3d_pct": -12.0,
+     "above_200dma_pct": 4.1,
+     "turnover_cr": 160.4,
+     "result": {
+      "entry": 37.51,
+      "exit": 36.02,
+      "exit_date": "2026-10-08",
+      "how": "time exit (6th open)",
+      "ret_pct": -4.17
+     }
+    }
+   ]
+  },
+  {
+   "signal_date": "2026-10-05",
+   "buy_date": "2026-10-06",
+   "picks": [
+    {
+     "sym": "WELCORP",
+     "name": "Welspun Corp Ltd.",
+     "industry": "Capital Goods",
+     "close": 2497.5,
+     "drop_3d_pct": -12.1,
+     "above_200dma_pct": 82.8,
+     "turnover_cr": 321.0,
+     "result": {
+      "entry": 2528.2,
+      "exit": 2654.61,
+      "exit_date": "2026-10-06",
+      "how": "target +5%",
+      "ret_pct": 4.8
+     }
+    }
+   ]
+  }
+ ]
+}

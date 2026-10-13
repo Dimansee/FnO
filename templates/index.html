@@ -301,6 +301,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
       <button data-t="context">🌍 Market context</button>
       <button data-t="backtest">🧪 Backtest</button>
       <button data-t="journal">📓 Journal</button>
+      <button data-t="stocks">📈 Stocks</button>
       <button data-t="rules">📘 Rulebook</button>
       <button data-t="settings">⚙️ Settings</button>
       <span class="ink" id="ink"></span>
@@ -465,6 +466,11 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
     </div>
     <div id="jrBody"></div>
   </section>
+  <section id="t-stocks" class="hidden">
+    <div class="card"><h3>Stock picks (cash delivery, paper)</h3>
+      <p class="muted" style="margin:6px 0 0" id="stRule"></p></div>
+    <div id="stBody"></div>
+  </section>
   <section id="t-rules" class="hidden"><div class="card rule" id="rulebook"></div></section>
 
   <!-- SETTINGS -->
@@ -614,6 +620,7 @@ async function load(quiet) {
     else if (S.tab === "context") await loadContext();
     else if (S.tab === "settings") await loadSettings();
     else if (S.tab === "journal") await loadJournal();
+    else if (S.tab === "stocks") await loadStocks();
     else if (S.tab === "backtest") await loadStudy();
   } catch (e) { if (!quiet) toast(e.message); }
   finally { sec.classList.remove("loading"); if (!quiet) pDone(); hideSplash(); }
@@ -1693,6 +1700,22 @@ function brokerCard(name, title, idLabel, st, steps) {
       ${st.connected ? `<button class="danger" data-disc="${name}">Disconnect</button>` : ""}
     </div>
     ${st.logged_in_at ? `<div class="muted" style="font-size:12px;margin-top:8px">Last login ${esc(st.logged_in_at.replace("T", " ").slice(0, 16))} IST · logins expire every night around 3:30 AM.</div>` : ""}`;
+}
+async function loadStocks() {
+  const d = await api("/api/stocks");
+  if (d.error) { $("#stBody").innerHTML = `<div class="card"><p class="muted">${esc(d.error)}</p></div>`; return; }
+  $("#stRule").textContent = `${d.rule} ${d.expected}`;
+  const rec = d.record_last_60_sessions || {};
+  const pick = p => `<tr><td><b>${esc(p.sym)}</b><div class="muted" style="font-size:11px">${esc(p.name)} · ${esc(p.industry)}</div></td><td class="mono">₹${p.close}</td><td class="mono down">${p.drop_3d_pct}%</td><td class="mono">+${p.above_200dma_pct}%</td><td class="mono">₹${p.turnover_cr} cr</td><td class="mono">₹${(p.close * 1.05).toFixed(2)}</td>${p.result ? `<td>${p.result.open ? `<span class="badge">open ${p.result.days_held}d</span> <span class="mono ${cls(p.result.ret_pct)}">${sgn(p.result.ret_pct)}%</span>` : `<span class="badge ${p.result.ret_pct > 0 ? "ok" : "no"}">${esc(p.result.how)}</span> ${esc(p.result.exit_date)} · <span class="mono ${cls(p.result.ret_pct)}">${sgn(p.result.ret_pct)}%</span>`}</td>` : ""}</tr>`;
+  const head = (res) => `<tr><th>Stock</th><th>Close</th><th>3-day move</th><th>vs 200-day avg</th><th>Daily turnover</th><th>+5% target</th>${res ? "<th>What happened</th>" : ""}</tr>`;
+  $("#stBody").innerHTML = `
+    <div class="k4" style="margin-top:14px;grid-template-columns:repeat(4,1fr)">${kpi("Picks for the next open", d.today.length, `data to ${esc(d.data_to)}`, "muted")}${kpi("Last 60 sessions", rec.n ?? "–", "closed picks", "muted")}${kpi("Win %", rec.win_pct == null ? "–" : rec.win_pct + "%", `target hit ${rec.target_hit_pct ?? "–"}%`, "muted")}${kpi("Avg per pick", rec.avg_ret_pct == null ? "–" : sgn(rec.avg_ret_pct) + "%", "after 0.2% costs", rec.avg_ret_pct > 0 ? "up" : "down")}</div>
+    <div class="card" style="margin-top:14px"><h3>Buy at the next open</h3>
+      ${d.today.length ? `<div class="tablewrap"><table class="prose">${head(false)}${d.today.map(pick).join("")}</table></div>` : `<p class="muted">No stock met the rule at the last close. Most days have none; the rule fires about 7 times a month.</p>`}
+      <p class="muted" style="font-size:12px">Paper exercise: equity ÷ 10 per name, whole shares, place the +5% limit sell as soon as the buy fills, sell at the open after the 5th close if it has not filled. No stop-loss - the first bounce is the trade. Picks arrive as a push at the open.</p></div>
+    <div class="card" style="margin-top:14px"><h3>Recent picks and what happened</h3>
+      ${d.history.length ? `<div class="tablewrap"><table class="prose">${head(true)}${d.history.slice().reverse().map(h => h.picks.map(p => pick({...p, sym: p.sym + " · " + h.buy_date})).join("")).join("")}</table></div>` : `<p class="muted">No signals in the last 60 sessions.</p>`}
+      <p class="muted" style="font-size:12px">Backtest 2021-26 on today's Nifty 500 list (survivorship-exposed): 64-69% of picks hit +5%, +1.4% a pick after costs, ~7 picks a month, 1-3 open at a time, 20-24% a year with an 8-14% worst fall - plan on 8-12%. Uncorrelated with the option rules (daily correlation about -0.1), so the two drawdowns did not overlap in the test.</p></div>`;
 }
 async function loadJournal() {
   const sel = $("#jrDay");

@@ -486,3 +486,60 @@ slippage, charges and ₹2 lakh / 1% sizing as the rules.
 3. **Raschke "Holy Grail"** (ADX > 30 rising, pullback to the 20 EMA, enter on the pullback bar's high/low, stop beyond it): fires rarely on 5-min bars — 12 Nifty / 21 BN
    trades in 3¾ years at ADX 30; Nifty lost at every setting (PF 0.1–0.9), BN +₹6–23k at ADX 30 on training, flat/negative unseen; at ADX 20–25 both lose.
    The engine's round-3 cousin (EMA 9/21 cross + ADX + VWAP) was −₹3.4k unseen. Not adopted.
+
+## Round 16 — stocks beyond F&O: cash-equity rules on the Nifty 500 (`round16_stocks.py` → `round16_stocks.json`)
+Long-only delivery, no leverage, ₹2 lakh, equal slots (equity / max positions), integer shares, **0.1 % a side on every fill**, signals on
+the close → buy at the next open, stops/targets filled at the level (open if gapped through), exit signals → next open. 499 stocks of
+**today's** Nifty 500 list (yfinance, 2020-10 → 2026-10) — **survivorship bias: the names that fell out are missing and the names that got
+in are there because they rose**, so everything below is an upper bound, worst for the momentum/breakout rules. Nifty daily exists only
+from 2023-10; before that the benchmark / 200-day regime / RS use an equal-weight proxy of today's Nifty 50 names (daily corr 0.96 with
+the real index on the overlap, but +41 % vs +15 % total — same bias), de-drifted 11 %/yr so 2020-10-13 = 11,934. Stats run from the
+first tradeable day 2021-11-01 (252-day warm-up); train to 2025-06-30, unseen 2025-07-01 → 2026-10-12, nothing tuned on unseen,
+17 variants fixed up front. "Beats" = higher CAGR *and* shallower max drawdown than Nifty buy-and-hold on **both** halves. 4 s runtime.
+
+| rule (best variant) | train CAGR / maxDD | unseen CAGR / maxDD | trades | win | hold | turnover/yr | top-5 trades = % of net |
+|---|---|---|---|---|---|---|---|
+| **Nifty buy-and-hold** | **9.1 % / −18.8 %** | **−9.4 % / −15.6 %** | – | – | – | – | – |
+| 1 momentum 6m top-10, monthly, no filter | 41.1 % / −32.6 % | 94.6 % / −10.7 % | 211 | 46 % | 46 d | 3.9× | 62 % |
+| 1 momentum 6m top-10 + Nifty>200d | 39.9 % / −35.0 % | −0.6 % / −10.7 % | 179 | 48 % | 39 d | 3.6× | 59 % |
+| 1 momentum 12-1 top-10 + filter | 36.4 % / −38.9 % | 4.3 % / −13.4 % | 138 | 56 % | 53 d | 2.6× | 60 % |
+| 2 52-wk high + vol 1.5×, trail 15 %, 60 d | 22.7 % / −24.8 % | 8.3 % / −15.2 % | 291 | 44 % | 38 d | 5.5× | 56 % |
+| 2 same with 10 % stop | 19–32 % / −25…−33 % | −9…−17 % / −22…−28 % | 302–354 | 36 % | 31–35 d | 6× | 68–104 % |
+| 3 pullback RSI(2)<10 above 200d, >10d MA / 10 d, stop 7 % | 13.2 % / −27.1 % | −0.5 % / −17.0 % | 3003 | 60 % | 3.4 d | 58× | 27 % |
+| 3 pullback RSI(14)<35 | 9.3 % / −21.3 % | −8.8 % / −19.7 % | 1299 | 60 % | 5.2 d | 25× | 64 % |
+| 4 RS top decile, 20-d breakout, 3×ATR trail, max 8 | 22.4 % / −29.1 % | 65.4 % / −20.5 % | 328 | 38 % | 25 d | 7.9× | 76 % |
+| 4 same, 2×ATR trail (± regime, top quintile) | −3…7 % / −30…−49 % | −5…−15 % / −18…−25 % | 519–797 | 35 % | 11 d | 13–19× | n/a (net ≈ 0) |
+| 5 mean reversion: 3-d drop >7 % above 200d, 5 d / +5 % | 6.5 % / −31.1 % | 12.0 % / −8.0 % | 1648 | 58 % | 4.3 d | 33× | 23 % |
+| **5 mean reversion: 3-d drop >10 % above 200d, 5 d / +5 %, max 10** | **24.0 % / −14.0 %** | **11.5 % / −4.4 %** | **838** | **64 %** | **3.9 d** | **17×** | **9 %** |
+| 5 same + 7 % stop (drop >7 %) | 7.2 % / −35.4 % | 0.0 % / −11.9 % | 2083 | 55 % | 3.2 d | 41× | 40 % |
+
+- **Only one rule beats Nifty on both halves: the 10 %-drop mean reversion** (yearly 2021 +6, 2022 +6, 2023 +41, 2024 +36, 2025 +4,
+  2026 +13 % vs Nifty −2 / −1 / +20 / +9 / +11 / −14 %; 41 of 61 months positive, worst month −₹14.7k, best +₹35k; median trade +5.0 %
+  (the target, hit 53 % of the time), the 47 % that time out average −3.8 %, worst −26 % (IDBI, Mar 2026); 578 signal days, 3.5 names on
+  an average signal day, more than 10 slots needed on only 35 days). **It survives the two checks the others fail:** universe cut to the
+  150 most liquid names each day (closer to what was investable at the time): train 22.5 % / −8.1 %, unseen 5.4 % / −4.0 %, 424 trades,
+  69 % win — still beats; cost 0.15 % / 0.20 % a side: 21.6 % / 9.8 % and 19.7 % / 8.2 % CAGR. Net is spread thin (top 5 trades 9 % of
+  it) — the opposite of every other rule.
+- **Momentum is the survivorship-bias poster child.** 41 % train CAGR, +124 % in 2026 unfiltered while the index did −14 % — MTARTECH
+  alone (3,080 → 6,950) made ₹80k on a ₹73k slot; top-5 trades are 60 % of the net; on the top-150 universe train drops to 22–28 % and
+  unseen goes **negative** (−12 % / −5 %); drawdowns −28…−39 % vs Nifty's −19 %. The 200-day regime filter cuts 2026 but not the train
+  drawdown. Same for the 52-week-high and RS breakouts: 2023 is 45–108 % of a 4½-year run, the other years are flat or negative, 5 trades
+  are 56–104 % of the net, and the top-150 check leaves 8–9 % CAGR with −31 % drawdowns. RSI pullbacks win 60 % but turn the book
+  25–58×/yr and the 0.1 % costs eat them (−0.5 … −9 % unseen).
+- **Correlation with the option rules (overlap 2023-01-04 → 2026-10-09, options +₹229k, maxDD ₹59k):** every stock rule is −0.08 … −0.16
+  daily, −0.03 … −0.29 monthly (Nifty itself −0.07) — genuinely uncorrelated. ₹2 L in the mean-reversion rule next to ₹2 L in the options:
+  **combined +₹509k, maxDD ₹62k = 15.6 % of ₹4 L vs ₹59k on ₹2 L alone** (the two drawdowns never overlapped: sum of the separate maxDDs
+  ₹104k). Top-150 variant: +₹434k, DD ₹58k. The momentum rules would add ₹436k but widen the combined drawdown to ₹100–180k.
+
+**Nightly "stock recommendation" for the app (plain words):** after the close, scan the Nifty 500 (prefer the 150 most liquid) for stocks
+whose close is above their 200-day average and down more than 10 % over the last three closes; sort by size of the drop; list up to
+(10 − open positions) names. Buy at the next day's open with equity ÷ 10 per name (≈ ₹20k, whole shares — skip names where one share is
+more than that); place a +5 % limit sell at once; whatever has not filled by the close of the 5th trading day is sold at the next open.
+No stop (the 7 % stop version lost — the first bounce is the trade and a stop sells the low). Expect **~7 signals a month on the
+liquid-150 list (14 on the full list), 60–70 % hit the +5 %, average +1.4 % a trade after costs, 1–3 names open at a time** so the
+₹2 L is mostly idle (median hold 4 days). Expected return: the backtest says 20–24 % a year with an 8–14 % worst drawdown; **plan on
+8–12 % a year** — the unseen 15 months did 11.5 % on the full list and only 5.4 % on the liquid-150 list, and this rule is itself
+survivorship-exposed (a stock that crashed 10 % and never bounced is more likely to have left the index), so the −3.8 % average on the
+47 % of trades that time out is understated. It is extra, uncorrelated income (≈ ₹20–30k a year on ₹2 L at the planned rate), not a second
+engine; 2022's +6 % and 2025's +4 % are what a flat year looks like. Not shipped — the data needs a point-in-time index list (the NSE
+archive has the Nifty 500 change log) and the rule should be paper-traded for a quarter first.
