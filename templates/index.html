@@ -1670,6 +1670,8 @@ async function loadStudy() {
     <div class="tablewrap"><table><tr>${r.round15.cols.map(c => `<th>${esc(c)}</th>`).join("")}</tr>
       ${r.round15.rows.map((f, i) => `<tr${i === 1 ? ' style="background:rgba(242,169,59,.08)"' : ""}>${f.map((c, j) => `<td${j ? ' class="mono"' : ""}>${esc(c)}</td>`).join("")}</tr>`).join("")}</table></div>
     <h4>Summary</h4><p>${esc(r.round15.summary)}</p>` : ""}
+    ${r.candles ? `<h4>Quick check — candlestick patterns on daily stocks</h4>
+    <p style="margin-top:0">${esc(r.candles.what)}.</p><p><b>Result:</b> ${esc(r.candles.result)}. ${r.candles.adopted ? "Adopted." : "Not adopted — the stock picks are unchanged."}</p>` : ""}
     ${r.combos ? `<h4>Does stacking indicators make it more accurate? (${r.combos.tested} combinations tested)</h4>
     <p style="margin-top:0">Each of: ${esc(r.combos.filters)} - added to the noise-band signal alone, in pairs, in threes, and as "k of n must agree" votes.</p>
     <ul><li><b>Win rate barely moved:</b> ${r.combos.base_win}% without filters vs ${r.combos.three_filter_win}% with three filters.</li>
