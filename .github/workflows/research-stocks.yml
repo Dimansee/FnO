@@ -23,9 +23,18 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install yfinance pandas requests numpy
-      - run: python research/fetch_stocks.py
-      - run: python research/stock_scan.py
-      - run: python research/stock_market.py
+      - run: python research/fetch_stocks.py 2>&1 | tee -a research/work/run.log
+      - run: python research/stock_scan.py 2>&1 | tee -a research/work/run.log
+      - run: python research/stock_market.py 2>&1 | tee -a research/work/run.log
+      - name: keep the log when a step fails
+        if: failure()
+        run: |
+          git config user.name "fno-data-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          tail -80 research/work/run.log > research/data/stocks_run_log.txt
+          git add research/data/stocks_run_log.txt && git commit -m "stocks job failed $(date -u +%F) - log [skip ci]" || true
+          git pull --rebase -q origin research-data || true
+          git push origin HEAD:research-data || true
       - name: commit research data
         run: |
           git config user.name "fno-data-bot"

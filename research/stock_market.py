@@ -87,25 +87,45 @@ if os.environ.get("FETCH_ANALYST", "1") == "1":
 def pct(a, b):
     return round(float(a / b - 1) * 100, 2) if not (pd.isna(a) or pd.isna(b) or b == 0) else None
 
-rows = []
+def num(v):
+    try:
+        v = float(v)
+        return v if np.isfinite(v) else None
+    except Exception:
+        return None
+
+
+def first(v):
+    """lst lookups can return a Series if a symbol is duplicated in a list file"""
+    if isinstance(v, pd.Series):
+        v = v.iloc[0] if len(v) else ""
+    return "" if v is None or (isinstance(v, float) and np.isnan(v)) else str(v)
+
+
+rows, errors = [], []
 for s in C.columns:
+  try:
     if pd.isna(c0[s]):
         continue
-    a = an.get(s, {}); tgt = a.get("target_mean"); cap = a.get("market_cap_cr")
-    ind = str(lst["Industry"].get(s, "") or "") if s in lst.index else ""
+    a = an.get(s, {}); tgt = num(a.get("target_mean")); cap = num(a.get("market_cap_cr"))
+    ind = first(lst["Industry"].get(s, "")) if s in lst.index else ""
     if not ind or ind == "nan":
         ind = a.get("sector") or "Other"
-    rows.append({"sym": s, "name": str(lst["Company Name"].get(s, s)) if s in lst.index else s, "industry": ind,
-                 "idx": str(lst["Indices"].get(s, "") or "") if s in lst.index and "Indices" in lst.columns else "",
+    rows.append({"sym": s, "name": first(lst["Company Name"].get(s, s)) or s if s in lst.index else s, "industry": ind,
+                 "idx": first(lst["Indices"].get(s, "")) if s in lst.index and "Indices" in lst.columns else "",
                  "close": round(float(c0[s]), 2), "chg_1d": pct(c0[s], c1[s]), "chg_3d": pct(c0[s], c3[s]), "chg_1m": pct(c0[s], c21[s]), "chg_3m": pct(c0[s], c63[s]), "chg_1y": pct(c0[s], c250[s]),
                  "vs_200dma": pct(c0[s], sma200[s]), "from_52w_high": pct(c0[s], hi52[s]),
                  "rsi14": round(float(r14[s])) if not pd.isna(r14[s]) else None,
                  "turnover_cr": round(float(turn[s] / 1e7), 2) if not pd.isna(turn[s]) else None,
                  "cap_bucket": "Large" if cap and cap >= 100000 else "Mid" if cap and cap >= 30000 else "Small" if cap else None, "market_cap_cr": cap,
-                 "pe": round(a["pe"], 1) if a.get("pe") else None,
-                 "float_cap_cr": round(a["float_shares"] * float(c0[s]) / 1e7) if a.get("float_shares") else None,
-                 "analyst": {"target": tgt, "upside_pct": round((tgt / float(c0[s]) - 1) * 100, 1) if tgt else None, "high": a.get("target_high"), "low": a.get("target_low"),
-                             "n": a.get("analysts"), "rating": a.get("rating")} if tgt else None})
+                 "pe": round(num(a.get("pe")), 1) if num(a.get("pe")) else None,
+                 "float_cap_cr": round(num(a.get("float_shares")) * float(c0[s]) / 1e7) if num(a.get("float_shares")) else None,
+                 "analyst": {"target": tgt, "upside_pct": round((tgt / float(c0[s]) - 1) * 100, 1) if tgt else None, "high": num(a.get("target_high")), "low": num(a.get("target_low")),
+                             "n": a.get("analysts") if isinstance(a.get("analysts"), int) else None, "rating": a.get("rating")} if tgt else None})
+  except Exception as e:
+    errors.append(f"{s}: {e!r}")
+if errors:
+    print(f"{len(errors)} stocks skipped:", errors[:5])
 rows = [r for r in rows if r["idx"] == "" or True]
 ind = {}
 for r in rows:
