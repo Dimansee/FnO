@@ -1,0 +1,105 @@
+{
+ "sessions": 60,
+ "from": "2026-07-16",
+ "to": "2026-10-09",
+ "decisions": 120,
+ "desk": {
+  "n": 58,
+  "net": -994,
+  "win": 37.9,
+  "pf": 0.99,
+  "avg": -17
+ },
+ "desk_dd": -45997,
+ "desk_by_index": {
+  "NIFTY": {
+   "n": 29,
+   "net": -993,
+   "win": 41.4,
+   "pf": 0.97,
+   "avg": -34
+  },
+  "BANKNIFTY": {
+   "n": 29,
+   "net": -1,
+   "win": 34.5,
+   "pf": 1.0,
+   "avg": 0
+  }
+ },
+ "desk_by_action": {
+  "BUY PUT": {
+   "n": 35,
+   "net": 6095,
+   "win": 42.9,
+   "pf": 1.13,
+   "avg": 174
+  },
+  "BUY CALL": {
+   "n": 23,
+   "net": -7090,
+   "win": 30.4,
+   "pf": 0.77,
+   "avg": -308
+  }
+ },
+ "desk_by_entry": {
+  "trigger": {
+   "n": 26,
+   "net": -19602,
+   "win": 26.9,
+   "pf": 0.49,
+   "avg": -754
+  },
+  "0930": {
+   "n": 32,
+   "net": 18608,
+   "win": 46.9,
+   "pf": 1.49,
+   "avg": 581
+  }
+ },
+ "desk_by_exit": {
+  "square-off": {
+   "count": 22,
+   "sum": 44463.0
+  },
+  "stop": {
+   "count": 29,
+   "sum": -72207.0
+  },
+  "target": {
+   "count": 7,
+   "sum": 26749.0
+  }
+ },
+ "no_trade": 32,
+ "triggers_unfilled": 21,
+ "rules_same_sessions": {
+  "n": 63,
+  "net": 19289,
+  "win": 30.2,
+  "pf": 1.43,
+  "avg": 306
+ },
+ "rules_dd": -19183,
+ "overlap": {
+  "n": 35,
+  "same_direction": 34
+ },
+ "rules_when_desk_agrees": {
+  "n": 37,
+  "net": 28344,
+  "win": 40.5,
+  "pf": 2.24,
+  "avg": 766
+ },
+ "rules_unless_desk_opposes": {
+  "n": 62,
+  "net": 19809,
+  "win": 30.6,
+  "pf": 1.44,
+  "avg": 320
+ },
+ "charges_desk": 4287
+}

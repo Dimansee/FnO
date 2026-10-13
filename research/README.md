@@ -455,3 +455,24 @@ Independent rebuild from the raw bhavcopy + index 5-min file (shares only `fno.i
 - **Verdict: partly holds.** The number reproduces and the decay difference vs non-expiry days is genuine, but the edge is a ~22 pts/day
   premium for carrying a −300 … −340 pts/unit tail (≈ 15 × the average day), concentrated in 10 days and in the Tuesday era. Worth an
   off-by-default paper strategy with a hard gap/event filter and intraday stop logging — not a live one from this evidence.
+
+## Round 15 — an LLM multi-agent trading desk (TradingAgents-style), tested out of sample (`agent_pack.py`, `agent_eval.py`, `round15_brief.txt`, `round15_decisions.json` → `round15.json`)
+Built the TradingAgents pipeline as a prompt (technical / options / macro analysts → bull vs bear → research manager → trader with absolute
+levels → aggressive / conservative / neutral risk desk → portfolio manager) and ran it with Claude as the model, one decision per index per
+session at 09:30, on the **60 sessions 2026-07-16 → 10-09** — all after the model's knowledge cutoff, so no hindsight. Each pack held only what
+a trader knew at 09:30 (10 daily bars, open, gap, PDH/PDL, Camarilla, CPR, VIX, overnight global moves, previous-day PCR and OI walls, DTE,
+the three 09:15–09:30 bars, ATR, noise-band levels); the agent could read nothing else. Decisions = BUY CALL / BUY PUT / NO TRADE, entry at
+09:30 or on a level trigger before 14:30, stop and target as index levels, hold to 15:15. Scored with the same 1-ITM option pricing,
+slippage, charges and ₹2 lakh / 1% sizing as the rules.
+- **Desk:** 120 decisions → 32 no-trade, 21 triggers never filled, **58 trades: −₹1.0k, 38% wins, PF 0.99, deepest fall ₹46k.**
+  Puts +₹6.1k (35), calls −₹7.1k (23). 09:30 entries +₹18.6k (32, PF 1.49); level-trigger entries −₹19.6k (26, PF 0.49) — the desk's
+  "wait for confirmation" entries bought the top of moves. Confidence did not rank outcomes (0.45–0.50 bucket −₹18.7k, 0.50–0.55 +₹11.4k).
+- **The two rules on the same 60 sessions:** 63 trades, **+₹19.3k, PF 1.43, deepest fall ₹19k.**
+- Where both traded the same index (35 times) they agreed on direction 34 times; the desk made ₹21.7k on those vs the rules' ₹29.2k — same
+  idea, worse exits (fixed targets/stops instead of the rules' trail and 4R).
+- **As a filter:** rule trades only when the desk agreed with the direction: 37 trades +₹28.3k PF 2.24 vs all 63 +₹19.3k. One half, 60
+  sessions, and the desk mostly restates the 09:30 direction the rules themselves require — a lead to re-test on the next 60 sessions, not a result.
+- Cost: ~6k tokens per decision (≈ 700k for the test); live, two decisions a day fit a free LLM tier, but the full framework (20–35 calls per
+  decision with tool-using analysts) would not.
+**Verdict:** the agent desk did not beat the rules — it matched their direction and lost the difference on execution. Nothing ships; the
+"desk agrees" filter goes on the watch-list.

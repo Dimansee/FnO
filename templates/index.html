@@ -1615,6 +1615,11 @@ async function loadStudy() {
     <div class="tablewrap"><table class="prose"><tr><th>Worker</th><th>What the data showed</th><th>Decision</th></tr>
       ${r.round14.items.map(f => `<tr><td><b>${esc(f[0])}</b></td><td>${esc(f[1])}</td><td>${esc(f[2])}</td></tr>`).join("")}</table></div>
     <h4>Summary</h4><p>${esc(r.round14.summary)}</p>` : ""}
+    ${r.round15 ? `<h4>${esc(r.round15.heading)}</h4>
+    <p style="margin-top:0">${esc(r.round15.what)}</p>
+    <div class="tablewrap"><table><tr>${r.round15.cols.map(c => `<th>${esc(c)}</th>`).join("")}</tr>
+      ${r.round15.rows.map((f, i) => `<tr${i === 1 ? ' style="background:rgba(242,169,59,.08)"' : ""}>${f.map((c, j) => `<td${j ? ' class="mono"' : ""}>${esc(c)}</td>`).join("")}</tr>`).join("")}</table></div>
+    <h4>Summary</h4><p>${esc(r.round15.summary)}</p>` : ""}
     ${r.combos ? `<h4>Does stacking indicators make it more accurate? (${r.combos.tested} combinations tested)</h4>
     <p style="margin-top:0">Each of: ${esc(r.combos.filters)} - added to the noise-band signal alone, in pairs, in threes, and as "k of n must agree" votes.</p>
     <ul><li><b>Win rate barely moved:</b> ${r.combos.base_win}% without filters vs ${r.combos.three_filter_win}% with three filters.</li>

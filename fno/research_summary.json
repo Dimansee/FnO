@@ -2341,5 +2341,60 @@
    ]
   ],
   "summary": "Four workers, four honest answers. More entries (A) and new inputs (C) add nothing the two rules do not already capture - 0 of 50+ variants beat the baseline on both the training years and the unseen 120 sessions, so the app's rules are unchanged. The one new edge (B, verified by D) is expiry-day premium selling: about 1% of margin per Nifty expiry day with real prices, but 72% of its losses come from the 21 big-move days and most of its profit from 10 days, so it earns a place only as an off-by-default paper strategy once the app can handle sell-side orders and the recorder has 20-30 real expiry days. Expected effect on the system if it passes: roughly +₹5k a month on ₹2 lakh of margin, with occasional −₹20k days."
+ },
+ "round15": {
+  "heading": "Round 15 - the TradingAgents idea, built and tested: an LLM analyst / debate / risk / manager desk vs the two rules",
+  "what": "The 111K-star TradingAgents framework was rebuilt as a decision desk - technical, options and macro analysts, a bull-vs-bear debate, a research manager, a trader with absolute price levels, an aggressive / conservative / neutral risk desk and a portfolio manager - run with Claude as the model, one decision per index at 09:30 on each of the 60 sessions from 16 Jul to 9 Oct 2026 (after the model's knowledge cutoff, so no hindsight). It saw only what a trader knew at 09:30 and was scored with the same option pricing, costs and sizing as the rules.",
+  "rows": [
+   [
+    "LLM desk",
+    "58 trades (32 no-trade, 21 triggers never filled)",
+    "−₹1.0k",
+    "38%",
+    "0.99",
+    "₹46k"
+   ],
+   [
+    "The two rules, same 60 sessions",
+    "63 trades",
+    "+₹19.3k",
+    "30%",
+    "1.43",
+    "₹19k"
+   ],
+   [
+    "Desk, entries at 09:30 only",
+    "32",
+    "+₹18.6k",
+    "47%",
+    "1.49",
+    "-"
+   ],
+   [
+    "Desk, level-trigger entries",
+    "26",
+    "−₹19.6k",
+    "27%",
+    "0.49",
+    "-"
+   ],
+   [
+    "Rules only when the desk agreed on direction (watch-list)",
+    "37",
+    "+₹28.3k",
+    "41%",
+    "2.24",
+    "-"
+   ]
+  ],
+  "cols": [
+   "",
+   "Trades",
+   "Net",
+   "Win",
+   "PF",
+   "Deepest fall"
+  ],
+  "summary": "The agent desk did not make more profit. On the same 60 unseen sessions it ended flat (−₹1k, PF 0.99) against the rules' +₹19k (PF 1.43), with more than double the drawdown. When both traded the same index they agreed on direction 34 times out of 35 - the desk sees the same morning structure the rules do - but it gave the edge back on execution: fixed targets and stops instead of the rules' trail and 4R target, and 'wait for confirmation' trigger entries that bought the tops. Its confidence score did not rank outcomes. One lead survives for re-testing: taking rule trades only when the desk agrees raised PF from 1.43 to 2.24 on 37 trades - one half, small sample. Nothing ships; the two rules stay, and the desk's value, if any, is as an explainer, not a trader."
  }
 }

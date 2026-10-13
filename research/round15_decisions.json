@@ -1,0 +1,1310 @@
+[
+{
+"symbol": "BANKNIFTY",
+"date": "2026-07-16",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 57550
+},
+"stop": 57720,
+"target": 57290,
+"confidence": 0.45,
+"reason": "Gap-up fully faded below open and pivot; short only on loss of Camarilla L3 57553"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-07-16",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.2,
+"reason": "Mid-range at H3 inside noise band, 24200 call wall caps, no edge"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-07-17",
+"action": "BUY CALL",
+"entry": "0930",
+"stop": 57735,
+"target": null,
+"confidence": 0.55,
+"reason": "Open drive above H3 with narrow CPR despite weak globals; relative strength, hold to close"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-07-17",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 24235
+},
+"stop": 24175,
+"target": null,
+"confidence": 0.5,
+"reason": "Above H4 on narrow CPR; enter on breakout over noise band top / 24200 call wall"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-07-20",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 57880,
+"target": 57350,
+"confidence": 0.55,
+"reason": "1.4% gap-down, bounce failed and 09:30 below open under L4; risk-off globals and crude spike"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-07-20",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.2,
+"reason": "Gap-down holding open, PCR 1.43 put support vs weak globals, expiry eve - conflicting"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-07-21",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.2,
+"reason": "Spike above H3 rejected within 10 minutes, mixed globals, indecision"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-07-21",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.15,
+"reason": "Inside H3/L3 with tiny ATR, no directional edge"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-07-22",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 57470,
+"target": 57000,
+"confidence": 0.6,
+"reason": "430-pt dump below L4 and noise band low against strong global cues - relative weakness momentum"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-07-22",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 24100,
+"target": 23950,
+"confidence": 0.6,
+"reason": "Below L4 at band low with 0.02% CPR trend-day setup; 24150 max put OI broken"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-07-23",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 56640
+},
+"stop": 56800,
+"target": 56390,
+"confidence": 0.45,
+"reason": "Gap-down bounce rejected at L3, VIX up; short only on break of first-bar low"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-07-23",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 23875
+},
+"stop": 23935,
+"target": 23780,
+"confidence": 0.45,
+"reason": "Below L3 after losing 24000 put wall; short on break of L4 / first-bar low"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-07-24",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 56085
+},
+"stop": 56250,
+"target": 55790,
+"confidence": 0.45,
+"reason": "Oil-shock gap below L4; continuation only on new low, target noise band bottom"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-07-24",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.2,
+"reason": "Extended gap-down with firm bounce, OI walls far away - no clean edge"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-07-27",
+"action": "BUY CALL",
+"entry": "0930",
+"stop": 57110,
+"target": null,
+"confidence": 0.55,
+"reason": "Follow-through on Friday reversal; gap above H4 holding, crude relief, hold to close"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-07-27",
+"action": "BUY CALL",
+"entry": "0930",
+"stop": 23895,
+"target": null,
+"confidence": 0.5,
+"reason": "Gap above H4 holding on expiry eve; Camarilla trend-up day, stop under H4"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-07-28",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.2,
+"reason": "Bearish Camarilla structure vs bullish macro (VIX -10%, crude -7.5%) - conflict"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-07-28",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.15,
+"reason": "Inside H3/L3, spike faded, PCR neutral"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-07-29",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 57160
+},
+"stop": 57020,
+"target": 57400,
+"confidence": 0.5,
+"reason": "Gap above H4 and above both OI walls but fading; buy only on reclaim of first-bar high"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-07-29",
+"action": "BUY CALL",
+"entry": "0930",
+"stop": 24130,
+"target": null,
+"confidence": 0.55,
+"reason": "Gap well above H4 on 0.03% CPR trend day, above 24000 call wall, rupee strength; hold to close"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-07-30",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 56815
+},
+"stop": 57000,
+"target": 56530,
+"confidence": 0.5,
+"reason": "Global risk-off + crude +6.6%, price below L4 sitting on PDL; put on noise-band breakdown, stop above L4"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-07-30",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 24330
+},
+"stop": 24250,
+"target": null,
+"confidence": 0.4,
+"reason": "Relative strength vs bad globals, rising closes into H3; call only on H4/noise-band breakout"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-07-31",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 57415
+},
+"stop": 57230,
+"target": null,
+"confidence": 0.5,
+"reason": "Gap above PDH with Nasdaq +2.8%; buy reclaim of first-bar high, stop under H3/PDH"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-07-31",
+"action": "NO TRADE",
+"entry": "0930",
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Gap-up fading with three lower closes at H3; no momentum edge"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-03",
+"action": "BUY CALL",
+"entry": "0930",
+"stop": 57400,
+"target": null,
+"confidence": 0.6,
+"reason": "Gap-and-go above H4/PDH making new highs at 09:30, Nikkei +4%, VIX down; stop below PDH"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-03",
+"action": "BUY CALL",
+"entry": "0930",
+"stop": 24495,
+"target": null,
+"confidence": 0.6,
+"reason": "Gap +0.85% above H4 with CPR 0.01 trend-day setup and dip bought; stop below first-bar low"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-04",
+"action": "NO TRADE",
+"entry": "0930",
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Strong globals vs 400-pt selloff below all levels, wide CPR 0.45 range-day; no edge"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-04",
+"action": "NO TRADE",
+"entry": "0930",
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Same conflict as BankNifty, wide CPR, price pinned under 24600 call wall"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-05",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 57935
+},
+"stop": 57780,
+"target": null,
+"confidence": 0.4,
+"reason": "250-pt rejection wick off gap-down low with Nasdaq +2.6%; call on break of first-bar high, stop at pivot"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-05",
+"action": "NO TRADE",
+"entry": "0930",
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Pinned between 24600 put wall and 24650 call wall, fading open"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-06",
+"action": "NO TRADE",
+"entry": "0930",
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Directionless under 58000 two-sided wall, mixed globals"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-06",
+"action": "NO TRADE",
+"entry": "0930",
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Drifting inside L3-H3, mixed cues"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-07",
+"action": "NO TRADE",
+"entry": "0930",
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Gap-down holding flat near L4, no follow-through either way, weak globals"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-07",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 24622
+},
+"stop": 24570,
+"target": null,
+"confidence": 0.45,
+"reason": "Gap-down bought back with CPR 0.01 trend-day; call on reclaim of L3/first-bar high"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-10",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 57655
+},
+"stop": 57820,
+"target": null,
+"confidence": 0.45,
+"reason": "Spike-and-fail at 58000, three lower closes below pivot; put on L3 break, stop at pivot"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-10",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 24540
+},
+"stop": 24595,
+"target": null,
+"confidence": 0.45,
+"reason": "Rejected at 24600 call wall, fading below pivot with CPR 0.02; put on L3 break"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-11",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 57420,
+"target": 57100,
+"confidence": 0.55,
+"reason": "Breakdown through PDL, L4 and noise band with follow-through, crude +5%; stop at L4, target late-July support"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-11",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 24530,
+"target": null,
+"confidence": 0.55,
+"reason": "Below PDL/L4/noise band and 24500 max-put-OI wall broken; stop above L4"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-12",
+"action": "BUY CALL",
+"entry": "0930",
+"stop": 57555,
+"target": null,
+"confidence": 0.5,
+"reason": "450-pt surge above PDH, H4 and noise upper with VIX -3%; stop below H3"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-12",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 24515
+},
+"stop": 24450,
+"target": null,
+"confidence": 0.45,
+"reason": "V-recovery with BankNifty; call only above H3/24500 call wall, stop at 24450 put wall"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-13",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 57535
+},
+"stop": 57680,
+"target": 57310,
+"confidence": 0.45,
+"reason": "Fade of yesterday's spike: opening drive lost pivot 57675 and L3 57712; put only if L4/noise-lower 57538-57560 breaks, stop back above pivot"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-13",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 24395,
+"target": 24250,
+"confidence": 0.55,
+"reason": "Lower-high/lower-low downtrend from 24774, 09:30 close already below noise-lower 24362 and L3/pivot; stop above pivot 24392, target near PDL 24266"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-14",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Price just under L4/PDL but inside noise band, globals strongly risk-on (SPX +0.65, Nikkei +1.16, crude -2.4) conflict with weak tape; no edge"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-14",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 24366,
+"target": 24220,
+"confidence": 0.5,
+"reason": "Fourth straight lower close, 09:30 close below L4 24330 and PDL 24311 with narrow CPR (trend day); stop above L3/pivot 24363-24380"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-17",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 57160
+},
+"stop": 57300,
+"target": 56940,
+"confidence": 0.4,
+"reason": "Below L4 in a downtrend but opening flush to 57162 was bought; put only on a fresh low through the noise-lower band, stop above the bounce high"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-17",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "1 DTE, 15-pt ATR, price sitting exactly on L4 after a bounce from the noise band; theta and chop outweigh the downtrend edge"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-18",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Gap down, 260-pt rip, then fade back between L3 and pivot; two-sided indecision, crude +2.5 vs Asia up, no directional edge"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-18",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Gap down held above L4 with rising PCR (0.92) arguing for a fill, but downtrend and crude spike argue against; signals cancel"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-19",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 57225,
+"target": 56920,
+"confidence": 0.6,
+"reason": "Global risk-off (Nasdaq -1.3, Nikkei -2.5, INR weaker), PCR 0.68, flat open sold through PDL 57218 and L3 toward L4; stop above PDL"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-19",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 24155,
+"target": 24005,
+"confidence": 0.6,
+"reason": "Closed at the low yesterday, now below PDL 24155 and at L4 24092 with PCR 0.63 and risk-off globals; stop at PDL, target the 24000 put wall"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-20",
+"action": "BUY CALL",
+"entry": "0930",
+"stop": 57475,
+"target": 57760,
+"confidence": 0.55,
+"reason": "Gap up +0.47% above H4 57435 held and 09:30 bar closed at its high (gap-and-go), VIX 10.7; stop below first-bar low, target Aug 17 high 57757"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-20",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 24226
+},
+"stop": 24160,
+"target": 24330,
+"confidence": 0.45,
+"reason": "Gap up above H4 but first bars faded; call only on reclaim of the opening high 24225 (Nifty lagging a strong Banknifty), stop under H4"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-21",
+"action": "BUY CALL",
+"entry": "0930",
+"stop": 57478,
+"target": 57775,
+"confidence": 0.5,
+"reason": "Opening dip to 57482 bought back above H3 57570, VIX -4.95% and rupee +0.33% despite weak US close; stop below opening low, target Aug 17 high"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-21",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Gap up fully faded back to prior close inside a 0.02% CPR and 15-pt ATR; nothing to lean on"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-24",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Three up days into the 58000 call wall, flat open at H3, VIX rising +4%; upside capped, no breakdown either"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-24",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Expiry eve with max call OI at 24300 sitting 13 pts overhead and a 0.02% CPR; pin risk, 13-pt ATR"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-25",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Gap-down filled with a 190-pt rip after yesterday's bearish reversal, VIX up, HSI -1.9; chasing either side has no edge"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-25",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Small gap down, bounce to L3, inside the noise band with weak globals and low PCR; indecisive"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-26",
+"action": "BUY CALL",
+"entry": "0930",
+"stop": 57860,
+"target": 58130,
+"confidence": 0.5,
+"reason": "Three consecutive strong green bars, 09:30 close 57966 already above H4 57747 and the noise-upper 57862 (breakout), VIX -3.9%, crude -3%; stop at noise-upper"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-26",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 24365
+},
+"stop": 24308,
+"target": 24455,
+"confidence": 0.5,
+"reason": "Price pinned at the 24350 max-call strike while Banknifty rips; call on a break above the 09:30 high 24363 (call-writer squeeze), stop below opening low, target H4"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-27",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 57675
+},
+"stop": 57800,
+"target": 57480,
+"confidence": 0.5,
+"reason": "Gap-up to H4 fully faded in 15 min with three lower closes below pivot; L3 break confirms sellers in control"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-27",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 24160
+},
+"stop": 24235,
+"target": 24040,
+"confidence": 0.55,
+"reason": "Gap-up faded below prev close after yesterday's close-at-low; L3 break under the 24200 put wall opens L4"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-28",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 57500
+},
+"stop": 57360,
+"target": 57720,
+"confidence": 0.45,
+"reason": "Strong US overnight, gap-down dip held above L4 and V-recovered in 15 min; reclaim of first-bar high confirms dip buyers"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-28",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 24160
+},
+"stop": 24110,
+"target": 24240,
+"confidence": 0.5,
+"reason": "Rising opening bars closed above H3 with strong Nasdaq overnight and very low PCR; pivot reclaim targets H4 and beyond"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-08-31",
+"action": "NO TRADE",
+"entry": "0930",
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Whipsaw open (gap down, spike to H3, rejection back to pivot) with no directional edge"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-08-31",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 24090,
+"target": 23965,
+"confidence": 0.55,
+"reason": "Three straight lower closes through L4 and the lower noise band on expiry eve; 10-day downtrend intact"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-01",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 57340
+},
+"stop": 57520,
+"target": 57060,
+"confidence": 0.5,
+"reason": "0.8% gap-down erased yesterday's rally, price below L4 with VIX and crude up; band-low break resumes the slide"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-01",
+"action": "NO TRADE",
+"entry": "0930",
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Flat open pinned at the pivot inside a narrow CPR; no side has shown its hand"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-02",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 56820
+},
+"stop": 56980,
+"target": 56560,
+"confidence": 0.5,
+"reason": "Second gap-down below L4 with weak US, crude +5% and rising VIX; break of opening low extends the trend day"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-02",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 23785
+},
+"stop": 23850,
+"target": 23680,
+"confidence": 0.5,
+"reason": "0.8% gap-down lost the 24050 put wall and L4; break of opening low below the band continues the sell-off"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-03",
+"action": "BUY CALL",
+"entry": "0930",
+"stop": 57470,
+"target": 57740,
+"confidence": 0.5,
+"reason": "Gap-and-go open above H4 holding its gains with positive US close; stop under first-bar low"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-03",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 24026
+},
+"stop": 23955,
+"target": 24135,
+"confidence": 0.5,
+"reason": "Open above H4 and holding after yesterday's close-at-high; first-bar high breakout confirms continuation"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-04",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 57275
+},
+"stop": 57400,
+"target": 57080,
+"confidence": 0.5,
+"reason": "Gap-up faded below pivot and prev close despite strong US, after yesterday's bearish reversal; L3 break targets L4"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-04",
+"action": "NO TRADE",
+"entry": "0930",
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Tiny opening range sitting exactly on pivot/H3 with conflicting signals (strong US vs close-at-low yesterday)"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-07",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 57215,
+"target": 56960,
+"confidence": 0.5,
+"reason": "Straight-line selling from a flat open, closing at the low below L4 and at the lower noise band"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-07",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 23875,
+"target": 23755,
+"confidence": 0.5,
+"reason": "Three lower closes through L4 to the lower band on expiry eve; downtrend continuation"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-08",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 56850
+},
+"stop": 56960,
+"target": 56670,
+"confidence": 0.45,
+"reason": "Gap-down below L3 in a 10-day downtrend with VIX rising; loss of L4/opening low resumes selling"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-08",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 23715,
+"target": 23605,
+"confidence": 0.5,
+"reason": "Gap-down with three lower closes below L4 and the lower band; trend continuation"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-09",
+"action": "NO TRADE",
+"entry": "0930",
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Fourth straight down day gap-down that immediately reclaimed its open; exhaustion risk offsets trend edge"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-09",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 23475
+},
+"stop": 23540,
+"target": 23370,
+"confidence": 0.45,
+"reason": "Gap-down lost the 23600 put wall and L4 with weak globals; break of opening low confirms continuation"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-10",
+"action": "BUY CALL",
+"entry": "0930",
+"stop": 56430,
+"target": 56743,
+"confidence": 0.5,
+"reason": "Opening drive +285 pts closes above H4 56541.7 and noise-band upper 56503 after 4 red days; momentum long, stop under H3/pivot"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-10",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 23371
+},
+"stop": 23440,
+"target": 23265,
+"confidence": 0.35,
+"reason": "Downtrend, weak globals, VIX up; Nifty flat under pivot while BN bounces - only trade on breakdown of noise-band lower 23371.6"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-11",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 56000
+},
+"stop": 55790,
+"target": 56320,
+"confidence": 0.45,
+"reason": "-0.89% gap-down reversed from 55699 low in first 15 min; gap-fill long on reclaim of the opening print 55970-56000"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-11",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 23212
+},
+"stop": 23275,
+"target": 23110,
+"confidence": 0.45,
+"reason": "-0.88% gap-down with zero bounce in 15 min (relative weakness vs BN); continuation short below noise-band lower 23212.7"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-15",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 56700,
+"target": 56270,
+"confidence": 0.5,
+"reason": "+0.49% gap-up rejected at H3 56867 and sold 350 pts in 15 min with VIX +4% and weak globals - gap-and-crap short"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-15",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 23520,
+"target": 23375,
+"confidence": 0.5,
+"reason": "+0.76% gap-up sold straight down 112 pts in 15 min; fade toward gap fill at prev close 23398"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-16",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 55925
+},
+"stop": 56070,
+"target": 55700,
+"confidence": 0.5,
+"reason": "After a 1200-pt reversal red day, gap-up faded below open with VIX +9%, crude +4%, INR -0.84%; short below first-bar low 55925"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-16",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 23186
+},
+"stop": 23245,
+"target": 23095,
+"confidence": 0.5,
+"reason": "Gap-up faded back to open after a 470-pt reversal day; VIX +9%, call OI wall 23300 overhead - short below first-bar low 23186"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-17",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 56370
+},
+"stop": 56230,
+"target": 56585,
+"confidence": 0.4,
+"reason": "Gap-down filled in 15 min, crude -3.2%, VIX easing; long only above PDH 56368.7"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-17",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 23298
+},
+"stop": 23235,
+"target": 23395,
+"confidence": 0.45,
+"reason": "Gap filled, above pivot, CPR 0.05 (trend-day setup); long above noise-band upper / PDH 23285-23297"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-18",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 56330
+},
+"stop": 56190,
+"target": 56545,
+"confidence": 0.35,
+"reason": "Strong US close (+1.1/+1.7%) and VIX -6.7% but tape flat at pivot; long only above first-bar high 56327/H4 56348"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-18",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.3,
+"reason": "Gap-up fading under H3 despite strong globals; narrow CPR but no direction - conflicting signals, no edge"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-21",
+"action": "BUY CALL",
+"entry": "0930",
+"stop": 56385,
+"target": 56670,
+"confidence": 0.5,
+"reason": "Three rising bars to 56498 clearing H3 56475 and testing PDH 56497 with VIX -7.3%, Nikkei +1.4%, PCR 1.04"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-21",
+"action": "BUY CALL",
+"entry": "0930",
+"stop": 23355,
+"target": 23470,
+"confidence": 0.5,
+"reason": "Expiry-eve momentum: close 23400 above H3 23375, PDH 23389 and at H4 23403 with CPR 0.02 and VIX -7%"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-22",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 56690
+},
+"stop": 56570,
+"target": 56875,
+"confidence": 0.5,
+"reason": "Nasdaq +2.3%, crude -4.5%, CPR 0.0 trend day; three rising bars above H3 - long only on break of H4/PDH cap 56670-56690"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-22",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 23490
+},
+"stop": 23440,
+"target": 23570,
+"confidence": 0.4,
+"reason": "Strong globals but flat tape under H3 and call OI wall 23500; long only above first-bar high 23489 / H4 23498"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-23",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.3,
+"reason": "Mid-range at pivot after yesterday's failed cap break; flat globals, no momentum - no edge"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-23",
+"action": "NO TRADE",
+"entry": null,
+"stop": null,
+"target": null,
+"confidence": 0.3,
+"reason": "Opening pop fully faded back to pivot 23368; OI walls 23300/23350 pin the range - no edge"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-24",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 55620
+},
+"stop": 55790,
+"target": 55360,
+"confidence": 0.4,
+"reason": "-1.48% gap-down with no bounce in 15 min on Nasdaq -1.1%; continuation short below first-bar low 55621"
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-24",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 23282
+},
+"stop": 23225,
+"target": 23370,
+"confidence": 0.4,
+"reason": "-0.96% gap-down but three rising closes from the open with VIX -5.9%; gap-fill long above first-bar high 23282"
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-25",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 55710
+},
+"stop": 55560,
+"target": null,
+"confidence": 0.5,
+"reason": "Gap-down filled, 09:30 close above pivot and H3 after -2% day; VIX +22% is a caution so enter only on noise-band upper breakout, stop under pivot."
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-25",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 23131
+},
+"stop": 23065,
+"target": null,
+"confidence": 0.5,
+"reason": "Opening reversal up into H3/pivot/noise-upper cluster at 23130; breakout above cluster confirms momentum, stop below 09:20 bar body."
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-28",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 55100,
+"target": null,
+"confidence": 0.55,
+"reason": "Gap-down open-drive already below L4 and noise-band lower despite positive globals = relative weakness; stop back above band lower."
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-28",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 23000,
+"target": null,
+"confidence": 0.55,
+"reason": "Expiry-eve open-drive below PDL, L4 and noise lower in a 4-session downtrend; stop above band lower at 22995."
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-29",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 54110,
+"target": null,
+"confidence": 0.5,
+"reason": "Third gap-down, 09:30 below L4, max-put-OI 54000 broken, VIX +12% and US -0.8%; extended but all aligned, stop above L3 zone."
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-29",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 22700,
+"target": null,
+"confidence": 0.5,
+"reason": "Sold through noise lower to L4 with negative globals and rising VIX; stop above L3 22692."
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-09-30",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 54620
+},
+"stop": 54430,
+"target": null,
+"confidence": 0.55,
+"reason": "Reversal after yesterday's hammer: 09:30 above H3 toward H4/noise-upper, PCR 1.17 put-heavy, crude -3.5%; buy breakout, stop at H3."
+},
+{
+"symbol": "NIFTY",
+"date": "2026-09-30",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 22812
+},
+"stop": 22730,
+"target": null,
+"confidence": 0.5,
+"reason": "Gap-down filled, above pivot with OI pinned at 22700; needs close above noise upper 22811 to confirm, stop under pivot/09:30 area."
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-10-01",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 55050
+},
+"stop": 54840,
+"target": null,
+"confidence": 0.45,
+"reason": "Narrow CPR (0.03) trend-day setup, opening rally toward H3 with Nikkei +1.9%; buy only above noise upper, stop at 09:30 close."
+},
+{
+"symbol": "NIFTY",
+"date": "2026-10-01",
+"action": "NO TRADE",
+"entry": "0930",
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Gap-down sitting between L3 and L4 inside the noise band after yesterday's rejection; Nifty weaker than BankNifty, no clear edge."
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-10-05",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 55270
+},
+"stop": 55010,
+"target": null,
+"confidence": 0.45,
+"reason": "Gap-up above H4 after Friday's hammer with strong US close; VIX +7% and HSI -2.6% argue for confirmation above noise upper, stop at H4."
+},
+{
+"symbol": "NIFTY",
+"date": "2026-10-05",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 22632
+},
+"stop": 22540,
+"target": null,
+"confidence": 0.5,
+"reason": "Expiry-eve gap-up holding above H3 with 0.02% CPR (trend day); breakout above noise upper/H4, stop under 09:30 bar."
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-10-06",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 55341
+},
+"stop": 55120,
+"target": null,
+"confidence": 0.4,
+"reason": "Flat gap-up inside band under 55200 double-rejection; narrow CPR and Nikkei +2.4% favour an upside break, buy only above noise upper."
+},
+{
+"symbol": "NIFTY",
+"date": "2026-10-06",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 22706
+},
+"stop": 22610,
+"target": null,
+"confidence": 0.4,
+"reason": "Gap-up at H3 inside noise band with strong globals; breakout above noise upper, stop below H3."
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-10-07",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 54560
+},
+"stop": 54740,
+"target": null,
+"confidence": 0.4,
+"reason": "Gap-down sold through L4 and PDL despite positive globals/VIX -8%; macro disagrees so only on noise-lower breakdown, stop at 09:30 close."
+},
+{
+"symbol": "NIFTY",
+"date": "2026-10-07",
+"action": "BUY PUT",
+"entry": {
+"trigger_below": 22600
+},
+"stop": 22680,
+"target": null,
+"confidence": 0.4,
+"reason": "Gap-down below L4 resting on noise lower 22602; breakdown confirms sellers, stop above L4/09:20 body."
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-10-08",
+"action": "NO TRADE",
+"entry": "0930",
+"stop": null,
+"target": null,
+"confidence": 0.0,
+"reason": "Opening dump reversed back above L3 inside the noise band, mixed globals; chop, no edge."
+},
+{
+"symbol": "NIFTY",
+"date": "2026-10-08",
+"action": "BUY PUT",
+"entry": "0930",
+"stop": 22580,
+"target": null,
+"confidence": 0.45,
+"reason": "Opened at PDH and sold straight through L4 and noise lower by 09:30 with soft globals; stop above L3/09:20 high."
+},
+{
+"symbol": "BANKNIFTY",
+"date": "2026-10-09",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 55150
+},
+"stop": 54880,
+"target": null,
+"confidence": 0.4,
+"reason": "Gap-up and 300-pt 09:30 thrust above H4 against negative globals/VIX +10%; macro conflict means buy only on noise-upper breakout, stop at H4."
+},
+{
+"symbol": "NIFTY",
+"date": "2026-10-09",
+"action": "BUY CALL",
+"entry": {
+"trigger_above": 22411
+},
+"stop": 22330,
+"target": null,
+"confidence": 0.4,
+"reason": "Gap-up reversal above H3/pivot after -1.6% day; breakout above noise upper confirms, stop under pivot."
+}
+]
