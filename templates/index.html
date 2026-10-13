@@ -1878,8 +1878,19 @@ function renderPicks(d) {
   const tierRec = t => rec[t] ? `${rec[t].n} closed · ${rec[t].win_pct ?? "–"}% won · avg ${rec[t].avg_ret_pct == null ? "–" : sgn(rec[t].avg_ret_pct) + "%"}` : "–";
   $("#stBody").innerHTML = `
     <div class="k4" style="margin-top:14px">${kpi("Candidates for the next open", ups.length, `${strong.length} rule pick${strong.length === 1 ? "" : "s"} · ${rest.length} weaker · ${downs.length} downside`, "muted")}${kpi("Last updated", esc(d.generated || "–"), `data to ${esc(d.data_to)}`, "muted")}${kpi("Rule picks, last 60 sessions", tierRec("rule"), `backtest ${tiers.rule ? tiers.rule.backtest_win_pct : 64}% won`, "muted")}${kpi("Other tiers, last 60 sessions", `near ${tierRec("near")}`, `breakout ${tierRec("breakout")} · down ${tierRec("down")}`, "muted")}</div>
-    <div class="card" style="margin-top:14px"><h3>For the next open</h3>
-      ${ups.length ? `<div class="tablewrap"><table class="prose stlist">${head(false)}${ups.map(p => pick(p)).join("")}</table></div>` : `<p class="muted">Nothing met the upside setups at the last close - that is rare; the scan runs again after the next close.</p>`}
+    <div class="card" style="margin-top:14px"><div class="cardhead"><h3 style="margin:0">For the next open</h3>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+        <select id="pkCat">${["", ...[...new Set(d.today.map(p => p.industry).filter(Boolean))].sort()].map(c => `<option value="${esc(c)}"${(S.stPickCat || "") === c ? " selected" : ""}>${c ? esc(c) : "All categories"}</option>`).join("")}</select>
+        <select id="pkTier"><option value="">All setups</option>${["rule", "near", "breakout"].map(t => `<option value="${t}"${S.stPickTier === t ? " selected" : ""}>${esc((tiers[t] || {}).label || t)}</option>`).join("")}</select>
+        <select id="pkGroup"><option value="">Flat list</option><option value="cat"${S.stPickGroup === "cat" ? " selected" : ""}>Group by category</option><option value="tier"${S.stPickGroup === "tier" ? " selected" : ""}>Group by setup</option></select>
+      </div></div>
+      ${(() => { const rows = ups.filter(p => (!S.stPickCat || p.industry === S.stPickCat) && (!S.stPickTier || p.tier === S.stPickTier));
+        if (!rows.length) return `<p class="muted" style="margin-top:8px">${ups.length ? "No candidate in this category / setup." : "Nothing met the upside setups at the last close - that is rare; the scan runs again after the next close."}</p>`;
+        if (!S.stPickGroup) return `<div class="tablewrap" style="margin-top:8px"><table class="prose stlist">${head(false)}${rows.map(p => pick(p)).join("")}</table></div>`;
+        const key = S.stPickGroup === "cat" ? (p => p.industry || "Other") : (p => p.setup || p.tier);
+        const groups = {}; rows.forEach(p => (groups[key(p)] = groups[key(p)] || []).push(p));
+        const order = Object.keys(groups).sort((a, b) => Math.max(...groups[b].map(p => p.strength || 0)) - Math.max(...groups[a].map(p => p.strength || 0)));
+        return order.map(g => `<div style="margin-top:10px"><div class="muted" style="font-size:12px;font-weight:600;margin-bottom:4px">${esc(g)} <span class="mono">· ${groups[g].length}</span></div><div class="tablewrap"><table class="prose stlist">${head(false)}${groups[g].map(p => pick(p)).join("")}</table></div></div>`).join(""); })()}
       <p class="muted" style="font-size:12px">Scanned every trading day after the close (${esc(d.generated || "")}). Strength = how closely the stock matches the tested setup, weighted by that setup's measured win rate - a match score, not a prediction. Rule picks are the only tier with a record worth trading on; the weaker tiers are there so the list is never empty, size them small or just watch. Paper only: equity ÷ 10 per rule pick, whole shares, target as a limit order at once. Click a stock for its chart.</p></div>
     <div class="card" style="margin-top:14px"><h3>Downside watch - expected to go lower</h3>
       ${downs.length ? `<div class="tablewrap"><table class="prose stlist">${head(false)}${downs.map(p => pick(p)).join("")}</table></div>` : `<p class="muted">No downside setup at the last close.</p>`}
@@ -1888,6 +1899,11 @@ function renderPicks(d) {
       ${d.history.length ? `<div class="tablewrap"><table class="prose stlist">${head(true)}${d.history.slice().reverse().map(h => h.picks.map(p => pick(p, h.buy_date)).join("")).join("")}</table></div>` : `<p class="muted">No signals in the last 60 sessions.</p>`}
       <p class="muted" style="font-size:12px">Backtest 2021-26 (today's Nifty 500 list, survivorship-exposed): rule picks 64% hit +5%, +1.4% a pick after costs, 20-24% a year with an 8-14% worst fall - plan on 8-12%. Near-rule: break-even to +12%/yr. Breakout: 23%/yr in trend years, loses in flat ones. The two weaker tiers are shown with their live record above so you can judge them yourself.</p></div>`;
 }
+document.addEventListener("change", e => {
+  if (e.target.id === "pkCat") { S.stPickCat = e.target.value; if (S.stPicks) renderPicks(S.stPicks); }
+  if (e.target.id === "pkTier") { S.stPickTier = e.target.value; if (S.stPicks) renderPicks(S.stPicks); }
+  if (e.target.id === "pkGroup") { S.stPickGroup = e.target.value; if (S.stPicks) renderPicks(S.stPicks); }
+});
 /* stock panel: chart + facts for one symbol */
 function closeStock() { S.stOpen = null; S.stCur = null; const p = $("#stPanel"); p.classList.add("hidden"); p.innerHTML = ""; }
 async function openStock(sym) {
