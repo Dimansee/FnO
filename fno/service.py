@@ -545,8 +545,11 @@ def stocks_morning_push(now) -> dict:
     picks = data.get("today") or []
     if not picks or data.get("data_to", "") < (now.date() - __import__("datetime").timedelta(days=5)).isoformat():
         return {"picks": 0}
-    body = "; ".join(f"{p['sym']} ₹{p['close']} ({p['drop_3d_pct']:+.1f}% in 3 days)" for p in picks[:5])
-    return _push_safe(f"Stock picks for today ({len(picks)})", f"Buy at the open, +5% target, out after 5 days: {body}", f"stocks:{data.get('data_to')}", "/#stocks")
+    strong = [p for p in picks if p.get("tier", "rule") == "rule"]
+    show = (strong or picks)[:4]
+    body = "; ".join(f"{p['sym']} buy ~₹{p.get('entry_ref', p['close'])} → target ₹{p.get('target', round(p['close'] * 1.05, 2))}, risk ₹{p.get('risk_line', '-')} ({p.get('setup', 'pick')}, strength {p.get('strength', '-')})" for p in show)
+    title = f"{len(strong)} rule pick{'s' if len(strong) != 1 else ''} for today" if strong else f"No rule pick today - {len(picks)} weaker candidate{'s' if len(picks) != 1 else ''}"
+    return _push_safe(title, body, f"stocks:{data.get('data_to')}", "/#stocks")
 
 
 def _push_safe(title, body, event_id, url="/"):
