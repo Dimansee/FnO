@@ -543,3 +543,34 @@ survivorship-exposed (a stock that crashed 10 % and never bounced is more likely
 47 % of trades that time out is understated. It is extra, uncorrelated income (≈ ₹20–30k a year on ₹2 L at the planned rate), not a second
 engine; 2022's +6 % and 2025's +4 % are what a flat year looks like. Not shipped — the data needs a point-in-time index list (the NSE
 archive has the Nifty 500 change log) and the rule should be paper-traded for a quarter first.
+
+## Quick check — candlestick patterns on daily stocks (`candles_check.py` → `candles_check.json`)
+The 12 textbook patterns (hammer, bullish engulfing, morning star, piercing line; shooting star, bearish engulfing, evening star, dark
+cloud cover; doji, spinning top, bullish/bearish harami), standard definitions on adjusted OHLC, 499 Nifty 500 names 2020-10 → 2026-10
+(645k stock-days), train < 2025-07-01 / unseen after. Each pattern vs the control (**all** days, and all days after a 5-day fall/rise —
+the context the books require): average 10-day forward return and the chance of a ±5 % move in the pattern's direction within 10
+sessions. Earlier, round 5 tested candle/Heikin-Ashi entries on the index 5-minute data (`s_candle`, `s_heikin`) — both lost.
+
+| pattern (after the required 5-d fall/rise) | n train/unseen | avg 10-d, train (ctrl) | unseen (ctrl) | hit ±5 % in 10 d, train (ctrl) | unseen (ctrl) |
+|---|---|---|---|---|---|
+| hammer | 1,700 / 663 | +1.97 % (+1.89) | +0.76 % (+0.47) | 56.5 % (56.5) | 43.3 % (44.6) |
+| bullish engulfing | 3,611 / 1,282 | +1.76 % (+1.89) | +0.18 % (+0.47) | 56.0 % (56.5) | 41.4 % (44.6) |
+| morning star | 2,748 / 977 | +1.61 % (+1.89) | +1.13 % (+0.47) | 54.9 % (56.5) | 47.2 % (44.6) |
+| piercing line | 589 / 155 | +1.96 % (+1.89) | −0.16 % (+0.47) | 57.9 % (56.5) | 35.5 % (44.6) |
+| shooting star | 2,790 / 574 | +1.80 % (+1.46) ✗ | +0.38 % (+0.45) | 44.5 % (44.3) | 43.6 % (41.9) |
+| bearish engulfing | 10,427 / 2,206 | +1.26 % (+1.46) | +0.12 % (+0.45) | 44.6 % (44.3) | 42.2 % (41.9) |
+| evening star | 2,461 / 729 | +1.30 % (+1.46) | +0.12 % (+0.45) | 46.5 % (44.3) | 43.8 % (41.9) |
+| dark cloud cover | 1,471 / 269 | +1.30 % (+1.46) | −0.22 % (+0.45) | 41.7 % (44.3) | 44.2 % (41.9) |
+| doji | 11,353 / 3,400 | +1.86 % (+1.89) | +0.21 % (+0.47) | 55.9 % (56.5) | 42.3 % (44.6) |
+| spinning top | 13,545 / 4,006 | +1.85 % (+1.89) | +0.61 % (+0.47) | 55.7 % (56.5) | 45.6 % (44.6) |
+| bullish harami | 13,454 / 3,882 | +1.85 % (+1.89) | +0.56 % (+0.47) | 55.0 % (56.5) | 44.5 % (44.6) |
+| bearish harami | 6,065 / 2,163 | +1.10 % (+1.46) | +0.73 % (+0.45) ✗ | 44.5 % (44.3) | 39.4 % (41.9) |
+
+- **None of the 12 beats its control on both halves** (bar: ≥ 0.5 % better 10-day average *and* ≥ 3 points better hit rate, both halves).
+  The differences are all within ±1 % and ±3 points of random days with the same context, and flip sign between halves (morning star looks
+  best unseen, +1.13 vs +0.47, but is *below* control in training; piercing line is above in training and the worst unseen). Bearish
+  patterns after a rise don't even go the right way on average (stocks still rose +1.1…+1.8 % in training). What *does* carry
+  information is the context: after a 5-day fall every day averages +1.89 % vs +1.53 % overall — it's the drop, not the candle shape.
+- **As a filter on the tested 10 %-drop rule it only subtracts:** rule alone train 75 % hit +5 % in 10 d / unseen 62 % (n 2,110/297);
+  requiring a bullish candle on the signal day 67 % (n 148 — and 25 unseen, too few); requiring a doji/spinning top 71 % / 58 %;
+  dropping signals with a bearish candle 75 % / 62 % (unchanged, n −7 %). Not adopted; the picks stay as they are.

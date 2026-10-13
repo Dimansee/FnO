@@ -1,0 +1,712 @@
+{
+ "control_all_days": {
+  "train": {
+   "n": 494772,
+   "avg_5d_pct": 0.77,
+   "avg_10d_pct": 1.53,
+   "up_10d_pct": 55.3,
+   "hit_5pct_in_10d": 51.5,
+   "adverse_5pct_in_10d": 39.9
+  },
+  "unseen": {
+   "n": 150100,
+   "avg_5d_pct": 0.12,
+   "avg_10d_pct": 0.23,
+   "up_10d_pct": 47.0,
+   "hit_5pct_in_10d": 39.9,
+   "adverse_5pct_in_10d": 39.5
+  }
+ },
+ "control_all_days_bearish_view": {
+  "train": {
+   "n": 494772,
+   "avg_5d_pct": 0.77,
+   "avg_10d_pct": 1.53,
+   "up_10d_pct": 55.3,
+   "hit_5pct_in_10d": 39.9,
+   "adverse_5pct_in_10d": 51.5
+  },
+  "unseen": {
+   "n": 150100,
+   "avg_5d_pct": 0.12,
+   "avg_10d_pct": 0.23,
+   "up_10d_pct": 47.0,
+   "hit_5pct_in_10d": 39.5,
+   "adverse_5pct_in_10d": 39.9
+  }
+ },
+ "control_after_5d_fall": {
+  "train": {
+   "n": 104269,
+   "avg_5d_pct": 1.13,
+   "avg_10d_pct": 1.89,
+   "up_10d_pct": 57.6,
+   "hit_5pct_in_10d": 56.5,
+   "adverse_5pct_in_10d": 41.5
+  },
+  "unseen": {
+   "n": 32054,
+   "avg_5d_pct": 0.18,
+   "avg_10d_pct": 0.47,
+   "up_10d_pct": 48.4,
+   "hit_5pct_in_10d": 44.6,
+   "adverse_5pct_in_10d": 42.8
+  }
+ },
+ "control_after_5d_rise": {
+  "train": {
+   "n": 136426,
+   "avg_5d_pct": 0.71,
+   "avg_10d_pct": 1.46,
+   "up_10d_pct": 53.6,
+   "hit_5pct_in_10d": 44.3,
+   "adverse_5pct_in_10d": 53.7
+  },
+  "unseen": {
+   "n": 32897,
+   "avg_5d_pct": 0.26,
+   "avg_10d_pct": 0.45,
+   "up_10d_pct": 48.4,
+   "hit_5pct_in_10d": 41.9,
+   "adverse_5pct_in_10d": 44.2
+  }
+ },
+ "patterns": {
+  "hammer": {
+   "direction": "bullish",
+   "any": {
+    "train": {
+     "n": 8090,
+     "avg_5d_pct": 0.83,
+     "avg_10d_pct": 1.51,
+     "up_10d_pct": 55.4,
+     "hit_5pct_in_10d": 49.3,
+     "adverse_5pct_in_10d": 39.3
+    },
+    "unseen": {
+     "n": 2926,
+     "avg_5d_pct": 0.26,
+     "avg_10d_pct": 0.61,
+     "up_10d_pct": 48.8,
+     "hit_5pct_in_10d": 39.5,
+     "adverse_5pct_in_10d": 37.0
+    }
+   },
+   "in_context": {
+    "train": {
+     "n": 1700,
+     "avg_5d_pct": 1.31,
+     "avg_10d_pct": 1.97,
+     "up_10d_pct": 59.0,
+     "hit_5pct_in_10d": 56.5,
+     "adverse_5pct_in_10d": 41.1
+    },
+    "unseen": {
+     "n": 663,
+     "avg_5d_pct": 0.12,
+     "avg_10d_pct": 0.76,
+     "up_10d_pct": 49.2,
+     "hit_5pct_in_10d": 43.3,
+     "adverse_5pct_in_10d": 38.8
+    }
+   }
+  },
+  "bullish engulfing": {
+   "direction": "bullish",
+   "any": {
+    "train": {
+     "n": 15145,
+     "avg_5d_pct": 0.69,
+     "avg_10d_pct": 1.49,
+     "up_10d_pct": 55.1,
+     "hit_5pct_in_10d": 51.2,
+     "adverse_5pct_in_10d": 40.2
+    },
+    "unseen": {
+     "n": 5483,
+     "avg_5d_pct": -0.08,
+     "avg_10d_pct": -0.06,
+     "up_10d_pct": 45.2,
+     "hit_5pct_in_10d": 37.7,
+     "adverse_5pct_in_10d": 41.1
+    }
+   },
+   "in_context": {
+    "train": {
+     "n": 3611,
+     "avg_5d_pct": 0.89,
+     "avg_10d_pct": 1.76,
+     "up_10d_pct": 56.0,
+     "hit_5pct_in_10d": 56.0,
+     "adverse_5pct_in_10d": 43.5
+    },
+    "unseen": {
+     "n": 1282,
+     "avg_5d_pct": 0.01,
+     "avg_10d_pct": 0.18,
+     "up_10d_pct": 46.1,
+     "hit_5pct_in_10d": 41.4,
+     "adverse_5pct_in_10d": 42.6
+    }
+   }
+  },
+  "morning star": {
+   "direction": "bullish",
+   "any": {
+    "train": {
+     "n": 8744,
+     "avg_5d_pct": 0.83,
+     "avg_10d_pct": 1.44,
+     "up_10d_pct": 54.7,
+     "hit_5pct_in_10d": 50.8,
+     "adverse_5pct_in_10d": 39.2
+    },
+    "unseen": {
+     "n": 2820,
+     "avg_5d_pct": 0.16,
+     "avg_10d_pct": 0.78,
+     "up_10d_pct": 50.1,
+     "hit_5pct_in_10d": 42.5,
+     "adverse_5pct_in_10d": 40.6
+    }
+   },
+   "in_context": {
+    "train": {
+     "n": 2748,
+     "avg_5d_pct": 1.15,
+     "avg_10d_pct": 1.61,
+     "up_10d_pct": 56.1,
+     "hit_5pct_in_10d": 54.9,
+     "adverse_5pct_in_10d": 40.8
+    },
+    "unseen": {
+     "n": 977,
+     "avg_5d_pct": 0.23,
+     "avg_10d_pct": 1.13,
+     "up_10d_pct": 51.6,
+     "hit_5pct_in_10d": 47.2,
+     "adverse_5pct_in_10d": 45.4
+    }
+   }
+  },
+  "piercing line": {
+   "direction": "bullish",
+   "any": {
+    "train": {
+     "n": 1734,
+     "avg_5d_pct": 0.86,
+     "avg_10d_pct": 1.9,
+     "up_10d_pct": 57.2,
+     "hit_5pct_in_10d": 53.6,
+     "adverse_5pct_in_10d": 40.0
+    },
+    "unseen": {
+     "n": 494,
+     "avg_5d_pct": -0.01,
+     "avg_10d_pct": 0.37,
+     "up_10d_pct": 46.4,
+     "hit_5pct_in_10d": 36.4,
+     "adverse_5pct_in_10d": 36.0
+    }
+   },
+   "in_context": {
+    "train": {
+     "n": 589,
+     "avg_5d_pct": 1.02,
+     "avg_10d_pct": 1.96,
+     "up_10d_pct": 56.7,
+     "hit_5pct_in_10d": 57.9,
+     "adverse_5pct_in_10d": 45.3
+    },
+    "unseen": {
+     "n": 155,
+     "avg_5d_pct": -0.81,
+     "avg_10d_pct": -0.16,
+     "up_10d_pct": 41.9,
+     "hit_5pct_in_10d": 35.5,
+     "adverse_5pct_in_10d": 38.7
+    }
+   }
+  },
+  "shooting star": {
+   "direction": "bearish",
+   "any": {
+    "train": {
+     "n": 11080,
+     "avg_5d_pct": 0.83,
+     "avg_10d_pct": 1.76,
+     "up_10d_pct": 55.2,
+     "hit_5pct_in_10d": 40.5,
+     "adverse_5pct_in_10d": 53.7
+    },
+    "unseen": {
+     "n": 3082,
+     "avg_5d_pct": 0.12,
+     "avg_10d_pct": 0.29,
+     "up_10d_pct": 46.4,
+     "hit_5pct_in_10d": 41.0,
+     "adverse_5pct_in_10d": 41.3
+    }
+   },
+   "in_context": {
+    "train": {
+     "n": 2790,
+     "avg_5d_pct": 0.91,
+     "avg_10d_pct": 1.8,
+     "up_10d_pct": 53.8,
+     "hit_5pct_in_10d": 44.5,
+     "adverse_5pct_in_10d": 57.3
+    },
+    "unseen": {
+     "n": 574,
+     "avg_5d_pct": 0.14,
+     "avg_10d_pct": 0.38,
+     "up_10d_pct": 49.8,
+     "hit_5pct_in_10d": 43.6,
+     "adverse_5pct_in_10d": 46.0
+    }
+   }
+  },
+  "bearish engulfing": {
+   "direction": "bearish",
+   "any": {
+    "train": {
+     "n": 30217,
+     "avg_5d_pct": 0.67,
+     "avg_10d_pct": 1.37,
+     "up_10d_pct": 54.5,
+     "hit_5pct_in_10d": 40.8,
+     "adverse_5pct_in_10d": 51.0
+    },
+    "unseen": {
+     "n": 8627,
+     "avg_5d_pct": 0.08,
+     "avg_10d_pct": 0.09,
+     "up_10d_pct": 46.8,
+     "hit_5pct_in_10d": 39.0,
+     "adverse_5pct_in_10d": 39.8
+    }
+   },
+   "in_context": {
+    "train": {
+     "n": 10427,
+     "avg_5d_pct": 0.62,
+     "avg_10d_pct": 1.26,
+     "up_10d_pct": 53.1,
+     "hit_5pct_in_10d": 44.6,
+     "adverse_5pct_in_10d": 53.6
+    },
+    "unseen": {
+     "n": 2206,
+     "avg_5d_pct": 0.04,
+     "avg_10d_pct": 0.12,
+     "up_10d_pct": 47.2,
+     "hit_5pct_in_10d": 42.2,
+     "adverse_5pct_in_10d": 43.2
+    }
+   }
+  },
+  "evening star": {
+   "direction": "bearish",
+   "any": {
+    "train": {
+     "n": 5250,
+     "avg_5d_pct": 0.33,
+     "avg_10d_pct": 1.29,
+     "up_10d_pct": 53.8,
+     "hit_5pct_in_10d": 43.7,
+     "adverse_5pct_in_10d": 50.8
+    },
+    "unseen": {
+     "n": 1929,
+     "avg_5d_pct": -0.06,
+     "avg_10d_pct": 0.06,
+     "up_10d_pct": 47.3,
+     "hit_5pct_in_10d": 41.3,
+     "adverse_5pct_in_10d": 40.1
+    }
+   },
+   "in_context": {
+    "train": {
+     "n": 2461,
+     "avg_5d_pct": 0.34,
+     "avg_10d_pct": 1.3,
+     "up_10d_pct": 52.6,
+     "hit_5pct_in_10d": 46.5,
+     "adverse_5pct_in_10d": 52.3
+    },
+    "unseen": {
+     "n": 729,
+     "avg_5d_pct": -0.12,
+     "avg_10d_pct": 0.12,
+     "up_10d_pct": 47.9,
+     "hit_5pct_in_10d": 43.8,
+     "adverse_5pct_in_10d": 42.4
+    }
+   }
+  },
+  "dark cloud cover": {
+   "direction": "bearish",
+   "any": {
+    "train": {
+     "n": 3596,
+     "avg_5d_pct": 0.63,
+     "avg_10d_pct": 1.21,
+     "up_10d_pct": 54.7,
+     "hit_5pct_in_10d": 38.4,
+     "adverse_5pct_in_10d": 48.7
+    },
+    "unseen": {
+     "n": 855,
+     "avg_5d_pct": 0.39,
+     "avg_10d_pct": 0.33,
+     "up_10d_pct": 47.5,
+     "hit_5pct_in_10d": 37.8,
+     "adverse_5pct_in_10d": 42.3
+    }
+   },
+   "in_context": {
+    "train": {
+     "n": 1471,
+     "avg_5d_pct": 0.74,
+     "avg_10d_pct": 1.3,
+     "up_10d_pct": 54.5,
+     "hit_5pct_in_10d": 41.7,
+     "adverse_5pct_in_10d": 50.8
+    },
+    "unseen": {
+     "n": 269,
+     "avg_5d_pct": 0.42,
+     "avg_10d_pct": -0.22,
+     "up_10d_pct": 43.1,
+     "hit_5pct_in_10d": 44.2,
+     "adverse_5pct_in_10d": 41.6
+    }
+   }
+  },
+  "doji": {
+   "direction": "indecision",
+   "any": {
+    "train": {
+     "n": 54746,
+     "avg_5d_pct": 0.8,
+     "avg_10d_pct": 1.52,
+     "up_10d_pct": 55.0,
+     "hit_5pct_in_10d": 51.3,
+     "adverse_5pct_in_10d": 39.2
+    },
+    "unseen": {
+     "n": 16279,
+     "avg_5d_pct": 0.08,
+     "avg_10d_pct": 0.16,
+     "up_10d_pct": 46.9,
+     "hit_5pct_in_10d": 39.3,
+     "adverse_5pct_in_10d": 39.3
+    }
+   },
+   "in_context": {
+    "train": {
+     "n": 11353,
+     "avg_5d_pct": 1.18,
+     "avg_10d_pct": 1.86,
+     "up_10d_pct": 57.1,
+     "hit_5pct_in_10d": 55.9,
+     "adverse_5pct_in_10d": 40.5
+    },
+    "unseen": {
+     "n": 3400,
+     "avg_5d_pct": 0.01,
+     "avg_10d_pct": 0.21,
+     "up_10d_pct": 47.6,
+     "hit_5pct_in_10d": 42.3,
+     "adverse_5pct_in_10d": 44.4
+    }
+   },
+   "any_bearish_view": {
+    "train": {
+     "n": 54746,
+     "avg_5d_pct": 0.8,
+     "avg_10d_pct": 1.52,
+     "up_10d_pct": 55.0,
+     "hit_5pct_in_10d": 39.2,
+     "adverse_5pct_in_10d": 51.3
+    },
+    "unseen": {
+     "n": 16279,
+     "avg_5d_pct": 0.08,
+     "avg_10d_pct": 0.16,
+     "up_10d_pct": 46.9,
+     "hit_5pct_in_10d": 39.3,
+     "adverse_5pct_in_10d": 39.3
+    }
+   },
+   "in_context_after_rise_bearish_view": {
+    "train": {
+     "n": 15150,
+     "avg_5d_pct": 0.71,
+     "avg_10d_pct": 1.45,
+     "up_10d_pct": 53.0,
+     "hit_5pct_in_10d": 44.1,
+     "adverse_5pct_in_10d": 53.5
+    },
+    "unseen": {
+     "n": 3627,
+     "avg_5d_pct": 0.29,
+     "avg_10d_pct": 0.52,
+     "up_10d_pct": 49.5,
+     "hit_5pct_in_10d": 41.0,
+     "adverse_5pct_in_10d": 44.8
+    }
+   }
+  },
+  "spinning top": {
+   "direction": "indecision",
+   "any": {
+    "train": {
+     "n": 66940,
+     "avg_5d_pct": 0.79,
+     "avg_10d_pct": 1.53,
+     "up_10d_pct": 55.3,
+     "hit_5pct_in_10d": 51.0,
+     "adverse_5pct_in_10d": 38.8
+    },
+    "unseen": {
+     "n": 19626,
+     "avg_5d_pct": 0.11,
+     "avg_10d_pct": 0.28,
+     "up_10d_pct": 47.1,
+     "hit_5pct_in_10d": 39.6,
+     "adverse_5pct_in_10d": 38.9
+    }
+   },
+   "in_context": {
+    "train": {
+     "n": 13545,
+     "avg_5d_pct": 1.12,
+     "avg_10d_pct": 1.85,
+     "up_10d_pct": 57.6,
+     "hit_5pct_in_10d": 55.7,
+     "adverse_5pct_in_10d": 40.2
+    },
+    "unseen": {
+     "n": 4006,
+     "avg_5d_pct": 0.25,
+     "avg_10d_pct": 0.61,
+     "up_10d_pct": 48.9,
+     "hit_5pct_in_10d": 45.6,
+     "adverse_5pct_in_10d": 41.0
+    }
+   },
+   "any_bearish_view": {
+    "train": {
+     "n": 66940,
+     "avg_5d_pct": 0.79,
+     "avg_10d_pct": 1.53,
+     "up_10d_pct": 55.3,
+     "hit_5pct_in_10d": 38.8,
+     "adverse_5pct_in_10d": 51.0
+    },
+    "unseen": {
+     "n": 19626,
+     "avg_5d_pct": 0.11,
+     "avg_10d_pct": 0.28,
+     "up_10d_pct": 47.1,
+     "hit_5pct_in_10d": 38.9,
+     "adverse_5pct_in_10d": 39.6
+    }
+   },
+   "in_context_after_rise_bearish_view": {
+    "train": {
+     "n": 18814,
+     "avg_5d_pct": 0.73,
+     "avg_10d_pct": 1.47,
+     "up_10d_pct": 53.8,
+     "hit_5pct_in_10d": 43.1,
+     "adverse_5pct_in_10d": 53.6
+    },
+    "unseen": {
+     "n": 4444,
+     "avg_5d_pct": 0.26,
+     "avg_10d_pct": 0.47,
+     "up_10d_pct": 49.2,
+     "hit_5pct_in_10d": 41.7,
+     "adverse_5pct_in_10d": 43.7
+    }
+   }
+  },
+  "bullish harami": {
+   "direction": "bullish",
+   "any": {
+    "train": {
+     "n": 40996,
+     "avg_5d_pct": 0.85,
+     "avg_10d_pct": 1.55,
+     "up_10d_pct": 55.0,
+     "hit_5pct_in_10d": 51.5,
+     "adverse_5pct_in_10d": 38.2
+    },
+    "unseen": {
+     "n": 10949,
+     "avg_5d_pct": 0.04,
+     "avg_10d_pct": 0.14,
+     "up_10d_pct": 46.7,
+     "hit_5pct_in_10d": 39.9,
+     "adverse_5pct_in_10d": 39.3
+    }
+   },
+   "in_context": {
+    "train": {
+     "n": 13454,
+     "avg_5d_pct": 1.07,
+     "avg_10d_pct": 1.85,
+     "up_10d_pct": 57.3,
+     "hit_5pct_in_10d": 55.0,
+     "adverse_5pct_in_10d": 38.9
+    },
+    "unseen": {
+     "n": 3882,
+     "avg_5d_pct": 0.16,
+     "avg_10d_pct": 0.56,
+     "up_10d_pct": 48.9,
+     "hit_5pct_in_10d": 44.5,
+     "adverse_5pct_in_10d": 42.4
+    }
+   }
+  },
+  "bearish harami": {
+   "direction": "bearish",
+   "any": {
+    "train": {
+     "n": 13880,
+     "avg_5d_pct": 0.51,
+     "avg_10d_pct": 1.25,
+     "up_10d_pct": 54.8,
+     "hit_5pct_in_10d": 40.9,
+     "adverse_5pct_in_10d": 50.2
+    },
+    "unseen": {
+     "n": 5798,
+     "avg_5d_pct": 0.12,
+     "avg_10d_pct": 0.37,
+     "up_10d_pct": 46.9,
+     "hit_5pct_in_10d": 38.9,
+     "adverse_5pct_in_10d": 40.0
+    }
+   },
+   "in_context": {
+    "train": {
+     "n": 6065,
+     "avg_5d_pct": 0.42,
+     "avg_10d_pct": 1.1,
+     "up_10d_pct": 53.1,
+     "hit_5pct_in_10d": 44.5,
+     "adverse_5pct_in_10d": 51.1
+    },
+    "unseen": {
+     "n": 2163,
+     "avg_5d_pct": 0.38,
+     "avg_10d_pct": 0.73,
+     "up_10d_pct": 48.9,
+     "hit_5pct_in_10d": 39.4,
+     "adverse_5pct_in_10d": 45.0
+    }
+   }
+  }
+ },
+ "verdict": {
+  "hammer": "no edge over control",
+  "bullish engulfing": "no edge over control",
+  "morning star": "no edge over control",
+  "piercing line": "no edge over control",
+  "shooting star": "no edge over control",
+  "bearish engulfing": "no edge over control",
+  "evening star": "no edge over control",
+  "dark cloud cover": "no edge over control",
+  "doji": "no edge over control",
+  "spinning top": "no edge over control",
+  "bullish harami": "no edge over control",
+  "bearish harami": "no edge over control"
+ },
+ "rule_with_candles": {
+  "rule (all)": {
+   "train": {
+    "n": 2110,
+    "avg_5d_pct": 3.21,
+    "avg_10d_pct": 4.39,
+    "up_10d_pct": 65.5,
+    "hit_5pct_in_10d": 75.2,
+    "adverse_5pct_in_10d": 45.9
+   },
+   "unseen": {
+    "n": 297,
+    "avg_5d_pct": 0.9,
+    "avg_10d_pct": 1.55,
+    "up_10d_pct": 53.5,
+    "hit_5pct_in_10d": 62.0,
+    "adverse_5pct_in_10d": 53.2
+   }
+  },
+  "rule + bullish candle": {
+   "train": {
+    "n": 148,
+    "avg_5d_pct": 2.7,
+    "avg_10d_pct": 3.56,
+    "up_10d_pct": 61.5,
+    "hit_5pct_in_10d": 66.9,
+    "adverse_5pct_in_10d": 45.3
+   },
+   "unseen": {
+    "n": 25
+   }
+  },
+  "rule + doji/spinning top": {
+   "train": {
+    "n": 272,
+    "avg_5d_pct": 2.93,
+    "avg_10d_pct": 4.06,
+    "up_10d_pct": 64.3,
+    "hit_5pct_in_10d": 70.6,
+    "adverse_5pct_in_10d": 50.0
+   },
+   "unseen": {
+    "n": 50,
+    "avg_5d_pct": -0.09,
+    "avg_10d_pct": 1.7,
+    "up_10d_pct": 56.0,
+    "hit_5pct_in_10d": 58.0,
+    "adverse_5pct_in_10d": 56.0
+   }
+  },
+  "rule + bearish candle": {
+   "train": {
+    "n": 151,
+    "avg_5d_pct": 3.24,
+    "avg_10d_pct": 5.72,
+    "up_10d_pct": 62.3,
+    "hit_5pct_in_10d": 74.8,
+    "adverse_5pct_in_10d": 51.0
+   },
+   "unseen": {
+    "n": 19
+   }
+  },
+  "rule, no bearish candle": {
+   "train": {
+    "n": 1959,
+    "avg_5d_pct": 3.21,
+    "avg_10d_pct": 4.28,
+    "up_10d_pct": 65.7,
+    "hit_5pct_in_10d": 75.2,
+    "adverse_5pct_in_10d": 45.5
+   },
+   "unseen": {
+    "n": 278,
+    "avg_5d_pct": 0.68,
+    "avg_10d_pct": 1.25,
+    "up_10d_pct": 52.9,
+    "hit_5pct_in_10d": 61.9,
+    "adverse_5pct_in_10d": 53.6
+   }
+  }
+ }
+}
