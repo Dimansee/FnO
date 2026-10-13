@@ -146,6 +146,11 @@ def stocks():
     return jsonify(SV.stock_picks())
 
 
+@app.get("/api/stocks/market")
+def stocks_market():
+    return jsonify(SV.stock_market())
+
+
 @app.post("/api/login")
 def login():
     pw = (request.get_json(silent=True) or {}).get("password", "")
