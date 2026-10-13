@@ -18,7 +18,7 @@ import pandas as pd
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA, WORK = os.path.join(HERE, "data"), os.path.join(HERE, "work")
 OUTD = os.path.join(WORK, "out"); os.makedirs(OUTD, exist_ok=True)
-ANALYST_PER_RUN = int(os.environ.get("ANALYST_PER_RUN", "450"))
+ANALYST_PER_RUN = int(os.environ.get("ANALYST_PER_RUN", "800"))
 
 src = os.path.join(WORK, "all_1y.csv.gz")
 if os.path.exists(src):
@@ -64,7 +64,7 @@ an = json.load(open(AN)) if os.path.exists(AN) else {}
 if os.environ.get("FETCH_ANALYST", "1") == "1":
     try:
         import yfinance as yf
-        stale = [s for s in C.columns if (datetime.now() - datetime.fromisoformat(an.get(s, {}).get("at", "2000-01-01"))).days >= 7]
+        stale = [s for s in C.columns if (datetime.now() - datetime.fromisoformat(an.get(s, {}).get("at", "2000-01-01"))).days >= 7 or "float_shares" not in an.get(s, {})]
         stale.sort(key=lambda s: -float(turn.get(s, 0) or 0))               # most traded first
         todo = stale[:ANALYST_PER_RUN]
         print(f"analyst consensus: {len(stale)} stale, refreshing {len(todo)}")
@@ -74,7 +74,7 @@ if os.environ.get("FETCH_ANALYST", "1") == "1":
                 an[s] = {"at": datetime.now().isoformat(timespec="seconds"), "target_mean": info.get("targetMeanPrice"), "target_high": info.get("targetHighPrice"),
                          "target_low": info.get("targetLowPrice"), "analysts": info.get("numberOfAnalystOpinions"), "rating": info.get("recommendationKey"),
                          "market_cap_cr": round(info["marketCap"] / 1e7) if info.get("marketCap") else None, "sector": info.get("sector"), "industry": info.get("industry"),
-                         "pe": info.get("trailingPE"), "div_yield": info.get("dividendYield")}
+                         "pe": info.get("trailingPE"), "div_yield": info.get("dividendYield"), "float_shares": info.get("floatShares"), "shares": info.get("sharesOutstanding")}
             except Exception as e:
                 an[s] = {"at": datetime.now().isoformat(timespec="seconds"), "error": str(e)[:60]}
             if i % 50 == 0:
@@ -103,6 +103,7 @@ for s in C.columns:
                  "turnover_cr": round(float(turn[s] / 1e7), 2) if not pd.isna(turn[s]) else None,
                  "cap_bucket": "Large" if cap and cap >= 100000 else "Mid" if cap and cap >= 30000 else "Small" if cap else None, "market_cap_cr": cap,
                  "pe": round(a["pe"], 1) if a.get("pe") else None,
+                 "float_cap_cr": round(a["float_shares"] * float(c0[s]) / 1e7) if a.get("float_shares") else None,
                  "analyst": {"target": tgt, "upside_pct": round((tgt / float(c0[s]) - 1) * 100, 1) if tgt else None, "high": a.get("target_high"), "low": a.get("target_low"),
                              "n": a.get("analysts"), "rating": a.get("rating")} if tgt else None})
 rows = [r for r in rows if r["idx"] == "" or True]
