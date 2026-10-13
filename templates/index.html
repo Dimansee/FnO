@@ -1610,6 +1610,11 @@ async function loadStudy() {
       ${r.round13.items.map(f => `<tr><td><b>${esc(f[0])}</b></td><td>${esc(f[1])}</td><td>${esc(f[2])}</td></tr>`).join("")}</table></div>
     <p class="muted" style="font-size:12px">${esc(r.round13.verdict)}</p>` : ""}
     ${r.live ? studyLive(r.live, k) : ""}
+    ${r.round14 ? `<h4>${esc(r.round14.heading)}</h4>
+    <p style="margin-top:0">Baseline (the two rules): training ${esc(r.round14.baseline.train)}; unseen 120 sessions ${esc(r.round14.baseline.unseen)}. Four research workers ran in parallel; the fourth re-built the only positive result from raw data to try to break it.</p>
+    <div class="tablewrap"><table class="prose"><tr><th>Worker</th><th>What the data showed</th><th>Decision</th></tr>
+      ${r.round14.items.map(f => `<tr><td><b>${esc(f[0])}</b></td><td>${esc(f[1])}</td><td>${esc(f[2])}</td></tr>`).join("")}</table></div>
+    <h4>Summary</h4><p>${esc(r.round14.summary)}</p>` : ""}
     ${r.combos ? `<h4>Does stacking indicators make it more accurate? (${r.combos.tested} combinations tested)</h4>
     <p style="margin-top:0">Each of: ${esc(r.combos.filters)} - added to the noise-band signal alone, in pairs, in threes, and as "k of n must agree" votes.</p>
     <ul><li><b>Win rate barely moved:</b> ${r.combos.base_win}% without filters vs ${r.combos.three_filter_win}% with three filters.</li>
