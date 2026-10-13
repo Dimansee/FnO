@@ -236,6 +236,23 @@ def reflect(day, candles_by_sym) -> str | None:
         hi = [r for r in recos if (r.get("basis", {}).get("score") or 0) >= 3]
         if hi:
             parts.append(f"{sum(1 for r in hi if r['result']['R'] > 0)} of {len(hi)} high-score (3+) ideas ended positive.")
+    # paper trades that left early (trail / time stop / breakeven) vs the plan held to stop / target / 15:15
+    try:
+        tds = [t for t in store.trades() if t.get("opened", "")[:10] == day and t.get("mode") == "signal"]
+    except Exception:
+        tds = []
+    for t in tds:
+        pl = t.get("plan") or {}
+        why = (t.get("reason") or "").lower()
+        if not any(w in why for w in ("trail", "time stop", "breakeven", "band", "vwap")):
+            continue
+        rec = next((r for r in recos if r["symbol"] == t["symbol"] and r["strategy"] == pl.get("strategy") and r.get("signal_bar") == pl.get("signal_bar")), None)
+        pr = (rec or {}).get("result", {}).get("premium") if rec else None
+        if not pr or pr.get("pnl_1lot_if_followed") is None:
+            continue
+        held = pr["pnl_1lot_if_followed"] * (t.get("lots") or 1)
+        parts.append(f"{t['symbol']} {pl.get('strategy')} trade left early ({t.get('reason')}) for ₹{t['pnl']:+,.0f}; held to stop / target / 15:15 it would have made ₹{held:+,.0f} "
+                     + ("- the early exit cost money today, but over 3 years it saves more than it costs." if held > t["pnl"] else "- the early exit saved money today."))
     parts.append("Carry forward: one trade per rule per day, the index-level stop decides, premium paths are shown so you can see where the plan and the option diverged.")
     return " ".join(parts)
 
