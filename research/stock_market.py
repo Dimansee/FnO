@@ -32,6 +32,10 @@ f = (d["adj close"] / d["close"]).replace([np.inf, -np.inf], np.nan).fillna(1.0)
 for c in ("open", "high", "low", "close"):
     d[c] = d[c] * f
 C = d.pivot(index="date", columns="sym", values="close"); H = d.pivot(index="date", columns="sym", values="high"); V = d.pivot(index="date", columns="sym", values="volume")
+# yfinance sometimes has the latest session for only a handful of names (partial day): use the last date that at least half the universe has
+cover = C.notna().mean(axis=1)
+full = cover[cover >= 0.5].index
+C, H, V = C.loc[:full[-1]], H.loc[:full[-1]], V.loc[:full[-1]]
 last = C.index[-1]
 # drop names with no trade in the last 5 sessions (suspended / dead) - you cannot buy those today
 alive = C.iloc[-5:].notna().any()

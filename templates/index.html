@@ -237,6 +237,35 @@ body.chartmax{overflow:hidden}
 .loading{opacity:.6;transition:opacity .2s}
 .empty{color:var(--muted);padding:16px 0}
 button.mini{padding:1px 7px;font-size:12px;border-radius:6px;margin-left:4px;background:transparent}
+
+/* stocks */
+.sttools{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.sttools input{flex:1 1 170px;min-width:130px}
+.sttools select{flex:0 1 auto;max-width:100%}
+.stsum{display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;font-size:12.5px;color:var(--muted);margin-bottom:8px}
+.stsum .mini{margin:0}
+.stheat{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.sttile{flex:0 0 auto;border-radius:6px;text-align:center;cursor:pointer;padding:4px 6px;width:54px;color:var(--text);transition:transform .1s var(--ease)}
+.sttile:hover{transform:scale(1.06);z-index:1}
+.sttile .s{font-size:10px;font-weight:650;overflow:hidden;text-overflow:ellipsis}
+.sttile .v{font-size:10px}
+.sttile.t2{width:72px;padding:7px 8px}.sttile.t2 .s,.sttile.t2 .v{font-size:12px}
+.sttile.t1{width:94px;padding:10px 10px}.sttile.t1 .s{font-size:13px}.sttile.t1 .v{font-size:12px}
+.sttile.pick{outline:2px solid var(--accent)}
+@media(max-width:600px){.sttile{width:44px;padding:3px 4px}.sttile.t2{width:58px;padding:5px 6px}.sttile.t1{width:72px;padding:7px 6px}.sttile .s,.sttile .v{font-size:9.5px}.sttile.t2 .s,.sttile.t2 .v{font-size:10.5px}.sttile.t1 .s,.sttile.t1 .v{font-size:11.5px}}
+.stlist th[data-k]{cursor:pointer;user-select:none;white-space:nowrap}
+.stlist th[data-k]:hover,.stlist th.on{color:var(--text)}
+.stlist tr.strow{cursor:pointer}.stlist tr.strow:hover{background:rgba(255,255,255,.035)}
+.stlist td{white-space:nowrap}
+.stcat{display:inline-block;font-size:10.5px;padding:0 6px;border-radius:999px;background:rgba(255,255,255,.06);color:var(--muted)}
+.stidx{font-size:10.5px;padding:1px 6px;background:rgba(127,180,217,.16);color:var(--blue);margin-left:2px}
+.stprice{display:flex;gap:6px 16px;flex-wrap:wrap;align-items:baseline;margin-top:10px;font-size:13.5px}
+.stranges{display:flex;gap:4px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.stranges .mini{margin:0}
+#stCv{display:block;width:100%;height:260px;margin-top:6px}
+@media(max-width:600px){#stCv{height:200px}}
+.stblock{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;font-size:13.5px}
+.stblock .k{font-size:12px;color:var(--muted);margin-bottom:4px}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 
 /* loading bar with the bull */
@@ -470,10 +499,16 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
     <div class="card"><div class="cardhead"><h3 style="margin:0">Stocks</h3>
       <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
         <button class="mini on" data-sv="picks">Picks</button><button class="mini" data-sv="heat">Heatmap</button><button class="mini" data-sv="list">List</button>
-        <select id="stMetric" style="display:none"><option value="chg_1d">Today %</option><option value="chg_3d">3 days %</option><option value="chg_1m">1 month %</option><option value="chg_3m">3 months %</option><option value="vs_200dma">vs 200-day avg %</option><option value="from_52w_high">From 52-week high %</option></select>
-        <input id="stFind" placeholder="Find a stock" style="display:none;min-width:140px">
       </div></div>
-      <p class="muted" style="margin:6px 0 0" id="stRule"></p></div>
+      <p class="muted" style="margin:6px 0 0" id="stRule"></p>
+      <div id="stTools" class="sttools hidden">
+        <input id="stFind" placeholder="Symbol or name" autocomplete="off">
+        <select id="stUni" title="Universe"><option value="N50">Nifty 50</option><option value="N100">Nifty 100</option><option value="N200">Nifty 200</option><option value="N500" selected>Nifty 500</option><option value="">All stocks</option></select>
+        <select id="stCat" title="Category"><option value="">All industries</option></select>
+        <select id="stTurn" title="Minimum daily turnover"><option value="0">Any turnover</option><option value="1">≥ ₹1 cr a day</option><option value="10">≥ ₹10 cr a day</option><option value="50">≥ ₹50 cr a day</option></select>
+        <select id="stMetric" title="Metric"><option value="chg_1d">Today</option><option value="chg_3d">3 days</option><option value="chg_1m">1 month</option><option value="chg_3m">3 months</option><option value="chg_1y">1 year</option><option value="vs_200dma">vs 200-day avg</option><option value="from_52w_high">From 52-week high</option></select>
+      </div></div>
+    <div id="stPanel" class="hidden"></div>
     <div id="stBody"></div>
   </section>
   <section id="t-rules" class="hidden"><div class="card rule" id="rulebook"></div></section>
@@ -1706,53 +1741,187 @@ function brokerCard(name, title, idLabel, st, steps) {
     </div>
     ${st.logged_in_at ? `<div class="muted" style="font-size:12px;margin-top:8px">Last login ${esc(st.logged_in_at.replace("T", " ").slice(0, 16))} IST · logins expire every night around 3:30 AM.</div>` : ""}`;
 }
-S.stView = S.stView || "picks";
-document.querySelectorAll("[data-sv]").forEach(b => b.onclick = () => { S.stView = b.dataset.sv; document.querySelectorAll("[data-sv]").forEach(x => x.classList.toggle("on", x === b)); loadStocks(); });
-const heatColor = v => { if (v == null) return "rgba(255,255,255,.06)"; const a = Math.min(Math.abs(v) / 6, 1); return v >= 0 ? `rgba(48,186,120,${0.15 + 0.75 * a})` : `rgba(226,82,82,${0.15 + 0.75 * a})`; };
+/* ---------- stocks ---------- */
+Object.assign(S, {stView: "picks", stQ: "", stUni: "N500", stCat: "", stTurn: 0, stMetric: "chg_1d", stSort: null, stShown: 100, stRange: 250, stSeries: {}, stOpen: null, stMarket: null, stMarketAt: 0, stPicks: null});
+const ST_METRICS = {chg_1d: ["Today", 5], chg_3d: ["3 days", 8], chg_1m: ["1 month", 15], chg_3m: ["3 months", 25], chg_1y: ["1 year", 60], vs_200dma: ["vs 200-day avg", 25], from_52w_high: ["From 52-week high", 40]};
+const ST_COLS = [["sym", "Stock"], ["close", "Price"], ["chg_1d", "Today"], ["chg_1m", "1m"], ["chg_3m", "3m"], ["chg_1y", "1y"], ["vs_200dma", "vs 200-d"], ["from_52w_high", "From 52-w high"], ["rsi14", "RSI"], ["turnover_cr", "Turnover"], ["upside", "Analyst target"]];
 const pctc = v => v == null ? `<span class="muted">–</span>` : `<span class="mono ${cls(v)}">${sgn(v)}%</span>`;
-async function loadStockMarket(d) {
-  const m = await api("/api/stocks/market");
-  const metric = $("#stMetric").value || "chg_1d";
-  $("#stMetric").style.display = ""; $("#stFind").style.display = "";
-  $("#stMetric").onchange = () => loadStocks(); $("#stFind").oninput = () => loadStocks();
-  if (m.error) { $("#stBody").innerHTML = `<div class="card"><p class="muted">${esc(m.error)}</p></div>`; return; }
-  $("#stRule").textContent = `${m.stocks.length} Nifty 500 stocks, data to ${m.data_to}. ${m.analyst_note || ""}`;
-  const q = ($("#stFind").value || "").trim().toUpperCase();
-  const picks = new Set((d.today || []).map(p => p.sym));
-  const stocks = m.stocks.filter(x => !q || x.sym.includes(q) || x.name.toUpperCase().includes(q));
-  const groups = {};
-  stocks.forEach(x => (groups[x.industry] = groups[x.industry] || []).push(x));
-  const order = Object.keys(groups).sort((a, b) => { const ma = groups[a].reduce((s, x) => s + (x[metric] || 0), 0) / groups[a].length, mb = groups[b].reduce((s, x) => s + (x[metric] || 0), 0) / groups[b].length; return mb - ma; });
-  const avg = g => { const v = groups[g].map(x => x[metric]).filter(x => x != null); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
-  if (S.stView === "heat") {
-    $("#stBody").innerHTML = order.map(g => `<div class="card" style="margin-top:12px"><div class="cardhead"><h3 style="margin:0">${esc(g)} <span class="muted" style="font-size:12px">${groups[g].length} · avg ${pctc(avg(g) == null ? null : +avg(g).toFixed(2))}</span></h3></div>
-      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px">${groups[g].sort((a, b) => (b.turnover_cr || 0) - (a.turnover_cr || 0)).map(x => { const big = (x.turnover_cr || 0) > 100, mid = (x.turnover_cr || 0) > 30; return `<div title="${esc(x.name)} · ₹${x.close} · today ${sgn(x.chg_1d)}% · 1m ${sgn(x.chg_1m)}% · turnover ₹${x.turnover_cr} cr${x.analyst ? ` · analyst target ₹${x.analyst.target} (${sgn(x.analyst.upside_pct)}%)` : ""}" style="background:${heatColor(x[metric])};border-radius:6px;padding:${big ? "10px 12px" : mid ? "7px 9px" : "4px 6px"};min-width:${big ? 92 : mid ? 72 : 56}px;text-align:center;${picks.has(x.sym) ? "outline:2px solid var(--accent,#f2a93b)" : ""}"><div style="font-size:${big ? 13 : mid ? 12 : 10}px;font-weight:600">${esc(x.sym)}</div><div class="mono" style="font-size:${big ? 12 : 10}px">${x[metric] == null ? "–" : sgn(x[metric]) + "%"}</div></div>`; }).join("")}</div></div>`).join("") +
-      `<p class="muted" style="font-size:12px;margin-top:10px">Tile size = daily turnover (bigger = more traded), colour = ${esc($("#stMetric").selectedOptions[0].textContent)}. Orange outline = tonight's pick. Hover a tile for the details.</p>`;
-  } else {
-    const row = x => `<tr><td><b>${esc(x.sym)}</b>${picks.has(x.sym) ? ' <span class="badge ok">pick</span>' : ""}<div class="muted" style="font-size:11px">${esc(x.name)}${x.cap_bucket ? " · " + x.cap_bucket + " cap" : ""}</div></td><td class="mono">₹${x.close}</td><td>${pctc(x.chg_1d)}</td><td>${pctc(x.chg_3d)}</td><td>${pctc(x.chg_1m)}</td><td>${pctc(x.chg_3m)}</td><td>${pctc(x.vs_200dma)}</td><td>${pctc(x.from_52w_high)}</td><td class="mono">${x.rsi14 ?? "–"}</td><td class="mono">₹${x.turnover_cr ?? "–"} cr</td><td>${x.analyst ? `<span class="mono">₹${x.analyst.target}</span> ${pctc(x.analyst.upside_pct)}<div class="muted" style="font-size:11px">${esc(x.analyst.rating || "")} · ${x.analyst.n || "?"} analysts · ₹${x.analyst.low}–${x.analyst.high}</div>` : `<span class="muted">–</span>`}</td></tr>`;
-    $("#stBody").innerHTML = order.map(g => `<details class="card" style="margin-top:12px" ${q ? "open" : ""}><summary style="cursor:pointer;display:flex;justify-content:space-between;align-items:center"><b>${esc(g)}</b><span class="muted" style="font-size:12px">${groups[g].length} stocks · avg ${pctc(avg(g) == null ? null : +avg(g).toFixed(2))}</span></summary>
-      <div class="tablewrap" style="margin-top:8px"><table class="prose"><tr><th>Stock</th><th>Price</th><th>Today</th><th>3 d</th><th>1 m</th><th>3 m</th><th>vs 200-d</th><th>From 52-w high</th><th>RSI</th><th>Turnover</th><th>Analyst target (12-m, consensus)</th></tr>${groups[g].sort((a, b) => (b[metric] || 0) - (a[metric] || 0)).map(row).join("")}</table></div></details>`).join("") +
-      `<p class="muted" style="font-size:12px;margin-top:10px">Groups are the NSE industry categories, sorted by the chosen metric; rows sorted the same way inside each group. The analyst target is a third-party 12-month consensus shown for context, not a tested signal.</p>`;
-  }
+const heatColor = (v, k) => {
+  if (v == null) return "rgba(255,255,255,.06)";
+  const s = k === "from_52w_high" ? v + 10 : v, a = Math.min(Math.abs(s) / ST_METRICS[k][1], 1);
+  return s >= 0 ? `rgba(63,191,143,${(0.14 + 0.7 * a).toFixed(2)})` : `rgba(226,103,90,${(0.14 + 0.7 * a).toFixed(2)})`;
+};
+const stIdx = x => { const m = (x.idx || "").split(","); const t = ["N50", "N100", "N200", "N500"].find(i => m.includes(i)); return t ? ` <span class="badge stidx">${t}</span>` : ""; };
+const stAnalyst = x => x.analyst ? `<span class="mono">₹${x.analyst.target}</span> ${pctc(x.analyst.upside_pct)}<div class="muted" style="font-size:11px">${esc(x.analyst.rating || "–")} · ${x.analyst.n || "?"} analysts</div>` : `<span class="muted">–</span>`;
+const stPickSet = () => new Set((((S.stPicks || {}).today) || []).map(p => p.sym));
+function stSyncUI() {
+  document.querySelectorAll("[data-sv]").forEach(x => x.classList.toggle("on", x.dataset.sv === S.stView));
+  $("#stTools").classList.toggle("hidden", S.stView === "picks");
+  $("#stFind").value = S.stQ; $("#stUni").value = S.stUni; $("#stTurn").value = String(S.stTurn); $("#stMetric").value = S.stMetric;
+}
+document.querySelectorAll("[data-sv]").forEach(b => b.onclick = () => { if (S.stView === b.dataset.sv) return; S.stView = b.dataset.sv; S.stShown = 100; stSyncUI(); load(); });
+$("#stFind").oninput = () => { S.stQ = $("#stFind").value.trim().toUpperCase(); S.stShown = 100; renderMarket(); };
+["stUni", "stCat", "stTurn"].forEach(id => $("#" + id).onchange = () => { S.stUni = $("#stUni").value; S.stCat = $("#stCat").value; S.stTurn = +$("#stTurn").value; S.stShown = 100; renderMarket(); });
+$("#stMetric").onchange = () => { S.stMetric = $("#stMetric").value; S.stSort = null; S.stShown = 100; renderMarket(); };
+$("#stBody").onclick = e => {
+  const th = e.target.closest("th[data-k]");
+  if (th) { const k = th.dataset.k, cur = stSort(); S.stSort = cur.k === k ? {k, dir: -cur.dir} : {k, dir: k === "sym" ? 1 : -1}; return renderMarket(); }
+  if (e.target.closest("#stMore")) { S.stShown += 100; return renderMarket(); }
+  const el = e.target.closest("[data-sym]"); if (el) openStock(el.dataset.sym);
+};
+async function stLoadMarket() {
+  if (S.stMarket && Date.now() - S.stMarketAt < 5 * 60e3) return S.stMarket;
+  const m = await api("/api/stocks/market"); if (m.error) throw new Error(m.error);
+  S.stMarket = m; S.stMarketAt = Date.now();
+  const cats = (m.industries || []).map(i => i.industry).filter(Boolean).sort();
+  if (!cats.includes(S.stCat)) S.stCat = "";
+  $("#stCat").innerHTML = `<option value="">All industries</option>` + cats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join("");
+  $("#stCat").value = S.stCat;
+  return m;
 }
 async function loadStocks() {
-  const d = await api("/api/stocks");
-  if (S.stView !== "picks") return loadStockMarket(d);
-  $("#stMetric").style.display = "none"; $("#stFind").style.display = "none";
-  if (d.error) { $("#stBody").innerHTML = `<div class="card"><p class="muted">${esc(d.error)}</p></div>`; return; }
+  stSyncUI();
+  const d = await api("/api/stocks"); S.stPicks = d.error ? null : d;
+  if (S.stView === "picks") { closeStock(); return renderPicks(d); }
+  try { await stLoadMarket(); } catch (e) { $("#stBody").innerHTML = `<div class="card" style="margin-top:12px"><p class="muted">${esc(e.message)}</p></div>`; return; }
+  renderMarket();
+}
+function stFiltered() {
+  const m = S.stMarket, q = S.stQ, uni = S.stUni, cat = S.stCat, tmin = S.stTurn;
+  const base = m.stocks.filter(x => (!cat || x.industry === cat) && (!tmin || (x.turnover_cr || 0) >= tmin) && (!q || x.sym.includes(q) || (x.name || "").toUpperCase().includes(q)));
+  const rows = uni ? base.filter(x => (x.idx || "").split(",").includes(uni)) : base;
+  rows.hiddenByUniverse = base.length - rows.length;
+  return rows;
+}
+function stSort() {
+  if (S.stSort) return S.stSort;
+  return {k: ST_COLS.some(c => c[0] === S.stMetric) ? S.stMetric : "chg_1d", dir: -1};
+}
+function renderMarket() {
+  const m = S.stMarket; if (!m || S.stView === "picks") return;
+  $("#stRule").textContent = `${m.count || m.stocks.length} NSE stocks, data to ${m.data_to}. ${m.analyst_note || ""}`;
+  const rows = stFiltered(), k = S.stMetric, picks = stPickSet();
+  const hint = S.stQ && rows.hiddenByUniverse ? ` <span class="muted">· ${rows.hiddenByUniverse} more match in All stocks</span>` : "";
+  if (S.stView === "heat") renderHeat(rows, k, picks, hint); else renderList(rows, k, picks, hint);
+}
+function renderHeat(rows, k, picks, hint) {
+  const m = S.stMarket, label = ST_METRICS[k][0], CAP = 600;
+  const sorted = rows.slice().sort((a, b) => (b[k] ?? -1e9) - (a[k] ?? -1e9));
+  const withV = sorted.filter(x => x[k] != null), hiK = k === "from_52w_high", ups = withV.filter(x => hiK ? x[k] > -10 : x[k] > 0).length, downs = withV.filter(x => hiK ? x[k] <= -10 : x[k] < 0).length;
+  const chip = x => `<button class="mini" data-sym="${esc(x.sym)}">${esc(x.sym)} <span class="mono ${cls(x[k])}">${sgn(x[k])}%</span></button>`;
+  const tile = x => { const t = (x.turnover_cr || 0) >= 100 ? "t1" : (x.turnover_cr || 0) >= 30 ? "t2" : "t3";
+    return `<div class="sttile ${t}${picks.has(x.sym) ? " pick" : ""}" data-sym="${esc(x.sym)}" style="background:${heatColor(x[k], k)}" title="${esc(x.name)} · ₹${x.close ?? "–"} · ${esc(x.industry || "")} · turnover ₹${x.turnover_cr ?? "–"} cr"><div class="s">${esc(x.sym)}</div><div class="mono v">${x[k] == null ? "–" : sgn(x[k]) + "%"}</div></div>`; };
+  $("#stBody").innerHTML = `<div class="card" style="margin-top:12px">
+    <div class="stsum"><span><b class="up">${ups}</b> ${hiK ? "within 10% of the high" : "up"} · <b class="down">${downs}</b> ${hiK ? "further off" : "down"} <span class="muted">(${esc(label)}, ${rows.length} stocks${hint})</span></span>${m.advances != null ? `<span>Market today ${m.advances} advances / ${m.declines} declines</span>` : ""}<span>Data to ${esc(m.data_to)}</span></div>
+    ${withV.length ? `<div class="stsum"><span>Best</span>${withV.slice(0, 5).map(chip).join("")}</div><div class="stsum"><span>Worst</span>${withV.slice(-5).reverse().map(chip).join("")}</div>` : ""}
+    ${sorted.length ? `<div class="stheat">${sorted.slice(0, CAP).map(tile).join("")}</div>` : `<p class="muted" style="margin:8px 0 0">No stock matches these filters.</p>`}
+    <p class="muted" style="font-size:12px;margin:10px 0 0">Sorted best to worst by ${esc(label)}. Tile width = daily turnover (≥ ₹100 cr, ≥ ₹30 cr, less). Grey = no data. Orange outline = tonight's pick. Tap a tile for the chart.${sorted.length > CAP ? ` Showing the first ${CAP} of ${sorted.length} - narrow the filters to see the rest.` : ""}</p></div>`;
+}
+function renderList(rows, k, picks, hint) {
+  const m = S.stMarket, sort = stSort();
+  const val = x => sort.k === "upside" ? (x.analyst ? x.analyst.upside_pct : null) : x[sort.k];
+  const sorted = rows.slice().sort((a, b) => { const va = val(a), vb = val(b); if (va == null && vb == null) return 0; if (va == null) return 1; if (vb == null) return -1; return (typeof va === "string" ? va.localeCompare(vb) : va - vb) * sort.dir; });
+  const shown = sorted.slice(0, S.stShown), col = ST_COLS.find(c => c[0] === sort.k) || [sort.k, ST_METRICS[sort.k] ? ST_METRICS[sort.k][0] : sort.k];
+  const th = c => `<th data-k="${c[0]}" class="${sort.k === c[0] ? "on" : ""}">${c[1]}${sort.k === c[0] ? (sort.dir < 0 ? " ▾" : " ▴") : ""}</th>`;
+  const row = x => `<tr class="strow" data-sym="${esc(x.sym)}"><td><b>${esc(x.sym)}</b>${stIdx(x)}${picks.has(x.sym) ? ' <span class="badge ok">pick</span>' : ""}<div class="muted" style="font-size:11px">${esc(x.name)} <span class="stcat">${esc(x.industry || "–")}</span></div></td><td class="mono">${x.close == null ? "–" : "₹" + x.close}</td><td>${pctc(x.chg_1d)}</td><td>${pctc(x.chg_1m)}</td><td>${pctc(x.chg_3m)}</td><td>${pctc(x.chg_1y)}</td><td>${pctc(x.vs_200dma)}</td><td>${pctc(x.from_52w_high)}</td><td class="mono">${x.rsi14 ?? "–"}</td><td class="mono">${x.turnover_cr == null ? "–" : "₹" + x.turnover_cr + " cr"}</td><td>${stAnalyst(x)}</td></tr>`;
+  $("#stBody").innerHTML = `<div class="card" style="margin-top:12px">
+    <div class="stsum"><span>${rows.length} stocks${hint} · sorted by ${esc(col[1])} ${sort.dir < 0 ? "high to low" : "low to high"}</span><span>Data to ${esc(m.data_to)}</span></div>
+    ${rows.length ? `<div class="tablewrap"><table class="prose stlist"><tr>${ST_COLS.map(th).join("")}</tr>${shown.map(row).join("")}</table></div>` : `<p class="muted" style="margin:8px 0 0">No stock matches these filters.</p>`}
+    ${sorted.length > shown.length ? `<div style="text-align:center;margin-top:10px"><button id="stMore">Show more (${shown.length} of ${sorted.length})</button></div>` : ""}
+    <p class="muted" style="font-size:12px;margin:10px 0 0">Click a column to sort, a row for the chart. Analyst target = third-party 12-month consensus, shown for context, not a tested signal.</p></div>`;
+}
+function renderPicks(d) {
+  if (d.error) { $("#stBody").innerHTML = `<div class="card" style="margin-top:12px"><p class="muted">${esc(d.error)}</p></div>`; return; }
   $("#stRule").textContent = `${d.rule} ${d.expected}`;
   const rec = d.record_last_60_sessions || {};
-  const pick = p => `<tr><td><b>${esc(p.sym)}</b><div class="muted" style="font-size:11px">${esc(p.name)} · ${esc(p.industry)}</div></td><td class="mono">₹${p.close}</td><td class="mono down">${p.drop_3d_pct}%</td><td class="mono">+${p.above_200dma_pct}%</td><td class="mono">₹${p.turnover_cr} cr</td><td class="mono">₹${(p.close * 1.05).toFixed(2)}</td>${p.result ? `<td>${p.result.open ? `<span class="badge">open ${p.result.days_held}d</span> <span class="mono ${cls(p.result.ret_pct)}">${sgn(p.result.ret_pct)}%</span>` : `<span class="badge ${p.result.ret_pct > 0 ? "ok" : "no"}">${esc(p.result.how)}</span> ${esc(p.result.exit_date)} · <span class="mono ${cls(p.result.ret_pct)}">${sgn(p.result.ret_pct)}%</span>`}</td>` : ""}</tr>`;
-  const head = (res) => `<tr><th>Stock</th><th>Close</th><th>3-day move</th><th>vs 200-day avg</th><th>Daily turnover</th><th>+5% target</th>${res ? "<th>What happened</th>" : ""}</tr>`;
+  const result = r => r.open ? `<span class="badge">open ${r.days_held}d</span> <span class="mono ${cls(r.ret_pct)}">${sgn(r.ret_pct)}%</span>` : `<span class="badge ${r.ret_pct > 0 ? "ok" : "no"}">${esc(r.how)}</span> ${esc(r.exit_date)} · <span class="mono ${cls(r.ret_pct)}">${sgn(r.ret_pct)}%</span>`;
+  const pick = (p, date) => `<tr class="strow" data-sym="${esc(p.sym)}"><td><b>${esc(p.sym)}</b>${date ? ` <span class="muted mono" style="font-size:11px">${esc(date)}</span>` : ""}<div class="muted" style="font-size:11px">${esc(p.name)} <span class="stcat">${esc(p.industry)}</span></div></td><td class="mono">₹${p.close}</td><td class="mono down">${p.drop_3d_pct}%</td><td class="mono">+${p.above_200dma_pct}%</td><td class="mono">₹${p.turnover_cr} cr</td><td class="mono">₹${(p.close * 1.05).toFixed(2)}</td>${date ? `<td>${p.result ? result(p.result) : "–"}</td>` : ""}</tr>`;
+  const head = res => `<tr><th>Stock</th><th>Close</th><th>3-day move</th><th>vs 200-day avg</th><th>Daily turnover</th><th>+5% target</th>${res ? "<th>What happened</th>" : ""}</tr>`;
   $("#stBody").innerHTML = `
-    <div class="k4" style="margin-top:14px;grid-template-columns:repeat(4,1fr)">${kpi("Picks for the next open", d.today.length, `data to ${esc(d.data_to)}`, "muted")}${kpi("Last 60 sessions", rec.n ?? "–", "closed picks", "muted")}${kpi("Win %", rec.win_pct == null ? "–" : rec.win_pct + "%", `target hit ${rec.target_hit_pct ?? "–"}%`, "muted")}${kpi("Avg per pick", rec.avg_ret_pct == null ? "–" : sgn(rec.avg_ret_pct) + "%", "after 0.2% costs", rec.avg_ret_pct > 0 ? "up" : "down")}</div>
+    <div class="k4" style="margin-top:14px">${kpi("Picks for the next open", d.today.length, `data to ${esc(d.data_to)}`, "muted")}${kpi("Last 60 sessions", rec.n ?? "–", "closed picks", "muted")}${kpi("Win %", rec.win_pct == null ? "–" : rec.win_pct + "%", `target hit ${rec.target_hit_pct ?? "–"}%`, "muted")}${kpi("Avg per pick", rec.avg_ret_pct == null ? "–" : sgn(rec.avg_ret_pct) + "%", "after 0.2% costs", rec.avg_ret_pct > 0 ? "up" : "down")}</div>
     <div class="card" style="margin-top:14px"><h3>Buy at the next open</h3>
-      ${d.today.length ? `<div class="tablewrap"><table class="prose">${head(false)}${d.today.map(pick).join("")}</table></div>` : `<p class="muted">No stock met the rule at the last close. Most days have none; the rule fires about 7 times a month.</p>`}
-      <p class="muted" style="font-size:12px">Paper exercise: equity ÷ 10 per name, whole shares, place the +5% limit sell as soon as the buy fills, sell at the open after the 5th close if it has not filled. No stop-loss - the first bounce is the trade. Picks arrive as a push at the open.</p></div>
+      ${d.today.length ? `<div class="tablewrap"><table class="prose stlist">${head(false)}${d.today.map(p => pick(p)).join("")}</table></div>` : `<p class="muted">No stock met the rule at the last close. Most days have none; the rule fires about 7 times a month.</p>`}
+      <p class="muted" style="font-size:12px">Paper exercise: equity ÷ 10 per name, whole shares, place the +5% limit sell as soon as the buy fills, sell at the open after the 5th close if it has not filled. No stop-loss - the first bounce is the trade. Picks arrive as a push at the open. Click a stock for its chart.</p></div>
     <div class="card" style="margin-top:14px"><h3>Recent picks and what happened</h3>
-      ${d.history.length ? `<div class="tablewrap"><table class="prose">${head(true)}${d.history.slice().reverse().map(h => h.picks.map(p => pick({...p, sym: p.sym + " · " + h.buy_date})).join("")).join("")}</table></div>` : `<p class="muted">No signals in the last 60 sessions.</p>`}
+      ${d.history.length ? `<div class="tablewrap"><table class="prose stlist">${head(true)}${d.history.slice().reverse().map(h => h.picks.map(p => pick(p, h.buy_date)).join("")).join("")}</table></div>` : `<p class="muted">No signals in the last 60 sessions.</p>`}
       <p class="muted" style="font-size:12px">Backtest 2021-26 on today's Nifty 500 list (survivorship-exposed): 64-69% of picks hit +5%, +1.4% a pick after costs, ~7 picks a month, 1-3 open at a time, 20-24% a year with an 8-14% worst fall - plan on 8-12%. Uncorrelated with the option rules (daily correlation about -0.1), so the two drawdowns did not overlap in the test.</p></div>`;
 }
+/* stock panel: chart + facts for one symbol */
+function closeStock() { S.stOpen = null; S.stCur = null; const p = $("#stPanel"); p.classList.add("hidden"); p.innerHTML = ""; }
+async function openStock(sym) {
+  let m = S.stMarket;
+  if (!m) { pStart(); try { m = await stLoadMarket(); } catch (e) { toast(e.message); return; } finally { pDone(); } }
+  const x = m.stocks.find(s => s.sym === sym); if (!x) { toast(sym + " is not in the market data"); return; }
+  S.stOpen = sym; S.stCur = null;
+  const pk = (((S.stPicks || {}).today) || []).find(p => p.sym === sym);
+  const meets = x.vs_200dma != null && x.chg_3d != null && x.vs_200dma > 0 && x.chg_3d < -10;
+  const idxs = (x.idx || "").split(",").filter(Boolean), a = x.analyst;
+  const p = $("#stPanel"); p.classList.remove("hidden");
+  p.innerHTML = `<div class="card" style="margin-top:12px">
+    <div class="cardhead" style="align-items:flex-start;flex-wrap:nowrap"><div style="min-width:0"><h3 style="margin:0">${esc(x.sym)} <span class="muted" style="font-weight:400;font-size:14px">${esc(x.name)}</span></h3>
+      <div class="muted" style="font-size:12px;margin-top:3px"><span class="stcat">${esc(x.industry || "–")}</span>${idxs.map(i => ` <span class="badge stidx">${esc(i)}</span>`).join("")}${x.cap_bucket ? ` · ${esc(x.cap_bucket)} cap` : ""}${x.market_cap_cr != null ? ` · mcap ₹${big(x.market_cap_cr)} cr` : ""}${x.pe != null ? ` · P/E ${x.pe}` : ""}</div></div>
+      <button class="mini" id="stClose" aria-label="Close" style="flex:0 0 auto">✕ Close</button></div>
+    <div class="stprice"><span class="mono" style="font-size:24px;font-weight:650">${x.close == null ? "–" : "₹" + x.close}</span>${[["Today", x.chg_1d], ["3d", x.chg_3d], ["1m", x.chg_1m], ["3m", x.chg_3m], ["1y", x.chg_1y]].map(([l, v]) => `<span><span class="muted">${l}</span> ${pctc(v)}</span>`).join("")}</div>
+    <div class="stranges">${[["1m", 22], ["3m", 63], ["6m", 126], ["1y", 250]].map(([l, n]) => `<button class="mini${n === S.stRange ? " on" : ""}" data-rng="${n}">${l}</button>`).join("")}<span class="muted" style="font-size:11.5px;margin-left:auto"><span style="color:var(--gold)">close</span> · <span style="color:var(--blue)">200-day avg</span> · 52-w high · volume</span></div>
+    <canvas id="stCv"></canvas><div id="stCvMsg" class="muted" style="font-size:12px">Loading the last 250 sessions…</div>
+    <div class="grid g2" style="margin-top:12px;gap:10px">
+      <div class="stblock"><div class="k">Why it matters</div>${meets ? `<b class="up">Meets the tested pick rule now</b>: close is ${sgn(x.vs_200dma)}% above the 200-day average and the 3-day move is ${sgn(x.chg_3d)}%.` : `Does not meet the pick rule today: needs close above the 200-day average (now ${x.vs_200dma == null ? "–" : sgn(x.vs_200dma) + "%"}) and a 3-day drop below −10% (now ${x.chg_3d == null ? "–" : sgn(x.chg_3d) + "%"}).`}${pk ? `<div style="margin-top:6px"><span class="badge ok">tonight's pick</span> buy at the next open, +5% target <span class="mono">₹${(pk.close * 1.05).toFixed(2)}</span>, out after 5 days.</div>` : ""}</div>
+      <div class="stblock"><div class="k">Analyst consensus (third-party, 12-month)</div>${a ? `Target <span class="mono">₹${a.target}</span> ${pctc(a.upside_pct)} · range <span class="mono">₹${a.low ?? "–"}–${a.high ?? "–"}</span> · ${esc(a.rating || "–")} · ${a.n || "?"} analysts<div class="muted" style="font-size:11.5px;margin-top:4px">Shown for context; it is not part of the tested rule.</div>` : `<span class="muted">No analyst coverage in the data.</span>`}</div>
+    </div></div>`;
+  $("#stClose").onclick = closeStock;
+  p.querySelectorAll("[data-rng]").forEach(b => b.onclick = () => { S.stRange = +b.dataset.rng; p.querySelectorAll("[data-rng]").forEach(y => y.classList.toggle("on", y === b)); drawStockChart(); });
+  p.scrollIntoView({block: "nearest", behavior: "smooth"});
+  let s = S.stSeries[sym];
+  if (!s) { try { s = await api("/api/stocks/series?sym=" + encodeURIComponent(sym)); } catch (e) { s = {error: e.message}; } if (!s.error && s.close) S.stSeries[sym] = s; }
+  if (S.stOpen !== sym) return;
+  if (s.error || !s.close) { $("#stCvMsg").textContent = s.error || "No price history for this stock."; return; }
+  $("#stCvMsg").textContent = ""; S.stCur = s; drawStockChart();
+}
+function drawStockChart() {
+  const cv = $("#stCv"), s = S.stCur; if (!cv || !s) return;
+  const close = s.close, n = close.length, from = Math.max(0, n - S.stRange);
+  if (!s.ma200) s.ma200 = close.map((_, i) => { if (i < 199) return null; let t = 0; for (let j = i - 199; j <= i; j++) { if (close[j] == null) return null; t += close[j]; } return t / 200; });
+  const dpr = devicePixelRatio || 1, W = cv.clientWidth, H = cv.clientHeight; if (!W) return;
+  cv.width = W * dpr; cv.height = H * dpr;
+  const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const idx = []; for (let i = from; i < n; i++) idx.push(i);
+  const vis = idx.map(i => close[i]).filter(c => c != null); if (!vis.length) return;
+  const mas = idx.map(i => s.ma200[i]).filter(v => v != null);
+  const hi52 = Math.max(...close.filter(c => c != null)), hiAt = close.indexOf(hi52);
+  let lo = Math.min(...vis, ...mas), hi = Math.max(...vis, ...mas);
+  const showHi = hi52 <= hi * 1.12; if (showHi) hi = Math.max(hi, hi52);
+  const pad = (hi - lo) * .08 || 1; lo -= pad; hi += pad;
+  const L = 8, R = W < 600 ? 54 : 66, T = 14, B = 20, VB = Math.round((H - T - B) * .2), PH = H - T - B - VB;
+  const X = i => L + (i - from) / Math.max(idx.length - 1, 1) * (W - L - R), Y = v => T + (hi - v) / (hi - lo) * PH;
+  const mono = "11px 'IBM Plex Mono', monospace", sans = "11.5px 'Bricolage Grotesque', sans-serif";
+  g.clearRect(0, 0, W, H);
+  // price grid
+  g.font = mono; g.textAlign = "left"; g.textBaseline = "middle";
+  for (let t = 0; t <= 4; t++) { const v = lo + (hi - lo) * t / 4, y = Y(v); g.strokeStyle = "rgba(255,255,255,.06)"; g.beginPath(); g.moveTo(L, y); g.lineTo(W - R, y); g.stroke(); g.fillStyle = "#5d7484"; g.fillText(v >= 1000 ? Math.round(v) : v.toFixed(1), W - R + 6, y); }
+  // volume
+  const vol = s.volume || [], vmax = Math.max(1, ...idx.map(i => vol[i] || 0)), bw = Math.max(1, (W - L - R) / idx.length * .7);
+  g.fillStyle = "rgba(127,180,217,.22)";
+  idx.forEach(i => { const h = (vol[i] || 0) / vmax * VB; if (h) g.fillRect(X(i) - bw / 2, H - B - h, bw, h); });
+  g.fillStyle = "#5d7484"; g.font = sans; g.textAlign = "left"; g.fillText("volume", L + 2, H - B - VB + 8);
+  // 52-week high
+  if (showHi) { const y = Y(hi52); g.setLineDash([3, 4]); g.strokeStyle = "rgba(242,169,59,.55)"; g.beginPath(); g.moveTo(L, y); g.lineTo(W - R, y); g.stroke(); g.setLineDash([]);
+    g.fillStyle = "#f2a93b"; g.font = sans; g.textAlign = "right"; g.textBaseline = "bottom"; g.fillText(`52-w high ₹${hi52}${hiAt >= 0 && s.dates ? " · " + s.dates[hiAt] : ""}`, W - R - 4, y - 2); }
+  else { g.fillStyle = "#f2a93b"; g.font = sans; g.textAlign = "right"; g.textBaseline = "top"; g.fillText(`52-w high ₹${hi52} (${sgn((hi52 / vis[vis.length - 1] - 1) * 100)}% above)`, W - R - 4, T); }
+  // 200-day average
+  const line = (arr, col, w) => { g.strokeStyle = col; g.lineWidth = w; g.lineJoin = "round"; g.beginPath(); let pen = false; idx.forEach(i => { const v = arr[i]; if (v == null) { pen = false; return; } pen ? g.lineTo(X(i), Y(v)) : g.moveTo(X(i), Y(v)); pen = true; }); g.stroke(); };
+  line(s.ma200, "#7fb4d9", 1.3);
+  const up = vis[vis.length - 1] >= vis[0];
+  line(close, up ? "#3fbf8f" : "#e2675a", 1.8);
+  // last price tag
+  const last = vis[vis.length - 1], ly = Y(last);
+  g.fillStyle = up ? "#3fbf8f" : "#e2675a"; g.fillRect(W - R + 2, ly - 8, R - 4, 16);
+  g.fillStyle = "#0e1922"; g.font = mono; g.textAlign = "left"; g.textBaseline = "middle"; g.fillText(last >= 1000 ? Math.round(last) : last.toFixed(1), W - R + 6, ly);
+  // dates
+  if (s.dates) { g.fillStyle = "#5d7484"; g.font = sans; g.textBaseline = "bottom";
+    [[from, "left"], [Math.floor((from + n - 1) / 2), "center"], [n - 1, "right"]].forEach(([i, al]) => { g.textAlign = al; g.fillText(s.dates[i] || "", X(i), H - 2); }); }
+}
+addEventListener("resize", () => { if (S.tab === "stocks" && S.stCur) drawStockChart(); });
+addEventListener("hashchange", () => { if (location.hash === "#stocks" && S.tab !== "stocks") { S.stView = "picks"; go("stocks"); } });
 async function loadJournal() {
   const sel = $("#jrDay");
   if (!S.study) { try { S.study = await api("/api/research"); } catch (e) {} }
