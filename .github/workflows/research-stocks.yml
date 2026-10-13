@@ -1,14 +1,20 @@
 name: research-stocks
+# Nightly: daily stock history (Nifty 500 for research; every investable NSE cash stock for the market view),
+# the stock-pick scan, and the market view + chart series. Big daily-churn files go to the single-commit
+# `stock-data` branch (force-pushed) so the repository history stays small.
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: "15 14 * * 1-5"   # 19:45 IST, after the close; daily stock history for the stock scan
+    - cron: "15 14 * * 1-5"   # 19:45 IST
 permissions:
   contents: write
+concurrency:
+  group: research-stocks
+  cancel-in-progress: false
 jobs:
   fetch:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
         with:
@@ -16,15 +22,27 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install yfinance pandas requests
+      - run: pip install yfinance pandas requests numpy
       - run: python research/fetch_stocks.py
       - run: python research/stock_scan.py
       - run: python research/stock_market.py
-      - name: commit data
+      - name: commit research data
         run: |
           git config user.name "fno-data-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add research/data/stocks_1d.csv.gz research/data/stocks_list.csv research/data/stock_picks.json research/data/stock_market.json research/data/stock_analyst.json
+          git add research/data/stocks_1d.csv.gz research/data/stocks_list.csv research/data/stock_picks.json research/data/stock_analyst.json
           git commit -m "stock daily data [skip ci]" || echo "nothing to commit"
           git pull --rebase -q origin research-data || true
           git push origin HEAD:research-data
+      - name: publish market view to the stock-data branch
+        run: |
+          set -e
+          D=$(mktemp -d)
+          cp research/work/out/stock_market.json research/work/out/stock_series.json research/data/stock_picks.json "$D"/
+          cd "$D"
+          git init -q -b stock-data
+          git config user.name "fno-data-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -q -m "stock market view $(date -u +%F)"
+          git push -q --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" stock-data
