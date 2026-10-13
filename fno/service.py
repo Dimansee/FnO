@@ -488,7 +488,9 @@ def stock_picks(force=False) -> dict:
     return data
 
 
-MARKET_URL = "https://raw.githubusercontent.com/Dimansee/FnO/research-data/research/data/stock_market.json"
+MARKET_URL = "https://raw.githubusercontent.com/Dimansee/FnO/stock-data/stock_market.json"
+SERIES_URL = "https://raw.githubusercontent.com/Dimansee/FnO/stock-data/stock_series.json"
+_SERIES = {}
 
 
 def stock_market(force=False) -> dict:
@@ -514,6 +516,24 @@ def stock_market(force=False) -> dict:
     except Exception:
         pass
     return data
+
+
+def stock_series(sym: str) -> dict:
+    """Last 250 sessions of close/volume for one stock (chart). The whole series file is fetched once per server instance."""
+    import requests as _rq
+    import time as _t
+    if not _SERIES or _t.time() - _SERIES.get("_at", 0) > 1800:
+        try:
+            r = _rq.get(SERIES_URL, timeout=25)
+            r.raise_for_status()
+            _SERIES.clear(); _SERIES.update(r.json()); _SERIES["_at"] = _t.time()
+        except Exception as e:
+            if not _SERIES:
+                return {"error": f"Chart data unavailable: {str(e)[:80]}"}
+    x = (_SERIES.get("stocks") or {}).get(sym.upper())
+    if not x:
+        return {"error": "No chart data for this stock."}
+    return {"sym": sym.upper(), "dates": _SERIES["dates"], "close": x["c"], "volume": x["v"]}
 
 
 def stocks_morning_push(now) -> dict:

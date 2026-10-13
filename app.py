@@ -151,6 +151,14 @@ def stocks_market():
     return jsonify(SV.stock_market())
 
 
+@app.get("/api/stocks/series")
+def stocks_series():
+    sym = (request.args.get("sym") or "").strip().upper()
+    if not sym or len(sym) > 20:
+        raise ValueError("sym required")
+    return jsonify(SV.stock_series(sym))
+
+
 @app.post("/api/login")
 def login():
     pw = (request.get_json(silent=True) or {}).get("password", "")
