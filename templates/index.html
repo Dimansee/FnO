@@ -467,7 +467,12 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
     <div id="jrBody"></div>
   </section>
   <section id="t-stocks" class="hidden">
-    <div class="card"><h3>Stock picks (cash delivery, paper)</h3>
+    <div class="card"><div class="cardhead"><h3 style="margin:0">Stocks</h3>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+        <button class="mini on" data-sv="picks">Picks</button><button class="mini" data-sv="heat">Heatmap</button><button class="mini" data-sv="list">List</button>
+        <select id="stMetric" style="display:none"><option value="chg_1d">Today %</option><option value="chg_3d">3 days %</option><option value="chg_1m">1 month %</option><option value="chg_3m">3 months %</option><option value="vs_200dma">vs 200-day avg %</option><option value="from_52w_high">From 52-week high %</option></select>
+        <input id="stFind" placeholder="Find a stock" style="display:none;min-width:140px">
+      </div></div>
       <p class="muted" style="margin:6px 0 0" id="stRule"></p></div>
     <div id="stBody"></div>
   </section>
@@ -1701,8 +1706,39 @@ function brokerCard(name, title, idLabel, st, steps) {
     </div>
     ${st.logged_in_at ? `<div class="muted" style="font-size:12px;margin-top:8px">Last login ${esc(st.logged_in_at.replace("T", " ").slice(0, 16))} IST · logins expire every night around 3:30 AM.</div>` : ""}`;
 }
+S.stView = S.stView || "picks";
+document.querySelectorAll("[data-sv]").forEach(b => b.onclick = () => { S.stView = b.dataset.sv; document.querySelectorAll("[data-sv]").forEach(x => x.classList.toggle("on", x === b)); loadStocks(); });
+const heatColor = v => { if (v == null) return "rgba(255,255,255,.06)"; const a = Math.min(Math.abs(v) / 6, 1); return v >= 0 ? `rgba(48,186,120,${0.15 + 0.75 * a})` : `rgba(226,82,82,${0.15 + 0.75 * a})`; };
+const pctc = v => v == null ? `<span class="muted">–</span>` : `<span class="mono ${cls(v)}">${sgn(v)}%</span>`;
+async function loadStockMarket(d) {
+  const m = await api("/api/stocks/market");
+  const metric = $("#stMetric").value || "chg_1d";
+  $("#stMetric").style.display = ""; $("#stFind").style.display = "";
+  $("#stMetric").onchange = () => loadStocks(); $("#stFind").oninput = () => loadStocks();
+  if (m.error) { $("#stBody").innerHTML = `<div class="card"><p class="muted">${esc(m.error)}</p></div>`; return; }
+  $("#stRule").textContent = `${m.stocks.length} Nifty 500 stocks, data to ${m.data_to}. ${m.analyst_note || ""}`;
+  const q = ($("#stFind").value || "").trim().toUpperCase();
+  const picks = new Set((d.today || []).map(p => p.sym));
+  const stocks = m.stocks.filter(x => !q || x.sym.includes(q) || x.name.toUpperCase().includes(q));
+  const groups = {};
+  stocks.forEach(x => (groups[x.industry] = groups[x.industry] || []).push(x));
+  const order = Object.keys(groups).sort((a, b) => { const ma = groups[a].reduce((s, x) => s + (x[metric] || 0), 0) / groups[a].length, mb = groups[b].reduce((s, x) => s + (x[metric] || 0), 0) / groups[b].length; return mb - ma; });
+  const avg = g => { const v = groups[g].map(x => x[metric]).filter(x => x != null); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+  if (S.stView === "heat") {
+    $("#stBody").innerHTML = order.map(g => `<div class="card" style="margin-top:12px"><div class="cardhead"><h3 style="margin:0">${esc(g)} <span class="muted" style="font-size:12px">${groups[g].length} · avg ${pctc(avg(g) == null ? null : +avg(g).toFixed(2))}</span></h3></div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px">${groups[g].sort((a, b) => (b.turnover_cr || 0) - (a.turnover_cr || 0)).map(x => { const big = (x.turnover_cr || 0) > 100, mid = (x.turnover_cr || 0) > 30; return `<div title="${esc(x.name)} · ₹${x.close} · today ${sgn(x.chg_1d)}% · 1m ${sgn(x.chg_1m)}% · turnover ₹${x.turnover_cr} cr${x.analyst ? ` · analyst target ₹${x.analyst.target} (${sgn(x.analyst.upside_pct)}%)` : ""}" style="background:${heatColor(x[metric])};border-radius:6px;padding:${big ? "10px 12px" : mid ? "7px 9px" : "4px 6px"};min-width:${big ? 92 : mid ? 72 : 56}px;text-align:center;${picks.has(x.sym) ? "outline:2px solid var(--accent,#f2a93b)" : ""}"><div style="font-size:${big ? 13 : mid ? 12 : 10}px;font-weight:600">${esc(x.sym)}</div><div class="mono" style="font-size:${big ? 12 : 10}px">${x[metric] == null ? "–" : sgn(x[metric]) + "%"}</div></div>`; }).join("")}</div></div>`).join("") +
+      `<p class="muted" style="font-size:12px;margin-top:10px">Tile size = daily turnover (bigger = more traded), colour = ${esc($("#stMetric").selectedOptions[0].textContent)}. Orange outline = tonight's pick. Hover a tile for the details.</p>`;
+  } else {
+    const row = x => `<tr><td><b>${esc(x.sym)}</b>${picks.has(x.sym) ? ' <span class="badge ok">pick</span>' : ""}<div class="muted" style="font-size:11px">${esc(x.name)}${x.cap_bucket ? " · " + x.cap_bucket + " cap" : ""}</div></td><td class="mono">₹${x.close}</td><td>${pctc(x.chg_1d)}</td><td>${pctc(x.chg_3d)}</td><td>${pctc(x.chg_1m)}</td><td>${pctc(x.chg_3m)}</td><td>${pctc(x.vs_200dma)}</td><td>${pctc(x.from_52w_high)}</td><td class="mono">${x.rsi14 ?? "–"}</td><td class="mono">₹${x.turnover_cr ?? "–"} cr</td><td>${x.analyst ? `<span class="mono">₹${x.analyst.target}</span> ${pctc(x.analyst.upside_pct)}<div class="muted" style="font-size:11px">${esc(x.analyst.rating || "")} · ${x.analyst.n || "?"} analysts · ₹${x.analyst.low}–${x.analyst.high}</div>` : `<span class="muted">–</span>`}</td></tr>`;
+    $("#stBody").innerHTML = order.map(g => `<details class="card" style="margin-top:12px" ${q ? "open" : ""}><summary style="cursor:pointer;display:flex;justify-content:space-between;align-items:center"><b>${esc(g)}</b><span class="muted" style="font-size:12px">${groups[g].length} stocks · avg ${pctc(avg(g) == null ? null : +avg(g).toFixed(2))}</span></summary>
+      <div class="tablewrap" style="margin-top:8px"><table class="prose"><tr><th>Stock</th><th>Price</th><th>Today</th><th>3 d</th><th>1 m</th><th>3 m</th><th>vs 200-d</th><th>From 52-w high</th><th>RSI</th><th>Turnover</th><th>Analyst target (12-m, consensus)</th></tr>${groups[g].sort((a, b) => (b[metric] || 0) - (a[metric] || 0)).map(row).join("")}</table></div></details>`).join("") +
+      `<p class="muted" style="font-size:12px;margin-top:10px">Groups are the NSE industry categories, sorted by the chosen metric; rows sorted the same way inside each group. The analyst target is a third-party 12-month consensus shown for context, not a tested signal.</p>`;
+  }
+}
 async function loadStocks() {
   const d = await api("/api/stocks");
+  if (S.stView !== "picks") return loadStockMarket(d);
+  $("#stMetric").style.display = "none"; $("#stFind").style.display = "none";
   if (d.error) { $("#stBody").innerHTML = `<div class="card"><p class="muted">${esc(d.error)}</p></div>`; return; }
   $("#stRule").textContent = `${d.rule} ${d.expected}`;
   const rec = d.record_last_60_sessions || {};

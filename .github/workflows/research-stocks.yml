@@ -19,11 +19,12 @@ jobs:
       - run: pip install yfinance pandas requests
       - run: python research/fetch_stocks.py
       - run: python research/stock_scan.py
+      - run: python research/stock_market.py
       - name: commit data
         run: |
           git config user.name "fno-data-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add research/data/stocks_1d.csv.gz research/data/stocks_list.csv research/data/stock_picks.json
+          git add research/data/stocks_1d.csv.gz research/data/stocks_list.csv research/data/stock_picks.json research/data/stock_market.json research/data/stock_analyst.json
           git commit -m "stock daily data [skip ci]" || echo "nothing to commit"
           git pull --rebase -q origin research-data || true
           git push origin HEAD:research-data

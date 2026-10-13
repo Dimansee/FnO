@@ -432,3 +432,6 @@ NOW[0] = datetime(2026, 10, 1, 9, 31, tzinfo=C.IST); CANDLES.clear(); M._cache.c
 r_ = SV.stocks_morning_push(NOW[0])
 assert r_.get("sent") == 0 or "skipped" in r_ or "error" in r_ or r_.get("picks") is not None, r_
 print("stocks OK")
+SV.stock_market = lambda force=False: {"generated": "2026-10-01", "data_to": "2026-10-01", "stocks": [{"sym": "ABC", "name": "ABC Ltd", "industry": "x", "close": 100.0, "chg_1d": 1.0, "chg_3d": -11.0, "chg_1m": 2.0, "chg_3m": 3.0, "vs_200dma": 3.0, "from_52w_high": -5.0, "rsi14": 40, "turnover_cr": 12.0, "cap_bucket": "Large", "analyst": {"target": 120.0, "upside_pct": 20.0, "n": 5, "rating": "buy", "high": 130, "low": 100}}], "industries": [{"industry": "x", "n": 1, "avg_1d": 1.0, "avg_1m": 2.0}]}
+assert j(c.get("/api/stocks/market"))["stocks"][0]["analyst"]["target"] == 120.0
+print("stock market OK")

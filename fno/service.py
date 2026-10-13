@@ -488,6 +488,34 @@ def stock_picks(force=False) -> dict:
     return data
 
 
+MARKET_URL = "https://raw.githubusercontent.com/Dimansee/FnO/research-data/research/data/stock_market.json"
+
+
+def stock_market(force=False) -> dict:
+    """Nightly per-stock market view (research/stock_market.py), fetched from the public research branch and cached."""
+    import json as _json
+    import requests as _rq
+    key = "fno:stocks:market"
+    if not force:
+        try:
+            raw = store._cmd("GET", key)
+            if raw:
+                return _json.loads(raw)
+        except Exception:
+            pass
+    try:
+        r = _rq.get(MARKET_URL, timeout=20)
+        r.raise_for_status()
+        data = r.json()
+    except Exception as e:
+        return {"error": f"Market view unavailable: {str(e)[:100]}", "stocks": [], "industries": []}
+    try:
+        store._cmd("SET", key, _json.dumps(data, separators=(",", ":")), "EX", 1800)
+    except Exception:
+        pass
+    return data
+
+
 def stocks_morning_push(now) -> dict:
     """Once a day, on the first tick after the open: push the night's stock picks (if any) to the devices."""
     try:
