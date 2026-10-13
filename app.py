@@ -137,6 +137,15 @@ def push_test():
     return jsonify(PUSH.send("F&O Trainer test", "Push notifications are working on this device.", event_id=f"test:{int(_t.time())}", url="/"))
 
 
+STOCKS_URL = "https://raw.githubusercontent.com/Dimansee/FnO/research-data/research/data/stock_picks.json"
+
+
+@app.get("/api/stocks")
+def stocks():
+    """Nightly stock picks (round 16 rule) computed by the research job on GitHub; cached 20 minutes."""
+    return jsonify(SV.stock_picks())
+
+
 @app.post("/api/login")
 def login():
     pw = (request.get_json(silent=True) or {}).get("password", "")

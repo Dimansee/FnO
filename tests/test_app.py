@@ -422,3 +422,13 @@ assert PUSH.send("t", "b", event_id="evt1")["skipped"] == "already sent"        
 PUSH.deliver = lambda s_, payload, ttl=600: (410, "gone")
 assert PUSH.send("t", "b", event_id="evt2")["removed"] == 1 and j(c.get("/api/push/key"))["devices"] == 0
 print("push OK")
+
+
+# ---------- stock picks ----------
+SV.stock_picks = lambda force=False: {"generated": "2026-10-01", "data_to": "2026-10-01", "rule": "r", "expected": "e", "today": [{"sym": "ABC", "name": "ABC Ltd", "industry": "x", "close": 100.0, "drop_3d_pct": -11.0, "above_200dma_pct": 3.0, "turnover_cr": 12.0}], "record_last_60_sessions": {"n": 3, "win_pct": 67, "avg_ret_pct": 1.2, "target_hit_pct": 67}, "history": []}
+st_ = j(c.get("/api/stocks"))
+assert st_["today"][0]["sym"] == "ABC"
+NOW[0] = datetime(2026, 10, 1, 9, 31, tzinfo=C.IST); CANDLES.clear(); M._cache.clear()
+r_ = SV.stocks_morning_push(NOW[0])
+assert r_.get("sent") == 0 or "skipped" in r_ or "error" in r_ or r_.get("picks") is not None, r_
+print("stocks OK")

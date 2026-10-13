@@ -460,6 +460,47 @@ def backtest(symbol, mult, capital, sizing="risk", otm=-1, strategy="both", days
                   "research": BT.research_summary()})
 
 
+STOCKS_URL = "https://raw.githubusercontent.com/Dimansee/FnO/research-data/research/data/stock_picks.json"
+
+
+def stock_picks(force=False) -> dict:
+    """The nightly stock scan's output (see research/stock_scan.py), fetched from the public research branch and cached."""
+    import json as _json
+    import requests as _rq
+    key = "fno:stocks:cache"
+    if not force:
+        try:
+            raw = store._cmd("GET", key)
+            if raw:
+                return _json.loads(raw)
+        except Exception:
+            pass
+    try:
+        r = _rq.get(STOCKS_URL, timeout=15)
+        r.raise_for_status()
+        data = r.json()
+    except Exception as e:
+        return {"error": f"Stock picks unavailable: {str(e)[:100]}", "today": [], "history": []}
+    try:
+        store._cmd("SET", key, _json.dumps(data), "EX", 1200)
+    except Exception:
+        pass
+    return data
+
+
+def stocks_morning_push(now) -> dict:
+    """Once a day, on the first tick after the open: push the night's stock picks (if any) to the devices."""
+    try:
+        data = stock_picks()
+    except Exception as e:
+        return {"error": str(e)[:80]}
+    picks = data.get("today") or []
+    if not picks or data.get("data_to", "") < (now.date() - __import__("datetime").timedelta(days=5)).isoformat():
+        return {"picks": 0}
+    body = "; ".join(f"{p['sym']} ₹{p['close']} ({p['drop_3d_pct']:+.1f}% in 3 days)" for p in picks[:5])
+    return _push_safe(f"Stock picks for today ({len(picks)})", f"Buy at the open, +5% target, out after 5 days: {body}", f"stocks:{data.get('data_to')}", "/#stocks")
+
+
 def _push_safe(title, body, event_id, url="/"):
     try:
         return PUSH.send(title, body, event_id=event_id, url=url)
@@ -497,6 +538,11 @@ def tick():
                     _push_safe(f"{sym}: paper trade placed", str(msg)[:160], f"placed:{sym}:{now.strftime('%H%M')}", "/#portfolio")
             except Exception as e:                       # one instrument failing must not stop the others
                 placed.append({"symbol": sym, "error": str(e)[:120]})
+    if t <= time(9, 45):
+        try:
+            stocks_morning_push(now)
+        except Exception:
+            pass
     try:                                                     # session journal: context at the open, recommendations, outcomes
         jr = journal_tick(now)
     except Exception as e:
