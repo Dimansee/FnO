@@ -49,12 +49,15 @@ TIERS = {
     "rule": {"label": "Rule pick", "win": 64, "target_pct": 5.0, "hold": 5, "risk_pct": 8.0, "exit": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line −8% (not part of the tested rule)."},
     "near": {"label": "Near-rule (weaker)", "win": 58, "target_pct": 5.0, "hold": 5, "risk_pct": 8.0, "exit": "Same as the rule pick: +5% target, out after 5 closes. Weaker setup - smaller size."},
     "breakout": {"label": "Breakout watch", "win": 44, "target_pct": 15.0, "hold": 60, "risk_pct": 10.0, "exit": "Trail a 15% stop from the highest close; out after 60 sessions. Safety line −10%."},
+    "down": {"label": "Downside watch", "win": 42, "target_pct": -5.0, "hold": 5, "risk_pct": -8.0, "exit": "Expect a −5% pullback within 5 sessions; wrong if it rises 8% instead. Cash: do not buy / book profit if holding. F&O names: a put or short future is the only way to act on it. Weak evidence."},
 }
+FO = set(pd.read_csv(os.path.join(HERE, "data", "fo_list.csv"))["Symbol"].astype(str)) if os.path.exists(os.path.join(HERE, "data", "fo_list.csv")) else set()
 
 
 def row(s, i, tier, strength, basis):
     c = float(C.iloc[i][s]); t = TIERS[tier]
     return {"sym": s, "name": str(names["Company Name"].get(s, s)), "industry": str(names["Industry"].get(s, "")), "tier": tier, "setup": t["label"], "strength": int(round(strength)),
+            "direction": "down" if tier == "down" else "up", "fo": s in FO, "price_date": dates[i].date().isoformat(),
             "close": round(c, 2), "entry": "next open (reference ₹%.2f)" % c, "entry_ref": round(c, 2), "target": round(c * (1 + t["target_pct"] / 100), 2), "target_pct": t["target_pct"],
             "risk_line": round(c * (1 - t["risk_pct"] / 100), 2), "risk_pct": t["risk_pct"], "exit_rule": t["exit"], "hold_days": t["hold"], "basis": basis,
             "drop_3d_pct": round(float(R3.iloc[i][s] * 100), 1) if not pd.isna(R3.iloc[i][s]) else None,
@@ -72,11 +75,12 @@ def picks_on(i):
         if pd.isna(c[s]) or pd.isna(sma[s]) or not liq.get(s, False):
             continue
         above = c[s] / sma[s] - 1
-        if above <= 0:
-            if not pd.isna(hi[s]) and c[s] > hi[s] and v50[s] and v[s] >= 1.5 * v50[s] and above > 0:
-                pass
-            continue
         drop = r3[s]
+        if above <= 0:
+            if not pd.isna(drop) and drop >= 0.10:
+                st = 25 + min(10, (drop - 0.10) * 100) + 5 * min(1.0, np.log10(max(tu[s], 1e7) / 1e7) / 2) + (5 if (rs[s] or 50) >= 70 else 0)
+                out.append(row(s, i, "down", min(40, st), f"3-day rise {drop*100:+.1f}% while {above*100:.1f}% below the 200-day average (bounce in a downtrend); RSI {rs[s]:.0f}"))
+            continue
         liqscore = min(1.0, np.log10(max(tu[s], 1e7) / 1e7) / 2)            # ₹1 cr -> 0, ₹100 cr -> 1
         if drop <= -0.10:
             st = 55 + min(20, (-drop - 0.10) * 200) + 10 * liqscore + (10 if 20 <= (rs[s] or 50) <= 40 else 0) + min(5, above * 50)
@@ -104,6 +108,13 @@ def settle(p, i):
         hi_, lo_, cl_ = H.iloc[k][s], L.iloc[k][s], C.iloc[k][s]
         if pd.isna(cl_):
             continue
+        if p["tier"] == "down":
+            tgt_d, risk_u = entry * (1 + t["target_pct"] / 100), entry * (1 - t["risk_pct"] / 100)
+            if hi_ >= risk_u and k > i + 1:
+                return {"entry": round(entry, 2), "exit": round(risk_u, 2), "exit_date": dates[k].date().isoformat(), "how": "rose instead (risk line)", "ret_pct": round((entry / risk_u - 1) * 100 - 0.2, 2)}
+            if lo_ <= tgt_d:
+                return {"entry": round(entry, 2), "exit": round(tgt_d, 2), "exit_date": dates[k].date().isoformat(), "how": "fell to target −5%", "ret_pct": round((entry / tgt_d - 1) * 100 - 0.2, 2)}
+            continue
         if p["tier"] == "breakout":
             peak = max(peak, cl_)
             if cl_ <= peak * 0.85 or lo_ <= risk:
@@ -118,11 +129,12 @@ def settle(p, i):
                 px = max(tgt, float(O.iloc[k][s])) if k > i + 1 else tgt
                 return {"entry": round(entry, 2), "exit": round(px, 2), "exit_date": dates[k].date().isoformat(), "how": "target +5%", "ret_pct": round((px / entry - 1) * 100 - 0.2, 2)}
     k = i + 1 + t["hold"]
+    sign = -1 if p["tier"] == "down" else 1
     if k >= len(dates):
         last = float(C.iloc[-1][s])
-        return {"entry": round(entry, 2), "open": True, "last": round(last, 2), "ret_pct": round((last / entry - 1) * 100 - 0.2, 2), "days_held": len(dates) - (i + 1)}
+        return {"entry": round(entry, 2), "open": True, "last": round(last, 2), "ret_pct": round(sign * (last / entry - 1) * 100 - 0.2, 2), "days_held": len(dates) - (i + 1)}
     px = float(O.iloc[k][s])
-    return {"entry": round(entry, 2), "exit": round(px, 2), "exit_date": dates[k].date().isoformat(), "how": "time exit", "ret_pct": round((px / entry - 1) * 100 - 0.2, 2)}
+    return {"entry": round(entry, 2), "exit": round(px, 2), "exit_date": dates[k].date().isoformat(), "how": "time exit", "ret_pct": round(sign * (px / entry - 1) * 100 - 0.2, 2)}
 
 
 last = len(dates) - 1
@@ -142,7 +154,7 @@ for tier in TIERS:
 out = {"generated": datetime.now(IST).strftime("%Y-%m-%d %H:%M IST"), "data_to": dates[last].date().isoformat(), "buy_on": "next trading day's open",
        "tiers": {k: {"label": v["label"], "backtest_win_pct": v["win"], "exit": v["exit"]} for k, v in TIERS.items()},
        "rule": "Scanned every trading day after the close. Rule pick = the tested mean-reversion setup (Nifty 500, ≥ ₹1 cr/day): close above the 200-day average and down more than 10% over three closes; "
-               "near-rule = the same with a 7-10% drop (weaker); breakout = new 52-week high on 1.5x volume above the 200-day average. Paper only.",
+               "near-rule = the same with a 7-10% drop (weaker); breakout = new 52-week high on 1.5x volume above the 200-day average; downside watch = a 10%+ three-day bounce in a stock below its 200-day average, expected to give back 5% (weak evidence: 42% hit in training vs 26% for random days, and it faded on the unseen period). Paper only.",
        "expected": "Strength is how closely the stock matches the tested setup (drop, trend margin, liquidity, RSI, volume), weighted by that setup's measured win rate - a match score, not a prediction. "
                    "Rule picks: 64% hit +5% in the 2021-26 backtest, +1.4% a trade after costs; plan on 8-12% a year on the capital used. Near-rule and breakout tiers are weaker and shown so there is always something to watch.",
        "today": today, "record_last_60_sessions": rec, "history": history}

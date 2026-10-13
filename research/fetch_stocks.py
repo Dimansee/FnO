@@ -56,6 +56,16 @@ out = download(syms500, "6y")
 out.to_csv(f"{OUT}/stocks_1d.csv.gz", index=False, compression="gzip")
 print("Nifty 500:", out.sym.nunique(), "stocks", len(out), "rows", out.date.min(), out.date.max())
 
+# 1b. F&O-eligible symbols (for the downside watch: puts / futures are the only way to act on a fall)
+try:
+    r = S.get("https://archives.nseindia.com/content/fo/fo_mktlots.csv", timeout=30); r.raise_for_status()
+    fo = pd.read_csv(io.StringIO(r.text)); fo.columns = [c.strip() for c in fo.columns]
+    col = next(c for c in fo.columns if c.upper().startswith("SYMBOL"))
+    pd.DataFrame({"Symbol": fo[col].astype(str).str.strip()}).drop_duplicates().to_csv(f"{OUT}/fo_list.csv", index=False)
+    print("F&O list:", fo[col].nunique())
+except Exception as e:
+    print("F&O list failed:", e)
+
 # 2. all investable NSE cash stocks (EQ series), 1 year
 eq = nse_csv("/content/equities/EQUITY_L.csv")
 if eq is not None:
