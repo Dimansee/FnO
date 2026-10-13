@@ -1,0 +1,28 @@
+name: research-stocks
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "15 14 * * 1-5"   # 19:45 IST, after the close; daily stock history for the stock scan
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research-data
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install yfinance pandas requests
+      - run: python research/fetch_stocks.py
+      - name: commit data
+        run: |
+          git config user.name "fno-data-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/data/stocks_1d.csv.gz research/data/stocks_list.csv
+          git commit -m "stock daily data [skip ci]" || echo "nothing to commit"
+          git pull --rebase -q origin research-data || true
+          git push origin HEAD:research-data
