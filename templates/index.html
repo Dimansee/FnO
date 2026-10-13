@@ -251,6 +251,8 @@ button.mini{padding:1px 7px;font-size:12px;border-radius:6px;margin-left:4px;bac
 .sttile .v{font-size:10px}
 .sttile.t2{width:72px;padding:7px 8px}.sttile.t2 .s,.sttile.t2 .v{font-size:12px}
 .sttile.t1{width:94px;padding:10px 10px}.sttile.t1 .s{font-size:13px}.sttile.t1 .v{font-size:12px}
+.sttile.tm{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;border-radius:4px;padding:0;min-width:0;width:auto}
+@media(max-width:600px){.sttile.tm{width:auto;padding:0}}
 .sttile.pick{outline:2px solid var(--accent)}
 @media(max-width:600px){.sttile{width:44px;padding:3px 4px}.sttile.t2{width:58px;padding:5px 6px}.sttile.t1{width:72px;padding:7px 6px}.sttile .s,.sttile .v{font-size:9.5px}.sttile.t2 .s,.sttile.t2 .v{font-size:10.5px}.sttile.t1 .s,.sttile.t1 .v{font-size:11.5px}}
 .stlist th[data-k]{cursor:pointer;user-select:none;white-space:nowrap}
@@ -1804,18 +1806,48 @@ function renderMarket() {
   const hint = S.stQ && rows.hiddenByUniverse ? ` <span class="muted">· ${rows.hiddenByUniverse} more match in All stocks</span>` : "";
   if (S.stView === "heat") renderHeat(rows, k, picks, hint); else renderList(rows, k, picks, hint);
 }
+function stSize(x) {                       // tile area = weight in the selected universe: free-float cap, else market cap, else a turnover-based estimate
+  if (x.float_cap_cr) return x.float_cap_cr;
+  if (x.market_cap_cr) return x.market_cap_cr * 0.5;
+  return Math.max(1, (x.turnover_cr || 0.05) * 150);
+}
+function squarify(items, x, y, w, h, out) {      // Bruls/Huizing/van Wijk squarified treemap; items sorted by size desc, sizes already scaled to w*h
+  if (!items.length) return;
+  let row = [], rest = items.slice(), rowSum = 0;
+  const worst = (r, s, len) => { if (!r.length) return Infinity; const mx = Math.max(...r.map(i => i.a)), mn = Math.min(...r.map(i => i.a)), s2 = s * s; return Math.max(len * len * mx / s2, s2 / (len * len * mn)); };
+  while (rest.length) {
+    const len = Math.min(w, h), it = rest[0];
+    if (worst(row, rowSum, len) >= worst(row.concat([it]), rowSum + it.a, len)) { row.push(it); rowSum += it.a; rest.shift(); }
+    else break;
+  }
+  if (!row.length) { row.push(rest.shift()); rowSum = row[0].a; }
+  if (w >= h) {                                   // lay the row as a vertical strip on the left
+    const rw = rowSum / h; let cy = y;
+    row.forEach(i => { const ih = i.a / rw; out.push({...i, x, y: cy, w: rw, h: ih}); cy += ih; });
+    squarify(rest, x + rw, y, w - rw, h, out);
+  } else {                                        // horizontal strip on top
+    const rh = rowSum / w; let cx = x;
+    row.forEach(i => { const iw = i.a / rh; out.push({...i, x: cx, y, w: iw, h: rh}); cx += iw; });
+    squarify(rest, x, y + rh, w, h - rh, out);
+  }
+}
 function renderHeat(rows, k, picks, hint) {
-  const m = S.stMarket, label = ST_METRICS[k][0], CAP = 600;
-  const sorted = rows.slice().sort((a, b) => (b[k] ?? -1e9) - (a[k] ?? -1e9));
-  const withV = sorted.filter(x => x[k] != null), hiK = k === "from_52w_high", ups = withV.filter(x => hiK ? x[k] > -10 : x[k] > 0).length, downs = withV.filter(x => hiK ? x[k] <= -10 : x[k] < 0).length;
+  const m = S.stMarket, label = ST_METRICS[k][0], CAP = 400;
+  const withV = rows.filter(x => x[k] != null), hiK = k === "from_52w_high", ups = withV.filter(x => hiK ? x[k] > -10 : x[k] > 0).length, downs = withV.filter(x => hiK ? x[k] <= -10 : x[k] < 0).length;
+  const best = withV.slice().sort((a, b) => b[k] - a[k]);
   const chip = x => `<button class="mini" data-sym="${esc(x.sym)}">${esc(x.sym)} <span class="mono ${cls(x[k])}">${sgn(x[k])}%</span></button>`;
-  const tile = x => { const t = (x.turnover_cr || 0) >= 100 ? "t1" : (x.turnover_cr || 0) >= 30 ? "t2" : "t3";
-    return `<div class="sttile ${t}${picks.has(x.sym) ? " pick" : ""}" data-sym="${esc(x.sym)}" style="background:${heatColor(x[k], k)}" title="${esc(x.name)} · ₹${x.close ?? "–"} · ${esc(x.industry || "")} · turnover ₹${x.turnover_cr ?? "–"} cr"><div class="s">${esc(x.sym)}</div><div class="mono v">${x[k] == null ? "–" : sgn(x[k]) + "%"}</div></div>`; };
+  const total = rows.reduce((s_, x) => s_ + stSize(x), 0);
+  const items = rows.map(x => ({st: x, size: stSize(x), wt: 100 * stSize(x) / total})).sort((a, b) => b.size - a.size).slice(0, CAP);
+  const shownTotal = items.reduce((s_, i) => s_ + i.size, 0);
+  const W = Math.max(320, ($("#stBody").clientWidth || 900) - 32), Hh = Math.min(900, Math.max(360, Math.round(W * 0.62)));
+  const laid = []; squarify(items.map(i => ({...i, a: i.size / shownTotal * W * Hh})), 0, 0, W, Hh, laid);
+  const tile = t => { const x = t.st, big = t.w > 70 && t.h > 36, mid = t.w > 40 && t.h > 22;
+    return `<div class="sttile tm${picks.has(x.sym) ? " pick" : ""}" data-sym="${esc(x.sym)}" style="left:${t.x.toFixed(1)}px;top:${t.y.toFixed(1)}px;width:${Math.max(0, t.w - 2).toFixed(1)}px;height:${Math.max(0, t.h - 2).toFixed(1)}px;background:${heatColor(x[k], k)}" title="${esc(x.name)} · weight ${t.wt.toFixed(2)}% of this view · ₹${x.close ?? "–"} · ${esc(label)} ${x[k] == null ? "–" : sgn(x[k]) + "%"} · ${esc(x.industry || "")}${x.float_cap_cr ? ` · free-float ₹${(x.float_cap_cr / 1000).toFixed(0)}k cr` : x.market_cap_cr ? ` · market cap ₹${(x.market_cap_cr / 1000).toFixed(0)}k cr` : " · size estimated from turnover"}">${mid ? `<div class="s" style="font-size:${big ? 13 : 10}px">${esc(x.sym)}</div>` : ""}${big ? `<div class="mono v">${x[k] == null ? "–" : sgn(x[k]) + "%"}</div>` : ""}</div>`; };
   $("#stBody").innerHTML = `<div class="card" style="margin-top:12px">
     <div class="stsum"><span><b class="up">${ups}</b> ${hiK ? "within 10% of the high" : "up"} · <b class="down">${downs}</b> ${hiK ? "further off" : "down"} <span class="muted">(${esc(label)}, ${rows.length} stocks${hint})</span></span>${m.advances != null ? `<span>Market today ${m.advances} advances / ${m.declines} declines</span>` : ""}<span>Data to ${esc(m.data_to)}</span></div>
-    ${withV.length ? `<div class="stsum"><span>Best</span>${withV.slice(0, 5).map(chip).join("")}</div><div class="stsum"><span>Worst</span>${withV.slice(-5).reverse().map(chip).join("")}</div>` : ""}
-    ${sorted.length ? `<div class="stheat">${sorted.slice(0, CAP).map(tile).join("")}</div>` : `<p class="muted" style="margin:8px 0 0">No stock matches these filters.</p>`}
-    <p class="muted" style="font-size:12px;margin:10px 0 0">Sorted best to worst by ${esc(label)}. Tile width = daily turnover (≥ ₹100 cr, ≥ ₹30 cr, less). Grey = no data. Orange outline = tonight's pick. Tap a tile for the chart.${sorted.length > CAP ? ` Showing the first ${CAP} of ${sorted.length} - narrow the filters to see the rest.` : ""}</p></div>`;
+    ${best.length ? `<div class="stsum"><span>Best</span>${best.slice(0, 5).map(chip).join("")}</div><div class="stsum"><span>Worst</span>${best.slice(-5).reverse().map(chip).join("")}</div>` : ""}
+    ${items.length ? `<div class="sttree" style="position:relative;width:${W}px;height:${Hh}px;max-width:100%;overflow:hidden;margin-top:8px">${laid.map(tile).join("")}</div>` : `<p class="muted" style="margin:8px 0 0">No stock matches these filters.</p>`}
+    <p class="muted" style="font-size:12px;margin:10px 0 0">Box size = the stock's weight in this view (free-float market cap, the way index weights are set; market cap or a turnover estimate where the free float is not known yet). Colour = ${esc(label)}; grey = no data; orange outline = tonight's pick. Hover for the weight, tap for the chart.${rows.length > CAP ? ` Showing the ${CAP} largest of ${rows.length} - narrow the filters to see the rest.` : ""}</p></div>`;
 }
 function renderList(rows, k, picks, hint) {
   const m = S.stMarket, sort = stSort();

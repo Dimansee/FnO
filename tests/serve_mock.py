@@ -56,6 +56,20 @@ if _os.environ.get("MOCK_AI"):                       # show the AI card with a f
     _st.put("prefs", {"sizing": "risk", "risk_pct": 2.0, "strategies": ["noise", "camarilla", "ai"], "auto": False, "auto_syms": ["NIFTY"]})
 
 
+# stocks views from the research files when present (no network)
+try:
+    import json as _json
+    from fno import service as _SV
+    _mk = _json.load(open(os.path.join(os.path.dirname(__file__), "..", "research", "work", "out", "stock_market.json")))
+    _sr = _json.load(open(os.path.join(os.path.dirname(__file__), "..", "research", "work", "out", "stock_series.json")))
+    _pk = _json.load(open(os.path.join(os.path.dirname(__file__), "..", "research", "data", "stock_picks.json")))
+    _SV.stock_market = lambda force=False: _mk
+    _SV.stock_picks = lambda force=False: _pk
+    _SV.stock_series = lambda sym: {"sym": sym, "dates": _sr["dates"], "close": _sr["stocks"][sym]["c"], "volume": _sr["stocks"][sym]["v"]} if sym in _sr["stocks"] else {"error": "no data"}
+except Exception as _e:
+    print("stocks mock not loaded:", _e)
+
+
 @app.after_request
 def relax(resp):  # local http: drop the Secure cookie flag
     sc = resp.headers.get("Set-Cookie")
