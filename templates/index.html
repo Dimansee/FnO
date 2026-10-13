@@ -251,6 +251,7 @@ button.mini{padding:1px 7px;font-size:12px;border-radius:6px;margin-left:4px;bac
 .sttile .v{font-size:10px}
 .sttile.t2{width:72px;padding:7px 8px}.sttile.t2 .s,.sttile.t2 .v{font-size:12px}
 .sttile.t1{width:94px;padding:10px 10px}.sttile.t1 .s{font-size:13px}.sttile.t1 .v{font-size:12px}
+.stbar{position:relative;width:80px;height:14px;background:rgba(255,255,255,.06);border-radius:7px;overflow:hidden}.stbar i{position:absolute;left:0;top:0;bottom:0;border-radius:7px}.stbar span{position:relative;font-size:11px;line-height:14px;padding-left:6px}.badge.warn{background:rgba(242,169,59,.18);color:var(--accent,#f2a93b)}
 .sttile.tm{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;border-radius:4px;padding:0;min-width:0;width:auto}
 @media(max-width:600px){.sttile.tm{width:auto;padding:0}}
 .sttile.pick{outline:2px solid var(--accent)}
@@ -1832,14 +1833,14 @@ function squarify(items, x, y, w, h, out) {      // Bruls/Huizing/van Wijk squar
   }
 }
 function renderHeat(rows, k, picks, hint) {
-  const m = S.stMarket, label = ST_METRICS[k][0], CAP = 400;
+  const m = S.stMarket, label = ST_METRICS[k][0], CAP = 2500;
   const withV = rows.filter(x => x[k] != null), hiK = k === "from_52w_high", ups = withV.filter(x => hiK ? x[k] > -10 : x[k] > 0).length, downs = withV.filter(x => hiK ? x[k] <= -10 : x[k] < 0).length;
   const best = withV.slice().sort((a, b) => b[k] - a[k]);
   const chip = x => `<button class="mini" data-sym="${esc(x.sym)}">${esc(x.sym)} <span class="mono ${cls(x[k])}">${sgn(x[k])}%</span></button>`;
   const total = rows.reduce((s_, x) => s_ + stSize(x), 0);
   const items = rows.map(x => ({st: x, size: stSize(x), wt: 100 * stSize(x) / total})).sort((a, b) => b.size - a.size).slice(0, CAP);
   const shownTotal = items.reduce((s_, i) => s_ + i.size, 0);
-  const W = Math.max(320, ($("#stBody").clientWidth || 900) - 32), Hh = Math.min(900, Math.max(360, Math.round(W * 0.62)));
+  const W = Math.max(320, ($("#stBody").clientWidth || 900) - 32), Hh = Math.min(9000, Math.max(Math.round(W * 0.62), Math.round(items.length * 2600 / W)));
   const laid = []; squarify(items.map(i => ({...i, a: i.size / shownTotal * W * Hh})), 0, 0, W, Hh, laid);
   const tile = t => { const x = t.st, big = t.w > 70 && t.h > 36, mid = t.w > 40 && t.h > 22;
     return `<div class="sttile tm${picks.has(x.sym) ? " pick" : ""}" data-sym="${esc(x.sym)}" style="left:${t.x.toFixed(1)}px;top:${t.y.toFixed(1)}px;width:${Math.max(0, t.w - 2).toFixed(1)}px;height:${Math.max(0, t.h - 2).toFixed(1)}px;background:${heatColor(x[k], k)}" title="${esc(x.name)} · weight ${t.wt.toFixed(2)}% of this view · ₹${x.close ?? "–"} · ${esc(label)} ${x[k] == null ? "–" : sgn(x[k]) + "%"} · ${esc(x.industry || "")}${x.float_cap_cr ? ` · free-float ₹${(x.float_cap_cr / 1000).toFixed(0)}k cr` : x.market_cap_cr ? ` · market cap ₹${(x.market_cap_cr / 1000).toFixed(0)}k cr` : " · size estimated from turnover"}">${mid ? `<div class="s" style="font-size:${big ? 13 : 10}px">${esc(x.sym)}</div>` : ""}${big ? `<div class="mono v">${x[k] == null ? "–" : sgn(x[k]) + "%"}</div>` : ""}</div>`; };
@@ -1865,18 +1866,22 @@ function renderList(rows, k, picks, hint) {
 function renderPicks(d) {
   if (d.error) { $("#stBody").innerHTML = `<div class="card" style="margin-top:12px"><p class="muted">${esc(d.error)}</p></div>`; return; }
   $("#stRule").textContent = `${d.rule} ${d.expected}`;
-  const rec = d.record_last_60_sessions || {};
+  const rec = d.record_last_60_sessions || {}, tiers = d.tiers || {};
+  const tierBadge = p => `<span class="badge ${p.tier === "rule" ? "ok" : p.tier === "near" ? "" : "warn"}">${esc(p.setup || p.tier || "pick")}</span>`;
+  const strength = v => v == null ? "–" : `<div class="stbar" title="match to the tested setup, 0-100"><i style="width:${v}%;background:${v >= 60 ? "var(--up,#30ba78)" : v >= 45 ? "var(--accent,#f2a93b)" : "var(--muted,#8893a2)"}"></i><span class="mono">${v}</span></div>`;
   const result = r => r.open ? `<span class="badge">open ${r.days_held}d</span> <span class="mono ${cls(r.ret_pct)}">${sgn(r.ret_pct)}%</span>` : `<span class="badge ${r.ret_pct > 0 ? "ok" : "no"}">${esc(r.how)}</span> ${esc(r.exit_date)} · <span class="mono ${cls(r.ret_pct)}">${sgn(r.ret_pct)}%</span>`;
-  const pick = (p, date) => `<tr class="strow" data-sym="${esc(p.sym)}"><td><b>${esc(p.sym)}</b>${date ? ` <span class="muted mono" style="font-size:11px">${esc(date)}</span>` : ""}<div class="muted" style="font-size:11px">${esc(p.name)} <span class="stcat">${esc(p.industry)}</span></div></td><td class="mono">₹${p.close}</td><td class="mono down">${p.drop_3d_pct}%</td><td class="mono">+${p.above_200dma_pct}%</td><td class="mono">₹${p.turnover_cr} cr</td><td class="mono">₹${(p.close * 1.05).toFixed(2)}</td>${date ? `<td>${p.result ? result(p.result) : "–"}</td>` : ""}</tr>`;
-  const head = res => `<tr><th>Stock</th><th>Close</th><th>3-day move</th><th>vs 200-day avg</th><th>Daily turnover</th><th>+5% target</th>${res ? "<th>What happened</th>" : ""}</tr>`;
+  const pick = (p, date) => `<tr class="strow" data-sym="${esc(p.sym)}"><td><b>${esc(p.sym)}</b>${date ? ` <span class="muted mono" style="font-size:11px">${esc(date)}</span>` : ""}<div class="muted" style="font-size:11px">${esc(p.name)} <span class="stcat">${esc(p.industry || "")}</span></div></td><td>${tierBadge(p)}</td><td>${strength(p.strength)}</td><td class="mono">₹${p.entry_ref ?? p.close}<div class="muted" style="font-size:11px">next open</div></td><td class="mono up">₹${p.target ?? (p.close * 1.05).toFixed(2)}<div class="muted" style="font-size:11px">+${p.target_pct ?? 5}%</div></td><td class="mono down">₹${p.risk_line ?? "–"}<div class="muted" style="font-size:11px">${p.risk_pct ? "−" + p.risk_pct + "%" : ""}</div></td><td style="min-width:220px;font-size:12px">${esc(p.basis || "")}<div class="muted" style="font-size:11px">${esc(p.exit_rule || "")}</div></td>${date ? `<td>${p.result ? result(p.result) : "–"}</td>` : ""}</tr>`;
+  const head = res => `<tr><th>Stock</th><th>Setup</th><th>Strength</th><th>Entry</th><th>Target</th><th>Risk line</th><th>Why, and how to exit</th>${res ? "<th>What happened</th>" : ""}</tr>`;
+  const strong = d.today.filter(p => p.tier === "rule"), rest = d.today.filter(p => p.tier !== "rule");
+  const tierRec = t => rec[t] ? `${rec[t].n} closed · ${rec[t].win_pct ?? "–"}% won · avg ${rec[t].avg_ret_pct == null ? "–" : sgn(rec[t].avg_ret_pct) + "%"}` : "–";
   $("#stBody").innerHTML = `
-    <div class="k4" style="margin-top:14px">${kpi("Picks for the next open", d.today.length, `data to ${esc(d.data_to)}`, "muted")}${kpi("Last 60 sessions", rec.n ?? "–", "closed picks", "muted")}${kpi("Win %", rec.win_pct == null ? "–" : rec.win_pct + "%", `target hit ${rec.target_hit_pct ?? "–"}%`, "muted")}${kpi("Avg per pick", rec.avg_ret_pct == null ? "–" : sgn(rec.avg_ret_pct) + "%", "after 0.2% costs", rec.avg_ret_pct > 0 ? "up" : "down")}</div>
-    <div class="card" style="margin-top:14px"><h3>Buy at the next open</h3>
-      ${d.today.length ? `<div class="tablewrap"><table class="prose stlist">${head(false)}${d.today.map(p => pick(p)).join("")}</table></div>` : `<p class="muted">No stock met the rule at the last close. Most days have none; the rule fires about 7 times a month.</p>`}
-      <p class="muted" style="font-size:12px">Paper exercise: equity ÷ 10 per name, whole shares, place the +5% limit sell as soon as the buy fills, sell at the open after the 5th close if it has not filled. No stop-loss - the first bounce is the trade. Picks arrive as a push at the open. Click a stock for its chart.</p></div>
-    <div class="card" style="margin-top:14px"><h3>Recent picks and what happened</h3>
+    <div class="k4" style="margin-top:14px">${kpi("Candidates for the next open", d.today.length, `${strong.length} rule pick${strong.length === 1 ? "" : "s"} · ${rest.length} weaker`, "muted")}${kpi("Last updated", esc(d.generated || "–"), `data to ${esc(d.data_to)}`, "muted")}${kpi("Rule picks, last 60 sessions", tierRec("rule"), `backtest ${tiers.rule ? tiers.rule.backtest_win_pct : 64}% won`, "muted")}${kpi("Weaker tiers, last 60 sessions", `near ${tierRec("near")}`, `breakout ${tierRec("breakout")}`, "muted")}</div>
+    <div class="card" style="margin-top:14px"><h3>For the next open</h3>
+      ${d.today.length ? `<div class="tablewrap"><table class="prose stlist">${head(false)}${d.today.map(p => pick(p)).join("")}</table></div>` : `<p class="muted">Nothing met any of the three setups at the last close - that is rare; the scan runs again after the next close.</p>`}
+      <p class="muted" style="font-size:12px">Scanned every trading day after the close (${esc(d.generated || "")}). Strength = how closely the stock matches the tested setup, weighted by that setup's measured win rate - a match score, not a prediction. Rule picks are the only tier with a record worth trading on; the weaker tiers are there so the list is never empty, size them small or just watch. Paper only: equity ÷ 10 per rule pick, whole shares, target as a limit order at once. Click a stock for its chart.</p></div>
+    <div class="card" style="margin-top:14px"><h3>Recent candidates and what happened</h3>
       ${d.history.length ? `<div class="tablewrap"><table class="prose stlist">${head(true)}${d.history.slice().reverse().map(h => h.picks.map(p => pick(p, h.buy_date)).join("")).join("")}</table></div>` : `<p class="muted">No signals in the last 60 sessions.</p>`}
-      <p class="muted" style="font-size:12px">Backtest 2021-26 on today's Nifty 500 list (survivorship-exposed): 64-69% of picks hit +5%, +1.4% a pick after costs, ~7 picks a month, 1-3 open at a time, 20-24% a year with an 8-14% worst fall - plan on 8-12%. Uncorrelated with the option rules (daily correlation about -0.1), so the two drawdowns did not overlap in the test.</p></div>`;
+      <p class="muted" style="font-size:12px">Backtest 2021-26 (today's Nifty 500 list, survivorship-exposed): rule picks 64% hit +5%, +1.4% a pick after costs, 20-24% a year with an 8-14% worst fall - plan on 8-12%. Near-rule: break-even to +12%/yr. Breakout: 23%/yr in trend years, loses in flat ones. The two weaker tiers are shown with their live record above so you can judge them yourself.</p></div>`;
 }
 /* stock panel: chart + facts for one symbol */
 function closeStock() { S.stOpen = null; S.stCur = null; const p = $("#stPanel"); p.classList.add("hidden"); p.innerHTML = ""; }
