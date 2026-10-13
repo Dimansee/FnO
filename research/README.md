@@ -476,3 +476,13 @@ slippage, charges and ₹2 lakh / 1% sizing as the rules.
   decision with tool-using analysts) would not.
 **Verdict:** the agent desk did not beat the rules — it matched their direction and lost the difference on execution. Nothing ships; the
 "desk agrees" filter goes on the watch-list.
+
+## Quick check — three suggested strategies (`nr7_holygrail.py` → `nr7_holygrail.json`)
+1. **ORB + VWAP + volume** — already tested: the 15-min ORB with VWAP/trend filters *was* the app's original rulebook (rounds 1–2) and was replaced by the
+   noise-area rule; re-run now: Nifty −₹68k (PF 0.92), Bank Nifty −₹233k (PF 0.74) over 3¾ years. Volume filters (proxy, round 9; futures volume, round 12): no edge.
+2. **Crabel NR7 + ORB** (trade only when yesterday's range was the narrowest of 7): 148 Nifty / 135 Bank Nifty NR7 days. ORB on NR7 days: Nifty −₹14k, BN −₹26k
+   (training losses, small unseen gains of ₹4–8k). The two rules on NR7 days: Nifty +₹18k (PF 1.21) vs +₹134k on the other days; BN −₹4k vs +₹76k.
+   NR7 days are *worse* for breakouts here, not better — Indian index narrow days tend to stay narrow (same finding as round 13's opening-range sizing).
+3. **Raschke "Holy Grail"** (ADX > 30 rising, pullback to the 20 EMA, enter on the pullback bar's high/low, stop beyond it): fires rarely on 5-min bars — 12 Nifty / 21 BN
+   trades in 3¾ years at ADX 30; Nifty lost at every setting (PF 0.1–0.9), BN +₹6–23k at ADX 30 on training, flat/negative unseen; at ADX 20–25 both lose.
+   The engine's round-3 cousin (EMA 9/21 cross + ADX + VWAP) was −₹3.4k unseen. Not adopted.
