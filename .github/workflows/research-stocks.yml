@@ -6,6 +6,7 @@ on:
   workflow_dispatch: {}
   schedule:
     - cron: "15 14 * * 1-5"   # 19:45 IST
+    - cron: "30 0 * * 2-6"    # 06:00 IST next morning - Yahoo sometimes posts the NSE session late; picks are re-done before the 09:45 push
 permissions:
   contents: write
 concurrency:
