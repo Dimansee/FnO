@@ -2311,5 +2311,35 @@
    ]
   ],
   "verdict": "No item beats the baseline on both the training years and the unseen 120 sessions, so the app's rules are unchanged. Two leads go on the watch-list: more size in the VIX 50-75th percentile band, and a second Camarilla attempt after a stop."
+ },
+ "round14": {
+  "heading": "Round 14 - four research workers: more entries, expiry-day selling, market-structure inputs, independent verification",
+  "baseline": {
+   "train": "796 trades +₹163k, PF 1.23, deepest fall ₹64k",
+   "unseen": "126 trades +₹61k, PF 1.56, deepest fall ₹23k"
+  },
+  "items": [
+   [
+    "A. Entries beyond two - re-entry only after a stop (37 cases, 16% wins), re-entry within 60/120 min, pyramiding at +1R/+2R (1:1:1 and 1:½:½), extra entries on confirmed trend days, all combined",
+    "Re-entry after a stop: unseen ₹51k vs ₹61k baseline. Pyramiding: training +₹242k but deepest fall ₹114k (57% of capital) - worse than simply trading 1.56× size; its unseen gain was 5 trend days; 124 add-then-breakeven exits cost ₹367k. Trend-day extras: 4 trades in 3.7 years. Only opposite-direction Camarilla re-entry was positive, 15 training trades, none unseen",
+    "Nothing ships; one trade per rule per day stays"
+   ],
+   [
+    "B. Expiry-day option selling with REAL prices (NSE bhavcopy, 157 Nifty / 82 Bank Nifty weekly expiries 2023-26; sell the ATM straddle at the open, hold to settlement or 60% per-leg stop; 2.7% haircut on the opening quote, slippage, charges)",
+    "Nifty: +₹1.9-2.2 lakh, PF 1.7-2.4, 66% wins, positive every year, about 1% of margin per expiry day; straddle decays 31-33% on expiry days vs 6-8% on other days (the non-expiry control is flat after the haircut, so the edge is expiry-specific). Bank Nifty hold-to-settle +₹196k. Tail: the 21 days with a >1% move lost ₹210k (72% of all losses, every one a loser), worst day −₹23k per lot, top 10 days = 65% of the profit, over half the money is the last 13 months (Tuesday expiries)",
+    "A real but tail-heavy edge; not shippable yet - needs sell-side order handling, margin checks, a gap/event filter and 20-30 recorded real expiry days (we have 2); candidate for an off-by-default paper strategy"
+   ],
+   [
+    "C. New market-structure inputs - cross-index agreement, heavyweight breadth (10 stocks vs VWAP / open), Bank Nifty vs Nifty relative strength, flow proxy, implied move (straddle) vs realised range; as filters, inverse filters, entries and 2-of-3 … 4-of-4 votes (49 variants)",
+    "The inputs carry real but tiny information (+2-3 basis points to 15:15, t 2.5-3.9); as filters every one of them dropped more profitable trades than losers on at least one half; 0 of 49 beat the baseline on both halves. Extreme breadth mean-reverts; relative strength says nothing for the next 30 minutes",
+    "Nothing ships; watch-list: trade the laggard index (Camarilla), breakouts after the implied move is spent"
+   ],
+   [
+    "D. Independent verification of B (rebuilt from the raw bhavcopy, not the worker's code)",
+    "Reproduced: +₹193k with the real lot history (50→25→75→65), +₹217k with today's lot; PF 1.66; the settle column equals the index settlement value; the 2.7% quote haircut is a fair central estimate (live days: mean +1.6%, median +2.4%) and the result moves only ±15% with it. Drop the best 5 days → ₹116k, best 10 → ₹68k. Stop fills are optimistic: on 13 Oct the ATM call jumped 86% in the first 5 minutes",
+    "Claim partly holds: a ~22-point-per-day premium for carrying a 300-340-point tail; paper strategy later, not live on this evidence"
+   ]
+  ],
+  "summary": "Four workers, four honest answers. More entries (A) and new inputs (C) add nothing the two rules do not already capture - 0 of 50+ variants beat the baseline on both the training years and the unseen 120 sessions, so the app's rules are unchanged. The one new edge (B, verified by D) is expiry-day premium selling: about 1% of margin per Nifty expiry day with real prices, but 72% of its losses come from the 21 big-move days and most of its profit from 10 days, so it earns a place only as an off-by-default paper strategy once the app can handle sell-side orders and the recorder has 20-30 real expiry days. Expected effect on the system if it passes: roughly +₹5k a month on ₹2 lakh of margin, with occasional −₹20k days."
  }
 }

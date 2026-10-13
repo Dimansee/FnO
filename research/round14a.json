@@ -1,0 +1,5928 @@
+{
+ "split": "2026-04-20",
+ "train_days": 809,
+ "unseen_days": 120,
+ "baseline": {
+  "book": {
+   "train": {
+    "trades": 796,
+    "net": 163146,
+    "per_trade": 205,
+    "win": 28.9,
+    "pf": 1.23,
+    "max_dd": -64206,
+    "net_per_dd": 2.54,
+    "charges": 59127,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 60563,
+    "per_trade": 481,
+    "win": 31.7,
+    "pf": 1.56,
+    "max_dd": -22890,
+    "net_per_dd": 2.65,
+    "charges": 9764,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 31331,
+    "2024": 96485,
+    "2025": 14727,
+    "2026": 81166
+   },
+   "exits": {
+    "stop": 216,
+    "time stop": 204,
+    "square-off": 196,
+    "noise exit": 178,
+    "breakeven": 119,
+    "target": 9
+   }
+  },
+  "by_rule": {
+   "noise": {
+    "train": {
+     "trades": 253,
+     "net": 55435,
+     "per_trade": 219,
+     "win": 36.4,
+     "pf": 1.24,
+     "max_dd": -36463,
+     "net_per_dd": 1.52,
+     "charges": 19284,
+     "per_day": 1.0,
+     "max_per_day": 1,
+     "re": 0,
+     "extra": 0,
+     "adds": 0
+    },
+    "unseen": {
+     "trades": 50,
+     "net": 9195,
+     "per_trade": 184,
+     "win": 36.0,
+     "pf": 1.2,
+     "max_dd": -21949,
+     "net_per_dd": 0.42,
+     "charges": 4013,
+     "per_day": 1.0,
+     "max_per_day": 1,
+     "re": 0,
+     "extra": 0,
+     "adds": 0
+    },
+    "years": {
+     "2023": -8691,
+     "2024": 53118,
+     "2025": 16758,
+     "2026": 3445
+    },
+    "exits": {
+     "noise exit": 178,
+     "stop": 60,
+     "square-off": 56,
+     "target": 9
+    }
+   },
+   "camarilla": {
+    "train": {
+     "trades": 543,
+     "net": 107711,
+     "per_trade": 198,
+     "win": 25.4,
+     "pf": 1.23,
+     "max_dd": -77571,
+     "net_per_dd": 1.39,
+     "charges": 39843,
+     "per_day": 1.0,
+     "max_per_day": 1,
+     "re": 0,
+     "extra": 0,
+     "adds": 0
+    },
+    "unseen": {
+     "trades": 76,
+     "net": 51369,
+     "per_trade": 676,
+     "win": 28.9,
+     "pf": 1.81,
+     "max_dd": -14683,
+     "net_per_dd": 3.5,
+     "charges": 5751,
+     "per_day": 1.0,
+     "max_per_day": 1,
+     "re": 0,
+     "extra": 0,
+     "adds": 0
+    },
+    "years": {
+     "2023": 40023,
+     "2024": 43367,
+     "2025": -2031,
+     "2026": 77722
+    },
+    "exits": {
+     "time stop": 204,
+     "stop": 156,
+     "square-off": 140,
+     "breakeven": 119
+    }
+   }
+  },
+  "by_sym": {
+   "NIFTY": {
+    "train": {
+     "trades": 441,
+     "net": 100203,
+     "per_trade": 227,
+     "win": 28.8,
+     "pf": 1.28,
+     "max_dd": -31704,
+     "net_per_dd": 3.16,
+     "charges": 29022,
+     "per_day": 1.06,
+     "max_per_day": 2,
+     "re": 0,
+     "extra": 0,
+     "adds": 0
+    },
+    "unseen": {
+     "trades": 71,
+     "net": 51533,
+     "per_trade": 726,
+     "win": 33.8,
+     "pf": 2.0,
+     "max_dd": -15556,
+     "net_per_dd": 3.31,
+     "charges": 4846,
+     "per_day": 1.06,
+     "max_per_day": 2,
+     "re": 0,
+     "extra": 0,
+     "adds": 0
+    },
+    "years": {
+     "2023": 994,
+     "2024": 40492,
+     "2025": 49174,
+     "2026": 61076
+    },
+    "exits": {
+     "time stop": 127,
+     "stop": 117,
+     "square-off": 113,
+     "noise exit": 90,
+     "breakeven": 61,
+     "target": 4
+    }
+   },
+   "BANKNIFTY": {
+    "train": {
+     "trades": 355,
+     "net": 62943,
+     "per_trade": 177,
+     "win": 29.0,
+     "pf": 1.18,
+     "max_dd": -52922,
+     "net_per_dd": 1.19,
+     "charges": 30105,
+     "per_day": 1.09,
+     "max_per_day": 2,
+     "re": 0,
+     "extra": 0,
+     "adds": 0
+    },
+    "unseen": {
+     "trades": 55,
+     "net": 9030,
+     "per_trade": 164,
+     "win": 29.1,
+     "pf": 1.16,
+     "max_dd": -19178,
+     "net_per_dd": 0.47,
+     "charges": 4918,
+     "per_day": 1.02,
+     "max_per_day": 2,
+     "re": 0,
+     "extra": 0,
+     "adds": 0
+    },
+    "years": {
+     "2023": 30337,
+     "2024": 55993,
+     "2025": -34448,
+     "2026": 20090
+    },
+    "exits": {
+     "stop": 99,
+     "noise exit": 88,
+     "square-off": 83,
+     "time stop": 77,
+     "breakeven": 58,
+     "target": 5
+    }
+   }
+  }
+ },
+ "item1_reentry_after_stop": {
+  "re-entry after stop: noise+camarilla, direction any": {
+   "train": {
+    "trades": 824,
+    "net": 165059,
+    "per_trade": 200,
+    "win": 28.4,
+    "pf": 1.23,
+    "max_dd": -62281,
+    "net_per_dd": 2.65,
+    "charges": 61335,
+    "per_day": 1.11,
+    "max_per_day": 3,
+    "re": 33,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 130,
+    "net": 51256,
+    "per_trade": 394,
+    "win": 30.8,
+    "pf": 1.44,
+    "max_dd": -30248,
+    "net_per_dd": 1.69,
+    "charges": 10130,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 4,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 26461,
+    "2024": 90175,
+    "2025": 16833,
+    "2026": 82846
+   },
+   "exits": {
+    "stop": 228,
+    "time stop": 210,
+    "square-off": 201,
+    "noise exit": 181,
+    "breakeven": 124,
+    "target": 10
+   },
+   "reentries": {
+    "n": 37,
+    "net": -1023,
+    "train_net": 8284,
+    "unseen_net": -9307,
+    "unseen_n": 4,
+    "win": 16.2,
+    "by_rule": {
+     "noise": -9961,
+     "camarilla": 8937
+    },
+    "exits": {
+     "stop": 14,
+     "square-off": 7,
+     "time stop": 6,
+     "breakeven": 5,
+     "noise exit": 4,
+     "target": 1
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise",
+     "camarilla"
+    ],
+    "dir": "any",
+    "window": null,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry after stop: noise+camarilla, direction same": {
+   "train": {
+    "trades": 813,
+    "net": 145457,
+    "per_trade": 179,
+    "win": 28.5,
+    "pf": 1.2,
+    "max_dd": -68499,
+    "net_per_dd": 2.12,
+    "charges": 60486,
+    "per_day": 1.09,
+    "max_per_day": 3,
+    "re": 18,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 130,
+    "net": 51256,
+    "per_trade": 394,
+    "win": 30.8,
+    "pf": 1.44,
+    "max_dd": -30248,
+    "net_per_dd": 1.69,
+    "charges": 10130,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 4,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 29843,
+    "2024": 91095,
+    "2025": 10615,
+    "2026": 65160
+   },
+   "exits": {
+    "stop": 225,
+    "time stop": 208,
+    "square-off": 198,
+    "noise exit": 183,
+    "breakeven": 119,
+    "target": 10
+   },
+   "reentries": {
+    "n": 22,
+    "net": -21799,
+    "train_net": -12492,
+    "unseen_net": -9307,
+    "unseen_n": 4,
+    "win": 13.6,
+    "by_rule": {
+     "noise": -8368,
+     "camarilla": -13431
+    },
+    "exits": {
+     "stop": 9,
+     "noise exit": 5,
+     "time stop": 4,
+     "square-off": 3,
+     "target": 1
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise",
+     "camarilla"
+    ],
+    "dir": "same",
+    "window": null,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry after stop: noise+camarilla, direction opp": {
+   "train": {
+    "trades": 808,
+    "net": 181377,
+    "per_trade": 224,
+    "win": 28.7,
+    "pf": 1.26,
+    "max_dd": -57988,
+    "net_per_dd": 3.13,
+    "charges": 60064,
+    "per_day": 1.09,
+    "max_per_day": 3,
+    "re": 16,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 60563,
+    "per_trade": 481,
+    "win": 31.7,
+    "pf": 1.56,
+    "max_dd": -22890,
+    "net_per_dd": 2.65,
+    "charges": 9764,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 27950,
+    "2024": 94194,
+    "2025": 20944,
+    "2026": 98852
+   },
+   "exits": {
+    "stop": 219,
+    "time stop": 206,
+    "square-off": 199,
+    "noise exit": 177,
+    "breakeven": 124,
+    "target": 9
+   },
+   "reentries": {
+    "n": 16,
+    "net": 19405,
+    "train_net": 19405,
+    "unseen_net": 0,
+    "unseen_n": 0,
+    "win": 18.8,
+    "by_rule": {
+     "noise": -2963,
+     "camarilla": 22368
+    },
+    "exits": {
+     "stop": 5,
+     "breakeven": 5,
+     "square-off": 4,
+     "time stop": 2
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise",
+     "camarilla"
+    ],
+    "dir": "opp",
+    "window": null,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry after stop: noise, direction any": {
+   "train": {
+    "trades": 806,
+    "net": 151561,
+    "per_trade": 188,
+    "win": 28.8,
+    "pf": 1.21,
+    "max_dd": -64801,
+    "net_per_dd": 2.34,
+    "charges": 59922,
+    "per_day": 1.08,
+    "max_per_day": 3,
+    "re": 11,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 128,
+    "net": 55620,
+    "per_trade": 435,
+    "win": 31.2,
+    "pf": 1.49,
+    "max_dd": -27833,
+    "net_per_dd": 2.0,
+    "charges": 9948,
+    "per_day": 1.06,
+    "max_per_day": 2,
+    "re": 2,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 31726,
+    "2024": 91618,
+    "2025": 14312,
+    "2026": 69525
+   },
+   "exits": {
+    "stop": 221,
+    "time stop": 204,
+    "square-off": 197,
+    "noise exit": 183,
+    "breakeven": 119,
+    "target": 10
+   },
+   "reentries": {
+    "n": 13,
+    "net": -11332,
+    "train_net": -6389,
+    "unseen_net": -4943,
+    "unseen_n": 2,
+    "win": 23.1,
+    "by_rule": {
+     "noise": -11332,
+     "camarilla": 0
+    },
+    "exits": {
+     "noise exit": 5,
+     "stop": 5,
+     "square-off": 2,
+     "target": 1
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise"
+    ],
+    "dir": "any",
+    "window": null,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry after stop: noise, direction same": {
+   "train": {
+    "trades": 805,
+    "net": 154524,
+    "per_trade": 192,
+    "win": 28.8,
+    "pf": 1.22,
+    "max_dd": -64801,
+    "net_per_dd": 2.38,
+    "charges": 59857,
+    "per_day": 1.08,
+    "max_per_day": 3,
+    "re": 10,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 128,
+    "net": 55620,
+    "per_trade": 435,
+    "win": 31.2,
+    "pf": 1.49,
+    "max_dd": -27833,
+    "net_per_dd": 2.0,
+    "charges": 9948,
+    "per_day": 1.06,
+    "max_per_day": 2,
+    "re": 2,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 31726,
+    "2024": 94581,
+    "2025": 14312,
+    "2026": 69525
+   },
+   "exits": {
+    "stop": 220,
+    "time stop": 204,
+    "square-off": 197,
+    "noise exit": 183,
+    "breakeven": 119,
+    "target": 10
+   },
+   "reentries": {
+    "n": 12,
+    "net": -8368,
+    "train_net": -3426,
+    "unseen_net": -4943,
+    "unseen_n": 2,
+    "win": 25.0,
+    "by_rule": {
+     "noise": -8368,
+     "camarilla": 0
+    },
+    "exits": {
+     "noise exit": 5,
+     "stop": 4,
+     "square-off": 2,
+     "target": 1
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise"
+    ],
+    "dir": "same",
+    "window": null,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry after stop: noise, direction opp": {
+   "train": {
+    "trades": 797,
+    "net": 160183,
+    "per_trade": 201,
+    "win": 28.9,
+    "pf": 1.23,
+    "max_dd": -64206,
+    "net_per_dd": 2.49,
+    "charges": 59192,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 1,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 60563,
+    "per_trade": 481,
+    "win": 31.7,
+    "pf": 1.56,
+    "max_dd": -22890,
+    "net_per_dd": 2.65,
+    "charges": 9764,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 31331,
+    "2024": 93522,
+    "2025": 14727,
+    "2026": 81166
+   },
+   "exits": {
+    "stop": 217,
+    "time stop": 204,
+    "square-off": 196,
+    "noise exit": 178,
+    "breakeven": 119,
+    "target": 9
+   },
+   "reentries": {
+    "n": 1,
+    "net": -2963,
+    "train_net": -2963,
+    "unseen_net": 0,
+    "unseen_n": 0,
+    "win": 0.0,
+    "by_rule": {
+     "noise": -2963,
+     "camarilla": 0
+    },
+    "exits": {
+     "stop": 1
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise"
+    ],
+    "dir": "opp",
+    "window": null,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry after stop: camarilla, direction any": {
+   "train": {
+    "trades": 815,
+    "net": 175274,
+    "per_trade": 215,
+    "win": 28.5,
+    "pf": 1.25,
+    "max_dd": -61685,
+    "net_per_dd": 2.84,
+    "charges": 60628,
+    "per_day": 1.1,
+    "max_per_day": 3,
+    "re": 23,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 128,
+    "net": 56199,
+    "per_trade": 439,
+    "win": 31.2,
+    "pf": 1.5,
+    "max_dd": -25305,
+    "net_per_dd": 2.22,
+    "charges": 9946,
+    "per_day": 1.06,
+    "max_per_day": 2,
+    "re": 2,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 26067,
+    "2024": 93671,
+    "2025": 17247,
+    "2026": 94488
+   },
+   "exits": {
+    "stop": 223,
+    "time stop": 210,
+    "square-off": 200,
+    "noise exit": 177,
+    "breakeven": 124,
+    "target": 9
+   },
+   "reentries": {
+    "n": 25,
+    "net": 8937,
+    "train_net": 13302,
+    "unseen_net": -4365,
+    "unseen_n": 2,
+    "win": 12.0,
+    "by_rule": {
+     "noise": 0,
+     "camarilla": 8937
+    },
+    "exits": {
+     "stop": 9,
+     "time stop": 6,
+     "breakeven": 5,
+     "square-off": 5
+    }
+   },
+   "cfg": {
+    "rules": [
+     "camarilla"
+    ],
+    "dir": "any",
+    "window": null,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry after stop: camarilla, direction same": {
+   "train": {
+    "trades": 804,
+    "net": 154080,
+    "per_trade": 192,
+    "win": 28.6,
+    "pf": 1.22,
+    "max_dd": -67903,
+    "net_per_dd": 2.27,
+    "charges": 59756,
+    "per_day": 1.08,
+    "max_per_day": 3,
+    "re": 8,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 128,
+    "net": 56199,
+    "per_trade": 439,
+    "win": 31.2,
+    "pf": 1.5,
+    "max_dd": -25305,
+    "net_per_dd": 2.22,
+    "charges": 9946,
+    "per_day": 1.06,
+    "max_per_day": 2,
+    "re": 2,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 29448,
+    "2024": 92999,
+    "2025": 11029,
+    "2026": 76802
+   },
+   "exits": {
+    "stop": 221,
+    "time stop": 208,
+    "square-off": 197,
+    "noise exit": 178,
+    "breakeven": 119,
+    "target": 9
+   },
+   "reentries": {
+    "n": 10,
+    "net": -13431,
+    "train_net": -9066,
+    "unseen_net": -4365,
+    "unseen_n": 2,
+    "win": 0.0,
+    "by_rule": {
+     "noise": 0,
+     "camarilla": -13431
+    },
+    "exits": {
+     "stop": 5,
+     "time stop": 4,
+     "square-off": 1
+    }
+   },
+   "cfg": {
+    "rules": [
+     "camarilla"
+    ],
+    "dir": "same",
+    "window": null,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry after stop: camarilla, direction opp": {
+   "train": {
+    "trades": 807,
+    "net": 184340,
+    "per_trade": 228,
+    "win": 28.7,
+    "pf": 1.26,
+    "max_dd": -57988,
+    "net_per_dd": 3.18,
+    "charges": 59999,
+    "per_day": 1.08,
+    "max_per_day": 3,
+    "re": 15,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 60563,
+    "per_trade": 481,
+    "win": 31.7,
+    "pf": 1.56,
+    "max_dd": -22890,
+    "net_per_dd": 2.65,
+    "charges": 9764,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 27950,
+    "2024": 97157,
+    "2025": 20944,
+    "2026": 98852
+   },
+   "exits": {
+    "stop": 218,
+    "time stop": 206,
+    "square-off": 199,
+    "noise exit": 177,
+    "breakeven": 124,
+    "target": 9
+   },
+   "reentries": {
+    "n": 15,
+    "net": 22368,
+    "train_net": 22368,
+    "unseen_net": 0,
+    "unseen_n": 0,
+    "win": 20.0,
+    "by_rule": {
+     "noise": 0,
+     "camarilla": 22368
+    },
+    "exits": {
+     "breakeven": 5,
+     "stop": 4,
+     "square-off": 4,
+     "time stop": 2
+    }
+   },
+   "cfg": {
+    "rules": [
+     "camarilla"
+    ],
+    "dir": "opp",
+    "window": null,
+    "max": 1
+   },
+   "beats": false
+  }
+ },
+ "item2_reentry_window": {
+  "re-entry <= 60 min after stop: noise+camarilla, direction any": {
+   "train": {
+    "trades": 814,
+    "net": 168916,
+    "per_trade": 208,
+    "win": 28.7,
+    "pf": 1.24,
+    "max_dd": -60287,
+    "net_per_dd": 2.8,
+    "charges": 60611,
+    "per_day": 1.09,
+    "max_per_day": 3,
+    "re": 20,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 128,
+    "net": 55620,
+    "per_trade": 435,
+    "win": 31.2,
+    "pf": 1.49,
+    "max_dd": -27833,
+    "net_per_dd": 2.0,
+    "charges": 9948,
+    "per_day": 1.06,
+    "max_per_day": 2,
+    "re": 2,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 27637,
+    "2024": 89874,
+    "2025": 16202,
+    "2026": 90824
+   },
+   "exits": {
+    "stop": 224,
+    "time stop": 206,
+    "square-off": 200,
+    "noise exit": 179,
+    "breakeven": 124,
+    "target": 9
+   },
+   "reentries": {
+    "n": 22,
+    "net": -3006,
+    "train_net": 1936,
+    "unseen_net": -4943,
+    "unseen_n": 2,
+    "win": 18.2,
+    "by_rule": {
+     "noise": -11606,
+     "camarilla": 8599
+    },
+    "exits": {
+     "stop": 9,
+     "breakeven": 5,
+     "square-off": 4,
+     "time stop": 2,
+     "noise exit": 2
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise",
+     "camarilla"
+    ],
+    "dir": "any",
+    "window": 60,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 120 min after stop: noise+camarilla, direction any": {
+   "train": {
+    "trades": 822,
+    "net": 166381,
+    "per_trade": 202,
+    "win": 28.5,
+    "pf": 1.23,
+    "max_dd": -61529,
+    "net_per_dd": 2.7,
+    "charges": 61206,
+    "per_day": 1.1,
+    "max_per_day": 3,
+    "re": 31,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 130,
+    "net": 51256,
+    "per_trade": 394,
+    "win": 30.8,
+    "pf": 1.44,
+    "max_dd": -30248,
+    "net_per_dd": 1.69,
+    "charges": 10130,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 4,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 26461,
+    "2024": 90175,
+    "2025": 17403,
+    "2026": 83598
+   },
+   "exits": {
+    "stop": 228,
+    "time stop": 210,
+    "square-off": 200,
+    "noise exit": 180,
+    "breakeven": 124,
+    "target": 10
+   },
+   "reentries": {
+    "n": 35,
+    "net": 298,
+    "train_net": 9606,
+    "unseen_net": -9307,
+    "unseen_n": 4,
+    "win": 17.1,
+    "by_rule": {
+     "noise": -8639,
+     "camarilla": 8937
+    },
+    "exits": {
+     "stop": 14,
+     "time stop": 6,
+     "square-off": 6,
+     "breakeven": 5,
+     "noise exit": 3,
+     "target": 1
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise",
+     "camarilla"
+    ],
+    "dir": "any",
+    "window": 120,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 60 min after stop: noise+camarilla, direction same": {
+   "train": {
+    "trades": 806,
+    "net": 151623,
+    "per_trade": 188,
+    "win": 28.8,
+    "pf": 1.21,
+    "max_dd": -66504,
+    "net_per_dd": 2.28,
+    "charges": 59971,
+    "per_day": 1.08,
+    "max_per_day": 3,
+    "re": 10,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 128,
+    "net": 55620,
+    "per_trade": 435,
+    "win": 31.2,
+    "pf": 1.49,
+    "max_dd": -27833,
+    "net_per_dd": 2.0,
+    "charges": 9948,
+    "per_day": 1.06,
+    "max_per_day": 2,
+    "re": 2,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 29448,
+    "2024": 92229,
+    "2025": 12428,
+    "2026": 73138
+   },
+   "exits": {
+    "stop": 222,
+    "time stop": 206,
+    "square-off": 198,
+    "noise exit": 180,
+    "breakeven": 119,
+    "target": 9
+   },
+   "reentries": {
+    "n": 12,
+    "net": -16466,
+    "train_net": -11523,
+    "unseen_net": -4943,
+    "unseen_n": 2,
+    "win": 16.7,
+    "by_rule": {
+     "noise": -8642,
+     "camarilla": -7824
+    },
+    "exits": {
+     "stop": 6,
+     "time stop": 2,
+     "noise exit": 2,
+     "square-off": 2
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise",
+     "camarilla"
+    ],
+    "dir": "same",
+    "window": 60,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 120 min after stop: noise+camarilla, direction same": {
+   "train": {
+    "trades": 811,
+    "net": 146779,
+    "per_trade": 181,
+    "win": 28.6,
+    "pf": 1.2,
+    "max_dd": -67747,
+    "net_per_dd": 2.17,
+    "charges": 60356,
+    "per_day": 1.09,
+    "max_per_day": 3,
+    "re": 16,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 130,
+    "net": 51256,
+    "per_trade": 394,
+    "win": 30.8,
+    "pf": 1.44,
+    "max_dd": -30248,
+    "net_per_dd": 1.69,
+    "charges": 10130,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 4,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 29843,
+    "2024": 91095,
+    "2025": 11185,
+    "2026": 65912
+   },
+   "exits": {
+    "stop": 225,
+    "time stop": 208,
+    "square-off": 197,
+    "noise exit": 182,
+    "breakeven": 119,
+    "target": 10
+   },
+   "reentries": {
+    "n": 20,
+    "net": -20478,
+    "train_net": -11171,
+    "unseen_net": -9307,
+    "unseen_n": 4,
+    "win": 15.0,
+    "by_rule": {
+     "noise": -7047,
+     "camarilla": -13431
+    },
+    "exits": {
+     "stop": 9,
+     "time stop": 4,
+     "noise exit": 4,
+     "square-off": 2,
+     "target": 1
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise",
+     "camarilla"
+    ],
+    "dir": "same",
+    "window": 120,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 60 min after stop: noise+camarilla, direction opp": {
+   "train": {
+    "trades": 804,
+    "net": 180439,
+    "per_trade": 224,
+    "win": 28.9,
+    "pf": 1.26,
+    "max_dd": -57988,
+    "net_per_dd": 3.11,
+    "charges": 59767,
+    "per_day": 1.08,
+    "max_per_day": 3,
+    "re": 10,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 60563,
+    "per_trade": 481,
+    "win": 31.7,
+    "pf": 1.56,
+    "max_dd": -22890,
+    "net_per_dd": 2.65,
+    "charges": 9764,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 29520,
+    "2024": 94130,
+    "2025": 18500,
+    "2026": 98852
+   },
+   "exits": {
+    "stop": 218,
+    "time stop": 204,
+    "square-off": 198,
+    "noise exit": 177,
+    "breakeven": 124,
+    "target": 9
+   },
+   "reentries": {
+    "n": 10,
+    "net": 13460,
+    "train_net": 13460,
+    "unseen_net": 0,
+    "unseen_n": 0,
+    "win": 20.0,
+    "by_rule": {
+     "noise": -2963,
+     "camarilla": 16423
+    },
+    "exits": {
+     "breakeven": 5,
+     "stop": 3,
+     "square-off": 2
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise",
+     "camarilla"
+    ],
+    "dir": "opp",
+    "window": 60,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 120 min after stop: noise+camarilla, direction opp": {
+   "train": {
+    "trades": 808,
+    "net": 181377,
+    "per_trade": 224,
+    "win": 28.7,
+    "pf": 1.26,
+    "max_dd": -57988,
+    "net_per_dd": 3.13,
+    "charges": 60064,
+    "per_day": 1.09,
+    "max_per_day": 3,
+    "re": 16,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 60563,
+    "per_trade": 481,
+    "win": 31.7,
+    "pf": 1.56,
+    "max_dd": -22890,
+    "net_per_dd": 2.65,
+    "charges": 9764,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 27950,
+    "2024": 94194,
+    "2025": 20944,
+    "2026": 98852
+   },
+   "exits": {
+    "stop": 219,
+    "time stop": 206,
+    "square-off": 199,
+    "noise exit": 177,
+    "breakeven": 124,
+    "target": 9
+   },
+   "reentries": {
+    "n": 16,
+    "net": 19405,
+    "train_net": 19405,
+    "unseen_net": 0,
+    "unseen_n": 0,
+    "win": 18.8,
+    "by_rule": {
+     "noise": -2963,
+     "camarilla": 22368
+    },
+    "exits": {
+     "stop": 5,
+     "breakeven": 5,
+     "square-off": 4,
+     "time stop": 2
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise",
+     "camarilla"
+    ],
+    "dir": "opp",
+    "window": 120,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 60 min after stop: noise, direction any": {
+   "train": {
+    "trades": 801,
+    "net": 156483,
+    "per_trade": 195,
+    "win": 29.0,
+    "pf": 1.22,
+    "max_dd": -64050,
+    "net_per_dd": 2.44,
+    "charges": 59551,
+    "per_day": 1.08,
+    "max_per_day": 3,
+    "re": 5,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 128,
+    "net": 55620,
+    "per_trade": 435,
+    "win": 31.2,
+    "pf": 1.49,
+    "max_dd": -27833,
+    "net_per_dd": 2.0,
+    "charges": 9948,
+    "per_day": 1.06,
+    "max_per_day": 2,
+    "re": 2,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 31331,
+    "2024": 92752,
+    "2025": 14882,
+    "2026": 73138
+   },
+   "exits": {
+    "stop": 220,
+    "time stop": 204,
+    "square-off": 197,
+    "noise exit": 180,
+    "breakeven": 119,
+    "target": 9
+   },
+   "reentries": {
+    "n": 7,
+    "net": -11606,
+    "train_net": -6663,
+    "unseen_net": -4943,
+    "unseen_n": 2,
+    "win": 28.6,
+    "by_rule": {
+     "noise": -11606,
+     "camarilla": 0
+    },
+    "exits": {
+     "stop": 4,
+     "noise exit": 2,
+     "square-off": 1
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise"
+    ],
+    "dir": "any",
+    "window": 60,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 120 min after stop: noise, direction any": {
+   "train": {
+    "trades": 804,
+    "net": 152882,
+    "per_trade": 190,
+    "win": 28.9,
+    "pf": 1.21,
+    "max_dd": -64050,
+    "net_per_dd": 2.39,
+    "charges": 59792,
+    "per_day": 1.08,
+    "max_per_day": 3,
+    "re": 9,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 128,
+    "net": 55620,
+    "per_trade": 435,
+    "win": 31.2,
+    "pf": 1.49,
+    "max_dd": -27833,
+    "net_per_dd": 2.0,
+    "charges": 9948,
+    "per_day": 1.06,
+    "max_per_day": 2,
+    "re": 2,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 31726,
+    "2024": 91618,
+    "2025": 14882,
+    "2026": 70276
+   },
+   "exits": {
+    "stop": 221,
+    "time stop": 204,
+    "square-off": 196,
+    "noise exit": 182,
+    "breakeven": 119,
+    "target": 10
+   },
+   "reentries": {
+    "n": 11,
+    "net": -10010,
+    "train_net": -5067,
+    "unseen_net": -4943,
+    "unseen_n": 2,
+    "win": 27.3,
+    "by_rule": {
+     "noise": -10010,
+     "camarilla": 0
+    },
+    "exits": {
+     "stop": 5,
+     "noise exit": 4,
+     "target": 1,
+     "square-off": 1
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise"
+    ],
+    "dir": "any",
+    "window": 120,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 60 min after stop: noise, direction same": {
+   "train": {
+    "trades": 800,
+    "net": 159446,
+    "per_trade": 199,
+    "win": 29.0,
+    "pf": 1.23,
+    "max_dd": -64050,
+    "net_per_dd": 2.49,
+    "charges": 59486,
+    "per_day": 1.08,
+    "max_per_day": 3,
+    "re": 4,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 128,
+    "net": 55620,
+    "per_trade": 435,
+    "win": 31.2,
+    "pf": 1.49,
+    "max_dd": -27833,
+    "net_per_dd": 2.0,
+    "charges": 9948,
+    "per_day": 1.06,
+    "max_per_day": 2,
+    "re": 2,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 31331,
+    "2024": 95716,
+    "2025": 14882,
+    "2026": 73138
+   },
+   "exits": {
+    "stop": 219,
+    "time stop": 204,
+    "square-off": 197,
+    "noise exit": 180,
+    "breakeven": 119,
+    "target": 9
+   },
+   "reentries": {
+    "n": 6,
+    "net": -8642,
+    "train_net": -3700,
+    "unseen_net": -4943,
+    "unseen_n": 2,
+    "win": 33.3,
+    "by_rule": {
+     "noise": -8642,
+     "camarilla": 0
+    },
+    "exits": {
+     "stop": 3,
+     "noise exit": 2,
+     "square-off": 1
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise"
+    ],
+    "dir": "same",
+    "window": 60,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 120 min after stop: noise, direction same": {
+   "train": {
+    "trades": 803,
+    "net": 155845,
+    "per_trade": 194,
+    "win": 28.9,
+    "pf": 1.22,
+    "max_dd": -64050,
+    "net_per_dd": 2.43,
+    "charges": 59727,
+    "per_day": 1.08,
+    "max_per_day": 3,
+    "re": 8,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 128,
+    "net": 55620,
+    "per_trade": 435,
+    "win": 31.2,
+    "pf": 1.49,
+    "max_dd": -27833,
+    "net_per_dd": 2.0,
+    "charges": 9948,
+    "per_day": 1.06,
+    "max_per_day": 2,
+    "re": 2,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 31726,
+    "2024": 94581,
+    "2025": 14882,
+    "2026": 70276
+   },
+   "exits": {
+    "stop": 220,
+    "time stop": 204,
+    "square-off": 196,
+    "noise exit": 182,
+    "breakeven": 119,
+    "target": 10
+   },
+   "reentries": {
+    "n": 10,
+    "net": -7047,
+    "train_net": -2104,
+    "unseen_net": -4943,
+    "unseen_n": 2,
+    "win": 30.0,
+    "by_rule": {
+     "noise": -7047,
+     "camarilla": 0
+    },
+    "exits": {
+     "noise exit": 4,
+     "stop": 4,
+     "target": 1,
+     "square-off": 1
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise"
+    ],
+    "dir": "same",
+    "window": 120,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 60 min after stop: noise, direction opp": {
+   "train": {
+    "trades": 797,
+    "net": 160183,
+    "per_trade": 201,
+    "win": 28.9,
+    "pf": 1.23,
+    "max_dd": -64206,
+    "net_per_dd": 2.49,
+    "charges": 59192,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 1,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 60563,
+    "per_trade": 481,
+    "win": 31.7,
+    "pf": 1.56,
+    "max_dd": -22890,
+    "net_per_dd": 2.65,
+    "charges": 9764,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 31331,
+    "2024": 93522,
+    "2025": 14727,
+    "2026": 81166
+   },
+   "exits": {
+    "stop": 217,
+    "time stop": 204,
+    "square-off": 196,
+    "noise exit": 178,
+    "breakeven": 119,
+    "target": 9
+   },
+   "reentries": {
+    "n": 1,
+    "net": -2963,
+    "train_net": -2963,
+    "unseen_net": 0,
+    "unseen_n": 0,
+    "win": 0.0,
+    "by_rule": {
+     "noise": -2963,
+     "camarilla": 0
+    },
+    "exits": {
+     "stop": 1
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise"
+    ],
+    "dir": "opp",
+    "window": 60,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 120 min after stop: noise, direction opp": {
+   "train": {
+    "trades": 797,
+    "net": 160183,
+    "per_trade": 201,
+    "win": 28.9,
+    "pf": 1.23,
+    "max_dd": -64206,
+    "net_per_dd": 2.49,
+    "charges": 59192,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 1,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 60563,
+    "per_trade": 481,
+    "win": 31.7,
+    "pf": 1.56,
+    "max_dd": -22890,
+    "net_per_dd": 2.65,
+    "charges": 9764,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 31331,
+    "2024": 93522,
+    "2025": 14727,
+    "2026": 81166
+   },
+   "exits": {
+    "stop": 217,
+    "time stop": 204,
+    "square-off": 196,
+    "noise exit": 178,
+    "breakeven": 119,
+    "target": 9
+   },
+   "reentries": {
+    "n": 1,
+    "net": -2963,
+    "train_net": -2963,
+    "unseen_net": 0,
+    "unseen_n": 0,
+    "win": 0.0,
+    "by_rule": {
+     "noise": -2963,
+     "camarilla": 0
+    },
+    "exits": {
+     "stop": 1
+    }
+   },
+   "cfg": {
+    "rules": [
+     "noise"
+    ],
+    "dir": "opp",
+    "window": 120,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 60 min after stop: camarilla, direction any": {
+   "train": {
+    "trades": 809,
+    "net": 175579,
+    "per_trade": 217,
+    "win": 28.7,
+    "pf": 1.25,
+    "max_dd": -60442,
+    "net_per_dd": 2.9,
+    "charges": 60187,
+    "per_day": 1.09,
+    "max_per_day": 3,
+    "re": 15,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 60563,
+    "per_trade": 481,
+    "win": 31.7,
+    "pf": 1.56,
+    "max_dd": -22890,
+    "net_per_dd": 2.65,
+    "charges": 9764,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 27637,
+    "2024": 93607,
+    "2025": 16046,
+    "2026": 98852
+   },
+   "exits": {
+    "stop": 220,
+    "time stop": 206,
+    "square-off": 199,
+    "noise exit": 177,
+    "breakeven": 124,
+    "target": 9
+   },
+   "reentries": {
+    "n": 15,
+    "net": 8599,
+    "train_net": 8599,
+    "unseen_net": 0,
+    "unseen_n": 0,
+    "win": 13.3,
+    "by_rule": {
+     "noise": 0,
+     "camarilla": 8599
+    },
+    "exits": {
+     "stop": 5,
+     "breakeven": 5,
+     "square-off": 3,
+     "time stop": 2
+    }
+   },
+   "cfg": {
+    "rules": [
+     "camarilla"
+    ],
+    "dir": "any",
+    "window": 60,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 120 min after stop: camarilla, direction any": {
+   "train": {
+    "trades": 815,
+    "net": 175274,
+    "per_trade": 215,
+    "win": 28.5,
+    "pf": 1.25,
+    "max_dd": -61685,
+    "net_per_dd": 2.84,
+    "charges": 60628,
+    "per_day": 1.1,
+    "max_per_day": 3,
+    "re": 23,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 128,
+    "net": 56199,
+    "per_trade": 439,
+    "win": 31.2,
+    "pf": 1.5,
+    "max_dd": -25305,
+    "net_per_dd": 2.22,
+    "charges": 9946,
+    "per_day": 1.06,
+    "max_per_day": 2,
+    "re": 2,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 26067,
+    "2024": 93671,
+    "2025": 17247,
+    "2026": 94488
+   },
+   "exits": {
+    "stop": 223,
+    "time stop": 210,
+    "square-off": 200,
+    "noise exit": 177,
+    "breakeven": 124,
+    "target": 9
+   },
+   "reentries": {
+    "n": 25,
+    "net": 8937,
+    "train_net": 13302,
+    "unseen_net": -4365,
+    "unseen_n": 2,
+    "win": 12.0,
+    "by_rule": {
+     "noise": 0,
+     "camarilla": 8937
+    },
+    "exits": {
+     "stop": 9,
+     "time stop": 6,
+     "breakeven": 5,
+     "square-off": 5
+    }
+   },
+   "cfg": {
+    "rules": [
+     "camarilla"
+    ],
+    "dir": "any",
+    "window": 120,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 60 min after stop: camarilla, direction same": {
+   "train": {
+    "trades": 802,
+    "net": 155322,
+    "per_trade": 194,
+    "win": 28.7,
+    "pf": 1.22,
+    "max_dd": -66660,
+    "net_per_dd": 2.33,
+    "charges": 59612,
+    "per_day": 1.08,
+    "max_per_day": 3,
+    "re": 6,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 60563,
+    "per_trade": 481,
+    "win": 31.7,
+    "pf": 1.56,
+    "max_dd": -22890,
+    "net_per_dd": 2.65,
+    "charges": 9764,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 29448,
+    "2024": 92999,
+    "2025": 12272,
+    "2026": 81166
+   },
+   "exits": {
+    "stop": 219,
+    "time stop": 206,
+    "square-off": 197,
+    "noise exit": 178,
+    "breakeven": 119,
+    "target": 9
+   },
+   "reentries": {
+    "n": 6,
+    "net": -7824,
+    "train_net": -7824,
+    "unseen_net": 0,
+    "unseen_n": 0,
+    "win": 0.0,
+    "by_rule": {
+     "noise": 0,
+     "camarilla": -7824
+    },
+    "exits": {
+     "stop": 3,
+     "time stop": 2,
+     "square-off": 1
+    }
+   },
+   "cfg": {
+    "rules": [
+     "camarilla"
+    ],
+    "dir": "same",
+    "window": 60,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 120 min after stop: camarilla, direction same": {
+   "train": {
+    "trades": 804,
+    "net": 154080,
+    "per_trade": 192,
+    "win": 28.6,
+    "pf": 1.22,
+    "max_dd": -67903,
+    "net_per_dd": 2.27,
+    "charges": 59756,
+    "per_day": 1.08,
+    "max_per_day": 3,
+    "re": 8,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 128,
+    "net": 56199,
+    "per_trade": 439,
+    "win": 31.2,
+    "pf": 1.5,
+    "max_dd": -25305,
+    "net_per_dd": 2.22,
+    "charges": 9946,
+    "per_day": 1.06,
+    "max_per_day": 2,
+    "re": 2,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 29448,
+    "2024": 92999,
+    "2025": 11029,
+    "2026": 76802
+   },
+   "exits": {
+    "stop": 221,
+    "time stop": 208,
+    "square-off": 197,
+    "noise exit": 178,
+    "breakeven": 119,
+    "target": 9
+   },
+   "reentries": {
+    "n": 10,
+    "net": -13431,
+    "train_net": -9066,
+    "unseen_net": -4365,
+    "unseen_n": 2,
+    "win": 0.0,
+    "by_rule": {
+     "noise": 0,
+     "camarilla": -13431
+    },
+    "exits": {
+     "stop": 5,
+     "time stop": 4,
+     "square-off": 1
+    }
+   },
+   "cfg": {
+    "rules": [
+     "camarilla"
+    ],
+    "dir": "same",
+    "window": 120,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 60 min after stop: camarilla, direction opp": {
+   "train": {
+    "trades": 803,
+    "net": 183403,
+    "per_trade": 228,
+    "win": 28.9,
+    "pf": 1.26,
+    "max_dd": -57988,
+    "net_per_dd": 3.16,
+    "charges": 59702,
+    "per_day": 1.08,
+    "max_per_day": 3,
+    "re": 9,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 60563,
+    "per_trade": 481,
+    "win": 31.7,
+    "pf": 1.56,
+    "max_dd": -22890,
+    "net_per_dd": 2.65,
+    "charges": 9764,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 29520,
+    "2024": 97093,
+    "2025": 18500,
+    "2026": 98852
+   },
+   "exits": {
+    "stop": 217,
+    "time stop": 204,
+    "square-off": 198,
+    "noise exit": 177,
+    "breakeven": 124,
+    "target": 9
+   },
+   "reentries": {
+    "n": 9,
+    "net": 16423,
+    "train_net": 16423,
+    "unseen_net": 0,
+    "unseen_n": 0,
+    "win": 22.2,
+    "by_rule": {
+     "noise": 0,
+     "camarilla": 16423
+    },
+    "exits": {
+     "breakeven": 5,
+     "square-off": 2,
+     "stop": 2
+    }
+   },
+   "cfg": {
+    "rules": [
+     "camarilla"
+    ],
+    "dir": "opp",
+    "window": 60,
+    "max": 1
+   },
+   "beats": false
+  },
+  "re-entry <= 120 min after stop: camarilla, direction opp": {
+   "train": {
+    "trades": 807,
+    "net": 184340,
+    "per_trade": 228,
+    "win": 28.7,
+    "pf": 1.26,
+    "max_dd": -57988,
+    "net_per_dd": 3.18,
+    "charges": 59999,
+    "per_day": 1.08,
+    "max_per_day": 3,
+    "re": 15,
+    "extra": 0,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 60563,
+    "per_trade": 481,
+    "win": 31.7,
+    "pf": 1.56,
+    "max_dd": -22890,
+    "net_per_dd": 2.65,
+    "charges": 9764,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 0
+   },
+   "years": {
+    "2023": 27950,
+    "2024": 97157,
+    "2025": 20944,
+    "2026": 98852
+   },
+   "exits": {
+    "stop": 218,
+    "time stop": 206,
+    "square-off": 199,
+    "noise exit": 177,
+    "breakeven": 124,
+    "target": 9
+   },
+   "reentries": {
+    "n": 15,
+    "net": 22368,
+    "train_net": 22368,
+    "unseen_net": 0,
+    "unseen_n": 0,
+    "win": 20.0,
+    "by_rule": {
+     "noise": 0,
+     "camarilla": 22368
+    },
+    "exits": {
+     "breakeven": 5,
+     "stop": 4,
+     "square-off": 4,
+     "time stop": 2
+    }
+   },
+   "cfg": {
+    "rules": [
+     "camarilla"
+    ],
+    "dir": "opp",
+    "window": 120,
+    "max": 1
+   },
+   "beats": false
+  },
+  "minutes_from_stop_to_reentry": {
+   "n": 37,
+   "median": 50.0,
+   "share_within_60": 56.8,
+   "share_within_120": 94.6
+  }
+ },
+ "item3_pyramid": {
+  "reach": {
+   "all": {
+    "n": 865,
+    "reach_1R_pct": 39.9,
+    "reach_2R_pct": 19.9
+   },
+   "camarilla": {
+    "n": 596,
+    "reach_1R_pct": 40.6,
+    "reach_2R_pct": 20.5
+   },
+   "NIFTY": {
+    "n": 484,
+    "reach_1R_pct": 38.6,
+    "reach_2R_pct": 18.0
+   },
+   "train": {
+    "n": 744,
+    "reach_1R_pct": 39.8,
+    "reach_2R_pct": 20.0
+   },
+   "noise": {
+    "n": 269,
+    "reach_1R_pct": 38.3,
+    "reach_2R_pct": 18.6
+   },
+   "unseen": {
+    "n": 121,
+    "reach_1R_pct": 40.5,
+    "reach_2R_pct": 19.0
+   },
+   "BANKNIFTY": {
+    "n": 381,
+    "reach_1R_pct": 41.5,
+    "reach_2R_pct": 22.3
+   }
+  },
+  "pyramid first trade both rules, sizes 1:1:1": {
+   "train": {
+    "trades": 798,
+    "net": 241754,
+    "per_trade": 303,
+    "win": 21.6,
+    "pf": 1.23,
+    "max_dd": -113602,
+    "net_per_dd": 2.13,
+    "charges": 95134,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 443
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 166940,
+    "per_trade": 1325,
+    "win": 26.2,
+    "pf": 2.04,
+    "max_dd": -29244,
+    "net_per_dd": 5.71,
+    "charges": 15727,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 72
+   },
+   "years": {
+    "2023": 83313,
+    "2024": 114150,
+    "2025": 16740,
+    "2026": 194490
+   },
+   "exits": {
+    "stop": 211,
+    "time stop": 204,
+    "square-off": 160,
+    "noise exit": 149,
+    "add-stop@be": 124,
+    "add-stop@+1R": 67,
+    "target": 8,
+    "breakeven": 1
+   },
+   "pyramid": {
+    "first_trades": 865,
+    "with_1_add": 175,
+    "with_2_adds": 170,
+    "capped_by_cash": 1,
+    "plain_net_on_added": 856434,
+    "pyramided_net_on_added": 1040059,
+    "delta_train": 77248,
+    "delta_unseen": 106377,
+    "by_final_exit": {
+     "square-off": {
+      "n": 127,
+      "pyramided": 1322634,
+      "plain": 701193
+     },
+     "add-stop@be": {
+      "n": 124,
+      "pyramided": -366646,
+      "plain": -63562
+     },
+     "add-stop@+1R": {
+      "n": 67,
+      "pyramided": -98351,
+      "plain": 115245
+     },
+     "noise exit": {
+      "n": 20,
+      "pyramided": 15798,
+      "plain": 30214
+     },
+     "target": {
+      "n": 7,
+      "pyramided": 166624,
+      "plain": 73344
+     }
+    },
+    "plain_exit_of_added": {
+     "square-off": 164,
+     "breakeven": 118,
+     "noise exit": 49,
+     "target": 8,
+     "stop": 6
+    },
+    "mean_add_lots": 1.03,
+    "top5_delta_train": [
+     {
+      "date": "2023-03-13",
+      "sym": "BANKNIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 5.52,
+      "plain": 14101,
+      "pyramided": 35595,
+      "units": [
+       14101,
+       12062,
+       9432
+      ]
+     },
+     {
+      "date": "2023-01-25",
+      "sym": "BANKNIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 6.16,
+      "plain": 13554,
+      "pyramided": 33557,
+      "units": [
+       13554,
+       11213,
+       8789
+      ]
+     },
+     {
+      "date": "2025-02-04",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 5.12,
+      "plain": 12888,
+      "pyramided": 31647,
+      "units": [
+       12888,
+       10736,
+       8023
+      ]
+     },
+     {
+      "date": "2025-01-06",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 4.44,
+      "plain": 12310,
+      "pyramided": 29371,
+      "units": [
+       12310,
+       9929,
+       7133
+      ]
+     },
+     {
+      "date": "2023-11-29",
+      "sym": "BANKNIFTY",
+      "rule": "camarilla",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 8.51,
+      "plain": 9867,
+      "pyramided": 26273,
+      "units": [
+       9867,
+       8716,
+       7690
+      ]
+     }
+    ],
+    "top5_share_of_delta_train_pct": 121.3,
+    "top5_delta_unseen": [
+     {
+      "date": "2026-07-08",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 6.14,
+      "plain": 16833,
+      "pyramided": 44074,
+      "units": [
+       16833,
+       14939,
+       12303
+      ]
+     },
+     {
+      "date": "2026-06-12",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 5.63,
+      "plain": 12832,
+      "pyramided": 32550,
+      "units": [
+       12832,
+       10968,
+       8750
+      ]
+     },
+     {
+      "date": "2026-10-08",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 5.49,
+      "plain": 12404,
+      "pyramided": 31046,
+      "units": [
+       12404,
+       10367,
+       8275
+      ]
+     },
+     {
+      "date": "2026-06-24",
+      "sym": "BANKNIFTY",
+      "rule": "noise",
+      "side": 1,
+      "adds": 2,
+      "exit": "target",
+      "R": 4.0,
+      "plain": 13515,
+      "pyramided": 31166,
+      "units": [
+       13515,
+       10493,
+       7157
+      ]
+     },
+     {
+      "date": "2026-05-12",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 4.04,
+      "plain": 12924,
+      "pyramided": 29153,
+      "units": [
+       12924,
+       9875,
+       6354
+      ]
+     }
+    ],
+    "top5_share_of_delta_unseen_pct": 93.5
+   },
+   "cfg": {
+    "rules": [
+     "noise",
+     "camarilla"
+    ],
+    "fracs": [
+     1.0,
+     1.0
+    ]
+   },
+   "beats": false,
+   "baseline_scaled_to_same_units": {
+    "train": {
+     "net": 253715,
+     "max_dd": -99849,
+     "units_per_trade": 1.56
+    },
+    "unseen": {
+     "net": 95170,
+     "max_dd": -35970,
+     "units_per_trade": 1.57
+    }
+   },
+   "beats_scaled": false
+  },
+  "pyramid first trade both rules, sizes 1:0.5:0.5": {
+   "train": {
+    "trades": 798,
+    "net": 242124,
+    "per_trade": 303,
+    "win": 21.7,
+    "pf": 1.23,
+    "max_dd": -113602,
+    "net_per_dd": 2.13,
+    "charges": 94950,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 443
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 166940,
+    "per_trade": 1325,
+    "win": 26.2,
+    "pf": 2.04,
+    "max_dd": -29244,
+    "net_per_dd": 5.71,
+    "charges": 15727,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 72
+   },
+   "years": {
+    "2023": 83683,
+    "2024": 114150,
+    "2025": 16740,
+    "2026": 194490
+   },
+   "exits": {
+    "stop": 211,
+    "time stop": 204,
+    "square-off": 160,
+    "noise exit": 149,
+    "add-stop@be": 124,
+    "add-stop@+1R": 67,
+    "target": 8,
+    "breakeven": 1
+   },
+   "pyramid": {
+    "first_trades": 865,
+    "with_1_add": 175,
+    "with_2_adds": 170,
+    "capped_by_cash": 1,
+    "plain_net_on_added": 856434,
+    "pyramided_net_on_added": 1040429,
+    "delta_train": 77618,
+    "delta_unseen": 106377,
+    "by_final_exit": {
+     "square-off": {
+      "n": 127,
+      "pyramided": 1315811,
+      "plain": 701193
+     },
+     "add-stop@be": {
+      "n": 124,
+      "pyramided": -360886,
+      "plain": -63562
+     },
+     "add-stop@+1R": {
+      "n": 67,
+      "pyramided": -96917,
+      "plain": 115245
+     },
+     "noise exit": {
+      "n": 20,
+      "pyramided": 15798,
+      "plain": 30214
+     },
+     "target": {
+      "n": 7,
+      "pyramided": 166624,
+      "plain": 73344
+     }
+    },
+    "plain_exit_of_added": {
+     "square-off": 164,
+     "breakeven": 118,
+     "noise exit": 49,
+     "target": 8,
+     "stop": 6
+    },
+    "mean_add_lots": 1.0,
+    "top5_delta_train": [
+     {
+      "date": "2023-03-13",
+      "sym": "BANKNIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 5.52,
+      "plain": 14101,
+      "pyramided": 35595,
+      "units": [
+       14101,
+       12062,
+       9432
+      ]
+     },
+     {
+      "date": "2023-01-25",
+      "sym": "BANKNIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 6.16,
+      "plain": 13554,
+      "pyramided": 33557,
+      "units": [
+       13554,
+       11213,
+       8789
+      ]
+     },
+     {
+      "date": "2025-02-04",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 5.12,
+      "plain": 12888,
+      "pyramided": 31647,
+      "units": [
+       12888,
+       10736,
+       8023
+      ]
+     },
+     {
+      "date": "2025-01-06",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 4.44,
+      "plain": 12310,
+      "pyramided": 29371,
+      "units": [
+       12310,
+       9929,
+       7133
+      ]
+     },
+     {
+      "date": "2023-11-29",
+      "sym": "BANKNIFTY",
+      "rule": "camarilla",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 8.51,
+      "plain": 9867,
+      "pyramided": 26273,
+      "units": [
+       9867,
+       8716,
+       7690
+      ]
+     }
+    ],
+    "top5_share_of_delta_train_pct": 120.7,
+    "top5_delta_unseen": [
+     {
+      "date": "2026-07-08",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 6.14,
+      "plain": 16833,
+      "pyramided": 44074,
+      "units": [
+       16833,
+       14939,
+       12303
+      ]
+     },
+     {
+      "date": "2026-06-12",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 5.63,
+      "plain": 12832,
+      "pyramided": 32550,
+      "units": [
+       12832,
+       10968,
+       8750
+      ]
+     },
+     {
+      "date": "2026-10-08",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 5.49,
+      "plain": 12404,
+      "pyramided": 31046,
+      "units": [
+       12404,
+       10367,
+       8275
+      ]
+     },
+     {
+      "date": "2026-06-24",
+      "sym": "BANKNIFTY",
+      "rule": "noise",
+      "side": 1,
+      "adds": 2,
+      "exit": "target",
+      "R": 4.0,
+      "plain": 13515,
+      "pyramided": 31166,
+      "units": [
+       13515,
+       10493,
+       7157
+      ]
+     },
+     {
+      "date": "2026-05-12",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 4.04,
+      "plain": 12924,
+      "pyramided": 29153,
+      "units": [
+       12924,
+       9875,
+       6354
+      ]
+     }
+    ],
+    "top5_share_of_delta_unseen_pct": 93.5
+   },
+   "cfg": {
+    "rules": [
+     "noise",
+     "camarilla"
+    ],
+    "fracs": [
+     0.5,
+     0.5
+    ]
+   },
+   "beats": false,
+   "baseline_scaled_to_same_units": {
+    "train": {
+     "net": 253715,
+     "max_dd": -99849,
+     "units_per_trade": 1.56
+    },
+    "unseen": {
+     "net": 95170,
+     "max_dd": -35970,
+     "units_per_trade": 1.57
+    }
+   },
+   "beats_scaled": false
+  },
+  "pyramid first trade noise only, sizes 1:1:1": {
+   "train": {
+    "trades": 797,
+    "net": 184095,
+    "per_trade": 231,
+    "win": 25.1,
+    "pf": 1.24,
+    "max_dd": -87243,
+    "net_per_dd": 2.11,
+    "charges": 69478,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 124
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 74688,
+    "per_trade": 593,
+    "win": 29.4,
+    "pf": 1.6,
+    "max_dd": -31028,
+    "net_per_dd": 2.41,
+    "charges": 12032,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 27
+   },
+   "years": {
+    "2023": 5214,
+    "2024": 158346,
+    "2025": 6666,
+    "2026": 88557
+   },
+   "exits": {
+    "stop": 211,
+    "time stop": 204,
+    "square-off": 184,
+    "noise exit": 149,
+    "breakeven": 119,
+    "add-stop@be": 29,
+    "add-stop@+1R": 19,
+    "target": 8
+   },
+   "pyramid": {
+    "first_trades": 269,
+    "with_1_add": 55,
+    "with_2_adds": 48,
+    "capped_by_cash": 1,
+    "plain_net_on_added": 258581,
+    "pyramided_net_on_added": 296699,
+    "delta_train": 23992,
+    "delta_unseen": 14125,
+    "by_final_exit": {
+     "square-off": {
+      "n": 28,
+      "pyramided": 230187,
+      "plain": 135536
+     },
+     "noise exit": {
+      "n": 20,
+      "pyramided": 15798,
+      "plain": 30214
+     },
+     "add-stop@be": {
+      "n": 29,
+      "pyramided": -88274,
+      "plain": -18742
+     },
+     "add-stop@+1R": {
+      "n": 19,
+      "pyramided": -27636,
+      "plain": 38229
+     },
+     "target": {
+      "n": 7,
+      "pyramided": 166624,
+      "plain": 73344
+     }
+    },
+    "plain_exit_of_added": {
+     "noise exit": 49,
+     "square-off": 40,
+     "target": 8,
+     "stop": 6
+    },
+    "mean_add_lots": 1.03,
+    "top5_delta_train": [
+     {
+      "date": "2024-01-23",
+      "sym": "NIFTY",
+      "rule": "noise",
+      "side": -1,
+      "adds": 2,
+      "exit": "target",
+      "R": 4.0,
+      "plain": 11450,
+      "pyramided": 26111,
+      "units": [
+       11450,
+       8672,
+       5989
+      ]
+     },
+     {
+      "date": "2024-03-01",
+      "sym": "BANKNIFTY",
+      "rule": "noise",
+      "side": 1,
+      "adds": 2,
+      "exit": "target",
+      "R": 4.0,
+      "plain": 11799,
+      "pyramided": 25921,
+      "units": [
+       11799,
+       8724,
+       5399
+      ]
+     },
+     {
+      "date": "2025-04-17",
+      "sym": "BANKNIFTY",
+      "rule": "noise",
+      "side": 1,
+      "adds": 2,
+      "exit": "target",
+      "R": 4.0,
+      "plain": 10023,
+      "pyramided": 23704,
+      "units": [
+       10023,
+       8101,
+       5580
+      ]
+     },
+     {
+      "date": "2024-04-29",
+      "sym": "BANKNIFTY",
+      "rule": "noise",
+      "side": 1,
+      "adds": 2,
+      "exit": "target",
+      "R": 4.0,
+      "plain": 10510,
+      "pyramided": 23629,
+      "units": [
+       10510,
+       7894,
+       5224
+      ]
+     },
+     {
+      "date": "2026-03-11",
+      "sym": "BANKNIFTY",
+      "rule": "noise",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 3.72,
+      "plain": 9943,
+      "pyramided": 21380,
+      "units": [
+       9943,
+       7089,
+       4349
+      ]
+     }
+    ],
+    "top5_share_of_delta_train_pct": 279.3,
+    "top5_delta_unseen": [
+     {
+      "date": "2026-06-24",
+      "sym": "BANKNIFTY",
+      "rule": "noise",
+      "side": 1,
+      "adds": 2,
+      "exit": "target",
+      "R": 4.0,
+      "plain": 13515,
+      "pyramided": 31166,
+      "units": [
+       13515,
+       10493,
+       7157
+      ]
+     },
+     {
+      "date": "2026-09-15",
+      "sym": "BANKNIFTY",
+      "rule": "noise",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 2.74,
+      "plain": 7187,
+      "pyramided": 13985,
+      "units": [
+       7187,
+       4846,
+       1953
+      ]
+     },
+     {
+      "date": "2026-09-15",
+      "sym": "NIFTY",
+      "rule": "noise",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 3.28,
+      "plain": 4873,
+      "pyramided": 10146,
+      "units": [
+       4873,
+       3410,
+       1863
+      ]
+     },
+     {
+      "date": "2026-06-24",
+      "sym": "NIFTY",
+      "rule": "noise",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 2.37,
+      "plain": 4973,
+      "pyramided": 7565,
+      "units": [
+       4973,
+       2577,
+       14
+      ]
+     },
+     {
+      "date": "2026-06-09",
+      "sym": "BANKNIFTY",
+      "rule": "noise",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 2.19,
+      "plain": 4458,
+      "pyramided": 6474,
+      "units": [
+       4458,
+       2161,
+       -145
+      ]
+     }
+    ],
+    "top5_share_of_delta_unseen_pct": 243.0
+   },
+   "cfg": {
+    "rules": [
+     "noise"
+    ],
+    "fracs": [
+     1.0,
+     1.0
+    ]
+   },
+   "beats": false,
+   "baseline_scaled_to_same_units": {
+    "train": {
+     "net": 188529,
+     "max_dd": -74195,
+     "units_per_trade": 1.16
+    },
+    "unseen": {
+     "net": 73541,
+     "max_dd": -27795,
+     "units_per_trade": 1.21
+    }
+   },
+   "beats_scaled": false
+  },
+  "pyramid first trade noise only, sizes 1:0.5:0.5": {
+   "train": {
+    "trades": 797,
+    "net": 182470,
+    "per_trade": 229,
+    "win": 25.1,
+    "pf": 1.23,
+    "max_dd": -87243,
+    "net_per_dd": 2.09,
+    "charges": 69408,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 124
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 74688,
+    "per_trade": 593,
+    "win": 29.4,
+    "pf": 1.6,
+    "max_dd": -31028,
+    "net_per_dd": 2.41,
+    "charges": 12032,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 27
+   },
+   "years": {
+    "2023": 3589,
+    "2024": 158346,
+    "2025": 6666,
+    "2026": 88557
+   },
+   "exits": {
+    "stop": 211,
+    "time stop": 204,
+    "square-off": 184,
+    "noise exit": 149,
+    "breakeven": 119,
+    "add-stop@be": 29,
+    "add-stop@+1R": 19,
+    "target": 8
+   },
+   "pyramid": {
+    "first_trades": 269,
+    "with_1_add": 55,
+    "with_2_adds": 48,
+    "capped_by_cash": 1,
+    "plain_net_on_added": 258581,
+    "pyramided_net_on_added": 295073,
+    "delta_train": 22367,
+    "delta_unseen": 14125,
+    "by_final_exit": {
+     "square-off": {
+      "n": 28,
+      "pyramided": 227539,
+      "plain": 135536
+     },
+     "noise exit": {
+      "n": 20,
+      "pyramided": 15798,
+      "plain": 30214
+     },
+     "add-stop@be": {
+      "n": 29,
+      "pyramided": -87251,
+      "plain": -18742
+     },
+     "add-stop@+1R": {
+      "n": 19,
+      "pyramided": -27636,
+      "plain": 38229
+     },
+     "target": {
+      "n": 7,
+      "pyramided": 166624,
+      "plain": 73344
+     }
+    },
+    "plain_exit_of_added": {
+     "noise exit": 49,
+     "square-off": 40,
+     "target": 8,
+     "stop": 6
+    },
+    "mean_add_lots": 1.0,
+    "top5_delta_train": [
+     {
+      "date": "2024-01-23",
+      "sym": "NIFTY",
+      "rule": "noise",
+      "side": -1,
+      "adds": 2,
+      "exit": "target",
+      "R": 4.0,
+      "plain": 11450,
+      "pyramided": 26111,
+      "units": [
+       11450,
+       8672,
+       5989
+      ]
+     },
+     {
+      "date": "2024-03-01",
+      "sym": "BANKNIFTY",
+      "rule": "noise",
+      "side": 1,
+      "adds": 2,
+      "exit": "target",
+      "R": 4.0,
+      "plain": 11799,
+      "pyramided": 25921,
+      "units": [
+       11799,
+       8724,
+       5399
+      ]
+     },
+     {
+      "date": "2025-04-17",
+      "sym": "BANKNIFTY",
+      "rule": "noise",
+      "side": 1,
+      "adds": 2,
+      "exit": "target",
+      "R": 4.0,
+      "plain": 10023,
+      "pyramided": 23704,
+      "units": [
+       10023,
+       8101,
+       5580
+      ]
+     },
+     {
+      "date": "2024-04-29",
+      "sym": "BANKNIFTY",
+      "rule": "noise",
+      "side": 1,
+      "adds": 2,
+      "exit": "target",
+      "R": 4.0,
+      "plain": 10510,
+      "pyramided": 23629,
+      "units": [
+       10510,
+       7894,
+       5224
+      ]
+     },
+     {
+      "date": "2026-03-11",
+      "sym": "BANKNIFTY",
+      "rule": "noise",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 3.72,
+      "plain": 9943,
+      "pyramided": 21380,
+      "units": [
+       9943,
+       7089,
+       4349
+      ]
+     }
+    ],
+    "top5_share_of_delta_train_pct": 299.6,
+    "top5_delta_unseen": [
+     {
+      "date": "2026-06-24",
+      "sym": "BANKNIFTY",
+      "rule": "noise",
+      "side": 1,
+      "adds": 2,
+      "exit": "target",
+      "R": 4.0,
+      "plain": 13515,
+      "pyramided": 31166,
+      "units": [
+       13515,
+       10493,
+       7157
+      ]
+     },
+     {
+      "date": "2026-09-15",
+      "sym": "BANKNIFTY",
+      "rule": "noise",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 2.74,
+      "plain": 7187,
+      "pyramided": 13985,
+      "units": [
+       7187,
+       4846,
+       1953
+      ]
+     },
+     {
+      "date": "2026-09-15",
+      "sym": "NIFTY",
+      "rule": "noise",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 3.28,
+      "plain": 4873,
+      "pyramided": 10146,
+      "units": [
+       4873,
+       3410,
+       1863
+      ]
+     },
+     {
+      "date": "2026-06-24",
+      "sym": "NIFTY",
+      "rule": "noise",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 2.37,
+      "plain": 4973,
+      "pyramided": 7565,
+      "units": [
+       4973,
+       2577,
+       14
+      ]
+     },
+     {
+      "date": "2026-06-09",
+      "sym": "BANKNIFTY",
+      "rule": "noise",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 2.19,
+      "plain": 4458,
+      "pyramided": 6474,
+      "units": [
+       4458,
+       2161,
+       -145
+      ]
+     }
+    ],
+    "top5_share_of_delta_unseen_pct": 243.0
+   },
+   "cfg": {
+    "rules": [
+     "noise"
+    ],
+    "fracs": [
+     0.5,
+     0.5
+    ]
+   },
+   "beats": false,
+   "baseline_scaled_to_same_units": {
+    "train": {
+     "net": 188529,
+     "max_dd": -74195,
+     "units_per_trade": 1.16
+    },
+    "unseen": {
+     "net": 73541,
+     "max_dd": -27795,
+     "units_per_trade": 1.21
+    }
+   },
+   "beats_scaled": false
+  },
+  "pyramid first trade camarilla only, sizes 1:1:1": {
+   "train": {
+    "trades": 797,
+    "net": 220805,
+    "per_trade": 277,
+    "win": 25.3,
+    "pf": 1.23,
+    "max_dd": -99009,
+    "net_per_dd": 2.23,
+    "charges": 84783,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 319
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 152815,
+    "per_trade": 1213,
+    "win": 28.6,
+    "pf": 2.06,
+    "max_dd": -26122,
+    "net_per_dd": 5.85,
+    "charges": 13460,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 45
+   },
+   "years": {
+    "2023": 109430,
+    "2024": 52290,
+    "2025": 24801,
+    "2026": 187100
+   },
+   "exits": {
+    "stop": 216,
+    "time stop": 204,
+    "noise exit": 178,
+    "square-off": 172,
+    "add-stop@be": 95,
+    "add-stop@+1R": 48,
+    "target": 9,
+    "breakeven": 1
+   },
+   "pyramid": {
+    "first_trades": 596,
+    "with_1_add": 120,
+    "with_2_adds": 122,
+    "capped_by_cash": 0,
+    "plain_net_on_added": 597853,
+    "pyramided_net_on_added": 743360,
+    "delta_train": 53255,
+    "delta_unseen": 92252,
+    "by_final_exit": {
+     "square-off": {
+      "n": 99,
+      "pyramided": 1092447,
+      "plain": 565657
+     },
+     "add-stop@be": {
+      "n": 95,
+      "pyramided": -278372,
+      "plain": -44820
+     },
+     "add-stop@+1R": {
+      "n": 48,
+      "pyramided": -70715,
+      "plain": 77016
+     }
+    },
+    "plain_exit_of_added": {
+     "square-off": 124,
+     "breakeven": 118
+    },
+    "mean_add_lots": 1.02,
+    "top5_delta_train": [
+     {
+      "date": "2023-03-13",
+      "sym": "BANKNIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 5.52,
+      "plain": 14101,
+      "pyramided": 35595,
+      "units": [
+       14101,
+       12062,
+       9432
+      ]
+     },
+     {
+      "date": "2023-01-25",
+      "sym": "BANKNIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 6.16,
+      "plain": 13554,
+      "pyramided": 33557,
+      "units": [
+       13554,
+       11213,
+       8789
+      ]
+     },
+     {
+      "date": "2025-02-04",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 5.12,
+      "plain": 12888,
+      "pyramided": 31647,
+      "units": [
+       12888,
+       10736,
+       8023
+      ]
+     },
+     {
+      "date": "2025-01-06",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 4.44,
+      "plain": 12310,
+      "pyramided": 29371,
+      "units": [
+       12310,
+       9929,
+       7133
+      ]
+     },
+     {
+      "date": "2023-11-29",
+      "sym": "BANKNIFTY",
+      "rule": "camarilla",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 8.51,
+      "plain": 9867,
+      "pyramided": 26273,
+      "units": [
+       9867,
+       8716,
+       7690
+      ]
+     }
+    ],
+    "top5_share_of_delta_train_pct": 176.0,
+    "top5_delta_unseen": [
+     {
+      "date": "2026-07-08",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 6.14,
+      "plain": 16833,
+      "pyramided": 44074,
+      "units": [
+       16833,
+       14939,
+       12303
+      ]
+     },
+     {
+      "date": "2026-06-12",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 5.63,
+      "plain": 12832,
+      "pyramided": 32550,
+      "units": [
+       12832,
+       10968,
+       8750
+      ]
+     },
+     {
+      "date": "2026-10-08",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 5.49,
+      "plain": 12404,
+      "pyramided": 31046,
+      "units": [
+       12404,
+       10367,
+       8275
+      ]
+     },
+     {
+      "date": "2026-05-12",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 4.04,
+      "plain": 12924,
+      "pyramided": 29153,
+      "units": [
+       12924,
+       9875,
+       6354
+      ]
+     },
+     {
+      "date": "2026-07-17",
+      "sym": "BANKNIFTY",
+      "rule": "camarilla",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 3.82,
+      "plain": 10236,
+      "pyramided": 22636,
+      "units": [
+       10236,
+       7383,
+       5017
+      ]
+     }
+    ],
+    "top5_share_of_delta_unseen_pct": 102.1
+   },
+   "cfg": {
+    "rules": [
+     "camarilla"
+    ],
+    "fracs": [
+     1.0,
+     1.0
+    ]
+   },
+   "beats": false,
+   "baseline_scaled_to_same_units": {
+    "train": {
+     "net": 228445,
+     "max_dd": -89905,
+     "units_per_trade": 1.4
+    },
+    "unseen": {
+     "net": 82193,
+     "max_dd": -31065,
+     "units_per_trade": 1.36
+    }
+   },
+   "beats_scaled": false
+  },
+  "pyramid first trade camarilla only, sizes 1:0.5:0.5": {
+   "train": {
+    "trades": 797,
+    "net": 222800,
+    "per_trade": 280,
+    "win": 25.5,
+    "pf": 1.23,
+    "max_dd": -99009,
+    "net_per_dd": 2.25,
+    "charges": 84669,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 319
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 152815,
+    "per_trade": 1213,
+    "win": 28.6,
+    "pf": 2.06,
+    "max_dd": -26122,
+    "net_per_dd": 5.85,
+    "charges": 13460,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 45
+   },
+   "years": {
+    "2023": 111425,
+    "2024": 52290,
+    "2025": 24801,
+    "2026": 187100
+   },
+   "exits": {
+    "stop": 216,
+    "time stop": 204,
+    "noise exit": 178,
+    "square-off": 172,
+    "add-stop@be": 95,
+    "add-stop@+1R": 48,
+    "target": 9,
+    "breakeven": 1
+   },
+   "pyramid": {
+    "first_trades": 596,
+    "with_1_add": 120,
+    "with_2_adds": 122,
+    "capped_by_cash": 0,
+    "plain_net_on_added": 597853,
+    "pyramided_net_on_added": 745356,
+    "delta_train": 55251,
+    "delta_unseen": 92252,
+    "by_final_exit": {
+     "square-off": {
+      "n": 99,
+      "pyramided": 1088272,
+      "plain": 565657
+     },
+     "add-stop@be": {
+      "n": 95,
+      "pyramided": -273635,
+      "plain": -44820
+     },
+     "add-stop@+1R": {
+      "n": 48,
+      "pyramided": -69281,
+      "plain": 77016
+     }
+    },
+    "plain_exit_of_added": {
+     "square-off": 124,
+     "breakeven": 118
+    },
+    "mean_add_lots": 1.0,
+    "top5_delta_train": [
+     {
+      "date": "2023-03-13",
+      "sym": "BANKNIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 5.52,
+      "plain": 14101,
+      "pyramided": 35595,
+      "units": [
+       14101,
+       12062,
+       9432
+      ]
+     },
+     {
+      "date": "2023-01-25",
+      "sym": "BANKNIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 6.16,
+      "plain": 13554,
+      "pyramided": 33557,
+      "units": [
+       13554,
+       11213,
+       8789
+      ]
+     },
+     {
+      "date": "2025-02-04",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 5.12,
+      "plain": 12888,
+      "pyramided": 31647,
+      "units": [
+       12888,
+       10736,
+       8023
+      ]
+     },
+     {
+      "date": "2025-01-06",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 4.44,
+      "plain": 12310,
+      "pyramided": 29371,
+      "units": [
+       12310,
+       9929,
+       7133
+      ]
+     },
+     {
+      "date": "2023-11-29",
+      "sym": "BANKNIFTY",
+      "rule": "camarilla",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 8.51,
+      "plain": 9867,
+      "pyramided": 26273,
+      "units": [
+       9867,
+       8716,
+       7690
+      ]
+     }
+    ],
+    "top5_share_of_delta_train_pct": 169.6,
+    "top5_delta_unseen": [
+     {
+      "date": "2026-07-08",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 6.14,
+      "plain": 16833,
+      "pyramided": 44074,
+      "units": [
+       16833,
+       14939,
+       12303
+      ]
+     },
+     {
+      "date": "2026-06-12",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 5.63,
+      "plain": 12832,
+      "pyramided": 32550,
+      "units": [
+       12832,
+       10968,
+       8750
+      ]
+     },
+     {
+      "date": "2026-10-08",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 5.49,
+      "plain": 12404,
+      "pyramided": 31046,
+      "units": [
+       12404,
+       10367,
+       8275
+      ]
+     },
+     {
+      "date": "2026-05-12",
+      "sym": "NIFTY",
+      "rule": "camarilla",
+      "side": -1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 4.04,
+      "plain": 12924,
+      "pyramided": 29153,
+      "units": [
+       12924,
+       9875,
+       6354
+      ]
+     },
+     {
+      "date": "2026-07-17",
+      "sym": "BANKNIFTY",
+      "rule": "camarilla",
+      "side": 1,
+      "adds": 2,
+      "exit": "square-off",
+      "R": 3.82,
+      "plain": 10236,
+      "pyramided": 22636,
+      "units": [
+       10236,
+       7383,
+       5017
+      ]
+     }
+    ],
+    "top5_share_of_delta_unseen_pct": 102.1
+   },
+   "cfg": {
+    "rules": [
+     "camarilla"
+    ],
+    "fracs": [
+     0.5,
+     0.5
+    ]
+   },
+   "beats": false,
+   "baseline_scaled_to_same_units": {
+    "train": {
+     "net": 228445,
+     "max_dd": -89905,
+     "units_per_trade": 1.4
+    },
+    "unseen": {
+     "net": 82193,
+     "max_dd": -31065,
+     "units_per_trade": 1.36
+    }
+   },
+   "beats_scaled": false
+  }
+ },
+ "item4_trend_day_extras": {
+  "confirmed_days": {
+   "train": {
+    "index_days_with_a_trade": 744,
+    "confirmed": 80,
+    "pct": 10.8
+   },
+   "unseen": {
+    "index_days_with_a_trade": 121,
+    "confirmed": 16,
+    "pct": 13.2
+   }
+  },
+  "extras on confirmed days, same dir as 1st, max 1": {
+   "train": {
+    "trades": 799,
+    "net": 165241,
+    "per_trade": 207,
+    "win": 29.0,
+    "pf": 1.24,
+    "max_dd": -64206,
+    "net_per_dd": 2.57,
+    "charges": 59381,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 3,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 127,
+    "net": 58756,
+    "per_trade": 463,
+    "win": 31.5,
+    "pf": 1.53,
+    "max_dd": -22890,
+    "net_per_dd": 2.57,
+    "charges": 9838,
+    "per_day": 1.05,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 1,
+    "adds": 0
+   },
+   "years": {
+    "2023": 31331,
+    "2024": 100357,
+    "2025": 12949,
+    "2026": 79359
+   },
+   "exits": {
+    "stop": 216,
+    "time stop": 204,
+    "square-off": 200,
+    "noise exit": 178,
+    "breakeven": 119,
+    "target": 9
+   },
+   "extras": {
+    "n": 4,
+    "net": 288,
+    "train_net": 2095,
+    "unseen_net": -1807,
+    "unseen_n": 1,
+    "win": 50.0,
+    "by_rule": {
+     "noise": 288,
+     "camarilla": 0
+    },
+    "exits": {
+     "square-off": 4
+    }
+   },
+   "cfg": {
+    "when": "confirmed",
+    "same_dir": true,
+    "max": 1
+   },
+   "beats": false
+  },
+  "extras on confirmed days, same dir as 1st, max 2": {
+   "train": {
+    "trades": 799,
+    "net": 165241,
+    "per_trade": 207,
+    "win": 29.0,
+    "pf": 1.24,
+    "max_dd": -64206,
+    "net_per_dd": 2.57,
+    "charges": 59381,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 3,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 127,
+    "net": 58756,
+    "per_trade": 463,
+    "win": 31.5,
+    "pf": 1.53,
+    "max_dd": -22890,
+    "net_per_dd": 2.57,
+    "charges": 9838,
+    "per_day": 1.05,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 1,
+    "adds": 0
+   },
+   "years": {
+    "2023": 31331,
+    "2024": 100357,
+    "2025": 12949,
+    "2026": 79359
+   },
+   "exits": {
+    "stop": 216,
+    "time stop": 204,
+    "square-off": 200,
+    "noise exit": 178,
+    "breakeven": 119,
+    "target": 9
+   },
+   "extras": {
+    "n": 4,
+    "net": 288,
+    "train_net": 2095,
+    "unseen_net": -1807,
+    "unseen_n": 1,
+    "win": 50.0,
+    "by_rule": {
+     "noise": 288,
+     "camarilla": 0
+    },
+    "exits": {
+     "square-off": 4
+    }
+   },
+   "cfg": {
+    "when": "confirmed",
+    "same_dir": true,
+    "max": 2
+   },
+   "beats": false
+  },
+  "extras on confirmed days, any dir, max 1": {
+   "train": {
+    "trades": 799,
+    "net": 165241,
+    "per_trade": 207,
+    "win": 29.0,
+    "pf": 1.24,
+    "max_dd": -64206,
+    "net_per_dd": 2.57,
+    "charges": 59381,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 3,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 127,
+    "net": 58756,
+    "per_trade": 463,
+    "win": 31.5,
+    "pf": 1.53,
+    "max_dd": -22890,
+    "net_per_dd": 2.57,
+    "charges": 9838,
+    "per_day": 1.05,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 1,
+    "adds": 0
+   },
+   "years": {
+    "2023": 31331,
+    "2024": 100357,
+    "2025": 12949,
+    "2026": 79359
+   },
+   "exits": {
+    "stop": 216,
+    "time stop": 204,
+    "square-off": 200,
+    "noise exit": 178,
+    "breakeven": 119,
+    "target": 9
+   },
+   "extras": {
+    "n": 4,
+    "net": 288,
+    "train_net": 2095,
+    "unseen_net": -1807,
+    "unseen_n": 1,
+    "win": 50.0,
+    "by_rule": {
+     "noise": 288,
+     "camarilla": 0
+    },
+    "exits": {
+     "square-off": 4
+    }
+   },
+   "cfg": {
+    "when": "confirmed",
+    "same_dir": false,
+    "max": 1
+   },
+   "beats": false
+  },
+  "extras on confirmed days, any dir, max 2": {
+   "train": {
+    "trades": 799,
+    "net": 165241,
+    "per_trade": 207,
+    "win": 29.0,
+    "pf": 1.24,
+    "max_dd": -64206,
+    "net_per_dd": 2.57,
+    "charges": 59381,
+    "per_day": 1.07,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 3,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 127,
+    "net": 58756,
+    "per_trade": 463,
+    "win": 31.5,
+    "pf": 1.53,
+    "max_dd": -22890,
+    "net_per_dd": 2.57,
+    "charges": 9838,
+    "per_day": 1.05,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 1,
+    "adds": 0
+   },
+   "years": {
+    "2023": 31331,
+    "2024": 100357,
+    "2025": 12949,
+    "2026": 79359
+   },
+   "exits": {
+    "stop": 216,
+    "time stop": 204,
+    "square-off": 200,
+    "noise exit": 178,
+    "breakeven": 119,
+    "target": 9
+   },
+   "extras": {
+    "n": 4,
+    "net": 288,
+    "train_net": 2095,
+    "unseen_net": -1807,
+    "unseen_n": 1,
+    "win": 50.0,
+    "by_rule": {
+     "noise": 288,
+     "camarilla": 0
+    },
+    "exits": {
+     "square-off": 4
+    }
+   },
+   "cfg": {
+    "when": "confirmed",
+    "same_dir": false,
+    "max": 2
+   },
+   "beats": false
+  },
+  "extras on always days, same dir as 1st, max 1": {
+   "train": {
+    "trades": 872,
+    "net": 156929,
+    "per_trade": 180,
+    "win": 28.9,
+    "pf": 1.21,
+    "max_dd": -56687,
+    "net_per_dd": 2.77,
+    "charges": 64981,
+    "per_day": 1.17,
+    "max_per_day": 3,
+    "re": 0,
+    "extra": 80,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 144,
+    "net": 34586,
+    "per_trade": 240,
+    "win": 29.9,
+    "pf": 1.26,
+    "max_dd": -33528,
+    "net_per_dd": 1.03,
+    "charges": 11183,
+    "per_day": 1.19,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 18,
+    "adds": 0
+   },
+   "years": {
+    "2023": 22558,
+    "2024": 99475,
+    "2025": 17429,
+    "2026": 52053
+   },
+   "exits": {
+    "stop": 242,
+    "square-off": 218,
+    "time stop": 217,
+    "noise exit": 206,
+    "breakeven": 121,
+    "target": 12
+   },
+   "extras": {
+    "n": 98,
+    "net": -29847,
+    "train_net": -3870,
+    "unseen_net": -25978,
+    "unseen_n": 18,
+    "win": 27.6,
+    "by_rule": {
+     "noise": -6194,
+     "camarilla": -23653
+    },
+    "exits": {
+     "noise exit": 28,
+     "stop": 28,
+     "square-off": 24,
+     "time stop": 13,
+     "target": 3,
+     "breakeven": 2
+    }
+   },
+   "cfg": {
+    "when": "always",
+    "same_dir": true,
+    "max": 1
+   },
+   "beats": false
+  },
+  "extras on always days, same dir as 1st, max 2": {
+   "train": {
+    "trades": 877,
+    "net": 155047,
+    "per_trade": 177,
+    "win": 29.0,
+    "pf": 1.2,
+    "max_dd": -58828,
+    "net_per_dd": 2.64,
+    "charges": 65424,
+    "per_day": 1.18,
+    "max_per_day": 3,
+    "re": 0,
+    "extra": 85,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 144,
+    "net": 34586,
+    "per_trade": 240,
+    "win": 29.9,
+    "pf": 1.26,
+    "max_dd": -33528,
+    "net_per_dd": 1.03,
+    "charges": 11183,
+    "per_day": 1.19,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 18,
+    "adds": 0
+   },
+   "years": {
+    "2023": 22558,
+    "2024": 102001,
+    "2025": 13005,
+    "2026": 52069
+   },
+   "exits": {
+    "stop": 245,
+    "square-off": 220,
+    "time stop": 217,
+    "noise exit": 206,
+    "breakeven": 121,
+    "target": 12
+   },
+   "extras": {
+    "n": 103,
+    "net": -31729,
+    "train_net": -5752,
+    "unseen_net": -25978,
+    "unseen_n": 18,
+    "win": 28.2,
+    "by_rule": {
+     "noise": -8076,
+     "camarilla": -23653
+    },
+    "exits": {
+     "stop": 31,
+     "noise exit": 28,
+     "square-off": 26,
+     "time stop": 13,
+     "target": 3,
+     "breakeven": 2
+    }
+   },
+   "cfg": {
+    "when": "always",
+    "same_dir": true,
+    "max": 2
+   },
+   "beats": false
+  },
+  "extras on always days, any dir, max 1": {
+   "train": {
+    "trades": 894,
+    "net": 165008,
+    "per_trade": 185,
+    "win": 28.6,
+    "pf": 1.21,
+    "max_dd": -49438,
+    "net_per_dd": 3.34,
+    "charges": 66741,
+    "per_day": 1.2,
+    "max_per_day": 3,
+    "re": 0,
+    "extra": 107,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 144,
+    "net": 34586,
+    "per_trade": 240,
+    "win": 29.9,
+    "pf": 1.26,
+    "max_dd": -33528,
+    "net_per_dd": 1.03,
+    "charges": 11183,
+    "per_day": 1.19,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 18,
+    "adds": 0
+   },
+   "years": {
+    "2023": 19458,
+    "2024": 88887,
+    "2025": 23303,
+    "2026": 67945
+   },
+   "exits": {
+    "stop": 249,
+    "square-off": 222,
+    "time stop": 220,
+    "noise exit": 206,
+    "breakeven": 129,
+    "target": 12
+   },
+   "extras": {
+    "n": 125,
+    "net": -22648,
+    "train_net": 3330,
+    "unseen_net": -25978,
+    "unseen_n": 18,
+    "win": 25.6,
+    "by_rule": {
+     "noise": -7818,
+     "camarilla": -14830
+    },
+    "exits": {
+     "stop": 38,
+     "noise exit": 29,
+     "square-off": 29,
+     "time stop": 16,
+     "breakeven": 10,
+     "target": 3
+    }
+   },
+   "cfg": {
+    "when": "always",
+    "same_dir": false,
+    "max": 1
+   },
+   "beats": false
+  },
+  "extras on always days, any dir, max 2": {
+   "train": {
+    "trades": 903,
+    "net": 170288,
+    "per_trade": 189,
+    "win": 28.7,
+    "pf": 1.21,
+    "max_dd": -51579,
+    "net_per_dd": 3.3,
+    "charges": 67546,
+    "per_day": 1.21,
+    "max_per_day": 4,
+    "re": 0,
+    "extra": 116,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 144,
+    "net": 34586,
+    "per_trade": 240,
+    "win": 29.9,
+    "pf": 1.26,
+    "max_dd": -33528,
+    "net_per_dd": 1.03,
+    "charges": 11183,
+    "per_day": 1.19,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 18,
+    "adds": 0
+   },
+   "years": {
+    "2023": 18805,
+    "2024": 99229,
+    "2025": 18878,
+    "2026": 67961
+   },
+   "exits": {
+    "stop": 253,
+    "square-off": 225,
+    "time stop": 221,
+    "noise exit": 206,
+    "breakeven": 130,
+    "target": 12
+   },
+   "extras": {
+    "n": 134,
+    "net": -17367,
+    "train_net": 8610,
+    "unseen_net": -25978,
+    "unseen_n": 18,
+    "win": 26.1,
+    "by_rule": {
+     "noise": 767,
+     "camarilla": -18135
+    },
+    "exits": {
+     "stop": 42,
+     "square-off": 32,
+     "noise exit": 29,
+     "time stop": 17,
+     "breakeven": 11,
+     "target": 3
+    }
+   },
+   "cfg": {
+    "when": "always",
+    "same_dir": false,
+    "max": 2
+   },
+   "beats": false
+  },
+  "extras on unconfirmed days, same dir as 1st, max 1": {
+   "train": {
+    "trades": 869,
+    "net": 154834,
+    "per_trade": 178,
+    "win": 28.8,
+    "pf": 1.2,
+    "max_dd": -56687,
+    "net_per_dd": 2.73,
+    "charges": 64727,
+    "per_day": 1.17,
+    "max_per_day": 3,
+    "re": 0,
+    "extra": 77,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 143,
+    "net": 36393,
+    "per_trade": 254,
+    "win": 30.1,
+    "pf": 1.27,
+    "max_dd": -33528,
+    "net_per_dd": 1.09,
+    "charges": 11109,
+    "per_day": 1.18,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 17,
+    "adds": 0
+   },
+   "years": {
+    "2023": 22558,
+    "2024": 95602,
+    "2025": 19207,
+    "2026": 53860
+   },
+   "exits": {
+    "stop": 242,
+    "time stop": 217,
+    "square-off": 214,
+    "noise exit": 206,
+    "breakeven": 121,
+    "target": 12
+   },
+   "extras": {
+    "n": 94,
+    "net": -30135,
+    "train_net": -5965,
+    "unseen_net": -24171,
+    "unseen_n": 17,
+    "win": 26.6,
+    "by_rule": {
+     "noise": -6482,
+     "camarilla": -23653
+    },
+    "exits": {
+     "noise exit": 28,
+     "stop": 28,
+     "square-off": 20,
+     "time stop": 13,
+     "target": 3,
+     "breakeven": 2
+    }
+   },
+   "cfg": {
+    "when": "unconfirmed",
+    "same_dir": true,
+    "max": 1
+   },
+   "beats": false
+  },
+  "extras on unconfirmed days, same dir as 1st, max 2": {
+   "train": {
+    "trades": 874,
+    "net": 152952,
+    "per_trade": 175,
+    "win": 28.8,
+    "pf": 1.2,
+    "max_dd": -58828,
+    "net_per_dd": 2.6,
+    "charges": 65171,
+    "per_day": 1.17,
+    "max_per_day": 3,
+    "re": 0,
+    "extra": 82,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 143,
+    "net": 36393,
+    "per_trade": 254,
+    "win": 30.1,
+    "pf": 1.27,
+    "max_dd": -33528,
+    "net_per_dd": 1.09,
+    "charges": 11109,
+    "per_day": 1.18,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 17,
+    "adds": 0
+   },
+   "years": {
+    "2023": 22558,
+    "2024": 98129,
+    "2025": 14782,
+    "2026": 53876
+   },
+   "exits": {
+    "stop": 245,
+    "time stop": 217,
+    "square-off": 216,
+    "noise exit": 206,
+    "breakeven": 121,
+    "target": 12
+   },
+   "extras": {
+    "n": 99,
+    "net": -32017,
+    "train_net": -7846,
+    "unseen_net": -24171,
+    "unseen_n": 17,
+    "win": 27.3,
+    "by_rule": {
+     "noise": -8364,
+     "camarilla": -23653
+    },
+    "exits": {
+     "stop": 31,
+     "noise exit": 28,
+     "square-off": 22,
+     "time stop": 13,
+     "target": 3,
+     "breakeven": 2
+    }
+   },
+   "cfg": {
+    "when": "unconfirmed",
+    "same_dir": true,
+    "max": 2
+   },
+   "beats": false
+  },
+  "extras on unconfirmed days, any dir, max 1": {
+   "train": {
+    "trades": 891,
+    "net": 162913,
+    "per_trade": 183,
+    "win": 28.5,
+    "pf": 1.21,
+    "max_dd": -49438,
+    "net_per_dd": 3.3,
+    "charges": 66487,
+    "per_day": 1.2,
+    "max_per_day": 3,
+    "re": 0,
+    "extra": 104,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 143,
+    "net": 36393,
+    "per_trade": 254,
+    "win": 30.1,
+    "pf": 1.27,
+    "max_dd": -33528,
+    "net_per_dd": 1.09,
+    "charges": 11109,
+    "per_day": 1.18,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 17,
+    "adds": 0
+   },
+   "years": {
+    "2023": 19458,
+    "2024": 85015,
+    "2025": 25081,
+    "2026": 69752
+   },
+   "exits": {
+    "stop": 249,
+    "time stop": 220,
+    "square-off": 218,
+    "noise exit": 206,
+    "breakeven": 129,
+    "target": 12
+   },
+   "extras": {
+    "n": 121,
+    "net": -22935,
+    "train_net": 1235,
+    "unseen_net": -24171,
+    "unseen_n": 17,
+    "win": 24.8,
+    "by_rule": {
+     "noise": -8105,
+     "camarilla": -14830
+    },
+    "exits": {
+     "stop": 38,
+     "noise exit": 29,
+     "square-off": 25,
+     "time stop": 16,
+     "breakeven": 10,
+     "target": 3
+    }
+   },
+   "cfg": {
+    "when": "unconfirmed",
+    "same_dir": false,
+    "max": 1
+   },
+   "beats": false
+  },
+  "extras on unconfirmed days, any dir, max 2": {
+   "train": {
+    "trades": 900,
+    "net": 168193,
+    "per_trade": 187,
+    "win": 28.6,
+    "pf": 1.21,
+    "max_dd": -51579,
+    "net_per_dd": 3.26,
+    "charges": 67292,
+    "per_day": 1.21,
+    "max_per_day": 4,
+    "re": 0,
+    "extra": 113,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 143,
+    "net": 36393,
+    "per_trade": 254,
+    "win": 30.1,
+    "pf": 1.27,
+    "max_dd": -33528,
+    "net_per_dd": 1.09,
+    "charges": 11109,
+    "per_day": 1.18,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 17,
+    "adds": 0
+   },
+   "years": {
+    "2023": 18805,
+    "2024": 95356,
+    "2025": 20656,
+    "2026": 69768
+   },
+   "exits": {
+    "stop": 253,
+    "square-off": 221,
+    "time stop": 221,
+    "noise exit": 206,
+    "breakeven": 130,
+    "target": 12
+   },
+   "extras": {
+    "n": 130,
+    "net": -17655,
+    "train_net": 6515,
+    "unseen_net": -24171,
+    "unseen_n": 17,
+    "win": 25.4,
+    "by_rule": {
+     "noise": 479,
+     "camarilla": -18135
+    },
+    "exits": {
+     "stop": 42,
+     "noise exit": 29,
+     "square-off": 28,
+     "time stop": 17,
+     "breakeven": 11,
+     "target": 3
+    }
+   },
+   "cfg": {
+    "when": "unconfirmed",
+    "same_dir": false,
+    "max": 2
+   },
+   "beats": false
+  }
+ },
+ "item5_combined": {
+  "picked_reentry": "re-entry after stop: camarilla, direction opp",
+  "picked_pyramid": null,
+  "reentry_cfg_used": {
+   "rules": [
+    "camarilla"
+   ],
+   "dir": "opp",
+   "window": null,
+   "max": 1,
+   "scope": "same"
+  },
+  "pyramid_rules_used": [
+   "camarilla",
+   "noise"
+  ],
+  "combined: re-entry[camarilla, opp, win None] + pyramid 1:1:1, pyramid 1st trade only": {
+   "train": {
+    "trades": 809,
+    "net": 262947,
+    "per_trade": 325,
+    "win": 21.5,
+    "pf": 1.25,
+    "max_dd": -104951,
+    "net_per_dd": 2.51,
+    "charges": 96006,
+    "per_day": 1.09,
+    "max_per_day": 3,
+    "re": 15,
+    "extra": 0,
+    "adds": 443
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 166940,
+    "per_trade": 1325,
+    "win": 26.2,
+    "pf": 2.04,
+    "max_dd": -29244,
+    "net_per_dd": 5.71,
+    "charges": 15727,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 72
+   },
+   "years": {
+    "2023": 79931,
+    "2024": 114823,
+    "2025": 22957,
+    "2026": 212176
+   },
+   "exits": {
+    "stop": 213,
+    "time stop": 206,
+    "square-off": 163,
+    "noise exit": 148,
+    "add-stop@be": 124,
+    "add-stop@+1R": 67,
+    "target": 8,
+    "breakeven": 6
+   },
+   "reentries": {
+    "n": 15,
+    "net": 22368,
+    "train_net": 22368,
+    "unseen_net": 0,
+    "unseen_n": 0,
+    "win": 20.0,
+    "by_rule": {
+     "noise": 0,
+     "camarilla": 22368
+    },
+    "exits": {
+     "breakeven": 5,
+     "stop": 4,
+     "square-off": 4,
+     "time stop": 2
+    }
+   },
+   "cfg": {
+    "reentry": {
+     "rules": [
+      "camarilla"
+     ],
+     "dir": "opp",
+     "window": null,
+     "max": 1,
+     "scope": "same"
+    },
+    "pyramid_rules": [
+     "camarilla",
+     "noise"
+    ],
+    "fracs": [
+     1.0,
+     1.0
+    ],
+    "pyramid_all": false
+   },
+   "beats": false,
+   "by_sym": {
+    "NIFTY": {
+     "train": {
+      "trades": 445,
+      "net": 184541,
+      "per_trade": 415,
+      "win": 23.1,
+      "pf": 1.34,
+      "max_dd": -60816,
+      "net_per_dd": 3.03,
+      "charges": 45812,
+      "per_day": 1.07,
+      "max_per_day": 3,
+      "re": 6,
+      "extra": 0,
+      "adds": 230
+     },
+     "unseen": {
+      "trades": 71,
+      "net": 133541,
+      "per_trade": 1881,
+      "win": 28.2,
+      "pf": 2.7,
+      "max_dd": -17298,
+      "net_per_dd": 7.72,
+      "charges": 8174,
+      "per_day": 1.06,
+      "max_per_day": 2,
+      "re": 0,
+      "extra": 0,
+      "adds": 44
+     },
+     "years": {
+      "2023": 8440,
+      "2024": 40974,
+      "2025": 105290,
+      "2026": 163378
+     },
+     "exits": {
+      "time stop": 128,
+      "stop": 116,
+      "square-off": 98,
+      "noise exit": 72,
+      "add-stop@be": 69,
+      "add-stop@+1R": 28,
+      "target": 4,
+      "breakeven": 1
+     }
+    },
+    "BANKNIFTY": {
+     "train": {
+      "trades": 364,
+      "net": 78407,
+      "per_trade": 215,
+      "win": 19.5,
+      "pf": 1.15,
+      "max_dd": -123553,
+      "net_per_dd": 0.63,
+      "charges": 50193,
+      "per_day": 1.11,
+      "max_per_day": 2,
+      "re": 9,
+      "extra": 0,
+      "adds": 213
+     },
+     "unseen": {
+      "trades": 55,
+      "net": 33399,
+      "per_trade": 607,
+      "win": 23.6,
+      "pf": 1.41,
+      "max_dd": -24902,
+      "net_per_dd": 1.34,
+      "charges": 7553,
+      "per_day": 1.02,
+      "max_per_day": 2,
+      "re": 0,
+      "extra": 0,
+      "adds": 28
+     },
+     "years": {
+      "2023": 71492,
+      "2024": 73849,
+      "2025": -82333,
+      "2026": 48799
+     },
+     "exits": {
+      "stop": 97,
+      "time stop": 78,
+      "noise exit": 76,
+      "square-off": 65,
+      "add-stop@be": 55,
+      "add-stop@+1R": 39,
+      "breakeven": 5,
+      "target": 4
+     }
+    }
+   },
+   "baseline_scaled_to_same_units": {
+    "train": {
+     "net": 252483,
+     "max_dd": -99365,
+     "units_per_trade": 1.55
+    },
+    "unseen": {
+     "net": 95170,
+     "max_dd": -35970,
+     "units_per_trade": 1.57
+    }
+   },
+   "beats_scaled": false
+  },
+  "combined: re-entry[camarilla, opp, win None] + pyramid 1:1:1, pyramid every trade incl. re-entry": {
+   "train": {
+    "trades": 809,
+    "net": 304228,
+    "per_trade": 376,
+    "win": 20.6,
+    "pf": 1.28,
+    "max_dd": -115423,
+    "net_per_dd": 2.64,
+    "charges": 99467,
+    "per_day": 1.09,
+    "max_per_day": 3,
+    "re": 15,
+    "extra": 0,
+    "adds": 485
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 166864,
+    "per_trade": 1324,
+    "win": 26.2,
+    "pf": 2.04,
+    "max_dd": -29244,
+    "net_per_dd": 5.71,
+    "charges": 15795,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 73
+   },
+   "years": {
+    "2023": 72098,
+    "2024": 123835,
+    "2025": 34893,
+    "2026": 240267
+   },
+   "exits": {
+    "stop": 212,
+    "time stop": 206,
+    "square-off": 158,
+    "noise exit": 146,
+    "add-stop@be": 132,
+    "add-stop@+1R": 73,
+    "target": 8
+   },
+   "reentries": {
+    "n": 15,
+    "net": 51214,
+    "train_net": 51214,
+    "unseen_net": 0,
+    "unseen_n": 0,
+    "win": 13.3,
+    "by_rule": {
+     "noise": 0,
+     "camarilla": 51214
+    },
+    "exits": {
+     "stop": 4,
+     "add-stop@be": 4,
+     "square-off": 3,
+     "time stop": 2,
+     "add-stop@+1R": 2
+    }
+   },
+   "cfg": {
+    "reentry": {
+     "rules": [
+      "camarilla"
+     ],
+     "dir": "opp",
+     "window": null,
+     "max": 1,
+     "scope": "same"
+    },
+    "pyramid_rules": [
+     "camarilla",
+     "noise"
+    ],
+    "fracs": [
+     1.0,
+     1.0
+    ],
+    "pyramid_all": true
+   },
+   "beats": true,
+   "by_sym": {
+    "NIFTY": {
+     "train": {
+      "trades": 445,
+      "net": 233513,
+      "per_trade": 525,
+      "win": 22.0,
+      "pf": 1.42,
+      "max_dd": -67818,
+      "net_per_dd": 3.44,
+      "charges": 47203,
+      "per_day": 1.07,
+      "max_per_day": 3,
+      "re": 6,
+      "extra": 0,
+      "adds": 248
+     },
+     "unseen": {
+      "trades": 71,
+      "net": 133465,
+      "per_trade": 1880,
+      "win": 28.2,
+      "pf": 2.7,
+      "max_dd": -17298,
+      "net_per_dd": 7.72,
+      "charges": 8242,
+      "per_day": 1.06,
+      "max_per_day": 2,
+      "re": 0,
+      "extra": 0,
+      "adds": 45
+     },
+     "years": {
+      "2023": 9678,
+      "2024": 55262,
+      "2025": 111817,
+      "2026": 190220
+     },
+     "exits": {
+      "time stop": 128,
+      "stop": 116,
+      "square-off": 94,
+      "add-stop@be": 72,
+      "noise exit": 72,
+      "add-stop@+1R": 30,
+      "target": 4
+     }
+    },
+    "BANKNIFTY": {
+     "train": {
+      "trades": 364,
+      "net": 70716,
+      "per_trade": 194,
+      "win": 19.0,
+      "pf": 1.13,
+      "max_dd": -118907,
+      "net_per_dd": 0.59,
+      "charges": 52263,
+      "per_day": 1.11,
+      "max_per_day": 2,
+      "re": 9,
+      "extra": 0,
+      "adds": 237
+     },
+     "unseen": {
+      "trades": 55,
+      "net": 33399,
+      "per_trade": 607,
+      "win": 23.6,
+      "pf": 1.41,
+      "max_dd": -24902,
+      "net_per_dd": 1.34,
+      "charges": 7553,
+      "per_day": 1.02,
+      "max_per_day": 2,
+      "re": 0,
+      "extra": 0,
+      "adds": 28
+     },
+     "years": {
+      "2023": 62420,
+      "2024": 68573,
+      "2025": -76925,
+      "2026": 50047
+     },
+     "exits": {
+      "stop": 96,
+      "time stop": 78,
+      "noise exit": 74,
+      "square-off": 64,
+      "add-stop@be": 60,
+      "add-stop@+1R": 43,
+      "target": 4
+     }
+    }
+   },
+   "baseline_scaled_to_same_units": {
+    "train": {
+     "net": 260953,
+     "max_dd": -102698,
+     "units_per_trade": 1.6
+    },
+    "unseen": {
+     "net": 95651,
+     "max_dd": -36152,
+     "units_per_trade": 1.58
+    }
+   },
+   "beats_scaled": true
+  },
+  "combined: re-entry[camarilla, opp, win None] + pyramid 1:0.5:0.5, pyramid 1st trade only": {
+   "train": {
+    "trades": 809,
+    "net": 263318,
+    "per_trade": 325,
+    "win": 21.6,
+    "pf": 1.25,
+    "max_dd": -104951,
+    "net_per_dd": 2.51,
+    "charges": 95822,
+    "per_day": 1.09,
+    "max_per_day": 3,
+    "re": 15,
+    "extra": 0,
+    "adds": 443
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 166940,
+    "per_trade": 1325,
+    "win": 26.2,
+    "pf": 2.04,
+    "max_dd": -29244,
+    "net_per_dd": 5.71,
+    "charges": 15727,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 72
+   },
+   "years": {
+    "2023": 80301,
+    "2024": 114823,
+    "2025": 22957,
+    "2026": 212176
+   },
+   "exits": {
+    "stop": 213,
+    "time stop": 206,
+    "square-off": 163,
+    "noise exit": 148,
+    "add-stop@be": 124,
+    "add-stop@+1R": 67,
+    "target": 8,
+    "breakeven": 6
+   },
+   "reentries": {
+    "n": 15,
+    "net": 22368,
+    "train_net": 22368,
+    "unseen_net": 0,
+    "unseen_n": 0,
+    "win": 20.0,
+    "by_rule": {
+     "noise": 0,
+     "camarilla": 22368
+    },
+    "exits": {
+     "breakeven": 5,
+     "stop": 4,
+     "square-off": 4,
+     "time stop": 2
+    }
+   },
+   "cfg": {
+    "reentry": {
+     "rules": [
+      "camarilla"
+     ],
+     "dir": "opp",
+     "window": null,
+     "max": 1,
+     "scope": "same"
+    },
+    "pyramid_rules": [
+     "camarilla",
+     "noise"
+    ],
+    "fracs": [
+     0.5,
+     0.5
+    ],
+    "pyramid_all": false
+   },
+   "beats": false,
+   "by_sym": {
+    "NIFTY": {
+     "train": {
+      "trades": 445,
+      "net": 184911,
+      "per_trade": 416,
+      "win": 23.4,
+      "pf": 1.34,
+      "max_dd": -60816,
+      "net_per_dd": 3.04,
+      "charges": 45628,
+      "per_day": 1.07,
+      "max_per_day": 3,
+      "re": 6,
+      "extra": 0,
+      "adds": 230
+     },
+     "unseen": {
+      "trades": 71,
+      "net": 133541,
+      "per_trade": 1881,
+      "win": 28.2,
+      "pf": 2.7,
+      "max_dd": -17298,
+      "net_per_dd": 7.72,
+      "charges": 8174,
+      "per_day": 1.06,
+      "max_per_day": 2,
+      "re": 0,
+      "extra": 0,
+      "adds": 44
+     },
+     "years": {
+      "2023": 8810,
+      "2024": 40974,
+      "2025": 105290,
+      "2026": 163378
+     },
+     "exits": {
+      "time stop": 128,
+      "stop": 116,
+      "square-off": 98,
+      "noise exit": 72,
+      "add-stop@be": 69,
+      "add-stop@+1R": 28,
+      "target": 4,
+      "breakeven": 1
+     }
+    },
+    "BANKNIFTY": {
+     "train": {
+      "trades": 364,
+      "net": 78407,
+      "per_trade": 215,
+      "win": 19.5,
+      "pf": 1.15,
+      "max_dd": -123553,
+      "net_per_dd": 0.63,
+      "charges": 50193,
+      "per_day": 1.11,
+      "max_per_day": 2,
+      "re": 9,
+      "extra": 0,
+      "adds": 213
+     },
+     "unseen": {
+      "trades": 55,
+      "net": 33399,
+      "per_trade": 607,
+      "win": 23.6,
+      "pf": 1.41,
+      "max_dd": -24902,
+      "net_per_dd": 1.34,
+      "charges": 7553,
+      "per_day": 1.02,
+      "max_per_day": 2,
+      "re": 0,
+      "extra": 0,
+      "adds": 28
+     },
+     "years": {
+      "2023": 71492,
+      "2024": 73849,
+      "2025": -82333,
+      "2026": 48799
+     },
+     "exits": {
+      "stop": 97,
+      "time stop": 78,
+      "noise exit": 76,
+      "square-off": 65,
+      "add-stop@be": 55,
+      "add-stop@+1R": 39,
+      "breakeven": 5,
+      "target": 4
+     }
+    }
+   },
+   "baseline_scaled_to_same_units": {
+    "train": {
+     "net": 252483,
+     "max_dd": -99365,
+     "units_per_trade": 1.55
+    },
+    "unseen": {
+     "net": 95170,
+     "max_dd": -35970,
+     "units_per_trade": 1.57
+    }
+   },
+   "beats_scaled": false
+  },
+  "combined: re-entry[camarilla, opp, win None] + pyramid 1:0.5:0.5, pyramid every trade incl. re-entry": {
+   "train": {
+    "trades": 809,
+    "net": 304599,
+    "per_trade": 377,
+    "win": 20.8,
+    "pf": 1.28,
+    "max_dd": -115423,
+    "net_per_dd": 2.64,
+    "charges": 99283,
+    "per_day": 1.09,
+    "max_per_day": 3,
+    "re": 15,
+    "extra": 0,
+    "adds": 485
+   },
+   "unseen": {
+    "trades": 126,
+    "net": 166864,
+    "per_trade": 1324,
+    "win": 26.2,
+    "pf": 2.04,
+    "max_dd": -29244,
+    "net_per_dd": 5.71,
+    "charges": 15795,
+    "per_day": 1.04,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 0,
+    "adds": 73
+   },
+   "years": {
+    "2023": 72468,
+    "2024": 123835,
+    "2025": 34893,
+    "2026": 240267
+   },
+   "exits": {
+    "stop": 212,
+    "time stop": 206,
+    "square-off": 158,
+    "noise exit": 146,
+    "add-stop@be": 132,
+    "add-stop@+1R": 73,
+    "target": 8
+   },
+   "reentries": {
+    "n": 15,
+    "net": 51214,
+    "train_net": 51214,
+    "unseen_net": 0,
+    "unseen_n": 0,
+    "win": 13.3,
+    "by_rule": {
+     "noise": 0,
+     "camarilla": 51214
+    },
+    "exits": {
+     "stop": 4,
+     "add-stop@be": 4,
+     "square-off": 3,
+     "time stop": 2,
+     "add-stop@+1R": 2
+    }
+   },
+   "cfg": {
+    "reentry": {
+     "rules": [
+      "camarilla"
+     ],
+     "dir": "opp",
+     "window": null,
+     "max": 1,
+     "scope": "same"
+    },
+    "pyramid_rules": [
+     "camarilla",
+     "noise"
+    ],
+    "fracs": [
+     0.5,
+     0.5
+    ],
+    "pyramid_all": true
+   },
+   "beats": true,
+   "by_sym": {
+    "NIFTY": {
+     "train": {
+      "trades": 445,
+      "net": 233883,
+      "per_trade": 526,
+      "win": 22.2,
+      "pf": 1.43,
+      "max_dd": -67818,
+      "net_per_dd": 3.45,
+      "charges": 47020,
+      "per_day": 1.07,
+      "max_per_day": 3,
+      "re": 6,
+      "extra": 0,
+      "adds": 248
+     },
+     "unseen": {
+      "trades": 71,
+      "net": 133465,
+      "per_trade": 1880,
+      "win": 28.2,
+      "pf": 2.7,
+      "max_dd": -17298,
+      "net_per_dd": 7.72,
+      "charges": 8242,
+      "per_day": 1.06,
+      "max_per_day": 2,
+      "re": 0,
+      "extra": 0,
+      "adds": 45
+     },
+     "years": {
+      "2023": 10049,
+      "2024": 55262,
+      "2025": 111817,
+      "2026": 190220
+     },
+     "exits": {
+      "time stop": 128,
+      "stop": 116,
+      "square-off": 94,
+      "add-stop@be": 72,
+      "noise exit": 72,
+      "add-stop@+1R": 30,
+      "target": 4
+     }
+    },
+    "BANKNIFTY": {
+     "train": {
+      "trades": 364,
+      "net": 70716,
+      "per_trade": 194,
+      "win": 19.0,
+      "pf": 1.13,
+      "max_dd": -118907,
+      "net_per_dd": 0.59,
+      "charges": 52263,
+      "per_day": 1.11,
+      "max_per_day": 2,
+      "re": 9,
+      "extra": 0,
+      "adds": 237
+     },
+     "unseen": {
+      "trades": 55,
+      "net": 33399,
+      "per_trade": 607,
+      "win": 23.6,
+      "pf": 1.41,
+      "max_dd": -24902,
+      "net_per_dd": 1.34,
+      "charges": 7553,
+      "per_day": 1.02,
+      "max_per_day": 2,
+      "re": 0,
+      "extra": 0,
+      "adds": 28
+     },
+     "years": {
+      "2023": 62420,
+      "2024": 68573,
+      "2025": -76925,
+      "2026": 50047
+     },
+     "exits": {
+      "stop": 96,
+      "time stop": 78,
+      "noise exit": 74,
+      "square-off": 64,
+      "add-stop@be": 60,
+      "add-stop@+1R": 43,
+      "target": 4
+     }
+    }
+   },
+   "baseline_scaled_to_same_units": {
+    "train": {
+     "net": 260953,
+     "max_dd": -102698,
+     "units_per_trade": 1.6
+    },
+    "unseen": {
+     "net": 95651,
+     "max_dd": -36152,
+     "units_per_trade": 1.58
+    }
+   },
+   "beats_scaled": true
+  }
+ },
+ "sanity": {
+  "book": {
+   "train": {
+    "trades": 903,
+    "net": 170288,
+    "per_trade": 189,
+    "win": 28.7,
+    "pf": 1.21,
+    "max_dd": -51579,
+    "net_per_dd": 3.3,
+    "charges": 67546,
+    "per_day": 1.21,
+    "max_per_day": 4,
+    "re": 0,
+    "extra": 116,
+    "adds": 0
+   },
+   "unseen": {
+    "trades": 144,
+    "net": 34586,
+    "per_trade": 240,
+    "win": 29.9,
+    "pf": 1.26,
+    "max_dd": -33528,
+    "net_per_dd": 1.03,
+    "charges": 11183,
+    "per_day": 1.19,
+    "max_per_day": 2,
+    "re": 0,
+    "extra": 18,
+    "adds": 0
+   },
+   "years": {
+    "2023": 18805,
+    "2024": 99229,
+    "2025": 18878,
+    "2026": 67961
+   },
+   "exits": {
+    "stop": 253,
+    "square-off": 225,
+    "time stop": 221,
+    "noise exit": 206,
+    "breakeven": 130,
+    "target": 12
+   }
+  },
+  "by_attempt": {
+   "1": {
+    "n": 865,
+    "net": 211843,
+    "per_trade": 245,
+    "win": 28.8,
+    "train_net": 147148,
+    "unseen_net": 64694,
+    "unseen_n": 121
+   },
+   "2": {
+    "n": 165,
+    "net": -10852,
+    "per_trade": -66,
+    "win": 27.9,
+    "train_net": 19257,
+    "unseen_net": -30109,
+    "unseen_n": 23
+   },
+   "3": {
+    "n": 16,
+    "net": -6584,
+    "per_trade": -412,
+    "win": 37.5,
+    "train_net": -6584,
+    "unseen_net": 0,
+    "unseen_n": 0
+   },
+   "4": {
+    "n": 1,
+    "net": 10467,
+    "per_trade": 10467,
+    "win": 100.0,
+    "train_net": 10467,
+    "unseen_net": 0,
+    "unseen_n": 0
+   }
+  },
+  "by_prev_why": {
+   "breakeven": {
+    "n": 18,
+    "net": -21980,
+    "per_trade": -1221,
+    "win": 16.7,
+    "train_net": -19333,
+    "unseen_net": -2647,
+    "unseen_n": 1
+   },
+   "noise exit": {
+    "n": 64,
+    "net": 6303,
+    "per_trade": 98,
+    "win": 35.9,
+    "train_net": 12598,
+    "unseen_net": -6295,
+    "unseen_n": 10
+   },
+   "stop": {
+    "n": 60,
+    "net": 15877,
+    "per_trade": 265,
+    "win": 25.0,
+    "train_net": 28260,
+    "unseen_net": -12383,
+    "unseen_n": 5
+   },
+   "target": {
+    "n": 4,
+    "net": 288,
+    "per_trade": 72,
+    "win": 50.0,
+    "train_net": 2095,
+    "unseen_net": -1807,
+    "unseen_n": 1
+   },
+   "time stop": {
+    "n": 36,
+    "net": -7457,
+    "per_trade": -207,
+    "win": 27.8,
+    "train_net": -480,
+    "unseen_net": -6977,
+    "unseen_n": 6
+   }
+  },
+  "by_rule_attempt": {
+   "('camarilla', 1)": {
+    "n": 596,
+    "net": 161323,
+    "per_trade": 271,
+    "win": 25.5,
+    "train_net": 106924,
+    "unseen_net": 54399,
+    "unseen_n": 73
+   },
+   "('camarilla', 2)": {
+    "n": 75,
+    "net": -16862,
+    "per_trade": -225,
+    "win": 22.7,
+    "train_net": -2236,
+    "unseen_net": -14627,
+    "unseen_n": 10
+   },
+   "('camarilla', 3)": {
+    "n": 4,
+    "net": -5376,
+    "per_trade": -1344,
+    "win": 0.0,
+    "train_net": -5376,
+    "unseen_net": 0,
+    "unseen_n": 0
+   },
+   "('noise', 1)": {
+    "n": 269,
+    "net": 50520,
+    "per_trade": 188,
+    "win": 36.1,
+    "train_net": 40224,
+    "unseen_net": 10295,
+    "unseen_n": 48
+   },
+   "('noise', 2)": {
+    "n": 90,
+    "net": 6011,
+    "per_trade": 67,
+    "win": 32.2,
+    "train_net": 21493,
+    "unseen_net": -15482,
+    "unseen_n": 13
+   },
+   "('noise', 3)": {
+    "n": 12,
+    "net": -1208,
+    "per_trade": -101,
+    "win": 50.0,
+    "train_net": -1208,
+    "unseen_net": 0,
+    "unseen_n": 0
+   },
+   "('noise', 4)": {
+    "n": 1,
+    "net": 10467,
+    "per_trade": 10467,
+    "win": 100.0,
+    "train_net": 10467,
+    "unseen_net": 0,
+    "unseen_n": 0
+   }
+  },
+  "by_rule_prev_why": {
+   "('camarilla', 'breakeven')": {
+    "n": 9,
+    "net": -16929,
+    "per_trade": -1881,
+    "win": 0.0,
+    "train_net": -14282,
+    "unseen_net": -2647,
+    "unseen_n": 1
+   },
+   "('camarilla', 'noise exit')": {
+    "n": 16,
+    "net": 81,
+    "per_trade": 5,
+    "win": 37.5,
+    "train_net": -35,
+    "unseen_net": 117,
+    "unseen_n": 3
+   },
+   "('camarilla', 'stop')": {
+    "n": 35,
+    "net": -125,
+    "per_trade": -4,
+    "win": 14.3,
+    "train_net": 7316,
+    "unseen_net": -7440,
+    "unseen_n": 3
+   },
+   "('camarilla', 'time stop')": {
+    "n": 19,
+    "net": -5267,
+    "per_trade": -277,
+    "win": 31.6,
+    "train_net": -610,
+    "unseen_net": -4656,
+    "unseen_n": 3
+   },
+   "('noise', 'breakeven')": {
+    "n": 9,
+    "net": -5051,
+    "per_trade": -561,
+    "win": 33.3,
+    "train_net": -5051,
+    "unseen_net": 0,
+    "unseen_n": 0
+   },
+   "('noise', 'noise exit')": {
+    "n": 48,
+    "net": 6221,
+    "per_trade": 130,
+    "win": 35.4,
+    "train_net": 12633,
+    "unseen_net": -6412,
+    "unseen_n": 7
+   },
+   "('noise', 'stop')": {
+    "n": 25,
+    "net": 16002,
+    "per_trade": 640,
+    "win": 40.0,
+    "train_net": 20945,
+    "unseen_net": -4943,
+    "unseen_n": 2
+   },
+   "('noise', 'target')": {
+    "n": 4,
+    "net": 288,
+    "per_trade": 72,
+    "win": 50.0,
+    "train_net": 2095,
+    "unseen_net": -1807,
+    "unseen_n": 1
+   },
+   "('noise', 'time stop')": {
+    "n": 17,
+    "net": -2190,
+    "per_trade": -129,
+    "win": 23.5,
+    "train_net": 130,
+    "unseen_net": -2321,
+    "unseen_n": 3
+   }
+  }
+ },
+ "verdicts": [
+  {
+   "item": "1 re-entry after stop",
+   "beats_both": [],
+   "train_only": [
+    "re-entry after stop: noise+camarilla, direction any",
+    "re-entry after stop: noise+camarilla, direction opp",
+    "re-entry after stop: camarilla, direction any",
+    "re-entry after stop: camarilla, direction opp"
+   ],
+   "beats_scaled_base": null
+  },
+  {
+   "item": "2 re-entry within window",
+   "beats_both": [],
+   "train_only": [
+    "re-entry <= 60 min after stop: noise+camarilla, direction any",
+    "re-entry <= 120 min after stop: noise+camarilla, direction any",
+    "re-entry <= 60 min after stop: noise+camarilla, direction opp",
+    "re-entry <= 120 min after stop: noise+camarilla, direction opp",
+    "re-entry <= 60 min after stop: camarilla, direction any",
+    "re-entry <= 120 min after stop: camarilla, direction any",
+    "re-entry <= 60 min after stop: camarilla, direction opp",
+    "re-entry <= 120 min after stop: camarilla, direction opp"
+   ],
+   "beats_scaled_base": null
+  },
+  {
+   "item": "3 pyramid",
+   "beats_both": [],
+   "train_only": [],
+   "beats_scaled_base": []
+  },
+  {
+   "item": "4 trend-day extras",
+   "beats_both": [],
+   "train_only": [
+    "extras on confirmed days, same dir as 1st, max 1",
+    "extras on confirmed days, same dir as 1st, max 2",
+    "extras on confirmed days, any dir, max 1",
+    "extras on confirmed days, any dir, max 2",
+    "extras on always days, any dir, max 1",
+    "extras on always days, any dir, max 2",
+    "extras on unconfirmed days, any dir, max 2"
+   ],
+   "beats_scaled_base": null
+  },
+  {
+   "item": "5 combined",
+   "beats_both": [
+    "combined: re-entry[camarilla, opp, win None] + pyramid 1:1:1, pyramid every trade incl. re-entry",
+    "combined: re-entry[camarilla, opp, win None] + pyramid 1:0.5:0.5, pyramid every trade incl. re-entry"
+   ],
+   "train_only": [],
+   "beats_scaled_base": [
+    "combined: re-entry[camarilla, opp, win None] + pyramid 1:1:1, pyramid every trade incl. re-entry",
+    "combined: re-entry[camarilla, opp, win None] + pyramid 1:0.5:0.5, pyramid every trade incl. re-entry"
+   ]
+  }
+ ],
+ "runtime_s": 20
+}

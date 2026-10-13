@@ -1,0 +1,3538 @@
+{
+ "split": "2026-04-20",
+ "train_days": 809,
+ "unseen_days": 120,
+ "baseline": {
+  "train": {
+   "trades": 796,
+   "net": 163146,
+   "per_trade": 205,
+   "win": 28.9,
+   "pf": 1.23,
+   "max_dd": -64206,
+   "net_per_dd": 2.54
+  },
+  "unseen": {
+   "trades": 126,
+   "net": 60563,
+   "per_trade": 481,
+   "win": 31.7,
+   "pf": 1.56,
+   "max_dd": -22890,
+   "net_per_dd": 2.65
+  },
+  "by_rule": {
+   "noise": {
+    "train": 55435,
+    "unseen": 9195
+   },
+   "camarilla": {
+    "train": 107711,
+    "unseen": 51369
+   }
+  },
+  "by_sym": {
+   "NIFTY": {
+    "train": 100203,
+    "unseen": 51533
+   },
+   "BANKNIFTY": {
+    "train": 62943,
+    "unseen": 9030
+   }
+  },
+  "years": {
+   "2023": 31331,
+   "2024": 96485,
+   "2025": 14727,
+   "2026": 81166
+  }
+ },
+ "baseline_em_days": {
+  "train": {
+   "trades": 599,
+   "net": 97211,
+   "per_trade": 162,
+   "win": 29.0,
+   "pf": 1.17,
+   "max_dd": -64206,
+   "net_per_dd": 1.51
+  },
+  "unseen": {
+   "trades": 119,
+   "net": 50503,
+   "per_trade": 424,
+   "win": 31.1,
+   "pf": 1.49,
+   "max_dd": -22890,
+   "net_per_dd": 2.21
+  },
+  "by_rule": {
+   "noise": {
+    "train": 54557,
+    "unseen": 7475
+   },
+   "camarilla": {
+    "train": 42653,
+    "unseen": 43028
+   }
+  },
+  "by_sym": {
+   "NIFTY": {
+    "train": 83459,
+    "unseen": 40283
+   },
+   "BANKNIFTY": {
+    "train": 13752,
+    "unseen": 10220
+   }
+  },
+  "years": {
+   "2023": -12451,
+   "2024": 74331,
+   "2025": 14727,
+   "2026": 71106
+  }
+ },
+ "filters": {
+  "x_vwap": {
+   "train": {
+    "trades": 737,
+    "net": 134201,
+    "per_trade": 182,
+    "win": 28.5,
+    "pf": 1.21,
+    "max_dd": -68841,
+    "net_per_dd": 1.95
+   },
+   "unseen": {
+    "trades": 117,
+    "net": 54620,
+    "per_trade": 467,
+    "win": 31.6,
+    "pf": 1.57,
+    "max_dd": -18650,
+    "net_per_dd": 2.93
+   },
+   "by_rule": {
+    "noise": {
+     "train": 52325,
+     "unseen": 24741
+    },
+    "camarilla": {
+     "train": 81876,
+     "unseen": 29880
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 106623,
+     "unseen": 48935
+    },
+    "BANKNIFTY": {
+     "train": 27579,
+     "unseen": 5685
+    }
+   },
+   "years": {
+    "2023": 40740,
+    "2024": 88613,
+    "2025": -14807,
+    "2026": 74275
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "x_nb": {
+   "train": {
+    "trades": 263,
+    "net": 44567,
+    "per_trade": 169,
+    "win": 32.7,
+    "pf": 1.17,
+    "max_dd": -40305,
+    "net_per_dd": 1.11
+   },
+   "unseen": {
+    "trades": 47,
+    "net": 17916,
+    "per_trade": 381,
+    "win": 38.3,
+    "pf": 1.48,
+    "max_dd": -17297,
+    "net_per_dd": 1.04
+   },
+   "by_rule": {
+    "noise": {
+     "train": 37828,
+     "unseen": 25788
+    },
+    "camarilla": {
+     "train": 6738,
+     "unseen": -7872
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 75219,
+     "unseen": 7216
+    },
+    "BANKNIFTY": {
+     "train": -30652,
+     "unseen": 10700
+    }
+   },
+   "years": {
+    "2023": 54,
+    "2024": 44143,
+    "2025": 4759,
+    "2026": 13528
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "x_or": {
+   "train": {
+    "trades": 564,
+    "net": 117458,
+    "per_trade": 208,
+    "win": 29.6,
+    "pf": 1.23,
+    "max_dd": -55442,
+    "net_per_dd": 2.12
+   },
+   "unseen": {
+    "trades": 82,
+    "net": -3397,
+    "per_trade": -41,
+    "win": 28.0,
+    "pf": 0.95,
+    "max_dd": -29367,
+    "net_per_dd": -0.12
+   },
+   "by_rule": {
+    "noise": {
+     "train": 52814,
+     "unseen": 11434
+    },
+    "camarilla": {
+     "train": 64644,
+     "unseen": -14830
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 85741,
+     "unseen": -1238
+    },
+    "BANKNIFTY": {
+     "train": 31717,
+     "unseen": -2158
+    }
+   },
+   "years": {
+    "2023": -3074,
+    "2024": 122830,
+    "2025": -3460,
+    "2026": -2235
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "inv_x_vwap": {
+   "train": {
+    "trades": 169,
+    "net": 20823,
+    "per_trade": 123,
+    "win": 29.6,
+    "pf": 1.14,
+    "max_dd": -46871,
+    "net_per_dd": 0.44
+   },
+   "unseen": {
+    "trades": 37,
+    "net": 1093,
+    "per_trade": 30,
+    "win": 35.1,
+    "pf": 1.03,
+    "max_dd": -20030,
+    "net_per_dd": 0.05
+   },
+   "by_rule": {
+    "noise": {
+     "train": 12371,
+     "unseen": -4014
+    },
+    "camarilla": {
+     "train": 8452,
+     "unseen": 5107
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": -2701,
+     "unseen": 12368
+    },
+    "BANKNIFTY": {
+     "train": 23524,
+     "unseen": -11275
+    }
+   },
+   "years": {
+    "2023": -29952,
+    "2024": 6403,
+    "2025": 42659,
+    "2026": 2806
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "inv_x_nb": {
+   "train": {
+    "trades": 1,
+    "net": -1793,
+    "per_trade": -1793,
+    "win": 0.0,
+    "pf": 0.0,
+    "max_dd": -1793,
+    "net_per_dd": -1.0
+   },
+   "unseen": {
+    "trades": 2,
+    "net": -660,
+    "per_trade": -330,
+    "win": 50.0,
+    "pf": 0.56,
+    "max_dd": -660,
+    "net_per_dd": -1.0
+   },
+   "by_rule": {
+    "noise": {
+     "train": 0,
+     "unseen": -660
+    },
+    "camarilla": {
+     "train": -1793,
+     "unseen": 0
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": -1793,
+     "unseen": 830
+    },
+    "BANKNIFTY": {
+     "train": 0,
+     "unseen": -1490
+    }
+   },
+   "years": {
+    "2023": 0,
+    "2024": -1793,
+    "2025": 0,
+    "2026": -660
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "inv_x_or": {
+   "train": {
+    "trades": 48,
+    "net": -18753,
+    "per_trade": -391,
+    "win": 22.9,
+    "pf": 0.58,
+    "max_dd": -21207,
+    "net_per_dd": -0.88
+   },
+   "unseen": {
+    "trades": 10,
+    "net": 10614,
+    "per_trade": 1061,
+    "win": 40.0,
+    "pf": 2.37,
+    "max_dd": -3407,
+    "net_per_dd": 3.12
+   },
+   "by_rule": {
+    "noise": {
+     "train": -1443,
+     "unseen": 2968
+    },
+    "camarilla": {
+     "train": -17310,
+     "unseen": 7646
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": -17889,
+     "unseen": -1320
+    },
+    "BANKNIFTY": {
+     "train": -864,
+     "unseen": 11934
+    }
+   },
+   "years": {
+    "2023": -13858,
+    "2024": 1209,
+    "2025": -2452,
+    "2026": 6962
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "breadth6_v": {
+   "train": {
+    "trades": 719,
+    "net": 127390,
+    "per_trade": 177,
+    "win": 28.5,
+    "pf": 1.2,
+    "max_dd": -48179,
+    "net_per_dd": 2.64
+   },
+   "unseen": {
+    "trades": 110,
+    "net": 35439,
+    "per_trade": 322,
+    "win": 32.7,
+    "pf": 1.4,
+    "max_dd": -21779,
+    "net_per_dd": 1.63
+   },
+   "by_rule": {
+    "noise": {
+     "train": 76353,
+     "unseen": 14051
+    },
+    "camarilla": {
+     "train": 51037,
+     "unseen": 21388
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 93673,
+     "unseen": 29260
+    },
+    "BANKNIFTY": {
+     "train": 33718,
+     "unseen": 6179
+    }
+   },
+   "years": {
+    "2023": 4135,
+    "2024": 101255,
+    "2025": 1691,
+    "2026": 55748
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "breadth7_v": {
+   "train": {
+    "trades": 663,
+    "net": 103481,
+    "per_trade": 156,
+    "win": 28.4,
+    "pf": 1.18,
+    "max_dd": -53059,
+    "net_per_dd": 1.95
+   },
+   "unseen": {
+    "trades": 90,
+    "net": 43385,
+    "per_trade": 482,
+    "win": 33.3,
+    "pf": 1.68,
+    "max_dd": -13190,
+    "net_per_dd": 3.29
+   },
+   "by_rule": {
+    "noise": {
+     "train": 74135,
+     "unseen": 1712
+    },
+    "camarilla": {
+     "train": 29346,
+     "unseen": 41673
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 83288,
+     "unseen": 44403
+    },
+    "BANKNIFTY": {
+     "train": 20193,
+     "unseen": -1019
+    }
+   },
+   "years": {
+    "2023": -3329,
+    "2024": 95336,
+    "2025": -12094,
+    "2026": 66953
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "breadth8_v": {
+   "train": {
+    "trades": 564,
+    "net": 89130,
+    "per_trade": 158,
+    "win": 28.7,
+    "pf": 1.18,
+    "max_dd": -82195,
+    "net_per_dd": 1.08
+   },
+   "unseen": {
+    "trades": 77,
+    "net": 47406,
+    "per_trade": 616,
+    "win": 35.1,
+    "pf": 1.9,
+    "max_dd": -11199,
+    "net_per_dd": 4.23
+   },
+   "by_rule": {
+    "noise": {
+     "train": 85551,
+     "unseen": 2698
+    },
+    "camarilla": {
+     "train": 3579,
+     "unseen": 44708
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 81351,
+     "unseen": 47062
+    },
+    "BANKNIFTY": {
+     "train": 7779,
+     "unseen": 344
+    }
+   },
+   "years": {
+    "2023": 13865,
+    "2024": 110886,
+    "2025": -50080,
+    "2026": 61865
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "breadth6_o": {
+   "train": {
+    "trades": 670,
+    "net": 150174,
+    "per_trade": 224,
+    "win": 30.0,
+    "pf": 1.25,
+    "max_dd": -69165,
+    "net_per_dd": 2.17
+   },
+   "unseen": {
+    "trades": 101,
+    "net": 28495,
+    "per_trade": 282,
+    "win": 30.7,
+    "pf": 1.32,
+    "max_dd": -22722,
+    "net_per_dd": 1.25
+   },
+   "by_rule": {
+    "noise": {
+     "train": 66337,
+     "unseen": 6994
+    },
+    "camarilla": {
+     "train": 83837,
+     "unseen": 21501
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 98610,
+     "unseen": 20796
+    },
+    "BANKNIFTY": {
+     "train": 51564,
+     "unseen": 7699
+    }
+   },
+   "years": {
+    "2023": 19235,
+    "2024": 98167,
+    "2025": 21396,
+    "2026": 39872
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "breadth7_o": {
+   "train": {
+    "trades": 569,
+    "net": 174902,
+    "per_trade": 307,
+    "win": 31.5,
+    "pf": 1.35,
+    "max_dd": -44835,
+    "net_per_dd": 3.9
+   },
+   "unseen": {
+    "trades": 84,
+    "net": 17116,
+    "per_trade": 204,
+    "win": 29.8,
+    "pf": 1.25,
+    "max_dd": -15610,
+    "net_per_dd": 1.1
+   },
+   "by_rule": {
+    "noise": {
+     "train": 76017,
+     "unseen": 7642
+    },
+    "camarilla": {
+     "train": 98886,
+     "unseen": 9474
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 143407,
+     "unseen": 19999
+    },
+    "BANKNIFTY": {
+     "train": 31495,
+     "unseen": -2883
+    }
+   },
+   "years": {
+    "2023": 20545,
+    "2024": 101439,
+    "2025": 29859,
+    "2026": 40176
+   },
+   "beats": false,
+   "train_only": true
+  },
+  "breadth8_o": {
+   "train": {
+    "trades": 445,
+    "net": 83239,
+    "per_trade": 187,
+    "win": 28.8,
+    "pf": 1.2,
+    "max_dd": -50356,
+    "net_per_dd": 1.65
+   },
+   "unseen": {
+    "trades": 64,
+    "net": 19856,
+    "per_trade": 310,
+    "win": 39.1,
+    "pf": 1.43,
+    "max_dd": -10602,
+    "net_per_dd": 1.87
+   },
+   "by_rule": {
+    "noise": {
+     "train": 53847,
+     "unseen": 8163
+    },
+    "camarilla": {
+     "train": 29392,
+     "unseen": 11693
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 93523,
+     "unseen": 16550
+    },
+    "BANKNIFTY": {
+     "train": -10284,
+     "unseen": 3306
+    }
+   },
+   "years": {
+    "2023": -2635,
+    "2024": 83677,
+    "2025": -14905,
+    "2026": 36959
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "inv_breadth7_v": {
+   "train": {
+    "trades": 64,
+    "net": 23520,
+    "per_trade": 367,
+    "win": 29.7,
+    "pf": 1.4,
+    "max_dd": -18160,
+    "net_per_dd": 1.3
+   },
+   "unseen": {
+    "trades": 11,
+    "net": -8901,
+    "per_trade": -809,
+    "win": 18.2,
+    "pf": 0.34,
+    "max_dd": -10647,
+    "net_per_dd": -0.84
+   },
+   "by_rule": {
+    "noise": {
+     "train": 9085,
+     "unseen": -4291
+    },
+    "camarilla": {
+     "train": 14435,
+     "unseen": -4610
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 5707,
+     "unseen": 1074
+    },
+    "BANKNIFTY": {
+     "train": 17813,
+     "unseen": -9975
+    }
+   },
+   "years": {
+    "2023": -14786,
+    "2024": 3299,
+    "2025": 31981,
+    "2026": -5875
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "inv_breadth7_o": {
+   "train": {
+    "trades": 61,
+    "net": 15222,
+    "per_trade": 250,
+    "win": 24.6,
+    "pf": 1.28,
+    "max_dd": -29311,
+    "net_per_dd": 0.52
+   },
+   "unseen": {
+    "trades": 13,
+    "net": 17581,
+    "per_trade": 1352,
+    "win": 23.1,
+    "pf": 2.76,
+    "max_dd": -5378,
+    "net_per_dd": 3.27
+   },
+   "by_rule": {
+    "noise": {
+     "train": -1583,
+     "unseen": 2968
+    },
+    "camarilla": {
+     "train": 16805,
+     "unseen": 14613
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": -13879,
+     "unseen": 7163
+    },
+    "BANKNIFTY": {
+     "train": 29101,
+     "unseen": 10418
+    }
+   },
+   "years": {
+    "2023": 11608,
+    "2024": -10137,
+    "2025": 7030,
+    "2026": 24303
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "rs_open": {
+   "train": {
+    "trades": 566,
+    "net": 94373,
+    "per_trade": 167,
+    "win": 29.0,
+    "pf": 1.19,
+    "max_dd": -51523,
+    "net_per_dd": 1.83
+   },
+   "unseen": {
+    "trades": 83,
+    "net": 35565,
+    "per_trade": 428,
+    "win": 33.7,
+    "pf": 1.49,
+    "max_dd": -13829,
+    "net_per_dd": 2.57
+   },
+   "by_rule": {
+    "noise": {
+     "train": 57566,
+     "unseen": 3460
+    },
+    "camarilla": {
+     "train": 36807,
+     "unseen": 32105
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 69241,
+     "unseen": 20861
+    },
+    "BANKNIFTY": {
+     "train": 25132,
+     "unseen": 14704
+    }
+   },
+   "years": {
+    "2023": 22723,
+    "2024": 54342,
+    "2025": -3847,
+    "2026": 56720
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "rs_30": {
+   "train": {
+    "trades": 599,
+    "net": 15765,
+    "per_trade": 26,
+    "win": 27.7,
+    "pf": 1.03,
+    "max_dd": -62373,
+    "net_per_dd": 0.25
+   },
+   "unseen": {
+    "trades": 89,
+    "net": 31041,
+    "per_trade": 349,
+    "win": 37.1,
+    "pf": 1.43,
+    "max_dd": -15944,
+    "net_per_dd": 1.95
+   },
+   "by_rule": {
+    "noise": {
+     "train": 32192,
+     "unseen": 17167
+    },
+    "camarilla": {
+     "train": -16427,
+     "unseen": 13874
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 10399,
+     "unseen": 26152
+    },
+    "BANKNIFTY": {
+     "train": 5366,
+     "unseen": 4889
+    }
+   },
+   "years": {
+    "2023": 9299,
+    "2024": 17449,
+    "2025": -11767,
+    "2026": 31824
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "rs_both": {
+   "train": {
+    "trades": 437,
+    "net": 18651,
+    "per_trade": 43,
+    "win": 28.6,
+    "pf": 1.05,
+    "max_dd": -53567,
+    "net_per_dd": 0.35
+   },
+   "unseen": {
+    "trades": 62,
+    "net": 13293,
+    "per_trade": 214,
+    "win": 33.9,
+    "pf": 1.25,
+    "max_dd": -9497,
+    "net_per_dd": 1.4
+   },
+   "by_rule": {
+    "noise": {
+     "train": 67145,
+     "unseen": 11205
+    },
+    "camarilla": {
+     "train": -48494,
+     "unseen": 2088
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 24756,
+     "unseen": 486
+    },
+    "BANKNIFTY": {
+     "train": -6105,
+     "unseen": 12807
+    }
+   },
+   "years": {
+    "2023": 16784,
+    "2024": 8484,
+    "2025": -15895,
+    "2026": 22571
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "inv_rs_open": {
+   "train": {
+    "trades": 335,
+    "net": 109469,
+    "per_trade": 327,
+    "win": 28.7,
+    "pf": 1.38,
+    "max_dd": -23373,
+    "net_per_dd": 4.68
+   },
+   "unseen": {
+    "trades": 58,
+    "net": 21285,
+    "per_trade": 367,
+    "win": 29.3,
+    "pf": 1.41,
+    "max_dd": -11393,
+    "net_per_dd": 1.87
+   },
+   "by_rule": {
+    "noise": {
+     "train": 25929,
+     "unseen": 12721
+    },
+    "camarilla": {
+     "train": 83540,
+     "unseen": 8564
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 79683,
+     "unseen": 32301
+    },
+    "BANKNIFTY": {
+     "train": 29787,
+     "unseen": -11017
+    }
+   },
+   "years": {
+    "2023": 21189,
+    "2024": 35434,
+    "2025": 34963,
+    "2026": 39168
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "inv_rs_30": {
+   "train": {
+    "trades": 483,
+    "net": 18410,
+    "per_trade": 38,
+    "win": 28.2,
+    "pf": 1.04,
+    "max_dd": -44061,
+    "net_per_dd": 0.42
+   },
+   "unseen": {
+    "trades": 82,
+    "net": 2217,
+    "per_trade": 27,
+    "win": 34.1,
+    "pf": 1.03,
+    "max_dd": -19976,
+    "net_per_dd": 0.11
+   },
+   "by_rule": {
+    "noise": {
+     "train": 36797,
+     "unseen": 10628
+    },
+    "camarilla": {
+     "train": -18387,
+     "unseen": -8412
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 44346,
+     "unseen": 11787
+    },
+    "BANKNIFTY": {
+     "train": -25936,
+     "unseen": -9570
+    }
+   },
+   "years": {
+    "2023": -13164,
+    "2024": 47571,
+    "2025": -11521,
+    "2026": -2260
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "flow1": {
+   "train": {
+    "trades": 425,
+    "net": 105204,
+    "per_trade": 248,
+    "win": 28.7,
+    "pf": 1.29,
+    "max_dd": -42470,
+    "net_per_dd": 2.48
+   },
+   "unseen": {
+    "trades": 68,
+    "net": 15260,
+    "per_trade": 224,
+    "win": 26.5,
+    "pf": 1.28,
+    "max_dd": -14962,
+    "net_per_dd": 1.02
+   },
+   "by_rule": {
+    "noise": {
+     "train": 27746,
+     "unseen": -7111
+    },
+    "camarilla": {
+     "train": 77458,
+     "unseen": 22371
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 78726,
+     "unseen": 34046
+    },
+    "BANKNIFTY": {
+     "train": 26478,
+     "unseen": -18786
+    }
+   },
+   "years": {
+    "2023": 42442,
+    "2024": -3844,
+    "2025": 54890,
+    "2026": 26976
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "flow3": {
+   "train": {
+    "trades": 428,
+    "net": 116789,
+    "per_trade": 273,
+    "win": 29.9,
+    "pf": 1.34,
+    "max_dd": -55234,
+    "net_per_dd": 2.11
+   },
+   "unseen": {
+    "trades": 66,
+    "net": 28206,
+    "per_trade": 427,
+    "win": 33.3,
+    "pf": 1.63,
+    "max_dd": -22483,
+    "net_per_dd": 1.25
+   },
+   "by_rule": {
+    "noise": {
+     "train": 23111,
+     "unseen": 8444
+    },
+    "camarilla": {
+     "train": 93678,
+     "unseen": 19762
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 60562,
+     "unseen": 33557
+    },
+    "BANKNIFTY": {
+     "train": 56227,
+     "unseen": -5351
+    }
+   },
+   "years": {
+    "2023": 44017,
+    "2024": 42394,
+    "2025": 15344,
+    "2026": 43240
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "inv_flow1": {
+   "train": {
+    "trades": 392,
+    "net": 68933,
+    "per_trade": 176,
+    "win": 28.6,
+    "pf": 1.19,
+    "max_dd": -59522,
+    "net_per_dd": 1.16
+   },
+   "unseen": {
+    "trades": 58,
+    "net": 45303,
+    "per_trade": 781,
+    "win": 37.9,
+    "pf": 1.86,
+    "max_dd": -22341,
+    "net_per_dd": 2.03
+   },
+   "by_rule": {
+    "noise": {
+     "train": 29908,
+     "unseen": 16305
+    },
+    "camarilla": {
+     "train": 39025,
+     "unseen": 28998
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 40598,
+     "unseen": 17488
+    },
+    "BANKNIFTY": {
+     "train": 28335,
+     "unseen": 27816
+    }
+   },
+   "years": {
+    "2023": -14210,
+    "2024": 92654,
+    "2025": -34290,
+    "2026": 70083
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "inv_flow3": {
+   "train": {
+    "trades": 386,
+    "net": 53916,
+    "per_trade": 140,
+    "win": 27.2,
+    "pf": 1.15,
+    "max_dd": -39277,
+    "net_per_dd": 1.37
+   },
+   "unseen": {
+    "trades": 60,
+    "net": 32357,
+    "per_trade": 539,
+    "win": 30.0,
+    "pf": 1.51,
+    "max_dd": -26432,
+    "net_per_dd": 1.22
+   },
+   "by_rule": {
+    "noise": {
+     "train": 34544,
+     "unseen": 750
+    },
+    "camarilla": {
+     "train": 19372,
+     "unseen": 31607
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 53824,
+     "unseen": 17976
+    },
+    "BANKNIFTY": {
+     "train": 91,
+     "unseen": 14381
+    }
+   },
+   "years": {
+    "2023": -19218,
+    "2024": 46416,
+    "2025": 5256,
+    "2026": 53819
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "em_lt50": {
+   "train": {
+    "trades": 39,
+    "net": 6820,
+    "per_trade": 175,
+    "win": 25.6,
+    "pf": 1.22,
+    "max_dd": -13703,
+    "net_per_dd": 0.5
+   },
+   "unseen": {
+    "trades": 14,
+    "net": 9513,
+    "per_trade": 679,
+    "win": 42.9,
+    "pf": 2.13,
+    "max_dd": -5118,
+    "net_per_dd": 1.86
+   },
+   "by_rule": {
+    "noise": {
+     "train": 0,
+     "unseen": 0
+    },
+    "camarilla": {
+     "train": 6820,
+     "unseen": 9513
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 3416,
+     "unseen": 13568
+    },
+    "BANKNIFTY": {
+     "train": 3404,
+     "unseen": -4055
+    }
+   },
+   "years": {
+    "2023": 3329,
+    "2024": 391,
+    "2025": 1392,
+    "2026": 11220
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "em_lt60": {
+   "train": {
+    "trades": 85,
+    "net": -14749,
+    "per_trade": -174,
+    "win": 20.0,
+    "pf": 0.82,
+    "max_dd": -25605,
+    "net_per_dd": -0.58
+   },
+   "unseen": {
+    "trades": 24,
+    "net": 31560,
+    "per_trade": 1315,
+    "win": 41.7,
+    "pf": 2.69,
+    "max_dd": -5268,
+    "net_per_dd": 5.99
+   },
+   "by_rule": {
+    "noise": {
+     "train": -7475,
+     "unseen": 0
+    },
+    "camarilla": {
+     "train": -7274,
+     "unseen": 31560
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": -12874,
+     "unseen": 33466
+    },
+    "BANKNIFTY": {
+     "train": -1875,
+     "unseen": -1905
+    }
+   },
+   "years": {
+    "2023": -5218,
+    "2024": -3287,
+    "2025": -11410,
+    "2026": 36726
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "em_lt80": {
+   "train": {
+    "trades": 193,
+    "net": -2499,
+    "per_trade": -13,
+    "win": 23.3,
+    "pf": 0.99,
+    "max_dd": -32546,
+    "net_per_dd": -0.08
+   },
+   "unseen": {
+    "trades": 51,
+    "net": 29765,
+    "per_trade": 584,
+    "win": 35.3,
+    "pf": 1.82,
+    "max_dd": -10783,
+    "net_per_dd": 2.76
+   },
+   "by_rule": {
+    "noise": {
+     "train": -417,
+     "unseen": -987
+    },
+    "camarilla": {
+     "train": -2081,
+     "unseen": 30752
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": -1567,
+     "unseen": 33687
+    },
+    "BANKNIFTY": {
+     "train": -932,
+     "unseen": -3921
+    }
+   },
+   "years": {
+    "2023": -7066,
+    "2024": -259,
+    "2025": -11367,
+    "2026": 45958
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "em_gt100": {
+   "train": {
+    "trades": 401,
+    "net": 119305,
+    "per_trade": 298,
+    "win": 31.4,
+    "pf": 1.31,
+    "max_dd": -43183,
+    "net_per_dd": 2.76
+   },
+   "unseen": {
+    "trades": 63,
+    "net": 3664,
+    "per_trade": 58,
+    "win": 30.2,
+    "pf": 1.07,
+    "max_dd": -16191,
+    "net_per_dd": 0.23
+   },
+   "by_rule": {
+    "noise": {
+     "train": 44292,
+     "unseen": 20599
+    },
+    "camarilla": {
+     "train": 75013,
+     "unseen": -16935
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 98873,
+     "unseen": -255
+    },
+    "BANKNIFTY": {
+     "train": 20431,
+     "unseen": 3919
+    }
+   },
+   "years": {
+    "2023": -11928,
+    "2024": 88100,
+    "2025": 25631,
+    "2026": 21166
+   },
+   "beats": false,
+   "train_only": true
+  },
+  "em_any": {
+   "train": {
+    "trades": 599,
+    "net": 97211,
+    "per_trade": 162,
+    "win": 29.0,
+    "pf": 1.17,
+    "max_dd": -64206,
+    "net_per_dd": 1.51
+   },
+   "unseen": {
+    "trades": 119,
+    "net": 50503,
+    "per_trade": 424,
+    "win": 31.1,
+    "pf": 1.49,
+    "max_dd": -22890,
+    "net_per_dd": 2.21
+   },
+   "by_rule": {
+    "noise": {
+     "train": 54557,
+     "unseen": 7475
+    },
+    "camarilla": {
+     "train": 42653,
+     "unseen": 43028
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 83459,
+     "unseen": 40283
+    },
+    "BANKNIFTY": {
+     "train": 13752,
+     "unseen": 10220
+    }
+   },
+   "years": {
+    "2023": -12451,
+    "2024": 74331,
+    "2025": 14727,
+    "2026": 71106
+   },
+   "beats": false,
+   "train_only": false
+  }
+ },
+ "base_split": {
+  "x_vwap": {
+   "pass": {
+    "train": {
+     "n": 716,
+     "net": 153264,
+     "per": 214
+    },
+    "unseen": {
+     "n": 109,
+     "net": 45666,
+     "per": 419
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 80,
+     "net": 9882,
+     "per": 124
+    },
+    "unseen": {
+     "n": 17,
+     "net": 14898,
+     "per": 876
+    }
+   }
+  },
+  "x_nb": {
+   "pass": {
+    "train": {
+     "n": 174,
+     "net": 12751,
+     "per": 73
+    },
+    "unseen": {
+     "n": 34,
+     "net": 11188,
+     "per": 329
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 622,
+     "net": 150395,
+     "per": 242
+    },
+    "unseen": {
+     "n": 92,
+     "net": 49375,
+     "per": 537
+    }
+   }
+  },
+  "x_or": {
+   "pass": {
+    "train": {
+     "n": 463,
+     "net": 127865,
+     "per": 276
+    },
+    "unseen": {
+     "n": 58,
+     "net": -7943,
+     "per": -137
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 333,
+     "net": 35281,
+     "per": 106
+    },
+    "unseen": {
+     "n": 68,
+     "net": 68506,
+     "per": 1007
+    }
+   }
+  },
+  "breadth6_v": {
+   "pass": {
+    "train": {
+     "n": 678,
+     "net": 106999,
+     "per": 158
+    },
+    "unseen": {
+     "n": 100,
+     "net": 32773,
+     "per": 328
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 118,
+     "net": 56147,
+     "per": 476
+    },
+    "unseen": {
+     "n": 26,
+     "net": 27790,
+     "per": 1069
+    }
+   }
+  },
+  "breadth7_v": {
+   "pass": {
+    "train": {
+     "n": 595,
+     "net": 90005,
+     "per": 151
+    },
+    "unseen": {
+     "n": 70,
+     "net": 21775,
+     "per": 311
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 201,
+     "net": 73141,
+     "per": 364
+    },
+    "unseen": {
+     "n": 56,
+     "net": 38788,
+     "per": 693
+    }
+   }
+  },
+  "breadth8_v": {
+   "pass": {
+    "train": {
+     "n": 454,
+     "net": 56114,
+     "per": 124
+    },
+    "unseen": {
+     "n": 56,
+     "net": 26766,
+     "per": 478
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 342,
+     "net": 107032,
+     "per": 313
+    },
+    "unseen": {
+     "n": 70,
+     "net": 33797,
+     "per": 483
+    }
+   }
+  },
+  "breadth6_o": {
+   "pass": {
+    "train": {
+     "n": 619,
+     "net": 146537,
+     "per": 237
+    },
+    "unseen": {
+     "n": 92,
+     "net": 36560,
+     "per": 397
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 177,
+     "net": 16609,
+     "per": 94
+    },
+    "unseen": {
+     "n": 34,
+     "net": 24003,
+     "per": 706
+    }
+   }
+  },
+  "breadth7_o": {
+   "pass": {
+    "train": {
+     "n": 506,
+     "net": 172085,
+     "per": 340
+    },
+    "unseen": {
+     "n": 71,
+     "net": 14556,
+     "per": 205
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 290,
+     "net": -8939,
+     "per": -31
+    },
+    "unseen": {
+     "n": 55,
+     "net": 46007,
+     "per": 836
+    }
+   }
+  },
+  "breadth8_o": {
+   "pass": {
+    "train": {
+     "n": 354,
+     "net": 97782,
+     "per": 276
+    },
+    "unseen": {
+     "n": 42,
+     "net": 12127,
+     "per": 289
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 442,
+     "net": 65364,
+     "per": 148
+    },
+    "unseen": {
+     "n": 84,
+     "net": 48436,
+     "per": 577
+    }
+   }
+  },
+  "rs_open": {
+   "pass": {
+    "train": {
+     "n": 522,
+     "net": 91811,
+     "per": 176
+    },
+    "unseen": {
+     "n": 77,
+     "net": 39573,
+     "per": 514
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 274,
+     "net": 71335,
+     "per": 260
+    },
+    "unseen": {
+     "n": 49,
+     "net": 20990,
+     "per": 428
+    }
+   }
+  },
+  "rs_30": {
+   "pass": {
+    "train": {
+     "n": 358,
+     "net": 76176,
+     "per": 213
+    },
+    "unseen": {
+     "n": 46,
+     "net": 9342,
+     "per": 203
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 438,
+     "net": 86970,
+     "per": 199
+    },
+    "unseen": {
+     "n": 80,
+     "net": 51221,
+     "per": 640
+    }
+   }
+  },
+  "rs_both": {
+   "pass": {
+    "train": {
+     "n": 253,
+     "net": 68999,
+     "per": 273
+    },
+    "unseen": {
+     "n": 33,
+     "net": 6843,
+     "per": 207
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 543,
+     "net": 94147,
+     "per": 173
+    },
+    "unseen": {
+     "n": 93,
+     "net": 53720,
+     "per": 578
+    }
+   }
+  },
+  "flow1": {
+   "pass": {
+    "train": {
+     "n": 413,
+     "net": 84100,
+     "per": 204
+    },
+    "unseen": {
+     "n": 68,
+     "net": 15260,
+     "per": 224
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 383,
+     "net": 79046,
+     "per": 206
+    },
+    "unseen": {
+     "n": 58,
+     "net": 45303,
+     "per": 781
+    }
+   }
+  },
+  "flow3": {
+   "pass": {
+    "train": {
+     "n": 419,
+     "net": 116607,
+     "per": 278
+    },
+    "unseen": {
+     "n": 66,
+     "net": 28206,
+     "per": 427
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 377,
+     "net": 46539,
+     "per": 123
+    },
+    "unseen": {
+     "n": 60,
+     "net": 32357,
+     "per": 539
+    }
+   }
+  },
+  "em_lt50": {
+   "pass": {
+    "train": {
+     "n": 39,
+     "net": 6820,
+     "per": 175
+    },
+    "unseen": {
+     "n": 14,
+     "net": 9513,
+     "per": 679
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 560,
+     "net": 90391,
+     "per": 161
+    },
+    "unseen": {
+     "n": 105,
+     "net": 40991,
+     "per": 390
+    }
+   }
+  },
+  "em_lt60": {
+   "pass": {
+    "train": {
+     "n": 85,
+     "net": -14749,
+     "per": -174
+    },
+    "unseen": {
+     "n": 24,
+     "net": 31560,
+     "per": 1315
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 514,
+     "net": 111960,
+     "per": 218
+    },
+    "unseen": {
+     "n": 95,
+     "net": 18943,
+     "per": 199
+    }
+   }
+  },
+  "em_lt80": {
+   "pass": {
+    "train": {
+     "n": 193,
+     "net": -2499,
+     "per": -13
+    },
+    "unseen": {
+     "n": 51,
+     "net": 29765,
+     "per": 584
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 406,
+     "net": 99709,
+     "per": 246
+    },
+    "unseen": {
+     "n": 68,
+     "net": 20738,
+     "per": 305
+    }
+   }
+  },
+  "em_gt100": {
+   "pass": {
+    "train": {
+     "n": 277,
+     "net": 79307,
+     "per": 286
+    },
+    "unseen": {
+     "n": 38,
+     "net": 11172,
+     "per": 294
+    }
+   },
+   "fail": {
+    "train": {
+     "n": 322,
+     "net": 17903,
+     "per": 56
+    },
+    "unseen": {
+     "n": 81,
+     "net": 39331,
+     "per": 486
+    }
+   }
+  }
+ },
+ "votes": {
+  "2 of 3 [x_vwap,breadth7_v,rs_open]": {
+   "train": {
+    "trades": 719,
+    "net": 100339,
+    "per_trade": 140,
+    "win": 27.8,
+    "pf": 1.16,
+    "max_dd": -68860,
+    "net_per_dd": 1.46
+   },
+   "unseen": {
+    "trades": 108,
+    "net": 43178,
+    "per_trade": 400,
+    "win": 32.4,
+    "pf": 1.55,
+    "max_dd": -13043,
+    "net_per_dd": 3.31
+   },
+   "by_rule": {
+    "noise": {
+     "train": 63423,
+     "unseen": 13132
+    },
+    "camarilla": {
+     "train": 36916,
+     "unseen": 30046
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 80963,
+     "unseen": 31627
+    },
+    "BANKNIFTY": {
+     "train": 19376,
+     "unseen": 11550
+    }
+   },
+   "years": {
+    "2023": 25247,
+    "2024": 86339,
+    "2025": -29508,
+    "2026": 61439
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "3 of 3 [x_vwap,breadth7_v,rs_open]": {
+   "train": {
+    "trades": 447,
+    "net": 87872,
+    "per_trade": 197,
+    "win": 30.0,
+    "pf": 1.22,
+    "max_dd": -42185,
+    "net_per_dd": 2.08
+   },
+   "unseen": {
+    "trades": 54,
+    "net": 29559,
+    "per_trade": 547,
+    "win": 33.3,
+    "pf": 1.67,
+    "max_dd": -10136,
+    "net_per_dd": 2.92
+   },
+   "by_rule": {
+    "noise": {
+     "train": 54862,
+     "unseen": 2269
+    },
+    "camarilla": {
+     "train": 33010,
+     "unseen": 27291
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 83904,
+     "unseen": 29689
+    },
+    "BANKNIFTY": {
+     "train": 3968,
+     "unseen": -130
+    }
+   },
+   "years": {
+    "2023": 1300,
+    "2024": 68903,
+    "2025": -17787,
+    "2026": 65015
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "2 of 4 [x_vwap,breadth7_v,rs_open,em_lt60]": {
+   "train": {
+    "trades": 734,
+    "net": 111586,
+    "per_trade": 152,
+    "win": 28.1,
+    "pf": 1.17,
+    "max_dd": -65732,
+    "net_per_dd": 1.7
+   },
+   "unseen": {
+    "trades": 113,
+    "net": 63989,
+    "per_trade": 566,
+    "win": 33.6,
+    "pf": 1.75,
+    "max_dd": -16415,
+    "net_per_dd": 3.9
+   },
+   "by_rule": {
+    "noise": {
+     "train": 59147,
+     "unseen": 13103
+    },
+    "camarilla": {
+     "train": 52438,
+     "unseen": 50886
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 80887,
+     "unseen": 46306
+    },
+    "BANKNIFTY": {
+     "train": 30699,
+     "unseen": 17684
+    }
+   },
+   "years": {
+    "2023": 32265,
+    "2024": 83731,
+    "2025": -24379,
+    "2026": 83958
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "2 of 4 [x_vwap,breadth7_v,rs_open,em_lt60] (straddle days)": {
+   "train": {
+    "trades": 555,
+    "net": 42243,
+    "per_trade": 76,
+    "win": 27.6,
+    "pf": 1.08,
+    "max_dd": -65732,
+    "net_per_dd": 0.64
+   },
+   "unseen": {
+    "trades": 107,
+    "net": 49498,
+    "per_trade": 463,
+    "win": 31.8,
+    "pf": 1.59,
+    "max_dd": -16415,
+    "net_per_dd": 3.02
+   },
+   "by_rule": {
+    "noise": {
+     "train": 51610,
+     "unseen": 11384
+    },
+    "camarilla": {
+     "train": -9367,
+     "unseen": 38115
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 53823,
+     "unseen": 32229
+    },
+    "BANKNIFTY": {
+     "train": -11580,
+     "unseen": 17270
+    }
+   },
+   "years": {
+    "2023": -14924,
+    "2024": 61577,
+    "2025": -24379,
+    "2026": 69467
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "3 of 4 [x_vwap,breadth7_v,rs_open,em_lt60]": {
+   "train": {
+    "trades": 486,
+    "net": 59791,
+    "per_trade": 123,
+    "win": 28.2,
+    "pf": 1.14,
+    "max_dd": -53925,
+    "net_per_dd": 1.11
+   },
+   "unseen": {
+    "trades": 63,
+    "net": 29470,
+    "per_trade": 468,
+    "win": 33.3,
+    "pf": 1.56,
+    "max_dd": -11151,
+    "net_per_dd": 2.64
+   },
+   "by_rule": {
+    "noise": {
+     "train": 50141,
+     "unseen": 7718
+    },
+    "camarilla": {
+     "train": 9650,
+     "unseen": 21752
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 63183,
+     "unseen": 36868
+    },
+    "BANKNIFTY": {
+     "train": -3393,
+     "unseen": -7398
+    }
+   },
+   "years": {
+    "2023": -6131,
+    "2024": 55653,
+    "2025": -29476,
+    "2026": 69214
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "3 of 4 [x_vwap,breadth7_v,rs_open,em_lt60] (straddle days)": {
+   "train": {
+    "trades": 371,
+    "net": 36231,
+    "per_trade": 98,
+    "win": 27.5,
+    "pf": 1.1,
+    "max_dd": -53925,
+    "net_per_dd": 0.67
+   },
+   "unseen": {
+    "trades": 60,
+    "net": 23371,
+    "per_trade": 390,
+    "win": 33.3,
+    "pf": 1.47,
+    "max_dd": -11151,
+    "net_per_dd": 2.1
+   },
+   "by_rule": {
+    "noise": {
+     "train": 35387,
+     "unseen": 1619
+    },
+    "camarilla": {
+     "train": 844,
+     "unseen": 21752
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 47797,
+     "unseen": 29201
+    },
+    "BANKNIFTY": {
+     "train": -11566,
+     "unseen": -5829
+    }
+   },
+   "years": {
+    "2023": -18987,
+    "2024": 44950,
+    "2025": -29476,
+    "2026": 63115
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "4 of 4 [x_vwap,breadth7_v,rs_open,em_lt60]": {
+   "train": {
+    "trades": 24,
+    "net": 6989,
+    "per_trade": 291,
+    "win": 25.0,
+    "pf": 1.34,
+    "max_dd": -5561,
+    "net_per_dd": 1.26
+   },
+   "unseen": {
+    "trades": 7,
+    "net": 10640,
+    "per_trade": 1520,
+    "win": 42.9,
+    "pf": 4.88,
+    "max_dd": -2207,
+    "net_per_dd": 4.82
+   },
+   "by_rule": {
+    "noise": {
+     "train": -343,
+     "unseen": 0
+    },
+    "camarilla": {
+     "train": 7332,
+     "unseen": 10640
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 9175,
+     "unseen": 11160
+    },
+    "BANKNIFTY": {
+     "train": -2186,
+     "unseen": -520
+    }
+   },
+   "years": {
+    "2023": -3956,
+    "2024": 13822,
+    "2025": -2048,
+    "2026": 9811
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "4 of 4 [x_vwap,breadth7_v,rs_open,em_lt60] (straddle days)": {
+   "train": {
+    "trades": 24,
+    "net": 6989,
+    "per_trade": 291,
+    "win": 25.0,
+    "pf": 1.34,
+    "max_dd": -5561,
+    "net_per_dd": 1.26
+   },
+   "unseen": {
+    "trades": 7,
+    "net": 10640,
+    "per_trade": 1520,
+    "win": 42.9,
+    "pf": 4.88,
+    "max_dd": -2207,
+    "net_per_dd": 4.82
+   },
+   "by_rule": {
+    "noise": {
+     "train": -343,
+     "unseen": 0
+    },
+    "camarilla": {
+     "train": 7332,
+     "unseen": 10640
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 9175,
+     "unseen": 11160
+    },
+    "BANKNIFTY": {
+     "train": -2186,
+     "unseen": -520
+    }
+   },
+   "years": {
+    "2023": -3956,
+    "2024": 13822,
+    "2025": -2048,
+    "2026": 9811
+   },
+   "beats": false,
+   "train_only": false
+  }
+ },
+ "entries": {
+  "e_xidx_nb": {
+   "train": {
+    "trades": 246,
+    "net": 62537,
+    "per_trade": 254,
+    "win": 38.6,
+    "pf": 1.19,
+    "max_dd": -58379,
+    "net_per_dd": 1.07
+   },
+   "unseen": {
+    "trades": 43,
+    "net": -4122,
+    "per_trade": -96,
+    "win": 41.9,
+    "pf": 0.93,
+    "max_dd": -26169,
+    "net_per_dd": -0.16
+   },
+   "by_rule": {
+    "noise": {
+     "train": 0
+    },
+    "camarilla": {
+     "train": 0
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 72149,
+     "unseen": 2290
+    },
+    "BANKNIFTY": {
+     "train": -9611,
+     "unseen": -6412
+    }
+   },
+   "years": {
+    "2023": -10806,
+    "2024": 63301,
+    "2025": -14065,
+    "2026": 19985
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "e_xidx_nb + book": {
+   "train": {
+    "trades": 826,
+    "net": 147047,
+    "per_trade": 178,
+    "win": 29.3,
+    "pf": 1.19,
+    "max_dd": -67577,
+    "net_per_dd": 2.18
+   },
+   "unseen": {
+    "trades": 132,
+    "net": 55084,
+    "per_trade": 417,
+    "win": 31.8,
+    "pf": 1.45,
+    "max_dd": -28654,
+    "net_per_dd": 1.92
+   },
+   "by_rule": {
+    "noise": {
+     "train": 40588,
+     "unseen": 7289
+    },
+    "camarilla": {
+     "train": 114255,
+     "unseen": 51369
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 96169,
+     "unseen": 44734
+    },
+    "BANKNIFTY": {
+     "train": 50878,
+     "unseen": 10350
+    }
+   },
+   "years": {
+    "2023": 13101,
+    "2024": 103817,
+    "2025": -941,
+    "2026": 86153
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "e_xidx_vwap": {
+   "train": {
+    "trades": 1305,
+    "net": -32540,
+    "per_trade": -25,
+    "win": 33.8,
+    "pf": 0.98,
+    "max_dd": -187006,
+    "net_per_dd": -0.17
+   },
+   "unseen": {
+    "trades": 207,
+    "net": -106027,
+    "per_trade": -512,
+    "win": 30.4,
+    "pf": 0.67,
+    "max_dd": -126157,
+    "net_per_dd": -0.84
+   },
+   "by_rule": {
+    "noise": {
+     "train": 0
+    },
+    "camarilla": {
+     "train": 0
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 58877,
+     "unseen": -43052
+    },
+    "BANKNIFTY": {
+     "train": -91416,
+     "unseen": -62975
+    }
+   },
+   "years": {
+    "2023": -75127,
+    "2024": 31802,
+    "2025": -75401,
+    "2026": -19841
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "e_xidx_vwap + book": {
+   "train": {
+    "trades": 1641,
+    "net": 9019,
+    "per_trade": 5,
+    "win": 31.4,
+    "pf": 1.0,
+    "max_dd": -173745,
+    "net_per_dd": 0.05
+   },
+   "unseen": {
+    "trades": 266,
+    "net": -39185,
+    "per_trade": -147,
+    "win": 31.2,
+    "pf": 0.89,
+    "max_dd": -72361,
+    "net_per_dd": -0.54
+   },
+   "by_rule": {
+    "noise": {
+     "train": 2456,
+     "unseen": 929
+    },
+    "camarilla": {
+     "train": 77351,
+     "unseen": 41312
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 88393,
+     "unseen": 7720
+    },
+    "BANKNIFTY": {
+     "train": -79374,
+     "unseen": -46905
+    }
+   },
+   "years": {
+    "2023": -34434,
+    "2024": 67859,
+    "2025": -96838,
+    "2026": 33246
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "e_breadth7": {
+   "train": {
+    "trades": 1403,
+    "net": -64291,
+    "per_trade": -46,
+    "win": 33.1,
+    "pf": 0.97,
+    "max_dd": -206325,
+    "net_per_dd": -0.31
+   },
+   "unseen": {
+    "trades": 218,
+    "net": -139340,
+    "per_trade": -639,
+    "win": 26.6,
+    "pf": 0.6,
+    "max_dd": -154526,
+    "net_per_dd": -0.9
+   },
+   "by_rule": {
+    "noise": {
+     "train": 0
+    },
+    "camarilla": {
+     "train": 0
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 31706,
+     "unseen": -76058
+    },
+    "BANKNIFTY": {
+     "train": -95997,
+     "unseen": -63282
+    }
+   },
+   "years": {
+    "2023": -145196,
+    "2024": 155245,
+    "2025": -136300,
+    "2026": -77380
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "e_breadth7 + book": {
+   "train": {
+    "trades": 1680,
+    "net": 37235,
+    "per_trade": 22,
+    "win": 31.4,
+    "pf": 1.02,
+    "max_dd": -211226,
+    "net_per_dd": 0.18
+   },
+   "unseen": {
+    "trades": 268,
+    "net": -84332,
+    "per_trade": -315,
+    "win": 26.9,
+    "pf": 0.78,
+    "max_dd": -98299,
+    "net_per_dd": -0.86
+   },
+   "by_rule": {
+    "noise": {
+     "train": -7115,
+     "unseen": -1349
+    },
+    "camarilla": {
+     "train": 135246,
+     "unseen": 47861
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 114072,
+     "unseen": -35459
+    },
+    "BANKNIFTY": {
+     "train": -76837,
+     "unseen": -48873
+    }
+   },
+   "years": {
+    "2023": -94208,
+    "2024": 199737,
+    "2025": -146201,
+    "2026": -6426
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "e_breadth8": {
+   "train": {
+    "trades": 1342,
+    "net": -35661,
+    "per_trade": -27,
+    "win": 33.4,
+    "pf": 0.98,
+    "max_dd": -273518,
+    "net_per_dd": -0.13
+   },
+   "unseen": {
+    "trades": 210,
+    "net": -93428,
+    "per_trade": -445,
+    "win": 30.5,
+    "pf": 0.71,
+    "max_dd": -114236,
+    "net_per_dd": -0.82
+   },
+   "by_rule": {
+    "noise": {
+     "train": 0
+    },
+    "camarilla": {
+     "train": 0
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 83703,
+     "unseen": -35419
+    },
+    "BANKNIFTY": {
+     "train": -119364,
+     "unseen": -58009
+    }
+   },
+   "years": {
+    "2023": -994,
+    "2024": 68758,
+    "2025": -190468,
+    "2026": -6384
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "e_breadth8 + book": {
+   "train": {
+    "trades": 1620,
+    "net": 50394,
+    "per_trade": 31,
+    "win": 32.2,
+    "pf": 1.03,
+    "max_dd": -236253,
+    "net_per_dd": 0.21
+   },
+   "unseen": {
+    "trades": 251,
+    "net": -46346,
+    "per_trade": -185,
+    "win": 29.9,
+    "pf": 0.86,
+    "max_dd": -73426,
+    "net_per_dd": -0.63
+   },
+   "by_rule": {
+    "noise": {
+     "train": -408,
+     "unseen": -1552
+    },
+    "camarilla": {
+     "train": 105032,
+     "unseen": 54428
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 122060,
+     "unseen": 2585
+    },
+    "BANKNIFTY": {
+     "train": -71666,
+     "unseen": -48931
+    }
+   },
+   "years": {
+    "2023": 30060,
+    "2024": 91352,
+    "2025": -153567,
+    "2026": 36203
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "e_breadth8_o": {
+   "train": {
+    "trades": 1016,
+    "net": -142795,
+    "per_trade": -141,
+    "win": 32.6,
+    "pf": 0.9,
+    "max_dd": -192430,
+    "net_per_dd": -0.74
+   },
+   "unseen": {
+    "trades": 158,
+    "net": -30118,
+    "per_trade": -191,
+    "win": 32.9,
+    "pf": 0.87,
+    "max_dd": -42603,
+    "net_per_dd": -0.71
+   },
+   "by_rule": {
+    "noise": {
+     "train": 0
+    },
+    "camarilla": {
+     "train": 0
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": -34151,
+     "unseen": -27501
+    },
+    "BANKNIFTY": {
+     "train": -108644,
+     "unseen": -2617
+    }
+   },
+   "years": {
+    "2023": -99848,
+    "2024": 23521,
+    "2025": -93150,
+    "2026": -3435
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "e_breadth8_o + book": {
+   "train": {
+    "trades": 1402,
+    "net": -143419,
+    "per_trade": -102,
+    "win": 29.6,
+    "pf": 0.91,
+    "max_dd": -181169,
+    "net_per_dd": -0.79
+   },
+   "unseen": {
+    "trades": 221,
+    "net": 14766,
+    "per_trade": 67,
+    "win": 32.6,
+    "pf": 1.06,
+    "max_dd": -52898,
+    "net_per_dd": 0.28
+   },
+   "by_rule": {
+    "noise": {
+     "train": 13086,
+     "unseen": 6986
+    },
+    "camarilla": {
+     "train": 74861,
+     "unseen": 49543
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": -11674,
+     "unseen": 10626
+    },
+    "BANKNIFTY": {
+     "train": -131746,
+     "unseen": 4140
+    }
+   },
+   "years": {
+    "2023": -97972,
+    "2024": 31081,
+    "2025": -81588,
+    "2026": 19825
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "e_rs": {
+   "train": {
+    "trades": 1391,
+    "net": -236431,
+    "per_trade": -170,
+    "win": 31.8,
+    "pf": 0.88,
+    "max_dd": -298073,
+    "net_per_dd": -0.79
+   },
+   "unseen": {
+    "trades": 217,
+    "net": -136243,
+    "per_trade": -628,
+    "win": 27.2,
+    "pf": 0.62,
+    "max_dd": -162551,
+    "net_per_dd": -0.84
+   },
+   "by_rule": {
+    "noise": {
+     "train": 0
+    },
+    "camarilla": {
+     "train": 0
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": -34356,
+     "unseen": -74238
+    },
+    "BANKNIFTY": {
+     "train": -202075,
+     "unseen": -62005
+    }
+   },
+   "years": {
+    "2023": -84706,
+    "2024": -22957,
+    "2025": -155480,
+    "2026": -109532
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "e_rs + book": {
+   "train": {
+    "trades": 1660,
+    "net": -128328,
+    "per_trade": -77,
+    "win": 30.7,
+    "pf": 0.94,
+    "max_dd": -233274,
+    "net_per_dd": -0.55
+   },
+   "unseen": {
+    "trades": 258,
+    "net": -80379,
+    "per_trade": -312,
+    "win": 27.5,
+    "pf": 0.78,
+    "max_dd": -105022,
+    "net_per_dd": -0.77
+   },
+   "by_rule": {
+    "noise": {
+     "train": -1564,
+     "unseen": 6016
+    },
+    "camarilla": {
+     "train": 71909,
+     "unseen": 34804
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 46681,
+     "unseen": -21848
+    },
+    "BANKNIFTY": {
+     "train": -175009,
+     "unseen": -58531
+    }
+   },
+   "years": {
+    "2023": -31346,
+    "2024": 15445,
+    "2025": -141620,
+    "2026": -51185
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "e_vote3of4": {
+   "train": {
+    "trades": 1230,
+    "net": -65312,
+    "per_trade": -53,
+    "win": 33.3,
+    "pf": 0.96,
+    "max_dd": -163966,
+    "net_per_dd": -0.4
+   },
+   "unseen": {
+    "trades": 192,
+    "net": -94845,
+    "per_trade": -494,
+    "win": 28.1,
+    "pf": 0.67,
+    "max_dd": -106313,
+    "net_per_dd": -0.89
+   },
+   "by_rule": {
+    "noise": {
+     "train": 0
+    },
+    "camarilla": {
+     "train": 0
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": -37906,
+     "unseen": -75244
+    },
+    "BANKNIFTY": {
+     "train": -27406,
+     "unseen": -19601
+    }
+   },
+   "years": {
+    "2023": -82244,
+    "2024": 37514,
+    "2025": -83141,
+    "2026": -32286
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "e_vote3of4 + book": {
+   "train": {
+    "trades": 1551,
+    "net": 45343,
+    "per_trade": 29,
+    "win": 31.9,
+    "pf": 1.02,
+    "max_dd": -127947,
+    "net_per_dd": 0.35
+   },
+   "unseen": {
+    "trades": 250,
+    "net": -49235,
+    "per_trade": -197,
+    "win": 29.2,
+    "pf": 0.85,
+    "max_dd": -74529,
+    "net_per_dd": -0.66
+   },
+   "by_rule": {
+    "noise": {
+     "train": 879,
+     "unseen": 2722
+    },
+    "camarilla": {
+     "train": 88438,
+     "unseen": 51156
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 58512,
+     "unseen": -29500
+    },
+    "BANKNIFTY": {
+     "train": -13169,
+     "unseen": -19735
+    }
+   },
+   "years": {
+    "2023": -29221,
+    "2024": 92829,
+    "2025": -62428,
+    "2026": -5071
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "e_vote4of4": {
+   "train": {
+    "trades": 164,
+    "net": -110209,
+    "per_trade": -672,
+    "win": 27.4,
+    "pf": 0.52,
+    "max_dd": -120292,
+    "net_per_dd": -0.92
+   },
+   "unseen": {
+    "trades": 41,
+    "net": -43516,
+    "per_trade": -1061,
+    "win": 24.4,
+    "pf": 0.4,
+    "max_dd": -49420,
+    "net_per_dd": -0.88
+   },
+   "by_rule": {
+    "noise": {
+     "train": 0
+    },
+    "camarilla": {
+     "train": 0
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": -51794,
+     "unseen": -16620
+    },
+    "BANKNIFTY": {
+     "train": -58415,
+     "unseen": -26896
+    }
+   },
+   "years": {
+    "2023": -4252,
+    "2024": -54105,
+    "2025": -42407,
+    "2026": -52961
+   },
+   "beats": false,
+   "train_only": false
+  },
+  "e_vote4of4 + book": {
+   "train": {
+    "trades": 903,
+    "net": 88517,
+    "per_trade": 98,
+    "win": 29.3,
+    "pf": 1.1,
+    "max_dd": -94225,
+    "net_per_dd": 0.94
+   },
+   "unseen": {
+    "trades": 152,
+    "net": 4599,
+    "per_trade": 30,
+    "win": 29.6,
+    "pf": 1.03,
+    "max_dd": -47511,
+    "net_per_dd": 0.1
+   },
+   "by_rule": {
+    "noise": {
+     "train": 45463,
+     "unseen": 11456
+    },
+    "camarilla": {
+     "train": 126038,
+     "unseen": 33420
+    }
+   },
+   "by_sym": {
+    "NIFTY": {
+     "train": 62345,
+     "unseen": 28650
+    },
+    "BANKNIFTY": {
+     "train": 26172,
+     "unseen": -24051
+    }
+   },
+   "years": {
+    "2023": 32177,
+    "2024": 73374,
+    "2025": -29122,
+    "2026": 16686
+   },
+   "beats": false,
+   "train_only": false
+  }
+ },
+ "predictive": {
+  "o_vwap": {
+   "NIFTY other above VWAP": {
+    "n": 4073,
+    "f30_bp": 0.4,
+    "t30": 1.7,
+    "fc_bp": 1.8,
+    "tc": 2.8
+   },
+   "NIFTY other below VWAP": {
+    "n": 4017,
+    "f30_bp": -0.5,
+    "t30": -2.0,
+    "fc_bp": -1.0,
+    "tc": -1.3
+   },
+   "BANKNIFTY other above VWAP": {
+    "n": 4168,
+    "f30_bp": 0.4,
+    "t30": 1.3,
+    "fc_bp": 3.3,
+    "tc": 4.2
+   },
+   "BANKNIFTY other below VWAP": {
+    "n": 3922,
+    "f30_bp": -0.6,
+    "t30": -1.8,
+    "fc_bp": -0.5,
+    "tc": -0.5
+   }
+  },
+  "o_vwap_agree": {
+   "NIFTY other agrees with own VWAP side": {
+    "n": 6505,
+    "f30_bp": 0.6,
+    "t30": 3.1,
+    "fc_bp": 2.1,
+    "tc": 3.9
+   },
+   "NIFTY other disagrees": {
+    "n": 1585,
+    "f30_bp": 0.3,
+    "t30": 0.7,
+    "fc_bp": 1.5,
+    "tc": 1.4
+   },
+   "BANKNIFTY other agrees with own VWAP side": {
+    "n": 6505,
+    "f30_bp": 0.7,
+    "t30": 2.7,
+    "fc_bp": 1.7,
+    "tc": 2.5
+   },
+   "BANKNIFTY other disagrees": {
+    "n": 1585,
+    "f30_bp": 0.3,
+    "t30": 0.7,
+    "fc_bp": -3.1,
+    "tc": -2.5
+   }
+  },
+  "o_nb": {
+   "NIFTY other beyond its band (signed)": {
+    "n": 885,
+    "f30_bp": 0.6,
+    "t30": 0.8,
+    "fc_bp": 3.1,
+    "tc": 1.9
+   },
+   "BANKNIFTY other beyond its band (signed)": {
+    "n": 986,
+    "f30_bp": 0.8,
+    "t30": 1.1,
+    "fc_bp": 1.7,
+    "tc": 1.0
+   }
+  },
+  "br_v": {
+   "NIFTY breadth 0-2": {
+    "n": 1626,
+    "f30_bp": -0.4,
+    "t30": -0.8,
+    "fc_bp": -3.5,
+    "tc": -2.9
+   },
+   "NIFTY breadth 3-4": {
+    "n": 2127,
+    "f30_bp": -0.6,
+    "t30": -1.8,
+    "fc_bp": -0.6,
+    "tc": -0.6
+   },
+   "NIFTY breadth 5": {
+    "n": 1133,
+    "f30_bp": -0.0,
+    "t30": -0.1,
+    "fc_bp": 2.0,
+    "tc": 1.8
+   },
+   "NIFTY breadth 6-7": {
+    "n": 1918,
+    "f30_bp": 0.7,
+    "t30": 2.1,
+    "fc_bp": 3.3,
+    "tc": 3.5
+   },
+   "NIFTY breadth 8-10": {
+    "n": 1286,
+    "f30_bp": 0.0,
+    "t30": 0.0,
+    "fc_bp": 1.5,
+    "tc": 1.2
+   },
+   "BANKNIFTY breadth 0-2": {
+    "n": 1626,
+    "f30_bp": -0.6,
+    "t30": -1.0,
+    "fc_bp": -1.8,
+    "tc": -1.3
+   },
+   "BANKNIFTY breadth 3-4": {
+    "n": 2127,
+    "f30_bp": -0.4,
+    "t30": -1.0,
+    "fc_bp": 1.6,
+    "tc": 1.4
+   },
+   "BANKNIFTY breadth 5": {
+    "n": 1133,
+    "f30_bp": 0.5,
+    "t30": 0.8,
+    "fc_bp": 3.1,
+    "tc": 2.2
+   },
+   "BANKNIFTY breadth 6-7": {
+    "n": 1918,
+    "f30_bp": 0.7,
+    "t30": 1.6,
+    "fc_bp": 3.2,
+    "tc": 2.9
+   },
+   "BANKNIFTY breadth 8-10": {
+    "n": 1286,
+    "f30_bp": -0.5,
+    "t30": -0.8,
+    "fc_bp": 1.4,
+    "tc": 0.9
+   }
+  },
+  "br_o": {
+   "NIFTY up-from-open 0-2": {
+    "n": 1423,
+    "f30_bp": -0.1,
+    "t30": -0.2,
+    "fc_bp": 2.1,
+    "tc": 1.6
+   },
+   "NIFTY up-from-open 3-4": {
+    "n": 2446,
+    "f30_bp": -0.1,
+    "t30": -0.3,
+    "fc_bp": -0.2,
+    "tc": -0.3
+   },
+   "NIFTY up-from-open 5": {
+    "n": 1243,
+    "f30_bp": -0.4,
+    "t30": -1.0,
+    "fc_bp": 1.0,
+    "tc": 0.8
+   },
+   "NIFTY up-from-open 6-7": {
+    "n": 1967,
+    "f30_bp": -0.0,
+    "t30": -0.1,
+    "fc_bp": -0.2,
+    "tc": -0.2
+   },
+   "NIFTY up-from-open 8-10": {
+    "n": 1011,
+    "f30_bp": 0.4,
+    "t30": 0.8,
+    "fc_bp": 0.3,
+    "tc": 0.3
+   },
+   "BANKNIFTY up-from-open 0-2": {
+    "n": 1423,
+    "f30_bp": 0.0,
+    "t30": 0.0,
+    "fc_bp": 4.3,
+    "tc": 2.9
+   },
+   "BANKNIFTY up-from-open 3-4": {
+    "n": 2446,
+    "f30_bp": 0.3,
+    "t30": 0.6,
+    "fc_bp": 2.8,
+    "tc": 2.6
+   },
+   "BANKNIFTY up-from-open 5": {
+    "n": 1243,
+    "f30_bp": -0.2,
+    "t30": -0.3,
+    "fc_bp": 2.0,
+    "tc": 1.4
+   },
+   "BANKNIFTY up-from-open 6-7": {
+    "n": 1967,
+    "f30_bp": -0.2,
+    "t30": -0.6,
+    "fc_bp": 0.2,
+    "tc": 0.2
+   },
+   "BANKNIFTY up-from-open 8-10": {
+    "n": 1011,
+    "f30_bp": -0.6,
+    "t30": -0.9,
+    "fc_bp": -4.0,
+    "tc": -2.6
+   }
+  },
+  "rs_open": {
+   "NIFTY this index stronger from open": {
+    "n": 3979,
+    "f30_bp": -0.1,
+    "t30": -0.2,
+    "fc_bp": 0.9,
+    "tc": 1.3
+   },
+   "NIFTY this index weaker": {
+    "n": 4111,
+    "f30_bp": -0.1,
+    "t30": -0.4,
+    "fc_bp": -0.0,
+    "tc": -0.1
+   },
+   "BANKNIFTY this index stronger from open": {
+    "n": 4111,
+    "f30_bp": -0.0,
+    "t30": -0.0,
+    "fc_bp": 0.7,
+    "tc": 0.8
+   },
+   "BANKNIFTY this index weaker": {
+    "n": 3979,
+    "f30_bp": -0.2,
+    "t30": -0.5,
+    "fc_bp": 2.3,
+    "tc": 2.7
+   }
+  },
+  "rs_30": {
+   "NIFTY RS rising last 30m": {
+    "n": 3681,
+    "f30_bp": -0.0,
+    "t30": -0.1,
+    "fc_bp": 1.1,
+    "tc": 1.6
+   },
+   "NIFTY RS falling": {
+    "n": 3600,
+    "f30_bp": -0.0,
+    "t30": -0.0,
+    "fc_bp": -0.1,
+    "tc": -0.1
+   },
+   "BANKNIFTY RS rising last 30m": {
+    "n": 3600,
+    "f30_bp": 0.0,
+    "t30": 0.0,
+    "fc_bp": 0.9,
+    "tc": 1.1
+   },
+   "BANKNIFTY RS falling": {
+    "n": 3681,
+    "f30_bp": -0.1,
+    "t30": -0.2,
+    "fc_bp": 2.4,
+    "tc": 2.8
+   }
+  },
+  "flow": {
+   "NIFTY yesterday up": {
+    "n": 4280,
+    "f30_bp": 0.1,
+    "t30": 0.3,
+    "fc_bp": -0.2,
+    "tc": -0.3
+   },
+   "NIFTY yesterday down": {
+    "n": 3790,
+    "f30_bp": -0.2,
+    "t30": -0.8,
+    "fc_bp": 1.1,
+    "tc": 1.5
+   },
+   "NIFTY 3-day up": {
+    "n": 4370,
+    "f30_bp": -0.2,
+    "t30": -0.9,
+    "fc_bp": -0.8,
+    "tc": -1.3
+   },
+   "NIFTY 3-day down": {
+    "n": 3690,
+    "f30_bp": 0.1,
+    "t30": 0.4,
+    "fc_bp": 1.9,
+    "tc": 2.5
+   },
+   "BANKNIFTY yesterday up": {
+    "n": 4390,
+    "f30_bp": 0.0,
+    "t30": 0.0,
+    "fc_bp": 1.6,
+    "tc": 2.2
+   },
+   "BANKNIFTY yesterday down": {
+    "n": 3690,
+    "f30_bp": -0.2,
+    "t30": -0.6,
+    "fc_bp": 1.2,
+    "tc": 1.3
+   },
+   "BANKNIFTY 3-day up": {
+    "n": 4420,
+    "f30_bp": 0.0,
+    "t30": 0.0,
+    "fc_bp": 1.4,
+    "tc": 2.0
+   },
+   "BANKNIFTY 3-day down": {
+    "n": 3640,
+    "f30_bp": -0.2,
+    "t30": -0.4,
+    "fc_bp": 1.7,
+    "tc": 1.7
+   }
+  },
+  "em_signed": {
+   "NIFTY realised < 50% implied": {
+    "n": 357,
+    "f30_bp": 0.2,
+    "t30": 0.2,
+    "fc_bp": 3.1,
+    "tc": 1.4
+   },
+   "NIFTY 50-80%": {
+    "n": 1714,
+    "f30_bp": -0.5,
+    "t30": -1.4,
+    "fc_bp": -0.3,
+    "tc": -0.3
+   },
+   "NIFTY 80-100%": {
+    "n": 1295,
+    "f30_bp": 0.1,
+    "t30": 0.3,
+    "fc_bp": -0.1,
+    "tc": -0.1
+   },
+   "NIFTY > 100%": {
+    "n": 2852,
+    "f30_bp": 0.4,
+    "t30": 1.2,
+    "fc_bp": 2.5,
+    "tc": 3.0
+   },
+   "BANKNIFTY realised < 50% implied": {
+    "n": 179,
+    "f30_bp": 0.6,
+    "t30": 0.4,
+    "fc_bp": 4.1,
+    "tc": 1.0
+   },
+   "BANKNIFTY 50-80%": {
+    "n": 1377,
+    "f30_bp": 0.4,
+    "t30": 0.8,
+    "fc_bp": -0.0,
+    "tc": -0.0
+   },
+   "BANKNIFTY 80-100%": {
+    "n": 1409,
+    "f30_bp": 0.1,
+    "t30": 0.2,
+    "fc_bp": -3.1,
+    "tc": -2.1
+   },
+   "BANKNIFTY > 100%": {
+    "n": 3255,
+    "f30_bp": 0.1,
+    "t30": 0.2,
+    "fc_bp": 0.6,
+    "tc": 0.7
+   }
+  },
+  "em_abs": {
+   "NIFTY realised < 50% implied": {
+    "n": 358,
+    "f30_bp": 11.3,
+    "t30": 18.6,
+    "fc_bp": 29.3,
+    "tc": 17.5
+   },
+   "NIFTY 50-80%": {
+    "n": 1714,
+    "f30_bp": 10.2,
+    "t30": 37.7,
+    "fc_bp": 30.3,
+    "tc": 35.8
+   },
+   "NIFTY 80-100%": {
+    "n": 1296,
+    "f30_bp": 10.2,
+    "t30": 32.7,
+    "fc_bp": 28.9,
+    "tc": 33.1
+   },
+   "NIFTY > 100%": {
+    "n": 2852,
+    "f30_bp": 12.0,
+    "t30": 48.1,
+    "fc_bp": 31.5,
+    "tc": 52.1
+   },
+   "BANKNIFTY realised < 50% implied": {
+    "n": 179,
+    "f30_bp": 14.7,
+    "t30": 15.3,
+    "fc_bp": 37.5,
+    "tc": 11.6
+   },
+   "BANKNIFTY 50-80%": {
+    "n": 1377,
+    "f30_bp": 12.4,
+    "t30": 34.4,
+    "fc_bp": 32.3,
+    "tc": 31.8
+   },
+   "BANKNIFTY 80-100%": {
+    "n": 1409,
+    "f30_bp": 12.6,
+    "t30": 34.8,
+    "fc_bp": 34.5,
+    "tc": 30.6
+   },
+   "BANKNIFTY > 100%": {
+    "n": 3255,
+    "f30_bp": 14.2,
+    "t30": 50.7,
+    "fc_bp": 35.6,
+    "tc": 54.6
+   }
+  },
+  "implied_check": {
+   "NIFTY": {
+    "median_implied_pts": 144.6,
+    "median_realised_full_range_pts": 195.9,
+    "median_ratio_full_day": 1.3
+   },
+   "BANKNIFTY": {
+    "median_implied_pts": 386.1,
+    "median_realised_full_range_pts": 543.8,
+    "median_ratio_full_day": 1.35
+   }
+  }
+ },
+ "verdicts": {
+  "filters": {
+   "beats_both": [],
+   "train_only": [
+    "breadth7_o",
+    "em_gt100"
+   ]
+  },
+  "votes": {
+   "beats_both": [],
+   "train_only": []
+  },
+  "entries": {
+   "beats_both": [],
+   "train_only": []
+  }
+ }
+}

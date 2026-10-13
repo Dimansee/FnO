@@ -288,3 +288,170 @@ One correction to the brief: the shipped noise rule already trails on the Zaratt
   base on both halves; the four entry rules lose on every year 2023–25.**
 - Sample sizes: 796 / 126 book trades; per-rule-per-index unseen counts are 24–55, so a Bank Nifty or a single-rule "win" of ±₹10k on the unseen
   half is inside noise. Nothing from this round changes the app's rules.
+
+## Round 14A — re-entry after a stop, pyramiding, trend-day extras (`round14a.py` → `round14a.json`, log `round14a.log`)
+Baseline = the round 6 book, reproduced trade-for-trade by a day loop that can re-scan after an exit: **training** 796 trades +₹163.1k PF 1.23
+maxDD ₹64k net/DD 2.54; **unseen** (last 120 sessions) 126 trades +₹60.6k PF 1.56 maxDD ₹23k net/DD 2.65; charges ₹69k. Option P&L via
+`engine.trade_pnl` (1 ITM, calibrated premiums, slippage, charges), ₹2 lakh, 1 % risk — **98 % of trades are 1 lot**, so "1:0.5:0.5" pyramids
+are 1:1:1 in practice. "Beats" = more net AND better net/maxDD on both halves; every pick is made on training. 20 s runtime.
+- **1. Re-entry only after a stop** (same rule, one re-entry, never the same strike+type twice). Both rules, any direction: 37 re-entries,
+  win 16 %, train +₹8.3k / unseen −₹9.3k (n 4) → book ₹165.1k / ₹51.3k, unseen DD ₹30k. Same direction: −₹12.5k / −₹9.3k (22 trades, win 14 %).
+  Opposite direction: +₹19.4k on 16 training trades, **0 unseen trades** → book ₹181.4k / ₹60.6k (unseen = baseline, untested). Camarilla alone,
+  opposite: +₹22.4k on 15 (win 20 %, 5 of them breakeven exits); noise alone: every direction loses (−₹3k to −₹11k). 0 of 9 beat on both.
+- **2. Within 60 / 120 minutes of the stop.** Median gap from the stop to the next same-rule signal is 50 min; 57 % come inside 60, 95 % inside 120,
+  so the window barely changes anything: 60 min any-direction ₹168.9k / ₹55.6k (22 re-entries, +₹1.9k / −₹4.9k), 120 min ₹166.4k / ₹51.3k.
+  0 of 18 beat on both; the only positive cells are the same opposite-direction Camarilla trades as item 1, all in training.
+- **3. Pyramiding the first trade** (+1 unit at +1R, +1 at +2R, fills at the level, same contract; stop of all units → previous add level;
+  rule's own trail/target/15:15 re-simulated from the add bar). 40 % of first trades reach +1R before their exit, 20 % reach +2R (noise 38 / 19 %,
+  Camarilla 41 / 21 %; train 40 / 20 %, unseen 41 / 19 %). Both rules 1:1:1: 345 of 865 first trades get an add (170 get two), 515 extra units,
+  charges ₹111k vs ₹69k. Book **₹241.8k / ₹166.9k**, PF 1.23 / 2.04, but **train maxDD ₹114k (57 % of capital)**, net/DD 2.13 vs 2.54 — fails on
+  training. By final exit: 127 square-offs ₹701k → ₹1,316k, 7 targets ₹73k → ₹167k, but 124 trades stopped at breakeven after the add
+  ₹−64k → ₹−367k and 67 stopped at +1R after the second add ₹+115k → ₹−98k. The gain is a handful of trend days: the top-5 pyramided trades are
+  121 % of the training gain (the other 292 added trades net negative) and 94 % of the unseen gain (2026-07-08 Nifty ₹16.8k → ₹44.1k,
+  06-12 ₹12.8k → ₹32.6k, 10-08, 06-24 Bank Nifty noise target, 05-12). Fair comparison: the baseline × the pyramid's average 1.56 units a trade
+  is ₹253.7k / ₹95.2k — **on training the pyramid earns less than simply trading bigger**; on unseen it earns more, on 5 trades. Noise only
+  ₹184.1k / ₹74.7k (scaled base ₹188.5k / ₹73.5k), Camarilla only ₹220.8k / ₹152.8k (₹228.4k / ₹82.2k). 1:0.5:0.5 = 1:1:1 ± ₹2k. 0 of 6 beat
+  the base or the scaled base on both.
+- **4. 3rd / 4th entries on confirmed trend days** (first trade hit target or closed ≥ +2R; either rule, same-option rule). Only 10.8 % of
+  training index-days (80) and 13.2 % of unseen (16) confirm, and when they do the first trade is almost always still open at 15:15 — the
+  filter allows **4 extra trades in 3.7 years** (+₹2.1k / −₹1.8k). Extras on every day: 125–134 trades, −₹22.6k / −₹17.4k net, unseen −₹26.0k
+  on 18 (book ₹165.0k / ₹34.6k, unseen DD ₹34k); extras on unconfirmed days the same. "Trend day confirmed" is known too late to trade on.
+- **5. Pyramid + re-entry combined** (re-entry pick on training = Camarilla, opposite direction, no window; pyramid both rules). First trade
+  pyramided: ₹262.9k / ₹166.9k, train DD ₹105k, net/DD 2.51 — fails training. Every trade pyramided incl. the re-entries: **₹304.2k / ₹166.9k,
+  net/DD 2.64 / 5.71, train DD ₹115k** — the only lines that pass "beats", and also pass the scaled base (×1.60: ₹261.0k / ₹95.7k). What is
+  in it: +₹22k from 15 opposite-direction Camarilla re-entries (training only, 0 unseen), +₹29k from pyramiding 2 of those 15, +₹77k / +₹106k from
+  pyramiding first trades, of which 5 trades per half are the whole gain. **Not an edge; it is 1.6× exposure plus ~15 trades.**
+- **Sanity (uncapped: re-scan after any exit, up to 4 per index-day, same-option rule).** Attempt 1: 865 trades ₹+245 a trade; attempt 2: 165,
+  ₹−66 (train +₹19.3k, unseen −₹30.1k on 23); attempt 3: 16, ₹−412; attempt 4: 1. By previous exit: after a stop +₹265 (n 60; noise +₹640 on 25,
+  Camarilla −₹4 on 35), after a noise-trail exit +₹98 (n 64), after a time stop −₹207 (n 36), after breakeven −₹1,221 (n 18, Camarilla −₹1,881
+  on 9). Round 13's "after a Camarilla stop +₹565" shrinks to −₹4 once the same-option rule and the one-position-per-index merge are applied.
+- **Ship nothing.** Re-entry after a stop is flat-to-negative except opposite-direction Camarilla (15 training trades, none unseen) — watch-list.
+  Pyramiding is exposure dressed as edge (worse than the scaled baseline on training, 57 % drawdown). Trend-day extras never trigger. The app
+  stays at one trade per rule per day.
+
+## Round 14B — expiry-day (0 DTE) option selling on REAL option prices (`round14b.py` → `round14b.json`, log `round14b.log`)
+First test of short premium with quotes, not a model. Two samples. **Lots NIFTY 65 / BANKNIFTY 30 for every year, slippage 0.5 %/leg/way,
+full charges (4 orders a straddle), margin ASSUMED ₹1.5 lakh a Nifty straddle / ₹2.5 lakh a Bank Nifty one; nothing tuned.** 3 min runtime.
+- **Data reality check.** `OPT_live5m.csv.gz` holds only contracts still listed on 1 Oct 2026 (earliest expiry 6 Oct) → **zero** expiry-day
+  sessions in it; it serves only as a non-expiry 5-min control (DTE 5–90 Nifty, 26–238 Bank Nifty). The only true 0-DTE intraday sessions we
+  have are the 1-min captures of **2026-10-06 and 2026-10-13 (Nifty, 2 days)**; Bank Nifty is monthly and its expiries miss the capture.
+  The long sample is the NSE bhavcopy, Oct 2023 → Oct 2026: **157 Nifty expiry days (96 Thu / 53 Tue / 8 other), 82 Bank Nifty**, 582 / 657
+  non-expiry control days (nearest listed expiry). On expiry days the bhavcopy's `settle` column is the index's final settlement value, so
+  "hold to settle" = intrinsic against it.
+- **Daily method is coarse and conservative on stops:** sell at the bhavcopy open (= the 09:15 first print), a per-leg stop counts as hit if
+  the leg's day HIGH touched the level (fill = level + slippage, no intraday ordering), else buy back at the day's close (proxy for 15:15) or
+  settle. 10:15 entries, combined stops and the "losing side" rule need intraday prices and only run on the 1-min days.
+- **First-print bias.** The bhavcopy open is the 09:15 first print; on the 11 live days the ATM straddle credit at 09:15 is **+2.7 % (Nifty)
+  / +2.8 % (Bank Nifty)** above the 09:20 open (per leg: median +2.5 % / +1 %, spread −49 % … +81 %). Without the haircut the NON-expiry control
+  "earns" ₹314k (Nifty) / ₹101k (BN) selling straddles that barely decay (3.9 % / 1.4 % open→close vs **14 % / 26 % on expiry days**); with the
+  haircut the Nifty control falls to ₹116k (PF 1.16) and the BN control to **−₹364k** — the control is the open print, not an edge. Every
+  headline number below is quoted after the haircut (raw in the log).
+- **Nifty expiry days (157), after haircut:** straddle hold-to-settle **+₹218.3k, win 66 %, PF 1.67, worst −₹22.1k (2026-09-15), maxDD ₹32k,
+  146 % on ₹1.5 lakh in 3 years = ₹1,390 (0.9 % of margin) an expiry day**; straddle with 60 % per-leg stop, close +₹220.1k, PF 2.39, worst
+  −₹15.0k, maxDD ₹19.6k; strangle ±1 100 % stop +₹229.3k, PF 2.72, worst −₹10.8k, maxDD ₹12.2k; strangle ±1 settle +₹241.8k, PF 1.86.
+  Raw (no haircut) by year, straddle settle: 2023 +₹12k (13 days), 2024 +₹89k (52), 2025 +₹75k (53), 2026 +₹83k (39) — positive every year.
+  Avg credit 147 pts (₹9.6k), median decay to settle 34 %, P&L p10 / median / p90 −₹7.8k / +₹2.9k / +₹8.2k. By |open→close spot move|:
+  < 0.25 % 53 days +₹346k, 0.25–0.5 % 47 days +₹164k, 0.5–1 % 36 days −₹19k, **> 1 % 21 days −₹232k (−₹11.1k a day)** — the whole edge is
+  "no big move"; VIX > 15 days earned the most (+₹171k on 44), VIX < 12 least (+₹37k on 43). Tight stops hurt: 25 % stop → 98 % of days have a
+  leg stopped, net +₹109k; 40 % → 92 %, +₹142k; 60 % → 82 %, +₹253k; 100 % → 64 %, +₹244k (raw).
+- **Bank Nifty expiry days (82, monthly, after haircut):** straddle settle **+₹195.9k, win 72 %, PF 2.2, worst −₹20.6k, maxDD ₹26k, 78 % on
+  ₹2.5 lakh** (₹2.4k = 1.0 % an expiry day); strangle ±1 settle +₹204.7k PF 2.33; straddle 60 % stop close only +₹73.9k PF 1.51 (the daily-high
+  stop rule fires on 80 % of BN days). Raw by year 2023 +₹0.6k (13), 2024 +₹162k (48), 2025 +₹46k (12), 2026 +₹11k (9); > 1 % move days 11,
+  −₹126k. Weekly BN expiries (2023–24) are 64 of the 82 days.
+- **Intraday sanity, the 2 real Nifty 0-DTE days (1-min, 09:20 entries):** both were trend days (06 Oct +0.8 %, 13 Oct larger). Straddle no
+  stop → settle −₹3.2k / −₹8.7k (−₹11.9k, decay −37 % / −94 %); → 15:15 −₹0.1k / −₹7.7k; 40 % per-leg stop → 15:15 **+₹2.8k / +₹2.5k** (CE
+  stopped 09:47 / 09:38, PE decayed); 10:15 entry stop 40 % +₹1.8k / −₹3.1k; combined 30 % −₹0.1k / −₹3.0k; losing-side 10:15 PE +₹3.4k /
+  −₹1.3k; strangle ±1 40 % +₹2.0k / +₹1.8k. Two days prove nothing; they do show the daily method's "stop = day high" is not what a real
+  intraday stop looks like (the stopped CE then kept rising both days). Non-expiry 1-min / 5-min controls (9–25 days an index) are ±₹10k noise;
+  BN non-expiry straddles with tight stops lose ₹12–22k on 11 days.
+- **Verdict: a real, data-backed edge on Nifty expiry days (and BN monthly expiry), ~1 % of margin a day, PF 1.7–2.7, but with −₹15–22k days
+  (10–15 % of margin) and the 21 "> 1 % move" days giving back ₹232k of ₹450k gross.** The daily test cannot see intraday ordering, the 09:15
+  fill is a first print we haircut by 2.7 %, and margin / lot sizes are assumptions. Not shippable from this alone.
+- **To ship as an off-by-default "expiry-day selling" strategy the app needs:** (1) sell-side order support — SELL entries, BUY-to-close exits,
+  per-leg stop-loss orders resting at the broker (not polled), a hard 15:15 square-off and a kill-switch on a combined-premium stop; (2) margin
+  awareness — read SPAN+exposure from the broker (Upstox margin API) before placing, size to 1 straddle per ₹1.5 lakh Nifty / ₹2.5 lakh BN,
+  and block entry when free margin < 1.3× the requirement; (3) 0-DTE option quotes at 1-min for both legs (the recorder already captures
+  them) and 20–30 more real expiry days recorded before enabling, re-running round14b's intraday suite on them; (4) a gap/ event filter
+  (skip when |open gap| > 0.5 %, RBI / budget / US-CPI days) because the loss days are the big-move days; (5) default off, Nifty only,
+  1 straddle, 60 % per-leg stop + 15:15 exit (the settle variant needs the broker to allow holding to expiry and physical-settlement-free
+  index options, which NSE index options are), and a paper-only mode first.
+
+## Round 14C — market-structure inputs: cross-index, heavyweight breadth, BN/Nifty RS, flow proxy, expected vs realised move (`round14c.py` → `round14c.json`, log `round14c.log`)
+Five inputs none of rounds 9–10 had, each as a **filter** on the two rules (engine `p["filters"]`, keep-scanning semantics as round 10)
+plus its **inverse** (trade only on disagreement, to show it is not noise), as a **standalone entry** (state turns true → buy the close,
+stop 2 × ATR clipped 1–2.5, 4R, no trail, 1 a day, VIX ≥ 11, 1 ITM, 09:45–14:30) and as **k-of-n votes**; plus each input's raw
+predictive power on training half-hour bars. Baseline = round 6 book: train ₹163.1k (796, PF 1.23, DD ₹64k, net/DD 2.54) / unseen
+₹60.6k (126, PF 1.56, DD ₹23k, 2.65). Nothing tuned on unseen. 38 s runtime.
+- **Data.** Both indices and the 10 heavyweights have 5-min bars 2023-01-02 → 2026-10-09 (100 % bar coverage, aligned by date + bar time).
+  **No daily FII/DII file exists in `research/data`** (only 10 days of participant OI under `data/live`), so input 4 is honestly a proxy:
+  the index's own previous close-to-close and 3-session return. The ATM straddle comes from the NSE bhavcopy (2023-10-03 → 2026-10-01,
+  738 index-days each), yesterday's close, nearest expiry ≥ today, scaled to one session as straddle / √(sessions to expiry) — median
+  implied 145 pts Nifty / 386 BN, and the median full-day range is 1.3 × that (a straddle prices the close-to-close move, not the range).
+  Input 5 is judged against the baseline restricted to straddle days (train ₹97.2k / unseen ₹50.5k, net/DD 1.51 / 2.21).
+- **1. Cross-index agreement.** Other index on the same side of its VWAP (`x_vwap`): ₹134.2k / ₹54.6k (737 / 117 trades) — it passes
+  90 % of baseline trades and the 80 train trades it drops made ₹+124 a trade (unseen: the 17 dropped made ₹+876 each). Other index
+  also beyond its own noise band (`x_nb`): ₹44.6k / ₹17.9k on 263 / 47; beyond its 15-min opening range (`x_or`): ₹117.5k / **−₹3.4k**.
+  Inverses: disagreement on VWAP ₹20.8k / ₹1.1k on 169 / 37 (worse per trade, not negative); `inv_x_nb` fires 3 times in 3.7 years.
+  Predictive: "other agrees with own VWAP side" → +2.1 bp to 15:15 (t 3.9) on Nifty, +1.7 (t 2.5) BN; "disagrees" +1.5 / −3.1 bp — real
+  but tiny, and the rules already demand own-VWAP agreement. 0 of 6 beat.
+- **2. Heavyweight breadth** (of RELIANCE HDFCBANK ICICIBANK INFY TCS SBIN AXISBANK BHARTIARTL LT ITC, longs need ≥ K up / shorts ≤ 10−K).
+  Above own VWAP, K 6 / 7 / 8: ₹127.4k / ₹35.4k, ₹103.5k / ₹43.4k, ₹89.1k / ₹47.4k — every K costs training profit; unseen net/DD rises
+  (3.29, 4.23 at K 7, 8) only because the drawdown shrinks with fewer trades. Up from open, K 6 / 7 / 8: ₹150.2k / ₹28.5k,
+  **₹174.9k / ₹17.1k (K 7: train net/DD 3.90, unseen 1.10 — train better, unseen not)**, ₹83.2k / ₹19.9k. On the baseline's own trades
+  `breadth7_o` separates −₹31 a trade (290 failing, train) from +₹340 — and on unseen the failing trades made **+₹836 each (55)**: the split
+  flips sign. Inverses ₹23.5k / −₹8.9k and ₹15.2k / +₹17.6k. Predictive: breadth 6–7 → +3.3 / +3.2 bp to close (t 3.5 / 2.9) but 8–10 only
+  +1.5 / +1.4 (not monotone); up-from-open 8–10 on BN → **−4.0 bp (t −2.6)** and 0–2 → +4.3 (t 2.9): extreme breadth mean-reverts. 0 of 8 beat.
+- **3. Relative strength** (own return from open minus the other's; 30-min change). Trade the stronger index (`rs_open`): ₹94.4k / ₹35.6k;
+  `rs_30`: ₹15.8k / ₹31.0k; both: ₹18.7k / ₹13.3k. The **inverse** — trade the weaker index — ₹109.5k / ₹21.3k on 335 / 58, train net/DD
+  4.68 (DD ₹23k) but unseen 1.87 — the Camarilla rule likes the laggard (₹+84k of it). Predictive: no RS bucket moves the next 30 min
+  (|t| < 0.6); BN "weaker from open" → +2.3 bp to close (t 2.7), reversion, not momentum. 0 of 5 beat.
+- **4. Flow proxy.** Yesterday up for longs / down for shorts (`flow1`): ₹105.2k / ₹15.3k; 3-session (`flow3`): ₹116.8k / ₹28.2k;
+  inverses ₹68.9k / **₹45.3k** and ₹53.9k / ₹32.4k. On the baseline's trades `flow3` pass earns ₹+278 vs fail ₹+123 (train) but ₹+427 vs
+  ₹+539 (unseen). Predictive: every bucket |t| ≤ 2.5 with no consistent sign across the indices. 0 of 4 beat; real FII/DII cash flows
+  were not testable.
+- **5. Expected vs realised.** Realised range so far < 50 / 60 / 80 % of the implied daily move ("room to run"): ₹6.8k / ₹9.5k (39 / 14
+  trades), **−₹14.7k / +₹31.6k (85 / 24)**, −₹2.5k / +₹29.8k (193 / 51) — negative on training, the best unseen cells of the round, on 24–51
+  trades. The opposite, > 100 % ("already spent"): **₹119.3k / ₹3.7k**, train net/DD 2.76 vs 1.51 (train better, unseen not): on training the
+  breakouts that work are the ones that fire after the day has already moved more than the straddle implied. Predictive: |move| to 15:15 is
+  29 bp when realised < 50 % and 31.5 bp when > 100 % (Nifty) — "room to run" does not mean bigger moves; signed continuation is
+  positive only in the > 100 % bucket (+2.5 bp, t 3.0). 0 of 4 beat the sub-baseline.
+- **Votes** (`x_vwap`, `breadth7_v`, `rs_open`[, `em_lt60`]): 2 of 3 ₹100.3k / ₹43.2k, 3 of 3 ₹87.9k / ₹29.6k, 2 of 4 ₹111.6k / **₹64.0k**
+  (unseen net/DD 3.90, train 1.70 — on straddle days only ₹42.2k / ₹49.5k vs the sub-baseline ₹97.2k / ₹50.5k), 3 of 4 ₹59.8k / ₹29.5k,
+  4 of 4 ₹7.0k / ₹10.6k on 24 / 7. 0 of 5 beat.
+- **Standalone entries** (all lose or fail): both indices beyond their noise bands + VWAP, checked every 5 min (`e_xidx_nb`): ₹62.5k /
+  **−₹4.1k** on 246 / 43 (PF 1.19 / 0.93); state triggers on own VWAP + the input (`e_xidx_vwap`, `e_breadth7/8`, `e_breadth8_o`, `e_rs`,
+  `e_vote3of4`, `e_vote4of4`): 1,000–1,400 trades, **−₹32k to −₹236k train / −₹30k to −₹139k unseen**, DD ₹120–300k — VWAP-state flips
+  are a churn machine at 1 ITM with charges. Added to the baseline book (one position per index, book first) every one is worse than the book.
+- **Ship nothing.** Market-structure agreement is real but tiny (+2–3 bp to the close, t 2.5–4) and the two rules already carry own-VWAP
+  confirmation, so every filter removes more profitable trades than losers on at least one half. Watch-list: `inv_rs_open` (trade the
+  laggard, Camarilla), `em_gt100` (breakouts after the implied move is spent), `em_lt60` on unseen — all one-half effects. Real FII/DII
+  daily flows still need a data source before input 4 means anything.
+
+## Round 14D — verification of 14B's expiry-day straddle (`round14d.py` → `round14d.json`, log `round14d.log`)
+Independent rebuild from the raw bhavcopy + index 5-min file (shares only `fno.indicators.charges` and round 6's lot history with 14B). 16 s.
+- **Rebuilt, 157 Nifty expiry days, ATM off the 09:15 index open, 2.7 % haircut, 0.5 %/leg slippage, charges of the time:** hold-to-settle
+  **+₹193k (PF 1.66, win 66 %) with the real lot history 50→25→75→65; +₹217k with a flat 65 lot — 14B's ₹218k reproduces** (14B used flat 65).
+  60 % per-leg stop → close: ₹163k / ₹213k (PF 2.08 / 2.34) vs claimed ₹220k, PF 2.39. Per unit (lot = 1): **+22 pts an expiry day net,
+  median +42, p10/p90 −123 / +123**. Positive every year (pts/unit 2023 161 on 13 days, 2024 1203, 2025 1000, 2026 1119). Haircut 0 / 5 % →
+  ₹229k / ₹163k; 1 % slippage ₹187k; STT on exercise ±₹1.4k; ATM off the previous close instead of the open → only ₹84k (PF 1.27), so the
+  strike must be picked at the open. Settle column = index settlement (one value a day; median 12 pts off the 15:25 close), debit = intrinsic.
+- **Where it breaks.** Top 10 days are 65 % of the net (drop best 5 → ₹116k, best 10 → ₹68k). The 21 days with > 1 % open→close move lose
+  ₹210k = 72 % of all losses and every one of them is a loser (ex them +₹403k — cheating, shown only to size the dependence). Worst day
+  −₹23.3k (2025-04-17, −310 pts/unit; 2026-09-15 −340 pts/unit); maxDD ₹32k = 490 pts/unit; worst 5 consecutive expiries −₹32k. Thursday
+  era (100 days to 2025-08-28) made ₹79k = 17 pts/unit/day; Tuesday era (57 days) ₹114k = 31 pts/unit/day — **more than half the money is
+  the last 13 months**, and 8 holiday-shifted Mon/Wed expiries alone made ₹57k. With the 60 % stop the > 1 % days lose only ₹23k, but the
+  daily "fill at the stop level" is optimistic: on 2026-10-13 the ATM CE went 71.7 → 133 between 09:15 and 09:20 (+86 %, through a 60 % stop
+  in one jump).
+- **Control (578 same-week non-expiry days, open → close):** at 0 % haircut it "earns" ₹276k (PF 1.46) — the raw open print is a mirage; at
+  2.7 % it is ₹28k (PF 1.04), a random one-per-week pick −₹35k; at 5 % −₹183k. Decay open→close: **median 31–33 % on expiry days vs 6–8 % on
+  non-expiry days** (means 11–14 % vs 0–3 %) — the expiry-day decay difference is real and survives the haircut the control does not.
+- **Data:** no zero or missing opens at ATM ±2 strikes on any expiry day (the 3 % zero-open rows sit a median 1,250 pts from the settle);
+  on the two live days the first 1-min bar is a real trade, so "first real trade" = the open. **Haircut:** across the 11 live days the 09:15
+  straddle is +1.6 % mean / +2.4 % median above the 09:20 open but ranges −19 % … +19 % (0-DTE days: +6.2 % on 06 Oct, **−18.7 % on 13 Oct**,
+  where the index moved 70 pts in 5 min). Re-pricing the 09:15 quote for the 09:15→09:20 index move alone *raises* the credit (+9 % on
+  average, a straddle struck at the open gains when the index leaves it), so the 2.7 % is a quote-width/staleness effect, not an index-move
+  effect; 2.7 % is a fair central estimate and the net is only ±15 % sensitive to it anyway. Live 13 Oct path: 140 → 365 by 15:15 (the
+  −1.9 % move day of the 1-min sample).
+- **Verdict: partly holds.** The number reproduces and the decay difference vs non-expiry days is genuine, but the edge is a ~22 pts/day
+  premium for carrying a −300 … −340 pts/unit tail (≈ 15 × the average day), concentrated in 10 days and in the Tuesday era. Worth an
+  off-by-default paper strategy with a hard gap/event filter and intraday stop logging — not a live one from this evidence.
