@@ -58,6 +58,7 @@ def row(s, i, tier, strength, basis):
     c = float(C.iloc[i][s]); t = TIERS[tier]
     return {"sym": s, "name": str(names["Company Name"].get(s, s)), "industry": str(names["Industry"].get(s, "")), "tier": tier, "setup": t["label"], "strength": int(round(strength)),
             "direction": "down" if tier == "down" else "up", "fo": s in FO, "price_date": dates[i].date().isoformat(),
+            "current": round(float(C.iloc[-1][s]), 2) if not pd.isna(C.iloc[-1][s]) else None, "current_date": dates[-1].date().isoformat(),
             "close": round(c, 2), "entry": "next open (reference ₹%.2f)" % c, "entry_ref": round(c, 2), "target": round(c * (1 + t["target_pct"] / 100), 2), "target_pct": t["target_pct"],
             "risk_line": round(c * (1 - t["risk_pct"] / 100), 2), "risk_pct": t["risk_pct"], "exit_rule": t["exit"], "hold_days": t["hold"], "basis": basis,
             "drop_3d_pct": round(float(R3.iloc[i][s] * 100), 1) if not pd.isna(R3.iloc[i][s]) else None,
@@ -139,6 +140,43 @@ def settle(p, i):
 
 last = len(dates) - 1
 today = picks_on(last)[:15]
+broad = []
+try:
+    import glob
+    wp = os.path.join(HERE, "work", "all_1y.csv.gz")
+    if os.path.exists(wp):
+        bd = pd.read_csv(wp, parse_dates=["date"]).sort_values(["sym", "date"]); bl = pd.read_csv(os.path.join(HERE, "work", "all_list.csv")).set_index("Symbol")
+        bd = bd[~bd["sym"].isin(set(C.columns))]
+        bf = (bd["adj close"] / bd["close"]).replace([np.inf, -np.inf], np.nan).fillna(1.0)
+        for c in ("open", "high", "low", "close"):
+            bd[c] = bd[c] * bf
+        BC = bd.pivot(index="date", columns="sym", values="close"); BH = bd.pivot(index="date", columns="sym", values="high"); BV = bd.pivot(index="date", columns="sym", values="volume")
+        bcov = BC.notna().mean(axis=1); bfr = ((BC != BC.shift(1)) | (BV != BV.shift(1))).where(BC.notna()).mean(axis=1); bok = (bcov >= 0.5) & (bfr >= 0.2)
+        while len(BC) > 1 and not bok.iloc[len(BC) - 1]:
+            BC, BH, BV = BC.iloc[:-1], BH.iloc[:-1], BV.iloc[:-1]
+        bs200 = BC.rolling(200, min_periods=200).mean().iloc[-1]; br3 = (BC / BC.shift(3) - 1).iloc[-1]; btu = (BC * BV).rolling(50, min_periods=20).median().iloc[-1]
+        brs = BC.apply(rsi).iloc[-1]; bhi = BH.rolling(252, min_periods=200).max().shift(1).iloc[-1]; bv = BV.iloc[-1]; bv50 = BV.rolling(50, min_periods=50).mean().iloc[-1]
+        bc = BC.iloc[-1]
+        for s_ in BC.columns:
+            if pd.isna(bc[s_]) or pd.isna(bs200[s_]) or not (btu.get(s_, 0) >= MIN_TURN):
+                continue
+            above = bc[s_] / bs200[s_] - 1; drop = br3[s_]
+            if above <= 0 or pd.isna(drop):
+                continue
+            tier = "rule" if drop <= -0.10 else "near" if drop <= -0.07 else ("breakout" if (not pd.isna(bhi[s_]) and bc[s_] > bhi[s_] and bv50[s_] and bv[s_] >= 1.5 * bv50[s_]) else None)
+            if not tier:
+                continue
+            t = TIERS[tier]; c_ = float(bc[s_]); liqscore = min(1.0, np.log10(max(btu[s_], 1e7) / 1e7) / 2)
+            st = (55 + min(20, (-drop - 0.10) * 200) if tier == "rule" else 35 + (-drop - 0.07) * 300 if tier == "near" else 30 + min(15, (bv[s_] / bv50[s_] - 1.5) * 10)) + 10 * liqscore
+            broad.append({"sym": s_, "name": str(bl["Company Name"].get(s_, s_)) if s_ in bl.index else s_, "industry": str(bl["Industry"].get(s_, "") or "") if s_ in bl.index else "", "tier": tier, "setup": t["label"] + " · outside Nifty 500",
+                          "strength": int(min(60, st)), "direction": "up", "fo": s_ in FO, "price_date": BC.index[-1].date().isoformat(), "current": round(c_, 2), "current_date": BC.index[-1].date().isoformat(),
+                          "close": round(c_, 2), "entry_ref": round(c_, 2), "target": round(c_ * (1 + t["target_pct"] / 100), 2), "target_pct": t["target_pct"], "risk_line": round(c_ * (1 - t["risk_pct"] / 100), 2),
+                          "risk_pct": t["risk_pct"], "exit_rule": t["exit"], "hold_days": t["hold"], "basis": f"3-day move {drop*100:+.1f}%, {above*100:.1f}% above the 200-day average; turnover ₹{btu[s_]/1e7:.0f} cr/day. Outside the tested Nifty 500 universe.",
+                          "drop_3d_pct": round(float(drop * 100), 1), "above_200dma_pct": round(float(above * 100), 1), "rsi14": round(float(brs[s_])) if not pd.isna(brs[s_]) else None,
+                          "turnover_cr": round(float(btu[s_] / 1e7), 1), "backtest_win_pct": None, "broad": True})
+        broad.sort(key=lambda r: -r["strength"]); broad = broad[:20]
+except Exception as e:
+    print("broad scan skipped:", e)
 history = []
 for i in range(max(0, last - LOOKBACK_DAYS), last):
     ps = picks_on(i)[:15]
@@ -157,6 +195,6 @@ out = {"generated": datetime.now(IST).strftime("%Y-%m-%d %H:%M IST"), "data_to":
                "near-rule = the same with a 7-10% drop (weaker); breakout = new 52-week high on 1.5x volume above the 200-day average; downside watch = a 10%+ three-day bounce in a stock below its 200-day average, expected to give back 5% (weak evidence: 42% hit in training vs 26% for random days, and it faded on the unseen period). Paper only.",
        "expected": "Strength is how closely the stock matches the tested setup (drop, trend margin, liquidity, RSI, volume), weighted by that setup's measured win rate - a match score, not a prediction. "
                    "Rule picks: 64% hit +5% in the 2021-26 backtest, +1.4% a trade after costs; plan on 8-12% a year on the capital used. Near-rule and breakout tiers are weaker and shown so there is always something to watch.",
-       "today": today, "record_last_60_sessions": rec, "history": history}
+       "today": today, "today_broad": broad, "record_last_60_sessions": rec, "history": history}
 json.dump(out, open(OUT, "w"), indent=1)
 print(f"{dates[last].date()}: {len(today)} candidate(s) {[(p['sym'], p['tier'], p['strength']) for p in today[:8]]}; record {rec}")
