@@ -2401,5 +2401,62 @@
   "what": "12 candlestick patterns (hammer, engulfing, morning/evening star, piercing, dark cloud, shooting star, doji, spinning top, harami) on 6 years of Nifty 500 daily data, train/unseen, vs random days with the same context",
   "result": "none beats the control on both halves; differences within \u00b11% / \u00b13 points and flip sign between halves; as a filter on the 10%-drop stock rule they only reduce the hit rate (75%\u219267% train)",
   "adopted": false
+ },
+ "round17": {
+  "heading": "Round 17 \u2014 what if 60% of the account goes into every recommended option?",
+  "what": "The same 922 trades as the two rules, re-sized as a real account: each trade spends a fixed share of the current equity on premium, whole lots, cash shared between the two indices, ruin ends the run; plus a premium cut-off (sell when the option is down X%). Train = 40 months, unseen = the last 120 sessions restarted from \u20b92 lakh, and the trade order reshuffled 3,000 times to see what one history hides.",
+  "cols": [
+   "Sizing",
+   "Train: end \u00f7 start / worst fall",
+   "Worst single trade",
+   "Unseen 120 d: end \u00f7 start / worst fall",
+   "Typical worst fall (reshuffled)"
+  ],
+  "rows": [
+   [
+    "Today: 1% risk (\u22487% of \u20b92L, 1\u20132 lots)",
+    "\u00d71.8 / \u221213%",
+    "\u22121.8%",
+    "\u00d71.3 / \u22127%",
+    "\u221213% (5% line)"
+   ],
+   [
+    "10% of equity",
+    "\u00d73.1 / \u221228%",
+    "\u22124%",
+    "\u00d71.5 / \u22129%",
+    "\u221230%, >50% fall in 0.6% of orderings"
+   ],
+   [
+    "20% of equity",
+    "\u00d77.6 / \u221252%",
+    "\u22129%",
+    "\u00d72.6 / \u221221%",
+    "\u221256%, >50% fall in 75%"
+   ],
+   [
+    "30% of equity",
+    "\u00d711.8 / \u221268%",
+    "\u221213%",
+    "\u00d73.9 / \u221230%",
+    "\u221273%, >80% fall in 22%"
+   ],
+   [
+    "60% of equity",
+    "\u00d74.7 / \u221293%",
+    "\u221227%",
+    "\u00d78.6 / \u221257%",
+    "\u221296%, >80% fall in 99.9%"
+   ],
+   [
+    "60% + 20% premium cut-off",
+    "\u00d76.6 / \u221294%",
+    "\u221218%",
+    "\u00d79.7 / \u221254%",
+    "cut-off fires on 10% of trades, changes nothing"
+   ]
+  ],
+  "summary": "The rules' own spot stop already loses only 7% of the premium on a typical losing trade (20% on a bad one), so a premium cut-off adds nothing \u2014 the stop is the cut-off. Sizing is the whole story: the rules make +2.3% of premium per trade with a 27% spread and 3 losers in 4, so 60% of the account means a normal loser costs 4% of the account, a bad one 12%, the worst in the data 27%, and in essentially every ordering of the same trades the account falls more than 80% from its peak before recovering (if it recovers; 2025 alone was \u221293%). Kelly says 31% at most, and Kelly on a backtest is an upper bound. 60% is not adopted. The tested, survivable 'invest more' is 10% of current equity per trade: roughly \u00d73 instead of \u00d71.8 on training and \u00d71.5 instead of \u00d71.3 unseen, for a \u221228% worst fall instead of \u221213% and no single trade worse than \u22124%. Not switched on by default \u2014 a setting to enable deliberately once the live record confirms the rules.",
+  "adopted": false
  }
 }
