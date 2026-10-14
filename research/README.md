@@ -574,3 +574,39 @@ sessions. Earlier, round 5 tested candle/Heikin-Ashi entries on the index 5-minu
 - **As a filter on the tested 10 %-drop rule it only subtracts:** rule alone train 75 % hit +5 % in 10 d / unseen 62 % (n 2,110/297);
   requiring a bullish candle on the signal day 67 % (n 148 — and 25 unseen, too few); requiring a doji/spinning top 71 % / 58 %;
   dropping signals with a bearish candle 75 % / 62 % (unchanged, n −7 %). Not adopted; the picks stay as they are.
+
+## Round 17 — "put 60 % of the account into every recommended option" (`round17_size.py` → `round17_size.json`)
+Same 922 trades as the two rules (2023-01 → 2026-10, same entries, exits, real-price-corrected premiums, 0.5 % slippage, charges),
+re-sized as a **real account**: each trade spends a fixed fraction of the *current* equity on premium (cash still locked in an open
+position is not available to the second index that day), lots are whole, ruin ends the run, drawdown is measured from the peak.
+On top, a **premium cut-off**: sell when the option is down X % from what it cost, checked every 5 minutes on the engine's premium path.
+Train < 2026-04-20 (40 months), unseen = the last 120 sessions restarted from ₹2 L. The rules' own spot stop already costs a median
+**7.4 %** of the premium on a losing trade (90th percentile 20 %), so a premium cut-off of 20–25 % fires on only 3–10 % of trades and
+changes nothing on either half (15 % fires on 19 % and hurts). **The spot stop is the cut-off; nothing to add there.**
+
+| sizing | train: end ÷ start / max DD | worst trade (% of equity) | losing months | unseen 120 d: end ÷ start / max DD | avg premium / max lots |
+|---|---|---|---|---|---|
+| **today: 1 % risk (≈ 7 % of ₹2 L, 1–2 lots)** | **×1.82 / −13 %** | −1.8 % | 17/40 | **×1.30 / −7 %** | ₹14k / 2 |
+| 60 % of equity | ×4.7 / **−93 %** | **−27 %** | 21/40 | ×8.6 / **−57 %** | ₹3.6 L / 134 |
+| 60 % + 20 % premium cut-off | ×6.6 / −94 % | −18 % | 21/40 | ×9.7 / −54 % | ₹4.5 L / 150 |
+| 60 %, never more than 20 lots | ×21 / −62 % | −12 % | 16/40 | ×5.7 / −57 % | ₹2.8 L / 20 |
+| 30 % of equity | ×11.8 / −68 % | −13 % | 19/40 | ×3.9 / −30 % | ₹3.4 L / 93 |
+| 20 % of equity | ×7.6 / −52 % | −9 % | 18/40 | ×2.6 / −21 % | ₹1.5 L / 39 |
+| **10 % of equity** | **×3.1 / −28 %** | −4 % | 17/40 | **×1.5 / −9 %** | ₹35k / 8 |
+| 5 % of equity | ×1.5 / −12 % | −1.6 % | 15/39 | ×1.05 / −7 % | ₹9k / 2 |
+
+Reshuffling the same trades 3,000 times (the order is luck, the list is not): at **60 % the typical max drawdown is −96 %** and a >80 %
+drawdown happens in 99.9 % of orderings — the account goes to ₹8–10k from a peak at some point in essentially every history, and
+recovers only if nothing changes and the trader keeps pressing 100-lot orders through it; 40 %: −84 % typical, >80 % in 70 %; 30 %:
+−73 %, >80 % in 22 %; 20 %: −56 %, >50 % in 75 %; **10 %: −30 % typical, −39 % one-in-ten, a >50 % drawdown in 0.6 %**; 5 %: −13 %.
+Per trade the rules return **+2.3 % of premium on average (sd 27 %, 30 % win)** → full Kelly ≈ 31 % of equity, half-Kelly 15 %; Kelly on a
+backtest with 120 unseen sessions is an upper bound, so the sane ceiling is ~10 %. The ×42 "all data" at 60 % is not reachable: the
+lots pass 100 (one person cannot fill that at the touch; the slippage model is for 1–3 lots), and in 2025 the 60 % line fell 93 %.
+
+**What 60 % means on ₹2 L in plain numbers:** ₹1.2 L of premium ≈ 8 lots of a 1-ITM Nifty option. A normal losing trade (−7 % of
+premium) costs ₹8.5k = 4 % of the account; the 1-in-10 bad one (−20 %) ₹24k = 12 %; the worst in the data (−48 %) ₹58k = 27 %; the
+rules lose 7 of 10 trades, and five losers in a row (happens every few months) is −20…−40 % — before the win rate is even questioned.
+**Verdict:** 60 % is not adopted. If the goal is "invest more", the tested, survivable step up is **10 % of current equity per trade**
+(≈ 1.5× today's ₹14k on ₹2 L, growing with the account): ×3.1 train and ×1.5 unseen vs ×1.8 / ×1.3 today, for a −28 % train drawdown
+instead of −13 % and a worst single trade of −4 %. Not shipped as the default; it is a setting to turn on deliberately after the live
+record confirms the rules. No premium cut-off either way.
