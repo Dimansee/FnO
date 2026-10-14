@@ -28,6 +28,7 @@ REDIS_TOKEN = os.environ.get("KV_REST_API_TOKEN") or os.environ.get("UPSTASH_RED
 # Upstash QStash - calls /api/tick every minute in market hours
 QSTASH_URL = (os.environ.get("QSTASH_URL") or "https://qstash.upstash.io").rstrip("/")
 QSTASH_TOKEN = os.environ.get("QSTASH_TOKEN", "")
+PRE_CRON = "30 3 * * 1-5"       # UTC = 09:00 IST, Mon-Fri: one pre-open call (stock picks refresh)
 TICK_CRON = "* 4-9 * * 1-5"   # UTC = 09:30-15:29 IST, Mon-Fri (~360 calls/day; Vercel free QStash limit is 500/day)
 PRODUCTION_HOST = os.environ.get("VERCEL_PROJECT_PRODUCTION_URL", "")
 APP_PASSWORD = os.environ.get("APP_PASSWORD", "")

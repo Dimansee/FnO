@@ -536,6 +536,66 @@ def stock_series(sym: str) -> dict:
     return {"sym": sym.upper(), "dates": _SERIES["dates"], "close": x["c"], "volume": x["v"]}
 
 
+
+_LIVE = {}
+
+
+def stock_live(syms) -> dict:
+    """Live price check for a handful of picks: today's open, last price, previous close (Yahoo chart endpoint, cached 45 s)."""
+    import time as _t
+    from concurrent.futures import ThreadPoolExecutor
+    import requests as _rq
+    syms = [x for x in dict.fromkeys(str(x).upper() for x in syms) if x.replace("&", "").replace("-", "").isalnum()][:25]
+
+    def one(sym):
+        hit = _LIVE.get(sym)
+        if hit and _t.time() - hit[0] < 45:
+            return sym, hit[1]
+        try:
+            r = _rq.get(f"https://query1.finance.yahoo.com/v8/finance/chart/{sym.replace('&', '%26')}.NS", params={"range": "1d", "interval": "5m"},
+                        headers={"User-Agent": "Mozilla/5.0"}, timeout=8)
+            r.raise_for_status()
+            res = r.json()["chart"]["result"][0]
+            meta = res["meta"]
+            q = (res.get("indicators", {}).get("quote") or [{}])[0]
+            opens = [x for x in (q.get("open") or []) if x is not None]
+            prev = meta.get("chartPreviousClose") or meta.get("previousClose")
+            v = {"last": meta.get("regularMarketPrice"), "open": opens[0] if opens else None, "prev_close": prev,
+                 "time": meta.get("regularMarketTime")}
+            if v["open"] is not None and prev:
+                v["gap_pct"] = round((v["open"] / prev - 1) * 100, 2)
+        except Exception as e:
+            v = {"error": str(e)[:60]}
+        _LIVE[sym] = (_t.time(), v)
+        return sym, v
+    with ThreadPoolExecutor(max_workers=8) as ex:
+        return {"quotes": dict(ex.map(one, syms)), "at": C.now_ist().isoformat(timespec="seconds")}
+
+
+def _live_line(p, q):
+    """One short phrase for a pick given its live quote: open/gap, and the levels re-based on the actual open."""
+    if not q or q.get("error") or q.get("open") is None:
+        return f"{p['sym']} ~₹{p.get('entry_ref', p['close'])} → ₹{p.get('target', round(p['close'] * 1.05, 2))}"
+    o = q["open"]
+    return f"{p['sym']} opened ₹{o:.2f} ({q.get('gap_pct', 0):+.1f}%) → target ₹{o * 1.05:.2f}, risk ₹{p.get('risk_line', '-')}"
+
+
+def stocks_preopen(now) -> dict:
+    """09:00 IST: re-read the freshest picks (the 06:00 scan has finished) and send the list for the open."""
+    try:
+        data = stock_picks(force=True)
+    except Exception as e:
+        return {"error": str(e)[:80]}
+    picks = [p for p in (data.get("today") or []) if p.get("direction") != "down"]
+    if not picks:
+        return {"picks": 0}
+    stale = data.get("data_to", "") < (now.date() - __import__("datetime").timedelta(days=4)).isoformat()
+    strong = [p for p in picks if p.get("tier", "rule") == "rule"]
+    show = (strong or picks)[:4]
+    body = "; ".join(f"{p['sym']} buy ~₹{p.get('entry_ref', p['close'])} → ₹{p.get('target', round(p['close'] * 1.05, 2))} ({p.get('setup', 'pick')})" for p in show)
+    title = (f"Pre-open: {len(strong)} rule pick{'s' if len(strong) != 1 else ''}" if strong else f"Pre-open: no rule pick, {len(picks)} weaker") + (" (scan looks stale)" if stale else "")
+    return _push_safe(title, body + " - buy at the open; I will re-check at 09:30.", f"stocks-pre:{data.get('data_to')}:{now.date()}", "/#recs")
+
 def stocks_morning_push(now) -> dict:
     """Once a day, on the first tick after the open: push the night's stock picks (if any) to the devices."""
     try:
@@ -547,9 +607,13 @@ def stocks_morning_push(now) -> dict:
         return {"picks": 0}
     strong = [p for p in picks if p.get("tier", "rule") == "rule"]
     show = (strong or picks)[:4]
-    body = "; ".join(f"{p['sym']} buy ~₹{p.get('entry_ref', p['close'])} → target ₹{p.get('target', round(p['close'] * 1.05, 2))}, risk ₹{p.get('risk_line', '-')} ({p.get('setup', 'pick')}, strength {p.get('strength', '-')})" for p in show)
+    try:
+        lq = stock_live([p["sym"] for p in show]).get("quotes", {})
+    except Exception:
+        lq = {}
+    body = "; ".join(_live_line(p, lq.get(p["sym"])) + f" ({p.get('setup', 'pick')})" for p in show)
     title = f"{len(strong)} rule pick{'s' if len(strong) != 1 else ''} for today" if strong else f"No rule pick today - {len(picks)} weaker candidate{'s' if len(picks) != 1 else ''}"
-    return _push_safe(title, body, f"stocks:{data.get('data_to')}", "/#stocks")
+    return _push_safe(title, body, f"stocks:{data.get('data_to')}:{now.date()}", "/#recs")
 
 
 def _push_safe(title, body, event_id, url="/"):
@@ -572,6 +636,8 @@ def tick():
     now = C.now_ist()
     if now.weekday() >= 5:
         return {"skipped": "weekend"}
+    if time(8, 55) <= now.time() < C.MARKET_OPEN:
+        return {"pre_open": stocks_preopen(now)}
     if not (C.MARKET_OPEN <= now.time() <= C.MARKET_CLOSE):
         return {"skipped": "outside market hours"}
     closed = manage_positions()

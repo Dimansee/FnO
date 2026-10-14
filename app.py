@@ -146,6 +146,15 @@ def stocks():
     return jsonify(SV.stock_picks())
 
 
+@app.get("/api/stocks/live")
+def stocks_live():
+    """Open / last price for the listed symbols (comma separated), used by the Recommendations tab's live check."""
+    syms = [x for x in (request.args.get("syms") or "").split(",") if x.strip()]
+    if not syms:
+        raise ValueError("syms required")
+    return jsonify(SV.stock_live(syms))
+
+
 @app.get("/api/stocks/market")
 def stocks_market():
     return jsonify(SV.stock_market())

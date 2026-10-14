@@ -14,6 +14,7 @@ from . import config as C
 from . import store
 
 SCHEDULE_ID = "fno-tick"
+PRE_ID = "fno-pre-open"
 
 
 def _dest(host: str | None) -> str | None:
@@ -21,23 +22,13 @@ def _dest(host: str | None) -> str | None:
     return f"https://{host}/api/tick" if host else None
 
 
-def ensure(host: str | None = None, force: bool = False) -> dict:
-    """Create/update the QStash schedule if it isn't registered with the current settings."""
-    if not C.QSTASH_TOKEN:
-        return {"ok": False, "reason": "QStash not connected"}
-    dest = _dest(host)
-    if not dest:
-        return {"ok": False, "reason": "Unknown production host"}
-    want = {"dest": dest, "cron": C.TICK_CRON}
-    cur = store.get("scheduler") or {}
-    if not force and cur.get("dest") == dest and cur.get("cron") == C.TICK_CRON:
-        return {"ok": True, "schedule_id": cur.get("schedule_id"), "cached": True}
+def _register(dest, cron, sid):
     r = requests.post(
         f"{C.QSTASH_URL}/v2/schedules/{quote(dest, safe=':/')}",
         headers={
             "Authorization": f"Bearer {C.QSTASH_TOKEN}",
-            "Upstash-Cron": C.TICK_CRON,
-            "Upstash-Schedule-Id": SCHEDULE_ID,
+            "Upstash-Cron": cron,
+            "Upstash-Schedule-Id": sid,
             "Upstash-Retries": "0",
             "Upstash-Timeout": "55s",
             "Upstash-Forward-X-Cron-Secret": C.CRON_SECRET,
@@ -47,6 +38,26 @@ def ensure(host: str | None = None, force: bool = False) -> dict:
     )
     if r.status_code >= 400:
         return {"ok": False, "reason": f"QStash {r.status_code}: {r.text[:160]}"}
-    sid = (r.json() or {}).get("scheduleId", SCHEDULE_ID)
-    store.put("scheduler", {**want, "schedule_id": sid})
-    return {"ok": True, "schedule_id": sid, "cached": False}
+    return {"ok": True, "schedule_id": (r.json() or {}).get("scheduleId", sid)}
+
+
+def ensure(host: str | None = None, force: bool = False) -> dict:
+    """Create/update the QStash schedules (market-hours tick + the 09:00 pre-open call) if not registered with the current settings."""
+    if not C.QSTASH_TOKEN:
+        return {"ok": False, "reason": "QStash not connected"}
+    dest = _dest(host)
+    if not dest:
+        return {"ok": False, "reason": "Unknown production host"}
+    want = {"dest": dest, "cron": C.TICK_CRON, "pre_cron": C.PRE_CRON}
+    cur = store.get("scheduler") or {}
+    if not force and all(cur.get(k) == v for k, v in want.items()):
+        return {"ok": True, "schedule_id": cur.get("schedule_id"), "cached": True}
+    a = _register(dest, C.TICK_CRON, SCHEDULE_ID)
+    if not a["ok"]:
+        return a
+    b = _register(dest, C.PRE_CRON, PRE_ID)
+    if not b["ok"]:
+        store.put("scheduler", {"dest": dest, "cron": C.TICK_CRON, "schedule_id": a["schedule_id"]})   # tick is up; retry the pre-open one next time
+        return b
+    store.put("scheduler", {**want, "schedule_id": a["schedule_id"], "pre_id": b["schedule_id"]})
+    return {"ok": True, "schedule_id": a["schedule_id"], "cached": False}

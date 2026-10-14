@@ -657,7 +657,7 @@ $("#refresh").onclick = () => load();
 $("#auto").onchange = schedule;
 function schedule() {
   clearInterval(S.timer);
-  if ($("#auto").checked && ["signal", "portfolio", "chain"].includes(S.tab)) S.timer = setInterval(() => !document.hidden && load(true), 30000);
+  if ($("#auto").checked && ["signal", "portfolio", "chain", "recs"].includes(S.tab)) S.timer = setInterval(() => !document.hidden && load(true), 30000);
 }
 async function load(quiet) {
   const sec = $("#t-" + S.tab); if (!quiet) { sec.classList.add("loading"); pStart(); }
@@ -1936,8 +1936,13 @@ document.addEventListener("change", e => {
 });
 
 /* Recommendations tab: platform-style cards built only from the tested stock tiers */
+function istNow() { const u = new Date(); const t = new Date(u.getTime() + u.getTimezoneOffset() * 60000 + 19800000); return {dow: t.getDay(), min: t.getHours() * 60 + t.getMinutes(), at: t}; }
 async function loadRecs() {
-  const d = await api("/api/stocks"); S.stPicks = d.error ? null : d; renderRecs(d);
+  const d = await api("/api/stocks"); S.stPicks = d.error ? null : d;
+  const n = istNow(), live = n.dow >= 1 && n.dow <= 5 && n.min >= 9 * 60 + 15 && n.min <= 15 * 60 + 40;
+  S.recLive = null;
+  if (live && !d.error && (d.today || []).length) { try { S.recLive = await api("/api/stocks/live?syms=" + encodeURIComponent(d.today.map(p => p.sym).join(","))); } catch (e) { S.recLive = null; } }
+  renderRecs(d);
 }
 function renderRecs(d) {
   const el = $("#recsBody");
@@ -1948,16 +1953,25 @@ function renderRecs(d) {
   const ups = (d.today || []).filter(p => p.direction !== "down").sort((a, b) => (order[a.tier] ?? 3) - (order[b.tier] ?? 3) || (b.strength || 0) - (a.strength || 0));
   const downs = (d.today || []).filter(p => p.direction === "down").sort((a, b) => (b.strength || 0) - (a.strength || 0));
   const live = t => rec[t] && rec[t].n ? `Live: ${rec[t].win_pct ?? "–"}% won of ${rec[t].n} closed (last 60 sessions)` : "Live record: not enough closed trades yet";
+  const LQ = (S.recLive && S.recLive.quotes) || {};
+  const liveBox = (p, dn) => { const q = LQ[p.sym]; if (!S.recLive) return `<p class="muted">Live check: starts after the 09:15 open on trading days.</p>`;
+    if (!q || q.error || q.open == null) return `<p class="muted">Live check: price not available right now.</p>`;
+    if (dn) return `<p><b>Live:</b> opened ₹${q.open.toFixed(2)} (${sgn(q.gap_pct ?? 0)}%), now ₹${q.last}</p>`;
+    const stop = p.risk_line, last = q.last, tgt = q.open * 1.05;
+    let st = ["Entry OK", "ok"]; if (stop != null && last <= stop) st = ["Below stop - skip", "no"]; else if (last >= tgt) st = ["Target already reached - skip", "warn"];
+    return `<p><b>Live check:</b> opened ₹${q.open.toFixed(2)} (<span class="mono ${cls(q.gap_pct)}">${sgn(q.gap_pct ?? 0)}%</span>), now ₹${last} <span class="badge ${st[1]}">${st[0]}</span><br><span class="muted">With the real open as entry: target ₹${tgt.toFixed(2)}, stop line ₹${stop ?? "–"}</span></p>`; };
   const card = p => { const a = A[p.tier] || ["WATCH", "", ""], dn = p.direction === "down", t = tiers[p.tier] || {};
     const entry = dn ? "–" : "₹" + (p.entry_ref ?? p.close), tgt = p.target ?? (p.close * 1.05).toFixed(2);
     return `<div class="rc"><div class="top"><div><b style="font-size:16px">${esc(p.sym)}</b>${p.fo ? ' <span class="badge" title="in the F&O list">F&amp;O</span>' : ""}<div class="muted" style="font-size:11px">${esc(p.name || "")} · ${esc(p.industry || "")}</div></div><span class="badge ${a[1]}">${a[0]}</span></div>
       <div class="lv"><div><small>${dn ? "Close" : "Buy near"}</small><span class="mono">${dn ? "₹" + p.close : entry}</span></div><div><small>${dn ? "Expected to fall to" : "Target"}</small><span class="mono ${dn ? "down" : "up"}">₹${tgt}</span></div><div><small>${dn ? "Wrong if above" : "Stop / wrong if"}</small><span class="mono ${dn ? "up" : "down"}">₹${p.risk_line ?? "–"}</span></div></div>
       <div class="stsum"><span>Match strength</span><div class="stbar"><i style="width:${p.strength || 0}%;background:${(p.strength || 0) >= 60 ? "var(--up,#30ba78)" : "var(--accent,#f2a93b)"}"></i><span class="mono">${p.strength ?? "–"}</span></div></div>
+      ${liveBox(p, dn)}
       <p><b>Why:</b> ${esc(p.basis || a[2])}</p>
       <p><b>Exit:</b> ${esc(p.exit_rule || t.exit || "")}</p>
       <p class="muted">Backtest hit rate ${t.backtest_win_pct ?? "–"}% · ${esc(live(p.tier))}</p></div>`; };
   const strong = ups.filter(p => p.tier === "rule");
-  el.innerHTML = `<div class="card" style="margin-top:14px"><div class="cardhead"><h3 style="margin:0">Today's recommendations</h3><span class="muted">Data to ${esc(d.data_to)} · for the next open</span></div>
+  el.innerHTML = `<div class="card" style="margin-top:14px"><div class="cardhead"><h3 style="margin:0">Today's recommendations</h3><span class="muted">Data to ${esc(d.data_to)} · list refreshed ${esc(d.generated || "")} · checked ${istNow().at.toTimeString().slice(0, 5)} IST</span></div>
+    <p class="muted" style="font-size:12px;margin:6px 0 0">Schedule (IST, trading days): 06:00 final overnight scan · 09:00 pre-open list + phone alert · 09:30 live check against the real open + phone alert · this tab re-checks live prices every 30 s while open (turn on Auto refresh).</p>
     <div class="stsum" style="margin-top:6px"><span><b>${strong.length}</b> BUY · <b>${ups.filter(p => p.tier === "near").length}</b> BUY SMALL · <b>${ups.filter(p => p.tier === "breakout").length}</b> WATCH · <b>${downs.length}</b> AVOID</span></div>
     ${strong.length ? "" : `<p class="muted" style="margin:8px 0 0">No full-strength BUY today. The tested rule fires only on a sharp dip in a stock above its 200-day average, so quiet days are normal - waiting is the rule too.</p>`}
     ${ups.length ? `<div class="rcgrid">${ups.map(card).join("")}</div>` : ""}</div>
