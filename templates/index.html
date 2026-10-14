@@ -334,6 +334,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
       <button data-t="backtest">🧪 Backtest</button>
       <button data-t="journal">📓 Journal</button>
       <button data-t="stocks">📈 Stocks</button>
+      <button data-t="stockrules">📕 Stock rule book</button>
       <button data-t="rules">📘 Rulebook</button>
       <button data-t="settings">⚙️ Settings</button>
       <span class="ink" id="ink"></span>
@@ -514,6 +515,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
     <div id="stPanel" class="hidden"></div>
     <div id="stBody"></div>
   </section>
+  <section id="t-stockrules" class="hidden"><div class="card rule" id="stockRulebook"></div></section>
   <section id="t-rules" class="hidden"><div class="card rule" id="rulebook"></div></section>
 
   <!-- SETTINGS -->
@@ -627,7 +629,7 @@ async function start() {
   const opts = S.meta.symbols.map(s => `<option value="${s.id}">${esc(s.label)}</option>`).join("");
   $("#symbol").innerHTML = opts; $("#btSym").innerHTML = opts;
   $("#symbol").value = S.symbol; $("#btSym").value = S.symbol;
-  renderRules();
+  renderRules(); renderStockRules();
   const q = new URLSearchParams(location.search);
   if (q.get("msg")) { toast(q.get("msg"), 6000); history.replaceState(null, "", location.pathname + location.hash); }
   go((location.hash || "#signal").slice(1));
@@ -2162,6 +2164,75 @@ function renderRules() {
   <li>Stacking more indicators on one signal (EMA, MACD, RSI, Heikin-Ashi, Supertrend, candle patterns…) did <b>not</b> raise accuracy: the win rate stayed ~35–36%, and the combinations that looked best on old data mostly lost on new data. Running two <i>different</i> strategies side by side helped; piling filters onto one did not.</li>
   <li>Profit is always measured on the <b>option premium</b>, never on Nifty points. Option prices were checked against real NSE closing prices (3 years) and real 5-minute option candles, and corrected for the faster decay real options show on sideways days. That correction is why the rule buys <b>1 strike in-the-money</b>.</li>
   <li>Move to real money only after <b>30+ paper trades</b> that look like the backtest, and start with 1 lot.</li></ul>`;
+}
+
+/* ---------- stock rule book ---------- */
+function renderStockRules() {
+  $("#stockRulebook").innerHTML = `
+  <h3 style="font-size:18px">The stock rule book – how the Picks in the Stocks tab are chosen</h3>
+  <p><b>What this is:</b> the rules the nightly stock scan runs today, written down in one place. They are long-only <b>cash-equity (delivery, no leverage)</b> rules, completely separate from the intraday option rules in the <b>Rulebook</b> tab. Everything here is <b>paper only</b>. The main tested rule came from research round 16 (Nifty 500, 2020-26, 0.1% cost per side on every fill); the other tiers are weaker and are shown so there is always something to watch.</p>
+
+  <h4>1 · Which stocks are scanned</h4>
+  <ul><li><b>Universe:</b> the Nifty 500 (499 names), prices adjusted for splits and dividends. The tested rules were only ever measured on this list.</li>
+  <li><b>Liquidity filter:</b> median daily turnover (price × volume, 50-day median) of at least <b>₹1 crore</b>. Anything thinner is ignored. Needs 200 sessions of history for the 200-day average.</li>
+  <li><b>Data guard:</b> a day is only used if at least half the stocks have fresh prices for it. Half-posted or copied-forward sessions are dropped, so a late Yahoo feed cannot create fake signals.</li>
+  <li><b>When:</b> scanned after the close (about 19:45 IST) and again early the next morning. The app pushes the night's picks on the first tick after the open (09:45 check). Top <b>15</b> candidates a day are kept, strongest first.</li>
+  <li><b>Outside the Nifty 500:</b> every other investable NSE stock (≥ ₹1 cr a day) gets the same three <i>upside</i> setups, listed separately with strength capped at 60 and <b>no measured win rate</b>. Smaller names bounce less reliably and cost more to trade: watch, do not size.</li></ul>
+
+  <h4>2 · Rule pick – the tested rule (the one that earns the money)</h4>
+  <ul><li><b>Setup:</b> the close is <b>above the 200-day average</b> (the stock is in an uptrend) <b>and</b> it has fallen <b>more than 10% over the last three closes</b> (a sharp dip inside an uptrend).</li>
+  <li><b>Entry:</b> buy at the <b>next trading day's open</b>.</li>
+  <li><b>Target:</b> a <b>+5% limit sell</b> placed at once.</li>
+  <li><b>Time exit:</b> if +5% has not been hit by the close of the <b>5th trading day</b>, sell at the next open.</li>
+  <li><b>No stop in the tested rule.</b> The first bounce is the trade, and a 7% stop sells the low (it made the rule worse). The −8% line shown in the app is a safety limit for the paper exercise, not part of the tested rule.</li>
+  <li><b>Backtest 2021-26:</b> about 64% hit the target, +1.4% a trade after costs, median trade +5.0%. The 47% that timed out averaged −3.8% and the worst single trade was −26%. 41 of 61 months were positive. Only this rule beat Nifty buy-and-hold on both the training half and the unseen half.</li></ul>
+
+  <h4>3 · Near-rule (weaker)</h4>
+  <ul><li><b>Setup:</b> same as the rule pick but the three-day drop is between <b>7% and 10%</b>.</li>
+  <li><b>Exit:</b> same as the rule pick (+5% target, out after 5 closes, −8% safety line). Use <b>smaller size</b>.</li>
+  <li><b>Evidence:</b> about 58% hit the target; roughly break-even in training, about +12% a year on the unseen period.</li></ul>
+
+  <h4>4 · Breakout watch (a momentum setup)</h4>
+  <ul><li><b>Setup:</b> the close is above the highest high of the previous 252 sessions (a new <b>52-week high</b>), on volume of at least <b>1.5×</b> its 50-day average, and the stock is above its 200-day average.</li>
+  <li><b>Exit:</b> trail a <b>15% stop</b> from the highest close since entry; out after <b>60 sessions</b>; safety line −10%; +15% target.</li>
+  <li><b>Evidence:</b> about 44% win, around 23% a year in training but only about 8% a year on the unseen period. It pays in trend years and bleeds in flat ones. Most of its profit came from a handful of trades, and the list contains survivorship bias, so treat it as a watch-list.</li></ul>
+
+  <h4>5 · Downside watch (weak evidence)</h4>
+  <ul><li><b>Setup:</b> the stock is <b>below</b> its 200-day average but has jumped <b>10% or more over three closes</b> (a bounce inside a downtrend).</li>
+  <li><b>Expectation:</b> a pullback of about <b>5% within 5 sessions</b>. It is wrong if the stock rises <b>8%</b> instead. Cash investors: do not buy it, or book profit if holding. Only F&O names can act on it (a put or short future).</li>
+  <li><b>Evidence:</b> 42% hit in training against 26% for random days, but it faded on the unseen period. Strength is capped at 40.</li></ul>
+
+  <h4>6 · What the Strength score means</h4>
+  <ul><li>Strength (0-100) is <b>how closely the stock matches the tested setup</b>, weighted by that tier's measured win rate. It is a <b>match score, not a prediction</b>.</li>
+  <li><b>Rule pick:</b> starts at 55, plus up to 20 for a drop deeper than 10%, up to 10 for liquidity (₹1 cr a day = 0, ₹100 cr a day = full), 10 if RSI(14) is between 20 and 40, and up to 5 for how far it is above the 200-day average.</li>
+  <li><b>Near-rule:</b> starts at 35, plus a bonus for a deeper drop inside the 7-10% band, up to 10 for liquidity, 5 if RSI is 20-40.</li>
+  <li><b>Breakout:</b> starts at 30, plus up to 15 for volume above 1.5× average, up to 10 for liquidity, up to 10 for the margin above the 200-day average.</li>
+  <li><b>Downside:</b> starts at 25, small bonuses for a bigger bounce and liquidity, 5 if RSI is 70 or more, never above 40.</li></ul>
+
+  <h4>7 · How each pick is judged afterwards</h4>
+  <ul><li>Every pick of the last <b>60 sessions</b> is settled from price data: bought at the next open, then exited at the target, the risk line, the trailing stop or the time limit, with <b>0.2% round-trip cost</b> taken off. The Picks view shows what each one did and the win rate per tier.</li>
+  <li>Compare this live record with the backtest numbers above. If the live rule picks run far below about 60% hit rate over a few dozen trades, stop and investigate before trusting the rule.</li></ul>
+
+  <h4>8 · Sizing – from the research notes</h4>
+  <ul><li>Plan <b>10 slots</b>: equity ÷ 10 per name (about ₹20,000 on ₹2 lakh), whole shares only. Skip a name if one share costs more than a slot.</li>
+  <li>Expect roughly <b>14 signals a month on the full Nifty 500 list</b> (about 7 on the 150 most liquid names), but only <b>1-3 names open at a time</b>, with a median hold of 4 days. The money is mostly idle.</li>
+  <li><b>Prefer the most liquid names.</b> On the 150 most liquid stocks the rule still beat Nifty, with about 69% wins, but the unseen-period return was smaller (about 5% a year against 11.5% on the full list).</li>
+  <li><b>Realistic return:</b> the backtest says 20-24% a year with an 8-14% worst fall, but <b>plan on 8-12% a year</b>. The list holds today's Nifty 500 names, so stocks that crashed and left the index are missing, which flatters the numbers.</li>
+  <li>The rule is almost <b>uncorrelated with the option rules</b> (daily correlation about −0.1). In the test, the same ₹2 lakh in each gave a combined drawdown of about 15.6% of ₹4 lakh, against about 30% for the options alone on ₹2 lakh. That is its main value: extra, steadier income, not a second engine. A flat year (2022, 2025) looks like +4-6%.</li></ul>
+
+  <h4>9 · What was tested and not adopted – read this</h4>
+  <ul><li><b>Momentum (6-month and 12-1 top 10) looked best</b> (about 41% a year in training) but is the survivorship-bias worst case: five trades made about 60% of the profit, and on the 150 most liquid names the unseen period turned <b>negative</b>. Not used.</li>
+  <li><b>RSI pullbacks</b> win about 60% but turn the book over 25-58 times a year, so costs eat the profit.</li>
+  <li><b>Stops:</b> the mean-reversion rule with a 7% stop did worse. No stop is the tested rule.</li>
+  <li><b>Candlestick patterns</b> (hammer, engulfing, morning star and nine more) did <b>not</b> beat random days with the same context on both halves of the data. Used as a filter on the rule pick they only reduced the number of trades. The picks are unchanged.</li>
+  <li><b>Analyst targets and the heatmap / list views</b> are context only: the targets come from Yahoo Finance consensus and are not a tested signal.</li>
+  <li>The F&O option strategies also lost money on most single stocks in the 2023-26 backtest. Use stock options for practice only; this rule book is for <b>cash stocks</b>.</li></ul>
+
+  <h4>10 · Before real money</h4>
+  <ul><li>Paper-trade the rule pick for <b>at least a quarter</b> and compare it with the numbers above.</li>
+  <li>The research notes also say the rule needs a <b>point-in-time Nifty 500 list</b> (the NSE archive has the change log) before it can be fully trusted.</li>
+  <li>Start small, one slot at a time, and never put more than a slot into a single name.</li></ul>
+  <p class="muted" style="font-size:12px">Source: nightly scan (research/stock_scan.py on the research-data branch) and research round 16 (research/README.md). The numbers describe past data and are not a promise.</p>`;
 }
 
 pStart(); start().finally(pDone);
