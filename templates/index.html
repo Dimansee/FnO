@@ -251,6 +251,7 @@ button.mini{padding:1px 7px;font-size:12px;border-radius:6px;margin-left:4px;bac
 .sttile .v{font-size:10px}
 .sttile.t2{width:72px;padding:7px 8px}.sttile.t2 .s,.sttile.t2 .v{font-size:12px}
 .sttile.t1{width:94px;padding:10px 10px}.sttile.t1 .s{font-size:13px}.sttile.t1 .v{font-size:12px}
+.rcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px;margin-top:10px}.rc{border:1px solid var(--line);border-radius:var(--r-lg);padding:14px;background:rgba(255,255,255,.02)}.rc .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.rc .lv{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0;text-align:center}.rc .lv div{background:rgba(255,255,255,.04);border-radius:8px;padding:6px 4px}.rc .lv small{display:block;color:var(--muted,#8893a2);font-size:11px}.rc p{margin:6px 0 0;font-size:12px}
 .stbar{position:relative;width:80px;height:14px;background:rgba(255,255,255,.06);border-radius:7px;overflow:hidden}.stbar i{position:absolute;left:0;top:0;bottom:0;border-radius:7px}.stbar span{position:relative;font-size:11px;line-height:14px;padding-left:6px}.badge.warn{background:rgba(242,169,59,.18);color:var(--accent,#f2a93b)}
 .sttile.tm{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;border-radius:4px;padding:0;min-width:0;width:auto}
 @media(max-width:600px){.sttile.tm{width:auto;padding:0}}
@@ -334,6 +335,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
       <button data-t="backtest">🧪 Backtest</button>
       <button data-t="journal">📓 Journal</button>
       <button data-t="stocks">📈 Stocks</button>
+      <button data-t="recs">⭐ Recommendations</button>
       <button data-t="stockrules">📕 Stock rule book</button>
       <button data-t="rules">📘 Rulebook</button>
       <button data-t="settings">⚙️ Settings</button>
@@ -515,6 +517,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
     <div id="stPanel" class="hidden"></div>
     <div id="stBody"></div>
   </section>
+  <section id="t-recs" class="hidden"><div id="recsBody"></div></section>
   <section id="t-stockrules" class="hidden"><div class="card rule" id="stockRulebook"></div></section>
   <section id="t-rules" class="hidden"><div class="card rule" id="rulebook"></div></section>
 
@@ -666,6 +669,7 @@ async function load(quiet) {
     else if (S.tab === "settings") await loadSettings();
     else if (S.tab === "journal") await loadJournal();
     else if (S.tab === "stocks") await loadStocks();
+    else if (S.tab === "recs") await loadRecs();
     else if (S.tab === "backtest") await loadStudy();
   } catch (e) { if (!quiet) toast(e.message); }
   finally { sec.classList.remove("loading"); if (!quiet) pDone(); hideSplash(); }
@@ -1930,6 +1934,36 @@ document.addEventListener("change", e => {
   if (e.target.id === "hsCat") { S.stHistCat = e.target.value; if (S.stPicks) renderPicks(S.stPicks); }
   if (e.target.id === "hsDays") { S.stHistDays = e.target.value; if (S.stPicks) renderPicks(S.stPicks); }
 });
+
+/* Recommendations tab: platform-style cards built only from the tested stock tiers */
+async function loadRecs() {
+  const d = await api("/api/stocks"); S.stPicks = d.error ? null : d; renderRecs(d);
+}
+function renderRecs(d) {
+  const el = $("#recsBody");
+  if (d.error) { el.innerHTML = `<div class="card"><p class="muted">${esc(d.error)}</p></div>`; return; }
+  const rec = d.record_last_60_sessions || {}, tiers = d.tiers || {};
+  const A = {rule: ["BUY", "ok", "Tested rule"], near: ["BUY SMALL", "warn", "Weaker version of the rule"], breakout: ["WATCH", "", "Breakout, mixed record"], down: ["AVOID", "no", "Weak evidence"]};
+  const order = {rule: 0, near: 1, breakout: 2};
+  const ups = (d.today || []).filter(p => p.direction !== "down").sort((a, b) => (order[a.tier] ?? 3) - (order[b.tier] ?? 3) || (b.strength || 0) - (a.strength || 0));
+  const downs = (d.today || []).filter(p => p.direction === "down").sort((a, b) => (b.strength || 0) - (a.strength || 0));
+  const live = t => rec[t] && rec[t].n ? `Live: ${rec[t].win_pct ?? "–"}% won of ${rec[t].n} closed (last 60 sessions)` : "Live record: not enough closed trades yet";
+  const card = p => { const a = A[p.tier] || ["WATCH", "", ""], dn = p.direction === "down", t = tiers[p.tier] || {};
+    const entry = dn ? "–" : "₹" + (p.entry_ref ?? p.close), tgt = p.target ?? (p.close * 1.05).toFixed(2);
+    return `<div class="rc"><div class="top"><div><b style="font-size:16px">${esc(p.sym)}</b>${p.fo ? ' <span class="badge" title="in the F&O list">F&amp;O</span>' : ""}<div class="muted" style="font-size:11px">${esc(p.name || "")} · ${esc(p.industry || "")}</div></div><span class="badge ${a[1]}">${a[0]}</span></div>
+      <div class="lv"><div><small>${dn ? "Close" : "Buy near"}</small><span class="mono">${dn ? "₹" + p.close : entry}</span></div><div><small>${dn ? "Expected to fall to" : "Target"}</small><span class="mono ${dn ? "down" : "up"}">₹${tgt}</span></div><div><small>${dn ? "Wrong if above" : "Stop / wrong if"}</small><span class="mono ${dn ? "up" : "down"}">₹${p.risk_line ?? "–"}</span></div></div>
+      <div class="stsum"><span>Match strength</span><div class="stbar"><i style="width:${p.strength || 0}%;background:${(p.strength || 0) >= 60 ? "var(--up,#30ba78)" : "var(--accent,#f2a93b)"}"></i><span class="mono">${p.strength ?? "–"}</span></div></div>
+      <p><b>Why:</b> ${esc(p.basis || a[2])}</p>
+      <p><b>Exit:</b> ${esc(p.exit_rule || t.exit || "")}</p>
+      <p class="muted">Backtest hit rate ${t.backtest_win_pct ?? "–"}% · ${esc(live(p.tier))}</p></div>`; };
+  const strong = ups.filter(p => p.tier === "rule");
+  el.innerHTML = `<div class="card" style="margin-top:14px"><div class="cardhead"><h3 style="margin:0">Today's recommendations</h3><span class="muted">Data to ${esc(d.data_to)} · for the next open</span></div>
+    <div class="stsum" style="margin-top:6px"><span><b>${strong.length}</b> BUY · <b>${ups.filter(p => p.tier === "near").length}</b> BUY SMALL · <b>${ups.filter(p => p.tier === "breakout").length}</b> WATCH · <b>${downs.length}</b> AVOID</span></div>
+    ${strong.length ? "" : `<p class="muted" style="margin:8px 0 0">No full-strength BUY today. The tested rule fires only on a sharp dip in a stock above its 200-day average, so quiet days are normal - waiting is the rule too.</p>`}
+    ${ups.length ? `<div class="rcgrid">${ups.map(card).join("")}</div>` : ""}</div>
+    ${downs.length ? `<div class="card" style="margin-top:14px"><h3>Avoid / do not buy</h3><div class="rcgrid">${downs.map(card).join("")}</div></div>` : ""}
+    <div class="card" style="margin-top:14px"><p class="muted" style="font-size:12px;margin:0">How these are made: every card comes from the nightly scan of the Nifty 500 using rules that were backtested (rule pick: 64% hit, about +1.4% a trade after costs, plan on 8-12% a year). Candle patterns are deliberately not used - on 6 years of daily data for 100 liquid stocks they did no better than a random day. BUY SMALL, WATCH and AVOID have weaker evidence, so size them small or just watch. Paper trading ideas, not investment advice; the backtest uses today's index list so it is flattered by survivorship.</p></div>`;
+}
 /* stock panel: chart + facts for one symbol */
 function closeStock() { S.stOpen = null; S.stCur = null; const p = $("#stPanel"); p.classList.add("hidden"); p.innerHTML = ""; }
 async function openStock(sym) {
