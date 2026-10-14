@@ -472,13 +472,13 @@ def stock_picks(force=False) -> dict:
         try:
             raw = store._cmd("GET", key)
             if raw:
-                return _json.loads(raw)
+                return clean(_json.loads(raw))
         except Exception:
             pass
     try:
         r = _rq.get(STOCKS_URL, timeout=15)
         r.raise_for_status()
-        data = r.json()
+        data = clean(_json.loads(r.text))                 # the scan can write NaN (not valid JSON): read it with the stdlib parser, turn NaN into null
     except Exception as e:
         return {"error": f"Stock picks unavailable: {str(e)[:100]}", "today": [], "history": []}
     try:
@@ -502,13 +502,13 @@ def stock_market(force=False) -> dict:
         try:
             raw = store._cmd("GET", key)
             if raw:
-                return _json.loads(raw)
+                return clean(_json.loads(raw))
         except Exception:
             pass
     try:
         r = _rq.get(MARKET_URL, timeout=20)
         r.raise_for_status()
-        data = r.json()
+        data = clean(_json.loads(r.text))
     except Exception as e:
         return {"error": f"Market view unavailable: {str(e)[:100]}", "stocks": [], "industries": []}
     try:
@@ -526,7 +526,8 @@ def stock_series(sym: str) -> dict:
         try:
             r = _rq.get(SERIES_URL, timeout=25)
             r.raise_for_status()
-            _SERIES.clear(); _SERIES.update(r.json()); _SERIES["_at"] = _t.time()
+            import json as _json
+            _SERIES.clear(); _SERIES.update(clean(_json.loads(r.text))); _SERIES["_at"] = _t.time()
         except Exception as e:
             if not _SERIES:
                 return {"error": f"Chart data unavailable: {str(e)[:80]}"}
