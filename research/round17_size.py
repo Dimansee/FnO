@@ -47,6 +47,8 @@ def premium_path(t):
     m_in = d.t[s.i] + 5
     iv_in = E.iv_for(sym, d, d.vix[s.i], entry, k, opt)
     prem_in = E.opt_price(entry, k, d, m_in, iv_in, opt) * (1 + E.SLIP)
+    prem_stop = E.opt_price(s.stop, k, d, m_in, iv_in, opt)
+    risk_unit = max(prem_in - prem_stop, prem_in * 0.05)
     path = []
     for j in range(s.i, k_exit + 1):
         m = d.t[j] + 5
@@ -55,13 +57,14 @@ def premium_path(t):
         pr = E.opt_price(px, k, d, m, iv, opt)
         pr = E.real_adjust(prem_in / (1 + E.SLIP), pr, (d.expiry - d.d).days, (m - m_in) / 60) * (1 - E.SLIP)
         path.append(pr)
-    return prem_in, path, meta["lot"]
+    return prem_in, path, meta["lot"], risk_unit
 
 
+book.sort(key=lambda t: (t["date"], t["in"]))          # chronological - compounding and the cash lock depend on it
 rows = []
 for t in book:
-    prem_in, path, lot = premium_path(t)
-    rows.append({"date": t["date"], "sym": t["sym"], "strat": t["strat"], "in": t["in"], "out": t["out"], "prem_in": prem_in, "path": path, "lot": lot,
+    prem_in, path, lot, risk_unit = premium_path(t)
+    rows.append({"date": t["date"], "sym": t["sym"], "strat": t["strat"], "in": t["in"], "out": t["out"], "prem_in": prem_in, "path": path, "lot": lot, "risk_unit": risk_unit,
                  "lots_risk1": t["lots"], "pnl_risk1": t["pnl"]})
 # sanity: the recomputed exit premium should match the engine's
 chk = [abs(r["path"][-1] - t["prem_out"]) / t["prem_out"] for r, t in zip(rows, book)]
@@ -81,7 +84,7 @@ def exit_prem(r, cut):
     return r["path"][-1], False
 
 
-def run(frac, cut, start_eq=CAP, half=None, max_lots=None, risk1=False):
+def run(frac, cut, start_eq=CAP, half=None, max_lots=None, risk1=False, risk=None):
     """account simulation: each trade spends `frac` of the equity at entry (cash still locked in an open position is not available);
     ruin (equity <= 0) ends the run.  risk1=True reproduces today's 1 %-risk sizing on the same account."""
     eq = start_eq; out = []; peak = eq; open_pos = []
@@ -91,6 +94,10 @@ def run(frac, cut, start_eq=CAP, half=None, max_lots=None, risk1=False):
         locked = sum(o[2] for o in open_pos)
         if risk1:
             lots = r["lots_risk1"]
+        elif risk:                                   # today's rule, compounding: risk% of current equity on the spot stop, at most 60 % of equity in premium
+            budget = eq * risk; ru = r["risk_unit"] * r["lot"]
+            lots = int(budget // ru) or (1 if ru <= 1.5 * budget else 0)
+            lots = min(lots, int(max(0.0, eq * 0.6 - locked) // (r["prem_in"] * r["lot"])))
         else:
             lots = int(max(0.0, eq * frac - locked) // (r["prem_in"] * r["lot"]))
         if max_lots:
@@ -138,6 +145,12 @@ for frac in FRACS:
         key = f"{int(frac*100)} % of equity" + (f", cut {int(cut*100)} %" if cut else "")
         a = stats(run(frac, cut, half="train")); b = stats(run(frac, cut, half="unseen"))
         res[key] = {"train": a, "unseen": b}; show(key, a, b)
+for risk in (0.01, 0.015, 0.02, 0.03):
+    key = f"risk {risk*100:g} % of equity (today's rule, compounding)"
+    a = stats(run(0, None, half="train", risk=risk)); b = stats(run(0, None, half="unseen", risk=risk)); res[key] = {"train": a, "unseen": b}; show(key, a, b)
+for frac in (0.15,):
+    key = f"{int(frac*100)} % of equity"
+    a = stats(run(frac, None, half="train")); b = stats(run(frac, None, half="unseen")); res[key] = {"train": a, "unseen": b}; show(key, a, b)
 # same with a liquidity cap of 20 lots (what one person can realistically fill at the touch)
 for frac in (0.6, 0.2, 0.1):
     key = f"{int(frac*100)} % of equity, max 20 lots"

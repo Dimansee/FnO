@@ -575,38 +575,47 @@ sessions. Earlier, round 5 tested candle/Heikin-Ashi entries on the index 5-minu
   requiring a bullish candle on the signal day 67 % (n 148 — and 25 unseen, too few); requiring a doji/spinning top 71 % / 58 %;
   dropping signals with a bearish candle 75 % / 62 % (unchanged, n −7 %). Not adopted; the picks stay as they are.
 
-## Round 17 — "put 60 % of the account into every recommended option" (`round17_size.py` → `round17_size.json`)
+## Round 17 — "put 60 % of the account into every recommended option" (`round17_size.py` → `round17_size.json`, months `round17_months.json`)
 Same 922 trades as the two rules (2023-01 → 2026-10, same entries, exits, real-price-corrected premiums, 0.5 % slippage, charges),
-re-sized as a **real account**: each trade spends a fixed fraction of the *current* equity on premium (cash still locked in an open
-position is not available to the second index that day), lots are whole, ruin ends the run, drawdown is measured from the peak.
-On top, a **premium cut-off**: sell when the option is down X % from what it cost, checked every 5 minutes on the engine's premium path.
+in date order, re-sized as a **real account**: each trade spends a fixed fraction of the *current* equity on premium (cash locked in an
+open position is not available to the second index that day), whole lots, ruin ends the run, drawdown measured from the peak. On top,
+a **premium cut-off**: sell when the option is down X % from cost, checked every 5 minutes on the engine's premium path.
 Train < 2026-04-20 (40 months), unseen = the last 120 sessions restarted from ₹2 L. The rules' own spot stop already costs a median
-**7.4 %** of the premium on a losing trade (90th percentile 20 %), so a premium cut-off of 20–25 % fires on only 3–10 % of trades and
-changes nothing on either half (15 % fires on 19 % and hurts). **The spot stop is the cut-off; nothing to add there.**
+**7.4 %** of the premium on a losing trade (90th percentile 20 %), so a 20–25 % premium cut-off fires on 3–10 % of trades and changes
+nothing on either half; 15 % fires on 19 % and hurts. **The spot stop is the cut-off; nothing to add.**
 
-| sizing | train: end ÷ start / max DD | worst trade (% of equity) | losing months | unseen 120 d: end ÷ start / max DD | avg premium / max lots |
+| sizing | train: end ÷ start / max DD | worst trade (% of equity) | losing months | unseen 120 d: end ÷ start / max DD | max lots |
 |---|---|---|---|---|---|
-| **today: 1 % risk (≈ 7 % of ₹2 L, 1–2 lots)** | **×1.82 / −13 %** | −1.8 % | 17/40 | **×1.30 / −7 %** | ₹14k / 2 |
-| 60 % of equity | ×4.7 / **−93 %** | **−27 %** | 21/40 | ×8.6 / **−57 %** | ₹3.6 L / 134 |
-| 60 % + 20 % premium cut-off | ×6.6 / −94 % | −18 % | 21/40 | ×9.7 / −54 % | ₹4.5 L / 150 |
-| 60 %, never more than 20 lots | ×21 / −62 % | −12 % | 16/40 | ×5.7 / −57 % | ₹2.8 L / 20 |
-| 30 % of equity | ×11.8 / −68 % | −13 % | 19/40 | ×3.9 / −30 % | ₹3.4 L / 93 |
-| 20 % of equity | ×7.6 / −52 % | −9 % | 18/40 | ×2.6 / −21 % | ₹1.5 L / 39 |
-| **10 % of equity** | **×3.1 / −28 %** | −4 % | 17/40 | **×1.5 / −9 %** | ₹35k / 8 |
-| 5 % of equity | ×1.5 / −12 % | −1.6 % | 15/39 | ×1.05 / −7 % | ₹9k / 2 |
+| **today: 1 % risk on ₹2 L (≈ 7 % of it in premium, 1–2 lots)** | **×1.82 / −17 %** | −1.6 % | 17/40 | **×1.30 / −11 %** | 2 |
+| 1 % risk, compounding on current equity | ×1.65 / −24 % | −1.6 % | 17/40 | ×1.27 / −12 % | 3 |
+| 1.5 % risk, compounding | ×2.1 / −34 % | −2.0 % | 20/40 | ×1.34 / −15 % | 7 |
+| 2 % risk, compounding | ×2.6 / −47 % | −2.8 % | 21/40 | ×1.66 / −19 % | 13 |
+| 3 % risk, compounding | ×5.5 / −61 % | −4.3 % | 18/40 | ×2.2 / −28 % | 43 |
+| 5 % of equity in premium | ×1.23 / −15 % | −1.7 % | 20/39 | ×1.05 / −7 % | 2 |
+| 10 % of equity | ×1.58 / −31 % | −4.1 % | 21/40 | ×1.43 / −9 % | 6 |
+| 15 % of equity | ×2.6 / −43 % | −6.1 % | 20/40 | ×1.61 / −18 % | 16 |
+| 20 % of equity | ×3.8 / −56 % | −9.1 % | 20/40 | ×2.0 / −23 % | 36 |
+| 30 % of equity | ×6.2 / −72 % | −13.5 % | 20/40 | ×2.8 / −35 % | 110 |
+| 40 % of equity | ×7.3 / −83 % | −18 % | 20/40 | ×3.5 / −46 % | 223 |
+| **60 % of equity** | ×6.1 / **−94 %** | **−28 %** | 21/40 | ×5.3 / **−63 %** | 517 |
+| 60 % + 20 % premium cut-off | ×6.8 / −93 % | −19 % | 22/40 | ×6.0 / −57 % | 463 |
+| 60 %, never more than 20 lots | ×20 / −51 % | −9 % | 16/40 | ×4.3 / −62 % | 20 |
 
-Reshuffling the same trades 3,000 times (the order is luck, the list is not): at **60 % the typical max drawdown is −96 %** and a >80 %
-drawdown happens in 99.9 % of orderings — the account goes to ₹8–10k from a peak at some point in essentially every history, and
-recovers only if nothing changes and the trader keeps pressing 100-lot orders through it; 40 %: −84 % typical, >80 % in 70 %; 30 %:
-−73 %, >80 % in 22 %; 20 %: −56 %, >50 % in 75 %; **10 %: −30 % typical, −39 % one-in-ten, a >50 % drawdown in 0.6 %**; 5 %: −13 %.
-Per trade the rules return **+2.3 % of premium on average (sd 27 %, 30 % win)** → full Kelly ≈ 31 % of equity, half-Kelly 15 %; Kelly on a
-backtest with 120 unseen sessions is an upper bound, so the sane ceiling is ~10 %. The ×42 "all data" at 60 % is not reachable: the
-lots pass 100 (one person cannot fill that at the touch; the slippage model is for 1–3 lots), and in 2025 the 60 % line fell 93 %.
+Reshuffling the same trades 3,000 times (the order is luck, the list is not): at **60 % the typical max drawdown is −94 %** and a >80 %
+drawdown happens in 99 % of orderings — the account goes to ₹10–15k from a peak at some point in essentially every history and recovers
+only if nothing changes and the trader keeps pressing 100–500-lot orders through it; 40 %: −82 % typical, >80 % in 60 %; 30 %: −71 %,
+>80 % in 17 %; 20 %: −54 %, >50 % in 66 %; 10 %: −31 % typical, −41 % one-in-ten, >50 % in 1 %; 5 %: −14 %. Per trade the rules return
+**+2.3 % of premium on average (sd 27 %, 30 % win)** → full Kelly ≈ 31 % of equity, half-Kelly 15 %; Kelly on a backtest with 120 unseen
+sessions is an upper bound. The ×36 "all data" at 60 % is not reachable: lots pass 500 (the slippage model is for 1–3 lots; one person
+cannot fill that at the touch), and 2025-08 alone was −2.5 M on a 5.3 M peak.
 
 **What 60 % means on ₹2 L in plain numbers:** ₹1.2 L of premium ≈ 8 lots of a 1-ITM Nifty option. A normal losing trade (−7 % of
-premium) costs ₹8.5k = 4 % of the account; the 1-in-10 bad one (−20 %) ₹24k = 12 %; the worst in the data (−48 %) ₹58k = 27 %; the
-rules lose 7 of 10 trades, and five losers in a row (happens every few months) is −20…−40 % — before the win rate is even questioned.
-**Verdict:** 60 % is not adopted. If the goal is "invest more", the tested, survivable step up is **10 % of current equity per trade**
-(≈ 1.5× today's ₹14k on ₹2 L, growing with the account): ×3.1 train and ×1.5 unseen vs ×1.8 / ×1.3 today, for a −28 % train drawdown
-instead of −13 % and a worst single trade of −4 %. Not shipped as the default; it is a setting to turn on deliberately after the live
-record confirms the rules. No premium cut-off either way.
+premium) costs ₹8.5k = 4 % of the account; the 1-in-10 bad one (−20 %) ₹24k = 12 %; the worst in the data (−48 %) ₹58k = 28 %; the
+rules lose 7 of 10 trades, and five losers in a row (every few months) is −20…−40 % before the win rate is even questioned.
+**Why "10 % of equity" is not better than today:** a 1-ITM lot costs ~₹14k, so 10 % of ₹2 L is 1 lot every time, while the 1 %-risk rule
+takes 2 lots when the stop is tight — the risk-based sizing beats a fixed premium fraction at the same exposure (×1.82 vs ×1.58, −17 %
+vs −31 % on training). **Verdict:** 60 % is not adopted and nothing above today's sizing is better on both net *and* drawdown; every
+step up buys more upside with a bigger fall — **2 % risk compounding (×2.6 train / ×1.7 unseen, −47 % / −19 % DD, 13 lots max)** is the
+most that still looks like an account rather than a lottery ticket, and only once the live record has confirmed the rules. No premium
+cut-off either way. Month-by-month P&L and equity for today's sizing and 10 / 20 / 60 % of equity: `round17_months.json`
+(today: 19 of 46 months negative, avg +₹4.9k, best +₹49k, worst −₹21k; 60 %: 23 of 46 negative, best +₹32 L, worst −₹25 L).
