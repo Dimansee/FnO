@@ -37,7 +37,7 @@ MARKETS = ("IN", "CRYPTO", "US")
 TIMEFRAMES = {"5m": 5, "15m": 15, "30m": 30, "1h": 60, "4h": 240, "1d": 1440}
 MAX_CONDS, MAX_STRATEGIES = 8, 20
 DEFAULT_EXIT = {"stop_atr": 1.5, "atr_n": 14, "target_r": 2.0, "trail_atr": None, "breakeven_r": None,
-                "time_stop_bars": None, "exit_on_opposite": False}
+                "time_stop_bars": None, "exit_on_opposite": False, "after_target_trail": None}
 DEFAULT_FILTERS = {"start": None, "end": None, "max_trades_day": 2, "vix_min": None, "vix_max": None}
 SESSION = {  # market -> (offset used when resampling so bars start on the session clock, square-off hh:mm, last entry hh:mm)
     "IN": {"offset": "15min", "square_off": (15, 15), "open": (9, 15), "close": (15, 30)},
@@ -187,7 +187,10 @@ def validate(raw: dict, existing_id: str | None = None) -> dict:
         "breakeven_r": _num(ex["breakeven_r"], 0.3, 10, "Break-even trigger (R)"),
         "time_stop_bars": _num(ex["time_stop_bars"], 1, 500, "Time stop (bars)", integer=True),
         "exit_on_opposite": bool(ex["exit_on_opposite"]),
+        "after_target_trail": _num(ex.get("after_target_trail"), 0.3, 20, "Trail after target (ATR)"),
     }
+    if exit_["after_target_trail"] is not None and exit_["target_r"] is None:
+        raise ValueError("'Trail after target' needs a target: set a Target (R) too.")
     if exit_["target_r"] is None and exit_["trail_atr"] is None and not exit_["exit_on_opposite"] and exit_["time_stop_bars"] is None and raw.get("hold", "intraday") == "swing":
         raise ValueError("A swing strategy needs a target, trailing stop, time stop or opposite-signal exit, otherwise trades never close.")
     fl = {**DEFAULT_FILTERS, **(raw.get("filters") or {})}
@@ -296,6 +299,7 @@ def new_pos(side: int, entry: float, atr_sig: float, ex: dict) -> dict:
             "tp": float(entry + side * ex["target_r"] * risk) if ex["target_r"] else None,
             "trail": float(ex["trail_atr"] * atr_sig) if ex["trail_atr"] else None,
             "be": float(entry + side * ex["breakeven_r"] * risk) if ex["breakeven_r"] else None,
+            "after": float(ex["after_target_trail"] * atr_sig) if ex.get("after_target_trail") else None,
             "best": float(entry), "held": 0, "pend_opp": False, "mfe": 0.0, "mae": 0.0, "first": True, "atr": float(atr_sig)}
 
 
@@ -314,7 +318,12 @@ def step_pos(p: dict, o: float, h: float, l: float, c: float, end_min: int | Non
             return p["sl"], "Break-even stop"
         return p["sl"], "Trailing stop" if p["sl"] != p["sl0"] and p["trail"] else "Stop-loss"
     if p["tp"] is not None and side * (fav - p["tp"]) >= 0:
-        return p["tp"], "Target"
+        if not p.get("after"):
+            return p["tp"], "Target"
+        # target reached: do not exit. Lock in profit behind the target and let the stop trail from here on.
+        lock = p["tp"] - side * p["after"]
+        p["sl"] = max(p["sl"], lock) if side > 0 else min(p["sl"], lock)
+        p["tp"], p["trail"], p["best"] = None, p["after"], float(fav)
     p["mfe"] = max(p["mfe"], side * (fav - p["entry"]) / p["risk"])
     p["mae"] = max(p["mae"], side * (p["entry"] - adverse) / p["risk"])
     if p["be"] is not None and side * (fav - p["be"]) >= 0 and side * (p["sl"] - p["entry"]) < 0:
@@ -654,8 +663,10 @@ def evaluate_live(spec: dict, symbol: str, candles: pd.DataFrame, vix: dict | No
             "trail_pts": ex["trail_atr"] * a if ex["trail_atr"] else None,
             "breakeven_at": spot + side * ex["breakeven_r"] * risk if ex["breakeven_r"] else None,
             "time_stop_bars": ex["time_stop_bars"], "bar_min": mins, "exit_on_opposite": ex["exit_on_opposite"],
+            "after_trail_pts": ex["after_target_trail"] * a if ex.get("after_target_trail") else None,
             "trail": ", ".join(x for x in (f"trail {ex['trail_atr']:g} ATR" if ex["trail_atr"] else "", f"break-even at {ex['breakeven_r']:g}R" if ex["breakeven_r"] else "",
-                                          f"time stop {ex['time_stop_bars']} bars" if ex["time_stop_bars"] else "", "exit on opposite signal" if ex["exit_on_opposite"] else "") if x) or "fixed stop and target, square-off 15:15"}
+                                          f"time stop {ex['time_stop_bars']} bars" if ex["time_stop_bars"] else "", "exit on opposite signal" if ex["exit_on_opposite"] else "",
+                                          f"after the target the stop trails {ex['after_target_trail']:g} ATR" if ex.get("after_target_trail") else "") if x) or "fixed stop and target, square-off 15:15"}
     out["signal"] = "BUY CALL" if side > 0 else "BUY PUT"
     out["plan"] = plan
     out["checks"].append((True, f"{spec['name']}: signal on the {end:%H:%M} bar - {'LONG' if side > 0 else 'SHORT'}"))
@@ -671,10 +682,11 @@ def custom_exit(pos: dict, spot: float, now: datetime, state: dict | None) -> tu
     if plan.get("breakeven_at") is not None and not pos.get("at_breakeven") and sign * (spot - plan["breakeven_at"]) >= 0:
         sl = max(sl, plan["entry"]) if long_ else min(sl, plan["entry"])
         upd.update({"at_breakeven": True, "live_sl": sl})
-    if plan.get("trail_pts"):
+    trail_pts = plan.get("after_trail_pts") if pos.get("target_hit") and plan.get("after_trail_pts") else plan.get("trail_pts")
+    if trail_pts:
         best = pos.get("best_spot", plan["entry"])
         best = max(best, spot) if long_ else min(best, spot)
-        cand = best - sign * plan["trail_pts"]
+        cand = best - sign * trail_pts
         if sign * (cand - sl) > 0:
             sl = cand
             upd["live_sl"] = sl

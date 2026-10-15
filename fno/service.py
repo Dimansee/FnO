@@ -132,6 +132,18 @@ def manage_positions(m: M.Market | None = None) -> list[dict]:
                 cstates[p["id"]] = CU.live_state(cspecs[st[7:]], m.candles(p["symbol"]), now)
             except Exception as e:
                 m.errors.append(f"Custom strategy state failed for {p['symbol']}: {e}")
+    exts = {}
+    for p in pos:
+        try:                                                 # high / low of the 5-minute bars after the entry bar: what happened between checks
+            if (p.get("plan") or {}).get("sl") is not None:
+                bars = m.candles(p["symbol"])
+                o = datetime.fromisoformat(p["opened"]).replace(tzinfo=None)
+                first = o.replace(minute=o.minute - o.minute % 5, second=0, microsecond=0) + timedelta(minutes=5)
+                sub = bars[[ts.replace(tzinfo=None) >= first for ts in bars.index]]
+                if not sub.empty:
+                    exts[p["id"]] = (float(sub["high"].max()), float(sub["low"].min()))
+        except Exception:
+            pass
     closed = []
     for p in pos:
         if spots.get(p["symbol"]) is None or not all(l["key"] in prices for l in p["legs"]):
@@ -143,7 +155,8 @@ def manage_positions(m: M.Market | None = None) -> list[dict]:
         prem = P.net_price(p["legs"], prices)
         sp = spots[p["symbol"]]
         is_c = str((p.get("plan") or {}).get("strategy", "")).startswith("custom:")
-        reason, upd = S.exit_check(p, sp, prem, now, cstates.get(p["id"]) if is_c else states.get(p["symbol"]))
+        reason, upd = S.exit_check(p, sp, prem, now, cstates.get(p["id"]) if is_c else states.get(p["symbol"]), exts.get(p["id"]))
+        level = upd.pop("_level", None)                      # stop / target touched between two checks (price already moved away)
         hi, lo = max(p.get("hi", sp), sp), min(p.get("lo", sp), sp)      # best / worst index level seen: feeds the lesson written when the trade closes
         if hi != p.get("hi") or lo != p.get("lo"):
             upd = {**upd, "hi": hi, "lo": lo}
@@ -152,6 +165,14 @@ def manage_positions(m: M.Market | None = None) -> list[dict]:
             store.update_position(p)
         if reason and (p["mode"] == "signal" or reason.startswith("Square-off")):
             fills = m.exit_fills([p], prices, eprefs().get("fills", "realistic"))
+            if level is not None and p.get("delta") and (p.get("plan") or {}).get("opt"):
+                sg = 1 if p["plan"]["opt"] == "CE" else -1  # premium when the index was at the level, from the option's delta
+                est = max(0.05, prem + float(p["delta"]) * sg * (level - sp))
+                if "stop" in reason.lower():
+                    est = max(0.05, est * (1 - M.slip_pct(est)))
+                for lg in p["legs"]:
+                    if lg["side"] == "BUY":
+                        fills[lg["key"]] = round(est, 2)
             rec = P.close_position(p["id"], fills, reason, extra={"spot_exit": sp, "exit_ltp": round(prem, 2)})
             if rec:
                 closed.append({"symbol": rec["symbol"], "reason": reason, "pnl": rec["pnl"], "id": p["id"]})
