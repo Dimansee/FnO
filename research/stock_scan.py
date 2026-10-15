@@ -44,6 +44,14 @@ def rsi(s, n=14):
 
 
 RSI = C.apply(rsi)
+# Lower-circuit signature: the session closed at its low and down exactly one price-band step (5/10/20%). Such a stock has sellers and
+# no buyers - a buy next day may be impossible to sell (35 of 161 such rule signals were locked again from the open the next day).
+R1 = C / C.shift(1) - 1
+_band = pd.DataFrame(False, index=C.index, columns=C.columns)
+for _b in (0.05, 0.10, 0.20):
+    _band |= (R1 <= -(_b - 0.0015)) & (R1 >= -(_b + 0.0015))
+LOCKED = (C <= L * 1.0005) & _band
+SKIPPED = []                                                          # up-picks dropped for this reason on the latest day (for the app)
 dates = C.index
 TIERS = {
     "rule": {"label": "Rule pick", "win": 64, "target_pct": 5.0, "hold": 5, "risk_pct": 8.0, "exit": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line −8% (not part of the tested rule)."},
@@ -83,6 +91,11 @@ def picks_on(i):
                 out.append(row(s, i, "down", min(40, st), f"3-day rise {drop*100:+.1f}% while {above*100:.1f}% below the 200-day average (bounce in a downtrend); RSI {rs[s]:.0f}"))
             continue
         liqscore = min(1.0, np.log10(max(tu[s], 1e7) / 1e7) / 2)            # ₹1 cr -> 0, ₹100 cr -> 1
+        if LOCKED.iloc[i][s] and (drop <= -0.07 or (not pd.isna(hi[s]) and c[s] > hi[s])):
+            if i == len(C) - 1:
+                SKIPPED.append({"sym": s, "name": str(names["Company Name"].get(s, s)), "drop_3d_pct": round(float(drop * 100), 1) if not pd.isna(drop) else None,
+                                "close": round(float(c[s]), 2), "reason": "Closed on its lower circuit (sellers only): a buy could not be sold"})
+            continue
         if drop <= -0.10:
             st = 55 + min(20, (-drop - 0.10) * 200) + 10 * liqscore + (10 if 20 <= (rs[s] or 50) <= 40 else 0) + min(5, above * 50)
             out.append(row(s, i, "rule", min(100, st), f"3-day drop {drop*100:.1f}% while {above*100:.1f}% above the 200-day average; RSI {rs[s]:.0f}; turnover ₹{tu[s]/1e7:.0f} cr/day"))
@@ -195,6 +208,6 @@ out = {"generated": datetime.now(IST).strftime("%Y-%m-%d %H:%M IST"), "data_to":
                "near-rule = the same with a 7-10% drop (weaker); breakout = new 52-week high on 1.5x volume above the 200-day average; downside watch = a 10%+ three-day bounce in a stock below its 200-day average, expected to give back 5% (weak evidence: 42% hit in training vs 26% for random days, and it faded on the unseen period). Paper only.",
        "expected": "Strength is how closely the stock matches the tested setup (drop, trend margin, liquidity, RSI, volume), weighted by that setup's measured win rate - a match score, not a prediction. "
                    "Rule picks: 64% hit +5% in the 2021-26 backtest, +1.4% a trade after costs; plan on 8-12% a year on the capital used. Near-rule and breakout tiers are weaker and shown so there is always something to watch.",
-       "today": today, "today_broad": broad, "record_last_60_sessions": rec, "history": history}
+       "today": today, "skipped_circuit": SKIPPED, "today_broad": broad, "record_last_60_sessions": rec, "history": history}
 json.dump(out, open(OUT, "w"), indent=1)
 print(f"{dates[last].date()}: {len(today)} candidate(s) {[(p['sym'], p['tier'], p['strength']) for p in today[:8]]}; record {rec}")
