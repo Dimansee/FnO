@@ -8,5 +8,5 @@
       "maxDuration": 120
     }
   },
-  "ignoreCommand": "[ \"$VERCEL_GIT_COMMIT_REF\" != \"main\" ] || git diff --quiet HEAD^ HEAD -- . ':(exclude)research' ':(exclude).github'"
+  "ignoreCommand": "exit 0"
 }
