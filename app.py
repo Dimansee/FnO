@@ -24,6 +24,7 @@ from fno import custom as CU
 from fno import ind as XI
 from fno import learn as LN
 from fno import gbook as GB
+from fno import datahub as DH
 from fno import markets as MK
 
 app = Flask(__name__)
@@ -49,7 +50,7 @@ def _authed() -> bool:
         return False
 
 
-PUBLIC = {"/", "/api/login", "/api/health", "/api/tick", "/api/tick/global", "/api/learn/run", "/api/recorder/day", "/api/recorder/probe", "/api/journal/day"}
+PUBLIC = {"/", "/api/login", "/api/health", "/api/tick", "/api/tick/global", "/api/learn/run", "/api/data/shared", "/api/recorder/day", "/api/recorder/probe", "/api/journal/day"}
 
 
 LOCKED = {"/api/recorder/day", "/api/recorder/probe", "/api/journal/day"}   # public until LOCK_DATA_ENDPOINTS=1 is set
@@ -654,6 +655,46 @@ def tick_global():
     if not C.CRON_SECRET or not hmac.compare_digest(request.headers.get("x-cron-secret", ""), C.CRON_SECRET):
         return jsonify({"error": "forbidden"}), 403
     return jsonify(SV.clean(GB.tick()))
+
+# ---------------------------------------------------------------------------
+# Data vault
+# ---------------------------------------------------------------------------
+def _attach(body, name, mime):
+    resp = app.response_class(body, mimetype=mime)
+    resp.headers["Content-Disposition"] = f'attachment; filename="{name}"'
+    resp.headers["Cache-Control"] = "no-store"
+    return resp
+
+
+@app.get("/api/data")
+def data_overview():
+    return jsonify(SV.clean(DH.overview()))
+
+
+@app.post("/api/data/save")
+def data_save():
+    """'Save now' button: pulls whatever Yahoo still serves for India and US candles into the vault."""
+    return jsonify({"IN": DH.save_in(), "US": DH.save_us()})
+
+
+@app.get("/api/data/export")
+def data_export():
+    q = request.args
+    return _attach(*DH.build(q.get("dataset", ""), q.get("symbol"), q.get("start", ""), q.get("end", ""), q.get("fmt", "csv"), q.get("tf", "1h")))
+
+
+@app.post("/api/data/share")
+def data_share():
+    b = request.get_json(force=True) or {}
+    DH.build(b.get("dataset", ""), b.get("symbol"), b.get("start", ""), b.get("end", ""), b.get("fmt", "csv"), b.get("tf", "1h"))     # fail now if the range is empty / too big
+    tok = DH.make_token(b)
+    return jsonify({"url": request.host_url.rstrip("/") + "/api/data/shared?t=" + tok, "valid_days": DH.SHARE_DAYS})
+
+
+@app.get("/api/data/shared")
+def data_shared():
+    p = DH.read_token(request.args.get("t", ""))
+    return _attach(*DH.build(p["dataset"], p["symbol"], p["start"], p["end"], p["fmt"], p["tf"]))
 
 
 # ---------------------------------------------------------------------------
