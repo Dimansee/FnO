@@ -296,6 +296,7 @@ from fno import brokers as B, backup as BK  # noqa: E402
 
 NOW[0] = datetime(2026, 10, 1, 10, 52, tzinfo=C.IST)
 store.put("upstox", {"api_key": "k", "secret": "s"})
+_REAL_VERIFY = A._verify_upstox
 A._verify_upstox = lambda tok: {"quote": True, "candles": False, "chain": True, "detail": "candles: nope"}
 r = c.post("/api/settings", json={"broker": "upstox", "analytics_token": "TOK1"})
 assert r.status_code == 400 and "candles" in r.get_json()["error"], r.get_data(as_text=True)[:200]
@@ -396,3 +397,73 @@ if not (PUSH.PUBLIC_KEY and PUSH.PRIVATE_KEY):
     assert j(c.post("/api/push/setup"))["ok"] and j(c.get("/api/push/key"))["key"] == k["key"], "setup must not replace existing keys"
 print("tokens, fills, health, backup OK")
 print("ALL V2 OK 3")
+
+# ------------------------------------------------------------------ 11. real token check, trail-after-target, between-check stop/target
+class _FakeUp:
+    def __init__(self, tok): self.tok = tok
+    def quotes(self, keys): return {keys[0]: {"ltp": 25000.0}}
+    def candles(self, key, days=3): return fake(1300, NOW[0])
+    def expiries(self, key): return [date(2026, 10, 6)], 65
+
+
+_real_up = A.B.Upstox
+A.B.Upstox = _FakeUp
+A._verify_upstox = _REAL_VERIFY
+v = A._verify_upstox("anything")
+assert v["quote"] and v["candles"] and v["chain"], v                    # regression: it used to crash with a relative-import error
+_FakeUp.candles = lambda self, key, days=3: (_ for _ in ()).throw(RuntimeError("no candles for this token"))
+v = A._verify_upstox("anything")
+assert v["quote"] and not v["candles"] and "no candles" in v["detail"], v
+A.B.Upstox = _real_up
+
+# validation
+base = {**CU.PRESETS[0], "exit": {"stop_atr": 1.5, "atr_n": 14, "target_r": None, "trail_atr": 2, "after_target_trail": 1.5}}
+try:
+    CU.validate(base); raise SystemExit("after_target_trail without a target must be rejected")
+except ValueError as e:
+    assert "needs a target" in str(e)
+ok_spec = CU.validate({**CU.PRESETS[0], "exit": {**base["exit"], "target_r": 2.0}})
+assert ok_spec["exit"]["after_target_trail"] == 1.5
+
+# backtest engine: exit at target vs. lock-and-trail
+ex_off = {"stop_atr": 1.5, "target_r": 2.0, "trail_atr": None, "breakeven_r": None, "time_stop_bars": None, "exit_on_opposite": False, "after_target_trail": None}
+ex_on = {**ex_off, "after_target_trail": 1.5}
+p0, p1 = CU.new_pos(1, 100.0, 2.0, ex_off), CU.new_pos(1, 100.0, 2.0, ex_on)       # risk 3 points, target 106
+assert p0["tp"] == 106 and p1["after"] == 3.0
+assert CU.step_pos(p0, 100, 107, 99.5, 106, None, ex_off, None, False) == (106.0, "Target")
+assert CU.step_pos(p1, 100, 107, 99.5, 106, None, ex_on, None, False) is None            # keeps going
+assert p1["tp"] is None and p1["sl"] == 104.0 and p1["trail"] == 3.0, p1                 # profit locked behind the target
+assert CU.step_pos(p1, 106, 108, 105, 107, None, ex_on, None, False) is None and p1["sl"] == 105.0
+assert CU.step_pos(p1, 107, 107, 104.5, 105, None, ex_on, None, False) == (105.0, "Trailing stop")
+# a spike through the target that then collapses to the stop in the NEXT bar ends at the locked profit, not at the original stop
+p2 = CU.new_pos(1, 100.0, 2.0, ex_on)
+CU.step_pos(p2, 100, 107, 99.5, 106, None, ex_on, None, False)
+r = CU.step_pos(p2, 106, 106, 80, 85, None, ex_on, None, False)
+assert r == (104.0, "Trailing stop"), r
+
+# live exit_check: the market touched the target (or stop) between two checks and came back
+from fno import strategy as S2  # noqa: E402
+T0 = datetime(2026, 10, 1, 10, 0, tzinfo=C.IST)
+def mkpos(strategy="camarilla", **plan_extra):
+    plan = {"opt": "CE", "sl": 90.0, "entry": 100.0, "target": 150.0, "rr": 1.5, "strategy": strategy, **plan_extra}
+    return {"opened": T0.isoformat(), "plan": plan, "sl_prem": 1, "target_prem": 1e9, "mode": "signal"}
+chk = datetime(2026, 10, 1, 10, 30, tzinfo=C.IST)
+why, up = S2.exit_check(mkpos(), 120.0, 50.0, chk, None, (155.0, 118.0))
+assert why and "target" in why.lower() and up["_level"] == 150.0, (why, up)
+why, up = S2.exit_check(mkpos(), 120.0, 50.0, chk, None, (155.0, 88.0))                  # both in the same bars: the stop wins
+assert why and "stop" in why.lower() and up["_level"] == 90.0, (why, up)
+assert S2.exit_check(mkpos(), 120.0, 50.0, chk, None, (130.0, 118.0))[0] is None
+assert S2.exit_check(mkpos(), 120.0, 50.0, chk, None, None)[0] is None                    # no bar data: same as before
+why, up = S2.exit_check(mkpos(), 85.0, 50.0, chk, None, (130.0, 85.0))                    # stop touched right now: no price adjustment
+assert why and "_level" not in up
+# custom strategy with trail-after-target
+cp = mkpos("custom:x", after_trail_pts=20.0)
+why, up = S2.exit_check(cp, 140.0, 50.0, chk, None, (155.0, 119.0))
+assert why is None and up["target_hit"] and up["live_sl"] == 130.0 and up["best_spot"] == 155.0, (why, up)
+cp.update(up)
+why, up2 = S2.exit_check(cp, 128.0, 50.0, chk, None, (155.0, 100.0))                       # old low must not count once the stop has moved
+assert why and "trailing" in why.lower(), (why, up2)
+cp2 = mkpos("custom:x", after_trail_pts=20.0); cp2.update(up)
+assert S2.exit_check(cp2, 135.0, 50.0, chk, None, (155.0, 100.0))[0] is None
+print("trail-after-target and between-check exits OK")
+print("ALL V2 OK 4")

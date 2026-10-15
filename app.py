@@ -383,10 +383,9 @@ def _status(cfg, idfield):
 
 def _verify_upstox(tok: str) -> dict:
     """Does this (analytics) token really serve what the app needs? Quote, 5-minute candles and the option chain."""
-    from . import config as _C
     out = {"quote": False, "candles": False, "chain": False, "detail": ""}
     cl = B.Upstox(tok)
-    key = _C.INDICES["NIFTY"]["upstox_key"]
+    key = C.INDICES["NIFTY"]["upstox_key"]
     try:
         q = cl.quotes([key])
         out["quote"] = any(v.get("ltp") for v in q.values())

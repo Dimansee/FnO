@@ -2671,7 +2671,7 @@ async function loadStrategies() { SX.data = await api("/api/strategies"); render
 function blankSpec() {
   return {name: "", about: "", market: "IN", symbols: ["NIFTY"], timeframe: "15m", direction: "both", hold: "intraday", enabled: false, auto: false, watch: false,
     long: {all: [{l: {ind: "ema", n: 9}, op: "crosses_above", r: {ind: "ema", n: 21}}], any: []}, short: {all: [{l: {ind: "ema", n: 9}, op: "crosses_below", r: {ind: "ema", n: 21}}], any: []},
-    exit: {stop_atr: 1.5, atr_n: 14, target_r: 2, trail_atr: null, breakeven_r: null, time_stop_bars: null, exit_on_opposite: false},
+    exit: {stop_atr: 1.5, atr_n: 14, target_r: 2, trail_atr: null, breakeven_r: null, after_target_trail: null, time_stop_bars: null, exit_on_opposite: false},
     filters: {start: "09:45", end: "14:15", max_trades_day: 2, vix_min: null, vix_max: null}};
 }
 function normSpec(sp) {
@@ -2759,6 +2759,7 @@ function editorHtml() {
       <div><label>Target (× risk)</label>${num("exit.target_r", e.exit.target_r)}</div>
       <div><label>Trail (× ATR)</label>${num("exit.trail_atr", e.exit.trail_atr)}</div>
       <div><label>Break-even at (R)</label>${num("exit.breakeven_r", e.exit.breakeven_r)}</div>
+      <div title="Keep the stop fixed until the target is touched. Then, instead of selling, lock profit behind the target and trail the stop by this many ATR."><label>After target: trail (× ATR)</label>${num("exit.after_target_trail", e.exit.after_target_trail, "sell at target")}</div>
       <div><label>Time stop (bars)</label>${num("exit.time_stop_bars", e.exit.time_stop_bars, "off", "1")}</div></div>
       <label class="sw" style="margin-top:10px"><input type="checkbox" data-p="exit.exit_on_opposite" data-k="bool" ${e.exit.exit_on_opposite ? "checked" : ""}> Exit when the opposite signal appears</label></div>
     <div class="card"><h3>Filters</h3><div class="grid g3f">

@@ -479,7 +479,8 @@ def strike_alternatives(plan, chain: pd.DataFrame, spot, vix_level, lot, capital
     return out
 
 
-def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict | None = None) -> tuple[str | None, dict]:
+def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict | None = None,
+               ext: tuple | None = None) -> tuple[str | None, dict]:
     """Return (exit_reason or None, updates) for an open paper position.
     Signal trades exit on the INDEX levels (as backtested); manual trades on premium."""
     plan = pos.get("plan")
@@ -497,15 +498,30 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
             return None, upd
     long_ = plan["opt"] == "CE"
     sl = pos.get("live_sl", plan["sl"])
-    if (long_ and spot <= sl) or (not long_ and spot >= sl):
+    # Between two one-minute checks the market can touch the stop or target and come back. While the stop and target are still
+    # fixed, the high / low of the 5-minute bars since entry (ext = (high, low)) reveal that. Stop first, as in the backtests.
+    fixed = ext is not None and not pos.get("target_hit") and not pos.get("at_breakeven") and abs(sl - plan["sl"]) < 1e-9
+    hi_e = max(spot, ext[0]) if fixed else spot
+    lo_e = min(spot, ext[1]) if fixed else spot
+    if (long_ and lo_e <= sl) or (not long_ and hi_e >= sl):
+        if fixed and not ((long_ and spot <= sl) or (not long_ and spot >= sl)):
+            upd["_level"] = sl                              # touched between checks: price the exit at the stop, not at today's price
         if pos.get("at_breakeven"):
             return "Breakeven stop (moved to entry at +1R)", upd
         if is_custom and pos.get("live_sl") is not None and abs(pos["live_sl"] - plan["sl"]) > 1e-9:
             return ("Break-even stop" if pos.get("at_breakeven") and abs(pos["live_sl"] - plan["entry"]) < 1e-6 else "Trailing stop hit"), upd
         return ("Index stop-loss hit (2 × ATR)" if plan.get("strategy") == "noise" else
                 f"Index stop-loss hit ({plan.get('stop_k', 1):g} × ATR)" if plan.get("strategy") == "ai" else "Index stop-loss hit"), upd
-    if plan.get("target") is not None and ((long_ and spot >= plan["target"]) or (not long_ and spot <= plan["target"])):
-        return f"Index target ({plan.get('rr', C.RR_TARGET):g}R) hit", upd
+    if plan.get("target") is not None and not pos.get("target_hit") and ((long_ and hi_e >= plan["target"]) or (not long_ and lo_e <= plan["target"])):
+        if plan.get("after_trail_pts"):                      # custom strategy: ride the move, lock profit behind the target and trail
+            lock = plan["target"] - (1 if long_ else -1) * plan["after_trail_pts"]
+            upd.update({"target_hit": True, "live_sl": max(sl, lock) if long_ else min(sl, lock),
+                        "best_spot": max(hi_e, plan["target"]) if long_ else min(lo_e, plan["target"])})
+            return None, upd                                 # the trailing stop takes over from the next check
+        else:
+            if fixed and not ((long_ and spot >= plan["target"]) or (not long_ and spot <= plan["target"])):
+                upd["_level"] = plan["target"]
+            return f"Index target ({plan.get('rr', C.RR_TARGET):g}R) hit", upd
     if is_custom:                                    # trail / break-even / time stop / opposite signal from the strategy's own rules
         from . import custom as CU
         why, up2 = CU.custom_exit(pos, spot, now, state)
