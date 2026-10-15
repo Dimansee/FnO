@@ -1,0 +1,460 @@
+{
+ "base": {
+  "n": 872,
+  "net_k": 255.7,
+  "train_k": 178.2,
+  "unseen_k": 77.5,
+  "pf": 1.34,
+  "win": 29.8,
+  "dd_k": -52.7,
+  "yrs": {
+   "2023": 31.6,
+   "2024": 98.4,
+   "2025": 20.9,
+   "2026": 104.8
+  }
+ },
+ "slip": {
+  "0.005": {
+   "n": 872,
+   "net_k": 255.7,
+   "train_k": 178.2,
+   "unseen_k": 77.5,
+   "pf": 1.34,
+   "win": 29.8,
+   "dd_k": -52.7,
+   "yrs": {
+    "2023": 31.6,
+    "2024": 98.4,
+    "2025": 20.9,
+    "2026": 104.8
+   }
+  },
+  "0.01": {
+   "n": 856,
+   "net_k": 129.3,
+   "train_k": 78.6,
+   "unseen_k": 50.7,
+   "pf": 1.16,
+   "win": 27.3,
+   "dd_k": -73.7,
+   "yrs": {
+    "2023": 0.9,
+    "2024": 66.1,
+    "2025": -4.6,
+    "2026": 67.0
+   }
+  },
+  "0.015": {
+   "n": 831,
+   "net_k": 16.0,
+   "train_k": -22.2,
+   "unseen_k": 38.2,
+   "pf": 1.02,
+   "win": 26.2,
+   "dd_k": -105.9,
+   "yrs": {
+    "2023": -26.0,
+    "2024": 45.0,
+    "2025": -51.0,
+    "2026": 48.0
+   }
+  },
+  "0.02": {
+   "n": 818,
+   "net_k": -72.5,
+   "train_k": -82.0,
+   "unseen_k": 9.5,
+   "pf": 0.92,
+   "win": 25.3,
+   "dd_k": -156.7,
+   "yrs": {
+    "2023": -47.0,
+    "2024": 31.6,
+    "2025": -72.1,
+    "2026": 15.1
+   }
+  },
+  "0.03": {
+   "n": 764,
+   "net_k": -271.9,
+   "train_k": -242.6,
+   "unseen_k": -29.4,
+   "pf": 0.72,
+   "win": 22.8,
+   "dd_k": -319.1,
+   "yrs": {
+    "2023": -80.8,
+    "2024": -53.8,
+    "2025": -111.5,
+    "2026": -25.9
+   }
+  }
+ },
+ "conc": {
+  "without best 1": 238.9,
+  "without best 5": 184.8,
+  "without best 10": 122.3,
+  "without best 20": 12.9,
+  "total_k": 255.7,
+  "best20_share_%": 95.0
+ },
+ "plateau": {
+  "noise mult 1.5 / stop 1.5": {
+   "noise_k": 12.3,
+   "n": 346,
+   "yrs": {
+    "2023": -11.1,
+    "2024": 29.0,
+    "2025": 26.8,
+    "2026": -32.4
+   }
+  },
+  "noise mult 1.5 / stop 2.0": {
+   "noise_k": 74.2,
+   "n": 337,
+   "yrs": {
+    "2023": -18.0,
+    "2024": 64.0,
+    "2025": 29.8,
+    "2026": -1.7
+   }
+  },
+  "noise mult 1.5 / stop 2.5": {
+   "noise_k": 27.0,
+   "n": 308,
+   "yrs": {
+    "2023": -24.9,
+    "2024": 67.2,
+    "2025": 1.7,
+    "2026": -17.0
+   }
+  },
+  "noise mult 1.75 / stop 1.5": {
+   "noise_k": 24.9,
+   "n": 275,
+   "yrs": {
+    "2023": -0.4,
+    "2024": 13.4,
+    "2025": 19.0,
+    "2026": -7.1
+   }
+  },
+  "noise mult 1.75 / stop 2.0": {
+   "noise_k": 89.2,
+   "n": 267,
+   "yrs": {
+    "2023": -9.1,
+    "2024": 54.7,
+    "2025": 21.5,
+    "2026": 22.1
+   }
+  },
+  "noise mult 1.75 / stop 2.5": {
+   "noise_k": 62.3,
+   "n": 232,
+   "yrs": {
+    "2023": -7.7,
+    "2024": 54.4,
+    "2025": 12.9,
+    "2026": 2.7
+   }
+  },
+  "noise mult 2.0 / stop 1.5": {
+   "noise_k": 44.1,
+   "n": 221,
+   "yrs": {
+    "2023": -4.6,
+    "2024": 11.2,
+    "2025": 24.3,
+    "2026": 13.1
+   }
+  },
+  "noise mult 2.0 / stop 2.0": {
+   "noise_k": 63.7,
+   "n": 208,
+   "yrs": {
+    "2023": -12.5,
+    "2024": 36.0,
+    "2025": 21.6,
+    "2026": 18.6
+   }
+  },
+  "noise mult 2.0 / stop 2.5": {
+   "noise_k": 78.9,
+   "n": 184,
+   "yrs": {
+    "2023": -11.0,
+    "2024": 62.5,
+    "2025": 17.6,
+    "2026": 9.8
+   }
+  }
+ },
+ "vixceil": {
+  "noise<14 cam<=16": {
+   "net_k": 202.1,
+   "unseen_k": 40.2,
+   "dd_k": -52.7
+  },
+  "noise<14 cam<=18": {
+   "net_k": 203.2,
+   "unseen_k": 34.5,
+   "dd_k": -53.7
+  },
+  "noise<14 cam<=20": {
+   "net_k": 230.0,
+   "unseen_k": 56.8,
+   "dd_k": -59.5
+  },
+  "noise<14 cam<=22": {
+   "net_k": 221.5,
+   "unseen_k": 56.8,
+   "dd_k": -59.5
+  },
+  "noise<14 cam<=99": {
+   "net_k": 221.5,
+   "unseen_k": 56.8,
+   "dd_k": -59.5
+  },
+  "noise<16 cam<=16": {
+   "net_k": 232.2,
+   "unseen_k": 62.9,
+   "dd_k": -52.7
+  },
+  "noise<16 cam<=18": {
+   "net_k": 233.3,
+   "unseen_k": 57.2,
+   "dd_k": -52.7
+  },
+  "noise<16 cam<=20": {
+   "net_k": 260.1,
+   "unseen_k": 79.5,
+   "dd_k": -55.0
+  },
+  "noise<16 cam<=22": {
+   "net_k": 251.6,
+   "unseen_k": 79.5,
+   "dd_k": -55.0
+  },
+  "noise<16 cam<=99": {
+   "net_k": 251.6,
+   "unseen_k": 79.5,
+   "dd_k": -55.0
+  },
+  "noise<18 cam<=16": {
+   "net_k": 227.8,
+   "unseen_k": 60.9,
+   "dd_k": -52.7
+  },
+  "noise<18 cam<=18": {
+   "net_k": 228.9,
+   "unseen_k": 55.2,
+   "dd_k": -52.7
+  },
+  "noise<18 cam<=20": {
+   "net_k": 255.7,
+   "unseen_k": 77.5,
+   "dd_k": -52.7
+  },
+  "noise<18 cam<=22": {
+   "net_k": 247.2,
+   "unseen_k": 77.5,
+   "dd_k": -52.7
+  },
+  "noise<18 cam<=99": {
+   "net_k": 247.2,
+   "unseen_k": 77.5,
+   "dd_k": -52.7
+  },
+  "noise<20 cam<=16": {
+   "net_k": 221.8,
+   "unseen_k": 44.0,
+   "dd_k": -52.7
+  },
+  "noise<20 cam<=18": {
+   "net_k": 222.9,
+   "unseen_k": 38.3,
+   "dd_k": -52.7
+  },
+  "noise<20 cam<=20": {
+   "net_k": 253.7,
+   "unseen_k": 64.6,
+   "dd_k": -54.1
+  },
+  "noise<20 cam<=22": {
+   "net_k": 245.2,
+   "unseen_k": 64.6,
+   "dd_k": -54.1
+  },
+  "noise<20 cam<=99": {
+   "net_k": 245.2,
+   "unseen_k": 64.6,
+   "dd_k": -54.1
+  },
+  "noise<22 cam<=16": {
+   "net_k": 217.8,
+   "unseen_k": 44.0,
+   "dd_k": -52.7
+  },
+  "noise<22 cam<=18": {
+   "net_k": 218.9,
+   "unseen_k": 38.3,
+   "dd_k": -52.7
+  },
+  "noise<22 cam<=20": {
+   "net_k": 249.7,
+   "unseen_k": 64.6,
+   "dd_k": -54.1
+  },
+  "noise<22 cam<=22": {
+   "net_k": 241.2,
+   "unseen_k": 64.6,
+   "dd_k": -54.1
+  },
+  "noise<22 cam<=99": {
+   "net_k": 241.2,
+   "unseen_k": 64.6,
+   "dd_k": -54.1
+  },
+  "noise<99 cam<=16": {
+   "net_k": 211.3,
+   "unseen_k": 44.0,
+   "dd_k": -52.7
+  },
+  "noise<99 cam<=18": {
+   "net_k": 212.5,
+   "unseen_k": 38.3,
+   "dd_k": -52.7
+  },
+  "noise<99 cam<=20": {
+   "net_k": 243.3,
+   "unseen_k": 64.6,
+   "dd_k": -54.1
+  },
+  "noise<99 cam<=22": {
+   "net_k": 234.8,
+   "unseen_k": 64.6,
+   "dd_k": -54.1
+  },
+  "noise<99 cam<=99": {
+   "net_k": 234.8,
+   "unseen_k": 64.6,
+   "dd_k": -54.1
+  }
+ },
+ "sizing": {
+  "20000|fixed 1 lot": {
+   "median_end": 70518,
+   "p5_end": 4025,
+   "p_below_start": 35,
+   "p_50pct_fall": 45,
+   "p_ruin": 4
+  },
+  "20000|1 lot, skip if one lot risks >15%": {
+   "median_end": 61689,
+   "p5_end": 6345,
+   "p_below_start": 40,
+   "p_50pct_fall": 45,
+   "p_ruin": 0
+  },
+  "20000|compound lots (1% risk, whole lots, min 1 if <=15%)": {
+   "median_end": 61689,
+   "p5_end": 6345,
+   "p_below_start": 40,
+   "p_50pct_fall": 45,
+   "p_ruin": 0
+  },
+  "20000|same + halve size when 10% below peak": {
+   "median_end": 61689,
+   "p5_end": 6345,
+   "p_below_start": 40,
+   "p_50pct_fall": 45,
+   "p_ruin": 0
+  },
+  "50000|fixed 1 lot": {
+   "median_end": 119775,
+   "p5_end": 11067,
+   "p_below_start": 11,
+   "p_50pct_fall": 20,
+   "p_ruin": 6
+  },
+  "50000|1 lot, skip if one lot risks >15%": {
+   "median_end": 119775,
+   "p5_end": 8656,
+   "p_below_start": 11,
+   "p_50pct_fall": 20,
+   "p_ruin": 6
+  },
+  "50000|compound lots (1% risk, whole lots, min 1 if <=15%)": {
+   "median_end": 119775,
+   "p5_end": 8656,
+   "p_below_start": 11,
+   "p_50pct_fall": 20,
+   "p_ruin": 6
+  },
+  "50000|same + halve size when 10% below peak": {
+   "median_end": 119775,
+   "p5_end": 8656,
+   "p_below_start": 11,
+   "p_50pct_fall": 20,
+   "p_ruin": 6
+  },
+  "100000|fixed 1 lot": {
+   "median_end": 169943,
+   "p5_end": 85613,
+   "p_below_start": 9,
+   "p_50pct_fall": 4,
+   "p_ruin": 1
+  },
+  "100000|1 lot, skip if one lot risks >15%": {
+   "median_end": 169943,
+   "p5_end": 85613,
+   "p_below_start": 9,
+   "p_50pct_fall": 4,
+   "p_ruin": 1
+  },
+  "100000|compound lots (1% risk, whole lots, min 1 if <=15%)": {
+   "median_end": 169322,
+   "p5_end": 85613,
+   "p_below_start": 9,
+   "p_50pct_fall": 4,
+   "p_ruin": 1
+  },
+  "100000|same + halve size when 10% below peak": {
+   "median_end": 169538,
+   "p5_end": 85613,
+   "p_below_start": 9,
+   "p_50pct_fall": 4,
+   "p_ruin": 1
+  },
+  "200000|fixed 1 lot": {
+   "median_end": 269943,
+   "p5_end": 185613,
+   "p_below_start": 9,
+   "p_50pct_fall": 0,
+   "p_ruin": 0
+  },
+  "200000|1 lot, skip if one lot risks >15%": {
+   "median_end": 269943,
+   "p5_end": 185613,
+   "p_below_start": 9,
+   "p_50pct_fall": 0,
+   "p_ruin": 0
+  },
+  "200000|compound lots (1% risk, whole lots, min 1 if <=15%)": {
+   "median_end": 261784,
+   "p5_end": 183370,
+   "p_below_start": 9,
+   "p_50pct_fall": 0,
+   "p_ruin": 0
+  },
+  "200000|same + halve size when 10% below peak": {
+   "median_end": 262523,
+   "p5_end": 184746,
+   "p_below_start": 9,
+   "p_50pct_fall": 0,
+   "p_ruin": 0
+  }
+ }
+}
