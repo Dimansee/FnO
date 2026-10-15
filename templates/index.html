@@ -2224,6 +2224,8 @@ const GLOSS = [
   ["Bid-ask spread", "The gap between the price buyers offer (bid) and sellers ask. You buy at the ask and sell at the bid, so a wide gap is an instant loss. The app skips strikes where the gap is over 10%.", "Bid 80, ask 100 → a 20% gap: you lose 20% the moment you enter."],
   ["Autopilot", "A single Settings switch. ON: the app picks instruments, strategies, option strike, lot count (from current equity) and limits itself using the tested rules, and trades automatically. OFF: it uses your own preferences.", ""],
   ["Compounding", "Reinvesting profits so the next trade is sized on a bigger account. Autopilot recalculates lots from current equity before every trade.", "Equity ₹20,000 → 1 lot. When equity reaches ~₹3 lakh, 1% risk allows 2 lots."],
+  ["Partial exit (scale-out)", "Selling part of the position at a first target and leaving the rest to run with a protected stop. Needs several lots to split.", "3 lots: sell 1 at +1.5R, 1 at +3R, trail the last."],
+  ["Re-entry", "Taking a new trade in the same direction after the first one ended. The rules allow one trade per strategy per index per day; testing showed re-entry after a stop-out lowers profit.", ""],
   ["Weekly loss limit", "After losing 4% of capital in a week, the app stops new trades until Monday - a circuit-breaker against bad streaks.", ""],
   ["NSE holiday", "A weekday when the exchange is closed. The app does nothing on those days.", ""],
   ["Open interest (OI), PCR, max pain", "OI = number of contracts still open. PCR = puts ÷ calls open. Max pain = the strike where option buyers lose most. We show them only as background - they never trigger a trade.", ""],
@@ -2298,7 +2300,7 @@ function renderRules() {
   <h4>1.2 · Entry – only on the half hour (09:45, 10:15 … 14:15)</h4>
   <ul><li><b>BUY CALL</b> when the 5-minute close at a check is above the upper band <b>and</b> above VWAP. <b>BUY PUT</b> when it is below the lower band <b>and</b> below VWAP.</li>
   <li>The signal can be taken for ${r.SIGNAL_VALID_MIN} minutes after the check if price is still beyond the band.</li>
-  <li>No trades when India VIX is below ${r.VIX_MIN} (moves too small to pay for an option) or at ${r.NOISE_VIX_MAX} and above (fear spikes: in testing, Noise trades with VIX 16+ lost money; a ceiling of ${r.NOISE_VIX_MAX} raised unseen-period profit from ₹60.6k to ₹77.5k). <b>One trade per instrument per day.</b></li>
+  <li>No trades when India VIX is below ${r.VIX_MIN} (moves too small to pay for an option) or at ${r.NOISE_VIX_MAX} and above (fear spikes: in testing, Noise trades with VIX 16+ lost money; a ceiling of ${r.NOISE_VIX_MAX} raised unseen-period profit from ₹60.6k to ₹77.5k). <b>One trade per instrument per day</b> - this is deliberate: in testing, allowing a second trade after a stop-out cut 3¾-year profit from ₹256k to ₹219k (profit factor 1.34 → 1.24). See Part 4.4.</li>
   <li><b>How to enter:</b> within 1-2 minutes of the signal. On real 1-minute prices a minute's delay made no measurable difference.</li></ul>
   <h4>1.3 · Exit – decided before you enter (all on the index price)</h4>
   <ul><li><b>Stop-loss:</b> ${r.STOP_ATR} × ATR(14) of the 5-minute chart away from entry. <b>Target:</b> ${r.RR_NOISE} × that risk.</li>
@@ -2334,7 +2336,13 @@ function renderRules() {
   <h4>4.2 · Calendar rule</h4>
   <ul><li><b>Sit out NSE holidays</b> – the app does nothing on exchange holidays (the 2026 list is built in; it must be extended each December).</li>
   <li><b>Sit out Union Budget day</b> – the app blocks new signals then (every Budget day in the 2023-26 test lost). Expiry days are fine to trade: Bank Nifty lost on its old weekly expiry days, but that effect hasn't shown up since it became monthly-only in Nov 2024.</li></ul>
-  <h4>4.3 · Don't tinker</h4>
+  <h4>4.3 · Ideas tested and not adopted (round 21)</h4>
+  <ul><li><b>Re-entry after a stop-out:</b> a second trade on the same rule and index the same day lowered profit (₹256k → ₹219k). Re-entry only after a first trade that did <i>not</i> lose looked slightly better on profit (₹263k) and the deepest fall (₹53k → ₹42k) but was mixed across years, so it stays on the watch-list.</li>
+  <li><b>Several targets / partial exits:</b> taking half at 2R and trailing the rest cut the deepest fall (₹44k → ₹31k) but also cut profit (₹193k → ₹184k) and unseen-period profit (₹57k → ₹43k); taking a third at 1.5R, a third at 3R and trailing the last third was worse still. It also needs at least 2-3 lots, which small accounts do not have.</li>
+  <li><b>More lots on "strong" signals:</b> no indicator reliably tells a likely winner from a loser (win rates 25-34% whichever way the indicators lean). Sizing up the top third by a score picked from earlier years gave ₹312k versus ₹312k for sizing up a random third - no edge beyond simply taking more risk.</li>
+  <li><b>Extra indicator filters</b> (previous-day range, Bollinger width, 15-minute supertrend, RSI, VIX level and others): each one cut total profit (₹255k → ₹128-241k).</li>
+  <li><b>Liquidity:</b> index prices have no volume, and option open interest and volume history exists only for the days the recorder has run, so this cannot be tested yet. The spread check (Part 3) is the liquidity safeguard in the meantime.</li></ul>
+  <h4>4.4 · Don't tinker</h4>
   <ul><li>Keep the stop where it is. Moving it 25-50% wider or 25% tighter both earned less in testing, and fixed profit-booking at +80/+100/+120 Nifty points earned less than letting winners run.</li>
   <li>Don't re-tune the settings every month to the latest winners – that did worse than one robust setting. The market score (global cues, news, PCR, FII) is context only; using it as a filter reduced profit.</li></ul>
 

@@ -3,6 +3,61 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r21a",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 21: can we measure how likely a trade is to win?",
+   "asked": "Do indicators at the entry (trend strength, RSI, supertrend, EMA stack, VIX, previous-day range, Bollinger width, gap, band distance...) separate winners from losers?",
+   "result": "Win rates only moved between about 25% and 34% whichever side an indicator leaned. The most consistent were previous-day range (34% vs 26% win, better in 4 of 4 years), Bollinger width, 'beyond previous high/low' and 15-minute supertrend (3 of 4 years). Others flipped between years (ADX was worse when high in 4 of 4 years).",
+   "decision": "Not adopted",
+   "summary": "Differences are small and unstable; no indicator gives a reliable win probability for a single trade.",
+   "period": "2023-01 to 2026-10, both indices, current rules (872 trades; some tests 668-1,087 as stated)"
+  },
+  {
+   "id": "r21b",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 21: more lots when the signal is strong",
+   "asked": "If a strength score picks the best third of trades, does doubling the size on them beat doubling a random third?",
+   "result": "Walk-forward on 2024-26, features chosen only from earlier years: base ₹224k; 2x on the strongest third ₹312k; 2x on a random third (200 shuffles) ₹312k. Filters alone (skip the weaker side of one indicator) cut profit in every case: ₹255.7k → ₹127-241k, and unseen-period profit ₹77.5k → ₹26-54k.",
+   "decision": "Not adopted",
+   "summary": "The score adds nothing beyond taking more risk. Size stays risk-based, not strength-based.",
+   "period": "2023-01 to 2026-10, both indices, current rules (872 trades; some tests 668-1,087 as stated)"
+  },
+  {
+   "id": "r21c",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 21: several targets, partial exits and trailing",
+   "asked": "Does selling in parts (1.5R / 2R / 3R) and trailing the rest beat the current single exit?",
+   "result": "Baseline for this test ₹192.7k, deepest fall ₹43.8k. 1/2 at 2R + 1/2 current exit: ₹184.1k, fall ₹30.9k, unseen ₹42.5k vs ₹57.3k. 1/2 at 2R with stop to entry after 2R: ₹174.0k, fall ₹30.6k. 1/3 at 1.5R + 1/3 at 3R + 1/3 current: ₹143.3k. 1/2 at 1.5R: ₹145.9k. Single 2R target for all: ₹149.7k. All splits need 2-3+ lots.",
+   "decision": "Not adopted",
+   "summary": "Partial exits lower the deepest fall but cost 4-25% of the profit; the current exit (stop to entry at +1R, noise-band / VWAP trailing exit, time stop) earned the most.",
+   "period": "2023-01 to 2026-10, both indices, current rules (872 trades; some tests 668-1,087 as stated)"
+  },
+  {
+   "id": "r21d",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 21: re-entry (more than one trade per rule per index per day)",
+   "asked": "Is the one-trade-per-day rule costing profit? Should a second signal be taken after a stop-out?",
+   "result": "Current rule: ₹255.7k, fall ₹52.7k. Two trades per rule per day: 1,087 trades, ₹219.1k, profit factor 1.24, fall ₹55.1k. A second trade only if the first did not lose: 903 trades, ₹263.0k, unseen ₹73.4k (vs ₹77.5k), fall ₹41.8k; better in 2024 and 2025, worse in 2023 and 2026.",
+   "decision": "Watch-list",
+   "summary": "The one-trade rule is deliberate and holds up. Re-entry after a loss is worse; re-entry after a non-losing first trade is promising on the deepest fall but mixed on profit - recheck with more live data.",
+   "period": "2023-01 to 2026-10, both indices, current rules (872 trades; some tests 668-1,087 as stated)"
+  },
+  {
+   "id": "r21e",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 21: liquidity and volume indicators",
+   "asked": "Can volume and open interest be used to judge the market?",
+   "result": "Index candles carry no volume; the only option liquidity history (open interest, bid/ask) comes from the live recorder, which has too few days for a test. The 10% spread check was added as a safeguard.",
+   "decision": "Watch-list",
+   "summary": "Re-test once the recorder has about 60+ trading days of option-chain snapshots.",
+   "period": "2023-01 to 2026-10, both indices, current rules (872 trades; some tests 668-1,087 as stated)"
+  },
+  {
    "id": "r20a",
    "date": "2026-10-15",
    "area": "Index options",
