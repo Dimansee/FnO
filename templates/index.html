@@ -340,6 +340,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
       <button data-t="recs">⭐ Recommendations</button>
       <button data-t="stockrules">📕 Stock rule book</button>
       <button data-t="rules">📘 Options rulebook</button>
+      <button data-t="glossary">📖 Glossary</button>
       <button data-t="settings">⚙️ Settings</button>
       <span class="ink" id="ink"></span>
     </nav>
@@ -529,6 +530,9 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
     <div id="stBody"></div>
   </section>
   <section id="t-recs" class="hidden"><div id="recsBody"></div></section>
+  <section id="t-glossary" class="hidden"><div class="card"><h3 style="font-size:19px">Glossary - every term in simple words</h3>
+    <p class="muted" style="margin-top:0">Plain-language meanings of the words used across the app, with small examples. Type to search.</p>
+    <input id="glQ" placeholder="Search a word, e.g. noise, VWAP, circuit" style="width:100%;margin:6px 0"></div><div id="glList"></div></section>
   <section id="t-stockrules" class="hidden"><div class="card rule" id="stockRulebook"></div></section>
   <section id="t-rules" class="hidden"><div class="card rule" id="rulebook"></div></section>
 
@@ -643,7 +647,7 @@ async function start() {
   const opts = S.meta.symbols.map(s => `<option value="${s.id}">${esc(s.label)}</option>`).join("");
   $("#symbol").innerHTML = opts; $("#btSym").innerHTML = opts;
   $("#symbol").value = S.symbol; $("#btSym").value = S.symbol;
-  renderRules(); renderStockRules();
+  renderRules(); renderStockRules(); renderGlossary(); $("#glQ").oninput = renderGlossary;
   const q = new URLSearchParams(location.search);
   if (q.get("msg")) { toast(q.get("msg"), 6000); history.replaceState(null, "", location.pathname + location.hash); }
   go((location.hash || "#signal").slice(1));
@@ -2201,44 +2205,59 @@ $("#logout").onclick = async () => { await post("/api/logout"); location.reload(
 
 /* ---------- rulebook ---------- */
 
-const GLOSS = {
- opt: [
-  ["Noise area / noise band", "The zone around today's opening price that the index normally stays inside. Its width at each time of day is 1.75 × the typical distance the index has moved from its open at that same time, averaged over the last 14 sessions. A close outside the band means the move is bigger than usual noise, so a trend is more likely. Drawn on the Signal chart."],
-  ["VWAP", "Volume-weighted average price of the day so far - the day's 'fair price'. Calls need price above it, puts below it."],
-  ["Camarilla levels (H3/H4, L3/L4)", "Support and resistance lines calculated from yesterday's high, low and close. H4 and L4 are the outer breakout lines Strategy B trades; H3 and L3 are the inner ones."],
-  ["ATR (14, 5-min)", "Average True Range: the average size of the last 14 five-minute candles. The stop is set 2 × ATR away so normal wiggles don't stop you out."],
-  ["R (risk multiple)", "Your planned loss on a trade. 1R = the loss if the stop is hit; a 4R target earns four times that. '+2R' means a profit of twice the risk."],
-  ["India VIX", "The market's fear gauge (expected volatility). Below 11 the app takes no trades: moves are too small to pay for the option's cost."],
-  ["IV (implied volatility)", "The volatility priced into an option. High IV makes options expensive; it usually falls after big events (IV crush) even if the index moves your way."],
-  ["ATM / ITM / OTM", "At / in / out of the money: strike equal to, better than, or worse than the current index level. ATM options move the most per rupee spent; far OTM are cheap but rarely pay."],
-  ["Premium", "The price of the option. Your maximum loss as a buyer is the premium paid × lot size."],
-  ["Lot size", "The fixed quantity per contract (currently 65 for Nifty, 30 for Bank Nifty - the exchange can change it). P&L = premium change × lot size × lots."],
-  ["Expiry / time decay (theta)", "Options lose value every hour they are held, faster near expiry. A sideways day loses money even if the index ends flat."],
-  ["PCR, OI, max pain", "Put/Call Ratio, Open Interest (open contracts) and the strike where option buyers lose the most. Shown as context only - they are NOT used to trigger trades."],
-  ["Profit factor (PF)", "Total profit of winning trades ÷ total loss of losing trades. Above 1 = making money; 1.5+ is healthy."],
-  ["Win rate", "Share of trades that closed in profit. Low win rate is fine if winners are much bigger than losers (here ~30% wins at up to 4R)."],
-  ["Max drawdown / deepest fall", "Largest drop from a peak in account value to the next low. It tells you how much pain to expect."],
-  ["Sharpe", "Return per unit of ups and downs. Higher is smoother; below 1 is bumpy."],
-  ["Slippage and costs", "The gap between the price you see and the price you get, plus brokerage, taxes and charges. All backtests here include them."],
-  ["Unseen days / walk-forward", "Unseen days were kept aside and never used to choose the rules - the honest test. Walk-forward re-picks the settings every 30 days from earlier data and trades the next 30 days blind."],
-  ["Paper trade", "A simulated trade with no real money, recorded exactly as a real one would be, to check the rules live before risking cash."]
- ],
- stk: [
-  ["3-day drop", "The stock has fallen by more than 10% over the last 3 trading days (7-10% = 'near' tier)."],
-  ["200-day average", "The average closing price of the last 200 days. A stock above it is in a long-term uptrend; the rule only buys dips in uptrends."],
-  ["Turnover", "Rupees traded in a day (price × volume). The rule needs at least ₹1 crore so you can get in and out."],
-  ["Lower / upper circuit", "The exchange's daily price limit (5, 10 or 20%). A stock locked at its lower circuit has only sellers - you cannot sell it, so the app skips those."],
-  ["Gap up / gap down", "Opening price well above/below yesterday's close. Tested: gap-ups did not hurt the rule."],
-  ["52-week high breakout", "Close above the highest price of the last year on heavy volume (a 'breakout' tier idea; weak in live results)."],
-  ["Buy at next open, +5% limit, exit after 5 closes", "The tested trade: buy at tomorrow's open, sell at +5% if reached, otherwise at the 5th close after entry."],
-  ["Tiers (rule / near / breakout / down)", "Rule = fully tested pattern. Near = similar but smaller drop. Breakout and down = weaker ideas shown for information."],
-  ["Backtest hit rate vs live", "Backtest is on past data; live is what happened after the app published picks. Live results are the ones to trust more."],
-  ["Delivery (cash) trade", "You buy shares outright with no borrowed money. Different from F&O, which uses leverage."]
- ]
-};
-function glossaryHTML(k) {
-  return `<h4>Glossary - terms used in this tab and the app</h4><div class="tablewrap"><table class="prose">` +
-    GLOSS[k].map(([t, d]) => `<tr><td style="width:28%"><b>${esc(t)}</b></td><td>${esc(d)}</td></tr>`).join("") + `</table></div>`;
+const GLOSS = [
+ ["Index options (Nifty and Bank Nifty)", [
+  ["Option", "A contract that lets you profit if the market moves your way, while your loss is limited to what you paid. A CALL gains when the market goes UP, a PUT gains when it goes DOWN.", "You buy a Nifty call for ₹100. If Nifty rises, it may become ₹140. If Nifty falls, it may drop to ₹0 - you lose at most the ₹100."],
+  ["Premium", "The price of the option - what you pay to buy it.", "Premium ₹100 × lot size 65 = ₹6,500 is the most you can lose on that trade."],
+  ["Lot size", "Options are sold in fixed bundles, not one at a time. Nifty is currently 65, Bank Nifty 30 (the exchange can change this).", "Premium moves ₹10 on a Nifty lot → ₹650 profit or loss."],
+  ["Strike: ATM / ITM / OTM", "The strike is the index level the option is based on. ATM = at the current level (moves the most per rupee). ITM = already in profit side (costlier). OTM = needs a bigger move (cheap but rarely pays).", "Nifty at 25,000: the 25,000 option is ATM, 25,500 call is OTM."],
+  ["Expiry", "The date the option stops existing. Nifty has weekly expiry, Bank Nifty monthly. Near expiry options are cheap but die fast.", ""],
+  ["Time decay (theta)", "An option loses a little value every hour just because time passes. A sideways day loses money for the buyer even if the index ends where it started.", "This is why the app exits by 15:15 and avoids slow, flat days."],
+  ["IV (implied volatility)", "How big a move the market expects, already priced into the option. High IV = expensive options. It often drops after big news, hurting buyers even when the index moves their way.", ""],
+  ["India VIX", "The market's 'fear meter'. High = big swings expected. The app takes no trades when VIX is below 11, because small moves cannot pay for the option's price.", ""],
+  ["Open interest (OI), PCR, max pain", "OI = number of contracts still open. PCR = puts ÷ calls open. Max pain = the strike where option buyers lose most. We show them only as background - they never trigger a trade.", ""],
+ ]],
+ ["How the signals work", [
+  ["Noise area / noise band", "The zone the index normally stays inside during the day, built around today's opening price. At each time of day its width is 1.75 × the typical distance the index has moved from its open at that same time, averaged over the last 14 days. Small wiggles inside = 'noise'. A close outside = a bigger-than-usual move, so a real trend is more likely.", "Open 25,000, typical move by 11:00 is 60 points → band ≈ 24,895 to 25,105. A 5-minute close at 25,120 (and above VWAP) → buy a CALL."],
+  ["VWAP", "Today's average price, weighted by how much traded at each price - the day's 'fair price'. Price above it = buyers in control, below = sellers.", "Calls need price above VWAP, puts below."],
+  ["Camarilla levels (H3, H4, L3, L4)", "Support and resistance lines worked out from yesterday's high, low and close. H4 (top) and L4 (bottom) are breakout lines: a candle closing beyond them is Strategy B's signal. H3 and L3 are the inner lines.", ""],
+  ["ATR (14, 5-minute)", "Average True Range: how far a typical 5-minute candle travels. The stop-loss is set 2 × ATR away so ordinary wiggles don't knock you out.", ""],
+  ["R (risk unit)", "1R = the amount you lose if the stop-loss is hit. Profits are counted the same way, so trades are comparable.", "Target 4R means: if you risk ₹1,000, you aim to make ₹4,000."],
+  ["Stop-loss / target / trailing exit", "Stop-loss: automatic exit that limits the loss. Target: automatic exit that books profit. Trailing exit: the stop follows the price up so profit is protected.", ""],
+  ["Strategy A and B", "A = Noise-Area Momentum (follows breakouts from the noise band). B = Camarilla breakout (follows breaks of the H4/L4 lines). Running two different ones side by side helped in testing.", ""],
+ ]],
+ ["Results and testing", [
+  ["Backtest", "Running the rules on past market data to see how they would have done. Useful but optimistic - real life has slippage and surprises.", ""],
+  ["Paper trade", "A practice trade with no real money, recorded exactly like a real one, to check the rules live before risking cash.", "The app recommends 30+ paper trades before going live."],
+  ["Win rate", "Share of trades that made money. A low win rate is fine if winners are much bigger than losers.", "These strategies win ~30% of the time but make money because winners are up to 4× the losers."],
+  ["Profit factor (PF)", "Total profit ÷ total loss. Above 1 you are making money; 1.5 or more is healthy.", "Won ₹30,000, lost ₹20,000 → PF 1.5."],
+  ["Max drawdown / deepest fall", "The biggest fall from a high point of your account to the next low. It shows how much pain to expect on the way.", ""],
+  ["Sharpe ratio", "Profit compared to how bumpy the ride was. Higher is smoother; under 1 is bumpy.", ""],
+  ["Slippage and costs", "Slippage = getting a slightly worse price than you saw. Costs = brokerage, taxes, exchange charges. Every backtest here includes both.", ""],
+  ["Unseen days", "Days kept aside and never used while designing the rules - the honest test of whether a rule works on new data.", ""],
+  ["Walk-forward", "Every 30 days the best setting is re-chosen using earlier data, then traded blind on the next 30 days. Mimics real life.", ""],
+ ]],
+ ["Stocks and Recommendations", [
+  ["Recommendation tiers", "Rule = the fully tested pattern. Near = same idea with a smaller drop. Breakout and Down = weaker ideas shown for information only.", "Live record so far: Rule 51% winners, Near 59%, Breakout 22%."],
+  ["3-day drop", "The stock has fallen more than 10% in 3 trading days (7-10% is the 'near' tier). The rule bets on a bounce.", ""],
+  ["200-day average", "The average closing price over the last 200 days. Above it = long-term uptrend. The rule only buys dips in uptrends.", ""],
+  ["Turnover", "Rupees traded in a day (price × shares traded). The rule needs ₹1 crore or more, so you can enter and leave easily.", ""],
+  ["Lower / upper circuit", "The exchange's daily price limit (5%, 10% or 20%). When a stock hits the lower circuit there are only sellers, so you cannot sell it. The app now skips such stocks and flags them live.", "Bought on the lower circuit → you may be stuck for days."],
+  ["Gap up / gap down", "Opening price well above or below yesterday's close.", "Tested: gap-ups did not hurt the rule."],
+  ["52-week-high breakout", "Close above the highest price of the past year on heavy volume. Weak in live results so far.", ""],
+  ["The tested trade", "Buy at the next day's open, sell at +5% if reached, otherwise sell at the 5th close after entry.", ""],
+  ["Delivery (cash) trade", "You buy shares outright with your own money, no borrowing. Different from options, which are leveraged.", ""],
+  ["Backtest vs live hit rate", "Backtest = past data (64% for the Rule tier). Live = what really happened after the app published picks (51%). Trust live numbers more.", ""],
+ ]],
+];
+function renderGlossary() {
+  const q = ($("#glQ").value || "").trim().toLowerCase();
+  let n = 0;
+  $("#glList").innerHTML = GLOSS.map(([g, items]) => {
+    const f = items.filter(x => !q || x.join(" ").toLowerCase().includes(q));
+    n += f.length;
+    return f.length ? `<h4 style="margin:18px 0 8px">${esc(g)}</h4>` + f.map(([t, d, e]) => `<div class="card" style="margin-bottom:8px"><b>${esc(t)}</b><p style="margin:4px 0">${esc(d)}</p>${e ? `<p class="muted" style="margin:0"><i>Example:</i> ${esc(e)}</p>` : ""}</div>`).join("") : "";
+  }).join("") || '<div class="muted">No term matches.</div>';
 }
 function renderRules() {
   const r = S.meta.rules, pct = v => Math.round(v * 100) + "%";
@@ -2319,7 +2338,8 @@ function renderRules() {
   <li>Stacking more indicators on one signal did <b>not</b> raise accuracy; running two <i>different</i> strategies side by side helped.</li></ul>
   <h4>6.2 · Before real money</h4>
   <ul><li>Move to real money only after <b>30+ paper trades</b> that look like the backtest, and start with 1 lot.</li>
-  <li>Profit is measured on the <b>option premium</b>, checked against real NSE option prices. The full evidence, with the date of each study, is in the <b>Research</b> tab.</li></ul>` + glossaryHTML("opt");
+  <li>Profit is measured on the <b>option premium</b>, checked against real NSE option prices. The full evidence, with the date of each study, is in the <b>Research</b> tab.</li></ul>
+  <p class="muted">Not sure what a word means (noise band, R, VWAP, profit factor...)? See the <b>Glossary</b> tab.</p>`;
 }
 
 /* ---------- stock rule book ---------- */
@@ -2388,7 +2408,8 @@ function renderStockRules() {
   <ul><li>Paper-trade the rule pick for <b>at least a quarter</b> and compare it with the numbers above.</li>
   <li>The research notes also say the rule needs a <b>point-in-time Nifty 500 list</b> (the NSE archive has the change log) before it can be fully trusted.</li>
   <li>Start small, one slot at a time, and never put more than a slot into a single name.</li></ul>
-  <p class="muted" style="font-size:12px">Source: nightly scan (research/stock_scan.py on the research-data branch) and research round 16 (research/README.md). The numbers describe past data and are not a promise.</p>` + glossaryHTML("stk");
+  <p class="muted" style="font-size:12px">Source: nightly scan (research/stock_scan.py on the research-data branch) and research round 16 (research/README.md). The numbers describe past data and are not a promise.</p>
+  <p class="muted">Not sure what a word means (circuit, turnover, 200-day average...)? See the <b>Glossary</b> tab.</p>`;
 }
 
 pStart(); start().finally(pDone);
