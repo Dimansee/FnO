@@ -18,6 +18,8 @@ from . import paper as P
 from . import store
 from . import strategy as S
 from . import ai as AI
+from . import custom as CU
+from . import learn as LN
 
 ALL_SYMBOLS = list(C.INDICES) + list(C.STOCKS)
 
@@ -97,7 +99,11 @@ def _traded_today(symbol, positions, trades) -> dict:
     done = {"noise": False, "camarilla": False}
     for x in list(positions) + list(trades):
         if x["symbol"] == symbol and x.get("mode") == "signal" and x["opened"][:10] == today:
-            done[((x.get("plan") or {}).get("strategy")) or "noise"] = True
+            st = ((x.get("plan") or {}).get("strategy")) or "noise"
+            if str(st).startswith("custom:"):
+                done[st] = int(done.get(st, 0)) + 1
+            else:
+                done[st] = True
     return done
 
 
@@ -116,6 +122,15 @@ def manage_positions(m: M.Market | None = None) -> list[dict]:
             states[sym] = S.noise_state(m.candles(sym), now)
         except Exception as e:
             m.errors.append(f"Band check failed for {sym}: {e}")
+    cspecs = {x["id"]: x for x in _safe_specs()}
+    cstates = {}
+    for p in pos:
+        st = (p.get("plan") or {}).get("strategy", "")
+        if str(st).startswith("custom:") and (p["plan"].get("exit_on_opposite")) and st[7:] in cspecs:
+            try:
+                cstates[p["id"]] = CU.live_state(cspecs[st[7:]], m.candles(p["symbol"]), now)
+            except Exception as e:
+                m.errors.append(f"Custom strategy state failed for {p['symbol']}: {e}")
     closed = []
     for p in pos:
         if spots.get(p["symbol"]) is None or not all(l["key"] in prices for l in p["legs"]):
@@ -125,12 +140,17 @@ def manage_positions(m: M.Market | None = None) -> list[dict]:
                            f"noprice:{p['id']}:{now.strftime('%H%M')[:3]}", "/#portfolio")
             continue
         prem = P.net_price(p["legs"], prices)
-        reason, upd = S.exit_check(p, spots[p["symbol"]], prem, now, states.get(p["symbol"]))
+        sp = spots[p["symbol"]]
+        is_c = str((p.get("plan") or {}).get("strategy", "")).startswith("custom:")
+        reason, upd = S.exit_check(p, sp, prem, now, cstates.get(p["id"]) if is_c else states.get(p["symbol"]))
+        hi, lo = max(p.get("hi", sp), sp), min(p.get("lo", sp), sp)      # best / worst index level seen: feeds the lesson written when the trade closes
+        if hi != p.get("hi") or lo != p.get("lo"):
+            upd = {**upd, "hi": hi, "lo": lo}
         if upd:
             p.update(upd)
             store.update_position(p)
         if reason and (p["mode"] == "signal" or reason.startswith("Square-off")):
-            rec = P.close_position(p["id"], prices, reason)
+            rec = P.close_position(p["id"], prices, reason, extra={"spot_exit": sp})
             if rec:
                 closed.append({"symbol": rec["symbol"], "reason": reason, "pnl": rec["pnl"], "id": p["id"]})
     return closed
@@ -193,6 +213,71 @@ def _with_ai(symbol, g, ev, pf, traded):
     elif ev["signal"] in ("NO TRADE TODAY", "NO NEW ENTRIES") and res["signal"] == "WAIT":
         ev["signal"] = "WAIT"
     return ev
+
+
+def _safe_specs() -> list[dict]:
+    try:
+        return CU.load_all(store)
+    except Exception:
+        return []
+
+
+def _with_custom(symbol, g, ev, pf, traded):
+    """Runs the user's enabled custom strategies for this instrument; used only when the built-in strategies have no plan."""
+    specs = [x for x in _safe_specs() if x.get("enabled") and x.get("market") == "IN" and symbol in x.get("symbols", [])]
+    if not specs or ev["signal"] in ("STOP FOR TODAY", "MARKET CLOSED"):
+        return ev
+    for sp in specs:
+        key = f"custom:{sp['id']}"
+        try:
+            res = CU.evaluate_live(sp, symbol, g["candles"], g["vix"], g["now"], int(traded.get(key, 0)) if isinstance(traded, dict) else 0)
+        except Exception as e:                                   # a broken custom rule must never break the page
+            ev["checks"].append((False, f"Custom strategy '{sp['name']}' error: {str(e)[:100]}"))
+            continue
+        ev["checks"] += res["checks"]
+        ev.setdefault("custom", []).append({"id": sp["id"], "name": sp["name"], "signal": res["signal"], "auto": sp.get("auto", False)})
+        if not ev["plan"] and res["plan"]:
+            ev["signal"], ev["plan"], ev["strategy"] = res["signal"], res["plan"], sp["name"]
+    return ev
+
+
+def _learn_tags(g, plan) -> list[str]:
+    cx = _entry_ctx(g)
+    return LN.tags_for({"market": "IN", "side": plan.get("opt"), "time": g["now"].strftime("%H:%M"), "vix": cx.get("vix"), "trend": cx.get("trend"),
+                        "gap_pct": cx.get("gap_pct"), "dte": cx.get("dte"), "wd": g["now"].weekday()})
+
+
+def _learn_gate(g, plan):
+    """(veto reason or None, size multiplier) from the learning engine's active rules."""
+    try:
+        st = plan.get("strategy") or "noise"
+        return LN.veto("IN", st, _learn_tags(g, plan)), LN.size_mult("IN", st)
+    except Exception:
+        return None, 1.0
+
+
+def _custom_auto_ok(plan) -> bool:
+    st = str((plan or {}).get("strategy", ""))
+    if not st.startswith("custom:"):
+        return True
+    sp = next((x for x in _safe_specs() if x["id"] == st[7:]), None)
+    return bool(sp and sp.get("auto"))
+
+
+def _entry_ctx(g) -> dict:
+    """What the market looked like at entry. The learning engine groups closed trades by these."""
+    try:
+        today, hist = S.session_frames(g["candles"], g["now"])
+        gap = (float(today["open"].iloc[0]) / float(hist["close"].iloc[-1]) - 1) * 100 if len(today) and len(hist) else None
+        last = today.iloc[-1] if len(today) else None
+        up = bool(last is not None and last["ema9"] > last["ema21"] and last["st"] > 0)
+        dn = bool(last is not None and last["ema9"] < last["ema21"] and last["st"] < 0)
+        return {"vix": round(float(g["vix"].get("level") or 0), 2), "vix_chg": round(float(g["vix"].get("chg_pct") or 0), 2),
+                "gap_pct": None if gap is None else round(gap, 2), "trend": "up" if up else "down" if dn else "mixed",
+                "dte": (g["trade_exp"] - g["now"].date()).days, "weekday": g["now"].weekday(), "minute_of_day": g["now"].hour * 60 + g["now"].minute,
+                "atr_pct": None if last is None else round(float(last["atr"]) / float(last["close"]) * 100, 3)}
+    except Exception:
+        return {}
 
 
 def _size_capital(acct, tr, pf) -> float:
@@ -260,6 +345,7 @@ def dashboard(symbol, strike=None):
     traded = _traded_today(symbol, pos, tr)
     ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, nw, gc, fi, g["now"], guard, traded, pf["strategies"])
     ev = _with_ai(symbol, g, ev, pf, traded)
+    ev = _with_custom(symbol, g, ev, pf, traded)
     today, hist = S.session_frames(g["candles"], g["now"])
     prev = float(hist["close"].iloc[-1]) if not hist.empty else g["spot"]
 
@@ -325,8 +411,17 @@ def place_signal(symbol, strike=None, auto=False):
     traded = _traded_today(symbol, pos, tr)
     ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, news(symbol), gcues(), fii(), g["now"], guard, traded, pf["strategies"])
     ev = _with_ai(symbol, g, ev, pf, traded)
+    ev = _with_custom(symbol, g, ev, pf, traded)
     if not ev["plan"]:
         return False, f"No valid signal right now ({ev['signal']}). The setup may have changed - refresh."
+    if auto and not _custom_auto_ok(ev["plan"]):
+        return False, "The signal comes from a custom strategy that is not switched to auto-trade (you can still place it by hand)."
+    if auto:                                                        # the learning engine's guarded rules apply to automatic entries only
+        why, mult = _learn_gate(g, ev["plan"])
+        if why:
+            return False, why
+        if mult < 1:
+            pf = {**pf, "risk_pct": float(pf.get("risk_pct") or 1.0) * mult}
     try:
         order = S.build_order(ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], _size_capital(acct, tr, pf),
                               strike=strike, cash=cash, prefs=pf)
@@ -337,7 +432,7 @@ def place_signal(symbol, strike=None, auto=False):
     src = m.br.name if g["chain"].attrs.get("source") == "live" and m.br else "demo"
     legs = [{**lg, "src": src} for lg in order["legs"]]
     return P.open_position(cash, symbol, legs, order["lots"], g["lot"], g["trade_exp"], g["spot"], m.source,
-                           clean(order), clean({**ev["plan"], "auto": auto}))
+                           clean(order), clean({**ev["plan"], "auto": auto, "ctx": _entry_ctx(g)}))
 
 
 def place_manual(symbol, expiry, strike, opt, side, lots):
@@ -441,7 +536,7 @@ def exit_position(pos_id):
         return False, "Position not found (it may have been closed already)."
     sp = {pos[0]["symbol"]: m.spot(pos[0]["symbol"])}
     prices = m.leg_prices(pos, sp, m.vix()["level"])
-    rec = P.close_position(pos_id, prices, "Manual exit")
+    rec = P.close_position(pos_id, prices, "Manual exit", extra={"spot_exit": sp[pos[0]["symbol"]]})
     return (True, f"Closed. Net P&L after charges ₹{rec['pnl']:,.0f}") if rec else (False, "Already closed.")
 
 
@@ -673,6 +768,11 @@ def tick():
     if time(8, 55) <= now.time() < C.MARKET_OPEN:
         return {"pre_open": stocks_preopen(now)}
     if not (C.MARKET_OPEN <= now.time() <= C.MARKET_CLOSE):
+        if time(15, 31) <= now.time() <= time(20, 0):                  # after the close: the day's research note and lessons (runs once)
+            try:
+                return {"post_close": LN.post_close_in()}
+            except Exception as e:
+                return {"post_close": {"error": str(e)[:160]}}
         return {"skipped": "outside market hours"}
     closed = manage_positions()
     for c in closed:
@@ -724,6 +824,12 @@ def scan(symbol, m=None, prefs_=None, want_order=True):
     traded = _traded_today(symbol, pos, tr)
     ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, None, gcues(), fii(), g["now"], guard, traded, pf["strategies"])
     ev = _with_ai(symbol, g, ev, pf, traded)
+    ev = _with_custom(symbol, g, ev, pf, traded)
+    if ev.get("plan"):
+        why, mult = _learn_gate(g, ev["plan"])
+        ev["learn"] = {"veto": why, "size_mult": mult}
+        if why:
+            ev.setdefault("warnings", []).append(why + " (automatic entries only; you can still place it by hand)")
     order = None
     if ev["plan"] and want_order:
         try:
@@ -785,3 +891,49 @@ def journal_tick(now):
                 pass
         return {"settled": J.settle(day, cands)}
     return {"skipped": "nothing due"}
+
+
+# ---------------------------------------------------------------------------
+# Custom strategies: data + backtest + improvement
+# ---------------------------------------------------------------------------
+def _custom_data(spec: dict, symbol: str, days: int):
+    """(candles in the base interval, vix series or None, source label) for a custom strategy backtest."""
+    from . import markets as MK
+    if spec["market"] == "IN":
+        if symbol not in ALL_SYMBOLS:
+            raise ValueError(f"{symbol} is not an Indian instrument in this app.")
+        c, v, src = BT.history(symbol, int(days))
+        return c, v, src
+    if not MK.valid_symbol(spec["market"], symbol):
+        raise ValueError(f"{symbol} is not in the {spec['market']} list.")
+    cal = int(days)
+    df = MK.candles(spec["market"], symbol, spec["timeframe"], cal, ttl=1800)
+    return df, None, "Binance public data" if spec["market"] == "CRYPTO" else "Yahoo Finance"
+
+
+def custom_backtest(raw: dict, symbol: str | None, days: int, capital: float, risk_pct: float) -> dict:
+    spec = CU.validate(raw, existing_id=raw.get("id") if raw.get("id") else None)
+    sym = symbol or spec["symbols"][0]
+    if not 20 <= int(days) <= 1500:
+        raise ValueError("Days must be between 20 and 1500.")
+    c, v, src = _custom_data(spec, sym, int(days))
+    res = CU.backtest(spec, c, sym, v, float(capital), float(risk_pct))
+    res["source"] = src
+    res["spec_name"] = spec["name"]
+    return clean(res)
+
+
+def custom_improve(sid: str, days: int = 250) -> dict:
+    spec = next((x for x in CU.load_all(store) if x["id"] == sid), None)
+    if not spec:
+        raise ValueError("Strategy not found.")
+    sym = spec["symbols"][0]
+    c, v, src = _custom_data(spec, sym, int(days))
+    res = LN.improve_custom(spec, c, sym, v)
+    out = {k: val for k, val in res.items() if k != "_spec"}
+    out["source"], out["symbol"] = src, sym
+    if res.get("candidate"):
+        ch = LN.apply_variant(sid, res, auto=(LN.mode() == "full"))
+        out["change"] = ch
+        out["adopted"] = bool(ch and ch["status"] == "applied")
+    return clean(out)

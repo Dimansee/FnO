@@ -10,8 +10,9 @@
 <link rel="apple-touch-icon" href="/icon.svg">
 <title>F&amp;O Trainer</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2211%22%20fill%3D%22%230e1922%22/%3E%3Cg%20fill%3D%22%23f2a93b%22%3E%3Cpath%20d%3D%22M16%2017.5C9%2017.5%203.5%2013%204.5%204.5%206.5%2010%2010.5%2012.6%2017.5%2013.2Z%22/%3E%3Cpath%20d%3D%22M32%2017.5C39%2017.5%2044.5%2013%2043.5%204.5%2041.5%2010%2037.5%2012.6%2030.5%2013.2Z%22/%3E%3Cpath%20d%3D%22M11%2019.5c2-1.6%204.4-1.6%205.5-.6-.6%202-2.6%203.3-5.5.6Z%22/%3E%3Cpath%20d%3D%22M37%2019.5c-2-1.6-4.4-1.6-5.5-.6.6%202%202.6%203.3%205.5.6Z%22/%3E%3Cpath%20d%3D%22M17.5%2012.6c3.8-1.6%209.2-1.6%2013%200%201.9%201.2%202.8%203.4%202.6%206.4-.4%205-2.6%209.4-3.2%2014.2.9%201.4%201.3%203%201.1%204.6-.5%203.4-3.8%205-7%205s-6.5-1.6-7-5c-.2-1.6.2-3.2%201.1-4.6-.6-4.8-2.8-9.2-3.2-14.2-.2-3%20.7-5.2%202.6-6.4Z%22/%3E%3C/g%3E%3Cg%20fill%3D%22%230e1922%22%3E%3Cellipse%20cx%3D%2219.6%22%20cy%3D%2222.6%22%20rx%3D%221.3%22%20ry%3D%221.6%22/%3E%3Cellipse%20cx%3D%2228.4%22%20cy%3D%2222.6%22%20rx%3D%221.3%22%20ry%3D%221.6%22/%3E%3Cellipse%20cx%3D%2221.4%22%20cy%3D%2237.6%22%20rx%3D%221.2%22%20ry%3D%221.7%22/%3E%3Cellipse%20cx%3D%2226.6%22%20cy%3D%2237.6%22%20rx%3D%221.2%22%20ry%3D%221.7%22/%3E%3C/g%3E%3C/svg%3E">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")||"dusk"}catch(e){document.documentElement.dataset.theme="dusk"}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400..800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
 <style>
 :root{
@@ -291,9 +292,131 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
 #splash .msg{font-size:13.5px;color:var(--muted)}
 @media(prefers-reduced-motion:reduce){.pbull,#splash .big{animation:none!important}}
 .rscard{margin-bottom:10px}.rshead{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.rstag{font-size:11.5px;padding:2px 8px;border-radius:99px;border:1px solid var(--line,#444)}.rstag.up{color:#3ecf8e}.rstag.down{color:#ef6a6a}
+/* ===== v2 design system: sidebar shell, new type, three themes ===== */
+:root,html[data-theme="dusk"]{
+  --bg:#0d0f1c;--bg2:#0a0c17;--panel:#151829;--panel2:#1d2138;--line:#262b47;--line2:#343a5e;
+  --text:#eceefb;--muted:#9aa0c3;--faint:#646b94;
+  --gold:#8f94ff;--gold-ink:#0b0c1d;--gold-bg:rgba(143,148,255,.14);--accent:#8f94ff;
+  --green:#3ddc97;--green-bg:rgba(61,220,151,.13);--red:#ff6b7a;--red-bg:rgba(255,107,122,.13);
+  --amber:#ffb454;--amber-bg:rgba(255,180,84,.13);--blue:#6cc4ff;--violet:#b9a2ff;
+  --hero:linear-gradient(180deg,#171b33,#10132a);--glow1:rgba(143,148,255,.10);--glow2:rgba(61,220,151,.05);
+  --display:"Plus Jakarta Sans",system-ui,sans-serif;--num:"JetBrains Mono",ui-monospace,monospace;
+  --r-lg:16px;--r-md:11px;--r-sm:8px;color-scheme:dark}
+html[data-theme="paper"]{
+  --bg:#f4f5fa;--bg2:#ffffff;--panel:#ffffff;--panel2:#eef0f8;--line:#e0e3ef;--line2:#cbd0e3;
+  --text:#161a2e;--muted:#5a6285;--faint:#8b92b3;
+  --gold:#4f54e6;--gold-ink:#ffffff;--gold-bg:rgba(79,84,230,.10);--accent:#4f54e6;
+  --green:#0f9d6a;--green-bg:rgba(15,157,106,.10);--red:#d93a4c;--red-bg:rgba(217,58,76,.09);
+  --amber:#c77a0a;--amber-bg:rgba(199,122,10,.12);--blue:#1b7fc4;--violet:#6a4fd6;
+  --hero:linear-gradient(180deg,#ffffff,#f0f2fb);--glow1:rgba(79,84,230,.07);--glow2:rgba(15,157,106,.05);color-scheme:light}
+html[data-theme="terminal"]{
+  --bg:#050806;--bg2:#030504;--panel:#0b110d;--panel2:#111a14;--line:#1b2a20;--line2:#2a4132;
+  --text:#d7f5df;--muted:#7fa68b;--faint:#4d6e58;
+  --gold:#33ff8c;--gold-ink:#02140a;--gold-bg:rgba(51,255,140,.10);--accent:#33ff8c;
+  --green:#33ff8c;--green-bg:rgba(51,255,140,.10);--red:#ff5a5a;--red-bg:rgba(255,90,90,.12);
+  --amber:#ffd24a;--amber-bg:rgba(255,210,74,.12);--blue:#5ad1ff;--violet:#c58bff;
+  --hero:linear-gradient(180deg,#0c150f,#070d09);--glow1:rgba(51,255,140,.06);--glow2:transparent;
+  --display:"JetBrains Mono",ui-monospace,monospace;color-scheme:dark}
+html,body{font-size:14.5px;letter-spacing:-.005em}
+body{background:radial-gradient(1100px 480px at 85% -10%,var(--glow1),transparent 60%),radial-gradient(800px 480px at -10% 10%,var(--glow2),transparent 60%),var(--bg);background-attachment:fixed}
+html[data-theme="paper"] .card{box-shadow:0 1px 2px rgba(22,26,46,.04),0 6px 20px -12px rgba(22,26,46,.18)}
+.card{background:var(--panel);background-image:none}
+.hero{background:radial-gradient(800px 260px at 20% 0%,var(--gold-bg),transparent 70%),var(--hero)}
+button.primary:hover{filter:brightness(1.08);background:var(--gold)}
+button.danger{color:var(--red);border-color:color-mix(in srgb,var(--red) 45%,transparent)}
+.pill.live{color:var(--green)}.pill.demo{color:var(--amber);background:var(--amber-bg)}
+.state.stop{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 45%,transparent);background:var(--amber-bg)}.state.stop i{background:var(--amber)}
+.state.call{color:var(--green)}.state.put{color:var(--red)}
+.chain tr.atm td.strike{background:var(--gold-bg);color:var(--text)}
+.chain tr.rec td.strike{background:var(--green-bg);color:var(--green)}
+a{color:var(--accent)}
+::selection{background:color-mix(in srgb,var(--accent) 35%,transparent)}
+
+/* shell */
+#app{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh;transition:grid-template-columns .25s var(--ease)}
+body.side-min #app{grid-template-columns:68px minmax(0,1fr)}
+#app>.hidden{display:none!important}
+aside.side{position:sticky;top:0;height:100vh;overflow:auto;scrollbar-width:thin;background:var(--bg2);border-right:1px solid var(--line);padding:16px 10px 14px;display:flex;flex-direction:column;gap:2px;z-index:30}
+aside.side .brand{padding:4px 8px 16px;margin:0;font-size:18px}
+aside.side .brand svg{margin:0}
+#tabs{display:flex;flex-direction:column;gap:1px;overflow:visible;padding:0;position:static}
+#tabs .grp{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:700;padding:14px 10px 5px}
+#tabs button{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:8px 10px;border-radius:9px;border:1px solid transparent;color:var(--muted);font-weight:600;font-size:13.5px;background:transparent}
+#tabs button .ic{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#tabs button:hover{background:var(--panel2);color:var(--text)}
+#tabs button.on{background:var(--gold-bg);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 28%,transparent)}
+#tabs .ink{display:none}
+.newb{margin-left:auto;font-size:9.5px;font-weight:800;letter-spacing:.06em;background:var(--accent);color:var(--gold-ink);padding:2px 6px;border-radius:99px}
+.sidefoot{margin-top:auto;padding:12px 8px 0;color:var(--faint);font-size:11.5px}
+body.side-min aside.side .brand b,body.side-min #tabs .lb,body.side-min #tabs .grp,body.side-min .newb,body.side-min .sidefoot{display:none}
+body.side-min #tabs button{justify-content:center;padding:10px 0}
+.content{min-width:0}
+header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 84%,transparent);backdrop-filter:blur(14px) saturate(1.2);border-bottom:1px solid var(--line)}
+header .wrap{max-width:none;padding:0 26px}
+.bar{padding:11px 0}
+header .brand{display:none}
+.iconbtn{width:36px;height:36px;padding:0;display:inline-grid;place-items:center;border-radius:10px}
+.iconbtn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+main.wrap{max-width:1380px;margin:0 auto;padding:24px 26px 80px}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23808aa8' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+
+/* page furniture */
+.pagehead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.pagehead h2{margin:0;font-size:24px;letter-spacing:-.025em}
+.pagehead p{margin:4px 0 0;max-width:68ch}
+.sect{margin:0 0 10px;font-size:15px}
+.row{display:flex;align-items:center;gap:10px}.row.between{justify-content:space-between}.row.wrap{flex-wrap:wrap}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
+.tag.tup{background:var(--green-bg);color:var(--green);border-color:transparent}.tag.tdown{background:var(--red-bg);color:var(--red);border-color:transparent}.tag.twarn{background:var(--amber-bg);color:var(--amber);border-color:transparent}
+.segs{display:inline-flex;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
+.seg{border:none;background:transparent;padding:6px 12px;border-radius:7px;color:var(--muted);font-weight:650}
+.seg.on{background:var(--panel2);color:var(--text);box-shadow:0 0 0 1px var(--line2)}
+button.ghost{background:transparent;border-style:dashed;color:var(--muted)}
+.card+.card,.strat+.strat,.tpl+.tpl{margin-top:12px}
+.grid>.card+.card{margin-top:0}
+.grid.g3f{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.grid.g3f input,.grid.g3f select{width:100%}
+.editor .cond .op{flex:1 1 auto}
+@media(max-width:700px){.grid.g3f{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.strat.on{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.strat .rules{font-size:13px;color:var(--muted);display:grid;gap:2px}
+.sw{display:inline-flex;align-items:center;gap:7px;margin:0;color:var(--text);font-size:13px;cursor:pointer}.sw input{min-width:auto}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{display:inline-flex;gap:6px;align-items:center;margin:0;padding:5px 10px;border:1px solid var(--line);border-radius:99px;color:var(--text);font-size:13px;cursor:pointer;background:var(--bg2)}.chip input{min-width:auto}
+.editor{border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.editor .grp{margin-top:6px}.grphead{font-size:12px;color:var(--faint);font-weight:700;margin:8px 0 6px;text-transform:uppercase;letter-spacing:.06em}
+.cond{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:10px;margin-bottom:6px;background:var(--bg2)}
+.op{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.op select,.cond>select,.op input{padding:6px 8px;font-size:13px}.op input{width:64px}
+label.mini{display:inline-flex;align-items:center;gap:4px;margin:0;font-size:12px}
+.cond .x{padding:4px 8px;margin-left:auto;background:transparent;border-color:transparent;color:var(--faint)}
+.verdict ul{margin:0;padding-left:18px;display:grid;gap:5px}
+.note,.lesson,.pend,.rule2{padding:10px 0;border-top:1px solid var(--line)}.note:first-of-type,.lesson:first-child,.pend:first-of-type,.rule2:first-of-type{border-top:none;padding-top:0}
+.rule2{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.lb{padding:4px 0;font-size:13px}
+ul.tight{margin:4px 0 6px;padding-left:18px;color:var(--muted);font-size:13px}
+.lessons{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:0 24px}
+details summary{cursor:pointer;font-size:13px}
+.err{background:var(--red-bg);color:var(--red);padding:10px 12px;border-radius:10px}
+
+/* phones: sidebar becomes a bottom dock */
+@media(max-width:900px){
+  #app{grid-template-columns:minmax(0,1fr)!important}
+  aside.side{position:fixed;inset:auto 0 0 0;height:auto;width:100%;flex-direction:row;padding:6px 6px calc(6px + env(safe-area-inset-bottom));border-right:none;border-top:1px solid var(--line);overflow-x:auto;overflow-y:hidden;z-index:40;gap:0}
+  aside.side .brand,.sidefoot,#tabs .grp,.newb{display:none!important}
+  #tabs{flex-direction:row;gap:2px}
+  #tabs button{flex-direction:column;gap:3px;width:auto;min-width:64px;padding:6px 8px;font-size:10.5px;text-align:center;white-space:nowrap}
+  #tabs button .lb{display:block!important}
+  header .wrap,main.wrap{padding-left:16px;padding-right:16px}
+  main.wrap{padding-bottom:110px}
+  #sideToggle{display:none}
+  header .brand{display:flex}
+}
+@media(max-width:600px){.pagehead h2{font-size:20px}}
+
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-signal" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8"/></symbol><symbol id="i-chain" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16M9 4v16M15 4v16"/></symbol><symbol id="i-portfolio" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/></symbol><symbol id="i-strategies" viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol><symbol id="i-learning" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"/></symbol><symbol id="i-markets" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></symbol><symbol id="i-context" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></symbol><symbol id="i-stocks" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol><symbol id="i-recs" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8 6.6 19.7l1.1-6.1L3.2 9.4l6.1-.8z"/></symbol><symbol id="i-journal" viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3zM5 17a3 3 0 013-3h11M9 8h6"/></symbol><symbol id="i-backtest" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L5 19a1.5 1.5 0 001.4 2h11.2A1.5 1.5 0 0019 19l-5-10V3"/><path d="M7.5 15h9"/></symbol><symbol id="i-research" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2"/></symbol><symbol id="i-rules" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol><symbol id="i-stockrules" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol><symbol id="i-glossary" viewBox="0 0 24 24"><path d="M4 19l4-14 4 14M5.5 14h5M15 8h5l-5 8h5"/></symbol><symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></symbol><symbol id="i-theme" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></symbol></svg>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="bull" viewBox="0 0 48 48"><g fill="#f2a93b"><path d="M16 17.5C9 17.5 3.5 13 4.5 4.5 6.5 10 10.5 12.6 17.5 13.2Z"/><path d="M32 17.5C39 17.5 44.5 13 43.5 4.5 41.5 10 37.5 12.6 30.5 13.2Z"/><path d="M11 19.5c2-1.6 4.4-1.6 5.5-.6-.6 2-2.6 3.3-5.5.6Z"/><path d="M37 19.5c-2-1.6-4.4-1.6-5.5-.6.6 2 2.6 3.3 5.5.6Z"/><path d="M17.5 12.6c3.8-1.6 9.2-1.6 13 0 1.9 1.2 2.8 3.4 2.6 6.4-.4 5-2.6 9.4-3.2 14.2.9 1.4 1.3 3 1.1 4.6-.5 3.4-3.8 5-7 5s-6.5-1.6-7-5c-.2-1.6.2-3.2 1.1-4.6-.6-4.8-2.8-9.2-3.2-14.2-.2-3 .7-5.2 2.6-6.4Z"/></g><g fill="#0e1922"><ellipse cx="19.6" cy="22.6" rx="1.3" ry="1.6"/><ellipse cx="28.4" cy="22.6" rx="1.3" ry="1.6"/><ellipse cx="21.4" cy="37.6" rx="1.2" ry="1.7"/><ellipse cx="26.6" cy="37.6" rx="1.2" ry="1.7"/></g></symbol></svg>
 <div id="pbar" aria-hidden="true"><div class="fill"></div><svg class="pbull"><use href="#bull"/></svg></div>
 <div id="splash" role="status" aria-label="Loading">
@@ -318,32 +441,47 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
 </div>
 
 <div id="app" class="hidden">
+<aside class="side">
+    <div class="brand"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 17 L8 11 L12 14 L21 5" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="5" r="2.4" fill="var(--accent)"/></svg><b>F&amp;O <span>Trainer</span></b></div>
+    <nav id="tabs">
+      <div class="grp">Trade</div>
+      <button data-t="signal" class="on"><svg class="ic"><use href="#i-signal"/></svg><span class="lb">Signal</span></button>
+      <button data-t="chain"><svg class="ic"><use href="#i-chain"/></svg><span class="lb">Option chain</span></button>
+      <button data-t="portfolio"><svg class="ic"><use href="#i-portfolio"/></svg><span class="lb">Portfolio</span></button>
+      <div class="grp">Strategy lab</div>
+      <button data-t="strategies"><svg class="ic"><use href="#i-strategies"/></svg><span class="lb">Strategies</span><span class="newb">NEW</span></button>
+      <button data-t="learning"><svg class="ic"><use href="#i-learning"/></svg><span class="lb">Learning</span><span class="newb">NEW</span></button>
+      <button data-t="markets"><svg class="ic"><use href="#i-markets"/></svg><span class="lb">Crypto &amp; US</span><span class="newb">NEW</span></button>
+      <div class="grp">Insight</div>
+      <button data-t="context"><svg class="ic"><use href="#i-context"/></svg><span class="lb">Market context</span></button>
+      <button data-t="stocks"><svg class="ic"><use href="#i-stocks"/></svg><span class="lb">Stocks</span></button>
+      <button data-t="recs"><svg class="ic"><use href="#i-recs"/></svg><span class="lb">Recommendations</span></button>
+      <button data-t="journal"><svg class="ic"><use href="#i-journal"/></svg><span class="lb">Journal</span></button>
+      <div class="grp">Study</div>
+      <button data-t="backtest"><svg class="ic"><use href="#i-backtest"/></svg><span class="lb">Backtest</span></button>
+      <button data-t="research"><svg class="ic"><use href="#i-research"/></svg><span class="lb">Research</span></button>
+      <button data-t="rules"><svg class="ic"><use href="#i-rules"/></svg><span class="lb">Options rulebook</span></button>
+      <button data-t="stockrules"><svg class="ic"><use href="#i-stockrules"/></svg><span class="lb">Stock rulebook</span></button>
+      <button data-t="glossary"><svg class="ic"><use href="#i-glossary"/></svg><span class="lb">Glossary</span></button>
+      <div class="grp">System</div>
+      <button data-t="settings"><svg class="ic"><use href="#i-settings"/></svg><span class="lb">Settings</span></button>
+      <span class="ink" id="ink"></span>
+    </nav>
+    <div class="sidefoot">Paper money only · v2</div>
+  </aside>
+  <div class="content">
 <header>
   <div class="wrap">
     <div class="bar">
+      <button class="iconbtn" id="sideToggle" title="Collapse menu"><svg><use href="#i-menu"/></svg></button>
       <div class="brand"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="vertical-align:-5px;margin-right:6px"><path d="M2 17 L8 11 L12 14 L21 5" fill="none" stroke="#f2a93b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="5" r="2.4" fill="#f2a93b"/></svg>F&amp;O <span>Trainer</span></div>
       <select id="symbol" aria-label="Instrument"></select>
       <span id="srcPill" class="pill demo"><span class="dot"></span><span>…</span></span>
       <div class="spacer"></div>
       <label style="display:flex;align-items:center;gap:6px;margin:0;font-size:13px"><input type="checkbox" id="auto" checked style="min-width:auto"> Auto 30s</label>
-      <button id="refresh" title="Refresh">↻</button>
+      <button id="refresh" class="iconbtn" title="Refresh">↻</button>
+      <button id="themeBtn" class="iconbtn" title="Change theme"><svg><use href="#i-theme"/></svg></button>
     </div>
-    <nav id="tabs">
-      <button data-t="signal" class="on">🎯 Signal</button>
-      <button data-t="chain">🔗 Option chain</button>
-      <button data-t="portfolio">💼 Portfolio</button>
-      <button data-t="context">🌍 Market context</button>
-      <button data-t="backtest">🧪 Backtest</button>
-      <button data-t="research">🔬 Research</button>
-      <button data-t="journal">📓 Journal</button>
-      <button data-t="stocks">📈 Stocks</button>
-      <button data-t="recs">⭐ Recommendations</button>
-      <button data-t="stockrules">📕 Stock rule book</button>
-      <button data-t="rules">📘 Options rulebook</button>
-      <button data-t="glossary">📖 Glossary</button>
-      <button data-t="settings">⚙️ Settings</button>
-      <span class="ink" id="ink"></span>
-    </nav>
   </div>
 </header>
 
@@ -537,6 +675,10 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
   <section id="t-rules" class="hidden"><div class="card rule" id="rulebook"></div></section>
 
   <!-- SETTINGS -->
+  <section id="t-strategies" class="hidden"><div id="sxBody"></div></section>
+  <section id="t-learning" class="hidden"><div id="lxBody"></div></section>
+  <section id="t-markets" class="hidden"><div id="gxBody"></div></section>
+
   <section id="t-settings" class="hidden">
     <div class="grid g2">
       <div class="card" id="upCard"></div>
@@ -597,6 +739,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
     <p class="muted" style="font-size:12px;margin-top:14px">Educational simulator only - it never places real orders. Not investment advice. SEBI's studies show most individual F&amp;O traders lose money; practise here first.</p>
   </section>
 </main>
+  </div>
 </div>
 
 <script>
@@ -692,6 +835,9 @@ async function load(quiet) {
     else if (S.tab === "recs") await loadRecs();
     else if (S.tab === "backtest") await loadStudy();
     else if (S.tab === "research") await loadResearch();
+    else if (S.tab === "strategies") await loadStrategies();
+    else if (S.tab === "learning") await loadLearning();
+    else if (S.tab === "markets") await loadMarkets();
   } catch (e) { if (!quiet) toast(e.message); }
   finally { sec.classList.remove("loading"); if (!quiet) pDone(); hideSplash(); }
 }
@@ -2448,6 +2594,292 @@ function renderStockRules() {
 }
 
 pStart(); start().finally(pDone);
+</script>
+<script>
+/* ====================== v2: Strategy lab, Learning, Global markets, themes ====================== */
+const clone = o => JSON.parse(JSON.stringify(o));
+const fmtN = (v, d = 2) => v == null ? "–" : Number(v).toLocaleString("en-US", {minimumFractionDigits: d, maximumFractionDigits: d});
+const money = (v, cur) => v == null ? "–" : (cur === "INR" ? rs(v) : (v < 0 ? "-" : "") + fmtN(Math.abs(v), 2) + " " + cur);
+const tabs = {IN: "India F&O", CRYPTO: "Crypto", US: "US stocks"};
+function miniLine(cv, vals, opt = {}) {
+  if (!cv) return; const dpr = devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; cv.width = w * dpr; cv.height = h * dpr;
+  const g = cv.getContext("2d"); g.scale(dpr, dpr); g.clearRect(0, 0, w, h);
+  if (!vals || vals.length < 2) { g.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--faint"); g.font = "13px sans-serif"; g.fillText("Not enough trades yet", 12, h / 2); return; }
+  const mn = Math.min(...vals, opt.base ?? Infinity), mx = Math.max(...vals, opt.base ?? -Infinity), pad = 8, sx = i => pad + i * (w - 2 * pad) / (vals.length - 1), sy = v => h - pad - (v - mn) / ((mx - mn) || 1) * (h - 2 * pad);
+  const cs = getComputedStyle(document.documentElement), up = cs.getPropertyValue("--green"), dn = cs.getPropertyValue("--red"), last = vals[vals.length - 1], col = last >= (opt.base ?? vals[0]) ? up : dn;
+  if (opt.base != null) { g.strokeStyle = cs.getPropertyValue("--line2"); g.setLineDash([4, 4]); g.beginPath(); g.moveTo(pad, sy(opt.base)); g.lineTo(w - pad, sy(opt.base)); g.stroke(); g.setLineDash([]); }
+  g.beginPath(); vals.forEach((v, i) => i ? g.lineTo(sx(i), sy(v)) : g.moveTo(sx(i), sy(v))); g.strokeStyle = col; g.lineWidth = 2; g.lineJoin = "round"; g.stroke();
+  g.lineTo(sx(vals.length - 1), h); g.lineTo(sx(0), h); g.closePath(); const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, col + "55"); gr.addColorStop(1, col + "00"); g.fillStyle = gr; g.fill();
+}
+const kpiCard = (k, v, d = "", c = "") => `<div class="card kpi"><div class="k">${k}</div><div class="v mono ${c}">${v}</div><div class="d muted">${d}</div></div>`;
+
+/* ------------------------------ Strategy lab ------------------------------ */
+const SX = {data: null, edit: null, bt: null, btFor: null, imp: null, busy: false};
+async function loadStrategies() { SX.data = await api("/api/strategies"); renderStrategies(); }
+function blankSpec() {
+  return {name: "", about: "", market: "IN", symbols: ["NIFTY"], timeframe: "15m", direction: "both", hold: "intraday", enabled: false, auto: false, watch: false,
+    long: {all: [{l: {ind: "ema", n: 9}, op: "crosses_above", r: {ind: "ema", n: 21}}], any: []}, short: {all: [{l: {ind: "ema", n: 9}, op: "crosses_below", r: {ind: "ema", n: 21}}], any: []},
+    exit: {stop_atr: 1.5, atr_n: 14, target_r: 2, trail_atr: null, breakeven_r: null, time_stop_bars: null, exit_on_opposite: false},
+    filters: {start: "09:45", end: "14:15", max_trades_day: 2, vix_min: null, vix_max: null}};
+}
+function normSpec(sp) {
+  const b = blankSpec(), o = {...b, ...clone(sp)};
+  ["long", "short"].forEach(k => o[k] = {all: [], any: [], ...(o[k] || {})});
+  o.exit = {...b.exit, ...(o.exit || {})}; o.filters = {...b.filters, ...(o.filters || {})}; o.symbols = o.symbols || []; return o;
+}
+function condText(c) {
+  const meta = SX.data.meta, opd = o => o.ind ? `${(meta.indicators[o.ind] || {label: o.ind}).label}${Object.keys((meta.indicators[o.ind] || {}).params || {}).length ? "(" + Object.keys(meta.indicators[o.ind].params).map(k => o[k]).join(",") + ")" : ""}${o.out ? "." + o.out : ""}` : o.price ? o.price : o.level ? (meta.levels[o.level] || o.level) : o.value;
+  return `${opd(c.l)} ${meta.ops[c.op] || c.op} ${c.op === "rising" || c.op === "falling" ? c.r.value + " bars" : opd(c.r)}`;
+}
+function renderStrategies() {
+  const d = SX.data, el = $("#sxBody"); if (!d) return;
+  const learn = {off: "Off", safe: "Safe", full: "Full"}[d.learn_mode] || d.learn_mode;
+  el.innerHTML = `
+  <div class="pagehead"><div><h2>Strategy lab</h2><p class="muted">Build your own rules from indicators, test them on past prices, then let them paper-trade. Learning mode: <b>${learn}</b> (change it in the Learning tab).</p></div>
+    <div class="row"><button class="primary" id="sxNew">+ New strategy</button></div></div>
+  ${SX.edit ? editorHtml() : ""}
+  <div class="grid g2" style="margin-top:16px">
+    <div>
+      <h3 class="sect">Your strategies <span class="muted mono">${d.items.length}/${d.max}</span></h3>
+      ${d.items.length ? d.items.map(cardHtml).join("") : `<div class="card muted">Nothing here yet. Start from a template on the right or press <b>+ New strategy</b>.</div>`}
+    </div>
+    <div>
+      <h3 class="sect">Templates</h3>
+      ${d.presets.map((p, i) => `<div class="card tpl"><div class="row between"><b>${esc(p.name)}</b><span class="tag">${esc(p.market)} · ${esc(p.timeframe)}</span></div><p class="muted" style="margin:6px 0 10px">${esc(p.about)}</p><button data-tpl="${i}">Use this template</button></div>`).join("")}
+    </div>
+  </div>
+  <div id="sxBt">${btHtml()}</div>`;
+  if (SX.bt && SX.bt.curve_R) setTimeout(() => miniLine($("#sxCurve"), SX.bt.curve_R.reduce((a, v) => (a.push((a.length ? a[a.length - 1] : 0) + v), a), [0]), {base: 0}), 0);
+}
+function cardHtml(s) {
+  const lg = s.long.all.concat(s.long.any).length, sh = s.short.all.concat(s.short.any).length;
+  return `<div class="card strat ${s.enabled ? "on" : ""}" data-id="${s.id}">
+    <div class="row between"><div><b>${esc(s.name)}</b> <span class="tag">${esc(s.market)} · ${esc(s.timeframe)} · ${esc(s.hold)}</span></div><span class="muted mono">v${s.version}</span></div>
+    <div class="muted" style="margin:4px 0 8px">${esc(s.symbols.join(", "))} · ${esc(s.direction)} · ${lg} long / ${sh} short rule${lg + sh === 1 ? "" : "s"}</div>
+    <div class="rules">${s.long.all.map(c => `<div><span class="up">▲</span> ${esc(condText(c))}</div>`).join("")}${s.short.all.map(c => `<div><span class="down">▼</span> ${esc(condText(c))}</div>`).join("")}</div>
+    <div class="row wrap" style="margin-top:10px;gap:14px">
+      <label class="sw"><input type="checkbox" data-f="enabled" ${s.enabled ? "checked" : ""}> Show signals</label>
+      <label class="sw"><input type="checkbox" data-f="auto" ${s.auto ? "checked" : ""}> Auto paper-trade</label>
+      <label class="sw" title="Evaluate this idea daily after the close, without trading it"><input type="checkbox" data-f="watch" ${s.watch ? "checked" : ""}> Watch only</label>
+    </div>
+    <div class="row wrap" style="margin-top:10px"><button data-act="bt">Backtest</button><button data-act="imp">Look for improvements</button><button data-act="edit">Edit</button><button class="danger" data-act="del">Delete</button></div></div>`;
+}
+function opHtml(path, o, side) {
+  const m = SX.data.meta, t = o.ind ? "ind" : o.price ? "price" : o.level ? "level" : "value", sel = (v, c) => v === c ? "selected" : "";
+  let h = `<select data-ot="${path}" data-side="${side}"><option value="ind" ${sel(t, "ind")}>Indicator</option><option value="price" ${sel(t, "price")}>Price</option><option value="level" ${sel(t, "level")}>Key level</option><option value="value" ${sel(t, "value")}>Number</option></select>`;
+  if (t === "ind") {
+    const spec = m.indicators[o.ind] || {params: {}, outs: ["value"]};
+    h += `<select data-p="${path}.ind" data-reset="1">${Object.entries(m.indicators).map(([k, v]) => `<option value="${k}" ${sel(k, o.ind)}>${esc(v.label)}</option>`).join("")}</select>`;
+    h += Object.entries(spec.params).map(([k, dv]) => `<label class="mini">${esc(k)}<input type="number" step="${typeof dv === "number" && !Number.isInteger(dv) ? "0.1" : "1"}" value="${o[k] ?? dv}" data-p="${path}.${k}" data-k="num"></label>`).join("");
+    if (spec.outs.length > 1) h += `<select data-p="${path}.out">${spec.outs.map(x => `<option ${sel(x, o.out || spec.outs[0])}>${x}</option>`).join("")}</select>`;
+  } else if (t === "price") h += `<select data-p="${path}.price">${m.prices.map(x => `<option ${sel(x, o.price)}>${x}</option>`).join("")}</select>`;
+  else if (t === "level") h += `<select data-p="${path}.level">${Object.entries(m.levels).map(([k, v]) => `<option value="${k}" ${sel(k, o.level)}>${esc(v)}</option>`).join("")}</select>`;
+  else h += `<input type="number" step="any" value="${o.value ?? 0}" data-p="${path}.value" data-k="num" style="width:90px">`;
+  return `<div class="op">${h}</div>`;
+}
+function sideHtml(key, label, icon) {
+  const sp = SX.edit[key], m = SX.data.meta;
+  const group = (grp, title) => `<div class="grp"><div class="grphead">${title}</div>${sp[grp].map((c, i) => `<div class="cond">${opHtml(`${key}.${grp}.${i}.l`, c.l, "l")}
+      <select data-p="${key}.${grp}.${i}.op" data-opch="1">${Object.entries(m.ops).map(([k, v]) => `<option value="${k}" ${k === c.op ? "selected" : ""}>${esc(v)}</option>`).join("")}</select>
+      ${c.op === "rising" || c.op === "falling" ? `<input type="number" min="1" value="${c.r.value}" data-p="${key}.${grp}.${i}.r.value" data-k="num" style="width:70px"> bars` : opHtml(`${key}.${grp}.${i}.r`, c.r, "r")}
+      <button class="x" data-rm="${key}.${grp}.${i}" title="Remove">✕</button></div>`).join("")}
+      <button class="ghost" data-add="${key}.${grp}">+ ${grp === "all" ? "Add rule" : "Add alternative"}</button></div>`;
+  return `<div class="card"><h3>${icon} ${label}</h3>${group("all", "All of these must be true")}${group("any", "…and at least one of these (optional)")}</div>`;
+}
+function editorHtml() {
+  const e = SX.edit, d = SX.data, mk = d.markets[e.market], syms = mk.symbols, nv = (v) => v == null ? "" : v;
+  const num = (p, v, ph = "off", st = "0.1") => `<input type="number" step="${st}" placeholder="${ph}" value="${nv(v)}" data-p="${p}" data-k="numnull">`;
+  return `<div class="card editor"><div class="row between"><h3 style="margin:0">${e.id ? "Edit strategy" : "New strategy"}</h3><button class="ghost" id="sxClose">Close</button></div>
+  <div class="grid g3f" style="margin-top:12px">
+    <div><label>Name</label><input data-p="name" value="${esc(e.name)}" placeholder="e.g. EMA cross + ADX" style="width:100%"></div>
+    <div><label>Market</label><select data-p="market" data-mk="1">${Object.keys(d.markets).map(k => `<option value="${k}" ${k === e.market ? "selected" : ""}>${tabs[k]}</option>`).join("")}</select></div>
+    <div><label>Timeframe</label><select data-p="timeframe">${mk.timeframes.map(t => `<option ${t === e.timeframe ? "selected" : ""}>${t}</option>`).join("")}</select></div>
+    <div><label>Direction</label><select data-p="direction">${["both", "long", "short"].map(t => `<option ${t === e.direction ? "selected" : ""}>${t}</option>`).join("")}</select></div>
+    <div><label>Holding</label><select data-p="hold"><option value="intraday" ${e.hold === "intraday" ? "selected" : ""}>Intraday (closed before the bell)</option><option value="swing" ${e.hold === "swing" ? "selected" : ""}>Swing (can stay open)</option></select></div>
+    <div><label>Note (optional)</label><input data-p="about" value="${esc(e.about || "")}" style="width:100%"></div>
+  </div>
+  <label style="margin-top:12px">Instruments</label><div class="chips">${syms.map(s => `<label class="chip"><input type="checkbox" data-sym="${s.id}" ${e.symbols.includes(s.id) ? "checked" : ""}> ${esc(s.id)}</label>`).join("")}</div>
+  <div class="grid g2" style="margin-top:14px">${e.direction !== "short" ? sideHtml("long", "Buy when…", `<span class="up">▲</span>`) : ""}${e.direction !== "long" ? sideHtml("short", "Sell short when…", `<span class="down">▼</span>`) : ""}</div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h3>Risk & exit</h3><div class="grid g3f">
+      <div><label>Stop (× ATR)</label>${num("exit.stop_atr", e.exit.stop_atr, "1.5")}</div>
+      <div><label>ATR length</label>${num("exit.atr_n", e.exit.atr_n, "14", "1")}</div>
+      <div><label>Target (× risk)</label>${num("exit.target_r", e.exit.target_r)}</div>
+      <div><label>Trail (× ATR)</label>${num("exit.trail_atr", e.exit.trail_atr)}</div>
+      <div><label>Break-even at (R)</label>${num("exit.breakeven_r", e.exit.breakeven_r)}</div>
+      <div><label>Time stop (bars)</label>${num("exit.time_stop_bars", e.exit.time_stop_bars, "off", "1")}</div></div>
+      <label class="sw" style="margin-top:10px"><input type="checkbox" data-p="exit.exit_on_opposite" data-k="bool" ${e.exit.exit_on_opposite ? "checked" : ""}> Exit when the opposite signal appears</label></div>
+    <div class="card"><h3>Filters</h3><div class="grid g3f">
+      <div><label>Not before</label><input type="time" data-p="filters.start" value="${nv(e.filters.start)}" data-k="strnull"></div>
+      <div><label>Not after</label><input type="time" data-p="filters.end" value="${nv(e.filters.end)}" data-k="strnull"></div>
+      <div><label>Max trades / day</label>${num("filters.max_trades_day", e.filters.max_trades_day, "2", "1")}</div>
+      ${e.market === "IN" ? `<div><label>India VIX at least</label>${num("filters.vix_min", e.filters.vix_min)}</div><div><label>India VIX at most</label>${num("filters.vix_max", e.filters.vix_max)}</div>` : ""}</div>
+      <p class="muted" style="font-size:12.5px;margin:10px 0 0">Signals are read when a bar closes; the trade starts at the next bar's open. If stop and target are both touched inside one bar, the stop is assumed to hit first.</p></div></div>
+  <div id="sxErr" class="err hidden" style="margin-top:12px"></div>
+  <div class="row" style="margin-top:14px"><button class="primary" id="sxSave">Save strategy</button><button id="sxTest">Save & backtest</button></div></div>`;
+}
+function btHtml() {
+  const b = SX.bt; if (!b) return SX.busy ? `<div class="card muted" style="margin-top:16px">Working… fetching history and simulating.</div>` : "";
+  if (b.error) return `<div class="card err" style="margin-top:16px">${esc(b.error)}</div>`;
+  const t = b.total || {}, tr = b.train_70 || {}, un = b.unseen_30 || {}, o = b.option;
+  const row = (n, s) => `<tr><td>${n}</td><td class="mono">${s.n ?? 0}</td><td class="mono">${s.win_rate ?? "–"}%</td><td class="mono ${cls(s.avg_R)}">${sgn(s.avg_R)}R</td><td class="mono">${s.profit_factor ?? "–"}</td><td class="mono ${cls(s.total_R)}">${sgn(s.total_R)}R</td><td class="mono down">${s.max_dd_R ?? "–"}R</td></tr>`;
+  const grp = (title, o) => `<div class="card"><h3>${title}</h3><div class="tablewrap"><table><tr><th></th><th>Trades</th><th>Win</th><th>Avg R</th><th>PF</th><th>Total</th><th>Worst dip</th></tr>${Object.entries(o || {}).filter(([, s]) => s.n).map(([k, s]) => row(esc(k), s)).join("")}</table></div></div>`;
+  return `<div style="margin-top:20px"><div class="pagehead"><div><h2>Backtest · ${esc(b.spec_name)} on ${esc(b.symbol)}</h2><p class="muted">${esc(b.from)} → ${esc(b.to)} · ${b.bars} bars · ${esc(b.source)}</p></div></div>
+  <div class="grid g4">${kpiCard("Trades", t.n ?? 0, `${t.win_rate ?? "–"}% win`)}${kpiCard("Average per trade", sgn(t.avg_R) + "R", `95% range ${t.avg_R_ci95 ? t.avg_R_ci95.map(sgn).join(" to ") : "–"}`, cls(t.avg_R))}${kpiCard("Profit factor", t.profit_factor ?? "–", `worst dip ${t.max_dd_R ?? "–"}R`)}${kpiCard("Unseen 30%", sgn(un.avg_R) + "R", `${un.n ?? 0} trades never used for tuning`, cls(un.avg_R))}</div>
+  ${(b.verdict || []).length ? `<div class="card verdict" style="margin-top:14px"><h3>What this tells you (and doesn't)</h3><ul>${b.verdict.map(v => `<li>${esc(v)}</li>`).join("")}</ul></div>` : ""}
+  <div class="grid g2" style="margin-top:14px"><div class="card"><h3>Cumulative result (R)</h3><canvas id="sxCurve" class="flowcv" style="height:220px"></canvas></div>
+  <div class="card"><h3>First 70% vs unseen 30%</h3><div class="tablewrap"><table><tr><th></th><th>Trades</th><th>Win</th><th>Avg R</th><th>PF</th><th>Total</th><th>Worst dip</th></tr>${row("Trained on", tr)}${row("Unseen", un)}</table></div>
+  ${o ? `<p class="muted" style="margin:10px 0 0">As Nifty/Bank Nifty option buys with charges: net <b class="mono ${cls(o.net)}">${rs(o.net)}</b> on ${rs(o.capital)}, ${o.trades} trades, deepest fall ${o.max_dd_pct}%.</p>` : ""}</div></div>
+  <div class="grid g2" style="margin-top:14px">${grp("By exit reason", b.by_exit)}${grp("By hour of entry", b.by_hour)}${grp("By side", b.by_side)}${b.by_year ? grp("By year", b.by_year) : ""}</div>
+  ${(b.assumptions || []).length ? `<p class="muted" style="font-size:12.5px;margin-top:10px">${b.assumptions.map(esc).join(" · ")}</p>` : ""}
+  ${SX.imp ? impHtml() : ""}</div>`;
+}
+function impHtml() {
+  const i = SX.imp; if (!i.ok) return `<div class="card" style="margin-top:14px"><h3>Improvement search</h3><p class="muted">${esc(i.why || i.error || "Nothing to report.")}</p></div>`;
+  return `<div class="card" style="margin-top:14px"><h3>Improvement search</h3><pre class="mono" style="white-space:pre-wrap;margin:0;font-size:12.5px">${esc(JSON.stringify(i, null, 1)).slice(0, 2400)}</pre></div>`;
+}
+function setPath(o, path, v) { const k = path.split("."); let c = o; for (let i = 0; i < k.length - 1; i++) c = c[isNaN(k[i]) ? k[i] : +k[i]]; c[isNaN(k.at(-1)) ? k.at(-1) : +k.at(-1)] = v; }
+function getPath(o, path) { return path.split(".").reduce((c, k) => c?.[isNaN(k) ? k : +k], o); }
+function defOperand(t) { return t === "ind" ? {ind: "ema", n: 20} : t === "price" ? {price: "close"} : t === "level" ? {level: "pdh"} : {value: 0}; }
+function indDefaults(k) { const o = {ind: k}, sp = SX.data.meta.indicators[k]; Object.entries(sp.params).forEach(([p, v]) => o[p] = v); if (sp.outs.length > 1) o.out = sp.outs[0]; return o; }
+function prune(spec) {   // drop empty conditions, make numeric-or-null fields clean
+  const s = clone(spec); ["long", "short"].forEach(k => { if (s.direction === "long" && k === "short" || s.direction === "short" && k === "long") s[k] = {all: [], any: []}; });
+  return s;
+}
+async function sxSave(andTest) {
+  const err = $("#sxErr"); err.classList.add("hidden");
+  try {
+    const r = await post("/api/strategies", prune(SX.edit)); toast("Saved " + r.item.name); SX.edit = null; await loadStrategies();
+    if (andTest) sxBacktest(r.item.id);
+  } catch (e) { err.textContent = e.message; err.classList.remove("hidden"); err.scrollIntoView({block: "center"}); }
+}
+async function sxBacktest(id) {
+  const s = SX.data.items.find(x => x.id === id); if (!s) return;
+  const sym = s.symbols[0]; SX.bt = null; SX.imp = null; SX.busy = true; renderStrategies(); $("#sxBt").scrollIntoView({behavior: "smooth", block: "start"});
+  try { SX.bt = await post("/api/strategies/backtest", {id, symbol: sym, days: s.market === "IN" ? 60 : 250}); SX.btFor = id; }
+  catch (e) { SX.bt = {error: e.message}; } SX.busy = false; renderStrategies();
+}
+async function sxImprove(id) {
+  const s = SX.data.items.find(x => x.id === id); if (!s) return; SX.busy = true; toast("Searching variants - this can take up to a minute…", 6000);
+  try { SX.imp = await post("/api/strategies/improve", {id, days: 250}); } catch (e) { SX.imp = {ok: false, error: e.message}; }
+  SX.busy = false; if (!SX.bt) SX.bt = {error: "Run a backtest first to see context."}; renderStrategies(); $("#sxBt").scrollIntoView({behavior: "smooth", block: "start"});
+}
+document.addEventListener("click", async e => {
+  const root = e.target.closest("#t-strategies"); if (!root) return;
+  const t = e.target.closest("button"); if (!t) return;
+  if (t.id === "sxNew") { SX.edit = blankSpec(); renderStrategies(); $(".editor").scrollIntoView({behavior: "smooth", block: "start"}); }
+  else if (t.id === "sxClose") { SX.edit = null; renderStrategies(); }
+  else if (t.id === "sxSave") sxSave(false);
+  else if (t.id === "sxTest") sxSave(true);
+  else if (t.dataset.tpl != null) { const p = clone(SX.data.presets[+t.dataset.tpl]); p.enabled = false; p.auto = false; SX.edit = normSpec(p); renderStrategies(); $(".editor").scrollIntoView({behavior: "smooth", block: "start"}); }
+  else if (t.dataset.add) { const [side, grp] = t.dataset.add.split("."); SX.edit[side][grp].push({l: {ind: "rsi", n: 14}, op: "gt", r: {value: 50}}); renderStrategies(); }
+  else if (t.dataset.rm) { const k = t.dataset.rm.split("."); SX.edit[k[0]][k[1]].splice(+k[2], 1); renderStrategies(); }
+  else if (t.dataset.act) {
+    const id = t.closest(".strat").dataset.id, s = SX.data.items.find(x => x.id === id);
+    if (t.dataset.act === "edit") { SX.edit = normSpec(s); renderStrategies(); $(".editor").scrollIntoView({behavior: "smooth", block: "start"}); }
+    else if (t.dataset.act === "del") { if (confirm(`Delete "${s.name}"? Open paper positions from it stay open.`)) { await api("/api/strategies/" + id, {method: "DELETE"}); await loadStrategies(); } }
+    else if (t.dataset.act === "bt") sxBacktest(id);
+    else if (t.dataset.act === "imp") sxImprove(id);
+  }
+});
+document.addEventListener("change", async e => {
+  const t = e.target; if (!t.closest("#t-strategies")) return;
+  if (t.dataset.f) {   // quick switches on a saved strategy
+    const s = SX.data.items.find(x => x.id === t.closest(".strat").dataset.id); s[t.dataset.f] = t.checked;
+    try { await post("/api/strategies", s); toast("Saved"); await loadStrategies(); } catch (er) { toast(er.message); t.checked = !t.checked; } return;
+  }
+  if (!SX.edit) return;
+  if (t.dataset.sym) { const a = SX.edit.symbols, i = a.indexOf(t.dataset.sym); if (t.checked && i < 0) a.push(t.dataset.sym); if (!t.checked && i >= 0) a.splice(i, 1); return; }
+  if (t.dataset.ot) {   // operand type switched
+    setPath(SX.edit, t.dataset.ot, defOperand(t.value)); renderStrategies(); return;
+  }
+  if (!t.dataset.p) return;
+  let v = t.value;
+  if (t.dataset.k === "num") v = v === "" ? 0 : +v; else if (t.dataset.k === "numnull") v = v === "" ? null : +v; else if (t.dataset.k === "strnull") v = v || null; else if (t.dataset.k === "bool") v = t.checked;
+  if (t.dataset.reset) { const base = t.dataset.p.replace(/\.ind$/, ""); setPath(SX.edit, base, indDefaults(v)); renderStrategies(); return; }
+  setPath(SX.edit, t.dataset.p, v);
+  if (t.dataset.mk) { const m = SX.data.markets[v]; SX.edit.symbols = [m.symbols[0].id]; SX.edit.timeframe = m.timeframes.includes(SX.edit.timeframe) ? SX.edit.timeframe : m.timeframes[2] || m.timeframes[0]; SX.edit.hold = v === "IN" ? "intraday" : "swing"; if (v !== "IN") { SX.edit.filters.start = SX.edit.filters.end = null; } renderStrategies(); }
+  else if (t.dataset.opch || t.dataset.p === "direction") { if (t.dataset.opch) { const c = getPath(SX.edit, t.dataset.p.replace(/\.op$/, "")); if (v === "rising" || v === "falling") c.r = {value: 3}; else if (c.r.value !== undefined && Object.keys(c.r).length === 1 && (c.r.value === 3)) c.r = {value: 0}; } renderStrategies(); }
+});
+
+/* ------------------------------ Learning ------------------------------ */
+const LX = {mk: "", data: null};
+async function loadLearning() { LX.data = await api("/api/learn" + (LX.mk ? "?market=" + LX.mk : "")); renderLearning(); }
+const KIND = {clean_win: ["Clean win", "up"], gave_back: ["Gave back gains", "warn"], fast_stop: ["Stopped fast", "down"], stopped: ["Stopped", "down"], time_stop: ["Time stop", "warn"], breakeven: ["Break-even", ""], big_win: ["Big win", "up"], loss: ["Loss", "down"], win: ["Win", "up"]};
+function renderLearning() {
+  const d = LX.data, el = $("#lxBody"); if (!d) return;
+  const modes = {off: ["Off", "Learns nothing, changes nothing."], safe: ["Safe", "Writes lessons and research. May skip clearly bad setups and halve size after a bad run, always logged and reversible. Never edits your rules."], full: ["Full", "Safe, plus it may adopt strategy improvements that beat the current version on every slice of past data, with automatic rollback if live trades disagree."]};
+  const changeFor = r => (d.changes || []).find(c => c.rule && c.rule.id === r.id && c.status === "applied");
+  const mktBtn = k => `<button class="seg ${LX.mk === k ? "on" : ""}" data-lmk="${k}">${k ? tabs[k] : "All markets"}</button>`;
+  const pend = (d.changes || []).filter(c => c.status === "pending");
+  el.innerHTML = `
+  <div class="pagehead"><div><h2>Learning</h2><p class="muted">After every trade it writes a lesson; after every close it studies the day. Rules it adds are small, evidence-based, logged, and expire on their own.</p></div>
+    <div class="row"><div class="segs">${["", "IN", "CRYPTO", "US"].map(mktBtn).join("")}</div><button id="lxRun">Run after-close research now</button></div></div>
+  <div class="card"><div class="row between wrap"><h3 style="margin:0">Autonomy</h3><div class="segs">${Object.entries(modes).map(([k, v]) => `<button class="seg ${d.mode === k ? "on" : ""}" data-lmode="${k}">${v[0]}</button>`).join("")}</div></div>
+    <p class="muted" style="margin:10px 0 0">${modes[d.mode][1]}</p>
+    <p class="muted" style="margin:6px 0 0;font-size:12.5px">Guard-rails: needs ${d.limits.min_signals_veto}+ signals and a very clear negative result (z ≤ −${d.limits.z_veto}) in both halves before skipping anything · at most ${d.limits.max_vetoes_per_strategy} skips per strategy · skips expire after ${d.limits.veto_days} days · the built-in Noise and Camarilla numbers are never changed automatically.</p></div>
+  ${pend.length ? `<div class="card" style="margin-top:14px"><h3>Waiting for your approval</h3>${pend.map(c => `<div class="row between wrap pend"><div><b>${esc(c.title)}</b><div class="muted" style="font-size:13px">${esc(JSON.stringify(c.evidence || {}))}</div></div><button class="primary" data-lapply="${c.id}">Approve</button></div>`).join("")}</div>` : ""}
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h3>Active rules from learning</h3>${(d.rules || []).length ? (d.rules || []).filter(r => !LX.mk || r.market === LX.mk).map(r => { const ch = changeFor(r); return `<div class="rule2"><div><span class="tag ${r.type === "veto" ? "tdown" : "twarn"}">${r.type === "veto" ? "SKIP" : "HALF SIZE"}</span> ${esc(r.reason)}<div class="muted" style="font-size:12.5px;margin-top:3px">since ${esc(r.since)}${r.expires ? " · expires " + esc(r.expires) : ""}</div></div>${ch ? `<button class="danger" data-lrev="${ch.id}">Undo</button>` : ""}</div>`; }).join("") || `<p class="muted">None.</p>` : `<p class="muted">No rules yet. They appear only when the evidence is strong, so a quiet list is normal early on.</p>`}</div>
+    <div class="card"><h3>How each strategy is doing</h3><div class="tablewrap"><table><tr><th>Strategy</th><th>Mkt</th><th>Based on</th><th>Count</th><th>Avg R</th><th>Last 20</th><th>Total</th></tr>${(d.health || []).map(h => `<tr><td>${esc(h.name)}</td><td>${h.market}</td><td class="muted">${h.set === "S" ? "signals seen" : "closed trades"}</td><td class="mono">${h.n}</td><td class="mono ${cls(h.avg_R)}">${sgn(h.avg_R)}</td><td class="mono ${cls(h.last20_R)}">${sgn(h.last20_R)}</td><td class="mono ${cls(h.total_R)}">${sgn(h.total_R)}R</td></tr>`).join("") || `<tr><td colspan="7" class="muted">No closed trades yet.</td></tr>`}</table></div></div>
+  </div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h3>Latest after-close notes</h3>${(d.research || []).slice(0, 4).map(r => `<div class="note"><div class="row between"><b>${esc(r.date)}</b><span class="tag">${esc(r.market)}</span></div><div style="margin:4px 0">${esc(r.headline || "")}</div><ul class="tight">${(r.insights || []).slice(0, 5).map(i => `<li>${esc(i)}</li>`).join("")}</ul>${r.levels_for_tomorrow ? `<details><summary class="muted">Levels for tomorrow</summary><div class="tablewrap"><table><tr><th></th><th>H4</th><th>H3</th><th>Pivot</th><th>L3</th><th>L4</th></tr>${Object.entries(r.levels_for_tomorrow).map(([s, v]) => `<tr><td>${esc(s)}</td><td class="mono">${n2(v.cam_h4)}</td><td class="mono">${n2(v.cam_h3)}</td><td class="mono">${n2(v.pivot)}</td><td class="mono">${n2(v.cam_l3)}</td><td class="mono">${n2(v.cam_l4)}</td></tr>`).join("")}</table></div></details>` : ""}</div>`).join("") || `<p class="muted">The first note is written after the next market close (15:35 IST for India), or press the button above.</p>`}</div>
+    <div class="card"><h3>What works and what doesn't</h3>${["best", "worst"].map(k => `<div class="muted" style="font-size:12.5px;margin:${k === "best" ? 0 : 12}px 0 4px">${k === "best" ? "Best conditions so far" : "Weakest conditions so far"}</div>${((d.leaderboard || {})[k] || []).map(x => `<div class="row between lb"><span>${esc(x.name)} · <b>${esc(x.tag)}</b> <span class="muted">(${x.market})</span></span><span class="mono ${cls(x.mean_R)}">${sgn(x.mean_R)}R · n=${x.n}</span></div>`).join("") || `<div class="muted">Not enough data.</div>`}`).join("")}</div>
+  </div>
+  <div class="card" style="margin-top:14px"><h3>Lessons from recent trades</h3><div class="lessons">${(d.lessons || []).map(l => { const k = KIND[l.kind] || [l.kind, ""]; return `<div class="lesson"><div class="row between"><span class="tag ${k[1] === "up" ? "tup" : k[1] === "down" ? "tdown" : k[1] === "warn" ? "twarn" : ""}">${esc(k[0])}</span><span class="muted mono" style="font-size:12px">${esc((l.closed || "").slice(0, 16).replace("T", " "))} · ${esc(l.market)}</span></div><p style="margin:6px 0 0">${esc(l.text)}</p></div>`; }).join("") || `<p class="muted">Lessons appear here as soon as a paper trade closes.</p>`}</div></div>
+  <div class="card" style="margin-top:14px"><h3>Change log</h3><div class="tablewrap"><table><tr><th>When</th><th>What</th><th>Status</th></tr>${(d.changes || []).map(c => `<tr><td class="mono">${esc((c.ts || "").slice(0, 16).replace("T", " "))}</td><td>${esc(c.title)}</td><td>${esc(c.status)}</td></tr>`).join("") || `<tr><td colspan="3" class="muted">Nothing changed yet.</td></tr>`}</table></div></div>`;
+}
+document.addEventListener("click", async e => {
+  if (!e.target.closest("#t-learning")) return; const t = e.target.closest("button"); if (!t) return;
+  try {
+    if (t.dataset.lmk != null) { LX.mk = t.dataset.lmk; await loadLearning(); }
+    else if (t.dataset.lmode) { await post("/api/learn/mode", {mode: t.dataset.lmode}); toast("Learning mode: " + t.dataset.lmode); await loadLearning(); }
+    else if (t.dataset.lrev) { await post("/api/learn/revert", {id: t.dataset.lrev}); toast("Rule undone"); await loadLearning(); }
+    else if (t.dataset.lapply) { await post("/api/learn/apply", {id: t.dataset.lapply}); toast("Applied"); await loadLearning(); }
+    else if (t.id === "lxRun") { t.disabled = true; const r = await post("/api/learn/run", {market: LX.mk || "IN", force: true}); toast(r.ok === false ? (r.error || "Not available") : "Research note written"); await loadLearning(); t.disabled = false; }
+  } catch (er) { toast(er.message); }
+});
+
+/* ------------------------------ Global markets (crypto / US) ------------------------------ */
+const GX = {mk: localStorage.getItem("gmk") || "CRYPTO", data: null};
+async function loadMarkets() { GX.data = await api("/api/gbook?market=" + GX.mk); renderMarkets(); }
+function renderMarkets() {
+  const d = GX.data, el = $("#gxBody"); if (!d) return; const cur = d.currency, p = d.prefs || {}, st = d.stats || {};
+  el.innerHTML = `
+  <div class="pagehead"><div><h2>Global markets</h2><p class="muted">Separate paper accounts in ${cur}. They trade only your own strategies from the Strategy lab. ${GX.mk === "CRYPTO" ? "Crypto runs around the clock." : "US stocks trade 7:00 pm – 1:30 am IST (9:30 am – 4:00 pm New York)."}</p></div>
+    <div class="segs">${["CRYPTO", "US"].map(k => `<button class="seg ${GX.mk === k ? "on" : ""}" data-gmk="${k}">${tabs[k]}</button>`).join("")}</div></div>
+  <div class="grid g4">${kpiCard("Account value", money(d.equity, cur), `started with ${money(d.capital_start, cur)}`)}${kpiCard("Available", money(d.cash, cur), `${d.positions.length} open`)}${kpiCard("Realised", money(d.realised, cur), `${st.trades || 0} closed trades`, cls(d.realised))}${kpiCard("Open profit", money(d.unrealised, cur), "right now", cls(d.unrealised))}</div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h3>Account curve</h3><canvas id="gxCurve" class="flowcv" style="height:200px"></canvas>
+      ${st.trades ? `<p class="muted" style="margin:8px 0 0">Win rate ${st.win_rate}% · profit factor ${st.profit_factor ?? "–"} · average ${sgn(st.avg_R)}R · deepest fall ${st.max_dd_pct}%</p>` : ""}</div>
+    <div class="card"><h3>Trading settings</h3>
+      <div class="grid g3f"><div><label>Risk per trade (%)</label><input id="gxRisk" type="number" step="0.1" min="0.1" max="5" value="${p.risk_pct}"></div>
+      <div><label>Max leverage (cap ${d.max_leverage}×)</label><input id="gxLev" type="number" step="0.5" min="1" max="${d.max_leverage}" value="${p.max_leverage}"></div>
+      <div><label>Max open positions</label><input id="gxMax" type="number" min="1" max="10" value="${p.max_open}"></div></div>
+      <label class="sw" style="margin-top:10px"><input type="checkbox" id="gxAuto" ${p.auto ? "checked" : ""}> Let strategies marked "Auto paper-trade" open trades by themselves</label>
+      <div class="row wrap" style="margin-top:12px"><button class="primary" id="gxSave">Save settings</button><input id="gxCap" type="number" value="${GX.mk === "CRYPTO" ? 5000 : 10000}" style="width:110px"><button class="danger" id="gxReset">Reset account</button></div>
+      <p class="muted" style="font-size:12.5px;margin:10px 0 0">Prices come from free public feeds and bars are checked every 5 minutes. Fees and slippage are included. Nothing here places a real order.</p></div></div>
+  <div class="card" style="margin-top:14px"><h3>Open positions</h3><div class="tablewrap"><table><tr><th>Symbol</th><th>Strategy</th><th>Side</th><th>Entry</th><th>Now</th><th>Stop</th><th>Target</th><th>R</th><th>P&L</th><th></th></tr>${d.positions.map(x => `<tr><td><b>${esc(x.symbol)}</b></td><td>${esc(x.strategy_name)}</td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${fmtN(x.entry)}</td><td class="mono">${fmtN(x.price)}</td><td class="mono">${fmtN(x.stop)}</td><td class="mono">${x.target == null ? "–" : fmtN(x.target)}</td><td class="mono ${cls(x.R_now)}">${sgn(x.R_now)}</td><td class="mono ${cls(x.unrealised)}">${fmtN(x.unrealised)}</td><td><button data-gx="${x.id}">Close</button></td></tr>`).join("") || `<tr><td colspan="10" class="muted">No open positions. Create a strategy for ${tabs[GX.mk]} in the Strategy lab and switch on <b>Show signals</b> / <b>Auto paper-trade</b>.</td></tr>`}</table></div></div>
+  <div class="card" style="margin-top:14px"><h3>Closed trades</h3><div class="tablewrap" style="max-height:50vh"><table><tr><th>Closed</th><th>Symbol</th><th>Strategy</th><th>Side</th><th>R</th><th>P&L</th><th>Reason</th></tr>${d.history.map(x => `<tr><td class="mono">${esc((x.closed || "").slice(0, 16).replace("T", " "))}</td><td>${esc(x.symbol)}</td><td>${esc(x.strategy_name)}</td><td>${esc(x.side)}</td><td class="mono ${cls(x.R)}">${sgn(x.R)}</td><td class="mono ${cls(x.pnl)}">${fmtN(x.pnl)}</td><td>${esc(x.reason)}</td></tr>`).join("") || `<tr><td colspan="7" class="muted">No closed trades yet.</td></tr>`}</table></div></div>`;
+  setTimeout(() => miniLine($("#gxCurve"), (st.equity || []).map(x => x.v), {base: d.capital_start}), 0);
+}
+document.addEventListener("click", async e => {
+  if (!e.target.closest("#t-markets")) return; const t = e.target.closest("button"); if (!t) return;
+  try {
+    if (t.dataset.gmk) { GX.mk = t.dataset.gmk; localStorage.setItem("gmk", GX.mk); await loadMarkets(); }
+    else if (t.dataset.gx) { const r = await post("/api/gbook/exit", {market: GX.mk, id: t.dataset.gx}); toast(r.message); await loadMarkets(); }
+    else if (t.id === "gxSave") { await post("/api/gbook/prefs", {market: GX.mk, risk_pct: +$("#gxRisk").value, max_leverage: +$("#gxLev").value, max_open: +$("#gxMax").value, auto: $("#gxAuto").checked}); toast("Saved"); await loadMarkets(); }
+    else if (t.id === "gxReset") { if (confirm("Clear this account's positions and trade history and start over?")) { await post("/api/gbook/reset", {market: GX.mk, capital: +$("#gxCap").value}); toast("Account reset"); await loadMarkets(); } }
+  } catch (er) { toast(er.message); }
+});
+
+/* ------------------------------ Themes ------------------------------ */
+const THEMES = [["dusk", "Dusk", "Dark indigo"], ["paper", "Paper", "Light"], ["terminal", "Terminal", "Black & green"]];
+function applyTheme(t) { if (!THEMES.some(x => x[0] === t)) t = "dusk"; document.documentElement.dataset.theme = t; try { localStorage.setItem("theme", t); } catch (e) {} const b = $("#themeBtn"); if (b) b.title = "Theme: " + THEMES.find(x => x[0] === t)[1]; document.querySelector('meta[name="theme-color"]')?.setAttribute("content", getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() || "#0e1022"); }
+$("#themeBtn").onclick = () => { const i = THEMES.findIndex(x => x[0] === document.documentElement.dataset.theme); applyTheme(THEMES[(i + 1) % THEMES.length][0]); toast("Theme: " + THEMES.find(x => x[0] === document.documentElement.dataset.theme)[1], 1500); if (S.dash) drawSession(S.dash, false); };
+$("#sideToggle").onclick = () => document.body.classList.toggle("side-min");
+
 </script>
 </body>
 </html>

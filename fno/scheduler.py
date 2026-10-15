@@ -6,6 +6,7 @@ so there is nothing to configure by hand.
 """
 from __future__ import annotations
 
+import hashlib
 from urllib.parse import quote
 
 import requests
@@ -16,6 +17,7 @@ from . import store
 SCHEDULE_ID = "fno-tick"
 PRE_ID = "fno-pre-open"
 OPEN_ID = "fno-open-record"
+POST_ID = "fno-post-close"
 
 
 def _dest(host: str | None) -> str | None:
@@ -49,7 +51,8 @@ def ensure(host: str | None = None, force: bool = False) -> dict:
     dest = _dest(host)
     if not dest:
         return {"ok": False, "reason": "Unknown production host"}
-    want = {"dest": dest, "cron": C.TICK_CRON, "pre_cron": C.PRE_CRON, "open_cron": C.OPEN_CRON}
+    want = {"dest": dest, "cron": C.TICK_CRON, "pre_cron": C.PRE_CRON, "open_cron": C.OPEN_CRON, "post_cron": C.POST_CRON,
+            "secret": hashlib.sha256(C.CRON_SECRET.encode()).hexdigest()[:12]}   # a changed CRON_SECRET re-registers the schedules by itself
     cur = store.get("scheduler") or {}
     if not force and all(cur.get(k) == v for k, v in want.items()):
         return {"ok": True, "schedule_id": cur.get("schedule_id"), "cached": True}
@@ -64,5 +67,9 @@ def ensure(host: str | None = None, force: bool = False) -> dict:
     if not c["ok"]:
         store.put("scheduler", {"dest": dest, "cron": C.TICK_CRON, "pre_cron": C.PRE_CRON, "schedule_id": a["schedule_id"], "pre_id": b["schedule_id"]})   # retry the 09:15 one next time
         return c
-    store.put("scheduler", {**want, "schedule_id": a["schedule_id"], "pre_id": b["schedule_id"], "open_id": c["schedule_id"]})
+    d = _register(dest, C.POST_CRON, POST_ID)
+    if not d["ok"]:
+        store.put("scheduler", {"dest": dest, "cron": C.TICK_CRON, "pre_cron": C.PRE_CRON, "open_cron": C.OPEN_CRON, "schedule_id": a["schedule_id"], "pre_id": b["schedule_id"], "open_id": c["schedule_id"]})
+        return d
+    store.put("scheduler", {**want, "schedule_id": a["schedule_id"], "pre_id": b["schedule_id"], "open_id": c["schedule_id"], "post_id": d["schedule_id"]})
     return {"ok": True, "schedule_id": a["schedule_id"], "cached": False}
