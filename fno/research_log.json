@@ -3,6 +3,39 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r19a",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 19: how much can the current rules make per month?",
+   "asked": "Can the current options rules reach 50% a month, and what does more risk do?",
+   "result": "At 1% risk per trade the average month is +2.8% of capital (median +0.8%, best +24.5%, worst -8.2%, 61% of months positive, 0 of 46 months at +50%). 1.5% risk: avg +2.4%. 2% risk: avg +3.2%, worst -15.2%, deepest fall 41% when compounded. 3% risk: avg +4.4%, only 1 month reached +50%, worst -21.5%, deepest fall 61%.",
+   "decision": "Information",
+   "summary": "50% a month is far outside what the rules have ever produced. Tripling risk lifts the average only to ~4% a month and brings 60% falls, so risk stays at 1%.",
+   "period": "2023-01 to 2026-10 (872 trades under the current rules, both indices; unseen = last 120 days)"
+  },
+  {
+   "id": "r19b",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 19: day-of-week and entry-hour filters",
+   "asked": "Would skipping a weekday or an entry hour add profit?",
+   "result": "Every filter lowered total profit (current ₹255.7k; skip Mon 219.6k, Tue 201.4k, Wed 228.3k, Thu 245.7k, Fri 128.0k; skip 9-10h 159.4k, 10-11h 250.1k, 11-12h 182.1k, 12h+ 175.6k). Skipping 10-11h raised profit factor and cut the deepest fall (₹52.7k → ₹41.7k) but cost ₹5.6k of profit.",
+   "decision": "Not adopted",
+   "summary": "No filter adds profit; the trade-off filters only reduce risk by giving up profit. Left as is.",
+   "period": "2023-01 to 2026-10 (872 trades under the current rules, both indices; unseen = last 120 days)"
+  },
+  {
+   "id": "r19c",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 19: enforce the daily limits on automatic trades?",
+   "asked": "Does stopping after 2 losers a day (account-wide), 4 trades, or -2% a day help?",
+   "result": "Net ₹255.7k → ₹250.7k, deepest fall ₹52.7k → ₹54.7k, unseen unchanged. Slightly negative.",
+   "decision": "Not adopted",
+   "summary": "Daily limits stay advisory (as before). Only the weekly 4% limit, which helps, is enforced on automatic trades.",
+   "period": "2023-01 to 2026-10 (872 trades under the current rules, both indices; unseen = last 120 days)"
+  },
+  {
    "id": "r18a",
    "date": "2026-10-15",
    "area": "Index options",

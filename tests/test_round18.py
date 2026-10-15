@@ -10,7 +10,7 @@ C.now_ist = now
 
 wk = [{"opened": "2026-10-12T10:00:00", "pnl": -5000, "closed": "x"}, {"opened": "2026-10-13T10:00:00", "pnl": -4000, "closed": "x"}]
 if C.today_ist().isoformat() == "2026-10-15":
-    assert P.day_guard([], wk, 200000)["blocked"]
+    assert P.week_guard(wk, 200000)["blocked"] and not P.week_guard(wk[:1], 200000)["blocked"]
 
 rows = [{"strike": k, "ce_key": f"c{k}", "ce_ltp": 100, "ce_bid": 80, "ce_ask": 100, "ce_delta": .5} for k in (24950, 25000, 25050)]
 plan = {"opt": "CE", "risk_pts": 30, "rr": 4, "strategy": "noise", "side": 1}

@@ -185,8 +185,11 @@ def _with_ai(symbol, g, ev, pf, traded):
     return ev
 
 
-def risk_guard(pos, tr, capital, pf) -> dict:
+def risk_guard(pos, tr, capital, pf, auto=False) -> dict:
     """The daily risk limits (two losers / -2% / max trades). On the demo account they only advise unless enforced in Settings."""
+    wg = P.week_guard(tr, capital)
+    if wg.get("blocked") and (auto or pf.get("enforce_limits")):   # the weekly limit always applies to automatic trades (round 18: it improved profit and the deepest fall)
+        return wg
     g = P.day_guard(pos, tr, capital)
     if g.get("blocked") and not pf.get("enforce_limits"):
         return {"blocked": False, "tip": "Daily risk limit reached - on a real account you would stop now: " + g["reason"] +
@@ -292,7 +295,7 @@ def place_signal(symbol, strike=None, auto=False):
     g = _gather(symbol, m)
     acct, pos, tr, cash = P.snapshot()
     pf = prefs()
-    guard = risk_guard(pos, tr, acct["capital_start"], pf)
+    guard = risk_guard(pos, tr, acct["capital_start"], pf, auto=auto)
     if not guard.get("blocked"):
         guard = calendar_guard(symbol, g["exps"], g["now"].date()) or guard
     if guard.get("blocked"):
@@ -679,7 +682,10 @@ def tick():
     try:                                                     # market recorder (every RECORD_EVERY_MIN minutes)
         from . import recorder
         from .market import Market
-        rec = recorder.snapshot(now, market=Market())
+        mk = Market()
+        rec = recorder.snapshot(now, market=mk)
+        if any("session expired" in x for x in getattr(mk, "errors", [])):
+            _push_safe("Broker login expired", "Live prices are off (delayed Yahoo data is being used). Log in again in Settings.", f"authexp:{now.date()}", "/#settings")
     except Exception as e:
         rec = {"error": str(e)[:160]}
     return {"closed": closed, "placed": placed, "recorded": rec, "journal": jr, "time": now.isoformat(timespec="seconds")}
@@ -707,6 +713,15 @@ def scan(symbol, m=None, prefs_=None, want_order=True):
             order = None
             if str(e).startswith("SKIP"):
                 ev.setdefault("warnings", []).append(str(e))
+    if g["vix"].get("assumed"):
+        ev.setdefault("warnings", []).append("India VIX is unavailable - 14.0 is being assumed, so the VIX filters (min 11, max 18/20) cannot be trusted right now. Check the VIX yourself before trading.")
+    try:
+        last = g["candles"].index[-1]
+        age = (g["now"] - last.to_pydatetime().astimezone(g["now"].tzinfo)).total_seconds() / 60 - 5   # a 5-minute candle is stamped at its start
+        if C.MARKET_OPEN <= g["now"].time() <= C.MARKET_CLOSE and age > 20:
+            ev.setdefault("warnings", []).append(f"Price data looks stale: the latest 5-minute candle is about {age:.0f} minutes old. Do not trade off this signal until it updates.")
+    except Exception:
+        pass
     if C.today_ist().year > C.HOLIDAYS_YEAR:
         ev.setdefault("warnings", []).append(f"The built-in NSE holiday list only covers {C.HOLIDAYS_YEAR} - add this year's list (fno/config.py) so holidays are skipped.")
     return g, ev, order, pf
