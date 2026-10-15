@@ -3,6 +3,50 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r22a",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 22: how much slippage can the rules survive?",
+   "asked": "The rules assume 0.5% slippage on each option fill. At what level does the profit disappear?",
+   "result": "Slippage 0.5%: ₹255.7k (PF 1.34). 1.0%: ₹129.3k (PF 1.16). 1.5%: ₹16.0k (PF 1.02). 2.0%: −₹72.5k. 3.0%: −₹271.9k.",
+   "decision": "Information only (no rule change)",
+   "summary": "The edge breaks even at roughly 1.5% slippage per fill, three times what we assume. Real fills on thin or fast strikes can cost more, so check the live paper P&L against the formula before trusting the backtest.",
+   "period": "2023-01 to 2026-10, both indices, current rules"
+  },
+  {
+   "id": "r22b",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 22: how concentrated is the profit?",
+   "asked": "If the best few trades are removed, how much profit is left?",
+   "result": "Total ₹255.7k. Without the best 5 trades: ₹184.8k. Without the best 10: ₹122.3k. Without the best 20 (of 872): ₹12.9k. The best 20 trades are 95% of the profit.",
+   "decision": "Information only (no rule change)",
+   "summary": "This is normal for trend-following (many small losses, a few big trend days), but it means a few weeks without a big trend day will look bad, and cutting the big winners (targets, partial exits) removes the edge.",
+   "period": "2023-01 to 2026-10, both indices, current rules"
+  },
+  {
+   "id": "r22c",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 22: are the parameters on a stable plateau?",
+   "asked": "Do small changes to the Noise band multiplier (1.5-2.0), ATR stop (1.5-2.5) and the VIX ceilings (14-22) keep the result similar?",
+   "result": "Noise leg, 9 neighbours: ₹12k to ₹89k; our setting (1.75 / 2.0) is the best cell at ₹89k, and most cells lose in 2023. VIX ceilings: noise <16 to <22 with Camarilla ≤20 gives ₹250-260k; no ceiling gives ₹235-243k.",
+   "decision": "Not changed; confidence lowered",
+   "summary": "All neighbours of the Noise setting stay positive overall, but ours sits at the top of the range, so expect a weaker live result. The VIX ceilings add roughly ₹10-20k, which is inside the ±₹20k noise band, so they are a mild safety rule rather than a proven edge.",
+   "period": "2023-01 to 2026-10, both indices"
+  },
+  {
+   "id": "r22d",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 22: ₹20K to ₹2 lakh with whole lots (1,000-run weekly bootstrap)",
+   "asked": "With whole lots only, what happens over 52 weeks at different starting capital, using fixed 1 lot, risk-based lots, and half size below the peak?",
+   "result": "₹20K: median end ₹62-71k, 5th percentile ₹4-6k, chance of ending below start 35-40%, chance of a 50% fall 45%. ₹50K: median ₹120k, 50% fall 20%. ₹1 lakh: median ₹170k, 50% fall 4%. ₹2 lakh: median ₹262-270k, 50% fall 0%. The sizing modes make almost no difference because one lot is already close to the 1% risk size at these amounts.",
+   "decision": "Information only (no rule change)",
+   "summary": "Capital matters far more than the sizing rule. The bootstrap reshuffles the historical weeks, so it shows the range of luck, not a forecast. ₹20K is possible but with a coin-flip chance of a 50% fall within a year.",
+   "period": "2023-01 to 2026-10, weekly block bootstrap of 872 trades"
+  },
+  {
    "id": "r21a",
    "date": "2026-10-15",
    "area": "Index options",
