@@ -6,6 +6,7 @@ so there is nothing to configure by hand.
 """
 from __future__ import annotations
 
+import hashlib
 from urllib.parse import quote
 
 import requests
@@ -50,7 +51,8 @@ def ensure(host: str | None = None, force: bool = False) -> dict:
     dest = _dest(host)
     if not dest:
         return {"ok": False, "reason": "Unknown production host"}
-    want = {"dest": dest, "cron": C.TICK_CRON, "pre_cron": C.PRE_CRON, "open_cron": C.OPEN_CRON, "post_cron": C.POST_CRON}
+    want = {"dest": dest, "cron": C.TICK_CRON, "pre_cron": C.PRE_CRON, "open_cron": C.OPEN_CRON, "post_cron": C.POST_CRON,
+            "secret": hashlib.sha256(C.CRON_SECRET.encode()).hexdigest()[:12]}   # a changed CRON_SECRET re-registers the schedules by itself
     cur = store.get("scheduler") or {}
     if not force and all(cur.get(k) == v for k, v in want.items()):
         return {"ok": True, "schedule_id": cur.get("schedule_id"), "cached": True}
