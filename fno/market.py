@@ -5,7 +5,7 @@ from __future__ import annotations
 import gzip
 import json
 import time as _t
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 import numpy as np
 import pandas as pd
@@ -186,6 +186,11 @@ def chain_stats(ch: pd.DataFrame, spot: float) -> dict:
 # ---------------------------------------------------------------------------
 # Market facade
 # ---------------------------------------------------------------------------
+def slip_pct(premium: float) -> float:
+    """Typical half-spread cost when no bid/ask is available: cheap options are proportionally the most expensive to trade."""
+    return 0.02 if premium < 20 else 0.012 if premium < 60 else 0.006
+
+
 class Market:
     def __init__(self):
         s = store.get_many(["upstox", "fyers", "broker_pref"])
@@ -193,13 +198,44 @@ class Market:
         up, fy = s.get("upstox") or {}, s.get("fyers") or {}
         pref = (s.get("broker_pref") or "auto")
         clients = {}
+        self.token_kind: dict[str, str] = {}
+        self.ba: dict[str, tuple] = {}                       # option key -> (best bid, best ask) from the last quote call
         if up.get("token") and B.token_valid(up.get("token_created")):
             clients["upstox"] = B.Upstox(up["token"])
+            self.token_kind["upstox"] = "daily"
+        elif up.get("analytics_token") and B.analytics_valid(up.get("analytics_created")):
+            clients["upstox"] = B.Upstox(up["analytics_token"])      # one-year, read-only: all the paper trading needs
+            self.token_kind["upstox"] = "analytics"
+        fy = self._fyers_refresh_if_needed(fy)
         if fy.get("token") and fy.get("app_id") and B.token_valid(fy.get("token_created")):
             clients["fyers"] = B.Fyers(fy["app_id"], fy["token"])
+            self.token_kind["fyers"] = "daily"
         self.clients = clients
         self.br = clients.get(pref) or clients.get("upstox") or clients.get("fyers")
         self.connected = {k: True for k in clients}
+
+    def _fyers_refresh_if_needed(self, fy: dict) -> dict:
+        """Today's Fyers token is missing/expired but a refresh token + PIN were saved: get a new one silently."""
+        try:
+            if fy.get("token") and B.token_valid(fy.get("token_created")):
+                return fy
+            if not (fy.get("refresh_token") and fy.get("pin") and fy.get("app_id") and fy.get("secret")):
+                return fy
+            last = fy.get("refresh_tried")
+            if last and (C.now_ist() - datetime.fromisoformat(last)).total_seconds() < 600:     # do not hammer a failing refresh
+                return fy
+            fy = dict(fy)
+            fy["refresh_tried"] = C.now_ist().isoformat(timespec="seconds")
+            try:
+                fy["token"] = B.fyers_refresh(fy["app_id"], fy["secret"], fy["refresh_token"], fy["pin"])
+                fy["token_created"] = C.now_ist().isoformat(timespec="seconds")
+                fy["refresh_error"] = None
+            except Exception as e:
+                fy["refresh_error"] = str(e)[:120]
+            store.put("fyers", fy)
+        except Exception:
+            pass
+        return fy
 
     @property
     def live(self):
@@ -301,6 +337,27 @@ class Market:
         except Exception:
             return None
 
+    def exit_fills(self, positions, prices: dict, mode: str = "realistic") -> dict:
+        """What closing would really fetch: sell a bought option at the bid, buy back a sold one at the ask.
+        If the broker gave no depth, fall back to a spread-sized haircut. Only legs priced from the live broker are touched."""
+        if mode != "realistic":
+            return prices
+        out = dict(prices)
+        for p in positions:
+            for lg in p["legs"]:
+                k = lg["key"]
+                ltp = prices.get(k)
+                if ltp is None or lg.get("src", "demo") not in self.clients or lg.get("price_src") == "formula":
+                    continue
+                bid, ask = self.ba.get(k, (None, None))
+                s = slip_pct(ltp)
+                if lg["side"] == "BUY":
+                    fill = min(ltp, bid) if bid and bid >= 0.5 * ltp else ltp * (1 - s)
+                else:
+                    fill = max(ltp, ask) if ask and ask <= 1.5 * ltp else ltp * (1 + s)
+                out[k] = round(max(fill, 0.05), 2)
+        return out
+
     def leg_prices(self, positions, spots: dict, vix_level: float) -> dict:
         """Current price of each leg. Live broker LTP when the leg came from the
         connected broker; otherwise a Black-Scholes estimate."""
@@ -330,6 +387,7 @@ class Market:
             try:
                 q = self.clients[name].quotes(sorted(keys))
                 prices.update({k: v["ltp"] for k, v in q.items() if v.get("ltp") is not None})
+                self.ba.update({k: (v.get("bid"), v.get("ask")) for k, v in q.items()})
             except Exception as e:
                 self.errors.append(f"Live option prices via {name.title()} failed: {e}")
         for p in positions:

@@ -25,6 +25,7 @@ from fno import ind as XI
 from fno import learn as LN
 from fno import gbook as GB
 from fno import datahub as DH
+from fno import backup as BK
 from fno import markets as MK
 
 app = Flask(__name__)
@@ -126,7 +127,12 @@ def manifest():
 
 @app.get("/api/push/key")
 def push_key():
-    return jsonify({"configured": PUSH.configured(), "key": PUSH.PUBLIC_KEY, "devices": len(PUSH.subscriptions()) if PUSH.configured() else 0})
+    return jsonify({"configured": PUSH.configured(), "key": PUSH.public_key(), "devices": len(PUSH.subscriptions()) if PUSH.configured() else 0})
+
+
+@app.post("/api/push/setup")
+def push_setup():
+    return jsonify({"ok": PUSH.setup()})
 
 
 @app.post("/api/push/subscribe")
@@ -367,9 +373,33 @@ def _base():
 
 
 def _status(cfg, idfield):
+    an = bool(cfg.get("analytics_token") and B.analytics_valid(cfg.get("analytics_created")))
+    daily = bool(cfg.get("token") and B.token_valid(cfg.get("token_created")))
     return {"configured": bool(cfg.get(idfield) and cfg.get("secret")), "id": cfg.get(idfield, ""),
-            "connected": bool(cfg.get("token") and B.token_valid(cfg.get("token_created"))),
-            "logged_in_at": cfg.get("token_created")}
+            "connected": daily or an, "daily_login": daily, "logged_in_at": cfg.get("token_created"),
+            "analytics": an, "analytics_days_left": B.analytics_days_left(cfg.get("analytics_created")) if an else None,
+            "refresh_ready": bool(cfg.get("refresh_token") and cfg.get("pin")), "refresh_error": cfg.get("refresh_error")}
+
+
+def _verify_upstox(tok: str) -> dict:
+    """Does this (analytics) token really serve what the app needs? Quote, 5-minute candles and the option chain."""
+    from . import config as _C
+    out = {"quote": False, "candles": False, "chain": False, "detail": ""}
+    cl = B.Upstox(tok)
+    key = _C.INDICES["NIFTY"]["upstox_key"]
+    try:
+        q = cl.quotes([key])
+        out["quote"] = any(v.get("ltp") for v in q.values())
+    except Exception as e:
+        out["detail"] = str(e)[:140]
+        return out
+    for name, fn in (("candles", lambda: not cl.candles(key, days=3).empty),
+                     ("chain", lambda: bool(cl.expiries(key)[0]))):
+        try:
+            out[name] = bool(fn())
+        except Exception as e:
+            out["detail"] += f"{name}: {str(e)[:80]} "
+    return out
 
 
 @app.get("/api/settings")
@@ -398,8 +428,24 @@ def settings_post():
         if b.get("secret"):
             cur["secret"] = b["secret"].strip()
         if b.get("disconnect"):
-            cur.pop("token", None)
-            cur.pop("token_created", None)
+            for k in ("token", "token_created", "analytics_token", "analytics_created", "refresh_token", "pin", "refresh_error"):
+                cur.pop(k, None)
+        if name == "upstox" and b.get("analytics_token"):
+            tok = str(b["analytics_token"]).strip()
+            res = _verify_upstox(tok)
+            if not all(res[k] for k in ("quote", "candles", "chain")):
+                return jsonify({"error": "This token does not cover everything the app needs (live price, candles, option chain): " + (res["detail"] or str(res)), "checks": res}), 400
+            cur["analytics_token"], cur["analytics_created"] = tok, C.now_ist().isoformat(timespec="seconds")
+            store.put(name, cur)
+            return jsonify({"ok": True, "checks": res})
+        if name == "fyers" and "pin" in b:
+            pin = str(b.get("pin") or "").strip()
+            if pin and not pin.isdigit():
+                return jsonify({"error": "The Fyers PIN is digits only."}), 400
+            if pin:
+                cur["pin"] = pin
+            else:
+                cur.pop("pin", None)
         store.put(name, cur)
     if "broker_pref" in b and b["broker_pref"] in ("auto", "upstox", "fyers"):
         store.put("broker_pref", b["broker_pref"])
@@ -421,6 +467,8 @@ def settings_post():
             cur["auto"] = bool(p["auto"])
         if "autopilot" in p:
             cur["autopilot"] = bool(p["autopilot"])
+        if p.get("fills") in ("realistic", "ltp"):
+            cur["fills"] = p["fills"]
         if "enforce_limits" in p:
             cur["enforce_limits"] = bool(p["enforce_limits"])
         if "auto_syms" in p:
@@ -464,7 +512,10 @@ def broker_callback(name):
             tok = B.upstox_exchange(request.args["code"], cfg["api_key"], cfg["secret"], redir)
         else:
             code = request.args.get("auth_code") or request.args.get("code")
-            tok = B.fyers_exchange(code, cfg["app_id"], cfg["secret"])
+            full = B.fyers_exchange_full(code, cfg["app_id"], cfg["secret"])
+            tok = full["access_token"]
+            if full.get("refresh_token"):
+                cfg["refresh_token"] = full["refresh_token"]
     except Exception as e:
         return redirect("/?msg=" + quote(f"{name.title()} login failed: {str(e)[:120]}") + "#settings")
     cfg.update({"token": tok, "token_created": C.now_ist().isoformat(timespec="seconds"), "state": None})
@@ -675,6 +726,27 @@ def data_overview():
 def data_save():
     """'Save now' button: pulls whatever Yahoo still serves for India and US candles into the vault."""
     return jsonify({"IN": DH.save_in(), "US": DH.save_us()})
+
+
+@app.get("/api/backup")
+def backup_status():
+    return jsonify(BK.status())
+
+
+@app.post("/api/backup/url")
+def backup_url():
+    return jsonify(BK.set_url((request.get_json(force=True) or {}).get("url", "")))
+
+
+@app.get("/api/backup/script")
+def backup_script():
+    return Response(BK.script_text(), mimetype="text/plain")
+
+
+@app.post("/api/backup/run")
+def backup_run():
+    r = BK.run()
+    return jsonify(r), (200 if r.get("ok") else 400)
 
 
 @app.get("/api/data/export")

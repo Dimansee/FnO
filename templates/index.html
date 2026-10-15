@@ -416,6 +416,7 @@ details summary{cursor:pointer;font-size:13px}
 .dsgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px}
 .dsc{margin:0!important}.dsc.sel{border-color:color-mix(in srgb,var(--accent) 50%,var(--line))}
 .dsmeta{display:grid;gap:3px;font-size:13px}.dsmeta .muted{display:inline-block;min-width:84px}
+.hstrip{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}.hchip{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:5px 10px;border:1px solid var(--line,#2a3a33);border-radius:999px;color:var(--muted,#9ab)}.hchip b{color:var(--text,#dfe)}.hchip i{width:8px;height:8px;border-radius:50%;display:inline-block}
 .notice td,.notice th{text-align:left;vertical-align:top}.notice td.mono{white-space:normal}.notice table{min-width:720px}
 .notice{border-color:color-mix(in srgb,var(--green) 40%,var(--line))}
 .seg.ghostseg{border:1px solid var(--line);padding:4px 10px;font-size:12.5px}
@@ -723,6 +724,10 @@ details summary{cursor:pointer;font-size:13px}
         <label class="tog" style="margin-left:14px"><input type="checkbox" id="pfAI"> AI model (experimental - see its record in Backtest)</label>
         <label style="margin-top:12px">Daily risk limits</label>
         <label class="tog"><input type="checkbox" id="pfLimits"> Enforce them (stop for the day after 2 losers, a 2% loss or 4 trades). Off = shown as a tip only, since this is a demo account</label>
+        <div style="height:10px"></div>
+        <label>Trade fills</label>
+        <select id="pfFills" style="width:100%"><option value="realistic">Realistic: buy at the ask, sell at the bid (recommended)</option><option value="ltp">Last traded price on exit (flatters results)</option></select>
+        <div class="muted" style="font-size:12px;margin:4px 0 10px">Entries already pay the ask. This makes exits receive the bid, so paper profits match what a real order would get.</div>
         <label style="margin-top:12px">Auto paper-trading</label>
         <label class="tog"><input type="checkbox" id="pfAuto"> Place signal trades automatically, even when this page is closed</label>
         <div style="margin-top:6px" id="pfSyms"></div>
@@ -879,6 +884,13 @@ const withLevels = levels => original => {
 S.pick = null;          // strike chosen for the trade ticket (null = recommended)
 S.dash = null;
 
+function healthStrip(h) {
+  if (!h || !h.length) return "";
+  const dot = {ok: "var(--ok,#2ecc71)", warn: "#f1c40f", bad: "var(--bad,#e74c3c)"};
+  return `<div class="hstrip" title="Is the data behind these signals current?">` +
+    h.map(x => `<span class="hchip"><i style="background:${dot[x.state] || "#888"}"></i><b>${esc(x.label)}</b> ${esc(x.text)}</span>`).join("") + `</div>`;
+}
+
 async function loadSignal() {
   const q = S.pick ? `&strike=${S.pick}` : "";
   const d = await api("/api/dashboard?symbol=" + S.symbol + q);
@@ -886,7 +898,7 @@ async function loadSignal() {
   setSource(d.source, d.live);
   const chg = d.spot - d.prev_close, pct = chg / d.prev_close * 100;
   renderHero(d, chg, pct);
-  let notes = "";
+  let notes = healthStrip(d.health);
   if (!d.live) notes += `<div class="note">Demo mode: prices from Yahoo (may be delayed) and option prices are THEORETICAL. Connect Upstox or Fyers in ⚙️ Settings for the real option chain.</div>`;
   (d.errors || []).forEach(e => notes += `<div class="err" style="margin-top:8px">${esc(e)}</div>`);
   (d.closed_now || []).forEach(c => toast(`Auto-exit ${c.symbol}: ${c.reason} → ${rs(c.pnl)}`, 6000));
@@ -1082,7 +1094,11 @@ async function pushInit() {
   }
   try {
     const k = await api("/api/push/key");
-    if (!k.configured) return pushUI("Push not set up on the server", "Add the VAPID keys to the Vercel project.");
+    if (!k.configured) {
+      const b = $("#pushBtn"); b.textContent = "📲 Set up phone alerts (one click)"; b.disabled = false; $("#pushInfo").textContent = "Creates the keys phone notifications need. Then turn push on per device.";
+      b.onclick = async () => { try { await post("/api/push/setup"); toast("Phone alerts are ready. Now turn push on for this device."); PUSH_INIT = false; pushInit(); } catch (e) { toast(e.message); } };
+      return;
+    }
     const reg = await navigator.serviceWorker.register("/sw.js");
     PUSH_SUB = await reg.pushManager.getSubscription();
     pushUI(PUSH_SUB ? "on" : "off", `${k.devices} device${k.devices === 1 ? "" : "s"} registered`);
@@ -1958,7 +1974,20 @@ function brokerCard(name, title, idLabel, st, steps) {
       ${st.configured ? `<a href="/api/${name}/login"><button class="primary" type="button">🔐 Log in with ${title}</button></a>` : ""}
       ${st.connected ? `<button class="danger" data-disc="${name}">Disconnect</button>` : ""}
     </div>
-    ${st.logged_in_at ? `<div class="muted" style="font-size:12px;margin-top:8px">Last login ${esc(st.logged_in_at.replace("T", " ").slice(0, 16))} IST · logins expire every night around 3:30 AM.</div>` : ""}`;
+    ${st.logged_in_at ? `<div class="muted" style="font-size:12px;margin-top:8px">Last login ${esc(st.logged_in_at.replace("T", " ").slice(0, 16))} IST · logins expire every night around 3:30 AM.</div>` : ""}
+    ${brokerExtra(name, st)}`;
+}
+function brokerExtra(name, st) {
+  if (name === "upstox") return `<div class="notice" style="margin-top:14px"><b>No daily login: one-year data token</b>
+      <div class="muted" style="font-size:12.5px;margin:4px 0 8px">Paper trading only needs prices, so Upstox's free <i>Analytics token</i> (read-only, valid one year, cannot place orders) is enough.
+      ${st.analytics ? `<br><span class="up">Active: ${st.analytics_days_left} days left.</span>` : ""}</div>
+      <ol class="muted" style="padding-left:18px;margin:0 0 10px;font-size:12.5px"><li>Open <a href="https://account.upstox.com/developer/apps" target="_blank" rel="noopener">account.upstox.com/developer/apps</a>.</li><li>Click the <b>Analytics</b> tab, then <b>Generate Token</b>, confirm, and click the copy icon next to the token.</li><li>Paste it below and press Save token. The app tests price, candles and option chain before keeping it.</li></ol>
+      <div class="copy"><input id="upAn" type="password" placeholder="paste analytics token" autocomplete="new-password"><button data-an="upstox">Save token</button></div></div>`;
+  return `<div class="notice" style="margin-top:14px"><b>Fewer logins: automatic renewal</b>
+      <div class="muted" style="font-size:12.5px;margin:4px 0 8px">Fyers gives a renewal key at each login. With your Fyers PIN saved here, the app renews its own token each morning, so you only log in again when the renewal key itself runs out (roughly every two weeks, I believe; Fyers' exact period is not in its public docs). The PIN is stored in your private database and never shown again.
+      ${st.refresh_ready ? `<br><span class="up">Renewal is set up.</span>` : `<br>Log in once after saving the PIN so the renewal key is captured.`}
+      ${st.refresh_error ? `<br><span class="down">Last renewal failed: ${esc(st.refresh_error)}</span>` : ""}</div>
+      <div class="copy"><input id="fyPin" type="password" inputmode="numeric" placeholder="Fyers PIN" autocomplete="new-password"><button data-pin="fyers">Save PIN</button></div></div>`;
 }
 /* ---------- stocks ---------- */
 Object.assign(S, {stView: "picks", stQ: "", stUni: "N500", stCat: "", stTurn: 0, stMetric: "chg_1d", stSort: null, stShown: 100, stRange: 250, stSeries: {}, stOpen: null, stMarket: null, stMarketAt: 0, stPicks: null});
@@ -2318,7 +2347,7 @@ async function loadSettings() {
   $("#pfSize").value = pf.sizing || "risk"; $("#pfRisk").value = String(pf.risk_pct ?? 1);
   $("#pfNoise").checked = (pf.strategies || []).includes("noise"); $("#pfCam").checked = (pf.strategies || []).includes("camarilla");
   $("#pfAI").checked = (pf.strategies || []).includes("ai");
-  $("#pfAutopilot").checked = !!pf.autopilot; $("#pfAuto").checked = !!pf.auto; $("#pfLimits").checked = !!pf.enforce_limits;
+  $("#pfAutopilot").checked = !!pf.autopilot; $("#pfAuto").checked = !!pf.auto; $("#pfLimits").checked = !!pf.enforce_limits; $("#pfFills").value = pf.fills || "realistic";
   if (!PUSH_INIT) { PUSH_INIT = true; pushInit(); }
   $("#pfSyms").innerHTML = ["NIFTY", "BANKNIFTY"].map(x => `<label class="tog" style="margin-right:14px"><input type="checkbox" data-asym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${x === "NIFTY" ? "Nifty 50" : "Bank Nifty"}</label>`).join("");
   $("#fiiIn").value = d.fii_manual ? d.fii_manual.value : "";
@@ -2348,6 +2377,16 @@ document.addEventListener("click", async e => {
     try { await post("/api/settings", {broker: n, id: $("#" + n + "Id").value, secret: $("#" + n + "Sec").value}); toast("Saved. Now click Log in."); loadSettings(); }
     catch (err) { toast(err.message); }
   }
+  const an = e.target.closest("[data-an]");
+  if (an) {
+    try { const r = await post("/api/settings", {broker: "upstox", analytics_token: $("#upAn").value}); toast("Token saved. Price, candles and option chain all tested OK."); loadSettings(); }
+    catch (err) { toast(err.message, 9000); }
+  }
+  const pn = e.target.closest("[data-pin]");
+  if (pn) {
+    try { await post("/api/settings", {broker: "fyers", pin: $("#fyPin").value}); toast("PIN saved. Log in with Fyers once so renewal can start."); loadSettings(); }
+    catch (err) { toast(err.message); }
+  }
   const d = e.target.closest("[data-disc]");
   if (d) { await post("/api/settings", {broker: d.dataset.disc, disconnect: true}); toast("Disconnected"); loadSettings(); }
 });
@@ -2355,7 +2394,7 @@ $("#pfSave").onclick = async () => {
   const strategies = [$("#pfNoise").checked && "noise", $("#pfCam").checked && "camarilla", $("#pfAI").checked && "ai"].filter(Boolean);
   const auto_syms = [...document.querySelectorAll("[data-asym]")].filter(x => x.checked).map(x => x.dataset.asym);
   try {
-    await post("/api/settings", {prefs: {sizing: $("#pfSize").value, risk_pct: +$("#pfRisk").value, strategies, auto: $("#pfAuto").checked, autopilot: $("#pfAutopilot").checked, auto_syms, enforce_limits: $("#pfLimits").checked}});
+    await post("/api/settings", {prefs: {sizing: $("#pfSize").value, risk_pct: +$("#pfRisk").value, strategies, auto: $("#pfAuto").checked, autopilot: $("#pfAutopilot").checked, auto_syms, enforce_limits: $("#pfLimits").checked, fills: $("#pfFills").value}});
     toast("Preferences saved"); loadSettings();
   } catch (e) { toast(e.message); }
 };
@@ -2892,7 +2931,7 @@ document.addEventListener("click", async e => {
 const DX = {d: null, ds: "in_candles", sym: "NIFTY", tf: "1h", start: "", end: "", fmt: "csv", link: null};
 const dxTime = t => t ? new Date(t).toLocaleString("en-IN", {timeZone: "Asia/Kolkata", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", hour12: false}) + " IST" : "not yet";
 const dxAgo = t => { if (!t) return ""; const m = Math.round((Date.now() - new Date(t)) / 60000); return m < 2 ? "just now" : m < 120 ? m + " min ago" : m < 2880 ? Math.round(m / 60) + " h ago" : Math.round(m / 1440) + " days ago"; };
-async function loadData() { DX.d = await api("/api/data"); dxPick(DX.ds, true); renderData(); }
+async function loadData() { DX.d = await api("/api/data"); try { DX.bk = await api("/api/backup"); } catch (e) { DX.bk = null; } dxPick(DX.ds, true); renderData(); }
 function dxCur() { return DX.d.datasets.find(x => x.id === DX.ds); }
 function dxShift(iso, days) { const d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + days); return d.toISOString().slice(0, 10); }
 function dxPick(id, keep) {
@@ -2939,11 +2978,46 @@ function renderData() {
     ${DX.link ? `<div class="card" style="margin-top:12px;background:var(--panel2)"><div class="muted" style="font-size:12.5px;margin-bottom:6px">Anyone with this link can download this one file for ${DX.link.valid_days} days. They don't need to sign in and can't see anything else.${/trades|lessons|research/.test(DX.ds) ? " This file contains your trade results." : ""}</div>
       <div class="copy"><input id="dxLinkIn" readonly value="${esc(DX.link.url)}" style="width:100%"><button id="dxCopy">Copy</button></div></div>` : ""}
   </div>
+  ${driveCard(DX.bk)}
   <div class="card" style="margin-top:16px"><h3>Permanent archive on GitHub</h3>
     ${ar.ok ? `<p class="muted" style="margin:0 0 8px">${ar.days.length} trading day${ar.days.length === 1 ? "" : "s"} saved forever${ar.days.length ? " (" + esc(ar.days[0]) + " → " + esc(ar.days[ar.days.length - 1]) + ")" : ""}. Each day has: ${ar.files.map(f => `<span class="mono">${esc(f)}</span>`).join(", ")}. Open a day and use GitHub's download button, or share the repository link with whoever does the research.</p>
       <a href="https://github.com/${ar.repo}/tree/${ar.branch}/${ar.path}" target="_blank" rel="noopener">Open the archive folder ↗</a>
       <div class="chips" style="margin-top:10px">${ar.days.slice(-24).reverse().map(x => `<a class="chip" style="text-decoration:none" target="_blank" rel="noopener" href="https://github.com/${ar.repo}/tree/${ar.branch}/${ar.path}/${x}">${esc(x)}</a>`).join("")}</div>` : `<p class="muted">Could not read the archive list right now (${esc(ar.error || "")}). It is still being saved; open <a href="https://github.com/${ar.repo}/tree/${ar.branch}/${ar.path}" target="_blank" rel="noopener">the folder on GitHub</a> to see it.</p>`}</div>`;
 }
+function driveCard(b) {
+  if (!b) return "";
+  const when = b.last_ok ? dxTime(b.last_ok) + " · " + dxAgo(b.last_ok) : null;
+  return `<div class="card" style="margin-top:16px"><h3>Back up everything to your Google Drive</h3>
+    <p class="muted" style="margin:0 0 8px;font-size:13px">One zip of your trades, journal, settings, strategies, lessons, crypto / US books and the saved candles goes to a folder in <i>your</i> Drive every Friday after the close (the newest ${b.keep} are kept). Broker keys, tokens and your Fyers PIN are never included. ${b.url_set ? "" : "Set-up takes about 3 minutes and is done once."}</p>
+    ${when ? `<div class="dsmeta"><div><span class="muted">Last backup</span> <span class="mono">${esc(when)}</span></div><div><span class="muted">File</span> <span class="mono">${esc(b.last_name || "")} · ${(b.last_bytes / 1e6).toFixed(1)} MB</span></div>${b.folder ? `<div><a href="${esc(b.folder)}" target="_blank" rel="noopener">Open the Drive folder ↗</a></div>` : ""}</div>` : ""}
+    ${b.last_error ? `<div class="err" style="margin:8px 0">Last attempt failed: ${esc(b.last_error)}</div>` : ""}
+    ${b.url_set ? "" : `<ol class="muted" style="padding-left:18px;font-size:13px;line-height:1.6">
+      <li>Press <b>Copy script</b> below.</li>
+      <li>Open <a href="https://script.google.com/home/start" target="_blank" rel="noopener">script.google.com</a> signed in to the Google account whose Drive should hold the backups, then click <b>New project</b>.</li>
+      <li>Select everything in the editor (Ctrl+A), delete it, paste the script (Ctrl+V) and click the save icon.</li>
+      <li>Click <b>Deploy</b> (top right) → <b>New deployment</b> → the gear icon → <b>Web app</b>. Set <b>Execute as: Me</b> and <b>Who has access: Anyone</b>, then <b>Deploy</b>.</li>
+      <li>Click <b>Authorize access</b>, choose your account, then <b>Advanced</b> → <b>Go to (project name) (unsafe)</b> → <b>Allow</b>. (Google shows this warning for every personal script; it is your own script.)</li>
+      <li>Copy the <b>Web app URL</b> (ends in /exec), paste it below and press <b>Connect Drive</b>.</li></ol>`}
+    <div class="row wrap" style="margin-top:8px">
+      <button id="dxBkCopy">Copy script</button>
+      <input id="dxBkUrl" placeholder="${b.url_set ? "Web app URL saved - paste a new one to replace" : "https://script.google.com/macros/s/.../exec"}" style="flex:1;min-width:220px" autocomplete="off">
+      <button id="dxBkSave">Connect Drive</button>
+      ${b.url_set ? `<button class="primary" id="dxBkRun">Back up now</button>` : ""}</div></div>`;
+}
+document.addEventListener("click", async e => {
+  const t = e.target.closest("#dxBkCopy,#dxBkSave,#dxBkRun"); if (!t) return;
+  try {
+    if (t.id === "dxBkCopy") {
+      const r = await fetch("/api/backup/script"); const txt = await r.text();
+      await navigator.clipboard.writeText(txt); toast("Script copied. Now paste it in script.google.com");
+    } else if (t.id === "dxBkSave") {
+      await post("/api/backup/url", {url: $("#dxBkUrl").value}); toast("Drive connected. Press Back up now to test it."); loadData();
+    } else {
+      t.disabled = true; t.textContent = "Backing up…";
+      const r = await post("/api/backup/run", {}); toast(`Saved ${r.name} (${(r.bytes / 1e6).toFixed(1)} MB) to your Drive`, 6000); loadData();
+    }
+  } catch (err) { toast(err.message, 9000); loadData(); }
+});
 function dxParams() {
   DX.ds = $("#dxDs").value; const c = dxCur(); DX.start = $("#dxFrom").value; DX.end = $("#dxTo").value; DX.fmt = $("#dxFmt").value;
   if ($("#dxSym")) DX.sym = $("#dxSym").value; if ($("#dxTf")) DX.tf = $("#dxTf").value;

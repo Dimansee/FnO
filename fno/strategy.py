@@ -366,7 +366,13 @@ def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=N
 
     def px(row, side):
         v = row.get(f"{tag}_{side}")
-        return float(v) if v and not (isinstance(v, float) and math.isnan(v)) and v > 0 else float(row[f"{tag}_ltp"])
+        if v and not (isinstance(v, float) and math.isnan(v)) and v > 0:
+            return float(v)
+        last = float(row[f"{tag}_ltp"])
+        if chain.attrs.get("source") == "live" and (prefs or {}).get("fills", "realistic") == "realistic":
+            from .market import slip_pct                  # no depth from the broker: assume a typical half-spread
+            return round(last * (1 + slip_pct(last) * (1 if side == "ask" else -1)), 2)
+        return last
 
     def dlt(row):
         v = row.get(f"{tag}_delta")
