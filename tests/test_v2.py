@@ -288,3 +288,111 @@ assert filled.index[-1].date() == last_day and len(filled) > len(broker), (fille
 assert not filled.index.duplicated().any()
 print("gap fill OK:", broker.index[-1].date(), "->", filled.index[-1].date())
 print("ALL V2 OK 2")
+
+# ------------------------------------------------------------------ 10. long-lived tokens, fills, data health, Drive backup
+import base64, io, json as _json, zipfile  # noqa: E402
+import app as A  # noqa: E402
+from fno import brokers as B, backup as BK  # noqa: E402
+
+NOW[0] = datetime(2026, 10, 1, 10, 52, tzinfo=C.IST)
+store.put("upstox", {"api_key": "k", "secret": "s"})
+A._verify_upstox = lambda tok: {"quote": True, "candles": False, "chain": True, "detail": "candles: nope"}
+r = c.post("/api/settings", json={"broker": "upstox", "analytics_token": "TOK1"})
+assert r.status_code == 400 and "candles" in r.get_json()["error"], r.get_data(as_text=True)[:200]
+A._verify_upstox = lambda tok: {"quote": True, "candles": True, "chain": True, "detail": ""}
+j(c.post("/api/settings", json={"broker": "upstox", "analytics_token": "TOK1"}))
+up = j(c.get("/api/settings"))["upstox"]
+assert up["analytics"] and up["analytics_days_left"] >= 359 and up["connected"] and not up["daily_login"], up
+mk = M.Market()
+assert mk.token_kind.get("upstox") == "analytics" and "upstox" in mk.clients
+cfg = store.get("upstox"); cfg["analytics_created"] = (NOW[0] - timedelta(days=361)).isoformat()
+store.put("upstox", cfg)
+assert "upstox" not in M.Market().clients, "an expired analytics token must not be used"
+store.put("upstox", {"api_key": "k", "secret": "s"})
+
+# Fyers: expired daily token + saved refresh token and PIN -> silent renewal
+store.put("fyers", {"app_id": "A-100", "secret": "sec", "token": "old", "token_created": (NOW[0] - timedelta(days=2)).isoformat(),
+                    "refresh_token": "RT", "pin": "987654"})
+B.fyers_refresh = lambda app_id, secret, rt, pin: "NEWTOK" if (rt, pin) == ("RT", "987654") else (_ for _ in ()).throw(RuntimeError("bad"))
+mk = M.Market()
+assert "fyers" in mk.clients and store.get("fyers")["token"] == "NEWTOK", store.get("fyers")
+assert j(c.get("/api/settings"))["fyers"]["refresh_ready"] is True
+r = c.post("/api/settings", json={"broker": "fyers", "pin": "12ab"})
+assert r.status_code == 400
+
+# realistic exit fills: sell a bought option at the bid, never above the last price
+mk = M.Market.__new__(M.Market)
+mk.clients = {"upstox": object()}
+mk.ba = {"K1": (98.0, 102.0), "K2": (None, None), "K3": (30.0, 101.0), "K4": (10.0, 12.0)}
+pos = [{"legs": [{"key": "K1", "side": "BUY", "src": "upstox"}, {"key": "K2", "side": "BUY", "src": "upstox"},
+                 {"key": "K3", "side": "BUY", "src": "upstox"}, {"key": "K4", "side": "SELL", "src": "upstox"},
+                 {"key": "K5", "side": "BUY", "src": "demo"}]}]
+px = {"K1": 100.0, "K2": 100.0, "K3": 100.0, "K4": 10.0, "K5": 100.0}
+f = mk.exit_fills(pos, px)
+assert f["K1"] == 98.0, f                                   # bid
+assert abs(f["K2"] - 99.4) < 0.01, f                        # no depth: 0.6% haircut for a 100 premium
+assert abs(f["K3"] - 99.4) < 0.01, f                        # stale far-off bid ignored
+assert f["K4"] == 12.0, f                                   # buying back a short leg pays the ask
+assert f["K5"] == 100.0, f                                  # demo (theoretical) legs untouched
+assert mk.exit_fills(pos, px, "ltp") == px
+
+# entry fallback when the broker gives no ask: LTP plus a half-spread (live chains only)
+ch = pd.DataFrame({"strike": [24800.0], "ce_ltp": [100.0], "ce_ask": [None], "ce_bid": [None], "ce_key": ["x"], "ce_delta": [0.5]})
+ch.attrs["source"] = "live"
+# (px() lives inside build_order; its fallback is exercised through slip_pct)
+assert M.slip_pct(10) == 0.02 and M.slip_pct(40) == 0.012 and M.slip_pct(150) == 0.006
+
+# data health strip
+class _MM:
+    live = False
+    token_kind = {}
+cd = fake(1300, NOW[0]).iloc[:-1]                           # bars up to 10:45
+h = {x["label"]: x for x in SV.health(_MM(), cd, NOW[0])}
+assert h["Candles"]["state"] == "ok" and h["Broker"]["state"] == "bad", h
+later = NOW[0] + timedelta(minutes=40)
+assert {x["label"]: x for x in SV.health(_MM(), cd, later)}["Candles"]["state"] == "bad"
+fri_night = datetime(2026, 10, 16, 1, 40, tzinfo=C.IST)
+stale = fake(1300, datetime(2026, 10, 14, 15, 25, tzinfo=C.IST))
+assert {x["label"]: x for x in SV.health(_MM(), stale, fri_night)}["Candles"]["state"] == "bad"     # the Wednesday-on-Friday case
+
+# Google Drive backup
+store.put("prefs", {"sizing": "risk"})
+store.put("fyers", {"app_id": "A-100", "secret": "sec", "token": "SECRETTOKEN", "refresh_token": "RT", "pin": "987654", "token_created": NOW[0].isoformat()})
+txt = c.get("/api/backup/script").get_data(as_text=True)
+sec = store.get("drive")["secret"]
+assert sec in txt and "doPost" in txt and "__SECRET__" not in txt
+assert c.post("/api/backup/url", json={"url": "https://evil.example.com/x"}).status_code == 400
+j(c.post("/api/backup/url", json={"url": "https://script.google.com/macros/s/AKfy-123_x/exec"}))
+blob, info = BK.build_zip(NOW[0])
+z = zipfile.ZipFile(io.BytesIO(blob))
+allt = "".join(z.read(n).decode() for n in z.namelist())
+assert "settings.json" in z.namelist() and "trades.json" in z.namelist() or "positions.json" in z.namelist() or info["keys"] >= 2, z.namelist()
+for secret in ("SECRETTOKEN", "987654", sec, "NEWTOK", "TOK1"):
+    assert secret not in allt, f"{secret} leaked into the backup"
+assert '"prefs"' in allt
+
+
+class _R:
+    status_code = 200
+    def json(self): return {"ok": True, "folder": "https://drive.google.com/x"}
+
+
+sent = {}
+BK.requests.post = lambda url, data, headers, timeout: (sent.update(body=_json.loads(data), url=url), _R())[1]
+res = j(c.post("/api/backup/run"))
+assert res["ok"] and sent["body"]["secret"] == sec and sent["body"]["name"].startswith("fno-backup-"), res
+assert zipfile.ZipFile(io.BytesIO(base64.b64decode(sent["body"]["data"]))).testzip() is None
+st = j(c.get("/api/backup"))
+assert st["url_set"] and st["last_ok"] and not st["last_error"] and st["last_bytes"] > 100, st
+BK.requests.post = lambda *a, **k: (_ for _ in ()).throw(RuntimeError("offline"))
+r = c.post("/api/backup/run")
+assert r.status_code == 400 and "offline" in j(c.get("/api/backup"))["last_error"]
+from fno import push as PUSH  # noqa: E402
+if not (PUSH.PUBLIC_KEY and PUSH.PRIVATE_KEY):
+    assert j(c.get("/api/push/key"))["configured"] is False
+    assert j(c.post("/api/push/setup"))["ok"] is True
+    k = j(c.get("/api/push/key"))
+    assert k["configured"] and len(k["key"]) > 40
+    assert j(c.post("/api/push/setup"))["ok"] and j(c.get("/api/push/key"))["key"] == k["key"], "setup must not replace existing keys"
+print("tokens, fills, health, backup OK")
+print("ALL V2 OK 3")

@@ -47,6 +47,7 @@ SCHEDULES = [
     {"name": "After-close research + data save", "where": "QStash", "when": "15:35 IST, Mon-Fri", "what": "Writes the day's research note and lessons, and saves the day's Nifty / Bank Nifty 5-minute candles."},
     {"name": "Crypto and US books", "where": "GitHub Actions", "when": "Every 5 minutes, all day", "what": "Runs the crypto and US paper accounts; after the US close it saves the day's US candles."},
     {"name": "Permanent market archive", "where": "GitHub Actions", "when": "19:10 IST and again 08:50 IST next morning", "what": "Saves 1-minute option candles, NSE end-of-day files, FII/DII participant data and a copy of the day's snapshots into the research-data branch. Kept forever."},
+    {"name": "Google Drive backup", "where": "QStash (after-close run)", "when": "Fridays after 15:35 IST", "what": "Zips trades, journal, settings, strategies, lessons and saved candles into your Google Drive (once connected below). Broker keys are never included."},
     {"name": "Stock research", "where": "GitHub Actions", "when": "19:45 IST and 06:00 IST next morning", "what": "Refreshes the stock research data and picks."},
     {"name": "AI model retrain", "where": "GitHub Actions", "when": "08:00 IST on the 1st of each month", "what": "Retrains the optional AI model."},
 ]

@@ -3,12 +3,13 @@ function returns plain JSON-safe dicts for the API."""
 from __future__ import annotations
 
 import math
-from datetime import date, time
+from datetime import date, datetime, time, timedelta
 
 import numpy as np
 import pandas as pd
 
 from . import backtest as BT
+from . import brokers as B
 from . import config as C
 from . import context as X
 from . import indicators as I
@@ -76,7 +77,7 @@ def fii():
 # Position management (also called every minute by the scheduler)
 # ---------------------------------------------------------------------------
 PREF_DEFAULTS = {"autopilot": False, "sizing": "risk", "risk_pct": 1.0, "strategies": ["noise", "camarilla"], "auto": False, "auto_syms": ["NIFTY"],
-                 "enforce_limits": False}   # demo account: the daily risk limits are shown as a tip unless switched on
+                 "enforce_limits": False, "fills": "realistic"}   # demo account: the daily risk limits are shown as a tip unless switched on
 
 
 def prefs() -> dict:
@@ -150,7 +151,8 @@ def manage_positions(m: M.Market | None = None) -> list[dict]:
             p.update(upd)
             store.update_position(p)
         if reason and (p["mode"] == "signal" or reason.startswith("Square-off")):
-            rec = P.close_position(p["id"], prices, reason, extra={"spot_exit": sp})
+            fills = m.exit_fills([p], prices, eprefs().get("fills", "realistic"))
+            rec = P.close_position(p["id"], fills, reason, extra={"spot_exit": sp, "exit_ltp": round(prem, 2)})
             if rec:
                 closed.append({"symbol": rec["symbol"], "reason": reason, "pnl": rec["pnl"], "id": p["id"]})
     return closed
@@ -331,6 +333,58 @@ def _mini_chain(ch, spot, width=6):
     return float(ch["strike"].iloc[atm_i]), view.reindex(columns=cols).to_dict("records")
 
 
+def _last_session_date(now):
+    d = now.date() if now.time() >= C.MARKET_OPEN else now.date() - timedelta(days=1)
+    while d.weekday() >= 5 or d in C.HOLIDAYS:
+        d -= timedelta(days=1)
+    return d
+
+
+def health(m, candles, now) -> list[dict]:
+    """A few honest lights: is the price data current, is the broker login healthy, are the schedules ticking."""
+    out = []
+    try:
+        last = candles.index[-1]
+        open_now = now.weekday() < 5 and now.date() not in C.HOLIDAYS and C.MARKET_OPEN <= now.time() <= C.MARKET_CLOSE
+        if open_now:
+            lag = (now - last).total_seconds() / 60
+            st = "ok" if lag <= 12 else "warn" if lag <= 25 else "bad"
+            out.append({"label": "Candles", "state": st, "text": f"latest bar {last:%H:%M} ({lag:.0f} min old)"})
+        else:
+            want = _last_session_date(now)
+            st = "ok" if last.date() >= want else "bad"
+            out.append({"label": "Candles", "state": st, "text": f"last session {last:%d %b}" + ("" if st == "ok" else f" - expected {want:%d %b}")})
+    except Exception:
+        out.append({"label": "Candles", "state": "bad", "text": "no data"})
+    if not m.live:
+        out.append({"label": "Broker", "state": "bad", "text": "not logged in - demo prices"})
+    else:
+        kind = (getattr(m, "token_kind", {}) or {}).get(m.br.name, "daily")
+        if kind == "analytics":
+            cfg = store.get("upstox") or {}
+            left = B.analytics_days_left(cfg.get("analytics_created"))
+            out.append({"label": "Broker", "state": "ok" if (left or 0) > 14 else "warn", "text": f"{m.br.name.title()} one-year data token, {left} days left"})
+        else:
+            cut = now.replace(hour=3, minute=30, second=0, microsecond=0)
+            if now >= cut:
+                cut += timedelta(days=1)
+            hrs = (cut - now).total_seconds() / 3600
+            out.append({"label": "Broker", "state": "ok" if hrs > 3 else "warn", "text": f"{m.br.name.title()} login runs out in {hrs:.0f}h (about 03:30)"})
+    try:
+        lt = store._cmd("GET", "fno:last_tick")
+        if lt:
+            t = datetime.fromisoformat(lt)
+            ago = (now - t).total_seconds() / 60
+            expect = now.weekday() < 5 and now.date() not in C.HOLIDAYS and C.MARKET_OPEN <= now.time() <= C.MARKET_CLOSE
+            st = "ok" if (not expect or ago <= 5) else "warn" if ago <= 15 else "bad"
+            out.append({"label": "Auto-check", "state": st, "text": f"last ran {t:%a %H:%M}" + (f" ({ago:.0f} min ago)" if expect else "")})
+        else:
+            out.append({"label": "Auto-check", "state": "warn", "text": "no run recorded yet (starts at the next market open)"})
+    except Exception:
+        pass
+    return out
+
+
 def dashboard(symbol, strike=None):
     m = M.Market()
     closed = manage_positions(m)
@@ -366,7 +420,7 @@ def dashboard(symbol, strike=None):
                                  for x in ev["bands"]["series"]]
     return clean({
         "symbol": symbol, "label": g["meta"]["label"], "source": m.source, "live": m.live,
-        "time": g["now"].strftime("%H:%M:%S"), "spot": g["spot"], "prev_close": prev,
+        "time": g["now"].strftime("%H:%M:%S"), "spot": g["spot"], "prev_close": prev, "health": health(m, g["candles"], g["now"]),
         "vix": g["vix"], "expiry": g["trade_exp"], "lot": g["lot"], "cash": cash,
         "chain_source": g["chain"].attrs.get("source", "live"),
         "signal": ev, "order": order, "alternatives": alts, "atm": atm, "chain": chain_rows,
@@ -536,7 +590,8 @@ def exit_position(pos_id):
         return False, "Position not found (it may have been closed already)."
     sp = {pos[0]["symbol"]: m.spot(pos[0]["symbol"])}
     prices = m.leg_prices(pos, sp, m.vix()["level"])
-    rec = P.close_position(pos_id, prices, "Manual exit", extra={"spot_exit": sp[pos[0]["symbol"]]})
+    rec = P.close_position(pos_id, m.exit_fills(pos, prices, eprefs().get("fills", "realistic")), "Manual exit",
+                           extra={"spot_exit": sp[pos[0]["symbol"]]})
     return (True, f"Closed. Net P&L after charges ₹{rec['pnl']:,.0f}") if rec else (False, "Already closed.")
 
 
@@ -777,10 +832,20 @@ def tick():
                         out["data_saved"] = DH.save_in(now)
                 except Exception as e:
                     out["data_saved"] = {"error": str(e)[:120]}
+                try:                                                    # weekly copy of everything to the user's Google Drive (Fridays)
+                    if now.weekday() == 4 and not store._cmd("SET", f"fno:backup:week:{now.strftime('%G-%V')}", "1", "NX", "EX", 86400 * 10) is None:
+                        from . import backup as BK
+                        out["drive_backup"] = BK.run(now) if BK.cfg().get("url") else {"skipped": "Drive not connected"}
+                except Exception as e:
+                    out["drive_backup"] = {"error": str(e)[:120]}
                 return out
             except Exception as e:
                 return {"post_close": {"error": str(e)[:160]}}
         return {"skipped": "outside market hours"}
+    try:
+        store._cmd("SET", "fno:last_tick", now.isoformat(timespec="seconds"), "EX", 86400 * 4)
+    except Exception:
+        pass
     closed = manage_positions()
     for c in closed:
         _push_safe(f"{c['symbol']} position closed", f"{c['reason']} - P&L ₹{c['pnl']:+,.0f}", f"close:{c.get('id') or c['symbol']}:{now.strftime('%H%M')}", "/#portfolio")
@@ -814,6 +879,16 @@ def tick():
             _push_safe("Broker login expired", "Live prices are off (delayed Yahoo data is being used). Log in again in Settings.", f"authexp:{now.date()}", "/#settings")
     except Exception as e:
         rec = {"error": str(e)[:160]}
+    try:                                                     # phone alerts for the things that quietly break trading
+        mk2 = locals().get("mk")
+        if mk2 is not None:
+            for h in health(mk2, mk2.candles("NIFTY"), now):
+                if h["state"] == "bad" and h["label"] in ("Candles", "Auto-check"):
+                    _push_safe("Data check failed", f"{h['label']}: {h['text']}", f"health:{h['label']}:{now.strftime('%H')}", "/#signal")
+                if h["label"] == "Broker" and "one-year" in h["text"] and h["state"] == "warn":
+                    _push_safe("Upstox data token ending soon", h["text"] + ". Generate a new one in the Upstox developer page and paste it in Settings.", f"antoken:{now.date()}", "/#settings")
+    except Exception:
+        pass
     return {"closed": closed, "placed": placed, "recorded": rec, "journal": jr, "time": now.isoformat(timespec="seconds")}
 
 

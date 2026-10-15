@@ -23,8 +23,32 @@ PRIVATE_KEY = os.environ.get("VAPID_PRIVATE_KEY", "")
 SUBJECT = os.environ.get("VAPID_SUBJECT", "mailto:admin@example.com")
 
 
+def _keys() -> tuple[str, str]:
+    """VAPID keys from the environment, else the ones made by the one-click setup (kept in the database)."""
+    if PUBLIC_KEY and PRIVATE_KEY:
+        return PUBLIC_KEY, PRIVATE_KEY
+    try:
+        v = store.get("vapid") or {}
+        return v.get("public", ""), v.get("private", "")
+    except Exception:
+        return "", ""
+
+
+def public_key() -> str:
+    return _keys()[0]
+
+
 def configured() -> bool:
-    return bool(PUBLIC_KEY and PRIVATE_KEY)
+    pub, priv = _keys()
+    return bool(pub and priv)
+
+
+def setup() -> bool:
+    """One click from Settings: make and keep a key pair if none exists. Returns True when keys exist afterwards."""
+    if not configured():
+        k = generate_keys()
+        store.put("vapid", {"public": k["VAPID_PUBLIC_KEY"], "private": k["VAPID_PRIVATE_KEY"]})
+    return configured()
 
 
 def subscriptions() -> dict:
@@ -127,7 +151,7 @@ def vapid_headers(endpoint: str) -> dict:
     header = _b64e(json.dumps({"typ": "JWT", "alg": "ES256"}).encode())
     body = _b64e(json.dumps(claims, separators=(",", ":")).encode())
     signing_input = f"{header}.{body}".encode()
-    priv = ec.derive_private_key(int.from_bytes(_b64d(PRIVATE_KEY), "big"), ec.SECP256R1())
+    priv = ec.derive_private_key(int.from_bytes(_b64d(_keys()[1]), "big"), ec.SECP256R1())
     r, s_ = decode_dss_signature(priv.sign(signing_input, ec.ECDSA(hashes.SHA256())))
     jwt = f"{header}.{body}.{_b64e(r.to_bytes(32, 'big') + s_.to_bytes(32, 'big'))}"
     pub = _b64e(_pub_bytes(priv.public_key()))

@@ -48,6 +48,32 @@ def token_valid(created_iso: str | None) -> bool:
         return False
 
 
+ANALYTICS_DAYS = 360          # Upstox analytics tokens last one year; we stop trusting one a few days early
+
+
+def analytics_valid(created_iso: str | None) -> bool:
+    """Upstox's read-only analytics token (market data only, no orders) lasts a year instead of a day."""
+    if not created_iso:
+        return False
+    try:
+        created = datetime.fromisoformat(created_iso)
+        if created.tzinfo is None:
+            created = created.replace(tzinfo=C.IST)
+        return (C.now_ist() - created).days < ANALYTICS_DAYS
+    except Exception:
+        return False
+
+
+def analytics_days_left(created_iso: str | None) -> int | None:
+    try:
+        created = datetime.fromisoformat(created_iso)
+        if created.tzinfo is None:
+            created = created.replace(tzinfo=C.IST)
+        return max(0, ANALYTICS_DAYS - (C.now_ist() - created).days)
+    except Exception:
+        return None
+
+
 def _num(v):
     try:
         return None if v is None else float(v)
@@ -105,7 +131,10 @@ class Upstox:
                 k = v.get("instrument_token") or ""
                 last = _num(v.get("last_price"))
                 chg = _num(v.get("net_change")) or 0
-                out[k] = {"ltp": last, "prev_close": (last - chg) if last is not None else None}
+                dep = v.get("depth") or {}
+                bid = _num(((dep.get("buy") or [{}])[0]).get("price")) or None
+                ask = _num(((dep.get("sell") or [{}])[0]).get("price")) or None
+                out[k] = {"ltp": last, "prev_close": (last - chg) if last is not None else None, "bid": bid, "ask": ask}
         return out
 
     def expiries(self, key):
@@ -175,6 +204,27 @@ def fyers_exchange(auth_code, app_id, secret) -> str:
     return j["access_token"]
 
 
+def fyers_exchange_full(auth_code, app_id, secret) -> dict:
+    h = hashlib.sha256(f"{app_id}:{secret}".encode()).hexdigest()
+    r = requests.post(f"{FYERS_API}/validate-authcode",
+                      json={"grant_type": "authorization_code", "appIdHash": h, "code": auth_code}, timeout=15)
+    j = r.json() if r.content else {}
+    if j.get("s") != "ok" or not j.get("access_token"):
+        raise BrokerError(f"Fyers token exchange failed: {j.get('message') or r.text[:200]}")
+    return {"access_token": j["access_token"], "refresh_token": j.get("refresh_token")}
+
+
+def fyers_refresh(app_id, secret, refresh_token, pin) -> str:
+    """A new Fyers access token from the refresh token + the user's PIN: no browser login."""
+    h = hashlib.sha256(f"{app_id}:{secret}".encode()).hexdigest()
+    r = requests.post(f"{FYERS_API}/validate-refresh-token",
+                      json={"grant_type": "refresh_token", "appIdHash": h, "refresh_token": refresh_token, "pin": str(pin)}, timeout=15)
+    j = r.json() if r.content else {}
+    if j.get("s") != "ok" or not j.get("access_token"):
+        raise BrokerError(f"Fyers refresh failed: {j.get('message') or r.text[:160]}")
+    return j["access_token"]
+
+
 class Fyers:
     name = "fyers"
 
@@ -208,7 +258,8 @@ class Fyers:
             j = self._get("/quotes", {"symbols": ",".join(keys[i:i + 50])})
             for d in j.get("d", []):
                 v = d.get("v") or {}
-                out[d.get("n")] = {"ltp": _num(v.get("lp")), "prev_close": _num(v.get("prev_close_price"))}
+                out[d.get("n")] = {"ltp": _num(v.get("lp")), "prev_close": _num(v.get("prev_close_price")),
+                                   "bid": _num(v.get("bid")) or None, "ask": _num(v.get("ask")) or None}
         return out
 
     def _raw_chain(self, key, ts="", strikecount=12, greeks=True):
