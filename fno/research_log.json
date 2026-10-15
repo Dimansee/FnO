@@ -3,6 +3,39 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "x5",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Expiry-day Nifty straddle: pre-open filters and long wings",
+   "asked": "Rounds 14b/14d left the expiry-day short straddle as 'needs a gap/event filter'. Can a filter known before 09:15 (gap, previous-day move, India VIX) or long wings (iron fly) remove the big-loss days? 157 Nifty expiry days from NSE bhavcopy, sell ATM CE+PE at the 09:15 first print (-2.7% haircut), hold to settlement, real lot-size history, charges. All variants reported, none tuned.",
+   "result": "The unfiltered straddle reproduces: +Rs 201k, win 66%, PF 1.70, worst day -23.2k, worst five days -92.1k, still +75.2k without the best 10 days. Every filter lowered profit and none removed the worst day: gap <= 0.75% +158.5k, gap <= 0.5% +120.1k, previous-day move <= 1% +107.3k, VIX <= 18 +107.5k, VIX <= 14 +43.7k, the three combined +34.6k with a deeper fall (-47.1k). Wings: 100 points wide -14.3k (PF 0.91), 200 points +32.7k (PF 1.13; -44.0k without the best 10), 300 points +75.7k (PF 1.26; worst day -19.4k).",
+   "decision": "Watch-list",
+   "summary": "The straddle keeps its edge but carries a single-day loss near Rs 23k per lot that no pre-open filter or wing setup removes cheaply; the days the filters skip are the ones that pay the most premium. Not shippable. Entry fills assume the first print less 2.7%, margin cost and live fill quality are not in the data, and it is only 157 days.",
+   "period": "2023-10-05 to 2026-09-29 (157 expiry days; unseen from 2025-07-01)"
+  },
+  {
+   "id": "x4",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Premium-based stop-loss on the current Noise and Camarilla rules",
+   "asked": "The system audit (r18f) noted a stop based on the option premium was never tested. Does closing a trade when the modelled premium falls 20/30/40/50% below entry improve the current rules? Same engine, Nifty + Bank Nifty, 872 trades, 2 Jan 2023 - 1 Oct 2026; the index stop, target and trail are unchanged, a gap through the stop fills at the open.",
+   "result": "Never better than the index stop. None (current): +Rs 255.7k, PF 1.34, worst fall -52.7k, unseen 120 days +77.5k. -20%: +225.2k, PF 1.30, fall -60.6k (119 trades cut). -30%: +241.9k, PF 1.32 (34 cut). -40%: +250.3k, PF 1.33 (9 cut). -50%: identical to current (0 cut). Unseen-day profit stayed +77.5k to +78.8k in every row.",
+   "decision": "Not adopted",
+   "summary": "A tight premium stop gives up about Rs 30k and deepens the worst fall; a wide one almost never triggers. The index-based stop already does the job. Premiums are modelled (calibrated Black-Scholes), not real quotes.",
+   "period": "2023-01-02 to 2026-10-01 (unseen 120 days)"
+  },
+  {
+   "id": "x3",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Video strategy as options: trade the D1-break signals with option premium (Nifty)",
+   "asked": "The D1-break reversal signal has no clear edge on the index itself. Does expressing the same Nifty signals as options (buy ATM or 1-ITM, sell the opposite option, or a 200-point credit spread) create one? Rules as in the index test, 1 lot (65), 0.5% slippage per fill, full charges.",
+   "result": "No. On 841 Nifty signals (D1 target) the modelled option result after costs was: buy 1-ITM -Rs 85.0k, buy ATM -65.6k, sell opposite ATM -62.2k, credit spread -187.5k (about Rs -223 per trade). Without the best 5 trades every single-leg version falls by another Rs 40-65k. Fixed 1R/2R/3R targets were negative with the 95% range below zero for every structure. Only 2024 was positive. The index itself rebuilt at 841 trades, 35 reaching the target, -0.085R net (+0.086R before costs). On the only real option candles available (16 trades) the sign agreed but the model was slightly optimistic: buy ATM +Rs 5.6k real vs +10.0k modelled, and -10.8k without the best 5 real trades.",
+   "decision": "Not adopted",
+   "summary": "The index signal's gross edge (about +0.09R) is smaller than option spread, slippage and charges, so no option structure fixes it. Long options turn the rare big winners into larger ones but pay time decay on the many small stops; selling options and spreads pay costs on four orders. Real option data covers only 16 trades, so this stays a model result until the recorder has months of candles.",
+   "period": "2023-01-03 to 2026-10-01 (924 sessions); real option check 29 Jul - 14 Oct 2026"
+  },
+  {
    "id": "x2",
    "date": "2026-10-15",
    "area": "Index options",
