@@ -552,6 +552,11 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
           <div class="copy"><input id="fiiIn" type="number" step="100" placeholder="e.g. -1250"><button id="fiiSave">Save</button></div>
         </div>
       </div>
+      <div class="card" id="autoCard" style="border-left:3px solid var(--accent,#f2a93b)">
+        <h3>🤖 Autopilot</h3>
+        <label class="tog"><input type="checkbox" id="pfAutopilot"> Autopilot - the app decides everything itself and trades automatically</label>
+        <p class="muted" style="margin:8px 0 0">When ON it ignores the preferences below and uses the tested rules: Nifty + Bank Nifty, both strategies, the 1-strike in-the-money option, a stop of 2 × ATR, and a noise band of 1.75×. Position size is worked out from your <b>current equity</b> (so it compounds): lots = 1% of equity ÷ risk per lot, with a minimum of 1 lot while one lot risks no more than 15% of equity, otherwise it skips the trade. A weekly loss limit (15% below ₹1 lakh, 4% above) stops new trades. When OFF, everything works exactly as set below. It is rule-based, not a promise of profit - see the Research tab (round 20) for the small-account results. Press <b>Save preferences</b> below after switching it.</p>
+      </div>
       <div class="card" id="prefCard">
         <h3>Trading preferences</h3>
         <div class="formrow">
@@ -2153,7 +2158,7 @@ async function loadSettings() {
   $("#pfSize").value = pf.sizing || "risk"; $("#pfRisk").value = String(pf.risk_pct ?? 1);
   $("#pfNoise").checked = (pf.strategies || []).includes("noise"); $("#pfCam").checked = (pf.strategies || []).includes("camarilla");
   $("#pfAI").checked = (pf.strategies || []).includes("ai");
-  $("#pfAuto").checked = !!pf.auto; $("#pfLimits").checked = !!pf.enforce_limits;
+  $("#pfAutopilot").checked = !!pf.autopilot; $("#pfAuto").checked = !!pf.auto; $("#pfLimits").checked = !!pf.enforce_limits;
   if (!PUSH_INIT) { PUSH_INIT = true; pushInit(); }
   $("#pfSyms").innerHTML = ["NIFTY", "BANKNIFTY"].map(x => `<label class="tog" style="margin-right:14px"><input type="checkbox" data-asym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${x === "NIFTY" ? "Nifty 50" : "Bank Nifty"}</label>`).join("");
   $("#fiiIn").value = d.fii_manual ? d.fii_manual.value : "";
@@ -2190,7 +2195,7 @@ $("#pfSave").onclick = async () => {
   const strategies = [$("#pfNoise").checked && "noise", $("#pfCam").checked && "camarilla", $("#pfAI").checked && "ai"].filter(Boolean);
   const auto_syms = [...document.querySelectorAll("[data-asym]")].filter(x => x.checked).map(x => x.dataset.asym);
   try {
-    await post("/api/settings", {prefs: {sizing: $("#pfSize").value, risk_pct: +$("#pfRisk").value, strategies, auto: $("#pfAuto").checked, auto_syms, enforce_limits: $("#pfLimits").checked}});
+    await post("/api/settings", {prefs: {sizing: $("#pfSize").value, risk_pct: +$("#pfRisk").value, strategies, auto: $("#pfAuto").checked, autopilot: $("#pfAutopilot").checked, auto_syms, enforce_limits: $("#pfLimits").checked}});
     toast("Preferences saved"); loadSettings();
   } catch (e) { toast(e.message); }
 };
@@ -2216,6 +2221,8 @@ const GLOSS = [
   ["IV (implied volatility)", "How big a move the market expects, already priced into the option. High IV = expensive options. It often drops after big news, hurting buyers even when the index moves their way.", ""],
   ["India VIX", "The market's 'fear meter'. High = big swings expected. The app takes no trades when VIX is below 11 (moves too small to pay for the option) or above 18 for Noise / 20 for Camarilla (fear spikes lost money in testing).", ""],
   ["Bid-ask spread", "The gap between the price buyers offer (bid) and sellers ask. You buy at the ask and sell at the bid, so a wide gap is an instant loss. The app skips strikes where the gap is over 10%.", "Bid 80, ask 100 → a 20% gap: you lose 20% the moment you enter."],
+  ["Autopilot", "A single Settings switch. ON: the app picks instruments, strategies, option strike, lot count (from current equity) and limits itself using the tested rules, and trades automatically. OFF: it uses your own preferences.", ""],
+  ["Compounding", "Reinvesting profits so the next trade is sized on a bigger account. Autopilot recalculates lots from current equity before every trade.", "Equity ₹20,000 → 1 lot. When equity reaches ~₹3 lakh, 1% risk allows 2 lots."],
   ["Weekly loss limit", "After losing 4% of capital in a week, the app stops new trades until Monday - a circuit-breaker against bad streaks.", ""],
   ["NSE holiday", "A weekday when the exchange is closed. The app does nothing on those days.", ""],
   ["Open interest (OI), PCR, max pain", "OI = number of contracts still open. PCR = puts ÷ calls open. Max pain = the strike where option buyers lose most. We show them only as background - they never trigger a trade.", ""],
@@ -2345,6 +2352,19 @@ function renderRules() {
   <h4>6.2 · Before real money</h4>
   <ul><li>Move to real money only after <b>30+ paper trades</b> that look like the backtest, and start with 1 lot.</li>
   <li>Profit is measured on the <b>option premium</b>, checked against real NSE option prices. The full evidence, with the date of each study, is in the <b>Research</b> tab.</li></ul>
+
+  <h3 style="font-size:17px;margin-top:22px">Part 7 · Autopilot (Settings → 🤖 Autopilot)</h3>
+  <h4>7.1 · What it does</h4>
+  <ul><li>One switch. <b>ON</b>: the app trades by itself on Nifty and Bank Nifty with both strategies, using the tested rules (1-strike in-the-money option, stop 2 × ATR, noise band 1.75×) and ignoring the preferences below it. <b>OFF</b>: everything works exactly as you set it.</li>
+  <li><b>Position size from current equity</b> (so it compounds): lots = 1% of equity ÷ the risk of one lot. Equity = starting money + realised profit and loss.</li>
+  <li><b>Small-account floor:</b> if that gives 0 lots, it still takes 1 lot, but only while that one lot risks <b>15% of equity or less</b>; otherwise it skips the trade and says why.</li>
+  <li><b>Weekly loss limit</b> always on: 15% of equity while equity is under ₹1 lakh (4% would block every trade after one normal loss), 4% above.</li></ul>
+  <h4>7.2 · What the research says about small accounts (round 20)</h4>
+  <ul><li>With ₹20,000 and 1 lot on every trade, the full 3¾-year backtest grew to about ₹1.7 lakh, but that depends on the start date. Starting in any month and trading for 12 months, <b>about 74% of the 12-month periods ended below ₹20,000</b> and the typical deepest fall was −76%.</li>
+  <li>Skipping trades where one lot risks more than 15% of equity improved this (typical deepest fall −61%, fewer periods dipping under ₹10,000) at the cost of about 6% of the long-run profit. Tighter caps (8-10%) cut the fall further but leave very few trades.</li>
+  <li>Compounding barely matters below roughly ₹2-3 lakh: one lot's risk (₹2,000-3,500) is already more than 1% of the account, so the lot count stays at 1 until equity grows.</li>
+  <li>Bottom line: Autopilot does what you asked on any account size, but a ₹20,000 account carries a high chance of a deep loss. Treat the money as money you can lose.</li></ul>
+</ul>
   <p class="muted">Not sure what a word means (noise band, R, VWAP, profit factor...)? See the <b>Glossary</b> tab.</p>`;
 }
 

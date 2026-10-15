@@ -151,3 +151,12 @@ MAX_TRADES_PER_DAY = 4   # two strategies x two indices; the 2-loser and 2% dail
 
 DEFAULT_CAPITAL = 200_000
 RISK_FREE = 0.065
+
+
+# Autopilot (round 20): one switch that chooses everything from the tested rules and the account size
+AUTOPILOT_SYMS = ["NIFTY", "BANKNIFTY"]
+AUTOPILOT_STRATEGIES = ["noise", "camarilla"]
+AUTOPILOT_RISK_PCT = 1.0            # lots = 1% of CURRENT equity / risk per lot (compounds as the account grows)
+AUTOPILOT_MAX_TRADE_RISK = 0.15     # a 1-lot floor is allowed only while one lot risks at most 15% of equity (round 20: 83% -> 46% of years dipping below half the account)
+AUTOPILOT_SMALL_ACCOUNT = 100_000   # below this equity the weekly loss cap is 15% (4% would block every trade after one loss)
+AUTOPILOT_WEEKLY_SMALL = 0.15

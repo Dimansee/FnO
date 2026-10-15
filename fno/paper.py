@@ -112,13 +112,19 @@ def day_guard(positions, trades, capital) -> dict:
     return {"blocked": False, "pnl_today": pnl, "trades_today": len(opened_today)}
 
 
-def week_guard(trades, capital) -> dict:
+def equity(acct, trades) -> float:
+    """Starting capital plus realised P&L - what compounding sizes from."""
+    return float(acct["capital_start"]) + sum(h["pnl"] for h in trades)
+
+
+def week_guard(trades, capital, limit=None) -> dict:
     """Round 18: after losing 4% of capital in a week, no new trades until Monday."""
     today = C.today_ist()
     wk_start = (today - timedelta(days=today.weekday())).isoformat()
     wk_pnl = sum(h["pnl"] for h in trades if wk_start <= h["opened"][:10] <= today.isoformat())
-    if wk_pnl <= -C.MAX_WEEKLY_LOSS * capital:
-        return {"blocked": True, "reason": f"Weekly loss limit hit (₹{wk_pnl:,.0f} this week, limit {C.MAX_WEEKLY_LOSS:.0%}). No new trades until Monday - research round 18."}
+    limit = C.MAX_WEEKLY_LOSS if limit is None else limit
+    if wk_pnl <= -limit * capital:
+        return {"blocked": True, "reason": f"Weekly loss limit hit (₹{wk_pnl:,.0f} this week, limit {limit:.0%}). No new trades until Monday - research round 18."}
     return {"blocked": False}
 
 

@@ -416,6 +416,13 @@ def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=N
         lots = max(1, int((cash if cash is not None else capital) // cost_per_lot)) if cost_per_lot > 0 else 0
         note = (f"All-in experiment: {lots} lot(s) use ₹{lots * cost_per_lot:,.0f} of your cash and risk about ₹{lots * risk_per_lot:,.0f} "
                 f"({lots * risk_per_lot / capital:.0%} of capital) on this one trade.")
+    elif lots == 0 and prefs.get("sizing") == "compound":
+        mx = float(prefs.get("max_trade_risk") or 0.15)
+        if risk_per_lot <= mx * capital:
+            lots, note = 1, f"Autopilot: 1 lot (risk about ₹{risk_per_lot:,.0f} = {risk_per_lot / capital:.0%} of equity ₹{capital:,.0f}); the lot count grows as equity grows."
+        else:
+            note = (f"SKIP (Autopilot): 1 lot would risk ₹{risk_per_lot:,.0f} = {risk_per_lot / capital:.0%} of your equity ₹{capital:,.0f}; "
+                    f"the limit is {mx:.0%}. Waiting for a tighter setup.")
     elif lots == 0:
         if risk_per_lot <= 1.5 * allowed:
             lots, note = 1, f"1 lot risks ₹{risk_per_lot:,.0f} ({risk_per_lot / capital:.1%}) - slightly above your {rp:.1%} rule."

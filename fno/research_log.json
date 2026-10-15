@@ -3,6 +3,39 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r20a",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 20: a ₹20,000 account trading 1 lot every time",
+   "asked": "What happens to ₹20,000 if it trades 1 lot on every signal, and does compounding help?",
+   "result": "Over the whole 3¾ years: about ₹1.7 lakh (8.5×), deepest fall -35%, 61% of months positive. But that is the best-case start. Taking every start month and trading 12 months: median final ₹5.6k-9k, 52-74% of the periods ended below ₹20,000, 83% dipped below ₹10,000, typical deepest fall -73% to -76%. Compounding made no difference: at 1% risk one lot already risks more than the allowance until equity reaches ~₹2-3 lakh, so the lot count stays at 1.",
+   "decision": "Information",
+   "summary": "The long-run profit is real but a small account is exposed to deep early losses. The 8× figure depends on the start date.",
+   "period": "2023-01 to 2026-10, ₹20,000 start, current rules, 1 lot (modelled option prices, costs included)"
+  },
+  {
+   "id": "r20b",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 20: risk cap per trade for small accounts",
+   "asked": "Does skipping trades where one lot risks too large a share of equity improve small-account outcomes?",
+   "result": "No cap: median 12-month end ₹5.6k, 83% dipped under ₹10k, median fall -76%. Cap 20%: ₹9.2k / 69% / -66%. Cap 15%: ₹12.8k / 46% / -61% (full-run ₹1.60 lakh vs ₹1.71 lakh). Cap 10%: ₹11.6k / 11% / -43%. Cap 8%: ₹15.0k / 0% / -30%, but only ~13 trades a year. Cap 6%: nearly no trades.",
+   "decision": "Adopted",
+   "summary": "Autopilot uses a 15% cap: the best compromise of fewer deep falls and still enough trades. Not a cure: most 12-month periods still ended under ₹20,000.",
+   "period": "2023-01 to 2026-10, ₹20,000 start, current rules, 1 lot (modelled option prices, costs included)"
+  },
+  {
+   "id": "r20c",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 20: weekly loss cap for small accounts",
+   "asked": "Is a 4% weekly cap workable on a ₹20,000 account?",
+   "result": "4% of ₹20,000 is ₹800, less than one normal 1-lot loss, so it blocked trading after the first loss (full-run ₹1.58 lakh, fall -46%). A 15% cap: ₹1.75 lakh vs ₹1.70 lakh with no cap, same fall.",
+   "decision": "Adopted",
+   "summary": "Autopilot uses a 15% weekly cap while equity is under ₹1 lakh, 4% above.",
+   "period": "2023-01 to 2026-10, ₹20,000 start, current rules, 1 lot (modelled option prices, costs included)"
+  },
+  {
    "id": "r19a",
    "date": "2026-10-15",
    "area": "Index options",

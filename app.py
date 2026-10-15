@@ -413,6 +413,8 @@ def settings_post():
             cur["strategies"] = st
         if "auto" in p:
             cur["auto"] = bool(p["auto"])
+        if "autopilot" in p:
+            cur["autopilot"] = bool(p["autopilot"])
         if "enforce_limits" in p:
             cur["enforce_limits"] = bool(p["enforce_limits"])
         if "auto_syms" in p:

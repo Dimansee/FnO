@@ -73,12 +73,22 @@ def fii():
 # ---------------------------------------------------------------------------
 # Position management (also called every minute by the scheduler)
 # ---------------------------------------------------------------------------
-PREF_DEFAULTS = {"sizing": "risk", "risk_pct": 1.0, "strategies": ["noise", "camarilla"], "auto": False, "auto_syms": ["NIFTY"],
+PREF_DEFAULTS = {"autopilot": False, "sizing": "risk", "risk_pct": 1.0, "strategies": ["noise", "camarilla"], "auto": False, "auto_syms": ["NIFTY"],
                  "enforce_limits": False}   # demo account: the daily risk limits are shown as a tip unless switched on
 
 
 def prefs() -> dict:
     return {**PREF_DEFAULTS, **(store.get("prefs") or {})}
+
+
+def eprefs() -> dict:
+    """The settings the engine actually trades with. Autopilot ON overrides position size, risk, strategies and instruments
+    with the tested rules; OFF = exactly what is saved in Settings."""
+    pf = prefs()
+    if not pf.get("autopilot"):
+        return pf
+    return {**pf, "auto": True, "auto_syms": list(C.AUTOPILOT_SYMS), "strategies": list(C.AUTOPILOT_STRATEGIES),
+            "sizing": "compound", "risk_pct": C.AUTOPILOT_RISK_PCT, "max_trade_risk": C.AUTOPILOT_MAX_TRADE_RISK}
 
 
 def _traded_today(symbol, positions, trades) -> dict:
@@ -185,9 +195,18 @@ def _with_ai(symbol, g, ev, pf, traded):
     return ev
 
 
+def _size_capital(acct, tr, pf) -> float:
+    """Capital the position size is worked out from: the starting capital, or the current equity when compounding."""
+    return P.equity(acct, tr) if pf.get("sizing") == "compound" else acct["capital_start"]
+
+
 def risk_guard(pos, tr, capital, pf, auto=False) -> dict:
     """The daily risk limits (two losers / -2% / max trades). On the demo account they only advise unless enforced in Settings."""
-    wg = P.week_guard(tr, capital)
+    if pf.get("autopilot"):
+        eq = float(capital) + sum(h["pnl"] for h in tr)
+        wg = P.week_guard(tr, eq, C.AUTOPILOT_WEEKLY_SMALL if eq < C.AUTOPILOT_SMALL_ACCOUNT else None)
+    else:
+        wg = P.week_guard(tr, capital)
     if wg.get("blocked") and (auto or pf.get("enforce_limits")):   # the weekly limit always applies to automatic trades (round 18: it improved profit and the deepest fall)
         return wg
     g = P.day_guard(pos, tr, capital)
@@ -234,7 +253,7 @@ def dashboard(symbol, strike=None):
     acct, pos, tr, cash = P.snapshot()
     cstats = M.chain_stats(g["chain"], g["spot"])
     gc, nw, fi = gcues(), news(symbol), fii()
-    pf = prefs()
+    pf = eprefs()
     guard = risk_guard(pos, tr, acct["capital_start"], pf)
     if not guard.get("blocked"):
         guard = calendar_guard(symbol, g["exps"], g["now"].date()) or guard
@@ -294,7 +313,7 @@ def place_signal(symbol, strike=None, auto=False):
     m = M.Market()
     g = _gather(symbol, m)
     acct, pos, tr, cash = P.snapshot()
-    pf = prefs()
+    pf = eprefs()
     guard = risk_guard(pos, tr, acct["capital_start"], pf, auto=auto)
     if not guard.get("blocked"):
         guard = calendar_guard(symbol, g["exps"], g["now"].date()) or guard
@@ -309,7 +328,7 @@ def place_signal(symbol, strike=None, auto=False):
     if not ev["plan"]:
         return False, f"No valid signal right now ({ev['signal']}). The setup may have changed - refresh."
     try:
-        order = S.build_order(ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], acct["capital_start"],
+        order = S.build_order(ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], _size_capital(acct, tr, pf),
                               strike=strike, cash=cash, prefs=pf)
     except ValueError as e:
         return False, str(e)
@@ -659,7 +678,7 @@ def tick():
     for c in closed:
         _push_safe(f"{c['symbol']} position closed", f"{c['reason']} - P&L ₹{c['pnl']:+,.0f}", f"close:{c.get('id') or c['symbol']}:{now.strftime('%H%M')}", "/#portfolio")
     placed = []
-    pf = prefs()
+    pf = eprefs()
     t = now.time()
     if pf.get("auto") and C.FIRST_ENTRY_ANY <= t <= C.LAST_ENTRY_ANY:
         for sym in pf.get("auto_syms") or []:
@@ -698,7 +717,7 @@ def scan(symbol, m=None, prefs_=None, want_order=True):
     g = _gather(symbol, m)
     acct, pos, tr, cash = P.snapshot()
     cstats = M.chain_stats(g["chain"], g["spot"])
-    pf = prefs_ or prefs()
+    pf = prefs_ or eprefs()
     guard = risk_guard(pos, tr, acct["capital_start"], pf)
     if not guard.get("blocked"):
         guard = calendar_guard(symbol, g["exps"], g["now"].date()) or guard
@@ -708,7 +727,7 @@ def scan(symbol, m=None, prefs_=None, want_order=True):
     order = None
     if ev["plan"] and want_order:
         try:
-            order = S.build_order(ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], acct["capital_start"], cash=cash, prefs=pf)
+            order = S.build_order(ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], _size_capital(acct, tr, pf), cash=cash, prefs=pf)
         except ValueError as e:
             order = None
             if str(e).startswith("SKIP"):
@@ -739,13 +758,13 @@ def journal_tick(now):
             if J._get(day, f"ctx:{sym}") is None:
                 m = m or M.Market()
                 g = _gather(sym, m)
-                J.write_context(sym, g, gcues(), fii(), prefs())
+                J.write_context(sym, g, gcues(), fii(), eprefs())
                 out[f"ctx:{sym}"] = "written"
         if t < time(9, 30):
             return out or {"skipped": "context already written"}
     if time(9, 30) <= t <= time(14, 50) and now.minute % 5 == 1:
         m = M.Market()
-        pf = prefs()
+        pf = eprefs()
         for sym in J.SYMS:
             try:
                 g, ev, order, _ = scan(sym, m, pf)
