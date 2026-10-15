@@ -1,0 +1,280 @@
+{
+ "window": [
+  "2026-09-10",
+  "2026-10-09"
+ ],
+ "20k strict app rules": {
+  "start": 20000,
+  "end": 20000,
+  "pnl": 0,
+  "pct": 0.0,
+  "trades": 0,
+  "log": []
+ },
+ "20k one-lot mode": {
+  "start": 20000,
+  "end": 20785,
+  "pnl": 785,
+  "pct": 3.9,
+  "trades": 8,
+  "log": [
+   [
+    "2026-09-15",
+    "BANKNIFTY",
+    "noise",
+    1,
+    7187
+   ],
+   [
+    "2026-09-17",
+    "NIFTY",
+    "noise",
+    1,
+    -1822
+   ],
+   [
+    "2026-09-21",
+    "NIFTY",
+    "camarilla",
+    1,
+    408
+   ],
+   [
+    "2026-09-22",
+    "BANKNIFTY",
+    "camarilla",
+    1,
+    -858
+   ],
+   [
+    "2026-09-28",
+    "NIFTY",
+    "noise",
+    1,
+    1840
+   ],
+   [
+    "2026-09-29",
+    "BANKNIFTY",
+    "camarilla",
+    1,
+    -3510
+   ],
+   [
+    "2026-10-06",
+    "NIFTY",
+    "camarilla",
+    1,
+    -416
+   ],
+   [
+    "2026-10-07",
+    "NIFTY",
+    "camarilla",
+    1,
+    -2043
+   ]
+  ]
+ },
+ "20k one-lot, no weekly cap": {
+  "start": 20000,
+  "end": 38221,
+  "pnl": 18221,
+  "pct": 91.1,
+  "trades": 11,
+  "log": [
+   [
+    "2026-09-15",
+    "BANKNIFTY",
+    "noise",
+    1,
+    7187
+   ],
+   [
+    "2026-09-17",
+    "NIFTY",
+    "noise",
+    1,
+    -1822
+   ],
+   [
+    "2026-09-21",
+    "NIFTY",
+    "camarilla",
+    1,
+    408
+   ],
+   [
+    "2026-09-22",
+    "BANKNIFTY",
+    "camarilla",
+    1,
+    -858
+   ],
+   [
+    "2026-09-28",
+    "NIFTY",
+    "noise",
+    1,
+    1840
+   ],
+   [
+    "2026-09-29",
+    "BANKNIFTY",
+    "camarilla",
+    1,
+    -3510
+   ],
+   [
+    "2026-10-01",
+    "NIFTY",
+    "camarilla",
+    1,
+    1925
+   ],
+   [
+    "2026-10-06",
+    "NIFTY",
+    "camarilla",
+    1,
+    -416
+   ],
+   [
+    "2026-10-07",
+    "NIFTY",
+    "camarilla",
+    1,
+    -2043
+   ],
+   [
+    "2026-10-08",
+    "NIFTY",
+    "camarilla",
+    1,
+    12404
+   ],
+   [
+    "2026-10-09",
+    "BANKNIFTY",
+    "camarilla",
+    1,
+    3108
+   ]
+  ]
+ },
+ "2L strict app rules": {
+  "start": 200000,
+  "end": 210706,
+  "pnl": 10706,
+  "pct": 5.4,
+  "trades": 14,
+  "log": [
+   [
+    "2026-09-10",
+    "BANKNIFTY",
+    "camarilla",
+    1,
+    -2201
+   ],
+   [
+    "2026-09-15",
+    "BANKNIFTY",
+    "noise",
+    1,
+    7187
+   ],
+   [
+    "2026-09-17",
+    "NIFTY",
+    "noise",
+    1,
+    -1822
+   ],
+   [
+    "2026-09-21",
+    "NIFTY",
+    "camarilla",
+    1,
+    408
+   ],
+   [
+    "2026-09-22",
+    "BANKNIFTY",
+    "camarilla",
+    1,
+    -858
+   ],
+   [
+    "2026-09-28",
+    "NIFTY",
+    "noise",
+    1,
+    1840
+   ],
+   [
+    "2026-09-29",
+    "BANKNIFTY",
+    "camarilla",
+    1,
+    -3510
+   ],
+   [
+    "2026-09-30",
+    "BANKNIFTY",
+    "noise",
+    1,
+    -1907
+   ],
+   [
+    "2026-10-01",
+    "NIFTY",
+    "camarilla",
+    1,
+    1925
+   ],
+   [
+    "2026-10-06",
+    "NIFTY",
+    "camarilla",
+    1,
+    -416
+   ],
+   [
+    "2026-10-06",
+    "BANKNIFTY",
+    "camarilla",
+    1,
+    -1604
+   ],
+   [
+    "2026-10-07",
+    "NIFTY",
+    "camarilla",
+    1,
+    -2043
+   ],
+   [
+    "2026-10-08",
+    "NIFTY",
+    "camarilla",
+    1,
+    12404
+   ],
+   [
+    "2026-10-09",
+    "NIFTY",
+    "noise",
+    1,
+    1306
+   ]
+  ]
+ },
+ "20k strict, no weekly cap": {
+  "start": 20000,
+  "end": 20000,
+  "pnl": 0,
+  "pct": 0.0,
+  "trades": 0,
+  "log": []
+ }
+}

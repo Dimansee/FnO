@@ -1,0 +1,122 @@
+{
+ "fixed 1 lot, no compounding, no weekly cap": {
+  "final": 170258,
+  "mult_x": 8.51,
+  "trades": 710,
+  "maxdd_pct": -34.6,
+  "lowest": 20000,
+  "cant_afford": 0,
+  "avg_month_pct": 5.9,
+  "pos_months_pct": 61,
+  "worst_month_pct": -13.1,
+  "best_month_pct": 101.5
+ },
+ "1-lot floor + compound at 1% risk, no weekly cap": {
+  "final": 170258,
+  "mult_x": 8.51,
+  "trades": 710,
+  "maxdd_pct": -34.6,
+  "lowest": 20000,
+  "cant_afford": 0,
+  "avg_month_pct": 5.9,
+  "pos_months_pct": 61,
+  "worst_month_pct": -13.1,
+  "best_month_pct": 101.5
+ },
+ "1-lot floor + compound at 1% risk, weekly cap 4%": {
+  "final": 158188,
+  "mult_x": 7.91,
+  "trades": 610,
+  "maxdd_pct": -46.1,
+  "lowest": 20000,
+  "cant_afford": 0,
+  "avg_month_pct": 5.8,
+  "pos_months_pct": 61,
+  "worst_month_pct": -18.5,
+  "best_month_pct": 77.8
+ },
+ "1-lot floor + compound at 2% risk, no weekly cap": {
+  "final": 170435,
+  "mult_x": 8.52,
+  "trades": 710,
+  "maxdd_pct": -34.6,
+  "lowest": 20000,
+  "cant_afford": 0,
+  "avg_month_pct": 5.9,
+  "pos_months_pct": 65,
+  "worst_month_pct": -13.1,
+  "best_month_pct": 101.5
+ },
+ "1-lot floor + compound at 1% risk, weekly cap 15%": {
+  "final": 174958,
+  "mult_x": 8.75,
+  "trades": 708,
+  "maxdd_pct": -34.6,
+  "lowest": 20000,
+  "cant_afford": 0,
+  "avg_month_pct": 5.9,
+  "pos_months_pct": 61,
+  "worst_month_pct": -13.1,
+  "best_month_pct": 101.5
+ },
+ "fixed 1 lot, weekly cap 15%": {
+  "final": 174958,
+  "mult_x": 8.75,
+  "trades": 708,
+  "maxdd_pct": -34.6,
+  "lowest": 20000,
+  "cant_afford": 0,
+  "avg_month_pct": 5.9,
+  "pos_months_pct": 61,
+  "worst_month_pct": -13.1,
+  "best_month_pct": 101.5
+ },
+ "1-lot floor + compound at 1%, band 2.0x, no weekly cap": {
+  "final": 178066,
+  "mult_x": 8.9,
+  "trades": 688,
+  "maxdd_pct": -33.8,
+  "lowest": 20000,
+  "cant_afford": 0,
+  "avg_month_pct": 5.9,
+  "pos_months_pct": 59,
+  "worst_month_pct": -12.4,
+  "best_month_pct": 101.5
+ },
+ "start 20000 (1% compound, no cap)": {
+  "final": 170258,
+  "mult_x": 8.51,
+  "trades": 710,
+  "maxdd_pct": -34.6,
+  "lowest": 20000,
+  "cant_afford": 0,
+  "avg_month_pct": 5.9,
+  "pos_months_pct": 61,
+  "worst_month_pct": -13.1,
+  "best_month_pct": 101.5
+ },
+ "start 40000 (1% compound, no cap)": {
+  "final": 190161,
+  "mult_x": 4.75,
+  "trades": 710,
+  "maxdd_pct": -27.1,
+  "lowest": 40000,
+  "cant_afford": 0,
+  "avg_month_pct": 3.9,
+  "pos_months_pct": 61,
+  "worst_month_pct": -10.5,
+  "best_month_pct": 50.5
+ },
+ "start 100000 (1% compound, no cap)": {
+  "final": 247013,
+  "mult_x": 2.47,
+  "trades": 710,
+  "maxdd_pct": -20.5,
+  "lowest": 100000,
+  "cant_afford": 0,
+  "avg_month_pct": 2.1,
+  "pos_months_pct": 61,
+  "worst_month_pct": -7.5,
+  "best_month_pct": 20.2
+ }
+}
