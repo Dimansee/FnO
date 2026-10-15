@@ -20,6 +20,11 @@ from fno import store
 from fno import recorder as REC
 from fno import journal as JR
 from fno import push as PUSH
+from fno import custom as CU
+from fno import ind as XI
+from fno import learn as LN
+from fno import gbook as GB
+from fno import markets as MK
 
 app = Flask(__name__)
 INDEX_HTML = (Path(__file__).parent / "templates" / "index.html").read_text(encoding="utf-8")
@@ -44,7 +49,7 @@ def _authed() -> bool:
         return False
 
 
-PUBLIC = {"/", "/api/login", "/api/health", "/api/tick", "/api/recorder/day", "/api/recorder/probe", "/api/journal/day"}
+PUBLIC = {"/", "/api/login", "/api/health", "/api/tick", "/api/tick/global", "/api/learn/run", "/api/recorder/day", "/api/recorder/probe", "/api/journal/day"}
 
 
 LOCKED = {"/api/recorder/day", "/api/recorder/probe", "/api/journal/day"}   # public until LOCK_DATA_ENDPOINTS=1 is set
@@ -543,3 +548,146 @@ def tick():
     if not C.CRON_SECRET or not hmac.compare_digest(request.headers.get("x-cron-secret", ""), C.CRON_SECRET):
         return jsonify({"error": "forbidden"}), 403
     return jsonify(SV.clean(SV.tick()))
+
+
+# ---------------------------------------------------------------------------
+# Custom strategies
+# ---------------------------------------------------------------------------
+def _cron_or_login():
+    ok = _authed() or (C.CRON_SECRET and hmac.compare_digest(request.headers.get("x-cron-secret", ""), C.CRON_SECRET))
+    if not ok:
+        raise PermissionError("unauthorised")
+
+
+@app.errorhandler(PermissionError)
+def on_denied(e):
+    return jsonify({"error": "unauthorised"}), 401
+
+
+def _markets_meta():
+    return {"IN": {"currency": "INR", "symbols": [{"id": s, "label": SV.M.instrument(s)["label"]} for s in SV.ALL_SYMBOLS], "timeframes": ["5m", "15m", "30m", "1h"]},
+            "CRYPTO": {"currency": "USDT", "symbols": MK.catalog("CRYPTO"), "timeframes": ["5m", "15m", "30m", "1h", "4h", "1d"]},
+            "US": {"currency": "USD", "symbols": MK.catalog("US"), "timeframes": ["5m", "15m", "30m", "1h", "4h", "1d"]}}
+
+
+@app.get("/api/strategies")
+def strategies_get():
+    return jsonify({"items": CU.load_all(store), "presets": CU.PRESETS, "meta": XI.meta(), "markets": _markets_meta(),
+                    "max": CU.MAX_STRATEGIES, "learn_mode": LN.mode()})
+
+
+@app.post("/api/strategies")
+def strategies_save():
+    spec = CU.upsert(store, request.get_json(force=True) or {})
+    return jsonify({"ok": True, "item": spec})
+
+
+@app.delete("/api/strategies/<sid>")
+def strategies_delete(sid):
+    return jsonify({"ok": CU.delete(store, sid)})
+
+
+@app.post("/api/strategies/backtest")
+def strategies_backtest():
+    b = request.get_json(force=True) or {}
+    raw = b.get("spec")
+    if not raw and b.get("id"):
+        raw = next((x for x in CU.load_all(store) if x["id"] == b["id"]), None)
+    if not raw:
+        raise ValueError("Send a strategy to test.")
+    return jsonify(SV.custom_backtest(raw, b.get("symbol"), int(b.get("days") or 250), float(b.get("capital") or C.DEFAULT_CAPITAL), float(b.get("risk_pct") or 1.0)))
+
+
+@app.post("/api/strategies/improve")
+def strategies_improve():
+    b = request.get_json(force=True) or {}
+    return jsonify(SV.custom_improve(b.get("id", ""), int(b.get("days") or 250)))
+
+
+# ---------------------------------------------------------------------------
+# Crypto / US paper books
+# ---------------------------------------------------------------------------
+def _mk():
+    m = (request.args.get("market") or (request.get_json(silent=True) or {}).get("market") or "CRYPTO").upper()
+    if m not in ("CRYPTO", "US"):
+        raise ValueError("Market must be CRYPTO or US.")
+    return m
+
+
+_last_gtick = {"t": 0.0}
+
+
+@app.get("/api/gbook")
+def gbook_get():
+    m = _mk()
+    if time.time() - _last_gtick["t"] > 60:                  # the page being open keeps the books fresh between the 5-minute scheduler calls
+        _last_gtick["t"] = time.time()
+        try:
+            GB.tick((m,))
+        except Exception:
+            traceback.print_exc()
+    return jsonify(SV.clean(GB.portfolio(m)))
+
+
+@app.post("/api/gbook/prefs")
+def gbook_prefs():
+    b = request.get_json(force=True) or {}
+    return jsonify({"ok": True, "prefs": GB.set_prefs(_mk(), b)})
+
+
+@app.post("/api/gbook/reset")
+def gbook_reset():
+    b = request.get_json(force=True) or {}
+    GB.reset(_mk(), float(b.get("capital") or 10000))
+    return jsonify({"ok": True})
+
+
+@app.post("/api/gbook/exit")
+def gbook_exit():
+    b = request.get_json(force=True) or {}
+    ok, msg = GB.manual_exit(_mk(), b.get("id", ""))
+    return jsonify({"ok": ok, "message": msg})
+
+
+@app.route("/api/tick/global", methods=["GET", "POST"])
+def tick_global():
+    if not C.CRON_SECRET or not hmac.compare_digest(request.headers.get("x-cron-secret", ""), C.CRON_SECRET):
+        return jsonify({"error": "forbidden"}), 403
+    return jsonify(SV.clean(GB.tick()))
+
+
+# ---------------------------------------------------------------------------
+# Learning
+# ---------------------------------------------------------------------------
+@app.get("/api/learn")
+def learn_get():
+    m = request.args.get("market")
+    return jsonify(SV.clean(LN.summary(m if m in ("IN", "CRYPTO", "US") else None)))
+
+
+@app.post("/api/learn/mode")
+def learn_mode():
+    LN.set_mode((request.get_json(force=True) or {}).get("mode", ""))
+    return jsonify({"ok": True, "mode": LN.mode()})
+
+
+@app.route("/api/learn/run", methods=["GET", "POST"])
+def learn_run():
+    """After-close research. Called by the 15:35 scheduler tick, the nightly job, or the 'Run now' button."""
+    _cron_or_login()
+    b = request.get_json(silent=True) or {}
+    m = (request.args.get("market") or b.get("market") or "IN").upper()
+    force = (request.args.get("force") or b.get("force")) in (True, "1", 1, "true")
+    day = request.args.get("date") or b.get("date")
+    out = LN.post_close_in(day, force) if m == "IN" else LN.post_close_g(m, day, force)
+    return jsonify(SV.clean(out))
+
+
+@app.post("/api/learn/revert")
+def learn_revert():
+    return jsonify({"ok": LN.revert((request.get_json(force=True) or {}).get("id", ""))})
+
+
+@app.post("/api/learn/apply")
+def learn_apply():
+    return jsonify({"ok": LN.apply_pending((request.get_json(force=True) or {}).get("id", ""))})

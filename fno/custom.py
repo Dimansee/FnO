@@ -201,7 +201,7 @@ def validate(raw: dict, existing_id: str | None = None) -> dict:
         raise ValueError("Indian index options strategies here are intraday only (they close by 15:15).")
     out = {"id": existing_id or raw.get("id") or "s_" + secrets.token_hex(3), "name": name, "about": str(raw.get("about") or "")[:300],
            "market": market, "symbols": syms, "timeframe": tf, "direction": direction, "long": long_, "short": short_,
-           "exit": exit_, "filters": filters, "hold": hold, "enabled": bool(raw.get("enabled", False)), "auto": bool(raw.get("auto", False)),
+           "exit": exit_, "filters": filters, "hold": hold, "enabled": bool(raw.get("enabled", False)), "auto": bool(raw.get("auto", False)), "watch": bool(raw.get("watch", False)),
            "created": raw.get("created") or C.now_ist().isoformat(timespec="seconds"), "version": int(raw.get("version") or 1)}
     if not re.fullmatch(r"s_[0-9a-f]{6}", out["id"]):
         out["id"] = "s_" + secrets.token_hex(3)
@@ -287,6 +287,58 @@ def signals(spec: dict, df: pd.DataFrame) -> tuple[pd.Series, pd.Series, dict]:
     return (lg & w & ~both), (sh & w & ~both), cache
 
 
+# ------------------------------------------------------------------ position stepping (shared by the backtest and the live books)
+def new_pos(side: int, entry: float, atr_sig: float, ex: dict) -> dict:
+    """State of one open trade. side: +1 long, -1 short. Everything is fixed at entry, as in the live app."""
+    risk = ex["stop_atr"] * atr_sig
+    return {"side": side, "entry": float(entry), "risk": float(risk), "sl": float(entry - side * risk),
+            "sl0": float(entry - side * risk),
+            "tp": float(entry + side * ex["target_r"] * risk) if ex["target_r"] else None,
+            "trail": float(ex["trail_atr"] * atr_sig) if ex["trail_atr"] else None,
+            "be": float(entry + side * ex["breakeven_r"] * risk) if ex["breakeven_r"] else None,
+            "best": float(entry), "held": 0, "pend_opp": False, "mfe": 0.0, "mae": 0.0, "first": True, "atr": float(atr_sig)}
+
+
+def step_pos(p: dict, o: float, h: float, l: float, c: float, end_min: int | None, ex: dict, sq_min: int | None,
+             opp_signal: bool) -> tuple[float, str] | None:
+    """Advance one finished bar. Returns (exit price, reason) when the trade ends on this bar, else None (state updated in place)."""
+    side = p["side"]
+    p["held"] += 1
+    if p["pend_opp"]:
+        return o, "Opposite signal"
+    adverse, fav = (l, h) if side > 0 else (h, l)
+    if not p["first"] and side * (o - p["sl"]) <= 0:
+        return o, "Stop (gap)"
+    if side * (adverse - p["sl"]) <= 0:
+        if p["sl"] == p["entry"]:
+            return p["sl"], "Break-even stop"
+        return p["sl"], "Trailing stop" if p["sl"] != p["sl0"] and p["trail"] else "Stop-loss"
+    if p["tp"] is not None and side * (fav - p["tp"]) >= 0:
+        return p["tp"], "Target"
+    p["mfe"] = max(p["mfe"], side * (fav - p["entry"]) / p["risk"])
+    p["mae"] = max(p["mae"], side * (p["entry"] - adverse) / p["risk"])
+    if p["be"] is not None and side * (fav - p["be"]) >= 0 and side * (p["sl"] - p["entry"]) < 0:
+        p["sl"] = p["entry"]
+    if p["trail"]:
+        p["best"] = max(p["best"], fav) if side > 0 else min(p["best"], fav)
+        cand = p["best"] - side * p["trail"]
+        if side * (cand - p["sl"]) > 0:
+            p["sl"] = cand
+    p["first"] = False
+    if sq_min is not None and end_min is not None and end_min >= sq_min:
+        return c, "Square-off"
+    if ex["time_stop_bars"] and p["held"] >= ex["time_stop_bars"]:
+        return c, "Time stop"
+    if ex["exit_on_opposite"] and opp_signal:
+        p["pend_opp"] = True
+    return None
+
+
+def trade_cost_R(market: str, entry: float, risk: float) -> float:
+    slip, fee = COSTS_BPS[market]
+    return (2 * slip + 2 * fee) / 1e4 * entry / risk
+
+
 # ------------------------------------------------------------------ simulation (underlying, R multiples)
 def simulate(spec: dict, df: pd.DataFrame, vix: pd.Series | None = None) -> list[dict]:
     """Walk the bars and return trades with R multiples on the underlying (costs in bps already deducted)."""
@@ -302,24 +354,25 @@ def simulate(spec: dict, df: pd.DataFrame, vix: pd.Series | None = None) -> list
     mins = bar_minutes(spec["timeframe"])
     sq = SESSION[market]["square_off"] if spec["hold"] == "intraday" else None
     sq_min = (sq[0] * 60 + sq[1]) if sq else None
-    slip, fee = COSTS_BPS[market]
     day = np.array([d.toordinal() for d in idx.date])
+    start_min = idx.hour.values * 60 + idx.minute.values
     vixv = None
     if vix is not None and len(vix):
-        vixv = vix.reindex(idx, method="ffill").values if not isinstance(vix.index, pd.RangeIndex) else None
+        try:
+            vixv = vix.reindex(idx, method="ffill").values
+        except Exception:
+            vixv = None
     trades, per_day = [], {}
     i, last_exit_bar = 0, -1
     lgv, shv = lg.values, sh.values
+    intraday = spec["hold"] == "intraday"
     while i < n - 1:
         side = 1 if lgv[i] else -1 if shv[i] else 0
         if side == 0 or i <= last_exit_bar:
             i += 1
             continue
         j = i + 1
-        if spec["hold"] == "intraday" and day[j] != day[i]:
-            i += 1
-            continue
-        if per_day.get(day[j], 0) >= fl["max_trades_day"]:
+        if (intraday and day[j] != day[i]) or per_day.get(day[j], 0) >= fl["max_trades_day"]:
             i += 1
             continue
         if vixv is not None and not np.isnan(vixv[i]):
@@ -330,62 +383,25 @@ def simulate(spec: dict, df: pd.DataFrame, vix: pd.Series | None = None) -> list
         if not np.isfinite(ai) or ai <= 0:
             i += 1
             continue
-        entry = o[j]
-        risk = ex["stop_atr"] * ai
-        sl = entry - side * risk
-        tp = entry + side * ex["target_r"] * risk if ex["target_r"] else None
-        trail = ex["trail_atr"] * ai if ex["trail_atr"] else None
-        be = entry + side * ex["breakeven_r"] * risk if ex["breakeven_r"] else None
-        best = entry
-        exit_px, reason, k_exit, pend_opp = None, None, None, False
-        mfe = mae = 0.0
+        p = new_pos(side, o[j], ai, ex)
+        res, k_exit = None, None
         for k in range(j, n):
-            if spec["hold"] == "intraday" and day[k] != day[j]:           # data gap: force out at previous close
-                exit_px, reason, k_exit = c[k - 1], "End of session", k - 1
+            if intraday and day[k] != day[j]:                              # data gap: out at the previous close
+                res, k_exit = (c[k - 1], "End of session"), k - 1
                 break
-            if pend_opp:
-                exit_px, reason, k_exit = o[k], "Opposite signal", k
+            opp = bool(shv[k]) if side > 0 else bool(lgv[k])
+            res = step_pos(p, o[k], h[k], l[k], c[k], start_min[k] + mins, ex, sq_min, opp)
+            if res:
+                k_exit = k
                 break
-            adverse, fav = (l[k], h[k]) if side > 0 else (h[k], l[k])
-            gap_stop = side * (o[k] - sl) <= 0 and k > j
-            if gap_stop:
-                exit_px, reason, k_exit = o[k], "Stop (gap)", k
-                break
-            if side * (adverse - sl) <= 0:
-                exit_px, reason, k_exit = sl, "Stop-loss" if sl != entry else "Break-even stop", k
-                if trail and sl != entry - side * risk:
-                    reason = "Trailing stop"
-                break
-            if tp is not None and side * (fav - tp) >= 0:
-                exit_px, reason, k_exit = tp, "Target", k
-                break
-            mfe = max(mfe, side * (fav - entry) / risk)
-            mae = max(mae, side * (entry - adverse) / risk)
-            if be is not None and side * (fav - be) >= 0 and side * (sl - entry) < 0:
-                sl = entry
-            if trail:
-                best = max(best, fav) if side > 0 else min(best, fav)
-                cand = best - side * trail
-                if side * (cand - sl) > 0:
-                    sl = cand
-            if sq_min is not None:
-                end_min = idx[k].hour * 60 + idx[k].minute + mins
-                if end_min >= sq_min:
-                    exit_px, reason, k_exit = c[k], "Square-off", k
-                    break
-            if ex["time_stop_bars"] and k - j + 1 >= ex["time_stop_bars"]:
-                exit_px, reason, k_exit = c[k], "Time stop", k
-                break
-            if ex["exit_on_opposite"] and ((side > 0 and shv[k]) or (side < 0 and lgv[k])):
-                pend_opp = True
-        if exit_px is None:
-            k_exit, exit_px, reason = n - 1, c[n - 1], "Open at end of data"
-        gross = side * (exit_px - entry)
-        cost = (2 * slip + 2 * fee) / 1e4 * entry
-        r_mult = (gross - cost) / risk
+        if res is None:
+            k_exit, res = n - 1, (c[n - 1], "Open at end of data")
+        exit_px, reason = res
+        gross = side * (exit_px - p["entry"])
+        r_mult = gross / p["risk"] - trade_cost_R(market, p["entry"], p["risk"])
         trades.append({"side": "long" if side > 0 else "short", "entry_i": j, "exit_i": k_exit, "entry_ts": idx[j], "exit_ts": idx[k_exit],
-                       "entry": float(entry), "exit": float(exit_px), "sl0": float(entry - side * risk), "tp0": None if tp is None else float(tp),
-                       "risk": float(risk), "R": float(r_mult), "gross_R": float(gross / risk), "mfe_R": float(mfe), "mae_R": float(mae),
+                       "entry": float(p["entry"]), "exit": float(exit_px), "sl0": float(p["sl0"]), "tp0": p["tp"],
+                       "risk": float(p["risk"]), "R": float(r_mult), "gross_R": float(gross / p["risk"]), "mfe_R": float(p["mfe"]), "mae_R": float(p["mae"]),
                        "bars": int(k_exit - j + 1), "reason": reason, "vix": None if vixv is None or np.isnan(vixv[i]) else float(vixv[i]),
                        "atr": float(ai)})
         per_day[day[j]] = per_day.get(day[j], 0) + 1

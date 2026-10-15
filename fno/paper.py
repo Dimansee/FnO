@@ -76,7 +76,7 @@ def open_position(cash, symbol, legs, lots, lot, expiry, spot, source, order=Non
     return True, f"Paper trade opened: {symbol} {desc} × {lots} lot(s) at ₹{entry:.2f}."
 
 
-def close_position(pos_id, prices: dict, reason: str) -> dict | None:
+def close_position(pos_id, prices: dict, reason: str, extra: dict | None = None) -> dict | None:
     pos = store.take_position(pos_id)
     if not pos:
         return None
@@ -88,8 +88,14 @@ def close_position(pos_id, prices: dict, reason: str) -> dict | None:
         b, s = (lg["price"], now) if lg["side"] == "BUY" else (now, lg["price"])
         ch += I.charges(b, s, pos["qty"])
     rec = {**pos, "closed": C.now_ist().isoformat(timespec="seconds"), "exit_prem": round(exit_net, 2),
-           "gross_pnl": round(gross, 2), "charges": round(ch, 2), "pnl": round(gross - ch, 2), "reason": reason}
+           "gross_pnl": round(gross, 2), "charges": round(ch, 2), "pnl": round(gross - ch, 2), "reason": reason, **(extra or {})}
     store.insert_trade(rec)
+    try:                                                    # the learning engine writes a lesson for every closed trade; it must never block a close
+        from . import learn
+        learn.on_close_in(rec)
+    except Exception:
+        import traceback
+        traceback.print_exc()
     return rec
 
 

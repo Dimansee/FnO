@@ -481,7 +481,8 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
     t = now.time()
     if t >= C.SQUARE_OFF or pos["opened"][:10] < now.date().isoformat():
         return "Square-off 15:15", upd
-    if not plan or plan.get("strategy") not in ("noise", "camarilla", "ai"):
+    is_custom = bool(plan) and str(plan.get("strategy", "")).startswith("custom:")
+    if not plan or (plan.get("strategy") not in ("noise", "camarilla", "ai") and not is_custom):
         if prem <= pos["sl_prem"]:
             return "Premium stop-loss hit", upd
         if prem >= pos["target_prem"]:
@@ -493,10 +494,17 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
     if (long_ and spot <= sl) or (not long_ and spot >= sl):
         if pos.get("at_breakeven"):
             return "Breakeven stop (moved to entry at +1R)", upd
+        if is_custom and pos.get("live_sl") is not None and abs(pos["live_sl"] - plan["sl"]) > 1e-9:
+            return ("Break-even stop" if pos.get("at_breakeven") and abs(pos["live_sl"] - plan["entry"]) < 1e-6 else "Trailing stop hit"), upd
         return ("Index stop-loss hit (2 × ATR)" if plan.get("strategy") == "noise" else
                 f"Index stop-loss hit ({plan.get('stop_k', 1):g} × ATR)" if plan.get("strategy") == "ai" else "Index stop-loss hit"), upd
     if plan.get("target") is not None and ((long_ and spot >= plan["target"]) or (not long_ and spot <= plan["target"])):
         return f"Index target ({plan.get('rr', C.RR_TARGET):g}R) hit", upd
+    if is_custom:                                    # trail / break-even / time stop / opposite signal from the strategy's own rules
+        from . import custom as CU
+        why, up2 = CU.custom_exit(pos, spot, now, state)
+        upd.update(up2)
+        return why, upd
     if plan.get("strategy") == "noise" and state and state.get("is_check"):
         opened = datetime.fromisoformat(pos["opened"])
         if state["bar_end"].replace(tzinfo=None) > opened.replace(tzinfo=None) and pos.get("last_check") != state["bar_end"].isoformat():
