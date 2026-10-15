@@ -23,7 +23,7 @@ import pandas as pd
 import requests
 
 ROOT = "research/data/live"
-APP = os.environ.get("FNO_APP_URL", "https://fno-trainer.vercel.app")
+APP = (os.environ.get("FNO_APP_URL") or "https://fno-trainer.vercel.app").rstrip("/")
 LOOKBACK = int(os.environ.get("RECORD_LOOKBACK", "7"))
 STRIKE_WIDTH = 0.04
 INDEX = {"NIFTY": "NSE_INDEX|Nifty 50", "BANKNIFTY": "NSE_INDEX|Nifty Bank", "FINNIFTY": "NSE_INDEX|Nifty Fin Service"}

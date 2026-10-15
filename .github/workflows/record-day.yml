@@ -33,6 +33,7 @@ jobs:
       - run: python research/record_day.py ${{ github.event.inputs.dates }}
         env:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          FNO_APP_URL: ${{ vars.APP_URL }}
       - name: commit data
         if: always()
         run: |

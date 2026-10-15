@@ -32,7 +32,8 @@ PRE_CRON = "30 3 * * 1-5"       # UTC = 09:00 IST, Mon-Fri: one pre-open call (s
 TICK_CRON = "* 4-9 * * 1-5"   # UTC = 09:30-15:29 IST, Mon-Fri (~360 calls/day; Vercel free QStash limit is 500/day)
 POST_CRON = "5 10 * * 1-5"      # UTC = 15:35 IST: one call after the close that writes the day's research note and lessons
 OPEN_CRON = "45-59 3 * * 1-5"  # UTC = 09:15-09:29 IST: 15 extra calls/day (total ~376, still under 500) used ONLY to record option-chain snapshots
-PRODUCTION_HOST = os.environ.get("VERCEL_PROJECT_PRODUCTION_URL", "")
+# Public host the schedules call. APP_HOST wins; Render and Vercel set their own variables.
+PRODUCTION_HOST = (os.environ.get("APP_HOST") or os.environ.get("RENDER_EXTERNAL_HOSTNAME") or os.environ.get("VERCEL_PROJECT_PRODUCTION_URL", "")).replace("https://", "").rstrip("/")
 APP_PASSWORD = os.environ.get("APP_PASSWORD", "")
 SESSION_SECRET = os.environ.get("SESSION_SECRET", "")
 CRON_SECRET = os.environ.get("CRON_SECRET", "")
