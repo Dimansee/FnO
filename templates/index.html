@@ -290,6 +290,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
 .strack .pbull{top:-28px;width:26px;height:26px;margin-left:-13px}
 #splash .msg{font-size:13.5px;color:var(--muted)}
 @media(prefers-reduced-motion:reduce){.pbull,#splash .big{animation:none!important}}
+.rscard{margin-bottom:10px}.rshead{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.rstag{font-size:11.5px;padding:2px 8px;border-radius:99px;border:1px solid var(--line,#444)}.rstag.up{color:#3ecf8e}.rstag.down{color:#ef6a6a}
 </style>
 </head>
 <body>
@@ -333,11 +334,12 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
       <button data-t="portfolio">💼 Portfolio</button>
       <button data-t="context">🌍 Market context</button>
       <button data-t="backtest">🧪 Backtest</button>
+      <button data-t="research">🔬 Research</button>
       <button data-t="journal">📓 Journal</button>
       <button data-t="stocks">📈 Stocks</button>
       <button data-t="recs">⭐ Recommendations</button>
       <button data-t="stockrules">📕 Stock rule book</button>
-      <button data-t="rules">📘 Rulebook</button>
+      <button data-t="rules">📘 Options rulebook</button>
       <button data-t="settings">⚙️ Settings</button>
       <span class="ink" id="ink"></span>
     </nav>
@@ -476,7 +478,7 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
   <!-- BACKTEST -->
   <section id="t-backtest" class="hidden">
     <div class="card">
-      <p style="margin-top:0">Replays today's rules on the latest ~60 days of 5-minute data (the first 14 sessions are only used to measure the usual move). The 3¾-year study that chose these rules is below.</p>
+      <p style="margin-top:0">Replays today's rules on the latest ~60 days of 5-minute data (the first 14 sessions are only used to measure the usual move). The studies that chose these rules, with dates and summaries, are in the <b>Research</b> tab.</p>
       <div class="formrow">
         <div><label>Instrument</label><select id="btSym" style="width:100%"></select></div>
         <div><label>Strategy</label><select id="btStrat" style="width:100%"><option value="both" selected>Both (the rule)</option><option value="noise">Noise band only</option><option value="camarilla">Camarilla breakout only</option><option value="ai">AI model (experimental)</option></select></div>
@@ -489,6 +491,15 @@ body.busy .pbull,#splash .pbull{animation:gallop .42s ease-in-out infinite alter
       </div>
     </div>
     <div id="btOut" style="margin-top:14px"></div>
+  </section>
+
+  <section id="t-research" class="hidden">
+    <div class="card" style="margin-top:0">
+      <div class="cardhead"><h3 style="margin:0">Research log</h3><span class="muted" id="rsCount"></span></div>
+      <p class="muted" style="margin:6px 0 10px" id="rsNote"></p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><select id="rsArea"></select><select id="rsDec"></select><input id="rsQ" placeholder="Search…" style="min-width:160px"></div>
+    </div>
+    <div id="rsList" style="margin-top:14px"></div>
     <div id="study" style="margin-top:14px"></div>
   </section>
 
@@ -671,6 +682,7 @@ async function load(quiet) {
     else if (S.tab === "stocks") await loadStocks();
     else if (S.tab === "recs") await loadRecs();
     else if (S.tab === "backtest") await loadStudy();
+    else if (S.tab === "research") await loadResearch();
   } catch (e) { if (!quiet) toast(e.message); }
   finally { sec.classList.remove("loading"); if (!quiet) pDone(); hideSplash(); }
 }
@@ -1619,13 +1631,35 @@ function studyR7(x, k) {
       <li><b>On real option premiums</b> (${st.D.days_1min} days of 1-minute and ${st.D.days_5min} of 5-minute near-expiry contracts so far): with a 20% premium stop, ${st.D.rows["SL-20% TP+20%"].of_stopped_then_target}% of stop-outs later reached +20% and ${st.D.rows["SL-20% TP+40%"].of_stopped_then_target}% reached +40%; with a 30-40% stop almost none did. A bought option that has fallen 20-30% rarely comes back above entry the same day - time decay works against it. The recorder is collecting more days to confirm this.</li>
     </ul>`;
 }
-async function loadStudy() {
+
+const RS_DEC = {"Adopted": "up", "Not adopted": "down", "Watch-list": "", "Information": "muted"};
+async function loadResearch() {
+  if (!S.rlog) S.rlog = await api("/api/research/log");
+  const L = S.rlog, items = L.entries || [];
+  const areas = [...new Set(items.map(x => x.area))];
+  const A = $("#rsArea"), D = $("#rsDec");
+  if (A.options.length <= 1) areas.forEach(a => A.add(new Option(a, a)));
+  if (!A.dataset.b) { A.dataset.b = 1; A.onchange = D.onchange = $("#rsQ").oninput = renderResearchList; }
+  $("#rsNote").textContent = L.note || "";
+  renderResearchList();
+  await loadStudy(true);
+}
+function renderResearchList() {
+  const items = (S.rlog && S.rlog.entries) || [];
+  const a = $("#rsArea").value, d = $("#rsDec").value, q = $("#rsQ").value.trim().toLowerCase();
+  const f = items.filter(x => (!a || x.area === a) && (!d || x.decision === d) && (!q || JSON.stringify(x).toLowerCase().includes(q)));
+  $("#rsCount").textContent = `${f.length} of ${items.length} studies` + (S.rlog.updated ? ` · log updated ${S.rlog.updated}` : "");
+  $("#rsList").innerHTML = f.map(x => `<div class="card rscard"><div class="rshead"><span class="mono muted">${esc(x.date)}</span><span class="rstag">${esc(x.area)}</span><span class="rstag ${RS_DEC[x.decision] || ""}">${esc(x.decision)}</span></div>
+    <h4 style="margin:6px 0">${esc(x.title)}</h4><p style="margin:0 0 6px"><b>Summary:</b> ${esc(x.summary)}</p>
+    <details><summary class="muted">Question, result, period</summary><p><b>Asked:</b> ${esc(x.asked)}</p><p><b>Result:</b> ${esc(x.result)}</p>${x.period ? `<p class="muted">Data period: ${esc(x.period)}</p>` : ""}</details></div>`).join("") || '<div class="muted">No studies match.</div>';
+}
+async function loadStudy(render) {
   if (!S.btDefaults) {
     try { const st = await api("/api/settings"); S.prefs = st.prefs || {}; $("#btSize").value = S.prefs.sizing || "risk"; S.btDefaults = true; } catch (e) {}
   }
-  if (S.study) return;
-  const r = await api("/api/research"); S.study = r;
-  if (!r.new) return;
+  if (!S.study) S.study = await api("/api/research");
+  const r = S.study;
+  if (!render || !r.new) return;
   const k = v => v == null ? "–" : `<span class="${cls(v)}">${v >= 0 ? "+" : "−"}₹${Math.abs(v / 1000).toFixed(1)}k</span>`;
   const row = (name, b) => `<tr><td>${name}</td>${[30, 60, 90, 120].map(w => { const x = b.windows[w]; return `<td class="mono">${k(x.net)}<div class="muted" style="font-size:11.5px">${x.pf === "" ? "" : `PF ${x.pf ?? "–"} · `}${x.trades} trades</div></td>`; }).join("")}${[2023, 2024, 2025, 2026].map(y => `<td class="mono">${k(b.years[y])}</td>`).join("")}</tr>`;
   const both = (a, b) => ({windows: Object.fromEntries([30, 60, 90, 120].map(w => [w, {net: a.windows[w].net + b.windows[w].net, pf: "", trades: a.windows[w].trades + b.windows[w].trades}])),
@@ -1958,6 +1992,8 @@ function renderRecs(d) {
     if (!q || q.error || q.open == null) return `<p class="muted">Live check: price not available right now.</p>`;
     if (dn) return `<p><b>Live:</b> opened ₹${q.open.toFixed(2)} (${sgn(q.gap_pct ?? 0)}%), now ₹${q.last}</p>`;
     const stop = p.risk_line, last = q.last, tgt = q.open * 1.05;
+    const lockd = q.prev_close && q.low != null && last <= q.low * 1.0005 && [0.05, 0.10, 0.20].some(b => Math.abs(last / q.prev_close - 1 + b) <= 0.0015);
+    if (lockd) return `<p><b>Live check:</b> now ₹${last} <span class="badge no">On lower circuit - cannot sell, SKIP</span><br><span class="muted">Only sellers in the queue: a buy here could not be sold.</span></p>`;
     let st = ["Entry OK", "ok"]; if (stop != null && last <= stop) st = ["Below stop - skip", "no"]; else if (last >= tgt) st = ["Target already reached - skip", "warn"];
     return `<p><b>Live check:</b> opened ₹${q.open.toFixed(2)} (<span class="mono ${cls(q.gap_pct)}">${sgn(q.gap_pct ?? 0)}%</span>), now ₹${last} <span class="badge ${st[1]}">${st[0]}</span><br><span class="muted">With the real open as entry: target ₹${tgt.toFixed(2)}, stop line ₹${stop ?? "–"}</span></p>`; };
   const card = p => { const a = A[p.tier] || ["WATCH", "", ""], dn = p.direction === "down", t = tiers[p.tier] || {};
@@ -1975,6 +2011,7 @@ function renderRecs(d) {
     <div class="stsum" style="margin-top:6px"><span><b>${strong.length}</b> BUY · <b>${ups.filter(p => p.tier === "near").length}</b> BUY SMALL · <b>${ups.filter(p => p.tier === "breakout").length}</b> WATCH · <b>${downs.length}</b> AVOID</span></div>
     ${strong.length ? "" : `<p class="muted" style="margin:8px 0 0">No full-strength BUY today. The tested rule fires only on a sharp dip in a stock above its 200-day average, so quiet days are normal - waiting is the rule too.</p>`}
     ${ups.length ? `<div class="rcgrid">${ups.map(card).join("")}</div>` : ""}</div>
+    ${(d.skipped_circuit || []).length ? `<div class="card" style="margin-top:14px"><h3>Skipped today: on the lower circuit</h3><p class="muted" style="font-size:12px;margin:0 0 6px">These matched the dip setup but closed locked at their lower price limit (sellers only), so a buy could not be sold. They are not recommended.</p>${d.skipped_circuit.map(x => `<div class="row"><span><b>${esc(x.sym)}</b> <span class="muted">${esc(x.name || "")}</span></span><span class="mono">₹${x.close} · 3-day ${sgn(x.drop_3d_pct)}%</span></div>`).join("")}</div>` : ""}
     ${downs.length ? `<div class="card" style="margin-top:14px"><h3>Avoid / do not buy</h3><div class="rcgrid">${downs.map(card).join("")}</div></div>` : ""}
     <div class="card" style="margin-top:14px"><p class="muted" style="font-size:12px;margin:0">How these are made: every card comes from the nightly scan of the Nifty 500 using rules that were backtested (rule pick: 64% hit, about +1.4% a trade after costs, plan on 8-12% a year). Candle patterns are deliberately not used - on 6 years of daily data for 100 liquid stocks they did no better than a random day. BUY SMALL, WATCH and AVOID have weaker evidence, so size them small or just watch. Paper trading ideas, not investment advice; the backtest uses today's index list so it is flattered by survivorship.</p></div>`;
 }
@@ -2166,59 +2203,90 @@ $("#logout").onclick = async () => { await post("/api/logout"); location.reload(
 function renderRules() {
   const r = S.meta.rules, pct = v => Math.round(v * 100) + "%";
   $("#rulebook").innerHTML = `
-  <h3 style="font-size:18px">The rulebook – “Noise-Area Momentum”</h3>
-  <p><b>Why this strategy:</b> it came out on top of a research loop that replayed 9 popular intraday strategies (opening-range breakouts, VWAP pullbacks, Supertrend, previous-day high/low with CPR, EMA/ADX, gap-and-go, 9:20 iron fly and this one) in over 5,000 settings on 3¾ years of real 5-minute Nifty and Bank Nifty data, with brokerage, taxes and slippage. Settings were chosen on 2023 – April 2026 only, then judged on the last 120 trading days they never saw. The idea comes from the 2024 study <i>“Beat the Market”</i> by Zarattini, Aziz and Barbon. The full numbers are in the <b>Backtest</b> tab.</p>
-  <p><b>The idea in one line:</b> most intraday wiggles are noise. Only when the index travels clearly further from its open than it usually does at that time of day is a real trend likely, so only then do we trade, and we stay in while it keeps going.</p>
-  <h4>1 · Draw the noise band (automatic)</h4>
+  <h3 style="font-size:19px">Options rulebook – Nifty &amp; Bank Nifty intraday options</h3>
+  <p class="muted" style="margin-top:0">Every rule the app uses to recommend and paper-trade <b>index options</b>. Stock rules are in the <b>Stock rule book</b> tab; the evidence behind these rules (with dates) is in the <b>Research</b> tab.</p>
+
+  <h4>Summary – the rules on one screen</h4>
+  <div class="tablewrap"><table class="prose">
+    <tr><th></th><th>Strategy A · Noise-Area Momentum</th><th>Strategy B · Camarilla breakout</th></tr>
+    <tr><td><b>Buy a CALL when</b></td><td>5-min close at a half-hour check is above the upper noise band <b>and</b> above VWAP</td><td>A 5-min candle closes above H4 (the one before closed at or below it)</td></tr>
+    <tr><td><b>Buy a PUT when</b></td><td>Close is below the lower band <b>and</b> below VWAP</td><td>A 5-min candle closes below L4</td></tr>
+    <tr><td><b>When it can trade</b></td><td>Checks at 09:45, 10:15 … 14:15 · India VIX ≥ ${r.VIX_MIN}</td><td>09:20 – 13:00 · India VIX between 11 and 22</td></tr>
+    <tr><td><b>Stop</b></td><td>${r.STOP_ATR} × ATR(14) on the index</td><td>H3 (call) / L3 (put), kept between 1 and 3 × ATR</td></tr>
+    <tr><td><b>Target / exit</b></td><td>${r.RR_NOISE}R target · trailing exit on band/VWAP · out by 15:15</td><td>No fixed target · stop to entry at +1R · time stop 45 min · out by 15:15</td></tr>
+    <tr><td><b>Option bought</b></td><td colspan="2">1 strike in-the-money, nearest expiry (next week's when 1 day or less is left)</td></tr>
+    <tr><td><b>Account rules</b></td><td colspan="2">Risk ${pct(r.RISK_PER_TRADE)} of capital per trade · max ${r.MAX_TRADES_PER_DAY} trades a day · stop after a ${pct(r.MAX_DAILY_LOSS)} daily loss or two losers · no new signals on Union Budget day · one trade per rule per index per day</td></tr>
+  </table></div>
+  <p class="muted" style="font-size:12px">Details of each rule follow. Profit is always judged on the option premium (not Nifty points), after costs.</p>
+
+  <h3 style="font-size:17px;margin-top:22px">Part 1 · Strategy A – Noise-Area Momentum</h3>
+  <p><b>The idea:</b> most intraday wiggles are noise. Only when the index travels clearly further from its open than it usually does at that time of day is a real trend likely, so we trade only then, and stay in while it keeps going. Source: the 2024 study <i>“Beat the Market”</i> by Zarattini, Aziz and Barbon, chosen over 8 other strategies in the research (see Research tab, rounds 1-2).</p>
+  <h4>1.1 · The noise band (drawn automatically)</h4>
   <ul><li>For every 5-minute slot of the day, take how far the index usually is from its open: the average over the last ${r.NOISE_LOOKBACK} sessions.</li>
   <li>Upper band = the higher of today's open and yesterday's close × (1 + ${r.NOISE_MULT} × that usual move). Lower band = the lower of the two × (1 − ${r.NOISE_MULT} × usual move).</li>
   <li>The band starts narrow and widens through the day, so early moves need less distance than late ones.</li></ul>
-  <h4>2 · Entry, only on the half hour (09:45, 10:15 … 14:15)</h4>
-  <ul><li><b>BUY CALL</b> when the 5-minute close at a check is above the upper band <b>and</b> above VWAP.</li>
-  <li><b>BUY PUT</b> when it is below the lower band <b>and</b> below VWAP.</li>
+  <h4>1.2 · Entry – only on the half hour (09:45, 10:15 … 14:15)</h4>
+  <ul><li><b>BUY CALL</b> when the 5-minute close at a check is above the upper band <b>and</b> above VWAP. <b>BUY PUT</b> when it is below the lower band <b>and</b> below VWAP.</li>
   <li>The signal can be taken for ${r.SIGNAL_VALID_MIN} minutes after the check if price is still beyond the band.</li>
   <li>No trades when India VIX is below ${r.VIX_MIN} (moves too small to pay for an option). <b>One trade per instrument per day.</b></li>
-  <li><b>How to enter:</b> within 1-2 minutes of the signal. Checked on real 1-minute prices, a minute's delay made no measurable difference to the same trades.</li></ul>
-  <h4>3 · What to buy</h4>
-  <ul><li>The option <b>1 strike in-the-money</b> of the nearest expiry (Nifty weekly): for a CALL the strike just below the price, for a PUT the strike just above. <b>When that expiry has 1 day or less left, buy the next week's</b> - 1-day options lost money in testing because of time decay.</li>
-  <li>Why not ATM: on real NSE option prices, ATM options lost noticeably more to time decay on sideways days; the in-the-money option moves more with Nifty and decays less per rupee of movement.</li>
-  <li>Too costly for your cash? The ticket lets you pick a nearby strike (cheaper OTM strikes decay faster).</li></ul>
-  <h4>4 · Exit, decided before you enter (all on the index price)</h4>
-  <ul><li><b>Stop-loss:</b> ${r.STOP_ATR} × ATR(14) of the 5-minute chart away from entry.</li>
-  <li><b>Target:</b> ${r.RR_NOISE} × that risk.</li>
+  <li><b>How to enter:</b> within 1-2 minutes of the signal. On real 1-minute prices a minute's delay made no measurable difference.</li></ul>
+  <h4>1.3 · Exit – decided before you enter (all on the index price)</h4>
+  <ul><li><b>Stop-loss:</b> ${r.STOP_ATR} × ATR(14) of the 5-minute chart away from entry. <b>Target:</b> ${r.RR_NOISE} × that risk.</li>
   <li><b>Trailing exit:</b> at each half-hour check, a CALL exits if the close falls back below the upper band or VWAP (whichever is higher); a PUT exits if it rises above the lower band or VWAP (whichever is lower).</li>
   <li><b>Square off by 15:15.</b> The server checks open trades every minute, even when this page is closed.</li></ul>
-  <h4>Second strategy · Camarilla breakout (runs alongside)</h4>
-  <ul><li>From yesterday's high, low and close: <b>H4 = close + 1.1 × range ÷ 2</b>, <b>L4 = close − 1.1 × range ÷ 2</b> (H3/L3 use ÷ 4). The app draws H4/L4 on the Nifty chart.</li>
-  <li><b>BUY CALL</b> when a 5-minute candle closes above H4 (the one before closed at or below it). <b>BUY PUT</b> when it closes below L4. Only between 09:20 and 13:00, and only when India VIX is between 11 and 22.</li>
-  <li><b>Stop:</b> H3 for a call / L3 for a put (kept between 1 and 3 × ATR). <b>At +1R</b> the stop moves to entry. <b>Time stop:</b> if +0.5R isn't reached within 45 minutes, exit. No fixed target - otherwise hold to 15:15.</li>
-  <li>Same option rule (1 strike in-the-money), one Camarilla trade per instrument per day, and never two open trades in the same instrument.</li>
-  <li>Why two strategies: their daily results are only weakly related (correlation ≈ 0.3), so one often makes money when the other doesn't. Together they were profitable in every year 2023–2026 under the app's risk rules.</li></ul>
-  <h4>5 · Risk – the part that keeps you in the game</h4>
+
+  <h3 style="font-size:17px;margin-top:22px">Part 2 · Strategy B – Camarilla breakout (runs alongside A)</h3>
+  <p><b>Why a second strategy:</b> the two strategies' daily results are only weakly related (correlation about 0.3), so one often makes money when the other doesn't. Together they were profitable in every year 2023–2026 under the app's risk rules.</p>
+  <h4>2.1 · Levels</h4>
+  <ul><li>From yesterday's high, low and close: <b>H4 = close + 1.1 × range ÷ 2</b>, <b>L4 = close − 1.1 × range ÷ 2</b> (H3/L3 use ÷ 4). The app draws H4/L4 on the Nifty chart.</li></ul>
+  <h4>2.2 · Entry</h4>
+  <ul><li><b>BUY CALL</b> when a 5-minute candle closes above H4 (the one before closed at or below it). <b>BUY PUT</b> when it closes below L4.</li>
+  <li>Only between 09:20 and 13:00, and only when India VIX is between 11 and 22.</li>
+  <li>One Camarilla trade per instrument per day, and never two open trades in the same instrument.</li></ul>
+  <h4>2.3 · Exit</h4>
+  <ul><li><b>Stop:</b> H3 for a call / L3 for a put (kept between 1 and 3 × ATR). <b>At +1R</b> the stop moves to entry.</li>
+  <li><b>Time stop:</b> if +0.5R isn't reached within 45 minutes, exit. No fixed target – otherwise hold to 15:15.</li></ul>
+
+  <h3 style="font-size:17px;margin-top:22px">Part 3 · Which option to buy (both strategies)</h3>
+  <h4>3.1 · Strike and expiry</h4>
+  <ul><li>The option <b>1 strike in-the-money</b> of the nearest expiry (Nifty weekly): for a CALL the strike just below the price, for a PUT the strike just above.</li>
+  <li><b>When that expiry has 1 day or less left, buy the next week's</b> – 1-day options lost money in testing because of time decay.</li></ul>
+  <h4>3.2 · Why in-the-money, and what if it costs too much</h4>
+  <ul><li>On real NSE option prices, ATM options lost more to time decay on sideways days; the in-the-money option moves more with Nifty and decays less per rupee of movement.</li>
+  <li>Too costly for your cash? The ticket lets you pick a nearby strike (cheaper OTM strikes decay faster).</li></ul>
+
+  <h3 style="font-size:17px;margin-top:22px">Part 4 · Risk and account rules</h3>
+  <h4>4.1 · Position size and limits</h4>
   <ul><li>Risk <b>${pct(r.RISK_PER_TRADE)} of capital per trade</b>; lots are calculated for you.</li>
-  <li>Max <b>${r.MAX_TRADES_PER_DAY} trades a day</b> in total; stop after a <b>${pct(r.MAX_DAILY_LOSS)} daily loss</b> or two losers.</li>
-  <li><b>Sit out Union Budget day</b> - the app blocks new signals then (every Budget day in the 2023-26 test lost). Expiry days are fine to trade: Bank Nifty lost on its old weekly expiry days, but that effect hasn't shown up since it became monthly-only in Nov 2024.</li>
-  <li>Keep the stop where it is. Moving it 25-50% wider or 25% tighter both earned less in testing, and fixed profit-booking at +80/+100/+120 Nifty points earned less than letting winners run.</li></ul>
-  <h4>Optional · the AI model (off by default)</h4>
-  <ul><li>A machine-learning model (gradient-boosted trees) that looks at 64 things at every 5-minute close from 09:30 to 14:30 - price vs open/VWAP/EMAs, the noise band, Camarilla and yesterday's levels, RSI/ADX/MACD/Supertrend, VIX, gap, global cues, time, expiry, today's structure - and scores six candidate trades: buy CALL or PUT with a stop of 1, 1.5 or 2 × ATR and a 2R target.</li>
-  <li>It recommends the best candidate when its expected R is at least 0.3, shows the win chance and which factors moved the score, and can paper-trade automatically like the rules (switch it on in Settings; up to 2 AI trades per index per day; exits on the index stop, the 2R target or 15:15).</li>
-  <li><b>Its honest record:</b> judged on quarters it never saw (2024 – Oct 2026), about break-even - roughly +₹21k with a losing 2025, against +₹192k for the two rules. Three other model designs and many decision policies did no better. It is here so you can watch it, not because it is better. A probability is not a confirmation.</li></ul>
-  <h4>What the research found – read this</h4>
-  <ul><li>The old opening-range rules lost money in every window tested once costs were included. They have been replaced.</li>
-  <li>The two strategies together win only about <b>30%</b> of trades. They make money because winners run (up to 4R) while losers are cut at 1R. All of the profit came from <b>trend days</b> (the close far from the open); range days lost. Expect losing weeks - in a luck test, a normal year saw a 15-35% fall from a peak at 1% risk per trade.</li>
-  <li>It was profitable on <b>Nifty in every year 2023–2026</b>. Bank Nifty was mixed (it lost in 2025), and most single stocks lost money, so <b>prefer the indices</b>.</li>
-  <li>The market score (global cues, news, PCR, FII…) is shown for context only. Using it as a filter <i>reduced</i> profit in testing.</li>
-  <li>Re-tuning the settings every month to the latest winners did <i>worse</i> than keeping one robust setting. Don't chase last month's best.</li>
-  <li>Stacking more indicators on one signal (EMA, MACD, RSI, Heikin-Ashi, Supertrend, candle patterns…) did <b>not</b> raise accuracy: the win rate stayed ~35–36%, and the combinations that looked best on old data mostly lost on new data. Running two <i>different</i> strategies side by side helped; piling filters onto one did not.</li>
-  <li>Profit is always measured on the <b>option premium</b>, never on Nifty points. Option prices were checked against real NSE closing prices (3 years) and real 5-minute option candles, and corrected for the faster decay real options show on sideways days. That correction is why the rule buys <b>1 strike in-the-money</b>.</li>
-  <li>Move to real money only after <b>30+ paper trades</b> that look like the backtest, and start with 1 lot.</li></ul>`;
+  <li>Max <b>${r.MAX_TRADES_PER_DAY} trades a day</b> in total; stop after a <b>${pct(r.MAX_DAILY_LOSS)} daily loss</b> or two losers.</li></ul>
+  <h4>4.2 · Calendar rule</h4>
+  <ul><li><b>Sit out Union Budget day</b> – the app blocks new signals then (every Budget day in the 2023-26 test lost). Expiry days are fine to trade: Bank Nifty lost on its old weekly expiry days, but that effect hasn't shown up since it became monthly-only in Nov 2024.</li></ul>
+  <h4>4.3 · Don't tinker</h4>
+  <ul><li>Keep the stop where it is. Moving it 25-50% wider or 25% tighter both earned less in testing, and fixed profit-booking at +80/+100/+120 Nifty points earned less than letting winners run.</li>
+  <li>Don't re-tune the settings every month to the latest winners – that did worse than one robust setting. The market score (global cues, news, PCR, FII) is context only; using it as a filter reduced profit.</li></ul>
+
+  <h3 style="font-size:17px;margin-top:22px">Part 5 · Optional – the AI model (off by default)</h3>
+  <h4>5.1 · What it does</h4>
+  <ul><li>A machine-learning model (gradient-boosted trees) that looks at 64 things at every 5-minute close from 09:30 to 14:30 and scores six candidate trades: buy CALL or PUT with a stop of 1, 1.5 or 2 × ATR and a 2R target.</li>
+  <li>It recommends the best candidate when its expected R is at least 0.3, shows the win chance and which factors moved the score, and can paper-trade automatically (switch it on in Settings; up to 2 AI trades per index per day; exits on the index stop, the 2R target or 15:15).</li></ul>
+  <h4>5.2 · Its honest record</h4>
+  <ul><li>Judged on quarters it never saw (2024 – Oct 2026), about break-even – roughly +₹21k with a losing 2025, against +₹192k for the two rules. Other model designs and many decision policies did no better. It is here so you can watch it, not because it is better. A probability is not a confirmation.</li></ul>
+
+  <h3 style="font-size:17px;margin-top:22px">Part 6 · What to expect, and before going live</h3>
+  <h4>6.1 · What to expect</h4>
+  <ul><li>The two strategies together win only about <b>30%</b> of trades. They make money because winners run (up to 4R) while losers are cut at 1R. All the profit came from <b>trend days</b>; range days lost. Expect losing weeks – in a luck test, a normal year saw a 15-35% fall from a peak at 1% risk per trade.</li>
+  <li>Profitable on <b>Nifty in every year 2023–2026</b>. Bank Nifty was mixed (it lost in 2025) and most single stocks lost, so <b>prefer the indices</b>.</li>
+  <li>Stacking more indicators on one signal did <b>not</b> raise accuracy; running two <i>different</i> strategies side by side helped.</li></ul>
+  <h4>6.2 · Before real money</h4>
+  <ul><li>Move to real money only after <b>30+ paper trades</b> that look like the backtest, and start with 1 lot.</li>
+  <li>Profit is measured on the <b>option premium</b>, checked against real NSE option prices. The full evidence, with the date of each study, is in the <b>Research</b> tab.</li></ul>`;
 }
 
 /* ---------- stock rule book ---------- */
 function renderStockRules() {
   $("#stockRulebook").innerHTML = `
   <h3 style="font-size:18px">The stock rule book – how the Picks in the Stocks tab are chosen</h3>
-  <p><b>What this is:</b> the rules the nightly stock scan runs today, written down in one place. They are long-only <b>cash-equity (delivery, no leverage)</b> rules, completely separate from the intraday option rules in the <b>Rulebook</b> tab. Everything here is <b>paper only</b>. The main tested rule came from research round 16 (Nifty 500, 2020-26, 0.1% cost per side on every fill); the other tiers are weaker and are shown so there is always something to watch.</p>
+  <p><b>What this is:</b> the rules the nightly stock scan runs today, written down in one place. They are long-only <b>cash-equity (delivery, no leverage)</b> rules, completely separate from the intraday option rules in the <b>Options rulebook</b> tab. Everything here is <b>paper only</b>. The main tested rule came from research round 16 (Nifty 500, 2020-26, 0.1% cost per side on every fill); the other tiers are weaker and are shown so there is always something to watch.</p>
 
   <h4>1 · Which stocks are scanned</h4>
   <ul><li><b>Universe:</b> the Nifty 500 (499 names), prices adjusted for splits and dividends. The tested rules were only ever measured on this list.</li>

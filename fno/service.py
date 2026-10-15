@@ -562,7 +562,7 @@ def stock_live(syms) -> dict:
             opens = [x for x in (q.get("open") or []) if x is not None]
             prev = meta.get("chartPreviousClose") or meta.get("previousClose")
             v = {"last": meta.get("regularMarketPrice"), "open": opens[0] if opens else None, "prev_close": prev,
-                 "time": meta.get("regularMarketTime")}
+                 "low": meta.get("regularMarketDayLow"), "time": meta.get("regularMarketTime")}
             if v["open"] is not None and prev:
                 v["gap_pct"] = round((v["open"] / prev - 1) * 100, 2)
         except Exception as e:
@@ -578,6 +578,9 @@ def _live_line(p, q):
     if not q or q.get("error") or q.get("open") is None:
         return f"{p['sym']} ~₹{p.get('entry_ref', p['close'])} → ₹{p.get('target', round(p['close'] * 1.05, 2))}"
     o = q["open"]
+    pc, lo, last = q.get("prev_close"), q.get("low"), q.get("last")
+    if pc and lo and last and last <= lo * 1.0005 and any(abs(last / pc - 1 + b) <= 0.0015 for b in (0.05, 0.10, 0.20)):
+        return f"{p['sym']} is on its LOWER CIRCUIT (₹{last:.2f}) - cannot be sold, skip"
     return f"{p['sym']} opened ₹{o:.2f} ({q.get('gap_pct', 0):+.1f}%) → target ₹{o * 1.05:.2f}, risk ₹{p.get('risk_line', '-')}"
 
 

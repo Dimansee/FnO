@@ -235,6 +235,16 @@ def research():
     return jsonify(BT.research_summary())
 
 
+@app.get("/api/research/log")
+def research_log():
+    import json as _j
+    from pathlib import Path
+    try:
+        return jsonify(_j.loads((Path(__file__).parent / "fno" / "research_log.json").read_text()))
+    except Exception:
+        return jsonify({"items": [], "note": "Research log unavailable."})
+
+
 @app.get("/api/dashboard")
 def dashboard():
     try:
