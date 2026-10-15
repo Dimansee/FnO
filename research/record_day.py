@@ -24,6 +24,7 @@ import requests
 
 ROOT = "research/data/live"
 APP = os.environ.get("FNO_APP_URL", "https://fno-trainer.vercel.app")
+CRON_SECRET = __import__("os").environ.get("CRON_SECRET", "")
 LOOKBACK = int(os.environ.get("RECORD_LOOKBACK", "7"))
 STRIKE_WIDTH = 0.04
 INDEX = {"NIFTY": "NSE_INDEX|Nifty 50", "BANKNIFTY": "NSE_INDEX|Nifty Bank", "FINNIFTY": "NSE_INDEX|Nifty Fin Service"}
@@ -171,7 +172,7 @@ def record_nse(d: date, out: str, man: dict):
 
 def record_snapshots(d: date, out: str, man: dict):
     try:
-        r = requests.get(f"{APP}/api/recorder/day", params={"date": d.isoformat()}, timeout=60)
+        r = requests.get(f"{APP}/api/recorder/day", params={"date": d.isoformat()}, headers={"x-cron-secret": CRON_SECRET}, timeout=60)
         j = r.json()
         n = len(j.get("snapshots") or [])
         if n:
@@ -186,7 +187,7 @@ def record_snapshots(d: date, out: str, man: dict):
 
 def record_journal(d: date, out: str, man: dict):
     try:
-        r = requests.get(f"{APP}/api/journal/day", params={"date": d.isoformat()}, timeout=60)
+        r = requests.get(f"{APP}/api/journal/day", params={"date": d.isoformat()}, headers={"x-cron-secret": CRON_SECRET}, timeout=60)
         j = r.json()
         n = len(j.get("recommendations") or [])
         if n or j.get("context", {}).get("NIFTY"):
