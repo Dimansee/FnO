@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "x2",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Custom strategy search: can anything beat the current Noise and Camarilla rules?",
+   "asked": "Three new ideas not covered in earlier rounds, run through the same engine, option pricing, 0.5% slippage and charges as the current rules (Nifty + Bank Nifty, 929 sessions). Tuned or fixed on 2 Jan 2023 - 30 Jun 2025, then judged on the unseen 1 Jul 2025 - 1 Oct 2026: (1) late-day momentum - buy in the direction of the first-30-minute and 2:15-2:45 moves, hold 2:45 to 3:15; (2) the noise-area breakout only when the other index also breaks out the same way; (3) the current rules only when the last 5 sessions' range was high compared with what the VIX implied.",
+   "result": "The current rules reproduce: Noise PF 1.35 (448 trades, +Rs 137k), Camarilla PF 1.30 (652 trades, +Rs 167k); on the unseen part Noise PF 1.26 and Camarilla PF 1.14. (1) Late-day momentum lost in every setting: PF 0.69-0.72 over all days, 0.71-0.96 on the unseen days. (2) Other-index confirmation kept PF at 1.35 with 262 instead of 448 trades and less profit (+Rs 89k). On Nifty alone it lifted PF from 1.61 to 1.77 and cut the fall from Rs 24.5k to 15.8k, but total profit dropped from Rs 110k to 85k, a random subset of the same size would do as well about 17% of the time, and on Bank Nifty it made things worse (PF 1.13 to 1.02). (3) The realised-vs-implied filter looked fine on the training days (Camarilla PF 1.40 to 1.72) but lost on the unseen days at every threshold (PF 0.64-1.08, mostly below 1). For scale, the earlier monthly study found the current rules average +2.8% a month on the account at 1% risk with 0 of 46 months at +50%.",
+   "decision": "Not adopted",
+   "summary": "Three new ideas, 14 settings in total: none beat the current rules on the unseen days. Late-day momentum and the volatility filter fail; Nifty-only cross-index confirmation is a small, not statistically convincing risk reduction. Keep the current rules.",
+   "period": "2023-01-02 to 2026-10-01 (929 sessions; unseen 2025-07-01 to 2026-10-01)"
+  },
+  {
    "id": "x1",
    "date": "2026-10-15",
    "area": "Index options",
