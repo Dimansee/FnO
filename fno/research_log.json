@@ -1,7 +1,62 @@
 {
- "updated": "2026-10-15",
+ "updated": "2026-10-16",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
+  {
+   "id": "x10",
+   "date": "2026-10-16",
+   "area": "Index options",
+   "title": "Paper-derived indicators as filters: CCI, VIX direction, weekday, VIX level",
+   "asked": "Do indicators from published papers on Nifty options (CCI momentum, India VIX direction, weekday effect, VIX level) raise profit, win % or profit factor of the current Noise + Camarilla rules? 15 candidates fixed before looking; 920 sessions, calibrated Black-Scholes, 0.5% slippage, full charges, Rs 2 lakh, 1% risk.",
+   "result": "Baseline (merged rules): 910 trades, +Rs 222k, win 29.5%, PF 1.28, fall -59k, unseen +41k. No filter raised total profit. Best leads: Camarilla-only with VIX >= 13 (354 trades, +154k vs +166k, PF 1.51, fall -28k vs -46k, every year positive, unseen PF 1.72) and 5-minute CCI > 100 as a risk filter (fall -59k to -40k, same profit). Skipping Thursday looks good (p 0.04) but has no mechanism and weekday is a known overfitting magnet. After about 40 looks at one sample, p of 0.02-0.05 is what chance gives.",
+   "decision": "Not adopted",
+   "summary": "Nothing beat the current rules. The Camarilla VIX-13 floor is worth forward-testing for a smaller fall, not worth changing yet.",
+   "period": "3 Jan 2023 - 1 Oct 2026"
+  },
+  {
+   "id": "x9",
+   "date": "2026-10-16",
+   "area": "Index options",
+   "title": "Chandelier Exit (ATR 1, x2) + ZLSMA (50) from an Instagram comment",
+   "asked": "Does the Chandelier Exit buy/sell signal, alone or filtered by ZLSMA(50), make money on Nifty and Bank Nifty after costs? Index only, 5m and 15m, signal at bar close, intraday, slippage 1 pt (Nifty) / 3 pt (Bank Nifty).",
+   "result": "7 of 8 combinations lost money after slippage (Nifty 5m CE only PF 0.94, CE+ZLSMA PF 0.84; Bank Nifty 5m PF 0.87 / 0.86). The only positive cell (Bank Nifty 15m CE only, +1,669 pts) turns to -8,028 pts without its 10 best trades and flips sign by year. ZLSMA as a filter did not help. The entry rule was my reading of the comment; other timeframes and trailing variants were not tested.",
+   "decision": "Not adopted",
+   "summary": "Gross of costs the edge is tiny; costs remove it. Frequent-signal indicator systems on 5-minute bars lose to slippage.",
+   "period": "2 Jan 2023 - 9 Oct 2026"
+  },
+  {
+   "id": "x8",
+   "date": "2026-10-16",
+   "area": "Index options",
+   "title": "200-day average trend filter on the current rules",
+   "asked": "Gayed's 200-day rule: take breakouts only in the direction of the index's 200-day average (long above, short below, prior close). Does it help Noise + Camarilla?",
+   "result": "With the trend: 377 trades, +77k, PF 1.23, fall -35k (baseline 708 trades, +178k, PF 1.28, fall -59k). Against it: 348 trades, +96k. The filter halves trades and more than halves profit (random thinning matches it 66% of the time). It looks good on the last 15 months (unseen PF 1.61) but earned almost nothing in 2024 (+4k vs +96k) while trading against the trend did the opposite, so the sign flips with the market regime.",
+   "decision": "Not adopted",
+   "summary": "A trend filter that works in one regime and fails in the next is not a stable rule.",
+   "period": "25 Oct 2023 - 1 Oct 2026 (200 sessions needed)"
+  },
+  {
+   "id": "x7",
+   "date": "2026-10-16",
+   "area": "Index options",
+   "title": "Marking sideways markets: worth it, but no usable real-time flag",
+   "asked": "All profit comes from trend days and range days lose. Would a sideways flag known before or at the signal help the current rules?",
+   "result": "Ceiling (hindsight): trend days +547k (PF 2.52), mixed -122k, range days -208k (PF 0.06); skipping every range day would lift profit from +217k to +425k. But pre-open flags do not predict range days (10-day efficiency, daily ADX, VWAP crosses, intraday efficiency all fail): every 'avoid sideways' filter removed winners and cut profit. The trades taken in sideways stretches actually did better (PF 1.46).",
+   "decision": "Not adopted",
+   "summary": "The loss comes from breakouts that fail on days that then range, and nothing known in advance separates them. Untested: opening-range width, first-30-minute efficiency, option-chain measures.",
+   "period": "17 Jan 2023 - 1 Oct 2026"
+  },
+  {
+   "id": "x6",
+   "date": "2026-10-16",
+   "area": "Index options",
+   "title": "Dealer-gamma proxy from open interest",
+   "asked": "Academic papers say intraday moves follow through more when dealers are short gamma. Does a gamma estimate known before the open predict follow-through or improve the rules? Estimated from end-of-day open interest (Black-Scholes gamma per strike, calls stabilising, puts destabilising).",
+   "result": "No link between the sign of the gamma estimate and the day's range or trendiness. Low total gamma days do have wider ranges, but that is India VIX in disguise. As a filter the 'short gamma' days carried the least profit (+27k vs +160k), the opposite of the papers. The proxy is crude and India dealer positions are not published, so this does not refute the papers; it means a free-data version has nothing to offer.",
+   "decision": "Not adopted",
+   "summary": "The live Options flow card on the Signal page shows the same kind of estimate for information only. It is not used in any trade rule. Revisit when the recorder has several months of real chains.",
+   "period": "Oct 2023 - Oct 2026"
+  },
   {
    "id": "x5",
    "date": "2026-10-15",

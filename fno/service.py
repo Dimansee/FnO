@@ -770,7 +770,14 @@ def tick():
     if not (C.MARKET_OPEN <= now.time() <= C.MARKET_CLOSE):
         if time(15, 31) <= now.time() <= time(20, 0):                  # after the close: the day's research note and lessons (runs once)
             try:
-                return {"post_close": LN.post_close_in()}
+                from . import datahub as DH
+                out = {"post_close": LN.post_close_in()}
+                try:
+                    if not store._cmd("SET", f"fno:data:in_saved:{now.date().isoformat()}", "1", "NX", "EX", 86400 * 2) is None:   # once a day
+                        out["data_saved"] = DH.save_in(now)
+                except Exception as e:
+                    out["data_saved"] = {"error": str(e)[:120]}
+                return out
             except Exception as e:
                 return {"post_close": {"error": str(e)[:160]}}
         return {"skipped": "outside market hours"}

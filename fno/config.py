@@ -123,7 +123,7 @@ CAM_RMIN, CAM_RMAX = 1.0, 3.0   # stop distance kept between 1 and 3 x ATR
 # Market recorder (fno/recorder.py): option-chain snapshots kept for later research
 RECORD_EVERY_MIN = 5       # one snapshot every 5 minutes, 09:15-15:30
 RECORD_STRIKES = 15        # strikes each side of the money
-RECORD_KEEP_DAYS = 45      # Redis copy expires after this; the nightly job keeps a permanent copy
+RECORD_KEEP_DAYS = 120     # Redis copy expires after this; the nightly job keeps a permanent copy (was 45; raised so exports can reach back 120 days)
 # NSE trading holidays (weekdays only). SOURCE: published 2026 NSE list - verify against the NSE circular; add next year's list in December.
 HOLIDAYS = {date(2026, 1, 15), date(2026, 1, 26), date(2026, 3, 3), date(2026, 3, 26), date(2026, 3, 31), date(2026, 4, 3),
             date(2026, 4, 14), date(2026, 5, 1), date(2026, 5, 28), date(2026, 6, 26), date(2026, 9, 14), date(2026, 10, 2),

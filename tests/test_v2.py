@@ -234,4 +234,42 @@ assert LN.post_close_in("2026-10-01").get("skipped") == "already done"
 r = c.post("/api/learn/run", json={"market": "IN", "force": True}, headers={"x-cron-secret": "c"})
 assert r.status_code == 200, r.get_data(as_text=True)
 assert c.post("/api/tick/global", headers={"x-cron-secret": "nope"}).status_code == 403
+# ------------------------------------------------------------------ 8. data vault
+from fno import datahub as DH  # noqa: E402
+M._cache.clear(); CANDLES.clear()
+NOW[0] = datetime(2026, 10, 1, 15, 40, tzinfo=C.IST)
+sv = DH.save_in(NOW[0])
+assert isinstance(sv["NIFTY"], int) and sv["NIFTY"] >= 25, sv
+# backfill: Upstox returns older sessions than Yahoo; they must be added without touching the rest
+_old = fake(1300, datetime(2026, 7, 10, 15, 40, tzinfo=C.IST))
+M.upstox_public_history = lambda key, cal_days: _old
+M._cache.clear(); CANDLES.clear()
+before = DH.store._cmd("HLEN", "fno:data:c:IN:NIFTY") or 0
+sv2 = DH.save_in(NOW[0])
+after = DH.store._cmd("HLEN", "fno:data:c:IN:NIFTY") or 0
+assert sv2.get("NIFTY_backfill", 0) >= 10 and after > before, (sv2, before, after)
+M.upstox_public_history = lambda key, cal_days: pd.DataFrame()
+ov = j(c.get("/api/data"))
+ds = {d["id"]: d for d in ov["datasets"]}
+assert ds["in_candles"]["days"] >= 25 and ds["in_candles"]["last"] == "2026-10-01" and ds["in_candles"]["last_update"], ds["in_candles"]
+assert len(ov["schedules"]) >= 6 and ov["keep_days"] == 120
+r = c.get("/api/data/export?dataset=in_candles&symbol=NIFTY&start=2026-09-20&end=2026-10-01&fmt=csv")
+assert r.status_code == 200 and "attachment" in r.headers["Content-Disposition"], r.get_data(as_text=True)[:200]
+head = r.get_data(as_text=True).splitlines()
+assert head[0] == "datetime,open,high,low,close,volume" and len(head) > 100, head[:2]
+rj = j(c.get("/api/data/export?dataset=in_candles&symbol=NIFTY&start=2026-09-20&end=2026-10-01&fmt=json"))
+assert rj["rows"] and rj["symbol"] == "NIFTY"
+assert c.get("/api/data/export?dataset=in_candles&symbol=NIFTY&start=2020-01-01&end=2020-01-05").status_code == 400
+for ds_id in ("trades_in", "trades_crypto", "lessons", "research_notes"):
+    rr = c.get(f"/api/data/export?dataset={ds_id}&start=2026-01-01&end=2026-12-31")
+    assert rr.status_code in (200, 400), (ds_id, rr.status_code)
+assert c.get("/api/data/export?dataset=lessons&start=2026-01-01&end=2026-12-31").status_code == 200
+sh = j(c.post("/api/data/share", json={"dataset": "in_candles", "symbol": "NIFTY", "start": "2026-09-20", "end": "2026-10-01", "fmt": "csv"}))
+tok = sh["url"].split("t=")[1]
+anon = app.test_client()
+ra = anon.get("/api/data/shared?t=" + tok)
+assert ra.status_code == 200 and ra.get_data(as_text=True).startswith("datetime,"), ra.status_code
+assert anon.get("/api/data/shared?t=" + tok[:-3] + "abc").status_code == 400
+assert anon.get("/api/data").status_code == 401 and anon.get("/api/data/export?dataset=lessons&start=2026-01-01&end=2026-12-31").status_code == 401
+print("data vault OK:", ds["in_candles"]["days"], "days saved,", len(head) - 1, "rows exported")
 print("ALL V2 OK")

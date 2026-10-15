@@ -413,10 +413,18 @@ details summary{cursor:pointer;font-size:13px}
 }
 @media(max-width:600px){.pagehead h2{font-size:20px}}
 
+.dsgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px}
+.dsc{margin:0!important}.dsc.sel{border-color:color-mix(in srgb,var(--accent) 50%,var(--line))}
+.dsmeta{display:grid;gap:3px;font-size:13px}.dsmeta .muted{display:inline-block;min-width:84px}
+.notice td,.notice th{text-align:left;vertical-align:top}.notice td.mono{white-space:normal}.notice table{min-width:720px}
+.notice{border-color:color-mix(in srgb,var(--green) 40%,var(--line))}
+.seg.ghostseg{border:1px solid var(--line);padding:4px 10px;font-size:12.5px}
+.copy{display:flex;gap:8px}.copy input{flex:1}.flowoff #flowBody,.flowoff #flowEmpty{display:none!important}.flowoff #flowNote{display:block}
+#flowCard:not(.flowoff) #flowNote{display:none}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-signal" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8"/></symbol><symbol id="i-chain" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16M9 4v16M15 4v16"/></symbol><symbol id="i-portfolio" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/></symbol><symbol id="i-strategies" viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol><symbol id="i-learning" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"/></symbol><symbol id="i-markets" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></symbol><symbol id="i-context" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></symbol><symbol id="i-stocks" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol><symbol id="i-recs" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8 6.6 19.7l1.1-6.1L3.2 9.4l6.1-.8z"/></symbol><symbol id="i-journal" viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3zM5 17a3 3 0 013-3h11M9 8h6"/></symbol><symbol id="i-backtest" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L5 19a1.5 1.5 0 001.4 2h11.2A1.5 1.5 0 0019 19l-5-10V3"/><path d="M7.5 15h9"/></symbol><symbol id="i-research" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2"/></symbol><symbol id="i-rules" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol><symbol id="i-stockrules" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol><symbol id="i-glossary" viewBox="0 0 24 24"><path d="M4 19l4-14 4 14M5.5 14h5M15 8h5l-5 8h5"/></symbol><symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></symbol><symbol id="i-theme" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></symbol></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-signal" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8"/></symbol><symbol id="i-chain" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16M9 4v16M15 4v16"/></symbol><symbol id="i-portfolio" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/></symbol><symbol id="i-strategies" viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol><symbol id="i-learning" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"/></symbol><symbol id="i-markets" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></symbol><symbol id="i-context" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></symbol><symbol id="i-stocks" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol><symbol id="i-recs" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8 6.6 19.7l1.1-6.1L3.2 9.4l6.1-.8z"/></symbol><symbol id="i-journal" viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3zM5 17a3 3 0 013-3h11M9 8h6"/></symbol><symbol id="i-backtest" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L5 19a1.5 1.5 0 001.4 2h11.2A1.5 1.5 0 0019 19l-5-10V3"/><path d="M7.5 15h9"/></symbol><symbol id="i-research" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2"/></symbol><symbol id="i-rules" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol><symbol id="i-stockrules" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol><symbol id="i-glossary" viewBox="0 0 24 24"><path d="M4 19l4-14 4 14M5.5 14h5M15 8h5l-5 8h5"/></symbol><symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></symbol><symbol id="i-theme" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></symbol><symbol id="i-data" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6M4 11.5v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></symbol></svg>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="bull" viewBox="0 0 48 48"><g fill="#f2a93b"><path d="M16 17.5C9 17.5 3.5 13 4.5 4.5 6.5 10 10.5 12.6 17.5 13.2Z"/><path d="M32 17.5C39 17.5 44.5 13 43.5 4.5 41.5 10 37.5 12.6 30.5 13.2Z"/><path d="M11 19.5c2-1.6 4.4-1.6 5.5-.6-.6 2-2.6 3.3-5.5.6Z"/><path d="M37 19.5c-2-1.6-4.4-1.6-5.5-.6.6 2 2.6 3.3 5.5.6Z"/><path d="M17.5 12.6c3.8-1.6 9.2-1.6 13 0 1.9 1.2 2.8 3.4 2.6 6.4-.4 5-2.6 9.4-3.2 14.2.9 1.4 1.3 3 1.1 4.6-.5 3.4-3.8 5-7 5s-6.5-1.6-7-5c-.2-1.6.2-3.2 1.1-4.6-.6-4.8-2.8-9.2-3.2-14.2-.2-3 .7-5.2 2.6-6.4Z"/></g><g fill="#0e1922"><ellipse cx="19.6" cy="22.6" rx="1.3" ry="1.6"/><ellipse cx="28.4" cy="22.6" rx="1.3" ry="1.6"/><ellipse cx="21.4" cy="37.6" rx="1.2" ry="1.7"/><ellipse cx="26.6" cy="37.6" rx="1.2" ry="1.7"/></g></symbol></svg>
 <div id="pbar" aria-hidden="true"><div class="fill"></div><svg class="pbull"><use href="#bull"/></svg></div>
 <div id="splash" role="status" aria-label="Loading">
@@ -457,6 +465,8 @@ details summary{cursor:pointer;font-size:13px}
       <button data-t="stocks"><svg class="ic"><use href="#i-stocks"/></svg><span class="lb">Stocks</span></button>
       <button data-t="recs"><svg class="ic"><use href="#i-recs"/></svg><span class="lb">Recommendations</span></button>
       <button data-t="journal"><svg class="ic"><use href="#i-journal"/></svg><span class="lb">Journal</span></button>
+      <div class="grp">Data</div>
+      <button data-t="data"><svg class="ic"><use href="#i-data"/></svg><span class="lb">Saved data</span><span class="newb">NEW</span></button>
       <div class="grp">Study</div>
       <button data-t="backtest"><svg class="ic"><use href="#i-backtest"/></svg><span class="lb">Backtest</span></button>
       <button data-t="research"><svg class="ic"><use href="#i-research"/></svg><span class="lb">Research</span></button>
@@ -467,7 +477,7 @@ details summary{cursor:pointer;font-size:13px}
       <button data-t="settings"><svg class="ic"><use href="#i-settings"/></svg><span class="lb">Settings</span></button>
       <span class="ink" id="ink"></span>
     </nav>
-    <div class="sidefoot">Paper money only · v2</div>
+    <div class="sidefoot">Paper money only · v2<br>Data saved daily → <b>Saved data</b></div>
   </aside>
   <div class="content">
 <header>
@@ -531,8 +541,9 @@ details summary{cursor:pointer;font-size:13px}
     <div class="card" style="margin-top:14px" id="flowCard">
       <div class="cardhead">
         <h3 style="margin:0">Options flow <span class="muted" style="font-weight:400">(gamma exposure and open interest)</span></h3>
-        <span class="muted mono" style="font-size:12px" id="flowMeta"></span>
+        <span class="row"><span class="muted mono" style="font-size:12px" id="flowMeta"></span><button id="flowToggle" class="ghost" style="padding:4px 10px;font-size:12.5px">Show</button></span>
       </div>
+      <p class="muted" id="flowNote" style="font-size:12.5px;margin:6px 0 0">For information only. Research found this kind of gamma estimate has no trading edge on the current rules (Research tab → "Dealer-gamma proxy"), so it plays no part in any signal. Hidden by default to keep the page short.</p>
       <div id="flowEmpty" class="empty hidden"></div>
       <div id="flowBody" class="hidden">
         <div class="grid g2" style="margin-top:10px">
@@ -675,6 +686,7 @@ details summary{cursor:pointer;font-size:13px}
   <section id="t-rules" class="hidden"><div class="card rule" id="rulebook"></div></section>
 
   <!-- SETTINGS -->
+  <section id="t-data" class="hidden"><div id="dxBody"></div></section>
   <section id="t-strategies" class="hidden"><div id="sxBody"></div></section>
   <section id="t-learning" class="hidden"><div id="lxBody"></div></section>
   <section id="t-markets" class="hidden"><div id="gxBody"></div></section>
@@ -838,6 +850,7 @@ async function load(quiet) {
     else if (S.tab === "strategies") await loadStrategies();
     else if (S.tab === "learning") await loadLearning();
     else if (S.tab === "markets") await loadMarkets();
+    else if (S.tab === "data") await loadData();
   } catch (e) { if (!quiet) toast(e.message); }
   finally { sec.classList.remove("loading"); if (!quiet) pDone(); hideSplash(); }
 }
@@ -2873,6 +2886,129 @@ document.addEventListener("click", async e => {
     else if (t.id === "gxReset") { if (confirm("Clear this account's positions and trade history and start over?")) { await post("/api/gbook/reset", {market: GX.mk, capital: +$("#gxCap").value}); toast("Account reset"); await loadMarkets(); } }
   } catch (er) { toast(er.message); }
 });
+
+
+/* ------------------------------ Saved data ------------------------------ */
+const DX = {d: null, ds: "in_candles", sym: "NIFTY", tf: "1h", start: "", end: "", fmt: "csv", link: null};
+const dxTime = t => t ? new Date(t).toLocaleString("en-IN", {timeZone: "Asia/Kolkata", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", hour12: false}) + " IST" : "not yet";
+const dxAgo = t => { if (!t) return ""; const m = Math.round((Date.now() - new Date(t)) / 60000); return m < 2 ? "just now" : m < 120 ? m + " min ago" : m < 2880 ? Math.round(m / 60) + " h ago" : Math.round(m / 1440) + " days ago"; };
+async function loadData() { DX.d = await api("/api/data"); dxPick(DX.ds, true); renderData(); }
+function dxCur() { return DX.d.datasets.find(x => x.id === DX.ds); }
+function dxShift(iso, days) { const d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + days); return d.toISOString().slice(0, 10); }
+function dxPick(id, keep) {
+  DX.ds = id; const c = dxCur(); if (!c) return;
+  if (c.symbols.length && !c.symbols.includes(DX.sym)) DX.sym = c.symbols[0];
+  if (!keep || !DX.start) dxRange(Math.min(30, c.max_days));
+  DX.link = null;
+}
+function dxRange(n) {
+  const c = dxCur(), today = new Date().toISOString().slice(0, 10), end = c.last || today;
+  DX.end = c.id === "crypto_candles" ? today : end; DX.start = n === "all" ? (c.first || dxShift(DX.end, -29)) : dxShift(DX.end, -(Math.min(n, c.max_days) - 1));
+  if (c.first && DX.start < c.first && c.id !== "crypto_candles") DX.start = c.first;
+}
+function renderData() {
+  const d = DX.d, el = $("#dxBody"), c = dxCur(), ar = d.archive;
+  const cards = d.datasets.map(x => `<div class="card dsc ${x.id === DX.ds ? "sel" : ""}"><div class="row between"><b>${esc(x.name)}</b><span class="tag">${x.days == null ? "live" : x.days + " day" + (x.days === 1 ? "" : "s")}</span></div>
+      <p class="muted" style="margin:6px 0 8px;font-size:13px">${esc(x.about)}</p>
+      <div class="dsmeta"><div><span class="muted">Covers</span> <span class="mono">${x.first ? esc(x.first) + " → " + esc(x.last) : x.days == null ? "any range" : "nothing yet"}</span></div>
+        <div><span class="muted">Last update</span> <span class="mono">${x.last_update ? esc(dxTime(x.last_update)) + " · " + dxAgo(x.last_update) : "not yet"}</span></div>
+        <div><span class="muted">Stored in</span> ${esc(x.stored)}</div></div>
+      <button data-dpick="${x.id}" style="margin-top:10px">Export this…</button></div>`).join("");
+  el.innerHTML = `
+  <div class="pagehead"><div><h2>Saved data</h2><p class="muted">The app saves market data for you automatically and keeps it so you can study it later or share it. Pick a dataset, choose any date range, and download it or send someone a link.</p></div>
+    <button id="dxSave" title="Pulls whatever Yahoo still has for India and US candles into the vault now">Save now</button></div>
+  <div class="card notice"><h3 style="margin:0 0 6px">✓ Saving is already running — nothing for you to do</h3>
+    <p style="margin:0 0 10px">Schedules run every trading day on their own. Today's data is saved after the market closes: India candles at <b>15:35 IST</b>, the permanent archive at <b>19:10 IST</b>, US candles after the New York close. Times below are Indian time.</p>
+    <div class="tablewrap"><table><tr><th>What runs</th><th>When</th><th>Where</th><th>What it saves</th></tr>${d.schedules.map(x => `<tr><td><b>${esc(x.name)}</b></td><td class="mono" style="white-space:nowrap">${esc(x.when)}</td><td>${esc(x.where)}</td><td class="muted">${esc(x.what)}</td></tr>`).join("")}</table></div>
+    <p class="muted" style="font-size:12.5px;margin:10px 0 0">Option-chain snapshots stay in the app for ${d.keep_days} days and are copied permanently to GitHub each evening. Nifty / Bank Nifty candles from Yahoo only go back about 60 days, so saving one day at a time is what builds a longer history; it grows by a day each session.</p></div>
+  <h3 class="sect" style="margin-top:20px">What is saved</h3>
+  <div class="dsgrid">${cards}</div>
+  <div class="card editor" id="dxBuilder" style="margin-top:16px"><h3>Export a custom range</h3>
+    <div class="grid g3f">
+      <div><label>Dataset</label><select id="dxDs">${d.datasets.map(x => `<option value="${x.id}" ${x.id === DX.ds ? "selected" : ""}>${esc(x.name)}</option>`).join("")}</select></div>
+      ${c.needs_symbol ? `<div><label>${c.id === "crypto_candles" ? "Coin" : "Symbol"}</label><select id="dxSym">${c.symbols.map(x => `<option ${x === DX.sym ? "selected" : ""}>${x}</option>`).join("")}</select></div>` : ""}
+      ${c.timeframes ? `<div><label>Candle size</label><select id="dxTf">${c.timeframes.map(x => `<option ${x === DX.tf ? "selected" : ""}>${x}</option>`).join("")}</select></div>` : ""}
+      <div><label>From</label><input type="date" id="dxFrom" value="${DX.start}"></div>
+      <div><label>To</label><input type="date" id="dxTo" value="${DX.end}"></div>
+      <div><label>File type</label><select id="dxFmt"><option value="csv" ${DX.fmt === "csv" ? "selected" : ""}>CSV (opens in Excel / Sheets)</option><option value="json" ${DX.fmt === "json" ? "selected" : ""}>JSON (for code)</option></select></div>
+    </div>
+    <div class="row wrap" style="margin-top:10px"><span class="muted" style="font-size:13px">Quick range:</span>${[[7, "7 days"], [30, "30 days"], [60, "60 days"], [120, "120 days"], ["all", "Everything saved"]].map(([n, l]) => `<button class="seg ghostseg" data-drange="${n}">${l}</button>`).join("")}</div>
+    <p class="muted" style="font-size:12.5px;margin:8px 0 0">${c.id === "chain_snapshots" ? "Chain snapshots are big: up to 10 days per file. For older days use the permanent archive below." : c.id === "crypto_candles" ? "Pulled live from Binance, so any range works (up to 366 days; 5-minute up to 120)." : `Up to ${c.max_days >= 3650 ? "any range" : c.max_days + " days per file"}.`}</p>
+    <div id="dxErr" class="err hidden" style="margin-top:10px"></div>
+    <div class="row wrap" style="margin-top:12px"><button class="primary" id="dxGo">Download</button><button id="dxShare">Create a share link</button></div>
+    ${DX.link ? `<div class="card" style="margin-top:12px;background:var(--panel2)"><div class="muted" style="font-size:12.5px;margin-bottom:6px">Anyone with this link can download this one file for ${DX.link.valid_days} days. They don't need to sign in and can't see anything else.${/trades|lessons|research/.test(DX.ds) ? " This file contains your trade results." : ""}</div>
+      <div class="copy"><input id="dxLinkIn" readonly value="${esc(DX.link.url)}" style="width:100%"><button id="dxCopy">Copy</button></div></div>` : ""}
+  </div>
+  <div class="card" style="margin-top:16px"><h3>Permanent archive on GitHub</h3>
+    ${ar.ok ? `<p class="muted" style="margin:0 0 8px">${ar.days.length} trading day${ar.days.length === 1 ? "" : "s"} saved forever${ar.days.length ? " (" + esc(ar.days[0]) + " → " + esc(ar.days[ar.days.length - 1]) + ")" : ""}. Each day has: ${ar.files.map(f => `<span class="mono">${esc(f)}</span>`).join(", ")}. Open a day and use GitHub's download button, or share the repository link with whoever does the research.</p>
+      <a href="https://github.com/${ar.repo}/tree/${ar.branch}/${ar.path}" target="_blank" rel="noopener">Open the archive folder ↗</a>
+      <div class="chips" style="margin-top:10px">${ar.days.slice(-24).reverse().map(x => `<a class="chip" style="text-decoration:none" target="_blank" rel="noopener" href="https://github.com/${ar.repo}/tree/${ar.branch}/${ar.path}/${x}">${esc(x)}</a>`).join("")}</div>` : `<p class="muted">Could not read the archive list right now (${esc(ar.error || "")}). It is still being saved; open <a href="https://github.com/${ar.repo}/tree/${ar.branch}/${ar.path}" target="_blank" rel="noopener">the folder on GitHub</a> to see it.</p>`}</div>`;
+}
+function dxParams() {
+  DX.ds = $("#dxDs").value; const c = dxCur(); DX.start = $("#dxFrom").value; DX.end = $("#dxTo").value; DX.fmt = $("#dxFmt").value;
+  if ($("#dxSym")) DX.sym = $("#dxSym").value; if ($("#dxTf")) DX.tf = $("#dxTf").value;
+  return {dataset: DX.ds, symbol: c.needs_symbol ? DX.sym : null, start: DX.start, end: DX.end, fmt: DX.fmt, tf: DX.tf};
+}
+document.addEventListener("click", async e => {
+  if (!e.target.closest("#t-data")) return; const t = e.target.closest("button"); if (!t) return; const err = $("#dxErr");
+  try {
+    if (t.dataset.dpick) { dxPick(t.dataset.dpick); renderData(); $("#dxBuilder").scrollIntoView({behavior: "smooth", block: "center"}); }
+    else if (t.dataset.drange) { dxParams(); dxRange(t.dataset.drange === "all" ? "all" : +t.dataset.drange); renderData(); }
+    else if (t.id === "dxSave") { t.disabled = true; toast("Saving… this takes up to a minute", 5000); const r = await post("/api/data/save"); toast("Saved: " + JSON.stringify(r).slice(0, 120), 6000); await loadData(); }
+    else if (t.id === "dxGo") {
+      err.classList.add("hidden"); const p = dxParams(), q = new URLSearchParams(p); q.delete("symbol"); if (p.symbol) q.set("symbol", p.symbol);
+      const r = await fetch("/api/data/export?" + q, {credentials: "same-origin"});
+      if (!r.ok) { let m = "Could not export"; try { m = (await r.json()).error || m; } catch (x) {} err.textContent = m; err.classList.remove("hidden"); return; }
+      const name = (r.headers.get("Content-Disposition") || "").match(/filename="([^"]+)"/); const a = document.createElement("a"); a.href = URL.createObjectURL(await r.blob()); a.download = name ? name[1] : "data." + p.fmt; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 5000); toast("Downloaded " + a.download);
+    }
+    else if (t.id === "dxShare") { err.classList.add("hidden"); try { DX.link = await post("/api/data/share", dxParams()); renderData(); } catch (x) { err.textContent = x.message; err.classList.remove("hidden"); } }
+    else if (t.id === "dxCopy") { const i = $("#dxLinkIn"); i.select(); try { await navigator.clipboard.writeText(i.value); } catch (x) { document.execCommand("copy"); } toast("Link copied"); }
+  } catch (er) { toast(er.message); }
+});
+document.addEventListener("change", e => {
+  if (!e.target.closest("#t-data")) return;
+  if (e.target.id === "dxDs") { dxParams(); dxPick(e.target.value); renderData(); }
+  else if (["dxSym", "dxTf", "dxFrom", "dxTo", "dxFmt"].includes(e.target.id)) { dxParams(); if (DX.link) { DX.link = null; renderData(); } }
+});
+
+
+/* options flow card: collapsed unless you opened it */
+function flowCollapse(on) { const c = $("#flowCard"); c.classList.toggle("flowoff", on); $("#flowToggle").textContent = on ? "Show" : "Hide"; try { localStorage.setItem("flowOpen", on ? "0" : "1"); } catch (e) {} if (!on && S.flow && !S.flow.empty) setTimeout(() => { try { drawGex(S.flow.profile); drawOiHeat(S.flow.heatmap, S.flow.profile); } catch (e) {} }, 0); }
+$("#flowToggle").onclick = () => flowCollapse(!$("#flowCard").classList.contains("flowoff"));
+flowCollapse((() => { try { return localStorage.getItem("flowOpen") !== "1"; } catch (e) { return true; } })());
+
+/* rulebook + glossary: the v2 features */
+const _renderRules0 = renderRules;
+renderRules = function () {
+  _renderRules0();
+  $("#rulebook").insertAdjacentHTML("beforeend", `
+  <h4 style="margin-top:28px">New: your own strategies, learning, and crypto / US books</h4>
+  <div class="tablewrap"><table class="prose">
+    <tr><th>Topic</th><th>The rule</th></tr>
+    <tr><td><b>Custom strategies</b></td><td>Built in <b>Strategies</b> from indicators, price, key levels and numbers. A signal is read when a bar <b>closes</b>; the trade starts at the <b>next bar's open</b>. If stop and target are both touched in one bar the <b>stop is assumed first</b>. Intraday strategies are closed before the bell. They never override the Noise and Camarilla rules; a custom signal shows only when those two have none.</td></tr>
+    <tr><td><b>Trying one out</b></td><td>Backtest first. The result is split into the first 70% and an unseen 30%, shows a 95% range for the average trade, and says in words when the sample is too small. Treat any strategy as unproven until it has traded live on paper for a few weeks.</td></tr>
+    <tr><td><b>Auto paper-trade</b></td><td>Off by default for every new strategy. When on, it uses the same risk rules as the built-in ones (1% risk per trade, daily and weekly loss limits).</td></tr>
+    <tr><td><b>Learning</b></td><td>After every trade a lesson is written. After the close a research note is written. In <b>Safe</b> mode it may (1) skip a setup after 25+ signals averaging clearly negative (z ≤ −2.8, negative in both halves, never more than 3 per strategy, auto-expires after 45 days, lifted when results recover) and (2) halve position size after the last 20 trades average −0.25R or worse. Every change is logged and can be undone. <b>Full</b> adds strategy improvements that beat the current version on all slices of past data, with automatic rollback if the next 15 live trades disagree. The built-in Noise and Camarilla numbers are never changed automatically.</td></tr>
+    <tr><td><b>Crypto and US books</b></td><td>Separate paper accounts (USDT and USD). Risk per trade 0.1–5% of the account, leverage capped at 5× (crypto) and 2× (US), fees and slippage included, bars checked every 5 minutes, one trade per bar per strategy. They trade only strategies you built and switched on.</td></tr>
+    <tr><td><b>Saved data</b></td><td>Candles, option-chain snapshots, trades, lessons and research notes are saved automatically (see <b>Saved data</b> for the schedule). Share links expire after 7 days and expose only the one file.</td></tr>
+  </table></div>`);
+};
+GLOSS.push(["Strategy lab, learning and global markets", [
+  ["R multiple", "Profit or loss measured in units of what you risked. +2R means you made twice your planned risk; -1R means you lost the planned amount (a stop-out).", "Risk ₹1,000 and make ₹2,500 → +2.5R."],
+  ["ATR (average true range)", "How far a market typically moves in one bar. Stops are often set as a multiple of ATR so they adapt to calm and wild days.", "Stop = 1.5 × ATR: wider on volatile days, tighter on quiet ones."],
+  ["Backtest", "Running a rule over past prices to see what it would have done. It tells you what would have happened, not what will.", "A rule that made +20R over 60 days of Yahoo data is a hint, not a promise."],
+  ["Unseen data", "The part of the history kept aside and not used for tuning. A rule that works on the first 70% but fails on the unseen 30% was probably fitted to noise.", "Trained +0.3R, unseen -0.1R → don't trust it."],
+  ["Overfitting", "Tweaking a rule until it looks great on past data, so it fits luck instead of a real pattern. The more variants you try, the more likely the best one is luck.", "Trying 200 settings and keeping the best one."],
+  ["Profit factor", "Total money won divided by total money lost. Above 1 means it made money; 1.3 is decent for a trend system.", "Won ₹130k, lost ₹100k → 1.3."],
+  ["Crosses above / below", "True only on the bar where one line moves from below the other to above it (or the reverse), not on every bar it stays above.", "EMA 9 crosses above EMA 21 signals once, at the crossover."],
+  ["Break-even stop", "After the trade has moved in your favour by a set amount, the stop moves up to your entry price so the trade can no longer lose.", "Break-even at 1R."],
+  ["Time stop", "Close the trade if it hasn't gone anywhere after a set number of bars, because a stalled trade usually isn't working.", "Exit after 6 bars if +0.5R isn't reached."],
+  ["Learning mode", "How much freedom the learning engine has. Off: nothing. Safe: lessons plus small, reversible protections. Full: also adopts proven strategy improvements, with automatic rollback.", "Start on Safe."],
+  ["Skip rule (veto)", "A temporary rule from the learning engine that skips a setup that has clearly kept losing. It expires on its own and can be undone.", "Skip 'midday' entries for Noise-area."],
+  ["USDT / leverage (crypto)", "USDT is a coin pegged to the US dollar, used as cash in crypto. Leverage lets a position be bigger than the cash behind it, which magnifies gains and losses.", "2× leverage: a 5% move is a 10% change on your cash."],
+  ["Slippage and fees", "The small cost of not getting the exact price you saw, plus exchange fees. They are included in every paper trade here because they decide whether many strategies pay.", "A strategy that trades 20 times a day pays them 20 times."],
+  ["Share link", "A web address that lets anyone download one saved data file for 7 days, without signing in and without seeing anything else.", "Send a research collaborator your 120-day Nifty candles."],
+]]);
 
 /* ------------------------------ Themes ------------------------------ */
 const THEMES = [["dusk", "Dusk", "Dark indigo"], ["paper", "Paper", "Light"], ["terminal", "Terminal", "Black & green"]];

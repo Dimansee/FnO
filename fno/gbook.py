@@ -348,6 +348,13 @@ def _after_close():
     loc = _local("US", now)
     if loc.weekday() < 5 and (loc.hour, loc.minute) >= (16, 20) and loc.hour < 19:
         done["US"] = LN.post_close_g("US", loc.date().isoformat())
+    try:
+        from . import datahub as DH
+        saved = DH.daily_us()
+        if saved:
+            done["US_data_saved"] = saved
+    except Exception as e:
+        done["US_data_saved"] = {"error": str(e)[:100]}
     return done
 
 

@@ -43,6 +43,10 @@ def valid_symbol(market: str, sym: str) -> bool:
     return sym in CATALOG.get(market, {})
 
 
+def catalog_ids(market: str) -> list[str]:
+    return list(CATALOG.get(market, {}))
+
+
 def catalog(market: str) -> list[dict]:
     return [{"id": k, "label": v} for k, v in CATALOG.get(market, {}).items()]
 
