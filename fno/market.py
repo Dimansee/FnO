@@ -227,11 +227,31 @@ class Market:
             try:
                 df = cached(f"c:{self.br.name}:{symbol}", 25, lambda: self.br.candles(self.key(symbol)))
                 if not df.empty:
-                    return df
+                    return self._fill_gaps(df, symbol)
             except Exception as e:
                 self._fail("Candles", e)
         # 30 days: the noise band needs the last 14 sessions
         return cached(f"c:yahoo:{symbol}", 45, lambda: yahoo_candles(instrument(symbol)["yahoo"], period="30d"))
+
+    def _fill_gaps(self, df: pd.DataFrame, symbol) -> pd.DataFrame:
+        """The broker's history can lag a session behind (it showed Wednesday's close on Friday night).
+        Any recent session it lacks is filled from Yahoo; broker bars always win where both exist."""
+        try:
+            now = C.now_ist()
+            have = set(df.index.date)
+            yh = cached(f"c:yahoo5:{symbol}", 300, lambda: yahoo_candles(instrument(symbol)["yahoo"], period="7d"))
+            if yh is None or yh.empty:
+                return df
+            miss = [d for d in set(yh.index.date) - have
+                    if d > min(have) and (d < now.date() or now.time() >= C.MARKET_CLOSE)]
+            if not miss:
+                return df
+            add = yh[[d in miss for d in yh.index.date]]
+            add = add[(add.index.time >= C.MARKET_OPEN) & (add.index.time < C.MARKET_CLOSE)]
+            out = pd.concat([df, add[df.columns.intersection(add.columns)]])
+            return out[~out.index.duplicated(keep="first")].sort_index()
+        except Exception:
+            return df
 
     def vix(self) -> dict:
         if self.br:

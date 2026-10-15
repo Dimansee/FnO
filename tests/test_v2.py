@@ -273,3 +273,18 @@ assert anon.get("/api/data/shared?t=" + tok[:-3] + "abc").status_code == 400
 assert anon.get("/api/data").status_code == 401 and anon.get("/api/data/export?dataset=lessons&start=2026-01-01&end=2026-12-31").status_code == 401
 print("data vault OK:", ds["in_candles"]["days"], "days saved,", len(head) - 1, "rows exported")
 print("ALL V2 OK")
+
+# ------------------------------------------------------------------ 9. stale broker history is gap-filled
+import pandas as pd  # noqa: E402
+NOW[0] = datetime(2026, 10, 16, 1, 40, tzinfo=C.IST)
+yh = fake(22600, datetime(2026, 10, 15, 15, 40, tzinfo=C.IST))
+last_day = yh.index[-1].date()
+broker = yh[yh.index.date < last_day]
+M.yahoo_candles = lambda t, period="5d", interval="5m": yh
+M._cache.clear()
+mk = M.Market.__new__(M.Market)
+filled = mk._fill_gaps(broker, "NIFTY")
+assert filled.index[-1].date() == last_day and len(filled) > len(broker), (filled.index[-1], last_day)
+assert not filled.index.duplicated().any()
+print("gap fill OK:", broker.index[-1].date(), "->", filled.index[-1].date())
+print("ALL V2 OK 2")
