@@ -30,6 +30,7 @@ QSTASH_URL = (os.environ.get("QSTASH_URL") or "https://qstash.upstash.io").rstri
 QSTASH_TOKEN = os.environ.get("QSTASH_TOKEN", "")
 PRE_CRON = "30 3 * * 1-5"       # UTC = 09:00 IST, Mon-Fri: one pre-open call (stock picks refresh)
 TICK_CRON = "* 4-9 * * 1-5"   # UTC = 09:30-15:29 IST, Mon-Fri (~360 calls/day; Vercel free QStash limit is 500/day)
+OPEN_CRON = "45-59 3 * * 1-5"  # UTC = 09:15-09:29 IST: 15 extra calls/day (total ~376, still under 500) used ONLY to record option-chain snapshots
 PRODUCTION_HOST = os.environ.get("VERCEL_PROJECT_PRODUCTION_URL", "")
 APP_PASSWORD = os.environ.get("APP_PASSWORD", "")
 SESSION_SECRET = os.environ.get("SESSION_SECRET", "")

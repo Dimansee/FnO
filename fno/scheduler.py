@@ -15,6 +15,7 @@ from . import store
 
 SCHEDULE_ID = "fno-tick"
 PRE_ID = "fno-pre-open"
+OPEN_ID = "fno-open-record"
 
 
 def _dest(host: str | None) -> str | None:
@@ -48,7 +49,7 @@ def ensure(host: str | None = None, force: bool = False) -> dict:
     dest = _dest(host)
     if not dest:
         return {"ok": False, "reason": "Unknown production host"}
-    want = {"dest": dest, "cron": C.TICK_CRON, "pre_cron": C.PRE_CRON}
+    want = {"dest": dest, "cron": C.TICK_CRON, "pre_cron": C.PRE_CRON, "open_cron": C.OPEN_CRON}
     cur = store.get("scheduler") or {}
     if not force and all(cur.get(k) == v for k, v in want.items()):
         return {"ok": True, "schedule_id": cur.get("schedule_id"), "cached": True}
@@ -59,5 +60,9 @@ def ensure(host: str | None = None, force: bool = False) -> dict:
     if not b["ok"]:
         store.put("scheduler", {"dest": dest, "cron": C.TICK_CRON, "schedule_id": a["schedule_id"]})   # tick is up; retry the pre-open one next time
         return b
-    store.put("scheduler", {**want, "schedule_id": a["schedule_id"], "pre_id": b["schedule_id"]})
+    c = _register(dest, C.OPEN_CRON, OPEN_ID)
+    if not c["ok"]:
+        store.put("scheduler", {"dest": dest, "cron": C.TICK_CRON, "pre_cron": C.PRE_CRON, "schedule_id": a["schedule_id"], "pre_id": b["schedule_id"]})   # retry the 09:15 one next time
+        return c
+    store.put("scheduler", {**want, "schedule_id": a["schedule_id"], "pre_id": b["schedule_id"], "open_id": c["schedule_id"]})
     return {"ok": True, "schedule_id": a["schedule_id"], "cached": False}
