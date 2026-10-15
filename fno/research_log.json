@@ -3,6 +3,72 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r18a",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 18: VIX ceilings for Noise and Camarilla",
+   "asked": "Do trades taken on high-fear days (high India VIX at the open) lose money? Where should the ceilings be?",
+   "result": "Noise: VIX 16-19 → 42 trades, -₹7.9k; 19+ → 17 trades, -₹14.4k. A ceiling of 18 lifted unseen-120-day profit from ₹60.6k to ₹77.5k, training from ₹169.4k to ₹170.4k, with a slightly smaller deepest fall. Camarilla: VIX 19-22 → 11 trades, -₹15.2k (win rate 9%); lowering its ceiling from 22 to 20 raised training profit ₹169.4k → ₹177.9k, unseen unchanged.",
+   "decision": "Adopted",
+   "summary": "Noise now skips VIX ≥ 18 and Camarilla skips VIX > 20. Small trade counts at the high end, so treat as protective, not a profit boost.",
+   "period": "2023-01 to 2026-10 (918 trades, both indices, unseen = last 120 days)"
+  },
+  {
+   "id": "r18b",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 18: weekly loss limit and pause-after-losses rules",
+   "asked": "Would a circuit-breaker (pause after a losing streak, or stop for the week after a big weekly loss) improve results?",
+   "result": "Weekly cap 4%: net ₹230.0k → ₹234.8k, unseen ₹60.6k → ₹64.6k, deepest fall ₹59.2k → ₹54.1k. Pausing 1-3 days after 3-5 straight losers: lower net profit (₹185-230k) and no better fall (₹58-63k); 2025 turned negative with the longer pauses.",
+   "decision": "Adopted",
+   "summary": "Weekly loss limit of 4% adopted (improves every window). Streak-based pauses not adopted - they cut winners as often as losers.",
+   "period": "2023-01 to 2026-10 (918 trades, both indices, unseen = last 120 days)"
+  },
+  {
+   "id": "r18c",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 18: should Camarilla need a minimum VIX of 13?",
+   "asked": "Camarilla trades with VIX under 13 made almost nothing (273 trades, -₹2.6k, profit factor 0.99). Should they be dropped?",
+   "result": "VIX ≥ 13 raised training profit (₹169k → ₹190k) but cut unseen profit (₹60.6k → ₹43.1k); VIX ≥ 12 and ≥ 14 gave opposite year-by-year pictures (2023 collapses at 12, 2023 negative at 14). Unstable.",
+   "decision": "Watch-list",
+   "summary": "Not adopted: results flip with the exact threshold, a sign of curve-fitting. Re-check when the live recorder has more low-VIX days.",
+   "period": "2023-01 to 2026-10 (918 trades, both indices, unseen = last 120 days)"
+  },
+  {
+   "id": "r18d",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 18: re-check of event days (RBI, US Fed, Budget)",
+   "asked": "Do known event days still lose?",
+   "result": "Days after a US Fed decision: 26 trades, -₹8.9k, PF 0.73. RBI policy days: 22 trades, +₹19.4k, PF 2.28. Budget day was already blocked. Samples are small.",
+   "decision": "Watch-list",
+   "summary": "No new event rule: the Fed-day loss is too small a sample (26 trades) to trust. RBI days were good, so they are not blocked.",
+   "period": "2023-01 to 2026-10 (918 trades, both indices, unseen = last 120 days)"
+  },
+  {
+   "id": "r18e",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "Round 18: Nifty vs Bank Nifty by year",
+   "asked": "Is the edge equal on both indices?",
+   "result": "Nifty: +₹154.7k, PF 1.38, profitable every year. Bank Nifty: +₹75.3k, PF 1.19, lost ₹33.8k in 2025 and added only ₹9.0k in the unseen 120 days.",
+   "decision": "Information",
+   "summary": "Bank Nifty is the weaker leg. Nothing changed, but prefer Nifty and watch Bank Nifty's live results closely.",
+   "period": "2023-01 to 2026-10 (918 trades, both indices, unseen = last 120 days)"
+  },
+  {
+   "id": "r18f",
+   "date": "2026-10-15",
+   "area": "Index options",
+   "title": "System audit: options safety changes (no backtest possible)",
+   "asked": "Gaps found by reading the code: no holiday calendar, no spread check, silent missing prices near square-off, public data endpoints.",
+   "result": "Added: 2026 NSE holiday calendar; a skip when the strike's bid-ask spread is over 10% of its price; a push alert at 15:00+ if a position has no live price; the journal/recorder data endpoints can now be locked to login or the cron secret (switch on with LOCK_DATA_ENDPOINTS=1 after adding the CRON_SECRET GitHub secret). Premium-based stop-loss NOT tested: the research engine only simulates index stops (an earlier round found the index stop earned the most).",
+   "decision": "Adopted",
+   "summary": "Safety filters adopted without a backtest because no history of real quotes exists. The spread limit of 10% is a judgement, not a measured value.",
+   "period": "n/a (code review of 15 Oct 2026)"
+  },
+  {
    "id": "jr",
    "date": "2026-10-15",
    "area": "Index options",

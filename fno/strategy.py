@@ -280,8 +280,8 @@ def _evaluate_noise(symbol, candles, vix, cstats, news, gcues, fii, now: datetim
         res["checks"].append((False, f"Need {C.NOISE_MIN_SESSIONS}+ past sessions of 5-min data to measure the usual move"))
         return res
     vlev = float(vix.get("level") or 0)
-    vix_ok = vlev >= C.VIX_MIN
-    res["checks"].append((vix_ok, f"India VIX {vlev:.2f} ≥ {C.VIX_MIN:g} (enough movement to pay for an option)"))
+    vix_ok = C.VIX_MIN <= vlev <= C.NOISE_VIX_MAX
+    res["checks"].append((vix_ok, f"India VIX {vlev:.2f} between {C.VIX_MIN:g} and {C.NOISE_VIX_MAX:g} (enough movement to pay for an option, but not a fear spike)"))
     if not vix_ok:
         res["signal"] = "NO TRADE TODAY"
         return res
@@ -374,6 +374,14 @@ def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=N
 
     ltp = float(buy[f"{tag}_ltp"]) if buy.get(f"{tag}_ltp") is not None and not pd.isna(buy.get(f"{tag}_ltp")) else None
     legs = [{"side": "BUY", "strike": float(buy["strike"]), "opt": opt, "key": buy[f"{tag}_key"], "price": px(buy, "ask")}]
+    bid_, ask_ = buy.get(f"{tag}_bid"), buy.get(f"{tag}_ask")
+    try:
+        bid_, ask_ = float(bid_), float(ask_)
+    except (TypeError, ValueError):
+        bid_ = ask_ = 0.0
+    if bid_ > 0 and ask_ > 0 and (ask_ - bid_) / ask_ > C.MAX_SPREAD_PCT:
+        raise ValueError(f"SKIP: the {buy['strike']:g} {opt} bid-ask spread is {(ask_ - bid_) / ask_:.0%} of the price "
+                         f"(limit {C.MAX_SPREAD_PCT:.0%}) - you would lose too much just getting in and out.")
     delta = dlt(buy)
     entry = legs[0]["price"]
     max_value = None

@@ -109,6 +109,10 @@ def manage_positions(m: M.Market | None = None) -> list[dict]:
     closed = []
     for p in pos:
         if spots.get(p["symbol"]) is None or not all(l["key"] in prices for l in p["legs"]):
+            if now.time() >= time(15, 0):                    # near square-off with no price: tell the user, do not stay silent
+                _push_safe(f"{p['symbol']}: no price near square-off",
+                           "A position is open but its live price is unavailable. Check it manually before 15:15.",
+                           f"noprice:{p['id']}:{now.strftime('%H%M')[:3]}", "/#portfolio")
             continue
         prem = P.net_price(p["legs"], prices)
         reason, upd = S.exit_check(p, spots[p["symbol"]], prem, now, states.get(p["symbol"]))
@@ -193,6 +197,8 @@ def risk_guard(pos, tr, capital, pf) -> dict:
 
 def calendar_guard(symbol, exps, today) -> dict | None:
     """Days the research says to sit out (round 6): Union Budget day, and Bank Nifty on its own expiry day."""
+    if today in C.HOLIDAYS:
+        return {"blocked": True, "reason": "NSE trading holiday - the market is closed today."}
     if today in C.BUDGET_DAYS:
         return {"blocked": True, "reason": "Union Budget day - no new signal trades (every Budget day in the 2023-26 test lost)."}
     if symbol in C.SKIP_OWN_EXPIRY and today in set(exps or []):
@@ -640,6 +646,8 @@ def tick():
     now = C.now_ist()
     if now.weekday() >= 5:
         return {"skipped": "weekend"}
+    if now.date() in C.HOLIDAYS:
+        return {"skipped": "NSE holiday"}
     if time(8, 55) <= now.time() < C.MARKET_OPEN:
         return {"pre_open": stocks_preopen(now)}
     if not (C.MARKET_OPEN <= now.time() <= C.MARKET_CLOSE):
@@ -695,8 +703,12 @@ def scan(symbol, m=None, prefs_=None, want_order=True):
     if ev["plan"] and want_order:
         try:
             order = S.build_order(ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], acct["capital_start"], cash=cash, prefs=pf)
-        except ValueError:
+        except ValueError as e:
             order = None
+            if str(e).startswith("SKIP"):
+                ev.setdefault("warnings", []).append(str(e))
+    if C.today_ist().year > C.HOLIDAYS_YEAR:
+        ev.setdefault("warnings", []).append(f"The built-in NSE holiday list only covers {C.HOLIDAYS_YEAR} - add this year's list (fno/config.py) so holidays are skipped.")
     return g, ev, order, pf
 
 

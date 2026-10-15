@@ -31,6 +31,8 @@ jobs:
           python-version: "3.12"
       - run: pip install pandas requests
       - run: python research/record_day.py ${{ github.event.inputs.dates }}
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
       - name: commit data
         if: always()
         run: |

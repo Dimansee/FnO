@@ -2214,7 +2214,10 @@ const GLOSS = [
   ["Expiry", "The date the option stops existing. Nifty has weekly expiry, Bank Nifty monthly. Near expiry options are cheap but die fast.", ""],
   ["Time decay (theta)", "An option loses a little value every hour just because time passes. A sideways day loses money for the buyer even if the index ends where it started.", "This is why the app exits by 15:15 and avoids slow, flat days."],
   ["IV (implied volatility)", "How big a move the market expects, already priced into the option. High IV = expensive options. It often drops after big news, hurting buyers even when the index moves their way.", ""],
-  ["India VIX", "The market's 'fear meter'. High = big swings expected. The app takes no trades when VIX is below 11, because small moves cannot pay for the option's price.", ""],
+  ["India VIX", "The market's 'fear meter'. High = big swings expected. The app takes no trades when VIX is below 11 (moves too small to pay for the option) or above 18 for Noise / 20 for Camarilla (fear spikes lost money in testing).", ""],
+  ["Bid-ask spread", "The gap between the price buyers offer (bid) and sellers ask. You buy at the ask and sell at the bid, so a wide gap is an instant loss. The app skips strikes where the gap is over 10%.", "Bid 80, ask 100 → a 20% gap: you lose 20% the moment you enter."],
+  ["Weekly loss limit", "After losing 4% of capital in a week, the app stops new trades until Monday - a circuit-breaker against bad streaks.", ""],
+  ["NSE holiday", "A weekday when the exchange is closed. The app does nothing on those days.", ""],
   ["Open interest (OI), PCR, max pain", "OI = number of contracts still open. PCR = puts ÷ calls open. Max pain = the strike where option buyers lose most. We show them only as background - they never trigger a trade.", ""],
  ]],
  ["How the signals work", [
@@ -2270,11 +2273,11 @@ function renderRules() {
     <tr><th></th><th>Strategy A · Noise-Area Momentum</th><th>Strategy B · Camarilla breakout</th></tr>
     <tr><td><b>Buy a CALL when</b></td><td>5-min close at a half-hour check is above the upper noise band <b>and</b> above VWAP</td><td>A 5-min candle closes above H4 (the one before closed at or below it)</td></tr>
     <tr><td><b>Buy a PUT when</b></td><td>Close is below the lower band <b>and</b> below VWAP</td><td>A 5-min candle closes below L4</td></tr>
-    <tr><td><b>When it can trade</b></td><td>Checks at 09:45, 10:15 … 14:15 · India VIX ≥ ${r.VIX_MIN}</td><td>09:20 – 13:00 · India VIX between 11 and 22</td></tr>
+    <tr><td><b>When it can trade</b></td><td>Checks at 09:45, 10:15 … 14:15 · India VIX between ${r.VIX_MIN} and ${r.NOISE_VIX_MAX}</td><td>09:20 – 13:00 · India VIX between ${r.VIX_MIN} and ${r.CAM_VIX_MAX}</td></tr>
     <tr><td><b>Stop</b></td><td>${r.STOP_ATR} × ATR(14) on the index</td><td>H3 (call) / L3 (put), kept between 1 and 3 × ATR</td></tr>
     <tr><td><b>Target / exit</b></td><td>${r.RR_NOISE}R target · trailing exit on band/VWAP · out by 15:15</td><td>No fixed target · stop to entry at +1R · time stop 45 min · out by 15:15</td></tr>
     <tr><td><b>Option bought</b></td><td colspan="2">1 strike in-the-money, nearest expiry (next week's when 1 day or less is left)</td></tr>
-    <tr><td><b>Account rules</b></td><td colspan="2">Risk ${pct(r.RISK_PER_TRADE)} of capital per trade · max ${r.MAX_TRADES_PER_DAY} trades a day · stop after a ${pct(r.MAX_DAILY_LOSS)} daily loss or two losers · no new signals on Union Budget day · one trade per rule per index per day</td></tr>
+    <tr><td><b>Account rules</b></td><td colspan="2">Risk ${pct(r.RISK_PER_TRADE)} of capital per trade · max ${r.MAX_TRADES_PER_DAY} trades a day · stop after a ${pct(r.MAX_DAILY_LOSS)} daily loss or two losers · stop for the week after a ${pct(r.MAX_WEEKLY_LOSS)} weekly loss · no new signals on Union Budget day or NSE holidays · one trade per rule per index per day</td></tr>
   </table></div>
   <p class="muted" style="font-size:12px">Details of each rule follow. Profit is always judged on the option premium (not Nifty points), after costs.</p>
 
@@ -2287,7 +2290,7 @@ function renderRules() {
   <h4>1.2 · Entry – only on the half hour (09:45, 10:15 … 14:15)</h4>
   <ul><li><b>BUY CALL</b> when the 5-minute close at a check is above the upper band <b>and</b> above VWAP. <b>BUY PUT</b> when it is below the lower band <b>and</b> below VWAP.</li>
   <li>The signal can be taken for ${r.SIGNAL_VALID_MIN} minutes after the check if price is still beyond the band.</li>
-  <li>No trades when India VIX is below ${r.VIX_MIN} (moves too small to pay for an option). <b>One trade per instrument per day.</b></li>
+  <li>No trades when India VIX is below ${r.VIX_MIN} (moves too small to pay for an option) or at ${r.NOISE_VIX_MAX} and above (fear spikes: in testing, Noise trades with VIX 16+ lost money; a ceiling of ${r.NOISE_VIX_MAX} raised unseen-period profit from ₹60.6k to ₹77.5k). <b>One trade per instrument per day.</b></li>
   <li><b>How to enter:</b> within 1-2 minutes of the signal. On real 1-minute prices a minute's delay made no measurable difference.</li></ul>
   <h4>1.3 · Exit – decided before you enter (all on the index price)</h4>
   <ul><li><b>Stop-loss:</b> ${r.STOP_ATR} × ATR(14) of the 5-minute chart away from entry. <b>Target:</b> ${r.RR_NOISE} × that risk.</li>
@@ -2300,7 +2303,7 @@ function renderRules() {
   <ul><li>From yesterday's high, low and close: <b>H4 = close + 1.1 × range ÷ 2</b>, <b>L4 = close − 1.1 × range ÷ 2</b> (H3/L3 use ÷ 4). The app draws H4/L4 on the Nifty chart.</li></ul>
   <h4>2.2 · Entry</h4>
   <ul><li><b>BUY CALL</b> when a 5-minute candle closes above H4 (the one before closed at or below it). <b>BUY PUT</b> when it closes below L4.</li>
-  <li>Only between 09:20 and 13:00, and only when India VIX is between 11 and 22.</li>
+  <li>Only between 09:20 and 13:00, and only when India VIX is between ${r.VIX_MIN} and ${r.CAM_VIX_MAX} (Camarilla trades at VIX 19+ lost in testing).</li>
   <li>One Camarilla trade per instrument per day, and never two open trades in the same instrument.</li></ul>
   <h4>2.3 · Exit</h4>
   <ul><li><b>Stop:</b> H3 for a call / L3 for a put (kept between 1 and 3 × ATR). <b>At +1R</b> the stop moves to entry.</li>
@@ -2312,14 +2315,17 @@ function renderRules() {
   <li><b>When that expiry has 1 day or less left, buy the next week's</b> – 1-day options lost money in testing because of time decay.</li></ul>
   <h4>3.2 · Why in-the-money, and what if it costs too much</h4>
   <ul><li>On real NSE option prices, ATM options lost more to time decay on sideways days; the in-the-money option moves more with Nifty and decays less per rupee of movement.</li>
+  <li><b>Spread check:</b> if the strike's live bid-ask gap is wider than ${pct(r.MAX_SPREAD_PCT)} of its price, the app skips the trade and says why. This is a safety filter, not backtested (there is no history of real quotes).</li>
   <li>Too costly for your cash? The ticket lets you pick a nearby strike (cheaper OTM strikes decay faster).</li></ul>
 
   <h3 style="font-size:17px;margin-top:22px">Part 4 · Risk and account rules</h3>
   <h4>4.1 · Position size and limits</h4>
   <ul><li>Risk <b>${pct(r.RISK_PER_TRADE)} of capital per trade</b>; lots are calculated for you.</li>
-  <li>Max <b>${r.MAX_TRADES_PER_DAY} trades a day</b> in total; stop after a <b>${pct(r.MAX_DAILY_LOSS)} daily loss</b> or two losers.</li></ul>
+  <li>Max <b>${r.MAX_TRADES_PER_DAY} trades a day</b> in total; stop after a <b>${pct(r.MAX_DAILY_LOSS)} daily loss</b> or two losers.</li>
+  <li><b>Weekly loss limit ${pct(r.MAX_WEEKLY_LOSS)}:</b> after losing that much in a week, no new trades until Monday. Replaying 3¾ years, it raised profit slightly (₹230k → ₹235k) and cut the deepest fall from ₹59k to ₹54k.</li></ul>
   <h4>4.2 · Calendar rule</h4>
-  <ul><li><b>Sit out Union Budget day</b> – the app blocks new signals then (every Budget day in the 2023-26 test lost). Expiry days are fine to trade: Bank Nifty lost on its old weekly expiry days, but that effect hasn't shown up since it became monthly-only in Nov 2024.</li></ul>
+  <ul><li><b>Sit out NSE holidays</b> – the app does nothing on exchange holidays (the 2026 list is built in; it must be extended each December).</li>
+  <li><b>Sit out Union Budget day</b> – the app blocks new signals then (every Budget day in the 2023-26 test lost). Expiry days are fine to trade: Bank Nifty lost on its old weekly expiry days, but that effect hasn't shown up since it became monthly-only in Nov 2024.</li></ul>
   <h4>4.3 · Don't tinker</h4>
   <ul><li>Keep the stop where it is. Moving it 25-50% wider or 25% tighter both earned less in testing, and fixed profit-booking at +80/+100/+120 Nifty points earned less than letting winners run.</li>
   <li>Don't re-tune the settings every month to the latest winners – that did worse than one robust setting. The market score (global cues, news, PCR, FII) is context only; using it as a filter reduced profit.</li></ul>

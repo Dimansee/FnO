@@ -47,8 +47,14 @@ def _authed() -> bool:
 PUBLIC = {"/", "/api/login", "/api/health", "/api/tick", "/api/recorder/day", "/api/recorder/probe", "/api/journal/day"}
 
 
+LOCKED = {"/api/recorder/day", "/api/recorder/probe", "/api/journal/day"}   # public until LOCK_DATA_ENDPOINTS=1 is set
+
+
 @app.before_request
 def guard():
+    if request.path in LOCKED and C.LOCK_DATA:
+        ok = _authed() or (C.CRON_SECRET and hmac.compare_digest(request.headers.get("x-cron-secret", ""), C.CRON_SECRET))
+        return None if ok else (jsonify({"error": "unauthorised"}), 401)
     if request.path in PUBLIC or not request.path.startswith("/api/"):
         return None
     if not _authed():
@@ -225,7 +231,7 @@ def _sym():
 def meta():
     from fno import market as M
     return jsonify({"symbols": [{"id": s, "label": M.instrument(s)["label"]} for s in SV.ALL_SYMBOLS],
-                    "rules": {k: getattr(C, k) for k in ("NOISE_MULT", "NOISE_LOOKBACK", "STOP_ATR", "RR_NOISE", "VIX_MIN",
+                    "rules": {k: getattr(C, k) for k in ("NOISE_MULT", "NOISE_LOOKBACK", "STOP_ATR", "RR_NOISE", "VIX_MIN", "NOISE_VIX_MAX", "CAM_VIX_MAX", "MAX_WEEKLY_LOSS", "MAX_SPREAD_PCT",
                               "SIGNAL_VALID_MIN", "RISK_PER_TRADE", "MAX_DAILY_LOSS", "MAX_TRADES_PER_DAY")}})
 
 

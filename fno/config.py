@@ -34,6 +34,7 @@ PRODUCTION_HOST = os.environ.get("VERCEL_PROJECT_PRODUCTION_URL", "")
 APP_PASSWORD = os.environ.get("APP_PASSWORD", "")
 SESSION_SECRET = os.environ.get("SESSION_SECRET", "")
 CRON_SECRET = os.environ.get("CRON_SECRET", "")
+LOCK_DATA = os.environ.get("LOCK_DATA_ENDPOINTS", "") == "1"   # set to 1 (after adding the CRON_SECRET GitHub secret) to require login or the cron secret on the journal/recorder data endpoints
 
 # ---------------------------------------------------------------------------
 # Instruments
@@ -106,13 +107,14 @@ CHECK_EVERY_MIN = 30       # look for entries/exits only on the half hour: 09:45
 FIRST_CHECK = time(9, 45)
 STOP_ATR = 2.0             # underlying stop = 2 x ATR(14, 5-min)
 RR_NOISE = 4.0             # underlying target = 4 x risk
+NOISE_VIX_MAX = 18.0       # round 18: Noise trades with VIX 16+ lost money (59 trades, net -22k); a ceiling of 18 raised the unseen-120-day profit 60.6k -> 77.5k
 VIX_MIN = 11.0             # no trades when India VIX is below 11 (moves too small to pay for the option)
 SIGNAL_VALID_MIN = 10      # a half-hour signal can still be taken for 10 minutes if price holds beyond the band
 # Second strategy: Camarilla breakout (research round 5, research/README.md)
 CAM_LAST_ENTRY = time(13, 0)
 FIRST_ENTRY_ANY = time(9, 20)   # auto paper-trading looks for signals between these times
 LAST_ENTRY_ANY = time(14, 40)
-CAM_VIX_MAX = 22.0
+CAM_VIX_MAX = 20.0         # round 18: Camarilla trades with VIX 19+ lost (11 trades, PF 0.18); ceiling lowered from 22
 CAM_BE_R = 1.0             # stop moves to entry after +1R
 CAM_TIME_STOP = 45         # exit if +0.5R not reached within 45 minutes
 CAM_RMIN, CAM_RMAX = 1.0, 3.0   # stop distance kept between 1 and 3 x ATR
@@ -120,6 +122,11 @@ CAM_RMIN, CAM_RMAX = 1.0, 3.0   # stop distance kept between 1 and 3 x ATR
 RECORD_EVERY_MIN = 5       # one snapshot every 5 minutes, 09:15-15:30
 RECORD_STRIKES = 15        # strikes each side of the money
 RECORD_KEEP_DAYS = 45      # Redis copy expires after this; the nightly job keeps a permanent copy
+# NSE trading holidays (weekdays only). SOURCE: published 2026 NSE list - verify against the NSE circular; add next year's list in December.
+HOLIDAYS = {date(2026, 1, 15), date(2026, 1, 26), date(2026, 3, 3), date(2026, 3, 26), date(2026, 3, 31), date(2026, 4, 3),
+            date(2026, 4, 14), date(2026, 5, 1), date(2026, 5, 28), date(2026, 6, 26), date(2026, 9, 14), date(2026, 10, 2),
+            date(2026, 10, 20), date(2026, 11, 10), date(2026, 11, 24), date(2026, 12, 25)}
+HOLIDAYS_YEAR = 2026     # the last year the list above covers; the app warns when today is past it
 # Calendar rules (research round 6, research/README.md)
 BUDGET_DAYS = {date(2023, 2, 1), date(2024, 2, 1), date(2024, 7, 23), date(2025, 2, 1), date(2026, 2, 1), date(2027, 2, 1)}   # Union Budget: no new signal trades (all 4 test-period Budget days lost). Update yearly.
 SKIP_OWN_EXPIRY = ()              # indices to sit out on their own expiry day. Tested for Bank Nifty: the losses came from its old
@@ -138,6 +145,8 @@ SPREAD_WIDTH_STRIKES = 2
 
 RISK_PER_TRADE = 0.01
 MAX_DAILY_LOSS = 0.02
+MAX_WEEKLY_LOSS = 0.04   # round 18: no new signal trades for the rest of the week after -4% (profit up, deepest fall 59k -> 54k)
+MAX_SPREAD_PCT = 0.10    # skip a strike whose live bid-ask spread is wider than 10% of the ask (protective, not backtested: no history of real quotes)
 MAX_TRADES_PER_DAY = 4   # two strategies x two indices; the 2-loser and 2% daily-loss stops still apply
 
 DEFAULT_CAPITAL = 200_000

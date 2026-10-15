@@ -143,6 +143,8 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
         for strat in (["noise", "camarilla"] if strategy == "both" else [strategy]):
             if strat == "camarilla" and (not lv or vix_at(day.index[0]) > C.CAM_VIX_MAX):
                 continue
+            if strat == "noise" and vix_at(day.index[0]) >= C.NOISE_VIX_MAX:
+                continue
             start, day_why = 0, set()
             while True:
                 res = _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d, mult, sizing, otm,
