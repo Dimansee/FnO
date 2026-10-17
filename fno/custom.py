@@ -716,9 +716,10 @@ def upsert(store, raw: dict) -> dict:
     items = load_all(store)
     rid = raw.get("id")
     old = next((s for s in items if s["id"] == rid), None) if rid else None
-    if not old and len(items) >= MAX_STRATEGIES:
-        raise ValueError(f"You can keep up to {MAX_STRATEGIES} strategies; delete one first.")
     spec = validate({**(old or {}), **raw} if old else raw, existing_id=old["id"] if old else None)
+    same_market = [s for s in items if s.get("market", "IN") == spec["market"] and (not old or s["id"] != old["id"])]
+    if len(same_market) >= MAX_STRATEGIES:            # the limit is per market: Indian, crypto and US strategies never crowd each other out
+        raise ValueError(f"You can keep up to {MAX_STRATEGIES} {spec['market']} strategies; delete one first.")
     if old:
         spec["created"] = old.get("created", spec["created"])
         changed = {k: spec[k] for k in ("long", "short", "exit", "filters", "timeframe", "direction", "symbols", "hold")} != \

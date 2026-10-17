@@ -80,15 +80,33 @@ def _ts(s) -> float:
         return _t.time()
 
 
-def mode() -> str:
+MARKET_KEYS = ("IN", "CRYPTO", "US")
+
+
+def mode(market: str | None = None) -> str:
+    """Learning mode. Each market (Indian options, crypto, US) has its own switch so one never changes the others;
+    a market without its own setting follows the overall one."""
+    if market in MARKET_KEYS:
+        m = store.get(f"learn_mode:{market}")
+        if m in MODES:
+            return m
     m = store.get("learn_mode")
     return m if m in MODES else "safe"
 
 
-def set_mode(m: str):
+def modes() -> dict:
+    return {k: mode(k) for k in MARKET_KEYS}
+
+
+def set_mode(m: str, market: str | None = None):
     if m not in MODES:
         raise ValueError("Learning mode must be off, safe or full.")
-    store.put("learn_mode", m)
+    if market in MARKET_KEYS:
+        store.put(f"learn_mode:{market}", m)
+    else:                                   # "all markets": set each one so they stay independent afterwards
+        store.put("learn_mode", m)
+        for k in MARKET_KEYS:
+            store.put(f"learn_mode:{k}", m)
     _cache.pop("overlay", None)
 
 
@@ -276,7 +294,7 @@ def _strategy_name(st: str) -> str:
 def on_close_in(rec: dict):
     """A closed Indian options paper trade (called by paper.close_position)."""
     plan = rec.get("plan") or {}
-    if rec.get("mode") != "signal" or not plan or mode() == "off":
+    if rec.get("mode") != "signal" or not plan or mode("IN") == "off":
         return None
     sign = 1 if plan.get("opt") == "CE" else -1
     entry, risk, xs = plan.get("entry"), plan.get("risk_pts"), rec.get("spot_exit")
@@ -298,7 +316,7 @@ def on_close_in(rec: dict):
 
 def on_close_g(rec: dict):
     """A closed crypto / US paper trade (called by gbook)."""
-    if mode() == "off":
+    if mode(rec.get("market")) == "off":
         return None
     o, c = datetime.fromisoformat(rec["opened"]), datetime.fromisoformat(rec["closed"])
     ctx = {**(rec.get("ctx") or {}), "market": rec["market"], "side": rec["side"], "wd": o.weekday(),
@@ -330,7 +348,7 @@ def _save_overlay(ov):
 
 def veto(market: str, strategy: str, tags: list[str]) -> str | None:
     """Reason to skip an AUTOMATIC entry now, or None. Only in safe/full mode."""
-    if mode() == "off":
+    if mode(market) == "off":
         return None
     for r in overlay().get("rules", []):
         if r["type"] == "veto" and r["market"] == market and r["strategy"] == strategy and r["tag"] in tags:
@@ -339,7 +357,7 @@ def veto(market: str, strategy: str, tags: list[str]) -> str | None:
 
 
 def size_mult(market: str, strategy: str) -> float:
-    if mode() == "off":
+    if mode(market) == "off":
         return 1.0
     m = 1.0
     for r in overlay().get("rules", []):
@@ -371,7 +389,7 @@ def _set_change_status(cid, status, note=None):
 
 def review(market: str) -> list[dict]:
     """Look at the evidence for every strategy in this market and add / remove guarded rules. Safe to call often."""
-    if mode() == "off":
+    if mode(market) == "off":
         return []
     ov = overlay()
     rules = list(ov.get("rules", []))
@@ -406,7 +424,7 @@ def review(market: str) -> list[dict]:
                     rule = {"id": "r_" + secrets.token_hex(3), "type": "veto", "market": market, "strategy": strat, "tag": tag, "reason": reason,
                             "since": today.isoformat(), "expires": (today + timedelta(days=VETO_DAYS)).isoformat(),
                             "evidence": {"n": v["n"], "mean_R": round(mean, 3), "z": round(z, 2), "first_half": round(m1, 3), "second_half": round(m2, 3)}}
-                    if mode() in ("safe", "full"):
+                    if mode(market) in ("safe", "full"):
                         rules.append(rule)
                         active.append(rule)
                         made.append(_log_change("veto", f"Skip '{tag}' entries for {sname} ({market})", rule["evidence"], rule, "applied", market=market, strategy=strat))
@@ -626,7 +644,7 @@ def strategy_health(market: str | None = None) -> list[dict]:
 
 def summary(market: str | None = None) -> dict:
     ov = overlay()
-    return {"mode": mode(), "rules": ov.get("rules", []), "changes": changes(30), "lessons": lessons(30, market), "research": research_list(market, 10),
+    return {"mode": mode(market), "modes": modes(), "rules": ov.get("rules", []), "changes": changes(30), "lessons": lessons(30, market), "research": research_list(market, 10),
             "leaderboard": leaderboard(market), "health": strategy_health(market),
             "limits": {"min_signals_veto": MIN_N_VETO, "z_veto": Z_VETO, "veto_days": VETO_DAYS, "max_vetoes_per_strategy": MAX_VETOES_PER_STRATEGY}}
 

@@ -669,7 +669,7 @@ def _markets_meta():
 @app.get("/api/strategies")
 def strategies_get():
     return jsonify({"items": CU.load_all(store), "presets": CU.PRESETS, "meta": XI.meta(), "markets": _markets_meta(),
-                    "max": CU.MAX_STRATEGIES, "learn_mode": LN.mode()})
+                    "max": CU.MAX_STRATEGIES, "max_per": "market", "learn_mode": LN.mode(), "learn_modes": LN.modes()})
 
 
 @app.post("/api/strategies")
@@ -824,8 +824,10 @@ def learn_get():
 
 @app.post("/api/learn/mode")
 def learn_mode():
-    LN.set_mode((request.get_json(force=True) or {}).get("mode", ""))
-    return jsonify({"ok": True, "mode": LN.mode()})
+    b = request.get_json(force=True) or {}
+    mk = b.get("market") if b.get("market") in ("IN", "CRYPTO", "US") else None
+    LN.set_mode(b.get("mode", ""), mk)
+    return jsonify({"ok": True, "mode": LN.mode(mk), "modes": LN.modes()})
 
 
 @app.route("/api/learn/run", methods=["GET", "POST"])

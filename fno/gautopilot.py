@@ -142,6 +142,11 @@ def qualify(market: str, force: bool = False) -> dict:
     return out
 
 
+def has_result(market: str) -> bool:
+    q = store.get(f"g_ap_qual:{market}") or {}
+    return bool(q.get("rows")) and set(q.get("ids") or []) == {c["id"] for c in CANDIDATES.get(market, [])}
+
+
 def active_specs(market: str) -> list[dict]:
     """The autopilot strategies allowed to open trades now (empty until the weekly check has run)."""
     q = store.get(f"g_ap_qual:{market}") or {}

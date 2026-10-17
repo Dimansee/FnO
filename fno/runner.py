@@ -56,6 +56,12 @@ def _safe_loop():
             _started["v"] = False
 
 
+def _indian_hours() -> bool:
+    """08:55-15:40 IST on weekdays: keep the shared server quiet for the Indian options engine."""
+    n = C.now_ist()
+    return n.weekday() < 5 and (8 * 60 + 55) <= n.hour * 60 + n.minute <= (15 * 60 + 40)
+
+
 def _ping():
     host = C.PRODUCTION_HOST
     if not host:
@@ -83,6 +89,8 @@ def _loop():
         t0 = time.time()
         for m in ("CRYPTO", "US"):
             try:
+                if _indian_hours() and AP.has_result(m):  # heavy re-test waits until the Indian session is over
+                    continue
                 q = AP.qualify(m)                        # no-op unless the weekly test is due
                 state["last_qualify"] = q.get("at")
             except Exception as e:

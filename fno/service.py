@@ -1036,7 +1036,7 @@ def custom_improve(sid: str, days: int = 250) -> dict:
     out = {k: val for k, val in res.items() if k != "_spec"}
     out["source"], out["symbol"] = src, sym
     if res.get("candidate"):
-        ch = LN.apply_variant(sid, res, auto=(LN.mode() == "full"))
+        ch = LN.apply_variant(sid, res, auto=(LN.mode(spec["market"]) == "full"))
         out["change"] = ch
         out["adopted"] = bool(ch and ch["status"] == "applied")
     return clean(out)

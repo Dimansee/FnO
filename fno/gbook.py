@@ -362,6 +362,12 @@ def _tick(markets, manage_only) -> dict:
                     except Exception as e:
                         rows.append({"error": f"{spec['name']} {sym}: {str(e)[:100]}"})
         out[market] = rows
+    if "CRYPTO" in markets:
+        try:                                   # forward-test lab: own ledger, never touches the books' cash or slots
+            from . import glab
+            out["lab"] = glab.tick()
+        except Exception as e:
+            out["lab"] = [{"error": str(e)[:100]}]
     try:
         out["research"] = _after_close()
     except Exception as e:
@@ -417,7 +423,17 @@ def portfolio(market: str) -> dict:
     return {"market": market, "currency": MK.CURRENCY[market], "capital_start": cap, "realised": round(realised, 2), "unrealised": round(unreal, 2),
             "equity": round(cap + realised + unreal, 2), "cash": round(cap + realised - sum(p["margin"] for p in pos), 2),
             "positions": out, "history": list(reversed([{k: v for k, v in t.items() if k not in ("state",)} for t in tr]))[:150], "stats": stats, "prefs": prefs(market),
-            "max_leverage": MAX_LEVERAGE[market], "autopilot": _ap_status(market), "last_tick": store.get("g_last_tick")}
+            "max_leverage": MAX_LEVERAGE[market], "autopilot": _ap_status(market), "last_tick": store.get("g_last_tick"), "lab": _lab(market)}
+
+
+def _lab(market: str):
+    if market != "CRYPTO":
+        return None
+    try:
+        from . import glab
+        return glab.summary()
+    except Exception as e:
+        return {"error": str(e)[:120]}
 
 
 def _ap_status(market: str) -> dict:

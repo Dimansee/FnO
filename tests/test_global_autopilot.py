@@ -19,7 +19,7 @@ UTC = timezone.utc
 T0 = datetime(2026, 10, 16, 12, 0, tzinfo=UTC)
 clock = [T0]
 GB._now = lambda: clock[0]
-MINS = {"5m": 5, "15m": 15, "1h": 60, "4h": 240}
+MINS = {"5m": 5, "15m": 15, "1h": 60, "4h": 240, "1d": 1440}
 
 
 def bars(tf, n, start=100.0, seed=0):
@@ -112,6 +112,50 @@ ix = _pd.DatetimeIndex([_pd.Timestamp("2026-10-16 09:30", tz=MK.TZ["US"]), _pd.T
 ends = MK.bar_ends(ix, "4h", "US")
 assert ends[0].hour == 13 and ends[0].minute == 30 and ends[1].hour == 16 and ends[1].minute == 0, ends
 assert MK.history_days("US", "4h") > 150 and MK.history_days("CRYPTO", "4h") < 60
+
+# 5c. lab: separate ledger, BTC regime switch, never touches the crypto book
+from fno import glab, learn as LN, market as Mmod
+Mmod._cache.clear() if hasattr(Mmod, "_cache") else None
+before_pos = len(GB.positions("CRYPTO"))
+reg = glab.btc_regime()
+_cu.signals = sig                                       # fresh long signal on the last bar again
+clock[0] = clock[0]
+print("lab part of the earlier book tick:", res.get("lab"))
+assert "lab" in res
+store.put("g_lab_pos", {})
+for sym_ in AP.SYMBOLS["CRYPTO"]:
+    store.put(f"g_lab_seen:s_b20001:{sym_}", None)
+import fno.glab as _gl
+_gl._now = lambda: clock[0]
+res = glab.tick()
+print("lab tick:", res[:4], "regime bull:", reg["bull"])
+lp = glab.positions()
+if reg["bull"]:
+    assert lp and all(p["side"] == "long" for p in lp.values()), res
+else:
+    assert not lp and any("BTC regime" in (x.get("lab_skipped") or "") for x in res), res
+assert len(GB.positions("CRYPTO")) == before_pos                     # lab never opens book positions
+_cu.signals = orig
+sm = glab.summary()["rules"][0]
+assert sm["id"] == "s_b20001" and "lab" in sm and "live_counterpart" in sm
+assert GB.portfolio("CRYPTO")["lab"]["rules"] and GB.portfolio("US")["lab"] is None
+
+# 5d. markets keep separate settings
+LN.set_mode("off", "CRYPTO")
+assert LN.mode("CRYPTO") == "off" and LN.mode("IN") != "off" and LN.mode("US") != "off"
+LN.set_mode("safe")
+assert LN.modes() == {"IN": "safe", "CRYPTO": "safe", "US": "safe"}
+base = {"timeframe": "1h", "direction": "long", "enabled": False, "hold": "swing", "long": {"all": [{"l": {"price": "close"}, "op": "gt", "r": {"value": 1}}]}, "exit": {"stop_atr": 1.0, "target_r": 1.5}}
+store.put("custom_strategies", [])
+for i in range(CU.MAX_STRATEGIES):
+    CU.upsert(store, {**base, "name": f"c{i}", "market": "CRYPTO", "symbols": ["BTCUSDT"]})
+try:
+    CU.upsert(store, {**base, "name": "one too many", "market": "CRYPTO", "symbols": ["BTCUSDT"]}); raise SystemExit("limit not enforced")
+except ValueError:
+    pass
+CU.upsert(store, {"name": "india ok", "market": "IN", "symbols": ["NIFTY"], "timeframe": "15m", "direction": "long", "enabled": False,
+                  "long": {"all": [{"l": {"price": "close"}, "op": "gt", "r": {"value": 1}}]}, "exit": {"stop_atr": 1.0, "target_r": 1.5}})
+print("separate settings OK")
 
 # 6. runner stays off outside Render; health accepts the POST wake-up call
 assert RN.enabled() is False and RN.start() is False

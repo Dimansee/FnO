@@ -2893,8 +2893,9 @@ function renderLearning() {
   el.innerHTML = `
   <div class="pagehead"><div><h2>Learning</h2><p class="muted">After every trade it writes a lesson; after every close it studies the day. Rules it adds are small, evidence-based, logged, and expire on their own.</p></div>
     <div class="row"><div class="segs">${["", "IN", "CRYPTO", "US"].map(mktBtn).join("")}</div><button id="lxRun">Run after-close research now</button></div></div>
-  <div class="card"><div class="row between wrap"><h3 style="margin:0">Autonomy</h3><div class="segs">${Object.entries(modes).map(([k, v]) => `<button class="seg ${d.mode === k ? "on" : ""}" data-lmode="${k}">${v[0]}</button>`).join("")}</div></div>
+  <div class="card"><div class="row between wrap"><h3 style="margin:0">Autonomy · ${LX.mk ? tabs[LX.mk] : "all markets"}</h3><div class="segs">${Object.entries(modes).map(([k, v]) => `<button class="seg ${d.mode === k ? "on" : ""}" data-lmode="${k}">${v[0]}</button>`).join("")}</div></div>
     <p class="muted" style="margin:10px 0 0">${modes[d.mode][1]}</p>
+    <p class="muted" style="margin:6px 0 0;font-size:12.5px">${LX.mk ? `This switch only affects ${tabs[LX.mk]}.` : "Each market has its own switch (pick a market above); setting it here sets all three."} Now: ${["IN", "CRYPTO", "US"].map(k => `${tabs[k]} <b>${(modes[(d.modes || {})[k]] || [k])[0]}</b>`).join(" · ")}</p>
     <p class="muted" style="margin:6px 0 0;font-size:12.5px">Guard-rails: needs ${d.limits.min_signals_veto}+ signals and a very clear negative result (z ≤ −${d.limits.z_veto}) in both halves before skipping anything · at most ${d.limits.max_vetoes_per_strategy} skips per strategy · skips expire after ${d.limits.veto_days} days · the built-in Noise and Camarilla numbers are never changed automatically.</p></div>
   ${pend.length ? `<div class="card" style="margin-top:14px"><h3>Waiting for your approval</h3>${pend.map(c => `<div class="row between wrap pend"><div><b>${esc(c.title)}</b><div class="muted" style="font-size:13px">${esc(JSON.stringify(c.evidence || {}))}</div></div><button class="primary" data-lapply="${c.id}">Approve</button></div>`).join("")}</div>` : ""}
   <div class="grid g2" style="margin-top:14px">
@@ -2912,7 +2913,7 @@ document.addEventListener("click", async e => {
   if (!e.target.closest("#t-learning")) return; const t = e.target.closest("button"); if (!t) return;
   try {
     if (t.dataset.lmk != null) { LX.mk = t.dataset.lmk; await loadLearning(); }
-    else if (t.dataset.lmode) { await post("/api/learn/mode", {mode: t.dataset.lmode}); toast("Learning mode: " + t.dataset.lmode); await loadLearning(); }
+    else if (t.dataset.lmode) { await post("/api/learn/mode", {mode: t.dataset.lmode, market: LX.mk || null}); toast("Learning mode " + (LX.mk ? "(" + tabs[LX.mk] + ")" : "(all markets)") + ": " + t.dataset.lmode); await loadLearning(); }
     else if (t.dataset.lrev) { await post("/api/learn/revert", {id: t.dataset.lrev}); toast("Rule undone"); await loadLearning(); }
     else if (t.dataset.lapply) { await post("/api/learn/apply", {id: t.dataset.lapply}); toast("Applied"); await loadLearning(); }
     else if (t.id === "lxRun") { t.disabled = true; const r = await post("/api/learn/run", {market: LX.mk || "IN", force: true}); toast(r.ok === false ? (r.error || "Not available") : "Research note written"); await loadLearning(); t.disabled = false; }
@@ -2934,12 +2935,19 @@ function gxAutopilot(d) {
     + ((a.failed || []).length ? `<br><span class="muted">Paused (not working lately): ${a.failed.map(r => `${esc(r.name.replace("Autopilot · ", ""))} — ${esc(r.why)}`).join("; ")}</span>` : "");
   return `<div class="card" style="margin-bottom:14px"><p style="margin:0">${body}</p><p class="muted" style="margin:6px 0 0;font-size:12.5px">Engine ${run}.</p></div>`;
 }
+function gxLab(d) {
+  const L = d.lab; if (!L || !(L.rules || []).length) return "";
+  const st = x => x && x.n ? `${x.n} trades · ${sgn(x.avg_R)}R avg · ${x.win_rate}% wins · ${sgn(x.total_R)}R total` : "no closed trades yet";
+  return `<div class="card" style="margin-bottom:14px"><h3>Forward test (lab) <span class="muted" style="font-weight:400;font-size:13px">— separate record, uses no money or slots</span></h3>` + L.rules.map(r => `
+    <p style="margin:6px 0 0"><b>${esc(r.name)}</b>${r.regime ? ` · BTC now ${r.regime.bull ? '<span class="up">above</span>' : '<span class="down">below</span>'} its 200-day average (${fmtN(r.regime.close)} vs ${fmtN(r.regime.sma200)}) → ${r.regime.bull ? "longs only" : "shorts only"}` : ""}</p>
+    <p class="muted" style="margin:4px 0 0;font-size:13px">Since ${esc(r.since)} — lab: ${st(r.lab)} | live rule without the switch: ${st(r.live_counterpart)}${(r.open || []).length ? ` | open: ${r.open.map(o => esc(o.symbol + " " + o.side)).join(", ")}` : ""}. Promote when ${esc(r.promote_when)}.</p>`).join("") + `</div>`;
+}
 function renderMarkets() {
   const d = GX.data, el = $("#gxBody"); if (!d) return; const cur = d.currency, p = d.prefs || {}, st = d.stats || {};
   el.innerHTML = `
-  <div class="pagehead"><div><h2>Global markets</h2><p class="muted">Separate paper accounts in ${cur}. They trade your own strategies set to Auto; with none on Auto, the built-in autopilot trades only the rules that passed its weekly backtest. ${GX.mk === "CRYPTO" ? "Crypto runs around the clock." : "US stocks trade 7:00 pm – 1:30 am IST (9:30 am – 4:00 pm New York)."}</p></div>
+  <div class="pagehead"><div><h2>Global markets</h2><p class="muted">Separate paper accounts in ${cur}. They are kept apart from the India F&O account and from each other: own money, own rules, own settings. They trade your own strategies set to Auto; with none on Auto, the built-in crypto/US autopilot (separate from the India F&O autopilot switch) trades only the rules that pass its weekly check. ${GX.mk === "CRYPTO" ? "Crypto runs around the clock." : "US stocks trade 7:00 pm – 1:30 am IST (9:30 am – 4:00 pm New York)."}</p></div>
     <div class="segs">${["CRYPTO", "US"].map(k => `<button class="seg ${GX.mk === k ? "on" : ""}" data-gmk="${k}">${tabs[k]}</button>`).join("")}</div></div>
-  ${gxAutopilot(d)}
+  ${gxAutopilot(d)}${gxLab(d)}
   <div class="grid g4">${kpiCard("Account value", money(d.equity, cur), `started with ${money(d.capital_start, cur)}`)}${kpiCard("Available", money(d.cash, cur), `${d.positions.length} open`)}${kpiCard("Realised", money(d.realised, cur), `${st.trades || 0} closed trades`, cls(d.realised))}${kpiCard("Open profit", money(d.unrealised, cur), "right now", cls(d.unrealised))}</div>
   <div class="grid g2" style="margin-top:14px">
     <div class="card"><h3>Account curve</h3><canvas id="gxCurve" class="flowcv" style="height:200px"></canvas>
