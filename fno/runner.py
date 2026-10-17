@@ -41,8 +41,19 @@ def start() -> bool:
         if _started["v"] or not enabled():
             return False
         _started["v"] = True
-    threading.Thread(target=_loop, name="gbook-runner", daemon=True).start()
+    state["spawned"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    threading.Thread(target=_safe_loop, name="gbook-runner", daemon=True).start()
     return True
+
+
+def _safe_loop():
+    try:
+        _loop()
+    except BaseException as e:            # never die silently: record it and let the next request start a fresh loop
+        state["last_error"] = f"loop died: {type(e).__name__}: {str(e)[:120]}"
+        traceback.print_exc()
+        with _lock:
+            _started["v"] = False
 
 
 def _ping():
@@ -57,10 +68,11 @@ def _ping():
 
 
 def _loop():
+    state["started"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    print("[runner] crypto/US loop started", flush=True)
     from . import gautopilot as AP
     from . import gbook as GB
     from . import scheduler
-    state["started"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     time.sleep(5)
     try:
         scheduler.ensure(C.PRODUCTION_HOST or None)   # (re)registers the QStash schedules, including the new wake-up one

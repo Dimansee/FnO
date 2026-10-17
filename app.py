@@ -807,11 +807,7 @@ def learn_apply():
 
 
 # Crypto / US books: background loop on the always-on host (no-op on Vercel and in tests).
-try:
-    from fno import runner as _runner
-    _runner.start()
-except Exception:
-    traceback.print_exc()
+from fno import runner as _runner   # started by the first request (not at import time, so no import-lock races in the worker)
 
 
 @app.before_request
