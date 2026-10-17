@@ -90,10 +90,36 @@ def us(sym):
         print(sym, iv, len(df))
 
 
+def funding(sym):
+    """Perpetual (USD-M) funding rate history, 8-hourly."""
+    frames = []
+    for m in months():
+        url = f"https://data.binance.vision/data/futures/um/monthly/fundingRate/{sym}/{sym}-fundingRate-{m:%Y-%m}.zip"
+        r = S.get(url, timeout=60)
+        if r.status_code != 200:
+            continue
+        with zipfile.ZipFile(io.BytesIO(r.content)) as z:
+            frames.append(pd.read_csv(z.open(z.namelist()[0])))
+    if not frames:
+        print("no funding", sym)
+        return
+    df = pd.concat(frames)
+    df.columns = [c.strip().lower() for c in df.columns]
+    tcol = next(c for c in df.columns if "time" in c)
+    rcol = next(c for c in df.columns if "rate" in c and "interval" not in c)
+    out = pd.DataFrame({"ts": pd.to_datetime(pd.to_numeric(df[tcol]), unit="ms", utc=True), "rate": pd.to_numeric(df[rcol])})
+    out.drop_duplicates("ts").sort_values("ts").to_csv(f"{OUT}/funding_{sym}.csv.gz", index=False)
+    print("funding", sym, len(out))
+
+
 for s in CRYPTO:
     try:
         crypto(s)
     except Exception as e:
         print("crypto fail", s, e)
+    try:
+        funding(s)
+    except Exception as e:
+        print("funding fail", s, e)
 for s in US:
     us(s)
