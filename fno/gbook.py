@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import secrets
+import threading
 from datetime import datetime, timedelta, timezone
 
 import numpy as np
@@ -113,7 +114,26 @@ def _slip_fee(market):
 
 
 def _spec_map():
-    return {s["id"]: s for s in CU.load_all(store)}
+    from . import gautopilot as AP
+    out = {s["id"]: s for m in ("CRYPTO", "US") for s in AP.all_specs(m)}   # so autopilot positions keep their exit rules
+    out.update({s["id"]: s for s in CU.load_all(store)})
+    return out
+
+
+def _own_auto(specs: dict, market: str) -> list[dict]:
+    return [s for s in specs.values() if not s.get("autopilot") and s.get("enabled") and s.get("auto") and s["market"] == market]
+
+
+def runners(market: str, specs: dict | None = None) -> tuple[list[dict], str]:
+    """Strategies allowed to open trades in this market: yours if any are on Auto, otherwise the tested autopilot set."""
+    from . import gautopilot as AP
+    own = _own_auto(specs if specs is not None else _spec_map(), market)
+    if own:
+        return own, "yours"
+    return AP.active_specs(market), "autopilot"
+
+
+_TICK_LOCK = threading.Lock()   # one tick at a time per process (scheduler, background loop and an open page can overlap)
 
 
 def _now():
@@ -308,7 +328,20 @@ def _evaluate(market: str, spec: dict, symbol: str, out: list):
 
 def tick(markets=("CRYPTO", "US"), manage_only=False) -> dict:
     """Run once. Safe to call from several places; every step is idempotent per bar."""
+    if not _TICK_LOCK.acquire(timeout=50):
+        return {"skipped": "another tick is still running"}
+    try:
+        return _tick(markets, manage_only)
+    finally:
+        _TICK_LOCK.release()
+
+
+def _tick(markets, manage_only) -> dict:
     out: dict = {}
+    try:
+        store.put("g_last_tick", datetime.now(timezone.utc).isoformat(timespec="seconds"))
+    except Exception:
+        pass
     specs = _spec_map()
     for market in markets:
         rows: list = []
@@ -321,9 +354,7 @@ def tick(markets=("CRYPTO", "US"), manage_only=False) -> dict:
             except Exception as e:
                 rows.append({"error": f"manage {pos['symbol']}: {str(e)[:100]}"})
         if not manage_only and prefs(market)["auto"] and (market == "CRYPTO" or MK.us_session_open()):
-            for spec in specs.values():
-                if not (spec.get("enabled") and spec.get("auto") and spec["market"] == market):
-                    continue
+            for spec in runners(market, specs)[0]:
                 for sym in spec["symbols"]:
                     if not MK.valid_symbol(market, sym):
                         continue
@@ -387,7 +418,15 @@ def portfolio(market: str) -> dict:
     return {"market": market, "currency": MK.CURRENCY[market], "capital_start": cap, "realised": round(realised, 2), "unrealised": round(unreal, 2),
             "equity": round(cap + realised + unreal, 2), "cash": round(cap + realised - sum(p["margin"] for p in pos), 2),
             "positions": out, "history": list(reversed([{k: v for k, v in t.items() if k not in ("state",)} for t in tr]))[:150], "stats": stats, "prefs": prefs(market),
-            "max_leverage": MAX_LEVERAGE[market]}
+            "max_leverage": MAX_LEVERAGE[market], "autopilot": _ap_status(market), "last_tick": store.get("g_last_tick")}
+
+
+def _ap_status(market: str) -> dict:
+    from . import gautopilot as AP
+    try:
+        return AP.status(market, runners(market)[1] == "autopilot")
+    except Exception as e:
+        return {"error": str(e)[:120]}
 
 
 def manual_exit(market: str, pid: str) -> tuple[bool, str]:

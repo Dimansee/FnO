@@ -2897,11 +2897,23 @@ document.addEventListener("click", async e => {
 /* ------------------------------ Global markets (crypto / US) ------------------------------ */
 const GX = {mk: localStorage.getItem("gmk") || "CRYPTO", data: null};
 async function loadMarkets() { GX.data = await api("/api/gbook?market=" + GX.mk); renderMarkets(); }
+function gxAutopilot(d) {
+  const a = d.autopilot || {}, ago = d.last_tick ? Math.round((Date.now() - Date.parse(d.last_tick)) / 60000) : null;
+  const run = ago == null ? "not checked yet" : ago <= 2 ? "checked just now" : `last checked ${ago} min ago`;
+  let body;
+  if (a.error) body = `Autopilot status unavailable: ${esc(a.error)}`;
+  else if (!a.in_use) body = `Your own Auto strategies are trading this market (autopilot stands aside).`;
+  else if (!a.tested_at) body = `Autopilot is running its first backtest of ${GX.mk === "CRYPTO" ? "crypto" : "US"} rules; trading starts once a rule passes (a few minutes).`;
+  else if (!(a.passed || []).length) body = `Autopilot tested ${a.tested} rule/symbol pairs on ${esc(a.tested_at.slice(0, 10))} and none passed (${esc(a.rules)}), so it is staying flat rather than trading a losing rule. It re-tests weekly.`;
+  else body = `Autopilot is trading ${a.passed.length} tested rule/symbol pair${a.passed.length > 1 ? "s" : ""}: ` + a.passed.map(r => `<b>${esc(r.symbol)}</b> ${esc(r.name.replace("Autopilot · ", ""))} <span class="muted">(${esc(r.why)})</span>`).join("; ") + `. Tested ${esc(a.tested_at.slice(0, 10))}.`;
+  return `<div class="card" style="margin-bottom:14px"><p style="margin:0">${body}</p><p class="muted" style="margin:6px 0 0;font-size:12.5px">Engine ${run}.</p></div>`;
+}
 function renderMarkets() {
   const d = GX.data, el = $("#gxBody"); if (!d) return; const cur = d.currency, p = d.prefs || {}, st = d.stats || {};
   el.innerHTML = `
-  <div class="pagehead"><div><h2>Global markets</h2><p class="muted">Separate paper accounts in ${cur}. They trade only your own strategies from the Strategy lab. ${GX.mk === "CRYPTO" ? "Crypto runs around the clock." : "US stocks trade 7:00 pm – 1:30 am IST (9:30 am – 4:00 pm New York)."}</p></div>
+  <div class="pagehead"><div><h2>Global markets</h2><p class="muted">Separate paper accounts in ${cur}. They trade your own strategies set to Auto; with none on Auto, the built-in autopilot trades only the rules that passed its weekly backtest. ${GX.mk === "CRYPTO" ? "Crypto runs around the clock." : "US stocks trade 7:00 pm – 1:30 am IST (9:30 am – 4:00 pm New York)."}</p></div>
     <div class="segs">${["CRYPTO", "US"].map(k => `<button class="seg ${GX.mk === k ? "on" : ""}" data-gmk="${k}">${tabs[k]}</button>`).join("")}</div></div>
+  ${gxAutopilot(d)}
   <div class="grid g4">${kpiCard("Account value", money(d.equity, cur), `started with ${money(d.capital_start, cur)}`)}${kpiCard("Available", money(d.cash, cur), `${d.positions.length} open`)}${kpiCard("Realised", money(d.realised, cur), `${st.trades || 0} closed trades`, cls(d.realised))}${kpiCard("Open profit", money(d.unrealised, cur), "right now", cls(d.unrealised))}</div>
   <div class="grid g2" style="margin-top:14px">
     <div class="card"><h3>Account curve</h3><canvas id="gxCurve" class="flowcv" style="height:200px"></canvas>
@@ -2912,8 +2924,8 @@ function renderMarkets() {
       <div><label>Max open positions</label><input id="gxMax" type="number" min="1" max="10" value="${p.max_open}"></div></div>
       <label class="sw" style="margin-top:10px"><input type="checkbox" id="gxAuto" ${p.auto ? "checked" : ""}> Let strategies marked "Auto paper-trade" open trades by themselves</label>
       <div class="row wrap" style="margin-top:12px"><button class="primary" id="gxSave">Save settings</button><input id="gxCap" type="number" value="${GX.mk === "CRYPTO" ? 5000 : 10000}" style="width:110px"><button class="danger" id="gxReset">Reset account</button></div>
-      <p class="muted" style="font-size:12.5px;margin:10px 0 0">Prices come from free public feeds and bars are checked every 5 minutes. Fees and slippage are included. Nothing here places a real order.</p></div></div>
-  <div class="card" style="margin-top:14px"><h3>Open positions</h3><div class="tablewrap"><table><tr><th>Symbol</th><th>Strategy</th><th>Side</th><th>Entry</th><th>Now</th><th>Stop</th><th>Target</th><th>R</th><th>P&L</th><th></th></tr>${d.positions.map(x => `<tr><td><b>${esc(x.symbol)}</b></td><td>${esc(x.strategy_name)}</td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${fmtN(x.entry)}</td><td class="mono">${fmtN(x.price)}</td><td class="mono">${fmtN(x.stop)}</td><td class="mono">${x.target == null ? "–" : fmtN(x.target)}</td><td class="mono ${cls(x.R_now)}">${sgn(x.R_now)}</td><td class="mono ${cls(x.unrealised)}">${fmtN(x.unrealised)}</td><td><button data-gx="${x.id}">Close</button></td></tr>`).join("") || `<tr><td colspan="10" class="muted">No open positions. Create a strategy for ${tabs[GX.mk]} in the Strategy lab and switch on <b>Show signals</b> / <b>Auto paper-trade</b>.</td></tr>`}</table></div></div>
+      <p class="muted" style="font-size:12.5px;margin:10px 0 0">Prices come from free public feeds and bars are checked every minute. Fees and slippage are included. Nothing here places a real order.</p></div></div>
+  <div class="card" style="margin-top:14px"><h3>Open positions</h3><div class="tablewrap"><table><tr><th>Symbol</th><th>Strategy</th><th>Side</th><th>Entry</th><th>Now</th><th>Stop</th><th>Target</th><th>R</th><th>P&L</th><th></th></tr>${d.positions.map(x => `<tr><td><b>${esc(x.symbol)}</b></td><td>${esc(x.strategy_name)}</td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${fmtN(x.entry)}</td><td class="mono">${fmtN(x.price)}</td><td class="mono">${fmtN(x.stop)}</td><td class="mono">${x.target == null ? "–" : fmtN(x.target)}</td><td class="mono ${cls(x.R_now)}">${sgn(x.R_now)}</td><td class="mono ${cls(x.unrealised)}">${fmtN(x.unrealised)}</td><td><button data-gx="${x.id}">Close</button></td></tr>`).join("") || `<tr><td colspan="10" class="muted">No open positions right now. A position opens when one of the active rules above gives a signal.</td></tr>`}</table></div></div>
   <div class="card" style="margin-top:14px"><h3>Closed trades</h3><div class="tablewrap" style="max-height:50vh"><table><tr><th>Closed</th><th>Symbol</th><th>Strategy</th><th>Side</th><th>R</th><th>P&L</th><th>Reason</th></tr>${d.history.map(x => `<tr><td class="mono">${esc((x.closed || "").slice(0, 16).replace("T", " "))}</td><td>${esc(x.symbol)}</td><td>${esc(x.strategy_name)}</td><td>${esc(x.side)}</td><td class="mono ${cls(x.R)}">${sgn(x.R)}</td><td class="mono ${cls(x.pnl)}">${fmtN(x.pnl)}</td><td>${esc(x.reason)}</td></tr>`).join("") || `<tr><td colspan="7" class="muted">No closed trades yet.</td></tr>`}</table></div></div>`;
   setTimeout(() => miniLine($("#gxCurve"), (st.equity || []).map(x => x.v), {base: d.capital_start}), 0);
 }

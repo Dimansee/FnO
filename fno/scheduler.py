@@ -20,6 +20,8 @@ OPEN_ID = "fno-open-record"
 POST_ID = "fno-post-close"
 WARM_ID = "fno-warm"
 WARM_CRON = "20 3 * * 1-5"   # UTC = 08:50 IST: wakes a sleeping free host before the 09:00 pre-open call
+GLOBAL_ID = "fno-global"
+GLOBAL_CRON = "*/10 0-3,10-23 * * *"   # crypto/US books + keeps the free host awake outside Indian hours (108 calls/day; free QStash = 1,000/day)
 
 
 def _dest(host: str | None) -> str | None:
@@ -53,7 +55,7 @@ def ensure(host: str | None = None, force: bool = False) -> dict:
     dest = _dest(host)
     if not dest:
         return {"ok": False, "reason": "Unknown production host"}
-    want = {"dest": dest, "cron": C.TICK_CRON, "pre_cron": C.PRE_CRON, "open_cron": C.OPEN_CRON, "post_cron": C.POST_CRON, "warm_cron": WARM_CRON,
+    want = {"dest": dest, "cron": C.TICK_CRON, "pre_cron": C.PRE_CRON, "open_cron": C.OPEN_CRON, "post_cron": C.POST_CRON, "warm_cron": WARM_CRON, "global_cron": GLOBAL_CRON,
             "secret": hashlib.sha256(C.CRON_SECRET.encode()).hexdigest()[:12]}   # a changed CRON_SECRET re-registers the schedules by itself
     cur = store.get("scheduler") or {}
     if not force and all(cur.get(k) == v for k, v in want.items()):
@@ -77,5 +79,8 @@ def ensure(host: str | None = None, force: bool = False) -> dict:
     if not w["ok"]:
         store.put("scheduler", {"dest": dest, "cron": C.TICK_CRON, "pre_cron": C.PRE_CRON, "open_cron": C.OPEN_CRON, "post_cron": C.POST_CRON, "schedule_id": a["schedule_id"], "pre_id": b["schedule_id"], "open_id": c["schedule_id"], "post_id": d["schedule_id"]})
         return w
-    store.put("scheduler", {**want, "schedule_id": a["schedule_id"], "pre_id": b["schedule_id"], "open_id": c["schedule_id"], "post_id": d["schedule_id"], "warm_id": w["schedule_id"]})
+    g = _register(dest.replace("/api/tick", "/api/tick/global"), GLOBAL_CRON, GLOBAL_ID)
+    if not g["ok"]:
+        return g
+    store.put("scheduler", {**want, "schedule_id": a["schedule_id"], "pre_id": b["schedule_id"], "open_id": c["schedule_id"], "post_id": d["schedule_id"], "warm_id": w["schedule_id"], "global_id": g["schedule_id"]})
     return {"ok": True, "schedule_id": a["schedule_id"], "cached": False}

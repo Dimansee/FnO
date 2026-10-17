@@ -205,11 +205,12 @@ def logout():
     return resp
 
 
-@app.get("/api/health")
+@app.route("/api/health", methods=["GET", "POST", "HEAD"])   # POST: the 08:50 QStash wake-up call (was a 500 before)
 def health():
+    from fno import runner as RN
     out = {"ok": True, "db": store.ping(), "time_ist": C.now_ist().isoformat(timespec="seconds"),
            "configured": bool(C.APP_PASSWORD and C.SESSION_SECRET and C.REDIS_URL),
-           "scheduler_connected": bool(C.QSTASH_TOKEN)}
+           "scheduler_connected": bool(C.QSTASH_TOKEN), "global_runner": RN.state}
     if request.args.get("deep") == "1":  # data-source reachability only (counts, no data)
         from fno import market as M
         checks = {
@@ -803,3 +804,11 @@ def learn_revert():
 @app.post("/api/learn/apply")
 def learn_apply():
     return jsonify({"ok": LN.apply_pending((request.get_json(force=True) or {}).get("id", ""))})
+
+
+# Crypto / US books: background loop on the always-on host (no-op on Vercel and in tests).
+try:
+    from fno import runner as _runner
+    _runner.start()
+except Exception:
+    traceback.print_exc()
