@@ -176,4 +176,17 @@ for r in sc:
         assert r["next"] and all(isinstance(x, str) and ("if a bar closes" in x or "already" in x or " when" in x) for x in r["next"]), r
 assert "scanner" in GB.portfolio("CRYPTO")
 print("scanner OK:", len(sc), "rows")
+
+# 9. chart endpoint: candles + rule lines on the rule's own timeframe, bad input refused
+ch = GB.chart("CRYPTO", "BTCUSDT", "4h")
+assert len(ch["candles"]) > 50 and ch["lines"] and all(p["time"] and p["value"] for p in ch["lines"][0]["points"][:5]), {k: (len(v) if isinstance(v, list) else v) for k, v in ch.items()}
+assert "1m" in ch["timeframes"] and {"id": "BTCUSDT", "label": "Bitcoin"} in ch["symbols"]
+for bad in (("CRYPTO", "BTCUSDT", "7m"), ("CRYPTO", "NOPE", "5m")):
+    try:
+        GB.chart(*bad); raise SystemExit("bad chart input accepted")
+    except ValueError:
+        pass
+r = c.get("/api/gbook/chart?market=CRYPTO&symbol=BTCUSDT&tf=1d")
+assert r.status_code in (200, 401), r.status_code
+print("chart OK:", len(ch["candles"]), "candles,", len(ch["lines"]), "lines,", len(ch["markers"]), "markers")
 print("ALL GLOBAL AUTOPILOT OK")

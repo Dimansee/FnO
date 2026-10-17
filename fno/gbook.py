@@ -483,6 +483,66 @@ def scanner(market: str) -> list[dict]:
     return M.cached(f"g_scan:{market}:{len(positions(market))}", 120, build)
 
 
+# ------------------------------------------------------------------ chart
+CHART_TF = {"1m": 1, "5m": 3, "15m": 8, "1h": 30, "4h": 120, "1d": 600}     # timeframe -> calendar days of history shown
+
+
+def chart(market: str, symbol: str, tf: str) -> dict:
+    """Candles for the Markets chart, plus what the book did on this symbol: trade arrows, open position lines, and the
+    Supertrend / channel lines of the active rules that run on this same timeframe."""
+    if tf not in CHART_TF:
+        raise ValueError("Unknown timeframe " + tf)
+    if not MK.valid_symbol(market, symbol):
+        raise ValueError(f"{symbol} is not in the {market} list")
+    df = MK.candles(market, symbol, tf, CHART_TF[tf], ttl=20 if tf in ("1m", "5m") else 60)
+    df = df.tail(1500)
+    t = lambda ix: int(pd.Timestamp(ix).tz_convert("UTC").timestamp())     # noqa: E731
+    candles = [{"time": t(i), "open": float(r.open), "high": float(r.high), "low": float(r.low), "close": float(r.close), "volume": float(r.volume)}
+               for i, r in zip(df.index, df.itertuples())]
+    lines = []
+    from . import indicators as IND
+    for spec in runners(market)[0]:
+        if spec["timeframe"] != tf or symbol not in spec["symbols"]:
+            continue
+        for side_name in ("long", "short"):
+            for c in ((spec.get(side_name) or {}).get("all") or [])[:1]:
+                l, r = c["l"], c["r"]
+                name = spec["name"].replace("Autopilot · ", "")
+                if l.get("ind") == "supertrend" and side_name == "long":
+                    tr, up, lo = IND.supertrend_bands(df, int(l.get("n", 10)), float(l.get("mult", 3.0)))
+                    pts = [{"time": t(i), "value": float(lo.iloc[k] if tr.iloc[k] > 0 else up.iloc[k]), "color": "#3fbf8f" if tr.iloc[k] > 0 else "#e2675a"}
+                           for k, i in enumerate(df.index) if k >= 20]
+                    lines.append({"name": f"{name}: Supertrend", "points": pts})
+                elif "price" in l and "ind" in r:
+                    ser = X.operand_series(df, r, {})
+                    pts = [{"time": t(i), "value": float(v)} for i, v in ser.items() if np.isfinite(v)]
+                    lines.append({"name": f"{name}: {X.describe(r)}", "points": pts})
+    t0 = candles[0]["time"] if candles else 0
+    markers = []
+    for tr_ in trades(market):
+        if tr_["symbol"] != symbol:
+            continue
+        for key, kind in (("opened", "in"), ("closed", "out")):
+            ts = tr_.get(key)
+            if ts and t(datetime.fromisoformat(ts)) >= t0:
+                markers.append({"time": t(datetime.fromisoformat(ts)), "kind": kind, "side": tr_["side"], "text": (f"{tr_['side']} " if kind == "in" else f"exit {tr_.get('R', 0):+.1f}R")})
+    pos = []
+    for p in positions(market):
+        if p["symbol"] != symbol:
+            continue
+        markers.append({"time": t(datetime.fromisoformat(p["opened"])), "kind": "in", "side": p["side"], "text": p["side"]})
+        pos.append({"side": p["side"], "entry": p["entry"], "stop": p["state"]["sl"], "target": p["state"]["tp"], "strategy": p["strategy_name"]})
+    # snap markers onto bar times so they always draw
+    times = [c["time"] for c in candles]
+    import bisect
+    for m in markers:
+        k = bisect.bisect_right(times, m["time"]) - 1
+        m["time"] = times[max(k, 0)] if times else m["time"]
+    markers.sort(key=lambda m: m["time"])
+    return {"symbol": symbol, "tf": tf, "candles": candles, "lines": lines, "markers": markers, "positions": pos,
+            "symbols": MK.catalog(market), "timeframes": list(CHART_TF)}
+
+
 # ------------------------------------------------------------------ read side
 def portfolio(market: str) -> dict:
     acct, pos, tr = account(market), positions(market), trades(market)

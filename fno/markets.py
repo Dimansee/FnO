@@ -17,7 +17,7 @@ import requests
 from . import market as M
 
 TZ = {"IN": ZoneInfo("Asia/Kolkata"), "US": ZoneInfo("America/New_York"), "CRYPTO": ZoneInfo("UTC")}
-MINUTES = {"5m": 5, "15m": 15, "30m": 30, "1h": 60, "4h": 240, "1d": 1440}
+MINUTES = {"1m": 1, "5m": 5, "15m": 15, "30m": 30, "1h": 60, "4h": 240, "1d": 1440}
 
 CATALOG = {
     "CRYPTO": {
@@ -88,7 +88,7 @@ def _frame(rows) -> pd.DataFrame:
 
 
 def _bybit(symbol: str, tf: str, start_ms: int, end_ms: int) -> pd.DataFrame:
-    iv = {"5m": "5", "15m": "15", "30m": "30", "1h": "60", "4h": "240", "1d": "D"}[tf]
+    iv = {"1m": "1", "5m": "5", "15m": "15", "30m": "30", "1h": "60", "4h": "240", "1d": "D"}[tf]
     rows, end = [], end_ms
     for _ in range(40):
         r = _s.get(f"{BYBIT}/v5/market/kline", params={"category": "spot", "symbol": symbol, "interval": iv, "start": start_ms, "end": end, "limit": 1000}, timeout=15)
@@ -116,7 +116,7 @@ def _crypto(symbol: str, tf: str, days: int) -> pd.DataFrame:
 
 
 # ------------------------------------------------------------------ US
-_YF = {"5m": ("5m", 59), "15m": ("15m", 59), "30m": ("30m", 59), "1h": ("1h", 720), "4h": ("1h", 720), "1d": ("1d", 3650)}
+_YF = {"1m": ("1m", 7), "5m": ("5m", 59), "15m": ("15m", 59), "30m": ("30m", 59), "1h": ("1h", 720), "4h": ("1h", 720), "1d": ("1d", 3650)}
 
 
 def _us(symbol: str, tf: str, days: int) -> pd.DataFrame:

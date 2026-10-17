@@ -371,6 +371,10 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .segs{display:inline-flex;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px}
 .seg{border:none;background:transparent;padding:6px 12px;border-radius:7px;color:var(--muted);font-weight:650}
 .seg.on{background:var(--panel2);color:var(--text);box-shadow:0 0 0 1px var(--line2)}
+#wsSwitch .seg{padding:6px 10px;font-size:13px}#wsSwitch .seg.on{color:var(--accent)}
+.gxchart{height:440px;position:relative}.gxchart .legend{position:absolute;left:10px;top:6px;z-index:3;font-size:12px;pointer-events:none}
+.gxtools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+@media(max-width:900px){.gxchart{height:340px}#wsSwitch .seg{padding:5px 7px;font-size:12px}}
 button.ghost{background:transparent;border-style:dashed;color:var(--muted)}
 .card+.card,.strat+.strat,.tpl+.tpl{margin-top:12px}
 .grid>.card+.card{margin-top:0}
@@ -457,10 +461,10 @@ details summary{cursor:pointer;font-size:13px}
       <button data-t="signal" class="on"><svg class="ic"><use href="#i-signal"/></svg><span class="lb">Signal</span></button>
       <button data-t="chain"><svg class="ic"><use href="#i-chain"/></svg><span class="lb">Option chain</span></button>
       <button data-t="portfolio"><svg class="ic"><use href="#i-portfolio"/></svg><span class="lb">Portfolio</span></button>
+      <button data-t="markets"><svg class="ic"><use href="#i-markets"/></svg><span class="lb">Dashboard</span><span class="newb">NEW</span></button>
       <div class="grp">Strategy lab</div>
       <button data-t="strategies"><svg class="ic"><use href="#i-strategies"/></svg><span class="lb">Strategies</span><span class="newb">NEW</span></button>
       <button data-t="learning"><svg class="ic"><use href="#i-learning"/></svg><span class="lb">Learning</span><span class="newb">NEW</span></button>
-      <button data-t="markets"><svg class="ic"><use href="#i-markets"/></svg><span class="lb">Crypto &amp; US</span><span class="newb">NEW</span></button>
       <div class="grp">Insight</div>
       <button data-t="context"><svg class="ic"><use href="#i-context"/></svg><span class="lb">Market context</span></button>
       <button data-t="stocks"><svg class="ic"><use href="#i-stocks"/></svg><span class="lb">Stocks</span></button>
@@ -486,6 +490,7 @@ details summary{cursor:pointer;font-size:13px}
     <div class="bar">
       <button class="iconbtn" id="sideToggle" title="Collapse menu"><svg><use href="#i-menu"/></svg></button>
       <div class="brand"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="vertical-align:-5px;margin-right:6px"><path d="M2 17 L8 11 L12 14 L21 5" fill="none" stroke="#f2a93b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="5" r="2.4" fill="#f2a93b"/></svg>F&amp;O <span>Trainer</span></div>
+      <div class="segs" id="wsSwitch" role="tablist" aria-label="Market"><button class="seg" data-ws="IN">India F&amp;O</button><button class="seg" data-ws="CRYPTO">Crypto</button><button class="seg" data-ws="US">US</button></div>
       <select id="symbol" aria-label="Instrument"></select>
       <span id="srcPill" class="pill demo"><span class="dot"></span><span>…</span></span>
       <div class="spacer"></div>
@@ -691,7 +696,12 @@ details summary{cursor:pointer;font-size:13px}
   <section id="t-data" class="hidden"><div id="dxBody"></div></section>
   <section id="t-strategies" class="hidden"><div id="sxBody"></div></section>
   <section id="t-learning" class="hidden"><div id="lxBody"></div></section>
-  <section id="t-markets" class="hidden"><div id="gxBody"></div></section>
+  <section id="t-markets" class="hidden"><div id="gxHead"></div>
+    <div class="card" id="gxChartCard" style="margin-bottom:14px"><div class="row between wrap" style="gap:10px"><h3 style="margin:0" id="gxChartTitle">Chart</h3>
+      <div class="gxtools"><select id="gxSym" aria-label="Symbol"></select><div class="segs" id="gxTf"></div></div></div>
+      <div class="gxchart" id="gxChart" style="margin-top:10px"><div class="legend mono" id="gxLegend"></div></div>
+      <p class="muted" id="gxChartNote" style="margin:8px 0 0;font-size:12.5px"></p></div>
+    <div id="gxBody"></div></section>
 
   <section id="t-settings" class="hidden">
     <div class="grid g2">
@@ -816,10 +826,37 @@ async function start() {
   renderRules(); renderStockRules(); renderGlossary(); $("#glQ").oninput = renderGlossary;
   const q = new URLSearchParams(location.search);
   if (q.get("msg")) { toast(q.get("msg"), 6000); history.replaceState(null, "", location.pathname + location.hash); }
-  go((location.hash || "#signal").slice(1));
+  applyWS();
+  go((location.hash || (WS.mk === "IN" ? "#signal" : "#markets")).slice(1));
 }
+/* ---- market workspace: India F&O, Crypto or US. Each shows only its own tabs and data. ---- */
+const WS = {mk: localStorage.getItem("ws") || "IN"};
+const WS_IN = new Set(["signal", "chain", "portfolio", "context", "stocks", "recs", "journal", "data", "backtest", "research", "rules", "stockrules", "settings"]);
+const WS_GLOBAL = new Set(["markets"]);
+const wsAllows = t => WS.mk === "IN" ? !WS_GLOBAL.has(t) : !WS_IN.has(t);
+function applyWS() {
+  document.querySelectorAll("#wsSwitch .seg").forEach(b => b.classList.toggle("on", b.dataset.ws === WS.mk));
+  document.body.dataset.ws = WS.mk;
+  let grp = null, any = false;
+  const close = () => { if (grp) grp.classList.toggle("hidden", !any); };
+  document.querySelectorAll("#tabs > *").forEach(el => {
+    if (el.classList.contains("grp")) { close(); grp = el; any = false; return; }
+    if (el.tagName !== "BUTTON") return;
+    const ok = wsAllows(el.dataset.t); el.classList.toggle("hidden", !ok); if (ok) any = true;
+  });
+  close();
+  const mb = document.querySelector('#tabs button[data-t="markets"] .lb'); if (mb) mb.textContent = WS.mk === "CRYPTO" ? "Crypto dashboard" : "US dashboard";
+  ["#symbol", "#srcPill"].forEach(q => { const e = $(q); if (e) e.classList.toggle("hidden", WS.mk !== "IN"); });
+  if (WS.mk !== "IN") { GX.mk = WS.mk; LX.mk = WS.mk; } else { LX.mk = "IN"; }
+}
+$("#wsSwitch").onclick = e => {
+  const b = e.target.closest("button"); if (!b || b.dataset.ws === WS.mk) return;
+  WS.mk = b.dataset.ws; localStorage.setItem("ws", WS.mk); applyWS(); SX.edit = null; SX.bt = null;
+  go(wsAllows(S.tab) ? S.tab : (WS.mk === "IN" ? "signal" : "markets"));
+};
 function go(t) {
   if (!document.getElementById("t-" + t)) t = "signal";
+  if (!wsAllows(t)) t = WS.mk === "IN" ? "signal" : "markets";
   S.tab = t; location.hash = t;
   document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.t === t));
   document.querySelectorAll("main section").forEach(s => s.classList.toggle("hidden", s.id !== "t-" + t));
@@ -838,7 +875,7 @@ $("#refresh").onclick = () => load();
 $("#auto").onchange = schedule;
 function schedule() {
   clearInterval(S.timer);
-  if ($("#auto").checked && ["signal", "portfolio", "chain", "recs"].includes(S.tab)) S.timer = setInterval(() => !document.hidden && load(true), 30000);
+  if ($("#auto").checked && ["signal", "portfolio", "chain", "recs", "markets"].includes(S.tab)) S.timer = setInterval(() => !document.hidden && load(true), 30000);
 }
 async function load(quiet) {
   const sec = $("#t-" + S.tab); if (!quiet) { sec.classList.add("loading"); pStart(); }
@@ -855,7 +892,7 @@ async function load(quiet) {
     else if (S.tab === "research") await loadResearch();
     else if (S.tab === "strategies") await loadStrategies();
     else if (S.tab === "learning") await loadLearning();
-    else if (S.tab === "markets") await loadMarkets();
+    else if (S.tab === "markets") await loadMarkets(quiet);
     else if (S.tab === "data") await loadData();
   } catch (e) { if (!quiet) toast(e.message); }
   finally { sec.classList.remove("loading"); if (!quiet) pDone(); hideSplash(); }
@@ -2694,7 +2731,8 @@ const kpiCard = (k, v, d = "", c = "") => `<div class="card kpi"><div class="k">
 const SX = {data: null, edit: null, bt: null, btFor: null, imp: null, busy: false};
 async function loadStrategies() { SX.data = await api("/api/strategies"); renderStrategies(); }
 function blankSpec() {
-  return {name: "", about: "", market: "IN", symbols: ["NIFTY"], timeframe: "15m", direction: "both", hold: "intraday", enabled: false, auto: false, watch: false,
+  const g = typeof WS !== "undefined" && WS.mk !== "IN";
+  return {name: "", about: "", market: g ? WS.mk : "IN", symbols: g ? [WS.mk === "CRYPTO" ? "BTCUSDT" : "SPY"] : ["NIFTY"], timeframe: g ? "1h" : "15m", direction: "both", hold: g ? "swing" : "intraday", enabled: false, auto: false, watch: false,
     long: {all: [{l: {ind: "ema", n: 9}, op: "crosses_above", r: {ind: "ema", n: 21}}], any: []}, short: {all: [{l: {ind: "ema", n: 9}, op: "crosses_below", r: {ind: "ema", n: 21}}], any: []},
     exit: {stop_atr: 1.5, atr_n: 14, target_r: 2, trail_atr: null, breakeven_r: null, after_target_trail: null, time_stop_bars: null, exit_on_opposite: false},
     filters: {start: "09:45", end: "14:15", max_trades_day: 2, vix_min: null, vix_max: null}};
@@ -2709,10 +2747,11 @@ function condText(c) {
   return `${opd(c.l)} ${meta.ops[c.op] || c.op} ${c.op === "rising" || c.op === "falling" ? c.r.value + " bars" : opd(c.r)}`;
 }
 function renderStrategies() {
-  const d = SX.data, el = $("#sxBody"); if (!d) return;
+  const el = $("#sxBody"); if (!SX.data) return;
+  const d = {...SX.data, items: SX.data.items.filter(x => x.market === WS.mk), presets: SX.data.presets.filter(x => x.market === WS.mk)};
   const learn = {off: "Off", safe: "Safe", full: "Full"}[d.learn_mode] || d.learn_mode;
   el.innerHTML = `
-  <div class="pagehead"><div><h2>Strategy lab</h2><p class="muted">Build your own rules from indicators, test them on past prices, then let them paper-trade. Learning mode: <b>${learn}</b> (change it in the Learning tab).</p></div>
+  <div class="pagehead"><div><h2>Strategy lab · ${tabs[WS.mk]}</h2><p class="muted">Showing only ${tabs[WS.mk]} strategies (switch market at the top). Build your own rules from indicators, test them on past prices, then let them paper-trade. Learning mode: <b>${learn}</b> (change it in the Learning tab).</p></div>
     <div class="row"><button class="primary" id="sxNew">+ New strategy</button></div></div>
   ${SX.edit ? editorHtml() : ""}
   <div class="grid g2" style="margin-top:16px">
@@ -2722,7 +2761,7 @@ function renderStrategies() {
     </div>
     <div>
       <h3 class="sect">Templates</h3>
-      ${d.presets.map((p, i) => `<div class="card tpl"><div class="row between"><b>${esc(p.name)}</b><span class="tag">${esc(p.market)} · ${esc(p.timeframe)}</span></div><p class="muted" style="margin:6px 0 10px">${esc(p.about)}</p><button data-tpl="${i}">Use this template</button></div>`).join("")}
+      ${d.presets.map((p, i) => `<div class="card tpl"><div class="row between"><b>${esc(p.name)}</b><span class="tag">${esc(p.market)} · ${esc(p.timeframe)}</span></div><p class="muted" style="margin:6px 0 10px">${esc(p.about)}</p><button data-tpl="${SX.data.presets.indexOf(p)}">Use this template</button></div>`).join("")}
     </div>
   </div>
   <div id="sxBt">${btHtml()}</div>`;
@@ -2891,8 +2930,8 @@ function renderLearning() {
   const mktBtn = k => `<button class="seg ${LX.mk === k ? "on" : ""}" data-lmk="${k}">${k ? tabs[k] : "All markets"}</button>`;
   const pend = (d.changes || []).filter(c => c.status === "pending");
   el.innerHTML = `
-  <div class="pagehead"><div><h2>Learning</h2><p class="muted">After every trade it writes a lesson; after every close it studies the day. Rules it adds are small, evidence-based, logged, and expire on their own.</p></div>
-    <div class="row"><div class="segs">${["", "IN", "CRYPTO", "US"].map(mktBtn).join("")}</div><button id="lxRun">Run after-close research now</button></div></div>
+  <div class="pagehead"><div><h2>Learning · ${tabs[WS.mk]}</h2><p class="muted">After every trade it writes a lesson; after every close it studies the day. Rules it adds are small, evidence-based, logged, and expire on their own.</p></div>
+    <div class="row"><button id="lxRun">Run after-close research now</button></div></div>
   <div class="card"><div class="row between wrap"><h3 style="margin:0">Autonomy · ${LX.mk ? tabs[LX.mk] : "all markets"}</h3><div class="segs">${Object.entries(modes).map(([k, v]) => `<button class="seg ${d.mode === k ? "on" : ""}" data-lmode="${k}">${v[0]}</button>`).join("")}</div></div>
     <p class="muted" style="margin:10px 0 0">${modes[d.mode][1]}</p>
     <p class="muted" style="margin:6px 0 0;font-size:12.5px">${LX.mk ? `This switch only affects ${tabs[LX.mk]}.` : "Each market has its own switch (pick a market above); setting it here sets all three."} Now: ${["IN", "CRYPTO", "US"].map(k => `${tabs[k]} <b>${(modes[(d.modes || {})[k]] || [k])[0]}</b>`).join(" · ")}</p>
@@ -2921,8 +2960,60 @@ document.addEventListener("click", async e => {
 });
 
 /* ------------------------------ Global markets (crypto / US) ------------------------------ */
-const GX = {mk: localStorage.getItem("gmk") || "CRYPTO", data: null};
-async function loadMarkets() { GX.data = await api("/api/gbook?market=" + GX.mk); renderMarkets(); }
+const GX = {mk: localStorage.getItem("gmk") || "CRYPTO", data: null, sym: {}, tf: localStorage.getItem("gxtf") || "5m", chart: null, ser: null, lines: [], pls: [], key: null};
+async function loadMarkets(quiet) {
+  if (WS.mk !== "IN") GX.mk = WS.mk;
+  const [d] = await Promise.all([api("/api/gbook?market=" + GX.mk), loadGxChart(quiet)]);
+  GX.data = d; renderMarkets();
+}
+const GX_TF = {"1m": "1 min", "5m": "5 min", "15m": "15 min", "1h": "1 hour", "4h": "4 hours", "1d": "1 day"};
+function gxMakeChart() {
+  if (GX.chart) return;
+  const el = $("#gxChart");
+  GX.chart = LightweightCharts.createChart(el, {...CH_OPTS, timeScale: {...CH_OPTS.timeScale, rightOffset: 4, barSpacing: 7}, localization: {timeFormatter: t => new Date(t * 1000).toLocaleString("en-IN", {day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", hour12: false})}});
+  GX.ser = GX.chart.addCandlestickSeries(CANDLE);
+  GX.vol = GX.chart.addHistogramSeries({priceFormat: {type: "volume"}, priceScaleId: "vol", color: "rgba(143,163,176,.35)"});
+  GX.chart.priceScale("vol").applyOptions({scaleMargins: {top: 0.82, bottom: 0}});
+  GX.chart.subscribeCrosshairMove(p => {
+    const b = p && p.time != null ? p.seriesData.get(GX.ser) : null, last = GX.bars && GX.bars[GX.bars.length - 1], x = b || last;
+    $("#gxLegend").innerHTML = x ? `O ${fmtN(x.open, x.open < 10 ? 4 : 2)} · H ${fmtN(x.high, x.high < 10 ? 4 : 2)} · L ${fmtN(x.low, x.low < 10 ? 4 : 2)} · C <b class="${x.close >= x.open ? "up" : "down"}">${fmtN(x.close, x.close < 10 ? 4 : 2)}</b>` : "";
+  });
+}
+async function loadGxChart(quiet) {
+  const mk = GX.mk, sym = GX.sym[mk] || (mk === "CRYPTO" ? "BTCUSDT" : "SPY"), tf = GX.tf;
+  gxMakeChart();
+  let r;
+  try { r = await api(`/api/gbook/chart?market=${mk}&symbol=${sym}&tf=${tf}`); }
+  catch (e) { $("#gxChartNote").textContent = "Chart unavailable right now: " + e.message; return; }
+  if (mk !== GX.mk) return;
+  $("#gxSym").innerHTML = (r.symbols || []).map(x => `<option value="${x.id}" ${x.id === sym ? "selected" : ""}>${esc(x.label)} (${esc(x.id.replace("USDT", ""))})</option>`).join("");
+  $("#gxTf").innerHTML = (r.timeframes || []).map(t => `<button class="seg ${t === tf ? "on" : ""}" data-gtf="${t}">${t}</button>`).join("");
+  $("#gxChartTitle").textContent = `${(r.symbols.find(x => x.id === sym) || {label: sym}).label} · ${GX_TF[tf]} candles`;
+  const bars = r.candles || []; GX.bars = bars;
+  const key = mk + sym + tf, scrolled = GX.key === key ? GX.chart.timeScale().getVisibleLogicalRange() : null;
+  GX.ser.setData(bars.map(b => ({time: b.time, open: b.open, high: b.high, low: b.low, close: b.close})));
+  GX.vol.setData(bars.map(b => ({time: b.time, value: b.volume, color: b.close >= b.open ? "rgba(63,191,143,.35)" : "rgba(226,103,90,.35)"})));
+  GX.lines.forEach(l => GX.chart.removeSeries(l)); GX.lines = [];
+  const pal = ["#f2a93b", "#7fb4d9", "#b48ee8"];
+  (r.lines || []).forEach((ln, i) => {
+    const s2 = GX.chart.addLineSeries({lineWidth: 2, color: pal[i % pal.length], priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false, title: ""});
+    s2.setData(ln.points); GX.lines.push(s2);
+  });
+  GX.pls.forEach(pl => GX.ser.removePriceLine(pl)); GX.pls = [];
+  (r.positions || []).forEach(p => {
+    const add = (price, color, title, st) => price != null && GX.pls.push(GX.ser.createPriceLine({price, color, title, lineWidth: 1, lineStyle: st, axisLabelVisible: true}));
+    add(p.entry, "#8fa3b0", `Entry (${p.side})`, 2); add(p.stop, "#e2675a", "Stop", 0); add(p.target, "#3fbf8f", "Target", 0);
+  });
+  GX.ser.setMarkers((r.markers || []).map(m => ({time: m.time, position: m.kind === "in" ? (m.side === "long" ? "belowBar" : "aboveBar") : (m.side === "long" ? "aboveBar" : "belowBar"),
+    color: m.kind === "in" ? (m.side === "long" ? "#3fbf8f" : "#e2675a") : "#8fa3b0", shape: m.kind === "in" ? (m.side === "long" ? "arrowUp" : "arrowDown") : "circle", text: m.text})));
+  if (GX.key !== key) { GX.key = key; const n = bars.length; if (n > 160) GX.chart.timeScale().setVisibleLogicalRange({from: n - 150, to: n + 4}); else GX.chart.timeScale().fitContent(); }
+  else if (scrolled) GX.chart.timeScale().setVisibleLogicalRange(scrolled);
+  const ln = (r.lines || []).map((l, i) => `<span style="color:${pal[i % pal.length]}">━</span> ${esc(l.name)}`).join(" · ");
+  $("#gxChartNote").innerHTML = `${bars.length} candles from ${mk === "CRYPTO" ? "Binance (Bybit if Binance is down)" : "Yahoo Finance (delayed)"}; refreshes every 30 s with Auto on. ${ln ? "Lines: " + ln + ". " : (tf === "4h" || tf === "1d" ? "" : "The autopilot rules run on 4h and daily bars; switch to those to see their lines. ")}Arrows = this book's entries, dots = exits.`;
+  $("#gxLegend").innerHTML = "";
+}
+$("#gxSym").onchange = () => { GX.sym[GX.mk] = $("#gxSym").value; loadGxChart(); };
+$("#gxTf").onclick = e => { const b = e.target.closest("button"); if (!b) return; GX.tf = b.dataset.gtf; localStorage.setItem("gxtf", GX.tf); loadGxChart(); };
 function gxAutopilot(d) {
   const a = d.autopilot || {}, ago = d.last_tick ? Math.round((Date.now() - Date.parse(d.last_tick)) / 60000) : null;
   const run = ago == null ? "not checked yet" : ago <= 2 ? "checked just now" : `last checked ${ago} min ago`;
@@ -2946,16 +3037,15 @@ function gxScanner(d) {
   const rows = d.scanner || []; if (!rows.length) return "";
   const ago = x => { if (!x) return "none in the window"; const b = x.bars_ago; return `${x.side === "long" ? "buy" : "sell"} · ${esc(x.at.slice(0, 16).replace("T", " "))} UTC (${b} bar${b === 1 ? "" : "s"} ago)`; };
   return `<div class="card" style="margin-bottom:14px"><h3>Live scanner <span class="muted" style="font-weight:400;font-size:13px">— checked every minute; a trade opens by itself the moment a level below is hit on a finished bar</span></h3>
-  <div class="tablewrap"><table><tr><th>Symbol</th><th>Rule</th><th>Price</th><th>Last signal</th><th>Status / next entry</th></tr>${rows.map(r => r.error ? `<tr><td>${esc(r.symbol || "")}</td><td colspan="4" class="muted">${esc(r.rule || "")} ${esc(r.error)}</td></tr>`
+  <div class="tablewrap"><table class="prose"><tr><th>Symbol</th><th>Rule</th><th>Price</th><th>Last signal</th><th>Status / next entry</th></tr>${rows.map(r => r.error ? `<tr><td>${esc(r.symbol || "")}</td><td colspan="4" class="muted">${esc(r.rule || "")} ${esc(r.error)}</td></tr>`
     : !r.rule ? `<tr><td><b>${esc(r.symbol)}</b></td><td colspan="4" class="muted">${esc(r.note)}</td></tr>`
     : `<tr><td><b>${esc(r.symbol)}</b></td><td>${esc(r.rule)}</td><td class="mono">${fmtN(r.price)}</td><td class="muted">${ago(r.last_signal)}</td><td>${r.in_position ? `<span class="${r.in_position === "long" ? "up" : "down"}">In a ${esc(r.in_position)} trade</span>` : esc((r.next || []).join(" · ") || "waiting")}</td></tr>`).join("")}</table></div></div>`;
 }
 function renderMarkets() {
   const d = GX.data, el = $("#gxBody"); if (!d) return; const cur = d.currency, p = d.prefs || {}, st = d.stats || {};
-  el.innerHTML = `
-  <div class="pagehead"><div><h2>Global markets</h2><p class="muted">Separate paper accounts in ${cur}. They are kept apart from the India F&O account and from each other: own money, own rules, own settings. They trade your own strategies set to Auto; with none on Auto, the built-in crypto/US autopilot (separate from the India F&O autopilot switch) trades only the rules that pass its weekly check. ${GX.mk === "CRYPTO" ? "Crypto runs around the clock." : "US stocks trade 7:00 pm – 1:30 am IST (9:30 am – 4:00 pm New York)."}</p></div>
-    <div class="segs">${["CRYPTO", "US"].map(k => `<button class="seg ${GX.mk === k ? "on" : ""}" data-gmk="${k}">${tabs[k]}</button>`).join("")}</div></div>
-  ${gxAutopilot(d)}${gxScanner(d)}${gxLab(d)}
+  $("#gxHead").innerHTML = `<div class="pagehead"><div><h2>${tabs[GX.mk]} dashboard</h2><p class="muted">Paper account in ${cur}, fully separate from India F&O: own money, rules, settings and learning. Your own ${tabs[GX.mk]} strategies set to Auto trade first; with none on Auto, the built-in autopilot trades only the rules that pass its weekly check. ${GX.mk === "CRYPTO" ? "Crypto runs around the clock." : "US stocks trade 7:00 pm – 1:30 am IST (9:30 am – 4:00 pm New York)."}</p></div>
+</div>`;
+  el.innerHTML = `${gxAutopilot(d)}${gxScanner(d)}${gxLab(d)}
   <div class="grid g4">${kpiCard("Account value", money(d.equity, cur), `started with ${money(d.capital_start, cur)}`)}${kpiCard("Available", money(d.cash, cur), `${d.positions.length} open`)}${kpiCard("Realised", money(d.realised, cur), `${st.trades || 0} closed trades`, cls(d.realised))}${kpiCard("Open profit", money(d.unrealised, cur), "right now", cls(d.unrealised))}</div>
   <div class="grid g2" style="margin-top:14px">
     <div class="card"><h3>Account curve</h3><canvas id="gxCurve" class="flowcv" style="height:200px"></canvas>

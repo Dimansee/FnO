@@ -725,6 +725,14 @@ def gbook_get():
     return jsonify(SV.clean(GB.portfolio(m)))
 
 
+@app.get("/api/gbook/chart")
+def gbook_chart():
+    try:
+        return jsonify(SV.clean(GB.chart(_mk(), request.args.get("symbol", ""), request.args.get("tf", "5m"))))
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+
+
 @app.post("/api/gbook/prefs")
 def gbook_prefs():
     b = request.get_json(force=True) or {}
