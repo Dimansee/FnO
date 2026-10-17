@@ -1,0 +1,47 @@
+name: research-all-stocks
+# On demand: 6 years of daily data for every investable NSE stock (not only the Nifty 500), then test whether the stock
+# rule and the opening-dip setup hold outside the Nifty 500. Results -> research-data: research/data/all_stocks_research.json.
+# The 6-year data file goes to the single-commit `stock-data-6y` branch (force-pushed) for later research.
+on:
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency:
+  group: research-all-stocks
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research-data
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install yfinance pandas requests numpy
+      - run: mkdir -p research/work
+      - run: python research/fetch_all_6y.py
+      - run: python research/all_stocks_research.py
+      - name: commit results
+        run: |
+          git config user.name "fno-data-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/data/all_stocks_research.json
+          git commit -m "all-stocks research results [skip ci]" || echo "nothing to commit"
+          git pull --rebase -q origin research-data || true
+          git push origin HEAD:research-data
+      - name: publish 6y data to the stock-data-6y branch
+        run: |
+          set -e
+          D=$(mktemp -d)
+          cp research/work/all_6y.csv.gz research/work/all_list.csv "$D"/
+          cp research/work/price_bands.csv "$D"/ 2>/dev/null || true
+          cd "$D"
+          git init -q -b stock-data-6y
+          git config user.name "fno-data-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -q -m "all NSE EQ stocks, 6y daily $(date -u +%F)"
+          git push -q --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" stock-data-6y
