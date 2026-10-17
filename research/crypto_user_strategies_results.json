@@ -1,0 +1,2562 @@
+{
+ "rows": [
+  {
+   "strategy": "India Noise band (5m, 30-min checks)",
+   "design": {
+    "n": 5166,
+    "win": 15.4,
+    "avg_pct": -0.184,
+    "avg_R": -0.803,
+    "pf": 0.57,
+    "sum_pct": -952.5,
+    "t": -10.22
+   },
+   "unseen": {
+    "n": 6189,
+    "win": 16.9,
+    "avg_pct": -0.132,
+    "avg_R": -0.73,
+    "pf": 0.64,
+    "sum_pct": -814.1,
+    "t": -8.87
+   },
+   "unseen_before_costs": {
+    "n": 6189,
+    "win": 22.5,
+    "avg_pct": 0.028,
+    "avg_R": -0.73,
+    "pf": 1.12,
+    "sum_pct": 176.1,
+    "t": 1.92
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 1187,
+     "win": 16.4,
+     "avg_pct": -0.11,
+     "avg_R": -0.921,
+     "pf": 0.61,
+     "sum_pct": -130.9,
+     "t": -4.53
+    },
+    "ETHUSDT": {
+     "n": 1235,
+     "win": 17.9,
+     "avg_pct": -0.095,
+     "avg_R": -0.456,
+     "pf": 0.75,
+     "sum_pct": -117.8,
+     "t": -2.53
+    },
+    "SOLUSDT": {
+     "n": 1252,
+     "win": 18.4,
+     "avg_pct": -0.153,
+     "avg_R": -0.629,
+     "pf": 0.63,
+     "sum_pct": -191.4,
+     "t": -4.52
+    },
+    "BNBUSDT": {
+     "n": 1258,
+     "win": 15.2,
+     "avg_pct": -0.155,
+     "avg_R": -0.889,
+     "pf": 0.53,
+     "sum_pct": -194.5,
+     "t": -5.51
+    },
+    "XRPUSDT": {
+     "n": 1257,
+     "win": 16.5,
+     "avg_pct": -0.143,
+     "avg_R": -0.759,
+     "pf": 0.65,
+     "sum_pct": -179.6,
+     "t": -3.67
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "India Camarilla H4/L4 breakout (5m, all day)",
+   "design": {
+    "n": 1562,
+    "win": 15.9,
+    "avg_pct": -0.197,
+    "avg_R": -0.165,
+    "pf": 0.65,
+    "sum_pct": -307.5,
+    "t": -4.87
+   },
+   "unseen": {
+    "n": 1942,
+    "win": 17.4,
+    "avg_pct": -0.117,
+    "avg_R": -0.174,
+    "pf": 0.74,
+    "sum_pct": -227.3,
+    "t": -3.73
+   },
+   "unseen_before_costs": {
+    "n": 1942,
+    "win": 22.1,
+    "avg_pct": 0.043,
+    "avg_R": -0.174,
+    "pf": 1.14,
+    "sum_pct": 83.4,
+    "t": 1.37
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 394,
+     "win": 15.0,
+     "avg_pct": -0.112,
+     "avg_R": -0.229,
+     "pf": 0.69,
+     "sum_pct": -44.2,
+     "t": -2.24
+    },
+    "ETHUSDT": {
+     "n": 378,
+     "win": 20.4,
+     "avg_pct": -0.031,
+     "avg_R": -0.107,
+     "pf": 0.94,
+     "sum_pct": -11.8,
+     "t": -0.35
+    },
+    "SOLUSDT": {
+     "n": 397,
+     "win": 19.6,
+     "avg_pct": -0.134,
+     "avg_R": -0.128,
+     "pf": 0.74,
+     "sum_pct": -53.4,
+     "t": -1.64
+    },
+    "BNBUSDT": {
+     "n": 392,
+     "win": 15.6,
+     "avg_pct": -0.149,
+     "avg_R": -0.27,
+     "pf": 0.61,
+     "sum_pct": -58.6,
+     "t": -2.68
+    },
+    "XRPUSDT": {
+     "n": 381,
+     "win": 16.3,
+     "avg_pct": -0.156,
+     "avg_R": -0.131,
+     "pf": 0.68,
+     "sum_pct": -59.3,
+     "t": -2.26
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "India Camarilla H4/L4 breakout (5m, first 12h UTC)",
+   "design": {
+    "n": 747,
+    "win": 11.5,
+    "avg_pct": -0.203,
+    "avg_R": -0.165,
+    "pf": 0.63,
+    "sum_pct": -151.8,
+    "t": -3.45
+   },
+   "unseen": {
+    "n": 946,
+    "win": 10.6,
+    "avg_pct": -0.171,
+    "avg_R": -0.215,
+    "pf": 0.62,
+    "sum_pct": -162.1,
+    "t": -3.8
+   },
+   "unseen_before_costs": {
+    "n": 946,
+    "win": 15.0,
+    "avg_pct": -0.011,
+    "avg_R": -0.215,
+    "pf": 0.96,
+    "sum_pct": -10.8,
+    "t": -0.25
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 188,
+     "win": 10.6,
+     "avg_pct": -0.096,
+     "avg_R": -0.16,
+     "pf": 0.7,
+     "sum_pct": -18.1,
+     "t": -1.4
+    },
+    "ETHUSDT": {
+     "n": 180,
+     "win": 12.2,
+     "avg_pct": -0.104,
+     "avg_R": -0.152,
+     "pf": 0.78,
+     "sum_pct": -18.7,
+     "t": -0.74
+    },
+    "SOLUSDT": {
+     "n": 192,
+     "win": 11.5,
+     "avg_pct": -0.294,
+     "avg_R": -0.216,
+     "pf": 0.48,
+     "sum_pct": -56.5,
+     "t": -2.79
+    },
+    "BNBUSDT": {
+     "n": 204,
+     "win": 9.3,
+     "avg_pct": -0.138,
+     "avg_R": -0.306,
+     "pf": 0.64,
+     "sum_pct": -28.2,
+     "t": -1.66
+    },
+    "XRPUSDT": {
+     "n": 182,
+     "win": 9.3,
+     "avg_pct": -0.223,
+     "avg_R": -0.234,
+     "pf": 0.54,
+     "sum_pct": -40.7,
+     "t": -2.29
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "D1 break reversal, target opposite D1 level (5m)",
+   "design": {
+    "n": 1337,
+    "win": 18.0,
+    "avg_pct": -0.096,
+    "avg_R": -0.4,
+    "pf": 0.82,
+    "sum_pct": -128.3,
+    "t": -2.22
+   },
+   "unseen": {
+    "n": 1574,
+    "win": 15.4,
+    "avg_pct": -0.116,
+    "avg_R": -0.636,
+    "pf": 0.75,
+    "sum_pct": -182.1,
+    "t": -2.89
+   },
+   "unseen_before_costs": {
+    "n": 1574,
+    "win": 15.8,
+    "avg_pct": 0.044,
+    "avg_R": -0.636,
+    "pf": 1.14,
+    "sum_pct": 69.7,
+    "t": 1.11
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 312,
+     "win": 14.7,
+     "avg_pct": -0.144,
+     "avg_R": -0.873,
+     "pf": 0.62,
+     "sum_pct": -44.8,
+     "t": -2.19
+    },
+    "ETHUSDT": {
+     "n": 303,
+     "win": 17.2,
+     "avg_pct": -0.185,
+     "avg_R": -0.584,
+     "pf": 0.63,
+     "sum_pct": -55.9,
+     "t": -2.37
+    },
+    "SOLUSDT": {
+     "n": 329,
+     "win": 12.8,
+     "avg_pct": -0.13,
+     "avg_R": -0.53,
+     "pf": 0.76,
+     "sum_pct": -42.8,
+     "t": -1.26
+    },
+    "BNBUSDT": {
+     "n": 312,
+     "win": 19.2,
+     "avg_pct": 0.022,
+     "avg_R": -0.424,
+     "pf": 1.06,
+     "sum_pct": 7.0,
+     "t": 0.31
+    },
+    "XRPUSDT": {
+     "n": 318,
+     "win": 13.5,
+     "avg_pct": -0.143,
+     "avg_R": -0.767,
+     "pf": 0.72,
+     "sum_pct": -45.6,
+     "t": -1.24
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "D1 break reversal, 2R target (5m)",
+   "design": {
+    "n": 1337,
+    "win": 35.2,
+    "avg_pct": -0.161,
+    "avg_R": -0.459,
+    "pf": 0.63,
+    "sum_pct": -215.2,
+    "t": -6.15
+   },
+   "unseen": {
+    "n": 1574,
+    "win": 32.7,
+    "avg_pct": -0.15,
+    "avg_R": -0.651,
+    "pf": 0.59,
+    "sum_pct": -236.1,
+    "t": -7.74
+   },
+   "unseen_before_costs": {
+    "n": 1574,
+    "win": 34.5,
+    "avg_pct": 0.01,
+    "avg_R": -0.651,
+    "pf": 1.04,
+    "sum_pct": 15.8,
+    "t": 0.52
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 312,
+     "win": 31.1,
+     "avg_pct": -0.168,
+     "avg_R": -0.854,
+     "pf": 0.45,
+     "sum_pct": -52.4,
+     "t": -5.77
+    },
+    "ETHUSDT": {
+     "n": 303,
+     "win": 35.0,
+     "avg_pct": -0.153,
+     "avg_R": -0.472,
+     "pf": 0.62,
+     "sum_pct": -46.5,
+     "t": -3.59
+    },
+    "SOLUSDT": {
+     "n": 329,
+     "win": 32.2,
+     "avg_pct": -0.146,
+     "avg_R": -0.513,
+     "pf": 0.66,
+     "sum_pct": -48.0,
+     "t": -2.67
+    },
+    "BNBUSDT": {
+     "n": 312,
+     "win": 36.9,
+     "avg_pct": -0.076,
+     "avg_R": -0.697,
+     "pf": 0.72,
+     "sum_pct": -23.8,
+     "t": -2.19
+    },
+    "XRPUSDT": {
+     "n": 318,
+     "win": 28.6,
+     "avg_pct": -0.206,
+     "avg_R": -0.722,
+     "pf": 0.52,
+     "sum_pct": -65.4,
+     "t": -4.25
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "Chandelier Exit 1/2 (5m)",
+   "design": {
+    "n": 49315,
+    "win": 23.0,
+    "avg_pct": -0.159,
+    "avg_R": -0.48,
+    "pf": 0.53,
+    "sum_pct": -7838.3,
+    "t": -43.96
+   },
+   "unseen": {
+    "n": 65520,
+    "win": 20.4,
+    "avg_pct": -0.163,
+    "avg_R": -0.662,
+    "pf": 0.44,
+    "sum_pct": -10709.1,
+    "t": -68.84
+   },
+   "unseen_before_costs": {
+    "n": 65520,
+    "win": 32.9,
+    "avg_pct": -0.003,
+    "avg_R": -0.662,
+    "pf": 0.98,
+    "sum_pct": -225.9,
+    "t": -1.45
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 15009,
+     "win": 15.8,
+     "avg_pct": -0.165,
+     "avg_R": -1.041,
+     "pf": 0.3,
+     "sum_pct": -2480.9,
+     "t": -51.84
+    },
+    "ETHUSDT": {
+     "n": 12599,
+     "win": 21.1,
+     "avg_pct": -0.162,
+     "avg_R": -0.57,
+     "pf": 0.47,
+     "sum_pct": -2034.9,
+     "t": -27.34
+    },
+    "SOLUSDT": {
+     "n": 11733,
+     "win": 24.0,
+     "avg_pct": -0.159,
+     "avg_R": -0.405,
+     "pf": 0.54,
+     "sum_pct": -1868.5,
+     "t": -21.89
+    },
+    "BNBUSDT": {
+     "n": 13903,
+     "win": 19.4,
+     "avg_pct": -0.162,
+     "avg_R": -0.724,
+     "pf": 0.36,
+     "sum_pct": -2252.3,
+     "t": -41.04
+    },
+    "XRPUSDT": {
+     "n": 12276,
+     "win": 22.9,
+     "avg_pct": -0.169,
+     "avg_R": -0.467,
+     "pf": 0.49,
+     "sum_pct": -2072.4,
+     "t": -26.6
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "Chandelier Exit + ZLSMA 50 (5m)",
+   "design": {
+    "n": 37176,
+    "win": 23.1,
+    "avg_pct": -0.156,
+    "avg_R": -0.462,
+    "pf": 0.47,
+    "sum_pct": -5810.5,
+    "t": -45.82
+   },
+   "unseen": {
+    "n": 48366,
+    "win": 20.5,
+    "avg_pct": -0.161,
+    "avg_R": -0.615,
+    "pf": 0.38,
+    "sum_pct": -7809.1,
+    "t": -72.55
+   },
+   "unseen_before_costs": {
+    "n": 48366,
+    "win": 34.8,
+    "avg_pct": -0.001,
+    "avg_R": -0.615,
+    "pf": 0.99,
+    "sum_pct": -70.6,
+    "t": -0.66
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 10609,
+     "win": 16.5,
+     "avg_pct": -0.16,
+     "avg_R": -0.94,
+     "pf": 0.27,
+     "sum_pct": -1695.6,
+     "t": -49.12
+    },
+    "ETHUSDT": {
+     "n": 9406,
+     "win": 20.8,
+     "avg_pct": -0.164,
+     "avg_R": -0.551,
+     "pf": 0.41,
+     "sum_pct": -1540.4,
+     "t": -29.51
+    },
+    "SOLUSDT": {
+     "n": 8974,
+     "win": 24.3,
+     "avg_pct": -0.164,
+     "avg_R": -0.396,
+     "pf": 0.46,
+     "sum_pct": -1469.7,
+     "t": -26.25
+    },
+    "BNBUSDT": {
+     "n": 10080,
+     "win": 19.2,
+     "avg_pct": -0.156,
+     "avg_R": -0.677,
+     "pf": 0.33,
+     "sum_pct": -1572.1,
+     "t": -40.0
+    },
+    "XRPUSDT": {
+     "n": 9297,
+     "win": 22.6,
+     "avg_pct": -0.165,
+     "avg_R": -0.45,
+     "pf": 0.43,
+     "sum_pct": -1531.3,
+     "t": -28.0
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "Chandelier Exit 1/2 (15m)",
+   "design": {
+    "n": 14074,
+    "win": 27.0,
+    "avg_pct": -0.167,
+    "avg_R": -0.243,
+    "pf": 0.69,
+    "sum_pct": -2353.7,
+    "t": -13.7
+   },
+   "unseen": {
+    "n": 18672,
+    "win": 24.9,
+    "avg_pct": -0.162,
+    "avg_R": -0.318,
+    "pf": 0.64,
+    "sum_pct": -3021.0,
+    "t": -19.16
+   },
+   "unseen_before_costs": {
+    "n": 18672,
+    "win": 31.8,
+    "avg_pct": -0.002,
+    "avg_R": -0.318,
+    "pf": 0.99,
+    "sum_pct": -33.5,
+    "t": -0.21
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 4056,
+     "win": 22.2,
+     "avg_pct": -0.165,
+     "avg_R": -0.485,
+     "pf": 0.52,
+     "sum_pct": -669.5,
+     "t": -14.07
+    },
+    "ETHUSDT": {
+     "n": 3511,
+     "win": 25.0,
+     "avg_pct": -0.146,
+     "avg_R": -0.236,
+     "pf": 0.7,
+     "sum_pct": -511.8,
+     "t": -6.4
+    },
+    "SOLUSDT": {
+     "n": 3512,
+     "win": 27.3,
+     "avg_pct": -0.155,
+     "avg_R": -0.219,
+     "pf": 0.72,
+     "sum_pct": -545.1,
+     "t": -6.54
+    },
+    "BNBUSDT": {
+     "n": 3985,
+     "win": 23.8,
+     "avg_pct": -0.171,
+     "avg_R": -0.369,
+     "pf": 0.55,
+     "sum_pct": -682.8,
+     "t": -12.64
+    },
+    "XRPUSDT": {
+     "n": 3608,
+     "win": 26.8,
+     "avg_pct": -0.17,
+     "avg_R": -0.251,
+     "pf": 0.67,
+     "sum_pct": -611.9,
+     "t": -7.68
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "Chandelier Exit + ZLSMA 50 (15m)",
+   "design": {
+    "n": 11138,
+    "win": 27.9,
+    "avg_pct": -0.156,
+    "avg_R": -0.232,
+    "pf": 0.65,
+    "sum_pct": -1732.6,
+    "t": -14.37
+   },
+   "unseen": {
+    "n": 14368,
+    "win": 26.3,
+    "avg_pct": -0.152,
+    "avg_R": -0.297,
+    "pf": 0.6,
+    "sum_pct": -2184.3,
+    "t": -20.3
+   },
+   "unseen_before_costs": {
+    "n": 14368,
+    "win": 35.0,
+    "avg_pct": 0.008,
+    "avg_R": -0.297,
+    "pf": 1.03,
+    "sum_pct": 114.6,
+    "t": 1.06
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 3040,
+     "win": 22.8,
+     "avg_pct": -0.159,
+     "avg_R": -0.457,
+     "pf": 0.48,
+     "sum_pct": -483.4,
+     "t": -14.36
+    },
+    "ETHUSDT": {
+     "n": 2727,
+     "win": 26.5,
+     "avg_pct": -0.156,
+     "avg_R": -0.244,
+     "pf": 0.62,
+     "sum_pct": -425.0,
+     "t": -8.31
+    },
+    "SOLUSDT": {
+     "n": 2780,
+     "win": 29.2,
+     "avg_pct": -0.128,
+     "avg_R": -0.18,
+     "pf": 0.71,
+     "sum_pct": -356.5,
+     "t": -6.08
+    },
+    "BNBUSDT": {
+     "n": 3000,
+     "win": 25.0,
+     "avg_pct": -0.162,
+     "avg_R": -0.35,
+     "pf": 0.51,
+     "sum_pct": -484.7,
+     "t": -12.49
+    },
+    "XRPUSDT": {
+     "n": 2821,
+     "win": 28.3,
+     "avg_pct": -0.154,
+     "avg_R": -0.237,
+     "pf": 0.64,
+     "sum_pct": -434.8,
+     "t": -8.08
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "Chandelier Exit 1/2 (1h)",
+   "design": {
+    "n": 5955,
+    "win": 28.6,
+    "avg_pct": -0.209,
+    "avg_R": -0.117,
+    "pf": 0.79,
+    "sum_pct": -1244.6,
+    "t": -5.76
+   },
+   "unseen": {
+    "n": 4312,
+    "win": 30.3,
+    "avg_pct": -0.105,
+    "avg_R": -0.055,
+    "pf": 0.87,
+    "sum_pct": -454.1,
+    "t": -2.8
+   },
+   "unseen_before_costs": {
+    "n": 4312,
+    "win": 33.5,
+    "avg_pct": 0.055,
+    "avg_R": -0.055,
+    "pf": 1.08,
+    "sum_pct": 235.8,
+    "t": 1.46
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 900,
+     "win": 29.4,
+     "avg_pct": -0.15,
+     "avg_R": -0.134,
+     "pf": 0.75,
+     "sum_pct": -135.1,
+     "t": -2.73
+    },
+    "ETHUSDT": {
+     "n": 843,
+     "win": 29.8,
+     "avg_pct": -0.018,
+     "avg_R": -0.02,
+     "pf": 0.98,
+     "sum_pct": -15.1,
+     "t": -0.17
+    },
+    "SOLUSDT": {
+     "n": 857,
+     "win": 32.6,
+     "avg_pct": -0.089,
+     "avg_R": -0.032,
+     "pf": 0.91,
+     "sum_pct": -76.7,
+     "t": -0.91
+    },
+    "BNBUSDT": {
+     "n": 898,
+     "win": 28.5,
+     "avg_pct": -0.194,
+     "avg_R": -0.106,
+     "pf": 0.73,
+     "sum_pct": -173.8,
+     "t": -3.01
+    },
+    "XRPUSDT": {
+     "n": 814,
+     "win": 31.2,
+     "avg_pct": -0.065,
+     "avg_R": 0.029,
+     "pf": 0.93,
+     "sum_pct": -53.3,
+     "t": -0.7
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "Chandelier Exit + ZLSMA 50 (1h)",
+   "design": {
+    "n": 4691,
+    "win": 30.7,
+    "avg_pct": -0.195,
+    "avg_R": -0.124,
+    "pf": 0.75,
+    "sum_pct": -916.5,
+    "t": -6.17
+   },
+   "unseen": {
+    "n": 3342,
+    "win": 31.0,
+    "avg_pct": -0.192,
+    "avg_R": -0.144,
+    "pf": 0.71,
+    "sum_pct": -643.0,
+    "t": -6.83
+   },
+   "unseen_before_costs": {
+    "n": 3342,
+    "win": 35.5,
+    "avg_pct": -0.032,
+    "avg_R": -0.144,
+    "pf": 0.94,
+    "sum_pct": -108.3,
+    "t": -1.15
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 709,
+     "win": 28.5,
+     "avg_pct": -0.206,
+     "avg_R": -0.199,
+     "pf": 0.6,
+     "sum_pct": -145.9,
+     "t": -4.88
+    },
+    "ETHUSDT": {
+     "n": 648,
+     "win": 31.0,
+     "avg_pct": -0.138,
+     "avg_R": -0.112,
+     "pf": 0.8,
+     "sum_pct": -89.2,
+     "t": -1.87
+    },
+    "SOLUSDT": {
+     "n": 671,
+     "win": 34.9,
+     "avg_pct": -0.192,
+     "avg_R": -0.123,
+     "pf": 0.76,
+     "sum_pct": -129.1,
+     "t": -2.57
+    },
+    "BNBUSDT": {
+     "n": 703,
+     "win": 29.0,
+     "avg_pct": -0.207,
+     "avg_R": -0.15,
+     "pf": 0.65,
+     "sum_pct": -145.6,
+     "t": -4.09
+    },
+    "XRPUSDT": {
+     "n": 611,
+     "win": 31.9,
+     "avg_pct": -0.218,
+     "avg_R": -0.128,
+     "pf": 0.71,
+     "sum_pct": -133.2,
+     "t": -3.05
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "Chandelier Exit 1/2 (4h)",
+   "design": {
+    "n": 1525,
+    "win": 30.6,
+    "avg_pct": -0.177,
+    "avg_R": -0.009,
+    "pf": 0.9,
+    "sum_pct": -270.6,
+    "t": -1.25
+   },
+   "unseen": {
+    "n": 1116,
+    "win": 32.3,
+    "avg_pct": -0.015,
+    "avg_R": -0.004,
+    "pf": 0.99,
+    "sum_pct": -17.0,
+    "t": -0.1
+   },
+   "unseen_before_costs": {
+    "n": 1116,
+    "win": 34.1,
+    "avg_pct": 0.145,
+    "avg_R": -0.004,
+    "pf": 1.11,
+    "sum_pct": 161.5,
+    "t": 0.99
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 238,
+     "win": 27.7,
+     "avg_pct": -0.346,
+     "avg_R": -0.18,
+     "pf": 0.71,
+     "sum_pct": -82.4,
+     "t": -1.8
+    },
+    "ETHUSDT": {
+     "n": 226,
+     "win": 37.2,
+     "avg_pct": 0.269,
+     "avg_R": 0.036,
+     "pf": 1.18,
+     "sum_pct": 60.8,
+     "t": 0.72
+    },
+    "SOLUSDT": {
+     "n": 232,
+     "win": 34.9,
+     "avg_pct": 0.101,
+     "avg_R": 0.149,
+     "pf": 1.06,
+     "sum_pct": 23.4,
+     "t": 0.29
+    },
+    "BNBUSDT": {
+     "n": 207,
+     "win": 31.4,
+     "avg_pct": 0.188,
+     "avg_R": 0.036,
+     "pf": 1.18,
+     "sum_pct": 38.8,
+     "t": 0.67
+    },
+    "XRPUSDT": {
+     "n": 213,
+     "win": 30.5,
+     "avg_pct": -0.271,
+     "avg_R": -0.057,
+     "pf": 0.85,
+     "sum_pct": -57.7,
+     "t": -0.67
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "Chandelier Exit + ZLSMA 50 (4h)",
+   "design": {
+    "n": 1152,
+    "win": 33.4,
+    "avg_pct": -0.256,
+    "avg_R": -0.046,
+    "pf": 0.83,
+    "sum_pct": -294.4,
+    "t": -2.13
+   },
+   "unseen": {
+    "n": 845,
+    "win": 33.8,
+    "avg_pct": -0.153,
+    "avg_R": -0.054,
+    "pf": 0.87,
+    "sum_pct": -129.1,
+    "t": -1.28
+   },
+   "unseen_before_costs": {
+    "n": 845,
+    "win": 36.6,
+    "avg_pct": 0.007,
+    "avg_R": -0.054,
+    "pf": 1.01,
+    "sum_pct": 6.1,
+    "t": 0.06
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 181,
+     "win": 27.6,
+     "avg_pct": -0.487,
+     "avg_R": -0.234,
+     "pf": 0.5,
+     "sum_pct": -88.2,
+     "t": -3.53
+    },
+    "ETHUSDT": {
+     "n": 169,
+     "win": 36.1,
+     "avg_pct": 0.141,
+     "avg_R": -0.01,
+     "pf": 1.11,
+     "sum_pct": 23.8,
+     "t": 0.43
+    },
+    "SOLUSDT": {
+     "n": 175,
+     "win": 33.7,
+     "avg_pct": -0.111,
+     "avg_R": 0.025,
+     "pf": 0.92,
+     "sum_pct": -19.4,
+     "t": -0.39
+    },
+    "BNBUSDT": {
+     "n": 154,
+     "win": 35.7,
+     "avg_pct": 0.13,
+     "avg_R": 0.059,
+     "pf": 1.15,
+     "sum_pct": 20.0,
+     "t": 0.58
+    },
+    "XRPUSDT": {
+     "n": 166,
+     "win": 36.7,
+     "avg_pct": -0.393,
+     "avg_R": -0.092,
+     "pf": 0.73,
+     "sum_pct": -65.3,
+     "t": -1.2
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "SMA200 + RSI(10) pullback (1h)",
+   "design": {
+    "n": 350,
+    "win": 67.7,
+    "avg_pct": 0.032,
+    "avg_R": -0.029,
+    "pf": 1.06,
+    "sum_pct": 11.2,
+    "t": 0.36
+   },
+   "unseen": {
+    "n": 257,
+    "win": 62.3,
+    "avg_pct": 0.018,
+    "avg_R": -0.003,
+    "pf": 1.04,
+    "sum_pct": 4.7,
+    "t": 0.22
+   },
+   "unseen_before_costs": {
+    "n": 257,
+    "win": 66.9,
+    "avg_pct": 0.178,
+    "avg_R": -0.003,
+    "pf": 1.46,
+    "sum_pct": 45.8,
+    "t": 2.17
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 47,
+     "win": 57.4,
+     "avg_pct": -0.013,
+     "avg_R": 0.005,
+     "pf": 0.96,
+     "sum_pct": -0.6,
+     "t": -0.11
+    },
+    "ETHUSDT": {
+     "n": 62,
+     "win": 61.3,
+     "avg_pct": -0.019,
+     "avg_R": -0.002,
+     "pf": 0.96,
+     "sum_pct": -1.2,
+     "t": -0.1
+    },
+    "SOLUSDT": {
+     "n": 49,
+     "win": 61.2,
+     "avg_pct": -0.09,
+     "avg_R": -0.018,
+     "pf": 0.85,
+     "sum_pct": -4.4,
+     "t": -0.44
+    },
+    "BNBUSDT": {
+     "n": 58,
+     "win": 63.8,
+     "avg_pct": 0.065,
+     "avg_R": -0.015,
+     "pf": 1.19,
+     "sum_pct": 3.8,
+     "t": 0.47
+    },
+    "XRPUSDT": {
+     "n": 41,
+     "win": 68.3,
+     "avg_pct": 0.173,
+     "avg_R": 0.021,
+     "pf": 1.34,
+     "sum_pct": 7.1,
+     "t": 0.7
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "SMA200 + RSI(10) pullback (4h)",
+   "design": {
+    "n": 118,
+    "win": 62.7,
+    "avg_pct": -0.339,
+    "avg_R": -0.049,
+    "pf": 0.78,
+    "sum_pct": -40.1,
+    "t": -0.93
+   },
+   "unseen": {
+    "n": 56,
+    "win": 62.5,
+    "avg_pct": -0.473,
+    "avg_R": -0.104,
+    "pf": 0.67,
+    "sum_pct": -26.5,
+    "t": -1.14
+   },
+   "unseen_before_costs": {
+    "n": 56,
+    "win": 66.1,
+    "avg_pct": -0.313,
+    "avg_R": -0.104,
+    "pf": 0.77,
+    "sum_pct": -17.5,
+    "t": -0.75
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 13,
+     "win": 61.5,
+     "avg_pct": -1.073,
+     "avg_R": -0.234,
+     "pf": 0.25,
+     "sum_pct": -13.9,
+     "t": -1.54
+    },
+    "ETHUSDT": {
+     "n": 13,
+     "win": 69.2,
+     "avg_pct": -0.223,
+     "avg_R": -0.071,
+     "pf": 0.84,
+     "sum_pct": -2.9,
+     "t": -0.24
+    },
+    "SOLUSDT": {
+     "n": 13,
+     "win": 53.8,
+     "avg_pct": -1.559,
+     "avg_R": -0.189,
+     "pf": 0.38,
+     "sum_pct": -20.3,
+     "t": -1.4
+    },
+    "BNBUSDT": {
+     "n": 10,
+     "win": 60.0,
+     "avg_pct": 0.204,
+     "avg_R": -0.025,
+     "pf": 1.22,
+     "sum_pct": 2.0,
+     "t": 0.24
+    },
+    "XRPUSDT": {
+     "n": 7,
+     "win": 71.4,
+     "avg_pct": 1.226,
+     "avg_R": 0.119,
+     "pf": 5.79,
+     "sum_pct": 8.6,
+     "t": 2.01
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "SMA200 + RSI(10) pullback (1d)",
+   "design": {
+    "n": 12,
+    "win": 66.7,
+    "avg_pct": 4.679,
+    "avg_R": 0.095,
+    "pf": 4.49,
+    "sum_pct": 56.2,
+    "t": 1.51
+   },
+   "unseen": {
+    "n": 5,
+    "win": 80.0,
+    "avg_pct": 4.74,
+    "avg_R": 0.158,
+    "pf": 3.58,
+    "sum_pct": 23.7,
+    "t": 1.33
+   },
+   "unseen_before_costs": {
+    "n": 5,
+    "win": 80.0,
+    "avg_pct": 4.9,
+    "avg_R": 0.158,
+    "pf": 3.72,
+    "sum_pct": 24.5,
+    "t": 1.37
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 0
+    },
+    "ETHUSDT": {
+     "n": 2,
+     "win": 100.0,
+     "avg_pct": 8.707,
+     "avg_R": 0.306,
+     "pf": null,
+     "sum_pct": 17.4,
+     "t": null
+    },
+    "SOLUSDT": {
+     "n": 1,
+     "win": 100.0,
+     "avg_pct": 9.231,
+     "avg_R": 0.296,
+     "pf": null,
+     "sum_pct": 9.2,
+     "t": null
+    },
+    "BNBUSDT": {
+     "n": 2,
+     "win": 50.0,
+     "avg_pct": -1.472,
+     "avg_R": -0.059,
+     "pf": 0.68,
+     "sum_pct": -2.9,
+     "t": null
+    },
+    "XRPUSDT": {
+     "n": 0
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "5 EMA alert candle, 3R (5m)",
+   "design": {
+    "n": 45742,
+    "win": 22.0,
+    "avg_pct": -0.172,
+    "avg_R": -1.157,
+    "pf": 0.48,
+    "sum_pct": -7875.0,
+    "t": -50.3
+   },
+   "unseen": {
+    "n": 62211,
+    "win": 21.5,
+    "avg_pct": -0.17,
+    "avg_R": -1.479,
+    "pf": 0.38,
+    "sum_pct": -10588.0,
+    "t": -87.08
+   },
+   "unseen_before_costs": {
+    "n": 62211,
+    "win": 24.3,
+    "avg_pct": -0.01,
+    "avg_R": -1.479,
+    "pf": 0.93,
+    "sum_pct": -634.2,
+    "t": -5.22
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 13154,
+     "win": 18.8,
+     "avg_pct": -0.161,
+     "avg_R": -2.085,
+     "pf": 0.28,
+     "sum_pct": -2114.5,
+     "t": -58.37
+    },
+    "ETHUSDT": {
+     "n": 10946,
+     "win": 23.2,
+     "avg_pct": -0.17,
+     "avg_R": -1.146,
+     "pf": 0.44,
+     "sum_pct": -1865.7,
+     "t": -32.93
+    },
+    "SOLUSDT": {
+     "n": 13025,
+     "win": 22.5,
+     "avg_pct": -0.182,
+     "avg_R": -1.035,
+     "pf": 0.44,
+     "sum_pct": -2368.9,
+     "t": -37.82
+    },
+    "BNBUSDT": {
+     "n": 14675,
+     "win": 20.9,
+     "avg_pct": -0.161,
+     "avg_R": -1.768,
+     "pf": 0.32,
+     "sum_pct": -2367.9,
+     "t": -54.69
+    },
+    "XRPUSDT": {
+     "n": 10411,
+     "win": 22.5,
+     "avg_pct": -0.18,
+     "avg_R": -1.213,
+     "pf": 0.4,
+     "sum_pct": -1871.0,
+     "t": -28.02
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "5 EMA alert candle, 3R (15m)",
+   "design": {
+    "n": 13336,
+    "win": 22.7,
+    "avg_pct": -0.191,
+    "avg_R": -0.584,
+    "pf": 0.64,
+    "sum_pct": -2544.2,
+    "t": -17.69
+   },
+   "unseen": {
+    "n": 17991,
+    "win": 23.3,
+    "avg_pct": -0.186,
+    "avg_R": -0.729,
+    "pf": 0.57,
+    "sum_pct": -3345.7,
+    "t": -27.98
+   },
+   "unseen_before_costs": {
+    "n": 17991,
+    "win": 23.6,
+    "avg_pct": -0.026,
+    "avg_R": -0.729,
+    "pf": 0.91,
+    "sum_pct": -467.1,
+    "t": -3.91
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 3426,
+     "win": 23.6,
+     "avg_pct": -0.168,
+     "avg_R": -0.958,
+     "pf": 0.51,
+     "sum_pct": -574.1,
+     "t": -15.19
+    },
+    "ETHUSDT": {
+     "n": 3228,
+     "win": 24.7,
+     "avg_pct": -0.18,
+     "avg_R": -0.551,
+     "pf": 0.62,
+     "sum_pct": -582.5,
+     "t": -10.63
+    },
+    "SOLUSDT": {
+     "n": 3497,
+     "win": 23.4,
+     "avg_pct": -0.192,
+     "avg_R": -0.519,
+     "pf": 0.62,
+     "sum_pct": -672.6,
+     "t": -10.35
+    },
+    "BNBUSDT": {
+     "n": 4033,
+     "win": 23.1,
+     "avg_pct": -0.173,
+     "avg_R": -0.932,
+     "pf": 0.5,
+     "sum_pct": -696.9,
+     "t": -15.93
+    },
+    "XRPUSDT": {
+     "n": 3807,
+     "win": 22.1,
+     "avg_pct": -0.215,
+     "avg_R": -0.652,
+     "pf": 0.55,
+     "sum_pct": -819.5,
+     "t": -13.44
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "5 EMA alert candle, 3R (1h)",
+   "design": {
+    "n": 5859,
+    "win": 22.8,
+    "avg_pct": -0.213,
+    "avg_R": -0.343,
+    "pf": 0.76,
+    "sum_pct": -1245.5,
+    "t": -7.09
+   },
+   "unseen": {
+    "n": 4761,
+    "win": 22.7,
+    "avg_pct": -0.247,
+    "avg_R": -0.389,
+    "pf": 0.67,
+    "sum_pct": -1177.0,
+    "t": -10.49
+   },
+   "unseen_before_costs": {
+    "n": 4761,
+    "win": 22.7,
+    "avg_pct": -0.087,
+    "avg_R": -0.389,
+    "pf": 0.86,
+    "sum_pct": -415.3,
+    "t": -3.7
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 1020,
+     "win": 22.5,
+     "avg_pct": -0.221,
+     "avg_R": -0.49,
+     "pf": 0.61,
+     "sum_pct": -225.6,
+     "t": -6.58
+    },
+    "ETHUSDT": {
+     "n": 937,
+     "win": 23.9,
+     "avg_pct": -0.234,
+     "avg_R": -0.297,
+     "pf": 0.71,
+     "sum_pct": -219.0,
+     "t": -4.04
+    },
+    "SOLUSDT": {
+     "n": 1035,
+     "win": 21.4,
+     "avg_pct": -0.342,
+     "avg_R": -0.363,
+     "pf": 0.63,
+     "sum_pct": -353.7,
+     "t": -5.98
+    },
+    "BNBUSDT": {
+     "n": 956,
+     "win": 23.4,
+     "avg_pct": -0.19,
+     "avg_R": -0.43,
+     "pf": 0.69,
+     "sum_pct": -181.7,
+     "t": -4.38
+    },
+    "XRPUSDT": {
+     "n": 813,
+     "win": 22.5,
+     "avg_pct": -0.242,
+     "avg_R": -0.354,
+     "pf": 0.71,
+     "sum_pct": -197.0,
+     "t": -3.45
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "44 MA bounce, 2R (1h)",
+   "design": {
+    "n": 1422,
+    "win": 31.9,
+    "avg_pct": -0.159,
+    "avg_R": -0.298,
+    "pf": 0.8,
+    "sum_pct": -226.5,
+    "t": -3.05
+   },
+   "unseen": {
+    "n": 951,
+    "win": 32.8,
+    "avg_pct": -0.175,
+    "avg_R": -0.286,
+    "pf": 0.76,
+    "sum_pct": -166.8,
+    "t": -3.11
+   },
+   "unseen_before_costs": {
+    "n": 951,
+    "win": 32.9,
+    "avg_pct": -0.015,
+    "avg_R": -0.286,
+    "pf": 0.98,
+    "sum_pct": -14.6,
+    "t": -0.27
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 203,
+     "win": 33.0,
+     "avg_pct": -0.171,
+     "avg_R": -0.377,
+     "pf": 0.7,
+     "sum_pct": -34.6,
+     "t": -1.99
+    },
+    "ETHUSDT": {
+     "n": 218,
+     "win": 35.8,
+     "avg_pct": -0.049,
+     "avg_R": -0.18,
+     "pf": 0.93,
+     "sum_pct": -10.6,
+     "t": -0.39
+    },
+    "SOLUSDT": {
+     "n": 173,
+     "win": 30.6,
+     "avg_pct": -0.147,
+     "avg_R": -0.273,
+     "pf": 0.84,
+     "sum_pct": -25.5,
+     "t": -0.78
+    },
+    "BNBUSDT": {
+     "n": 183,
+     "win": 35.5,
+     "avg_pct": -0.202,
+     "avg_R": -0.243,
+     "pf": 0.67,
+     "sum_pct": -36.9,
+     "t": -2.28
+    },
+    "XRPUSDT": {
+     "n": 174,
+     "win": 28.2,
+     "avg_pct": -0.34,
+     "avg_R": -0.371,
+     "pf": 0.62,
+     "sum_pct": -59.2,
+     "t": -2.63
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "Inside-bar breakout, 2R (1h)",
+   "design": {
+    "n": 4400,
+    "win": 32.7,
+    "avg_pct": -0.167,
+    "avg_R": -0.212,
+    "pf": 0.83,
+    "sum_pct": -733.3,
+    "t": -4.56
+   },
+   "unseen": {
+    "n": 3300,
+    "win": 34.8,
+    "avg_pct": -0.078,
+    "avg_R": -0.178,
+    "pf": 0.9,
+    "sum_pct": -257.2,
+    "t": -2.34
+   },
+   "unseen_before_costs": {
+    "n": 3300,
+    "win": 34.8,
+    "avg_pct": 0.082,
+    "avg_R": -0.178,
+    "pf": 1.12,
+    "sum_pct": 270.8,
+    "t": 2.46
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 638,
+     "win": 33.1,
+     "avg_pct": -0.158,
+     "avg_R": -0.318,
+     "pf": 0.74,
+     "sum_pct": -101.0,
+     "t": -3.02
+    },
+    "ETHUSDT": {
+     "n": 712,
+     "win": 35.7,
+     "avg_pct": -0.04,
+     "avg_R": -0.12,
+     "pf": 0.95,
+     "sum_pct": -28.7,
+     "t": -0.52
+    },
+    "SOLUSDT": {
+     "n": 643,
+     "win": 36.7,
+     "avg_pct": 0.014,
+     "avg_R": -0.066,
+     "pf": 1.02,
+     "sum_pct": 9.2,
+     "t": 0.16
+    },
+    "BNBUSDT": {
+     "n": 676,
+     "win": 32.2,
+     "avg_pct": -0.152,
+     "avg_R": -0.287,
+     "pf": 0.78,
+     "sum_pct": -103.1,
+     "t": -2.62
+    },
+    "XRPUSDT": {
+     "n": 631,
+     "win": 36.1,
+     "avg_pct": -0.053,
+     "avg_R": -0.099,
+     "pf": 0.94,
+     "sum_pct": -33.7,
+     "t": -0.61
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "Holy Grail ADX>30 + 20 EMA (1h)",
+   "design": {
+    "n": 268,
+    "win": 31.3,
+    "avg_pct": -0.188,
+    "avg_R": -0.31,
+    "pf": 0.76,
+    "sum_pct": -50.5,
+    "t": -1.57
+   },
+   "unseen": {
+    "n": 132,
+    "win": 39.4,
+    "avg_pct": -0.047,
+    "avg_R": -0.118,
+    "pf": 0.93,
+    "sum_pct": -6.2,
+    "t": -0.3
+   },
+   "unseen_before_costs": {
+    "n": 132,
+    "win": 39.4,
+    "avg_pct": 0.113,
+    "avg_R": -0.118,
+    "pf": 1.18,
+    "sum_pct": 14.9,
+    "t": 0.72
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 26,
+     "win": 46.2,
+     "avg_pct": 0.023,
+     "avg_R": -0.087,
+     "pf": 1.04,
+     "sum_pct": 0.6,
+     "t": 0.09
+    },
+    "ETHUSDT": {
+     "n": 24,
+     "win": 33.3,
+     "avg_pct": -0.503,
+     "avg_R": -0.289,
+     "pf": 0.55,
+     "sum_pct": -12.1,
+     "t": -0.96
+    },
+    "SOLUSDT": {
+     "n": 24,
+     "win": 33.3,
+     "avg_pct": -0.135,
+     "avg_R": -0.249,
+     "pf": 0.83,
+     "sum_pct": -3.2,
+     "t": -0.37
+    },
+    "BNBUSDT": {
+     "n": 31,
+     "win": 32.3,
+     "avg_pct": -0.089,
+     "avg_R": -0.452,
+     "pf": 0.84,
+     "sum_pct": -2.7,
+     "t": -0.39
+    },
+    "XRPUSDT": {
+     "n": 27,
+     "win": 51.9,
+     "avg_pct": 0.418,
+     "avg_R": 0.503,
+     "pf": 1.66,
+     "sum_pct": 11.3,
+     "t": 1.08
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "44 MA bounce, 2R (4h)",
+   "design": {
+    "n": 306,
+    "win": 32.7,
+    "avg_pct": -0.129,
+    "avg_R": -0.129,
+    "pf": 0.92,
+    "sum_pct": -39.5,
+    "t": -0.53
+   },
+   "unseen": {
+    "n": 223,
+    "win": 31.8,
+    "avg_pct": -0.358,
+    "avg_R": -0.168,
+    "pf": 0.75,
+    "sum_pct": -79.8,
+    "t": -1.75
+   },
+   "unseen_before_costs": {
+    "n": 223,
+    "win": 31.8,
+    "avg_pct": -0.198,
+    "avg_R": -0.168,
+    "pf": 0.85,
+    "sum_pct": -44.1,
+    "t": -0.97
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 47,
+     "win": 36.2,
+     "avg_pct": -0.173,
+     "avg_R": -0.108,
+     "pf": 0.81,
+     "sum_pct": -8.1,
+     "t": -0.53
+    },
+    "ETHUSDT": {
+     "n": 53,
+     "win": 34.0,
+     "avg_pct": -0.332,
+     "avg_R": -0.082,
+     "pf": 0.8,
+     "sum_pct": -17.6,
+     "t": -0.7
+    },
+    "SOLUSDT": {
+     "n": 43,
+     "win": 30.2,
+     "avg_pct": -0.116,
+     "avg_R": -0.17,
+     "pf": 0.94,
+     "sum_pct": -5.0,
+     "t": -0.18
+    },
+    "BNBUSDT": {
+     "n": 41,
+     "win": 34.1,
+     "avg_pct": -0.268,
+     "avg_R": -0.116,
+     "pf": 0.77,
+     "sum_pct": -11.0,
+     "t": -0.73
+    },
+    "XRPUSDT": {
+     "n": 39,
+     "win": 23.1,
+     "avg_pct": -0.977,
+     "avg_R": -0.41,
+     "pf": 0.43,
+     "sum_pct": -38.1,
+     "t": -2.35
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "Inside-bar breakout, 2R (4h)",
+   "design": {
+    "n": 1138,
+    "win": 35.9,
+    "avg_pct": -0.002,
+    "avg_R": -0.019,
+    "pf": 1.0,
+    "sum_pct": -2.5,
+    "t": -0.02
+   },
+   "unseen": {
+    "n": 907,
+    "win": 36.9,
+    "avg_pct": 0.103,
+    "avg_R": -0.003,
+    "pf": 1.07,
+    "sum_pct": 93.2,
+    "t": 0.84
+   },
+   "unseen_before_costs": {
+    "n": 907,
+    "win": 36.9,
+    "avg_pct": 0.263,
+    "avg_R": -0.003,
+    "pf": 1.2,
+    "sum_pct": 238.3,
+    "t": 2.14
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 182,
+     "win": 36.3,
+     "avg_pct": 0.041,
+     "avg_R": -0.072,
+     "pf": 1.04,
+     "sum_pct": 7.5,
+     "t": 0.21
+    },
+    "ETHUSDT": {
+     "n": 194,
+     "win": 34.0,
+     "avg_pct": -0.04,
+     "avg_R": -0.079,
+     "pf": 0.97,
+     "sum_pct": -7.7,
+     "t": -0.14
+    },
+    "SOLUSDT": {
+     "n": 196,
+     "win": 39.3,
+     "avg_pct": 0.338,
+     "avg_R": 0.091,
+     "pf": 1.21,
+     "sum_pct": 66.3,
+     "t": 1.11
+    },
+    "BNBUSDT": {
+     "n": 163,
+     "win": 38.0,
+     "avg_pct": 0.1,
+     "avg_R": 0.017,
+     "pf": 1.08,
+     "sum_pct": 16.3,
+     "t": 0.4
+    },
+    "XRPUSDT": {
+     "n": 172,
+     "win": 37.2,
+     "avg_pct": 0.063,
+     "avg_R": 0.029,
+     "pf": 1.04,
+     "sum_pct": 10.8,
+     "t": 0.19
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "Holy Grail ADX>30 + 20 EMA (4h)",
+   "design": {
+    "n": 56,
+    "win": 30.4,
+    "avg_pct": -0.228,
+    "avg_R": -0.195,
+    "pf": 0.87,
+    "sum_pct": -12.8,
+    "t": -0.4
+   },
+   "unseen": {
+    "n": 38,
+    "win": 36.8,
+    "avg_pct": 0.014,
+    "avg_R": 0.022,
+    "pf": 1.01,
+    "sum_pct": 0.5,
+    "t": 0.03
+   },
+   "unseen_before_costs": {
+    "n": 38,
+    "win": 36.8,
+    "avg_pct": 0.174,
+    "avg_R": 0.022,
+    "pf": 1.16,
+    "sum_pct": 6.6,
+    "t": 0.37
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 10,
+     "win": 30.0,
+     "avg_pct": -0.549,
+     "avg_R": -0.522,
+     "pf": 0.45,
+     "sum_pct": -5.5,
+     "t": -1.0
+    },
+    "ETHUSDT": {
+     "n": 6,
+     "win": 16.7,
+     "avg_pct": -1.695,
+     "avg_R": -0.378,
+     "pf": 0.23,
+     "sum_pct": -10.2,
+     "t": -1.51
+    },
+    "SOLUSDT": {
+     "n": 3,
+     "win": 33.3,
+     "avg_pct": 0.025,
+     "avg_R": -0.186,
+     "pf": 1.02,
+     "sum_pct": 0.1,
+     "t": 0.01
+    },
+    "BNBUSDT": {
+     "n": 11,
+     "win": 45.5,
+     "avg_pct": 0.698,
+     "avg_R": 0.512,
+     "pf": 1.71,
+     "sum_pct": 7.7,
+     "t": 0.73
+    },
+    "XRPUSDT": {
+     "n": 8,
+     "win": 50.0,
+     "avg_pct": 1.053,
+     "avg_R": 0.405,
+     "pf": 2.21,
+     "sum_pct": 8.4,
+     "t": 0.86
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "44 MA bounce, 2R (1d)",
+   "design": {
+    "n": 60,
+    "win": 26.7,
+    "avg_pct": -1.655,
+    "avg_R": -0.242,
+    "pf": 0.62,
+    "sum_pct": -99.3,
+    "t": -1.44
+   },
+   "unseen": {
+    "n": 32,
+    "win": 37.5,
+    "avg_pct": 0.324,
+    "avg_R": 0.075,
+    "pf": 1.12,
+    "sum_pct": 10.4,
+    "t": 0.27
+   },
+   "unseen_before_costs": {
+    "n": 32,
+    "win": 37.5,
+    "avg_pct": 0.484,
+    "avg_R": 0.075,
+    "pf": 1.19,
+    "sum_pct": 15.5,
+    "t": 0.4
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 10,
+     "win": 60.0,
+     "avg_pct": 3.15,
+     "avg_R": 0.744,
+     "pf": 3.27,
+     "sum_pct": 31.5,
+     "t": 1.47
+    },
+    "ETHUSDT": {
+     "n": 1,
+     "win": 100.0,
+     "avg_pct": 10.329,
+     "avg_R": 1.969,
+     "pf": null,
+     "sum_pct": 10.3,
+     "t": null
+    },
+    "SOLUSDT": {
+     "n": 9,
+     "win": 33.3,
+     "avg_pct": 0.076,
+     "avg_R": -0.038,
+     "pf": 1.02,
+     "sum_pct": 0.7,
+     "t": 0.03
+    },
+    "BNBUSDT": {
+     "n": 9,
+     "win": 22.2,
+     "avg_pct": -2.175,
+     "avg_R": -0.394,
+     "pf": 0.33,
+     "sum_pct": -19.6,
+     "t": -1.29
+    },
+    "XRPUSDT": {
+     "n": 3,
+     "win": 0.0,
+     "avg_pct": -4.193,
+     "avg_R": -1.044,
+     "pf": 0.0,
+     "sum_pct": -12.6,
+     "t": -4.36
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "Inside-bar breakout, 2R (1d)",
+   "design": {
+    "n": 215,
+    "win": 35.8,
+    "avg_pct": 0.351,
+    "avg_R": 0.041,
+    "pf": 1.08,
+    "sum_pct": 75.4,
+    "t": 0.47
+   },
+   "unseen": {
+    "n": 122,
+    "win": 31.1,
+    "avg_pct": -0.624,
+    "avg_R": -0.086,
+    "pf": 0.85,
+    "sum_pct": -76.1,
+    "t": -0.68
+   },
+   "unseen_before_costs": {
+    "n": 122,
+    "win": 32.0,
+    "avg_pct": -0.464,
+    "avg_R": -0.086,
+    "pf": 0.89,
+    "sum_pct": -56.6,
+    "t": -0.5
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 21,
+     "win": 14.3,
+     "avg_pct": -2.995,
+     "avg_R": -0.578,
+     "pf": 0.26,
+     "sum_pct": -62.9,
+     "t": -2.47
+    },
+    "ETHUSDT": {
+     "n": 31,
+     "win": 35.5,
+     "avg_pct": -0.625,
+     "avg_R": 0.012,
+     "pf": 0.85,
+     "sum_pct": -19.4,
+     "t": -0.4
+    },
+    "SOLUSDT": {
+     "n": 20,
+     "win": 35.0,
+     "avg_pct": 0.446,
+     "avg_R": 0.054,
+     "pf": 1.08,
+     "sum_pct": 8.9,
+     "t": 0.15
+    },
+    "BNBUSDT": {
+     "n": 30,
+     "win": 26.7,
+     "avg_pct": -1.707,
+     "avg_R": -0.209,
+     "pf": 0.57,
+     "sum_pct": -51.2,
+     "t": -1.1
+    },
+    "XRPUSDT": {
+     "n": 20,
+     "win": 45.0,
+     "avg_pct": 2.424,
+     "avg_R": 0.32,
+     "pf": 1.59,
+     "sum_pct": 48.5,
+     "t": 0.78
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "Holy Grail ADX>30 + 20 EMA (1d)",
+   "design": {
+    "n": 7,
+    "win": 28.6,
+    "avg_pct": -6.903,
+    "avg_R": -0.102,
+    "pf": 0.26,
+    "sum_pct": -48.3,
+    "t": -1.36
+   },
+   "unseen": {
+    "n": 4,
+    "win": 25.0,
+    "avg_pct": -3.374,
+    "avg_R": -0.297,
+    "pf": 0.3,
+    "sum_pct": -13.5,
+    "t": -0.92
+   },
+   "unseen_before_costs": {
+    "n": 4,
+    "win": 25.0,
+    "avg_pct": -3.214,
+    "avg_R": -0.297,
+    "pf": 0.32,
+    "sum_pct": -12.9,
+    "t": -0.88
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 1,
+     "win": 0.0,
+     "avg_pct": -3.32,
+     "avg_R": -1.051,
+     "pf": 0.0,
+     "sum_pct": -3.3,
+     "t": null
+    },
+    "ETHUSDT": {
+     "n": 1,
+     "win": 0.0,
+     "avg_pct": -4.006,
+     "avg_R": -1.042,
+     "pf": 0.0,
+     "sum_pct": -4.0,
+     "t": null
+    },
+    "SOLUSDT": {
+     "n": 0
+    },
+    "BNBUSDT": {
+     "n": 1,
+     "win": 100.0,
+     "avg_pct": 5.88,
+     "avg_R": 1.919,
+     "pf": null,
+     "sum_pct": 5.9,
+     "t": null
+    },
+    "XRPUSDT": {
+     "n": 1,
+     "win": 0.0,
+     "avg_pct": -12.051,
+     "avg_R": -1.013,
+     "pf": 0.0,
+     "sum_pct": -12.1,
+     "t": null
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "RSI 60/40 cross (15m)",
+   "design": {
+    "n": 5708,
+    "win": 24.2,
+    "avg_pct": -0.173,
+    "avg_R": -0.155,
+    "pf": 0.77,
+    "sum_pct": -990.0,
+    "t": -5.97
+   },
+   "unseen": {
+    "n": 7200,
+    "win": 23.5,
+    "avg_pct": -0.122,
+    "avg_R": -0.198,
+    "pf": 0.8,
+    "sum_pct": -876.7,
+    "t": -5.33
+   },
+   "unseen_before_costs": {
+    "n": 7200,
+    "win": 26.2,
+    "avg_pct": 0.038,
+    "avg_R": -0.198,
+    "pf": 1.08,
+    "sum_pct": 275.3,
+    "t": 1.68
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 1474,
+     "win": 21.1,
+     "avg_pct": -0.157,
+     "avg_R": -0.361,
+     "pf": 0.67,
+     "sum_pct": -230.7,
+     "t": -4.59
+    },
+    "ETHUSDT": {
+     "n": 1427,
+     "win": 23.2,
+     "avg_pct": -0.098,
+     "avg_R": -0.135,
+     "pf": 0.85,
+     "sum_pct": -140.4,
+     "t": -1.65
+    },
+    "SOLUSDT": {
+     "n": 1443,
+     "win": 25.1,
+     "avg_pct": -0.113,
+     "avg_R": -0.146,
+     "pf": 0.85,
+     "sum_pct": -162.5,
+     "t": -2.02
+    },
+    "BNBUSDT": {
+     "n": 1475,
+     "win": 23.5,
+     "avg_pct": -0.137,
+     "avg_R": -0.24,
+     "pf": 0.73,
+     "sum_pct": -201.8,
+     "t": -3.61
+    },
+    "XRPUSDT": {
+     "n": 1381,
+     "win": 24.8,
+     "avg_pct": -0.102,
+     "avg_R": -0.1,
+     "pf": 0.85,
+     "sum_pct": -141.2,
+     "t": -1.61
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "RSI 60/40 cross (1h)",
+   "design": {
+    "n": 2558,
+    "win": 24.4,
+    "avg_pct": -0.138,
+    "avg_R": 0.013,
+    "pf": 0.9,
+    "sum_pct": -352.7,
+    "t": -1.44
+   },
+   "unseen": {
+    "n": 1804,
+    "win": 27.3,
+    "avg_pct": -0.081,
+    "avg_R": 0.024,
+    "pf": 0.93,
+    "sum_pct": -145.4,
+    "t": -0.97
+   },
+   "unseen_before_costs": {
+    "n": 1804,
+    "win": 29.2,
+    "avg_pct": 0.079,
+    "avg_R": 0.024,
+    "pf": 1.08,
+    "sum_pct": 143.3,
+    "t": 0.96
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 366,
+     "win": 24.3,
+     "avg_pct": -0.152,
+     "avg_R": -0.086,
+     "pf": 0.82,
+     "sum_pct": -55.5,
+     "t": -1.24
+    },
+    "ETHUSDT": {
+     "n": 361,
+     "win": 27.4,
+     "avg_pct": 0.023,
+     "avg_R": 0.089,
+     "pf": 1.02,
+     "sum_pct": 8.5,
+     "t": 0.11
+    },
+    "SOLUSDT": {
+     "n": 367,
+     "win": 29.4,
+     "avg_pct": -0.123,
+     "avg_R": 0.034,
+     "pf": 0.91,
+     "sum_pct": -45.1,
+     "t": -0.6
+    },
+    "BNBUSDT": {
+     "n": 348,
+     "win": 27.0,
+     "avg_pct": -0.033,
+     "avg_R": -0.001,
+     "pf": 0.96,
+     "sum_pct": -11.4,
+     "t": -0.21
+    },
+    "XRPUSDT": {
+     "n": 362,
+     "win": 28.5,
+     "avg_pct": -0.115,
+     "avg_R": 0.082,
+     "pf": 0.91,
+     "sum_pct": -41.8,
+     "t": -0.54
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "RSI 60/40 cross (4h)",
+   "design": {
+    "n": 616,
+    "win": 28.7,
+    "avg_pct": 1.033,
+    "avg_R": 0.413,
+    "pf": 1.42,
+    "sum_pct": 636.5,
+    "t": 1.55
+   },
+   "unseen": {
+    "n": 442,
+    "win": 29.0,
+    "avg_pct": -0.038,
+    "avg_R": 0.143,
+    "pf": 0.98,
+    "sum_pct": -16.6,
+    "t": -0.11
+   },
+   "unseen_before_costs": {
+    "n": 442,
+    "win": 29.2,
+    "avg_pct": 0.122,
+    "avg_R": 0.143,
+    "pf": 1.06,
+    "sum_pct": 54.1,
+    "t": 0.36
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 90,
+     "win": 32.2,
+     "avg_pct": 0.052,
+     "avg_R": 0.166,
+     "pf": 1.03,
+     "sum_pct": 4.7,
+     "t": 0.1
+    },
+    "ETHUSDT": {
+     "n": 95,
+     "win": 27.4,
+     "avg_pct": 0.268,
+     "avg_R": 0.21,
+     "pf": 1.1,
+     "sum_pct": 25.5,
+     "t": 0.3
+    },
+    "SOLUSDT": {
+     "n": 94,
+     "win": 25.5,
+     "avg_pct": -0.336,
+     "avg_R": 0.076,
+     "pf": 0.89,
+     "sum_pct": -31.6,
+     "t": -0.42
+    },
+    "BNBUSDT": {
+     "n": 79,
+     "win": 32.9,
+     "avg_pct": -0.104,
+     "avg_R": 0.204,
+     "pf": 0.95,
+     "sum_pct": -8.2,
+     "t": -0.17
+    },
+    "XRPUSDT": {
+     "n": 84,
+     "win": 27.4,
+     "avg_pct": -0.083,
+     "avg_R": 0.061,
+     "pf": 0.97,
+     "sum_pct": -7.0,
+     "t": -0.09
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "NR7 breakout, one bar (4h)",
+   "design": {
+    "n": 3789,
+    "win": 33.8,
+    "avg_pct": -0.16,
+    "avg_R": -0.218,
+    "pf": 0.65,
+    "sum_pct": -607.0,
+    "t": -9.1
+   },
+   "unseen": {
+    "n": 2488,
+    "win": 33.6,
+    "avg_pct": -0.207,
+    "avg_R": -0.246,
+    "pf": 0.53,
+    "sum_pct": -515.7,
+    "t": -11.95
+   },
+   "unseen_before_costs": {
+    "n": 2488,
+    "win": 42.7,
+    "avg_pct": -0.047,
+    "avg_R": -0.246,
+    "pf": 0.86,
+    "sum_pct": -117.6,
+    "t": -2.73
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 484,
+     "win": 32.0,
+     "avg_pct": -0.172,
+     "avg_R": -0.338,
+     "pf": 0.47,
+     "sum_pct": -83.1,
+     "t": -6.26
+    },
+    "ETHUSDT": {
+     "n": 491,
+     "win": 31.6,
+     "avg_pct": -0.189,
+     "avg_R": -0.197,
+     "pf": 0.58,
+     "sum_pct": -92.8,
+     "t": -4.61
+    },
+    "SOLUSDT": {
+     "n": 482,
+     "win": 33.0,
+     "avg_pct": -0.271,
+     "avg_R": -0.256,
+     "pf": 0.52,
+     "sum_pct": -130.6,
+     "t": -5.42
+    },
+    "BNBUSDT": {
+     "n": 498,
+     "win": 34.1,
+     "avg_pct": -0.181,
+     "avg_R": -0.24,
+     "pf": 0.52,
+     "sum_pct": -89.9,
+     "t": -5.54
+    },
+    "XRPUSDT": {
+     "n": 533,
+     "win": 36.8,
+     "avg_pct": -0.224,
+     "avg_R": -0.203,
+     "pf": 0.52,
+     "sum_pct": -119.3,
+     "t": -5.71
+    }
+   },
+   "pass": false
+  },
+  {
+   "strategy": "NR7 breakout, one bar (1d)",
+   "design": {
+    "n": 586,
+    "win": 42.0,
+    "avg_pct": -0.041,
+    "avg_R": -0.034,
+    "pf": 0.96,
+    "sum_pct": -24.0,
+    "t": -0.37
+   },
+   "unseen": {
+    "n": 433,
+    "win": 48.0,
+    "avg_pct": 0.143,
+    "avg_R": 0.094,
+    "pf": 1.2,
+    "sum_pct": 61.8,
+    "t": 1.43
+   },
+   "unseen_before_costs": {
+    "n": 433,
+    "win": 52.2,
+    "avg_pct": 0.303,
+    "avg_R": 0.094,
+    "pf": 1.49,
+    "sum_pct": 131.0,
+    "t": 3.04
+   },
+   "unseen_by_coin": {
+    "BTCUSDT": {
+     "n": 93,
+     "win": 47.3,
+     "avg_pct": 0.113,
+     "avg_R": 0.102,
+     "pf": 1.21,
+     "sum_pct": 10.5,
+     "t": 0.72
+    },
+    "ETHUSDT": {
+     "n": 85,
+     "win": 44.7,
+     "avg_pct": 0.092,
+     "avg_R": 0.079,
+     "pf": 1.11,
+     "sum_pct": 7.8,
+     "t": 0.36
+    },
+    "SOLUSDT": {
+     "n": 85,
+     "win": 51.8,
+     "avg_pct": 0.166,
+     "avg_R": 0.145,
+     "pf": 1.22,
+     "sum_pct": 14.2,
+     "t": 0.71
+    },
+    "BNBUSDT": {
+     "n": 84,
+     "win": 51.2,
+     "avg_pct": 0.094,
+     "avg_R": 0.044,
+     "pf": 1.14,
+     "sum_pct": 7.9,
+     "t": 0.45
+    },
+    "XRPUSDT": {
+     "n": 86,
+     "win": 45.3,
+     "avg_pct": 0.249,
+     "avg_R": 0.098,
+     "pf": 1.35,
+     "sum_pct": 21.4,
+     "t": 0.97
+    }
+   },
+   "pass": false
+  }
+ ],
+ "split": "2025-04-01",
+ "cost_per_side": 0.0008
+}

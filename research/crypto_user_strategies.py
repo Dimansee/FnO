@@ -19,7 +19,6 @@ Usage: python research/crypto_user_strategies.py <data_dir>
 import json
 import os
 import sys
-from concurrent.futures import ProcessPoolExecutor
 
 import numpy as np
 import pandas as pd
@@ -433,8 +432,15 @@ def st(rows):
 
 
 def main():
-    with ProcessPoolExecutor(2) as ex:
-        res = dict(ex.map(tests_for, COINS))
+    # one coin per child process (keeps memory low on small machines); results cached next to the script
+    import pickle
+    import subprocess
+    res = {}
+    for sym in COINS:
+        f = os.path.join(os.path.dirname(OUT), f".cache_user_{sym}.pkl")
+        if not os.path.exists(f):
+            subprocess.run([sys.executable, "-W", "ignore", os.path.abspath(__file__), DATA, "--coin", sym], check=True)
+        res[sym] = pickle.load(open(f, "rb"))
     names = list(res[COINS[0]])
     rows = []
     for nm in names:
@@ -454,4 +460,10 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if "--coin" in sys.argv:
+        import pickle
+        sym = sys.argv[sys.argv.index("--coin") + 1]
+        pickle.dump(tests_for(sym)[1], open(os.path.join(os.path.dirname(OUT), f".cache_user_{sym}.pkl"), "wb"))
+        print("done", sym, flush=True)
+    else:
+        main()

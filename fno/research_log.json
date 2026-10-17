@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "cus",
+   "date": "2026-10-17",
+   "area": "Crypto",
+   "title": "Your strategies on crypto: Noise band, Camarilla, D1 break, Chandelier+ZLSMA, SMA200+RSI(10), 5 EMA, 44 MA, RSI 60/40, inside bar, Holy Grail, NR7",
+   "asked": "Do the strategies you gave the India app make money on BTC, ETH, SOL, BNB, XRP after costs (8 bps a side), on 5m to daily bars? Binance 5m Jan 2024 - Oct 2026 and 1h Jan 2023 - Oct 2026; design before 1 Apr 2025, unseen after; your parameters, no tuning. 32 tests.",
+   "result": "0 of 32 passed (needs a profit in both periods, PF >= 1.1 unseen, profitable on 3 of 5 coins). All 5m and 15m versions lose about 0.12-0.19% a trade: before costs they are flat (-0.01% to +0.04%), so fees decide. Closest: inside-bar breakout 4h (design -0.00%, unseen +0.10%, PF 1.07), NR7 daily (design -0.04%, unseen +0.14%, PF 1.20), SMA200 + RSI(10) daily (+4.7% a trade but only 17 trades in almost 4 years). The live Supertrend 4h rule made about +0.15R a trade on the same unseen period.",
+   "decision": "Not adopted",
+   "summary": "None of them beats the trend rules already trading crypto. Fast intraday rules lose to fees on crypto just as they lost to slippage on Nifty.",
+   "period": "Jan 2023 - 17 Oct 2026"
+  },
+  {
    "id": "x10",
    "date": "2026-10-16",
    "area": "Index options",
