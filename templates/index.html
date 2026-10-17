@@ -713,6 +713,19 @@ details summary{cursor:pointer;font-size:13px}
       <div class="gxtools"><select id="gxSym" aria-label="Symbol"></select><div class="segs" id="gxTf"></div></div></div>
       <div class="gxchart" id="gxChart" style="margin-top:10px"><div class="legend mono" id="gxLegend"></div></div>
       <p class="muted" id="gxChartNote" style="margin:8px 0 0;font-size:12.5px"></p></div>
+    <div class="card" id="mtCard" style="margin-bottom:14px"><div class="row between wrap"><h3 style="margin:0">Manual trade <span class="muted" style="font-weight:400;font-size:13px">— paper money, at the live price, on the coin shown in the chart</span></h3>
+      <div class="segs" id="mtSide"><button class="seg on" data-mts="long">Buy</button><button class="seg" data-mts="short">Sell</button></div></div>
+      <div class="grid g4" style="margin-top:12px">
+        <div><label>Size by</label><select id="mtMode"><option value="risk">Risk % of account</option><option value="amount">Amount</option><option value="qty">Quantity</option></select></div>
+        <div><label id="mtSizeLb">Risk per trade (%)</label><input id="mtSize" type="number" step="any" min="0" value="1"></div>
+        <div><label>Stop-loss price</label><input id="mtStop" type="number" step="any"><div class="row wrap" style="gap:4px;margin-top:6px" id="mtStopQ"><button class="mini" data-mtq="1">1%</button><button class="mini" data-mtq="2">2%</button><button class="mini" data-mtq="3">3%</button><button class="mini" data-mtq="5">5%</button><button class="mini" data-mtq="swing" title="Beyond the lowest low (buy) or highest high (sell) of the last 20 candles on the chart">Chart swing</button></div></div>
+        <div><label>Target price (optional)</label><input id="mtTgt" type="number" step="any"><div class="row wrap" style="gap:4px;margin-top:6px"><button class="mini" data-mtr="1.5">1.5R</button><button class="mini" data-mtr="2">2R</button><button class="mini" data-mtr="3">3R</button><button class="mini" data-mtr="0">None</button></div></div>
+        <div><label>Trailing stop % (optional)</label><input id="mtTrail" type="number" step="0.1" min="0" placeholder="off"></div>
+        <div><label>Leverage (×)</label><input id="mtLev" type="number" step="0.5" min="1" value="1"></div>
+        <div style="grid-column:span 2"><label>Note for the journal (optional)</label><input id="mtNote" type="text" maxlength="200" placeholder="why you are taking it"></div>
+      </div>
+      <div id="mtPrev" class="muted" style="margin-top:12px;font-size:13.5px">Set a stop to see size, cost and risk.</div>
+      <div class="row wrap" style="margin-top:10px"><button class="primary" id="mtGo" disabled>Place paper trade</button></div></div>
     <div id="gxBody"></div></section>
 
   <section id="t-settings" class="hidden">
@@ -3072,6 +3085,57 @@ async function loadGContext() {
 }
 
 /* ------------------------------ Global markets (crypto / US) ------------------------------ */
+/* ------------------------------ manual paper trade (crypto / US) ------------------------------ */
+const gpx = v => v == null ? "–" : fmtN(v, v >= 1000 ? 2 : v >= 1 ? 4 : 6);
+const MT = {side: "long", prev: null, t: null};
+const mtSym = () => GX.sym[GX.mk] || (GX.mk === "CRYPTO" ? "BTCUSDT" : "SPY");
+const mtLast = () => (GX.bars && GX.bars.length ? GX.bars[GX.bars.length - 1].close : null);
+function mtBody() {
+  const m = $("#mtMode").value, v = $("#mtSize").value;
+  return {market: GX.mk, symbol: mtSym(), side: MT.side, size_mode: m, risk_pct: m === "risk" ? v : null, amount: m === "amount" ? v : null, qty: m === "qty" ? v : null,
+          stop: $("#mtStop").value, target: $("#mtTgt").value, trail_pct: $("#mtTrail").value, leverage: $("#mtLev").value, note: $("#mtNote").value};
+}
+function mtSchedule() { clearTimeout(MT.t); MT.t = setTimeout(mtPreview, 350); }
+async function mtPreview() {
+  const el = $("#mtPrev"), go = $("#mtGo");
+  if (!$("#mtStop").value) { el.textContent = "Set a stop to see size, cost and risk."; go.disabled = true; MT.prev = null; return; }
+  try {
+    const r = await post("/api/gbook/manual", {...mtBody(), preview: true}); MT.prev = r;
+    const c = r.currency;
+    el.innerHTML = `<b>${r.side === "long" ? "Buy" : "Sell"} ${esc(r.symbol)}</b> × <b class="mono">${r.qty}</b> at about <span class="mono">${gpx(r.entry)}</span> · value ${money(r.notional, c)} · margin ${money(r.margin, c)} at ${r.leverage}× (free ${money(r.cash, c)})<br>
+      If the stop hits: <b class="down mono">-${money(r.loss_at_stop, c)}</b> (${r.loss_pct}% of the account)${r.gain_at_target != null ? ` · at the target: <b class="up mono">+${money(r.gain_at_target, c)}</b> (${r.rr}R)` : ""} · fees about ${money(r.fees_est, c)}${r.trail_pct ? ` · trailing ${r.trail_pct}%` : ""}
+      ${r.error ? `<div class="err" style="margin-top:8px">${esc(r.error)}</div>` : ""}`;
+    go.disabled = !!r.error;
+  } catch (e) { el.innerHTML = `<span class="down">${esc(e.message)}</span>`; go.disabled = true; MT.prev = null; }
+}
+$("#mtCard").addEventListener("input", mtSchedule);
+$("#mtMode").onchange = () => { const m = $("#mtMode").value; $("#mtSizeLb").textContent = {risk: "Risk per trade (%)", amount: `Amount (${GX.mk === "CRYPTO" ? "USDT" : "USD"})`, qty: GX.mk === "CRYPTO" ? "Quantity (coins)" : "Shares"}[m]; $("#mtSize").value = m === "risk" ? 1 : ""; mtSchedule(); };
+$("#mtCard").addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const px = mtLast(), side = MT.side === "long" ? 1 : -1, dec = v => +v.toPrecision(6);
+  if (b.dataset.mts) { MT.side = b.dataset.mts; document.querySelectorAll("#mtSide .seg").forEach(x => x.classList.toggle("on", x === b)); $("#mtGo").textContent = MT.side === "long" ? "Place paper buy" : "Place paper sell"; $("#mtStop").value = ""; $("#mtTgt").value = ""; mtSchedule(); }
+  else if (b.dataset.mtq && px) {
+    if (b.dataset.mtq === "swing") { const w = GX.bars.slice(-20); const lv = side > 0 ? Math.min(...w.map(x => x.low)) : Math.max(...w.map(x => x.high)); $("#mtStop").value = dec(lv * (1 - side * 0.001)); }
+    else $("#mtStop").value = dec(px * (1 - side * +b.dataset.mtq / 100));
+    mtSchedule();
+  } else if (b.dataset.mtr != null) {
+    const st = +$("#mtStop").value; if (+b.dataset.mtr === 0) $("#mtTgt").value = ""; else if (px && st) $("#mtTgt").value = dec(px + side * Math.abs(px - st) * +b.dataset.mtr); else toast("Set the stop first");
+    mtSchedule();
+  } else if (b.id === "mtGo") {
+    await mtPreview(); const r = MT.prev; if (!r || r.error) return;
+    if (!confirm(`Paper ${r.side === "long" ? "BUY" : "SELL"} ${r.symbol} x ${r.qty} at about ${gpx(r.entry)}\nStop ${gpx(r.stop)}${r.target ? " · target " + gpx(r.target) : ""}\nRisk if stopped: ${money(r.loss_at_stop, r.currency)} (${r.loss_pct}% of the account)\n\nPaper money only. Place it?`)) return;
+    try { const o = await post("/api/gbook/manual", mtBody()); toast(o.message, 5000); ["#mtStop", "#mtTgt", "#mtTrail", "#mtNote"].forEach(q => $(q).value = ""); $("#mtPrev").textContent = "Placed. Set a stop to prepare another."; $("#mtGo").disabled = true; await loadMarkets(); }
+    catch (er) { toast(er.message, 6000); }
+  }
+});
+document.addEventListener("click", async e => {
+  const b = e.target.closest("button[data-gxe]"); if (!b) return;
+  const sl = prompt("New stop-loss price:", b.dataset.sl); if (sl == null) return;
+  const tp = prompt("New target price (leave empty for no target):", b.dataset.tp); if (tp == null) return;
+  try { const r = await post("/api/gbook/modify", {market: GX.mk, id: b.dataset.gxe, stop: sl, target: tp}); toast(r.message); S.tab === "gportfolio" ? await loadGPortfolio() : await loadMarkets(); }
+  catch (er) { toast(er.message, 6000); }
+});
+
 const GX = {mk: localStorage.getItem("gmk") || "CRYPTO", data: null, sym: {}, tf: localStorage.getItem("gxtf") || "5m", chart: null, ser: null, lines: [], pls: [], key: null};
 async function loadMarkets(quiet) {
   if (WS.mk !== "IN") GX.mk = WS.mk;
@@ -3132,7 +3196,7 @@ async function loadGxChart(quiet) {
   $("#gxChartNote").innerHTML = `${bars.length} candles from ${mk === "CRYPTO" ? "Binance (Bybit if Binance is down)" : "Yahoo Finance (delayed)"}; refreshes every 30 s with Auto on. ${ln ? "Lines: " + ln + ". " : (tf === "4h" || tf === "1d" ? "" : "The autopilot rules run on 4h and daily bars; switch to those to see their lines. ")}Arrows = this book's entries, dots = exits.`;
   $("#gxLegend").innerHTML = "";
 }
-$("#gxSym").onchange = () => { GX.sym[GX.mk] = $("#gxSym").value; GX.bars = []; loadGxChart(); };
+$("#gxSym").onchange = async () => { GX.sym[GX.mk] = $("#gxSym").value; GX.bars = []; $("#mtStop").value = ""; $("#mtTgt").value = ""; await loadGxChart(); mtSchedule(); };
 $("#gxTf").onclick = e => { const b = e.target.closest("button"); if (!b) return; GX.tf = b.dataset.gtf; localStorage.setItem("gxtf", GX.tf); loadGxChart(); };
 function gxAutopilot(d) {
   const a = d.autopilot || {}, ago = d.last_tick ? Math.round((Date.now() - Date.parse(d.last_tick)) / 60000) : null;
@@ -3167,7 +3231,7 @@ function renderMarkets() {
 </div>`;
   el.innerHTML = `${gxAutopilot(d)}${gxScanner(d)}${gxLab(d)}
   <div class="grid g4">${kpiCard("Account value", money(d.equity, cur), `started with ${money(d.capital_start, cur)}`)}${kpiCard("Available", money(d.cash, cur), `${d.positions.length} open`)}${kpiCard("Realised", money(d.realised, cur), `${st.trades || 0} closed trades`, cls(d.realised))}${kpiCard("Open profit", money(d.unrealised, cur), "right now", cls(d.unrealised))}</div>
-  <div class="card" style="margin-top:14px"><h3>Open positions</h3><div class="tablewrap"><table><tr><th>Symbol</th><th>Strategy</th><th>Side</th><th>Entry</th><th>Now</th><th>Stop</th><th>Target</th><th>R</th><th>P&L</th><th></th></tr>${d.positions.map(x => `<tr><td><b>${esc(x.symbol)}</b></td><td>${esc(x.strategy_name)}</td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${fmtN(x.entry)}</td><td class="mono">${fmtN(x.price)}</td><td class="mono">${fmtN(x.stop)}</td><td class="mono">${x.target == null ? "–" : fmtN(x.target)}</td><td class="mono ${cls(x.R_now)}">${sgn(x.R_now)}</td><td class="mono ${cls(x.unrealised)}">${fmtN(x.unrealised)}</td><td><button data-gx="${x.id}">Close</button></td></tr>`).join("") || `<tr><td colspan="10" class="muted">No open positions right now. A position opens when one of the active rules above gives a signal.</td></tr>`}</table></div></div>`;
+  <div class="card" style="margin-top:14px"><h3>Open positions</h3><div class="tablewrap"><table><tr><th>Symbol</th><th>Strategy</th><th>Side</th><th>Entry</th><th>Now</th><th>Stop</th><th>Target</th><th>R</th><th>P&L</th><th></th></tr>${d.positions.map(x => `<tr><td><b>${esc(x.symbol)}</b></td><td>${esc(x.strategy_name)}</td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${gpx(x.entry)}</td><td class="mono">${gpx(x.price)}</td><td class="mono">${gpx(x.stop)}</td><td class="mono">${x.target == null ? "–" : gpx(x.target)}</td><td class="mono ${cls(x.R_now)}">${sgn(x.R_now)}</td><td class="mono ${cls(x.unrealised)}">${fmtN(x.unrealised)}</td><td style="white-space:nowrap"><button data-gxe="${x.id}" data-sl="${x.stop}" data-tp="${x.target ?? ""}">Edit stop/target</button> <button data-gx="${x.id}">Close</button></td></tr>`).join("") || `<tr><td colspan="10" class="muted">No open positions right now. One opens when an active rule gives a signal, or when you place a manual trade on the Dashboard.</td></tr>`}</table></div></div>`;
 }
 function gxPortfolioHtml(d) {
   const cur = d.currency, p = d.prefs || {}, st = d.stats || {};
@@ -3183,7 +3247,7 @@ function gxPortfolioHtml(d) {
       <label class="sw" style="margin-top:10px"><input type="checkbox" id="gxAuto" ${p.auto ? "checked" : ""}> Let strategies marked "Auto paper-trade" open trades by themselves</label>
       <div class="row wrap" style="margin-top:12px"><button class="primary" id="gxSave">Save settings</button><input id="gxCap" type="number" value="${GX.mk === "CRYPTO" ? 5000 : 10000}" style="width:110px"><button class="danger" id="gxReset">Reset account</button></div>
       <p class="muted" style="font-size:12.5px;margin:10px 0 0">Prices come from free public feeds and bars are checked every minute. Fees and slippage are included. Nothing here places a real order.</p></div></div>
-  <div class="card" style="margin-top:14px"><h3>Open positions</h3><div class="tablewrap"><table><tr><th>Symbol</th><th>Strategy</th><th>Side</th><th>Entry</th><th>Now</th><th>Stop</th><th>Target</th><th>R</th><th>P&L</th><th></th></tr>${d.positions.map(x => `<tr><td><b>${esc(x.symbol)}</b></td><td>${esc(x.strategy_name)}</td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${fmtN(x.entry)}</td><td class="mono">${fmtN(x.price)}</td><td class="mono">${fmtN(x.stop)}</td><td class="mono">${x.target == null ? "–" : fmtN(x.target)}</td><td class="mono ${cls(x.R_now)}">${sgn(x.R_now)}</td><td class="mono ${cls(x.unrealised)}">${fmtN(x.unrealised)}</td><td><button data-gx="${x.id}">Close</button></td></tr>`).join("") || `<tr><td colspan="10" class="muted">No open positions right now. A position opens when one of the active rules above gives a signal.</td></tr>`}</table></div></div>
+  <div class="card" style="margin-top:14px"><h3>Open positions</h3><div class="tablewrap"><table><tr><th>Symbol</th><th>Strategy</th><th>Side</th><th>Entry</th><th>Now</th><th>Stop</th><th>Target</th><th>R</th><th>P&L</th><th></th></tr>${d.positions.map(x => `<tr><td><b>${esc(x.symbol)}</b></td><td>${esc(x.strategy_name)}</td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${gpx(x.entry)}</td><td class="mono">${gpx(x.price)}</td><td class="mono">${gpx(x.stop)}</td><td class="mono">${x.target == null ? "–" : gpx(x.target)}</td><td class="mono ${cls(x.R_now)}">${sgn(x.R_now)}</td><td class="mono ${cls(x.unrealised)}">${fmtN(x.unrealised)}</td><td style="white-space:nowrap"><button data-gxe="${x.id}" data-sl="${x.stop}" data-tp="${x.target ?? ""}">Edit stop/target</button> <button data-gx="${x.id}">Close</button></td></tr>`).join("") || `<tr><td colspan="10" class="muted">No open positions right now. One opens when an active rule gives a signal, or when you place a manual trade on the Dashboard.</td></tr>`}</table></div></div>
   <div class="card" style="margin-top:14px"><h3>Closed trades</h3><div class="tablewrap" style="max-height:50vh"><table><tr><th>Closed</th><th>Symbol</th><th>Strategy</th><th>Side</th><th>R</th><th>P&L</th><th>Reason</th></tr>${d.history.map(x => `<tr><td class="mono">${esc((x.closed || "").slice(0, 16).replace("T", " "))}</td><td>${esc(x.symbol)}</td><td>${esc(x.strategy_name)}</td><td>${esc(x.side)}</td><td class="mono ${cls(x.R)}">${sgn(x.R)}</td><td class="mono ${cls(x.pnl)}">${fmtN(x.pnl)}</td><td>${esc(x.reason)}</td></tr>`).join("") || `<tr><td colspan="7" class="muted">No closed trades yet.</td></tr>`}</table></div></div>`;
 }
 async function loadGPortfolio() {

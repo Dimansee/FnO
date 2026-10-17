@@ -733,6 +733,26 @@ def gbook_chart():
         return jsonify({"error": str(e)}), 400
 
 
+@app.post("/api/gbook/manual")
+def gbook_manual():
+    b = request.get_json(force=True) or {}
+    try:
+        if b.get("preview"):
+            return jsonify(SV.clean(GB.manual_preview(_mk(), b)))
+        return jsonify(SV.clean({"ok": True, **GB.manual_open(_mk(), b)}))
+    except ValueError as e:
+        return jsonify({"ok": False, "error": str(e)}), 400
+
+
+@app.post("/api/gbook/modify")
+def gbook_modify():
+    b = request.get_json(force=True) or {}
+    try:
+        return jsonify(GB.modify_position(_mk(), b.get("id", ""), b))
+    except ValueError as e:
+        return jsonify({"ok": False, "error": str(e)}), 400
+
+
 @app.get("/api/gbook/journal")
 def gbook_journal():
     return jsonify(SV.clean(GB.journal(_mk())))

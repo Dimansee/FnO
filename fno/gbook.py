@@ -200,6 +200,119 @@ def open_position(market: str, spec: dict, symbol: str, side: int, price: float,
     return True, f"{spec['name']}: {pos['side']} {symbol} x {qty:g} at {entry:,.4f} (stop {st['sl']:,.4f}" + (f", target {st['tp']:,.4f}" if st["tp"] else "") + ")"
 
 
+MANUAL_ID = "manual"
+MANUAL_EXIT = {"stop_atr": 1.0, "atr_n": 14, "target_r": None, "trail_atr": None, "breakeven_r": None, "after_target_trail": None,
+               "time_stop_bars": None, "exit_on_opposite": False}
+
+
+def manual_preview(market: str, b: dict) -> dict:
+    """Size, cost and risk of a manual paper trade, without placing it. Same checks as manual_open."""
+    return _manual(market, b, place=False)
+
+
+def manual_open(market: str, b: dict) -> dict:
+    return _manual(market, b, place=True)
+
+
+def _manual(market: str, b: dict, place: bool) -> dict:
+    """A trade you place yourself on the paper account, at the live price. You set the stop (required) and optionally a
+    target and a trailing stop; the engine then manages it every minute like any other position. Size by risk % of the
+    account (default), by quantity, or by amount."""
+    sym = str(b.get("symbol") or "")
+    if not MK.valid_symbol(market, sym):
+        raise ValueError(f"{sym or 'Symbol'} is not in the {market} list.")
+    if market == "US" and not MK.us_session_open(pad_before=0, pad_after=0):
+        raise ValueError("US market is closed: manual US trades open 9:30 am - 4:00 pm New York (7:00 pm - 1:30 am IST).")
+    side = {"long": 1, "buy": 1, "short": -1, "sell": -1}.get(str(b.get("side", "")).lower())
+    if not side:
+        raise ValueError("Choose Buy or Sell.")
+    px = float(MK.last_price(market, sym))
+    slip, fee = _slip_fee(market)
+    entry = px * (1 + side * slip / 1e4)
+    num = lambda k: (None if b.get(k) in (None, "") else float(b[k]))      # noqa: E731
+    stop, target, trail_pct = num("stop"), num("target"), num("trail_pct")
+    if stop is None:
+        raise ValueError("Set a stop-loss price (every trade needs one so its risk is known).")
+    if side * (entry - stop) <= 0:
+        raise ValueError(f"For a {'buy' if side > 0 else 'sell'} the stop must be {'below' if side > 0 else 'above'} the price ({entry:,.6g}).")
+    risk_unit = abs(entry - stop)
+    if risk_unit / entry < 0.0005:
+        raise ValueError("Stop is too close to the price (less than 0.05%): fees and noise would hit it at once.")
+    if target is not None and side * (target - entry) <= 0:
+        raise ValueError(f"For a {'buy' if side > 0 else 'sell'} the target must be {'above' if side > 0 else 'below'} the price.")
+    if trail_pct is not None and not 0.1 <= trail_pct <= 50:
+        raise ValueError("Trailing stop must be between 0.1% and 50%.")
+    pf, eq = prefs(market), equity(market)
+    mode = b.get("size_mode") or "risk"
+    if mode == "risk":
+        rp = num("risk_pct") or pf["risk_pct"]
+        if not 0.05 <= rp <= 10:
+            raise ValueError("Risk per trade must be between 0.05% and 10% of the account.")
+        qty = eq * rp / 100 / risk_unit
+    elif mode == "qty":
+        qty = num("qty") or 0
+    elif mode == "amount":
+        qty = (num("amount") or 0) / entry
+    else:
+        raise ValueError("Size by risk, quantity or amount.")
+    if market == "US":
+        qty = float(int(qty))
+    qty = round(qty, 6)
+    if qty <= 0:
+        raise ValueError("Position size rounds to zero: raise the size or move the stop closer.")
+    lev = max(1.0, min(float(num("leverage") or pf["max_leverage"]), MAX_LEVERAGE[market]))
+    notional = qty * entry
+    margin = notional / (lev if market == "CRYPTO" or side > 0 else 1)
+    fees = notional * fee / 1e4
+    loss = qty * risk_unit + fees * 2
+    out = {"symbol": sym, "side": "long" if side > 0 else "short", "price": round(px, 8), "entry": round(entry, 8), "qty": qty, "notional": round(notional, 2),
+           "leverage": lev, "margin": round(margin, 2), "cash": round(cash(market), 2), "equity": round(eq, 2), "stop": stop, "target": target, "trail_pct": trail_pct,
+           "loss_at_stop": round(loss, 2), "loss_pct": round(loss / eq * 100, 2) if eq else None,
+           "gain_at_target": round(qty * abs(target - entry) - fees * 2, 2) if target is not None else None,
+           "rr": round(abs(target - entry) / risk_unit, 2) if target is not None else None, "fees_est": round(fees * 2, 2), "currency": MK.CURRENCY[market]}
+    if margin > cash(market):
+        out["error"] = f"Not enough free cash: needs {margin:,.2f} margin, {cash(market):,.2f} available. Use a smaller size or more leverage."
+    if not place:
+        return out
+    if out.get("error"):
+        raise ValueError(out["error"])
+    st = {"side": side, "entry": float(entry), "risk": float(risk_unit), "sl": float(stop), "sl0": float(stop), "tp": target,
+          "trail": float(entry * trail_pct / 100) if trail_pct else None, "be": None, "after": None, "best": float(entry), "held": 0,
+          "pend_opp": False, "mfe": 0.0, "mae": 0.0, "first": True, "atr": float(risk_unit)}
+    now = _now()
+    pos = {"id": secrets.token_hex(4), "market": market, "symbol": sym, "side": out["side"], "qty": qty, "entry": round(entry, 8), "margin": round(margin, 2),
+           "leverage": lev, "fees_in": round(fees, 4), "strategy_id": MANUAL_ID, "strategy_name": "Manual", "spec_version": 1, "state": st,
+           "opened": now.isoformat(timespec="seconds"), "from_bar_ts": now.isoformat(timespec="seconds"), "ctx": {"manual": True, "note": str(b.get("note") or "")[:200]},
+           "size_mult": 1.0, "tf": "5m", "hold": "swing", "exit": MANUAL_EXIT, "manual": True}
+    _save_pos(pos)
+    out["id"] = pos["id"]
+    out["message"] = f"Paper {'buy' if side > 0 else 'sell'}: {sym} x {qty:g} at {entry:,.6g} (stop {stop:,.6g}" + (f", target {target:,.6g}" if target else "") + (f", trailing {trail_pct:g}%" if trail_pct else "") + ")"
+    return out
+
+
+def modify_position(market: str, pid: str, b: dict) -> dict:
+    """Move the stop / target of an open position (any position, yours or a rule's). The stop may only be moved, never removed."""
+    pos = next((p for p in positions(market) if p["id"] == pid), None)
+    if not pos:
+        raise ValueError("Position not found (already closed?).")
+    st, side = pos["state"], (1 if pos["side"] == "long" else -1)
+    px = float(MK.last_price(market, pos["symbol"]))
+    if b.get("stop") not in (None, ""):
+        sl = float(b["stop"])
+        if side * (px - sl) <= 0:
+            raise ValueError(f"The stop must be {'below' if side > 0 else 'above'} the current price ({px:,.6g}).")
+        st["sl"] = sl
+    if "target" in b:
+        tp = None if b["target"] in (None, "") else float(b["target"])
+        if tp is not None and side * (tp - px) <= 0:
+            raise ValueError(f"The target must be {'above' if side > 0 else 'below'} the current price ({px:,.6g}).")
+        st["tp"] = tp
+    pos["state"] = st
+    pos.setdefault("edits", []).append({"t": _now().isoformat(timespec="seconds"), "stop": st["sl"], "target": st["tp"]})
+    _save_pos(pos)
+    return {"ok": True, "message": f"{pos['symbol']}: stop {st['sl']:,.6g}" + (f", target {st['tp']:,.6g}" if st["tp"] is not None else ", no target")}
+
+
 def close_position(market: str, pid: str, px: float, reason: str) -> dict | None:
     pos = _take_pos(market, pid)
     if not pos:
@@ -214,11 +327,12 @@ def close_position(market: str, pid: str, px: float, reason: str) -> dict | None
     rec = {**pos, "closed": _now().isoformat(timespec="seconds"), "exit": round(exit_fill, 6), "gross_pnl": round(gross, 4), "fees": round(fees, 4), "pnl": round(gross - fees, 4),
            "R": round(R, 3), "mfe_R": round(st["mfe"], 2), "mae_R": round(st["mae"], 2), "reason": reason}
     store._cmd("HSET", TRD + market, rec["id"], _dump(rec))
-    try:
-        from . import learn as LN
-        LN.on_close_g(rec)
-    except Exception:
-        pass
+    if not rec.get("manual"):                  # the learning engine studies the rules, not your own manual trades
+        try:
+            from . import learn as LN
+            LN.on_close_g(rec)
+        except Exception:
+            pass
     return rec
 
 
@@ -237,7 +351,7 @@ def _sq_min(spec):
 def _manage(market: str, pos: dict, spec: dict | None, out: list):
     """Process every completed bar since the last look, then the latest price."""
     sym = pos["symbol"]
-    ex = (spec or {}).get("exit") or {"stop_atr": 1.5, "target_r": None, "trail_atr": None, "breakeven_r": None, "time_stop_bars": None, "exit_on_opposite": False}
+    ex = (spec or {}).get("exit") or pos.get("exit") or {"stop_atr": 1.5, "target_r": None, "trail_atr": None, "breakeven_r": None, "time_stop_bars": None, "exit_on_opposite": False}
     mins = CU.TIMEFRAMES[pos["tf"]]
     st = pos["state"]
     side = 1 if pos["side"] == "long" else -1

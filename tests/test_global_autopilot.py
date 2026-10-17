@@ -201,4 +201,35 @@ ctx = GB.context("CRYPTO")
 assert ctx["rows"] and all("error" not in r for r in ctx["rows"]), ctx["rows"][:2]
 assert ctx["breadth"]["of"] == len(ctx["rows"])
 print("journal/rules/context OK")
+
+# 11. manual paper trades: preview, checks, open, edit, managed exit, kept out of learning
+px = MK.last_price("CRYPTO", "ETHUSDT")
+pv = GB.manual_preview("CRYPTO", {"symbol": "ETHUSDT", "side": "buy", "stop": px * 0.98, "target": px * 1.04, "size_mode": "risk", "risk_pct": 1})
+assert pv["qty"] > 0 and abs(pv["loss_pct"] - 1.0) < 0.3 and pv["rr"] and "id" not in pv, pv
+for bad in ({"side": "buy", "stop": px * 1.01}, {"side": "sell", "stop": px * 0.99}, {"side": "buy"}, {"side": "buy", "stop": px * 0.99, "target": px * 0.98},
+            {"side": "buy", "stop": px * 0.99999}, {"side": "x", "stop": px * 0.99}):
+    try:
+        GB.manual_open("CRYPTO", {"symbol": "ETHUSDT", **bad}); raise SystemExit(f"bad manual trade accepted: {bad}")
+    except ValueError:
+        pass
+n0 = len(GB.positions("CRYPTO"))
+o = GB.manual_open("CRYPTO", {"symbol": "ETHUSDT", "side": "buy", "stop": px * 0.98, "target": px * 1.04, "trail_pct": 3, "size_mode": "amount", "amount": 500, "note": "test"})
+mp = next(p for p in GB.positions("CRYPTO") if p["id"] == o["id"])
+assert len(GB.positions("CRYPTO")) == n0 + 1 and mp["strategy_name"] == "Manual" and mp["manual"] and abs(mp["qty"] * mp["entry"] - 500) < 2, mp
+m = GB.modify_position("CRYPTO", o["id"], {"stop": px * 0.97, "target": ""})
+mp = next(p for p in GB.positions("CRYPTO") if p["id"] == o["id"])
+assert abs(mp["state"]["sl"] - px * 0.97) < 1e-6 and mp["state"]["tp"] is None, mp["state"]
+try:
+    GB.modify_position("CRYPTO", o["id"], {"stop": px * 1.05}); raise SystemExit("stop above price accepted")
+except ValueError:
+    pass
+GB.modify_position("CRYPTO", o["id"], {"stop": px * 0.9999})   # tighten: the next tick's live-price check may stop it
+orig = MK.last_price
+MK.last_price = lambda m, s: px * 0.99                           # price falls through the stop
+GB.tick(("CRYPTO",), manage_only=True)
+MK.last_price = orig
+assert not any(p["id"] == o["id"] for p in GB.positions("CRYPTO"))
+rec = next(t for t in GB.trades("CRYPTO") if t["id"] == o["id"])
+assert rec["strategy_name"] == "Manual" and rec["reason"].startswith("Stop") and rec["pnl"] < 0, rec
+print("manual trades OK:", o["message"])
 print("ALL GLOBAL AUTOPILOT OK")
