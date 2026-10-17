@@ -41,7 +41,7 @@ jobs:
         run: |
           git config user.name "fno-data-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add research/data/stocks_1d.csv.gz research/data/stocks_list.csv research/data/stock_picks.json research/data/stock_analyst.json
+          git add research/data/stocks_1d.csv.gz research/data/stocks_list.csv research/data/stock_picks.json research/data/stock_analyst.json research/data/price_bands.csv
           git commit -m "stock daily data [skip ci]" || echo "nothing to commit"
           git pull --rebase -q origin research-data || true
           git push origin HEAD:research-data

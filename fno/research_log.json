@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-16",
+ "updated": "2026-10-17",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
@@ -356,14 +356,14 @@
   },
   {
    "id": "circ",
-   "date": "2026-10-15",
+   "date": "2026-10-17",
    "area": "Stocks",
    "title": "Lower-circuit stocks",
    "asked": "Should stocks locked on their lower circuit be recommended?",
-   "result": "8% of rule signals closed on a lower-circuit signature; 22% of those were locked again from the next open, so they could not be sold.",
+   "result": "Retested with real fills (a stock frozen all day at its lower limit can't be sold or bought): dips that touched the lower circuit bounced better, 84% / +3.2% a trade (train) and 72% / +2.2% (unseen) vs 74% / +1.9% and 59% / +0.5% for other dips. Skipping them cut the realistic all-stock backtest from 18.8% to 8.5% a year; Nifty 500 only 20.1% to 16.7%.",
    "decision": "Adopted",
-   "summary": "On 15 Oct two picks (STLTECH, HFCL) closed on the 5% lower circuit. The backtest assumes you can always sell, so it flatters them. The nightly scan now skips such stocks and lists them as skipped; the 9:30 live check also flags a stock on its lower circuit. Without them the backtest unseen return fell from 11.3% to 7.7% a year, which is the honest price of not holding unsellable stock.",
-   "period": "2021-11 to 2026-10"
+   "summary": "The 15 Oct fix skipped stocks that closed on the lower circuit. The real risk is only a stock frozen at the limit at the next open (38 of 305 cases). So circuit dips stay in the list with a 'Lower circuit' badge and their dates, and are not bought if frozen at the open (09:30 live check; the record marks them 'not bought'). Circuit detection now uses NSE's real price band per stock (No Band = F&O, no circuit); trade-to-trade (BE) stocks get a T2T badge.",
+   "period": "2020-10 to 2026-10"
   },
   {
    "id": "r17",
@@ -661,6 +661,50 @@
    "decision": "Information",
    "summary": "Expired-option prices, bid/ask spreads, chain open interest and FII/DII positioning are not available for past dates, so the app and a nightly GitHub job now save them as they happen for later studies.",
    "period": "from 2026-09-28"
+  },
+  {
+   "id": "univ",
+   "date": "2026-10-17",
+   "area": "Stocks",
+   "title": "All NSE stocks, not only the Nifty 500",
+   "asked": "Should picks come from every NSE stock (Nifty 50 / 500 and beyond)?",
+   "result": "2,344 stocks, 6 years. Nifty 500 only: 20.1% a year, worst fall -12.4%. All stocks ranked by drop: 18.8%, fall -39%. Nifty 500 first plus at most 2 of 10 slots outside: 26.2%, fall -17.5%, unseen 11.2% vs 4.6%. Caps of 1-5 all beat Nifty 500 only.",
+   "decision": "Adopted",
+   "summary": "Outside the Nifty 500 the dip still bounces (73% hit per signal) but small caps that fall hardest can keep falling, so letting them take any slot tripled the worst fall. The scan now covers every investable NSE stock: Nifty 500 picks first, and the 2 strongest outside rule picks join the list with an 'Outside N500 · max 2' badge.",
+   "period": "2020-10 to 2026-10"
+  },
+  {
+   "id": "bigmv",
+   "date": "2026-10-17",
+   "area": "Stocks",
+   "title": "Catching big one-day jumps (like HBL Engineering +17%)",
+   "asked": "Can the app find stocks about to jump 10%+ in a day, or catch them early?",
+   "result": "+10% days: 0.34% of stock-days. Best pre-signal (5x volume and +5% today) raises that only to 3.2%; buying such stocks at the next open lost 0.4% a trade. Gap-ups at the open fade (+3-5% gap: -0.55% open to close; +8% gap: -2.1%). After a +15% day on 10x volume, buying next open lost 0.4-1.0% over 1-5 days. Only 19% of +10% days had any warning the day before.",
+   "decision": "Not adopted",
+   "summary": "HBL's jump came on 40x normal volume after a quiet, falling week - nothing in daily data flagged it. Chasing jumps after they start loses after costs. The opposite works: stocks that gap DOWN 3-8% at the open (above their 200-day average) rose +1.1% a trade open to close, every year 2021-26 (see Opening dip).",
+   "period": "2021-10 to 2026-10"
+  },
+  {
+   "id": "odip",
+   "date": "2026-10-17",
+   "area": "Stocks",
+   "title": "Opening dip (gap down 3-8%, buy the open, sell the close)",
+   "asked": "Is there a same-day stock trade with an edge?",
+   "result": "All NSE stocks above their 200-day average, >= Rs 1 cr turnover, not frozen: 8,454 trades, +1.24% a trade after 0.1% costs, 57% win, positive every year (train +1.27%, unseen +1.07%). Nifty 500: +1.13%, 35 a month.",
+   "decision": "Watch-list",
+   "summary": "The edge needs the official opening price: on 5-minute data the gain shrank from +0.86% at the open to +0.35% when buying at 09:20. Usable only with a pre-open (09:00-09:08) limit order through the broker, which the app does not place yet. Next step: record live pre-open prices and paper-test.",
+   "period": "2021-10 to 2026-10"
+  },
+  {
+   "id": "rsi10",
+   "date": "2026-10-17",
+   "area": "Stocks",
+   "title": "SMA 200 + RSI(10) pullback (Instagram post)",
+   "asked": "Does the posted strategy (34.8% a year, 78% win) work in India, and is it better than our rule?",
+   "result": "Nifty 500, 10 slots: 8.0% a year, fall -25.7%, unseen -6.8% vs our rule 18.3%, -12.0%, +8.4%. Nifty 50: 2.5-3.0% a year. As index call options: 10 trades, 3 won, -Rs 65k per lot.",
+   "decision": "Not adopted",
+   "summary": "The 64-70% win rate is real but wins are small and there is no stop; 34.8% only appears in a picked year (2024). Adding its signals to our rule lowered the result.",
+   "period": "2021-08 to 2026-10"
   }
  ]
 }
