@@ -733,6 +733,21 @@ def gbook_chart():
         return jsonify({"error": str(e)}), 400
 
 
+@app.get("/api/gbook/journal")
+def gbook_journal():
+    return jsonify(SV.clean(GB.journal(_mk())))
+
+
+@app.get("/api/gbook/rules")
+def gbook_rules():
+    return jsonify(SV.clean(GB.rules(_mk())))
+
+
+@app.get("/api/gbook/context")
+def gbook_context():
+    return jsonify(SV.clean(GB.context(_mk())))
+
+
 @app.post("/api/gbook/prefs")
 def gbook_prefs():
     b = request.get_json(force=True) or {}

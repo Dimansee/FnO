@@ -14,6 +14,39 @@
    "period": "Jan 2023 - 17 Oct 2026"
   },
   {
+   "id": "pcs",
+   "date": "2026-10-17",
+   "area": "Crypto",
+   "title": "Best setup per coin (by profit or by win %), and late entries on slow rules",
+   "asked": "If each coin (BTC, ETH, SOL, BNB, XRP) trades whichever of 60 setups did best on it over the last 12 months, re-chosen every quarter, does it make money the next quarter? And can a 4h/daily signal still be taken if the engine missed the bar close?",
+   "result": "Best-profit pick per coin: 336 unseen trades, +0.02R, PF 1.04 (break-even). Best-win-% pick: 455 trades, +0.02R, 42% wins (break-even). Fixed live trend rules on the same quarters: 621 trades, +0.23R, PF 1.38. Entering one 4h bar late kept the edge (Supertrend 4h +0.080R vs +0.085R on time); 2+ bars late it faded.",
+   "decision": "Partly adopted",
+   "summary": "Per-coin chasing not adopted. Slow rules may now enter up to 4 hours after the signal bar; live scanner added to the dashboard.",
+   "period": "Jan 2024 - 17 Oct 2026"
+  },
+  {
+   "id": "ccs",
+   "date": "2026-10-17",
+   "area": "Crypto",
+   "title": "Candle patterns and crypto-only ideas: seasonality, coin rotation, BTC regime, squeeze, funding rates",
+   "asked": "Do 18 candlestick patterns (1h/4h/daily) or crypto-specific ideas give an edge on 10 coins after 16 bps round-trip costs? Binance 1h Jan 2023 - Oct 2026, design before 1 Apr 2025.",
+   "result": "Candles: only 5 of 108 positive in both halves (chance level); reversal patterns were the worst. Hour/weekday effects about 1 bps, far below costs. Coin rotation lost on the unseen part (-11% to -39% a year). Funding contrarian: the opposite happened (momentum). A BTC 200-day switch on Supertrend 4h: +0.27R vs +0.15R unseen but worse on design.",
+   "decision": "Watch-list",
+   "summary": "Trend-following on slow bars stays the only edge. The BTC 200-day switch is forward-tested in the lab (separate ledger, no money).",
+   "period": "Jan 2023 - 17 Oct 2026"
+  },
+  {
+   "id": "glr",
+   "date": "2026-10-17",
+   "area": "Crypto & US",
+   "title": "Which textbook rules work on crypto and US stocks after costs?",
+   "asked": "10 rule families (Donchian, EMA crosses, Supertrend, Keltner, MACD, RSI pullbacks, mean reversion) x 1h/4h/daily x long/both on 10 coins and 14 US names, judged on data the choice never saw.",
+   "result": "29 of 100 passed design, 10 passed both, all slow trend-following on 4h or daily bars. Every mean-reversion rule and everything on 1h bars lost after costs. Crypto Supertrend 4h +0.15R (487 unseen trades), Donchian 20 daily +0.22R; US Donchian 55 4h +0.40R, Keltner 4h +0.32R (US is a 2-year bull market).",
+   "decision": "Adopted",
+   "summary": "These are the autopilot's built-in rules; each still has to pass a weekly re-test on recent data before it may trade.",
+   "period": "Jan 2023 - 17 Oct 2026"
+  },
+  {
    "id": "x10",
    "date": "2026-10-16",
    "area": "Index options",

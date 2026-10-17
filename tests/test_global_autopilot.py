@@ -189,4 +189,16 @@ for bad in (("CRYPTO", "BTCUSDT", "7m"), ("CRYPTO", "NOPE", "5m")):
 r = c.get("/api/gbook/chart?market=CRYPTO&symbol=BTCUSDT&tf=1d")
 assert r.status_code in (200, 401), r.status_code
 print("chart OK:", len(ch["candles"]), "candles,", len(ch["lines"]), "lines,", len(ch["markers"]), "markers")
+
+# 10. journal, rulebook and market context for the Crypto workspace
+j = GB.journal("CRYPTO")
+assert {"trades", "by_day", "by_strategy", "by_symbol", "by_reason", "open"} <= set(j) and len(j["open"]) == len(GB.positions("CRYPTO"))
+rb = GB.rules("CRYPTO")
+assert len(rb["built_in"]) == len(AP.CANDIDATES["CRYPTO"]) and all(r["about"] and r["spec"]["market"] == "CRYPTO" for r in rb["built_in"])
+for r in rb["built_in"]:
+    CU.validate(r["spec"], existing_id=r["id"])            # the Backtest tab posts these specs back unchanged
+ctx = GB.context("CRYPTO")
+assert ctx["rows"] and all("error" not in r for r in ctx["rows"]), ctx["rows"][:2]
+assert ctx["breadth"]["of"] == len(ctx["rows"])
+print("journal/rules/context OK")
 print("ALL GLOBAL AUTOPILOT OK")

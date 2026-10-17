@@ -61,20 +61,26 @@ _KELTNER = {"long": {"all": [_c(_P, "crosses_above", {"ind": "keltner", "n": 20,
 # 'research' = pooled result on the unseen part of the history (avg R per trade after costs, trades).
 CANDIDATES = {
     "CRYPTO": [
-        {"id": "s_a10001", "name": "Supertrend 10/3 (4h)", "timeframe": "4h", "direction": "both", **_SUPERTREND, "research": "+0.15R over 487 unseen trades, every year positive"},
-        {"id": "s_a10002", "name": "Donchian 55 breakout, long (4h)", "timeframe": "4h", "direction": "long", **_donchian(55, 4.0), "research": "+0.14R over 298 unseen trades"},
-        {"id": "s_a10003", "name": "Donchian 20 breakout, long (daily)", "timeframe": "1d", "direction": "long", **_donchian(20, 3.0), "research": "+0.22R over 95 unseen trades, every year positive"},
-        {"id": "s_a10004", "name": "Supertrend 10/3 (daily)", "timeframe": "1d", "direction": "both", **_SUPERTREND, "research": "+0.33R over 73 unseen trades, depends on a few big winners"},
+        {"id": "s_a10001", "name": "Supertrend 10/3 (4h)", "timeframe": "4h", "direction": "both", **_SUPERTREND, "research": "+0.15R over 487 unseen trades, every year positive",
+         "about": "Buy when a 4-hour bar closes above the Supertrend line (trend flips up); sell short when one closes below it (flips down). Stop 2 x ATR from entry; exit on the opposite flip. No fixed target: it rides the trend."},
+        {"id": "s_a10002", "name": "Donchian 55 breakout, long (4h)", "timeframe": "4h", "direction": "long", **_donchian(55, 4.0), "research": "+0.14R over 298 unseen trades",
+         "about": "Buy when a 4-hour bar closes above the highest high of the previous 55 bars (about 9 days). Stop 2 x ATR; then a trailing stop 4 x ATR below the best price. Longs only."},
+        {"id": "s_a10003", "name": "Donchian 20 breakout, long (daily)", "timeframe": "1d", "direction": "long", **_donchian(20, 3.0), "research": "+0.22R over 95 unseen trades, every year positive",
+         "about": "Buy when a daily close (00:00 UTC, 05:30 IST) is above the highest high of the previous 20 days. Stop 2 x ATR; trailing stop 3 x ATR below the best price. Longs only."},
+        {"id": "s_a10004", "name": "Supertrend 10/3 (daily)", "timeframe": "1d", "direction": "both", **_SUPERTREND, "research": "+0.33R over 73 unseen trades, depends on a few big winners",
+         "about": "Same as the 4-hour Supertrend rule on daily bars: buy on an up-flip, short on a down-flip, stop 2 x ATR, exit on the opposite flip. Few trades, large winners."},
     ],
     "US": [
-        {"id": "s_a10011", "name": "Donchian 55 breakout, long (4h)", "timeframe": "4h", "direction": "long", **_donchian(55, 4.0), "research": "+0.40R over 76 unseen trades"},
-        {"id": "s_a10012", "name": "Keltner breakout, long (4h)", "timeframe": "4h", "direction": "long", **_KELTNER, "research": "+0.32R over 115 unseen trades"},
+        {"id": "s_a10011", "name": "Donchian 55 breakout, long (4h)", "timeframe": "4h", "direction": "long", **_donchian(55, 4.0), "research": "+0.40R over 76 unseen trades",
+         "about": "Buy when a 4-hour bar (two per US session) closes above the highest high of the previous 55 bars. Stop 2 x ATR, trailing stop 4 x ATR. Longs only, whole shares."},
+        {"id": "s_a10012", "name": "Keltner breakout, long (4h)", "timeframe": "4h", "direction": "long", **_KELTNER, "research": "+0.32R over 115 unseen trades",
+         "about": "Buy when a 4-hour bar closes above the upper Keltner band (20-bar EMA + 2 x ATR). Stop 2 x ATR, trailing stop 3 x ATR. Longs only, whole shares."},
     ],
 }
 
 
 def _spec(market: str, cand: dict, symbols: list[str]) -> dict:
-    raw = {k: v for k, v in cand.items() if k != "research"}
+    raw = {k: v for k, v in cand.items() if k not in ("research", "about")}
     raw.update(name="Autopilot · " + cand["name"], market=market, symbols=symbols or SYMBOLS[market][:1], hold="swing",
                filters={"max_trades_day": 3}, enabled=True, auto=True, version=1)
     spec = CU.validate(raw, existing_id=cand["id"])
@@ -159,3 +165,18 @@ def status(market: str, in_use: bool) -> dict:
     rows = [{k: v for k, v in r.items() if k != "per_symbol"} for r in q.get("rows", [])]
     return {"in_use": in_use, "tested_at": q.get("at"), "passed": [r for r in rows if r["ok"]], "failed": [r for r in rows if not r["ok"]],
             "tested": len(rows), "rules": f"each rule needs ≥{MIN_TRADES} recent trades, ≥{MIN_AVG_R}R average and profit factor ≥{MIN_PF}"}
+
+
+def rulebook(market: str) -> list[dict]:
+    """Every built-in rule with its plain-English text, latest weekly check and the strategy itself (for the Backtest tab)."""
+    q = store.get(f"g_ap_qual:{market}") or {}
+    rows = {r["id"]: r for r in q.get("rows", [])}
+    out = []
+    for c in CANDIDATES.get(market, []):
+        r = rows.get(c["id"], {})
+        spec = _spec(market, c, SYMBOLS[market])
+        spec.pop("autopilot", None)
+        out.append({"id": c["id"], "name": c["name"], "timeframe": c["timeframe"], "direction": c["direction"], "about": c.get("about"),
+                    "research": c.get("research"), "active": bool(r.get("ok")), "symbols": r.get("symbol") if r.get("ok") else None,
+                    "check": r.get("why"), "spec": spec})
+    return out

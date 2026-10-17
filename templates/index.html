@@ -462,20 +462,26 @@ details summary{cursor:pointer;font-size:13px}
       <button data-t="chain"><svg class="ic"><use href="#i-chain"/></svg><span class="lb">Option chain</span></button>
       <button data-t="portfolio"><svg class="ic"><use href="#i-portfolio"/></svg><span class="lb">Portfolio</span></button>
       <button data-t="markets"><svg class="ic"><use href="#i-markets"/></svg><span class="lb">Dashboard</span><span class="newb">NEW</span></button>
+      <button data-t="gportfolio"><svg class="ic"><use href="#i-portfolio"/></svg><span class="lb">Portfolio</span></button>
       <div class="grp">Strategy lab</div>
       <button data-t="strategies"><svg class="ic"><use href="#i-strategies"/></svg><span class="lb">Strategies</span><span class="newb">NEW</span></button>
       <button data-t="learning"><svg class="ic"><use href="#i-learning"/></svg><span class="lb">Learning</span><span class="newb">NEW</span></button>
       <div class="grp">Insight</div>
       <button data-t="context"><svg class="ic"><use href="#i-context"/></svg><span class="lb">Market context</span></button>
+      <button data-t="gcontext"><svg class="ic"><use href="#i-context"/></svg><span class="lb">Market context</span></button>
       <button data-t="stocks"><svg class="ic"><use href="#i-stocks"/></svg><span class="lb">Stocks</span></button>
       <button data-t="recs"><svg class="ic"><use href="#i-recs"/></svg><span class="lb">Recommendations</span></button>
       <button data-t="journal"><svg class="ic"><use href="#i-journal"/></svg><span class="lb">Journal</span></button>
+      <button data-t="gjournal"><svg class="ic"><use href="#i-journal"/></svg><span class="lb">Journal</span></button>
       <div class="grp">Data</div>
       <button data-t="data"><svg class="ic"><use href="#i-data"/></svg><span class="lb">Saved data</span><span class="newb">NEW</span></button>
       <div class="grp">Study</div>
       <button data-t="backtest"><svg class="ic"><use href="#i-backtest"/></svg><span class="lb">Backtest</span></button>
+      <button data-t="gbacktest"><svg class="ic"><use href="#i-backtest"/></svg><span class="lb">Backtest</span></button>
       <button data-t="research"><svg class="ic"><use href="#i-research"/></svg><span class="lb">Research</span></button>
+      <button data-t="gresearch"><svg class="ic"><use href="#i-research"/></svg><span class="lb">Research</span></button>
       <button data-t="rules"><svg class="ic"><use href="#i-rules"/></svg><span class="lb">Options rulebook</span></button>
+      <button data-t="grules"><svg class="ic"><use href="#i-rules"/></svg><span class="lb">Rulebook</span></button>
       <button data-t="stockrules"><svg class="ic"><use href="#i-stockrules"/></svg><span class="lb">Stock rulebook</span></button>
       <button data-t="glossary"><svg class="ic"><use href="#i-glossary"/></svg><span class="lb">Glossary</span></button>
       <div class="grp">System</div>
@@ -696,6 +702,12 @@ details summary{cursor:pointer;font-size:13px}
   <section id="t-data" class="hidden"><div id="dxBody"></div></section>
   <section id="t-strategies" class="hidden"><div id="sxBody"></div></section>
   <section id="t-learning" class="hidden"><div id="lxBody"></div></section>
+  <section id="t-gportfolio" class="hidden"><div id="gpBody"></div></section>
+  <section id="t-gjournal" class="hidden"><div id="gjBody"></div></section>
+  <section id="t-grules" class="hidden"><div id="grBody"></div></section>
+  <section id="t-gbacktest" class="hidden"><div id="gbHead"></div><div id="gbBody"></div></section>
+  <section id="t-gresearch" class="hidden"><div id="gsBody"></div></section>
+  <section id="t-gcontext" class="hidden"><div id="gcBody"></div></section>
   <section id="t-markets" class="hidden"><div id="gxHead"></div>
     <div class="card" id="gxChartCard" style="margin-bottom:14px"><div class="row between wrap" style="gap:10px"><h3 style="margin:0" id="gxChartTitle">Chart</h3>
       <div class="gxtools"><select id="gxSym" aria-label="Symbol"></select><div class="segs" id="gxTf"></div></div></div>
@@ -832,7 +844,7 @@ async function start() {
 /* ---- market workspace: India F&O, Crypto or US. Each shows only its own tabs and data. ---- */
 const WS = {mk: localStorage.getItem("ws") || "IN"};
 const WS_IN = new Set(["signal", "chain", "portfolio", "context", "stocks", "recs", "journal", "data", "backtest", "research", "rules", "stockrules", "settings"]);
-const WS_GLOBAL = new Set(["markets"]);
+const WS_GLOBAL = new Set(["markets", "gportfolio", "gjournal", "grules", "gbacktest", "gresearch", "gcontext"]);
 const wsAllows = t => WS.mk === "IN" ? !WS_GLOBAL.has(t) : !WS_IN.has(t);
 function applyWS() {
   document.querySelectorAll("#wsSwitch .seg").forEach(b => b.classList.toggle("on", b.dataset.ws === WS.mk));
@@ -875,7 +887,7 @@ $("#refresh").onclick = () => load();
 $("#auto").onchange = schedule;
 function schedule() {
   clearInterval(S.timer);
-  if ($("#auto").checked && ["signal", "portfolio", "chain", "recs", "markets"].includes(S.tab)) S.timer = setInterval(() => !document.hidden && load(true), 30000);
+  if ($("#auto").checked && ["signal", "portfolio", "chain", "recs", "markets", "gportfolio"].includes(S.tab)) S.timer = setInterval(() => !document.hidden && load(true), 30000);
 }
 async function load(quiet) {
   const sec = $("#t-" + S.tab); if (!quiet) { sec.classList.add("loading"); pStart(); }
@@ -893,6 +905,12 @@ async function load(quiet) {
     else if (S.tab === "strategies") await loadStrategies();
     else if (S.tab === "learning") await loadLearning();
     else if (S.tab === "markets") await loadMarkets(quiet);
+    else if (S.tab === "gportfolio") await loadGPortfolio();
+    else if (S.tab === "gjournal") await loadGJournal();
+    else if (S.tab === "grules") await loadGRules();
+    else if (S.tab === "gbacktest") await loadGBacktest();
+    else if (S.tab === "gresearch") await loadGResearch();
+    else if (S.tab === "gcontext") await loadGContext();
     else if (S.tab === "data") await loadData();
   } catch (e) { if (!quiet) toast(e.message); }
   finally { sec.classList.remove("loading"); if (!quiet) pDone(); hideSplash(); }
@@ -2765,7 +2783,7 @@ function renderStrategies() {
     </div>
   </div>
   <div id="sxBt">${btHtml()}</div>`;
-  if (SX.bt && SX.bt.curve_R) setTimeout(() => miniLine($("#sxCurve"), SX.bt.curve_R.reduce((a, v) => (a.push((a.length ? a[a.length - 1] : 0) + v), a), [0]), {base: 0}), 0);
+  if (SX.bt && SX.bt.curve_R) setTimeout(() => miniLine($("#sxCurve"), [0].concat(SX.bt.curve_R), {base: 0}), 0);
 }
 function cardHtml(s) {
   const lg = s.long.all.concat(s.long.any).length, sh = s.short.all.concat(s.short.any).length;
@@ -2959,6 +2977,100 @@ document.addEventListener("click", async e => {
   } catch (er) { toast(er.message); }
 });
 
+
+/* ------------------------------ Crypto / US: journal, rulebook, backtest, research, market context ------------------------------ */
+const gmk = () => (WS.mk !== "IN" ? WS.mk : GX.mk);
+const pct = v => v == null ? "–" : `<span class="${cls(v)}">${v > 0 ? "+" : ""}${Number(v).toFixed(2)}%</span>`;
+const gHead = (title, sub) => `<div class="pagehead"><div><h2>${tabs[gmk()]} ${title}</h2><p class="muted">${sub}</p></div></div>`;
+const grpTable = (title, rows, cur, label) => `<div class="card"><h3>${title}</h3>${rows.length ? `<div class="tablewrap" style="max-height:340px"><table><tr><th>${label}</th><th>Trades</th><th>Win</th><th>Avg R</th><th>PF</th><th>Net</th></tr>${rows.map(r => `<tr><td>${esc(r.key)}</td><td class="mono">${r.trades}</td><td class="mono">${r.win_rate}%</td><td class="mono ${cls(r.avg_R)}">${sgn(r.avg_R)}R</td><td class="mono">${r.profit_factor ?? "–"}</td><td class="mono ${cls(r.net)}">${money(r.net, cur)}</td></tr>`).join("")}</table></div>` : `<p class="muted">No closed trades yet.</p>`}</div>`;
+
+async function loadGJournal() {
+  const d = await api("/api/gbook/journal?market=" + gmk()), cur = d.currency;
+  const t = d.trades, net = t.reduce((a, x) => a + (x.pnl || 0), 0), wins = t.filter(x => x.pnl > 0).length;
+  $("#gjBody").innerHTML = gHead("journal", "Every closed paper trade with why it opened and why it closed, grouped by day (Indian time), strategy, coin and exit reason.")
+  + `<div class="grid g4">${kpiCard("Closed trades", t.length, `${d.open.length} still open`)}${kpiCard("Win rate", t.length ? Math.round(wins / t.length * 100) + "%" : "–", `${wins} winners`)}${kpiCard("Net result", money(net, cur), "after fees and slippage", cls(net))}${kpiCard("Average", t.length ? sgn(t.reduce((a, x) => a + (x.R || 0), 0) / t.length) + "R" : "–", "per trade, in risk units")}</div>
+  <div class="grid g2" style="margin-top:14px">${grpTable("By day", d.by_day, cur, "Day")}${grpTable("By strategy", d.by_strategy, cur, "Strategy")}${grpTable("By coin", d.by_symbol, cur, gmk() === "CRYPTO" ? "Coin" : "Symbol")}${grpTable("By exit reason", d.by_reason, cur, "Exit")}</div>
+  <div class="card" style="margin-top:14px"><h3>Every trade</h3><div class="tablewrap" style="max-height:60vh"><table><tr><th>Closed (IST)</th><th>Symbol</th><th>Strategy</th><th>Side</th><th>Entry → exit</th><th>Best / worst</th><th>R</th><th>P&L</th><th>Reason</th></tr>${t.map(x => `<tr><td class="mono">${esc(new Date(x.closed).toLocaleString("en-IN", {day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", hour12: false}))}</td><td><b>${esc(x.symbol)}</b></td><td>${esc((x.strategy_name || "").replace("Autopilot · ", ""))}</td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${fmtN(x.entry, x.entry < 10 ? 4 : 2)} → ${fmtN(x.exit, x.exit < 10 ? 4 : 2)}</td><td class="mono">${sgn(x.mfe_R)} / ${sgn(x.mae_R)}R</td><td class="mono ${cls(x.R)}">${sgn(x.R)}</td><td class="mono ${cls(x.pnl)}">${fmtN(x.pnl)}</td><td>${esc(x.reason)}</td></tr>`).join("") || `<tr><td colspan="9" class="muted">No closed trades yet. The first ones appear here as soon as a rule exits a position.</td></tr>`}</table></div></div>`;
+}
+
+async function loadGRules() {
+  const d = await api("/api/gbook/rules?market=" + gmk()), p = d.prefs, c = d.costs;
+  GB_RULES = d;
+  const rule = r => `<div class="card" style="margin-bottom:12px"><div class="row between wrap"><h3 style="margin:0">${esc(r.name)}</h3><span class="tag ${r.active ? "tup" : "twarn"}">${r.active ? "TRADING" : "PAUSED"}</span></div>
+    <p style="margin:8px 0 0">${esc(r.about || "")}</p>
+    <p class="muted" style="margin:6px 0 0;font-size:13px"><b>Bars:</b> ${esc(r.timeframe)} · <b>Direction:</b> ${r.direction === "both" ? "long and short" : "long only"} · <b>Research:</b> ${esc(r.research || "–")}</p>
+    <p class="muted" style="margin:4px 0 0;font-size:13px"><b>This week's check:</b> ${esc(r.check || "not run yet")}${r.active && r.symbols ? ` · <b>trading on</b> ${esc(r.symbols)}` : ""}</p></div>`;
+  $("#grBody").innerHTML = gHead("rulebook", `The rules that trade this account, in plain words. ${d.who_trades === "yours" ? "<b>Your own Auto strategies are trading now</b>, so the built-in rules below stand aside." : "No strategy of yours is on Auto, so the built-in rules below trade."}`)
+  + `<div class="grid g2"><div>
+      <h3 class="sect">Built-in rules (autopilot)</h3>${d.built_in.map(rule).join("")}
+      <div class="card"><h3>How a rule earns the right to trade</h3><ul class="tight"><li>Chosen from research on years of past prices, judged only on data the choice never saw (Research tab).</li><li>Re-tested every week on recent history: ${esc(d.gate)}. A rule that stops working is paused on its own; coins where it has been losing lately are skipped.</li><li>Last check: ${esc((d.tested_at || "not yet").replace("T", " ").slice(0, 16))} UTC.</li></ul></div>
+    </div><div>
+      <h3 class="sect">Your ${tabs[gmk()]} strategies</h3>${d.own.length ? d.own.map(o => `<div class="card" style="margin-bottom:10px"><b>${esc(o.name)}</b> <span class="tag">${esc(o.timeframe)}</span> ${o.auto ? '<span class="tag tup">AUTO</span>' : ""}<div class="muted" style="margin-top:4px">${esc(o.symbols.join(", "))}</div></div>`).join("") : `<div class="card muted">None yet. Build one in Strategies; switch on "Auto paper-trade" and it trades here instead of the built-in rules.</div>`}
+      <div class="card" style="margin-top:12px"><h3>Risk and money rules</h3><ul class="tight">
+        <li><b>Risk per trade:</b> ${p.risk_pct}% of the account between entry and stop. Position size = that amount ÷ stop distance.</li>
+        <li><b>Leverage cap:</b> ${p.max_leverage}× · <b>max open positions:</b> ${p.max_open} (one per rule and coin).</li>
+        <li><b>Entries:</b> only on a finished bar; a signal may still be taken up to 4 hours late on 4h/daily rules, never if price already ran more than ½ ATR from the signal.</li>
+        <li><b>Exits:</b> stop-loss, trailing stop or the opposite signal, checked every minute.</li>
+        <li><b>Costs in every result:</b> ${c.fee_bps} bps fee + ${c.slippage_bps} bps slippage per side.</li>
+        <li><b>Paper money only.</b> No real order is ever placed from here.</li></ul></div>
+      <div class="card" style="margin-top:12px"><h3>What does not work here (tested)</h3><ul class="tight"><li>Fast intraday rules on 5m/15m bars (your Noise band, Camarilla, D1 break, Chandelier, 5 EMA, RSI 60/40): flat before costs, losing after them.</li><li>Candlestick patterns, mean reversion, coin rotation, funding-rate fades, picking each coin's recent "best" setup.</li><li>Details and numbers: Research tab.</li></ul></div>
+    </div></div>`;
+}
+let GB_RULES = null;
+const GBT = {res: null, busy: false};
+async function loadGBacktest() {
+  const mk = gmk();
+  if (!GB_RULES || GB_RULES.market !== mk) GB_RULES = await api("/api/gbook/rules?market=" + mk);
+  const opts = GB_RULES.built_in.map(r => [r.id, "Built-in · " + r.name]).concat(GB_RULES.own.map(o => [o.id, "Yours · " + o.name]));
+  const prevR = $("#gbRule") && $("#gbRule").value, prevS = $("#gbSym") && $("#gbSym").value, prevD = $("#gbDays") && $("#gbDays").value;
+  $("#gbHead").innerHTML = gHead("backtest", "Test any built-in rule or your own strategy on one coin's past prices, with the same engine, fees and slippage the paper account uses.") +
+    `<div class="card"><div class="grid g4"><div><label>Rule</label><select id="gbRule">${opts.map(([k, v]) => `<option value="${k}" ${k === prevR ? "selected" : ""}>${esc(v)}</option>`).join("")}</select></div>
+    <div><label>${mk === "CRYPTO" ? "Coin" : "Symbol"}</label><select id="gbSym">${GB_RULES.symbols.map(x => `<option value="${x.id}" ${x.id === prevS ? "selected" : ""}>${esc(x.label)}</option>`).join("")}</select></div>
+    <div><label>Days of history</label><select id="gbDays">${[90, 180, 365, 730, 1095, 1460].map(n => `<option ${String(n) === (prevD || "730") ? "selected" : ""}>${n}</option>`).join("")}</select></div>
+    <div style="display:flex;align-items:flex-end"><button class="primary" id="gbRun" ${GBT.busy ? "disabled" : ""}>${GBT.busy ? "Running…" : "Run backtest"}</button></div></div></div>`;
+  gbRender();
+}
+function gbRender() {
+  const el = $("#gbBody"); SX.bt = GBT.res; SX.imp = null;
+  el.innerHTML = GBT.busy ? `<div class="card muted" style="margin-top:16px">Working… fetching history and simulating.</div>` : (GBT.res ? btHtml() : `<p class="muted" style="margin-top:14px">Pick a rule and a coin, then run.</p>`);
+  const cv = el.querySelector("#sxCurve"); if (cv && GBT.res && GBT.res.curve_R) setTimeout(() => miniLine(cv, [0].concat(GBT.res.curve_R), {base: 0}), 0);
+  SX.bt = null;
+}
+document.addEventListener("click", async e => {
+  if (!e.target.closest("#gbRun")) return;
+  const id = $("#gbRule").value, sym = $("#gbSym").value, days = +$("#gbDays").value;
+  const r = GB_RULES.built_in.find(x => x.id === id), o = GB_RULES.own.find(x => x.id === id);
+  const spec = clone((r || o).spec); spec.symbols = [sym];
+  GBT.busy = true; GBT.res = null; await loadGBacktest();
+  try { GBT.res = await post("/api/strategies/backtest", {spec, symbol: sym, days}); }
+  catch (er) { GBT.res = {error: er.message}; }
+  GBT.busy = false; await loadGBacktest();
+});
+
+async function loadGResearch() {
+  const d = await api("/api/research/log"), mk = gmk(), want = mk === "CRYPTO" ? ["Crypto", "Crypto & US"] : ["US", "Crypto & US"];
+  const items = (d.entries || []).filter(x => want.includes(x.area));
+  const tag = x => ({"Adopted": "tup", "Partly adopted": "tup", "Watch-list": "twarn", "Not adopted": "tdown"}[x.decision] || "");
+  $("#gsBody").innerHTML = gHead("research", "What was tested for this market, how, and what was decided. Every test uses the app's own engine and costs, and is judged on data the choice never saw.")
+  + (items.length ? items.map(x => `<div class="card" style="margin-bottom:12px"><div class="row between wrap"><h3 style="margin:0">${esc(x.title)}</h3><span class="tag ${tag(x)}">${esc(x.decision)}</span></div>
+      <p class="muted" style="margin:6px 0 0;font-size:12.5px">${esc(x.date)} · ${esc(x.area)} · data ${esc(x.period || "")}</p>
+      <p style="margin:8px 0 0"><b>Question.</b> ${esc(x.asked)}</p><p style="margin:6px 0 0"><b>Result.</b> ${esc(x.result)}</p><p style="margin:6px 0 0"><b>Decision.</b> ${esc(x.summary)}</p></div>`).join("")
+    : `<div class="card muted">No research for this market yet.</div>`);
+}
+
+async function loadGContext() {
+  const mk = gmk(), d = await api("/api/gbook/context?market=" + mk), b = d.breadth || {}, rg = d.regime, se = d.sentiment;
+  const rows = d.rows || [];
+  $("#gcBody").innerHTML = gHead("market context", `Where each ${mk === "CRYPTO" ? "coin" : "symbol"} stands now: recent moves, trend and how much it swings. Updated every 10 minutes.`)
+  + `<div class="grid g4">${kpiCard("Leader trend", rg ? (rg.bull ? '<span class="up">Up</span>' : '<span class="down">Down</span>') : "–", rg ? `${esc(rg.symbol)} ${rg.vs_sma200 > 0 ? "+" : ""}${rg.vs_sma200}% vs its 200-day average` : "")}
+    ${kpiCard("Above 200-day average", `${b.above_200d ?? "–"} / ${b.of ?? "–"}`, "long-term uptrends")}
+    ${kpiCard("4h trend up", `${b.up_4h ?? "–"} / ${b.of ?? "–"}`, "Supertrend 10/3 on 4h bars")}
+    ${kpiCard(se ? esc(se.name) : "Sentiment", se ? se.value : "–", se ? `${esc(se.label)} · a week ago ${se.week_ago}` : "not available right now")}</div>
+  <div class="card" style="margin-top:14px"><div class="tablewrap"><table><tr><th>${mk === "CRYPTO" ? "Coin" : "Symbol"}</th><th>Price</th><th>1 day</th><th>7 days</th><th>30 days</th><th>vs 200-day avg</th><th>4h trend</th><th>Daily swing (ATR)</th><th>Volume vs 30-day avg</th></tr>
+  ${rows.map(r => r.error ? `<tr><td><b>${esc(r.label)}</b></td><td colspan="8" class="muted">${esc(r.error)}</td></tr>` : `<tr><td><b>${esc(r.label)}</b> <span class="muted">${esc(r.symbol.replace("USDT", ""))}</span></td><td class="mono">${fmtN(r.price, r.price < 10 ? 4 : 2)}</td><td class="mono">${pct(r.d1)}</td><td class="mono">${pct(r.d7)}</td><td class="mono">${pct(r.d30)}</td><td class="mono">${pct(r.vs_sma200)}</td><td>${r.trend4h === 1 ? '<span class="up">▲ up</span>' : r.trend4h === -1 ? '<span class="down">▼ down</span>' : "–"}</td><td class="mono">${r.atr_pct}%</td><td class="mono">${r.vol_vs_30d == null ? "–" : r.vol_vs_30d + "×"}</td></tr>`).join("")}</table></div>
+  <p class="muted" style="font-size:12.5px;margin:10px 0 0">The trend rules buy when a coin breaks out with its trend and stay out of coins trending down; a big daily swing means wider stops and smaller positions. ${mk === "CRYPTO" ? "Fear & Greed from alternative.me." : "VIX from Yahoo Finance."}</p></div>`;
+}
+
 /* ------------------------------ Global markets (crypto / US) ------------------------------ */
 const GX = {mk: localStorage.getItem("gmk") || "CRYPTO", data: null, sym: {}, tf: localStorage.getItem("gxtf") || "5m", chart: null, ser: null, lines: [], pls: [], key: null};
 async function loadMarkets(quiet) {
@@ -2982,21 +3094,29 @@ function gxMakeChart() {
 async function loadGxChart(quiet) {
   const mk = GX.mk, sym = GX.sym[mk] || (mk === "CRYPTO" ? "BTCUSDT" : "SPY"), tf = GX.tf;
   gxMakeChart();
+  const token = (GX.token = (GX.token || 0) + 1);       // a slower reply for an older coin / timeframe must never overwrite the newer one
   let r;
   try { r = await api(`/api/gbook/chart?market=${mk}&symbol=${sym}&tf=${tf}`); }
-  catch (e) { $("#gxChartNote").textContent = "Chart unavailable right now: " + e.message; return; }
-  if (mk !== GX.mk) return;
+  catch (e) { if (token === GX.token) $("#gxChartNote").textContent = "Chart unavailable right now: " + e.message; return; }
+  if (token !== GX.token || mk !== GX.mk) return;
   $("#gxSym").innerHTML = (r.symbols || []).map(x => `<option value="${x.id}" ${x.id === sym ? "selected" : ""}>${esc(x.label)} (${esc(x.id.replace("USDT", ""))})</option>`).join("");
   $("#gxTf").innerHTML = (r.timeframes || []).map(t => `<button class="seg ${t === tf ? "on" : ""}" data-gtf="${t}">${t}</button>`).join("");
   $("#gxChartTitle").textContent = `${(r.symbols.find(x => x.id === sym) || {label: sym}).label} · ${GX_TF[tf]} candles`;
   const bars = r.candles || []; GX.bars = bars;
   const key = mk + sym + tf, scrolled = GX.key === key ? GX.chart.timeScale().getVisibleLogicalRange() : null;
+  if (GX.key !== key) {                                    // new coin or timeframe: price axis follows its own prices again
+    const px = bars.length ? bars[bars.length - 1].close : 1, prec = px >= 1000 ? 2 : px >= 10 ? 3 : px >= 1 ? 4 : px >= 0.01 ? 5 : 8;
+    const fmt = {type: "price", precision: prec, minMove: Math.pow(10, -prec)};
+    GX.ser.applyOptions({priceFormat: fmt});
+    GX.chart.priceScale("right").applyOptions({autoScale: true});
+    GX.fmt = fmt;
+  }
   GX.ser.setData(bars.map(b => ({time: b.time, open: b.open, high: b.high, low: b.low, close: b.close})));
   GX.vol.setData(bars.map(b => ({time: b.time, value: b.volume, color: b.close >= b.open ? "rgba(63,191,143,.35)" : "rgba(226,103,90,.35)"})));
   GX.lines.forEach(l => GX.chart.removeSeries(l)); GX.lines = [];
   const pal = ["#f2a93b", "#7fb4d9", "#b48ee8"];
   (r.lines || []).forEach((ln, i) => {
-    const s2 = GX.chart.addLineSeries({lineWidth: 2, color: pal[i % pal.length], priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false, title: ""});
+    const s2 = GX.chart.addLineSeries({lineWidth: 2, color: pal[i % pal.length], priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false, title: "", priceFormat: GX.fmt});
     s2.setData(ln.points); GX.lines.push(s2);
   });
   GX.pls.forEach(pl => GX.ser.removePriceLine(pl)); GX.pls = [];
@@ -3012,7 +3132,7 @@ async function loadGxChart(quiet) {
   $("#gxChartNote").innerHTML = `${bars.length} candles from ${mk === "CRYPTO" ? "Binance (Bybit if Binance is down)" : "Yahoo Finance (delayed)"}; refreshes every 30 s with Auto on. ${ln ? "Lines: " + ln + ". " : (tf === "4h" || tf === "1d" ? "" : "The autopilot rules run on 4h and daily bars; switch to those to see their lines. ")}Arrows = this book's entries, dots = exits.`;
   $("#gxLegend").innerHTML = "";
 }
-$("#gxSym").onchange = () => { GX.sym[GX.mk] = $("#gxSym").value; loadGxChart(); };
+$("#gxSym").onchange = () => { GX.sym[GX.mk] = $("#gxSym").value; GX.bars = []; loadGxChart(); };
 $("#gxTf").onclick = e => { const b = e.target.closest("button"); if (!b) return; GX.tf = b.dataset.gtf; localStorage.setItem("gxtf", GX.tf); loadGxChart(); };
 function gxAutopilot(d) {
   const a = d.autopilot || {}, ago = d.last_tick ? Math.round((Date.now() - Date.parse(d.last_tick)) / 60000) : null;
@@ -3047,6 +3167,12 @@ function renderMarkets() {
 </div>`;
   el.innerHTML = `${gxAutopilot(d)}${gxScanner(d)}${gxLab(d)}
   <div class="grid g4">${kpiCard("Account value", money(d.equity, cur), `started with ${money(d.capital_start, cur)}`)}${kpiCard("Available", money(d.cash, cur), `${d.positions.length} open`)}${kpiCard("Realised", money(d.realised, cur), `${st.trades || 0} closed trades`, cls(d.realised))}${kpiCard("Open profit", money(d.unrealised, cur), "right now", cls(d.unrealised))}</div>
+  <div class="card" style="margin-top:14px"><h3>Open positions</h3><div class="tablewrap"><table><tr><th>Symbol</th><th>Strategy</th><th>Side</th><th>Entry</th><th>Now</th><th>Stop</th><th>Target</th><th>R</th><th>P&L</th><th></th></tr>${d.positions.map(x => `<tr><td><b>${esc(x.symbol)}</b></td><td>${esc(x.strategy_name)}</td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${fmtN(x.entry)}</td><td class="mono">${fmtN(x.price)}</td><td class="mono">${fmtN(x.stop)}</td><td class="mono">${x.target == null ? "–" : fmtN(x.target)}</td><td class="mono ${cls(x.R_now)}">${sgn(x.R_now)}</td><td class="mono ${cls(x.unrealised)}">${fmtN(x.unrealised)}</td><td><button data-gx="${x.id}">Close</button></td></tr>`).join("") || `<tr><td colspan="10" class="muted">No open positions right now. A position opens when one of the active rules above gives a signal.</td></tr>`}</table></div></div>`;
+}
+function gxPortfolioHtml(d) {
+  const cur = d.currency, p = d.prefs || {}, st = d.stats || {};
+  return `<div class="pagehead"><div><h2>${tabs[GX.mk]} portfolio</h2><p class="muted">Paper account in ${cur}: money, open trades, every closed trade and the account's own settings. Separate from India F&O.</p></div></div>
+  <div class="grid g4">${kpiCard("Account value", money(d.equity, cur), `started with ${money(d.capital_start, cur)}`)}${kpiCard("Available", money(d.cash, cur), `${d.positions.length} open`)}${kpiCard("Realised", money(d.realised, cur), `${st.trades || 0} closed trades`, cls(d.realised))}${kpiCard("Open profit", money(d.unrealised, cur), "right now", cls(d.unrealised))}</div>
   <div class="grid g2" style="margin-top:14px">
     <div class="card"><h3>Account curve</h3><canvas id="gxCurve" class="flowcv" style="height:200px"></canvas>
       ${st.trades ? `<p class="muted" style="margin:8px 0 0">Win rate ${st.win_rate}% · profit factor ${st.profit_factor ?? "–"} · average ${sgn(st.avg_R)}R · deepest fall ${st.max_dd_pct}%</p>` : ""}</div>
@@ -3059,15 +3185,20 @@ function renderMarkets() {
       <p class="muted" style="font-size:12.5px;margin:10px 0 0">Prices come from free public feeds and bars are checked every minute. Fees and slippage are included. Nothing here places a real order.</p></div></div>
   <div class="card" style="margin-top:14px"><h3>Open positions</h3><div class="tablewrap"><table><tr><th>Symbol</th><th>Strategy</th><th>Side</th><th>Entry</th><th>Now</th><th>Stop</th><th>Target</th><th>R</th><th>P&L</th><th></th></tr>${d.positions.map(x => `<tr><td><b>${esc(x.symbol)}</b></td><td>${esc(x.strategy_name)}</td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${fmtN(x.entry)}</td><td class="mono">${fmtN(x.price)}</td><td class="mono">${fmtN(x.stop)}</td><td class="mono">${x.target == null ? "–" : fmtN(x.target)}</td><td class="mono ${cls(x.R_now)}">${sgn(x.R_now)}</td><td class="mono ${cls(x.unrealised)}">${fmtN(x.unrealised)}</td><td><button data-gx="${x.id}">Close</button></td></tr>`).join("") || `<tr><td colspan="10" class="muted">No open positions right now. A position opens when one of the active rules above gives a signal.</td></tr>`}</table></div></div>
   <div class="card" style="margin-top:14px"><h3>Closed trades</h3><div class="tablewrap" style="max-height:50vh"><table><tr><th>Closed</th><th>Symbol</th><th>Strategy</th><th>Side</th><th>R</th><th>P&L</th><th>Reason</th></tr>${d.history.map(x => `<tr><td class="mono">${esc((x.closed || "").slice(0, 16).replace("T", " "))}</td><td>${esc(x.symbol)}</td><td>${esc(x.strategy_name)}</td><td>${esc(x.side)}</td><td class="mono ${cls(x.R)}">${sgn(x.R)}</td><td class="mono ${cls(x.pnl)}">${fmtN(x.pnl)}</td><td>${esc(x.reason)}</td></tr>`).join("") || `<tr><td colspan="7" class="muted">No closed trades yet.</td></tr>`}</table></div></div>`;
-  setTimeout(() => miniLine($("#gxCurve"), (st.equity || []).map(x => x.v), {base: d.capital_start}), 0);
+}
+async function loadGPortfolio() {
+  if (WS.mk !== "IN") GX.mk = WS.mk;
+  GX.data = await api("/api/gbook?market=" + GX.mk);
+  const d = GX.data; $("#gpBody").innerHTML = gxPortfolioHtml(d);
+  setTimeout(() => miniLine($("#gxCurve"), (d.stats.equity || []).map(x => x.v), {base: d.capital_start}), 0);
 }
 document.addEventListener("click", async e => {
-  if (!e.target.closest("#t-markets")) return; const t = e.target.closest("button"); if (!t) return;
+  if (!e.target.closest("#t-markets, #t-gportfolio")) return; const t = e.target.closest("button"); if (!t) return; const reload = () => S.tab === "gportfolio" ? loadGPortfolio() : loadMarkets();
   try {
     if (t.dataset.gmk) { GX.mk = t.dataset.gmk; localStorage.setItem("gmk", GX.mk); await loadMarkets(); }
-    else if (t.dataset.gx) { const r = await post("/api/gbook/exit", {market: GX.mk, id: t.dataset.gx}); toast(r.message); await loadMarkets(); }
-    else if (t.id === "gxSave") { await post("/api/gbook/prefs", {market: GX.mk, risk_pct: +$("#gxRisk").value, max_leverage: +$("#gxLev").value, max_open: +$("#gxMax").value, auto: $("#gxAuto").checked}); toast("Saved"); await loadMarkets(); }
-    else if (t.id === "gxReset") { if (confirm("Clear this account's positions and trade history and start over?")) { await post("/api/gbook/reset", {market: GX.mk, capital: +$("#gxCap").value}); toast("Account reset"); await loadMarkets(); } }
+    else if (t.dataset.gx) { const r = await post("/api/gbook/exit", {market: GX.mk, id: t.dataset.gx}); toast(r.message); await reload(); }
+    else if (t.id === "gxSave") { await post("/api/gbook/prefs", {market: GX.mk, risk_pct: +$("#gxRisk").value, max_leverage: +$("#gxLev").value, max_open: +$("#gxMax").value, auto: $("#gxAuto").checked}); toast("Saved"); await reload(); }
+    else if (t.id === "gxReset") { if (confirm("Clear this account's positions and trade history and start over?")) { await post("/api/gbook/reset", {market: GX.mk, capital: +$("#gxCap").value}); toast("Account reset"); await reload(); } }
   } catch (er) { toast(er.message); }
 });
 

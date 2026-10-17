@@ -543,6 +543,89 @@ def chart(market: str, symbol: str, tf: str) -> dict:
             "symbols": MK.catalog(market), "timeframes": list(CHART_TF)}
 
 
+# ------------------------------------------------------------------ journal, rulebook, market context
+def _grp(rows, key):
+    out = {}
+    for t in rows:
+        out.setdefault(key(t), []).append(t)
+    res = []
+    for k, ts in out.items():
+        pnl = np.array([x["pnl"] for x in ts], float)
+        lo = -pnl[pnl <= 0].sum()
+        res.append({"key": k, "trades": len(ts), "win_rate": round(float((pnl > 0).mean() * 100), 1), "net": round(float(pnl.sum()), 2),
+                    "avg_R": round(float(np.mean([x.get("R") or 0 for x in ts])), 3), "profit_factor": round(float(pnl[pnl > 0].sum() / lo), 2) if lo > 0 else None})
+    return res
+
+
+def journal(market: str) -> dict:
+    tr = sorted(trades(market), key=lambda t: t["closed"], reverse=True)
+    day = lambda t: _local("IN", datetime.fromisoformat(t["closed"])).date().isoformat()     # noqa: E731  (days in Indian time)
+    rows = [{k: t.get(k) for k in ("id", "symbol", "side", "strategy_name", "tf", "opened", "closed", "entry", "exit", "qty", "pnl", "fees", "R", "mfe_R", "mae_R", "reason")} | {"day": day(t)}
+            for t in tr]
+    return {"market": market, "currency": MK.CURRENCY[market], "trades": rows,
+            "by_day": sorted(_grp(tr, day), key=lambda x: x["key"], reverse=True),
+            "by_strategy": sorted(_grp(tr, lambda t: t["strategy_name"].replace("Autopilot · ", "")), key=lambda x: -x["trades"]),
+            "by_symbol": sorted(_grp(tr, lambda t: t["symbol"]), key=lambda x: -x["trades"]),
+            "by_reason": sorted(_grp(tr, lambda t: t.get("reason") or "?"), key=lambda x: -x["trades"]),
+            "open": [{k: p.get(k) for k in ("symbol", "side", "strategy_name", "opened", "entry", "qty")} for p in positions(market)]}
+
+
+def rules(market: str) -> dict:
+    from . import gautopilot as AP
+    specs = _spec_map()
+    own = [{"id": s["id"], "name": s["name"], "timeframe": s["timeframe"], "symbols": s["symbols"], "auto": bool(s.get("auto")), "enabled": bool(s.get("enabled")), "spec": s}
+           for s in specs.values() if not s.get("autopilot") and s["market"] == market]
+    slip, fee = _slip_fee(market)
+    return {"market": market, "built_in": AP.rulebook(market), "own": own, "who_trades": runners(market, specs)[1], "prefs": prefs(market),
+            "costs": {"slippage_bps": slip, "fee_bps": fee}, "tested_at": (store.get(f"g_ap_qual:{market}") or {}).get("at"),
+            "gate": AP.status(market, True)["rules"], "symbols": MK.catalog(market)}
+
+
+def context(market: str) -> dict:
+    """Market overview: per symbol price, 1/7/30-day change, trend (200-day average, 4h Supertrend), daily volatility."""
+    def build():
+        from . import indicators as IND
+        rows = []
+        for item in MK.catalog(market):
+            sym = item["id"]
+            try:
+                d = MK.completed(MK.candles(market, sym, "1d", 420, ttl=900), "1d", market=market)
+                h4 = MK.completed(MK.candles(market, sym, "4h", 60, ttl=900), "4h", market=market)
+                px = float(MK.last_price(market, sym))
+                c = d["close"]
+                ch = lambda n: round((px / float(c.iloc[-n]) - 1) * 100, 2) if len(c) > n else None    # noqa: E731
+                sma200 = float(c.rolling(200).mean().iloc[-1]) if len(c) >= 200 else None
+                a = float(X.atr(d, 14).iloc[-1])
+                st4 = int(IND.supertrend(h4).iloc[-1]) if len(h4) > 30 else None
+                vol = d["volume"]
+                rows.append({"symbol": sym, "label": item["label"], "price": px, "d1": ch(1), "d7": ch(7), "d30": ch(30),
+                             "vs_sma200": round((px / sma200 - 1) * 100, 1) if sma200 else None, "trend4h": st4, "atr_pct": round(a / px * 100, 2),
+                             "vol_vs_30d": round(float(vol.iloc[-1] / vol.iloc[-31:-1].mean()), 2) if len(vol) > 31 and vol.iloc[-31:-1].mean() > 0 else None})
+            except Exception as e:
+                rows.append({"symbol": sym, "label": item["label"], "error": str(e)[:80]})
+        good = [r for r in rows if "error" not in r]
+        out = {"market": market, "rows": rows, "at": _now().isoformat(timespec="minutes"),
+               "breadth": {"above_200d": sum(1 for r in good if (r["vs_sma200"] or 0) > 0), "up_4h": sum(1 for r in good if r["trend4h"] == 1), "of": len(good)}}
+        lead = next((r for r in good if r["symbol"] == ("BTCUSDT" if market == "CRYPTO" else "SPY")), None)
+        if lead and lead["vs_sma200"] is not None:
+            out["regime"] = {"symbol": lead["symbol"], "bull": lead["vs_sma200"] > 0, "vs_sma200": lead["vs_sma200"]}
+        try:
+            if market == "CRYPTO":
+                r = MK._s.get("https://api.alternative.me/fng/?limit=8", timeout=8).json()["data"]
+                out["sentiment"] = {"name": "Crypto Fear & Greed", "value": int(r[0]["value"]), "label": r[0]["value_classification"], "week_ago": int(r[-1]["value"])}
+            else:
+                import yfinance as yf
+                vx = yf.Ticker("^VIX").history(period="10d", interval="1d")["Close"].dropna()
+                if len(vx):
+                    out["sentiment"] = {"name": "VIX (fear gauge)", "value": round(float(vx.iloc[-1]), 2), "label": "calm" if vx.iloc[-1] < 15 else "normal" if vx.iloc[-1] < 22 else "stressed",
+                                        "week_ago": round(float(vx.iloc[0]), 2)}
+        except Exception:
+            pass
+        return out
+    from . import market as M
+    return M.cached(f"g_ctx:{market}", 600, build)
+
+
 # ------------------------------------------------------------------ read side
 def portfolio(market: str) -> dict:
     acct, pos, tr = account(market), positions(market), trades(market)
