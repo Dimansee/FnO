@@ -1,0 +1,37 @@
+name: global-data
+# Saves crypto (Binance spot) and US (Yahoo) price history into the research-data branch
+# (research/data/global/) for the crypto/US autopilot research. Weekly, or on demand.
+on:
+  schedule:
+    - cron: "15 1 * * 0"     # Sunday 06:45 IST
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: global-data
+  cancel-in-progress: false
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research-data
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: app
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas requests yfinance
+      - run: python app/research/fetch_global.py research/data/global
+      - name: commit data
+        run: |
+          git config user.name "fno-data-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/data/global
+          git commit -m "global price history $(date -u +%F) [skip ci]" || echo "nothing to commit"
+          git pull --rebase -q origin research-data || true
+          git push origin HEAD:research-data
