@@ -66,6 +66,13 @@ try:
 except Exception as e:
     print("F&O list failed:", e)
 
+# 1c. NSE's current price bands (circuit width per stock; "No Band" = F&O) and series (EQ / BE trade-to-trade) for the scanner
+bands = nse_csv("/content/equities/sec_list.csv")
+if bands is not None:
+    bands.columns = [c.strip() for c in bands.columns]
+    bands.to_csv(f"{OUT}/price_bands.csv", index=False)
+    print("price bands:", len(bands))
+
 # 2. all investable NSE cash stocks (EQ series), 1 year
 eq = nse_csv("/content/equities/EQUITY_L.csv")
 if eq is not None:
