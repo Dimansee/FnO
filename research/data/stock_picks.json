@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-17 10:16 IST",
+ "generated": "2026-10-17 12:05 IST",
  "data_to": "2026-10-16",
  "buy_on": "next trading day's open",
  "tiers": {
@@ -104,12 +104,16 @@
    "risk_pct": 8.0,
    "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
    "hold_days": 5,
-   "basis": "3-day drop -10.1% while 95.7% above the 200-day average; RSI 47; turnover \u20b9131 cr/day",
+   "basis": "3-day drop -10.1% while 95.7% above the 200-day average; RSI 47; turnover \u20b9131 cr/day; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance; hit the lower circuit on 2026-10-15 - buy only if it trades freely at the open, skip if it is stuck at the limit",
    "drop_3d_pct": -10.1,
    "above_200dma_pct": 95.7,
    "rsi14": 47,
    "turnover_cr": 131.0,
-   "backtest_win_pct": 64
+   "backtest_win_pct": 64,
+   "t2t": "BE",
+   "circuit_days": [
+    "2026-10-15"
+   ]
   },
   {
    "sym": "INDHOTEL",
@@ -272,12 +276,15 @@
    "risk_pct": 8.0,
    "exit_rule": "Same as the rule pick: +5% target, out after 5 closes. Weaker setup - smaller size.",
    "hold_days": 5,
-   "basis": "3-day drop -8.6% (7-10% band) while 26.2% above the 200-day average; RSI 42",
+   "basis": "3-day drop -8.6% (7-10% band) while 26.2% above the 200-day average; RSI 42; hit the lower circuit on 2026-10-15 - buy only if it trades freely at the open, skip if it is stuck at the limit",
    "drop_3d_pct": -8.6,
    "above_200dma_pct": 26.2,
    "rsi14": 42,
    "turnover_cr": 71.5,
-   "backtest_win_pct": 58
+   "backtest_win_pct": 58,
+   "circuit_days": [
+    "2026-10-15"
+   ]
   },
   {
    "sym": "TDPOWERSYS",
@@ -334,37 +341,6 @@
    "rsi14": 74,
    "turnover_cr": 69.9,
    "backtest_win_pct": 42
-  }
- ],
- "skipped_circuit": [],
- "today_broad": [
-  {
-   "sym": "AEROFLEX",
-   "name": "Aeroflex Industries Limited",
-   "industry": "nan",
-   "tier": "rule",
-   "setup": "Rule pick \u00b7 outside Nifty 500",
-   "strength": 60,
-   "direction": "up",
-   "fo": false,
-   "price_date": "2026-10-15",
-   "current": 510.95,
-   "current_date": "2026-10-15",
-   "close": 510.95,
-   "entry_ref": 510.95,
-   "target": 536.5,
-   "target_pct": 5.0,
-   "risk_line": 470.07,
-   "risk_pct": 8.0,
-   "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
-   "hold_days": 5,
-   "basis": "3-day move -10.0%, 41.7% above the 200-day average; turnover \u20b958 cr/day. Outside the tested Nifty 500 universe.",
-   "drop_3d_pct": -10.0,
-   "above_200dma_pct": 41.7,
-   "rsi14": 46,
-   "turnover_cr": 57.8,
-   "backtest_win_pct": null,
-   "broad": true
   },
   {
    "sym": "AVALON",
@@ -372,7 +348,68 @@
    "industry": "nan",
    "tier": "rule",
    "setup": "Rule pick \u00b7 outside Nifty 500",
-   "strength": 60,
+   "strength": 87,
+   "direction": "up",
+   "fo": false,
+   "price_date": "2026-10-15",
+   "current": 2046.9,
+   "current_date": "2026-10-15",
+   "close": 2046.9,
+   "entry_ref": 2046.9,
+   "target": 2149.25,
+   "target_pct": 5.0,
+   "risk_line": 1883.15,
+   "risk_pct": 8.0,
+   "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
+   "hold_days": 5,
+   "basis": "3-day move -13.9%, 37.9% above the 200-day average; turnover \u20b984 cr/day. Outside the Nifty 500: hold at most 2 such stocks at a time.",
+   "drop_3d_pct": -13.9,
+   "above_200dma_pct": 37.9,
+   "rsi14": 37,
+   "turnover_cr": 84.0,
+   "backtest_win_pct": 64,
+   "broad": true,
+   "outside_slot": true
+  },
+  {
+   "sym": "KRN",
+   "name": "KRN Heat Exchanger and Refrigeration Limited",
+   "industry": "nan",
+   "tier": "rule",
+   "setup": "Rule pick \u00b7 outside Nifty 500",
+   "strength": 83,
+   "direction": "up",
+   "fo": false,
+   "price_date": "2026-10-15",
+   "current": 1231.2,
+   "current_date": "2026-10-15",
+   "close": 1231.2,
+   "entry_ref": 1231.2,
+   "target": 1292.76,
+   "target_pct": 5.0,
+   "risk_line": 1132.7,
+   "risk_pct": 8.0,
+   "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
+   "hold_days": 5,
+   "basis": "3-day move -12.9%, 10.0% above the 200-day average; turnover \u20b930 cr/day. Outside the Nifty 500: hold at most 2 such stocks at a time.",
+   "drop_3d_pct": -12.9,
+   "above_200dma_pct": 10.0,
+   "rsi14": 32,
+   "turnover_cr": 29.9,
+   "backtest_win_pct": 64,
+   "broad": true,
+   "outside_slot": true
+  }
+ ],
+ "skipped_circuit": [],
+ "today_broad": [
+  {
+   "sym": "AVALON",
+   "name": "Avalon Technologies Limited",
+   "industry": "nan",
+   "tier": "rule",
+   "setup": "Rule pick \u00b7 outside Nifty 500",
+   "strength": 87,
    "direction": "up",
    "fo": false,
    "price_date": "2026-10-15",
@@ -400,7 +437,7 @@
    "industry": "nan",
    "tier": "rule",
    "setup": "Rule pick \u00b7 outside Nifty 500",
-   "strength": 60,
+   "strength": 83,
    "direction": "up",
    "fo": false,
    "price_date": "2026-10-15",
@@ -428,7 +465,7 @@
    "industry": "nan",
    "tier": "rule",
    "setup": "Rule pick \u00b7 outside Nifty 500",
-   "strength": 60,
+   "strength": 71,
    "direction": "up",
    "fo": false,
    "price_date": "2026-10-15",
@@ -447,6 +484,34 @@
    "above_200dma_pct": 30.5,
    "rsi14": 41,
    "turnover_cr": 28.4,
+   "backtest_win_pct": null,
+   "broad": true
+  },
+  {
+   "sym": "AEROFLEX",
+   "name": "Aeroflex Industries Limited",
+   "industry": "nan",
+   "tier": "rule",
+   "setup": "Rule pick \u00b7 outside Nifty 500",
+   "strength": 68,
+   "direction": "up",
+   "fo": false,
+   "price_date": "2026-10-15",
+   "current": 510.95,
+   "current_date": "2026-10-15",
+   "close": 510.95,
+   "entry_ref": 510.95,
+   "target": 536.5,
+   "target_pct": 5.0,
+   "risk_line": 470.07,
+   "risk_pct": 8.0,
+   "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
+   "hold_days": 5,
+   "basis": "3-day move -10.0%, 41.7% above the 200-day average; turnover \u20b958 cr/day. Outside the tested Nifty 500 universe.",
+   "drop_3d_pct": -10.0,
+   "above_200dma_pct": 41.7,
+   "rsi14": 46,
+   "turnover_cr": 57.8,
    "backtest_win_pct": null,
    "broad": true
   },
@@ -817,14 +882,14 @@
  ],
  "record_last_60_sessions": {
   "rule": {
-   "n": 48,
-   "win_pct": 52,
-   "avg_ret_pct": -0.27
+   "n": 56,
+   "win_pct": 54,
+   "avg_ret_pct": -0.07
   },
   "near": {
-   "n": 149,
-   "win_pct": 59,
-   "avg_ret_pct": NaN
+   "n": 151,
+   "win_pct": 60,
+   "avg_ret_pct": 0.88
   },
   "breakout": {
    "n": 138,
@@ -1415,6 +1480,41 @@
    "buy_date": "2026-07-27",
    "picks": [
     {
+     "sym": "CEMPRO",
+     "name": "Cemindia Projects Ltd.",
+     "industry": "Construction",
+     "tier": "rule",
+     "setup": "Rule pick",
+     "strength": 74,
+     "direction": "up",
+     "fo": false,
+     "price_date": "2026-07-24",
+     "current": 1197.7,
+     "current_date": "2026-10-16",
+     "close": 1441.0,
+     "entry": "next open (reference \u20b91441.00)",
+     "entry_ref": 1441.0,
+     "target": 1513.05,
+     "target_pct": 5.0,
+     "risk_line": 1325.72,
+     "risk_pct": 8.0,
+     "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
+     "hold_days": 5,
+     "basis": "3-day drop -12.1% while 69.7% above the 200-day average; RSI 50; turnover \u20b975 cr/day",
+     "drop_3d_pct": -12.1,
+     "above_200dma_pct": 69.7,
+     "rsi14": 50,
+     "turnover_cr": 74.9,
+     "backtest_win_pct": 64,
+     "result": {
+      "entry": 1382.0,
+      "exit": 1375.0,
+      "exit_date": "2026-08-03",
+      "how": "time exit",
+      "ret_pct": -0.71
+     }
+    },
+    {
      "sym": "ACUTAAS",
      "name": "Acutaas Chemicals Ltd.",
      "industry": "Healthcare",
@@ -1540,12 +1640,16 @@
      "risk_pct": 8.0,
      "exit_rule": "Same as the rule pick: +5% target, out after 5 closes. Weaker setup - smaller size.",
      "hold_days": 5,
-     "basis": "3-day drop -9.7% (7-10% band) while 86.5% above the 200-day average; RSI 44",
+     "basis": "3-day drop -9.7% (7-10% band) while 86.5% above the 200-day average; RSI 44; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance; hit the lower circuit on 2026-07-23 - buy only if it trades freely at the open, skip if it is stuck at the limit",
      "drop_3d_pct": -9.7,
      "above_200dma_pct": 86.5,
      "rsi14": 44,
      "turnover_cr": 600.7,
      "backtest_win_pct": 58,
+     "t2t": "BE",
+     "circuit_days": [
+      "2026-07-23"
+     ],
      "result": {
       "entry": 199.81,
       "exit": 183.83,
@@ -1841,6 +1945,41 @@
    "buy_date": "2026-07-28",
    "picks": [
     {
+     "sym": "CEMPRO",
+     "name": "Cemindia Projects Ltd.",
+     "industry": "Construction",
+     "tier": "rule",
+     "setup": "Rule pick",
+     "strength": 78,
+     "direction": "up",
+     "fo": false,
+     "price_date": "2026-07-27",
+     "current": 1197.7,
+     "current_date": "2026-10-16",
+     "close": 1369.0,
+     "entry": "next open (reference \u20b91369.00)",
+     "entry_ref": 1369.0,
+     "target": 1437.45,
+     "target_pct": 5.0,
+     "risk_line": 1259.48,
+     "risk_pct": 8.0,
+     "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
+     "hold_days": 5,
+     "basis": "3-day drop -14.3% while 60.7% above the 200-day average; RSI 43; turnover \u20b976 cr/day",
+     "drop_3d_pct": -14.3,
+     "above_200dma_pct": 60.7,
+     "rsi14": 43,
+     "turnover_cr": 75.9,
+     "backtest_win_pct": 64,
+     "result": {
+      "entry": 1328.1,
+      "exit": 1366.0,
+      "exit_date": "2026-08-04",
+      "how": "time exit",
+      "ret_pct": 2.65
+     }
+    },
+    {
      "sym": "HFCL",
      "name": "HFCL Ltd.",
      "industry": "Telecommunication",
@@ -1861,12 +2000,16 @@
      "risk_pct": 8.0,
      "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
      "hold_days": 5,
-     "basis": "3-day drop -11.6% while 81.4% above the 200-day average; RSI 42; turnover \u20b9592 cr/day",
+     "basis": "3-day drop -11.6% while 81.4% above the 200-day average; RSI 42; turnover \u20b9592 cr/day; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance; hit the lower circuit on 2026-07-23 - buy only if it trades freely at the open, skip if it is stuck at the limit",
      "drop_3d_pct": -11.6,
      "above_200dma_pct": 81.4,
      "rsi14": 42,
      "turnover_cr": 591.8,
      "backtest_win_pct": 64,
+     "t2t": "BE",
+     "circuit_days": [
+      "2026-07-23"
+     ],
      "result": {
       "entry": 186.83,
       "exit": 196.17,
@@ -1975,8 +2118,8 @@
      "result": {
       "entry": 1822.35,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 1885.1,
+      "ret_pct": 3.24,
       "days_held": 57
      }
     },
@@ -2182,12 +2325,13 @@
      "risk_pct": 8.0,
      "exit_rule": "Same as the rule pick: +5% target, out after 5 closes. Weaker setup - smaller size.",
      "hold_days": 5,
-     "basis": "3-day drop -9.0% (7-10% band) while 76.5% above the 200-day average; RSI 40",
+     "basis": "3-day drop -9.0% (7-10% band) while 76.5% above the 200-day average; RSI 40; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance",
      "drop_3d_pct": -9.0,
      "above_200dma_pct": 76.5,
      "rsi14": 40,
      "turnover_cr": 600.7,
      "backtest_win_pct": 58,
+     "t2t": "BE",
      "result": {
       "entry": 188.82,
       "exit": 198.26,
@@ -2448,6 +2592,45 @@
    "buy_date": "2026-07-30",
    "picks": [
     {
+     "sym": "MTARTECH",
+     "name": "MTAR Technologies Ltd.",
+     "industry": "Capital Goods",
+     "tier": "rule",
+     "setup": "Rule pick",
+     "strength": 81,
+     "direction": "up",
+     "fo": false,
+     "price_date": "2026-07-29",
+     "current": 7054.5,
+     "current_date": "2026-10-16",
+     "close": 5194.0,
+     "entry": "next open (reference \u20b95194.00)",
+     "entry_ref": 5194.0,
+     "target": 5453.7,
+     "target_pct": 5.0,
+     "risk_line": 4778.48,
+     "risk_pct": 8.0,
+     "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
+     "hold_days": 5,
+     "basis": "3-day drop -10.5% while 21.2% above the 200-day average; RSI 29; turnover \u20b9668 cr/day; hit the lower circuit on 2026-07-28, 2026-07-29 - buy only if it trades freely at the open, skip if it is stuck at the limit",
+     "drop_3d_pct": -10.5,
+     "above_200dma_pct": 21.2,
+     "rsi14": 29,
+     "turnover_cr": 667.7,
+     "backtest_win_pct": 64,
+     "circuit_days": [
+      "2026-07-28",
+      "2026-07-29"
+     ],
+     "result": {
+      "entry": 5277.0,
+      "exit": 5726.0,
+      "exit_date": "2026-07-31",
+      "how": "target +5%",
+      "ret_pct": 8.31
+     }
+    },
+    {
      "sym": "J&KBANK",
      "name": "Jammu & Kashmir Bank Ltd.",
      "industry": "Financial Services",
@@ -2643,12 +2826,13 @@
      "risk_pct": 8.0,
      "exit_rule": "Same as the rule pick: +5% target, out after 5 closes. Weaker setup - smaller size.",
      "hold_days": 5,
-     "basis": "3-day drop -7.8% (7-10% band) while 100.0% above the 200-day average; RSI 44",
+     "basis": "3-day drop -7.8% (7-10% band) while 100.0% above the 200-day average; RSI 44; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance",
      "drop_3d_pct": -7.8,
      "above_200dma_pct": 100.0,
      "rsi14": 44,
      "turnover_cr": 127.1,
      "backtest_win_pct": 58,
+     "t2t": "BE",
      "result": {
       "entry": 516.9,
       "exit": 557.05,
@@ -2943,6 +3127,45 @@
    "signal_date": "2026-07-30",
    "buy_date": "2026-07-31",
    "picks": [
+    {
+     "sym": "THANGAMAYL",
+     "name": "Thangamayil Jewellery Ltd.",
+     "industry": "Consumer Durables",
+     "tier": "rule",
+     "setup": "Rule pick",
+     "strength": 90,
+     "direction": "up",
+     "fo": false,
+     "price_date": "2026-07-30",
+     "current": 5098.0,
+     "current_date": "2026-10-16",
+     "close": 5807.0,
+     "entry": "next open (reference \u20b95807.00)",
+     "entry_ref": 5807.0,
+     "target": 6097.35,
+     "target_pct": 5.0,
+     "risk_line": 5342.44,
+     "risk_pct": 8.0,
+     "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
+     "hold_days": 5,
+     "basis": "3-day drop -20.6% while 47.3% above the 200-day average; RSI 43; turnover \u20b995 cr/day; hit the lower circuit on 2026-07-29, 2026-07-30 - buy only if it trades freely at the open, skip if it is stuck at the limit",
+     "drop_3d_pct": -20.6,
+     "above_200dma_pct": 47.3,
+     "rsi14": 43,
+     "turnover_cr": 95.3,
+     "backtest_win_pct": 64,
+     "circuit_days": [
+      "2026-07-29",
+      "2026-07-30"
+     ],
+     "result": {
+      "entry": 5450.0,
+      "exit": 5014.0,
+      "exit_date": "2026-08-03",
+      "how": "risk line",
+      "ret_pct": -8.2
+     }
+    },
     {
      "sym": "J&KBANK",
      "name": "Jammu & Kashmir Bank Ltd.",
@@ -3370,6 +3593,46 @@
    "buy_date": "2026-08-03",
    "picks": [
     {
+     "sym": "THANGAMAYL",
+     "name": "Thangamayil Jewellery Ltd.",
+     "industry": "Consumer Durables",
+     "tier": "rule",
+     "setup": "Rule pick",
+     "strength": 100,
+     "direction": "up",
+     "fo": false,
+     "price_date": "2026-07-31",
+     "current": 5098.0,
+     "current_date": "2026-10-16",
+     "close": 5226.5,
+     "entry": "next open (reference \u20b95226.50)",
+     "entry_ref": 5226.5,
+     "target": 5487.82,
+     "target_pct": 5.0,
+     "risk_line": 4808.38,
+     "risk_pct": 8.0,
+     "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
+     "hold_days": 5,
+     "basis": "3-day drop -27.1% while 32.1% above the 200-day average; RSI 36; turnover \u20b9103 cr/day; hit the lower circuit on 2026-07-29, 2026-07-30, 2026-07-31 - buy only if it trades freely at the open, skip if it is stuck at the limit",
+     "drop_3d_pct": -27.1,
+     "above_200dma_pct": 32.1,
+     "rsi14": 36,
+     "turnover_cr": 102.9,
+     "backtest_win_pct": 64,
+     "circuit_days": [
+      "2026-07-29",
+      "2026-07-30",
+      "2026-07-31"
+     ],
+     "result": {
+      "entry": 5175.0,
+      "exit": 4761.0,
+      "exit_date": "2026-08-04",
+      "how": "risk line",
+      "ret_pct": -8.2
+     }
+    },
+    {
      "sym": "J&KBANK",
      "name": "Jammu & Kashmir Bank Ltd.",
      "industry": "Financial Services",
@@ -3726,6 +3989,45 @@
    "buy_date": "2026-08-04",
    "picks": [
     {
+     "sym": "THANGAMAYL",
+     "name": "Thangamayil Jewellery Ltd.",
+     "industry": "Consumer Durables",
+     "tier": "rule",
+     "setup": "Rule pick",
+     "strength": 100,
+     "direction": "up",
+     "fo": false,
+     "price_date": "2026-08-03",
+     "current": 5098.0,
+     "current_date": "2026-10-16",
+     "close": 4965.5,
+     "entry": "next open (reference \u20b94965.50)",
+     "entry_ref": 4965.5,
+     "target": 5213.78,
+     "target_pct": 5.0,
+     "risk_line": 4568.26,
+     "risk_pct": 8.0,
+     "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
+     "hold_days": 5,
+     "basis": "3-day drop -23.0% while 25.0% above the 200-day average; RSI 34; turnover \u20b9114 cr/day; hit the lower circuit on 2026-07-30, 2026-07-31 - buy only if it trades freely at the open, skip if it is stuck at the limit",
+     "drop_3d_pct": -23.0,
+     "above_200dma_pct": 25.0,
+     "rsi14": 34,
+     "turnover_cr": 114.4,
+     "backtest_win_pct": 64,
+     "circuit_days": [
+      "2026-07-30",
+      "2026-07-31"
+     ],
+     "result": {
+      "entry": 4717.5,
+      "exit": 4989.5,
+      "exit_date": "2026-08-06",
+      "how": "target +5%",
+      "ret_pct": 5.57
+     }
+    },
+    {
      "sym": "PCBL",
      "name": "PCBL Chemical Ltd.",
      "industry": "Chemicals",
@@ -3965,8 +4267,8 @@
      "result": {
       "entry": 684.55,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 678.1,
+      "ret_pct": -1.14,
       "days_held": 52
      }
     },
@@ -4117,6 +4419,44 @@
    "buy_date": "2026-08-05",
    "picks": [
     {
+     "sym": "THANGAMAYL",
+     "name": "Thangamayil Jewellery Ltd.",
+     "industry": "Consumer Durables",
+     "tier": "rule",
+     "setup": "Rule pick",
+     "strength": 98,
+     "direction": "up",
+     "fo": false,
+     "price_date": "2026-08-04",
+     "current": 5098.0,
+     "current_date": "2026-10-16",
+     "close": 4717.5,
+     "entry": "next open (reference \u20b94717.50)",
+     "entry_ref": 4717.5,
+     "target": 4953.38,
+     "target_pct": 5.0,
+     "risk_line": 4340.1,
+     "risk_pct": 8.0,
+     "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
+     "hold_days": 5,
+     "basis": "3-day drop -18.8% while 18.4% above the 200-day average; RSI 32; turnover \u20b9123 cr/day; hit the lower circuit on 2026-07-31 - buy only if it trades freely at the open, skip if it is stuck at the limit",
+     "drop_3d_pct": -18.8,
+     "above_200dma_pct": 18.4,
+     "rsi14": 32,
+     "turnover_cr": 123.2,
+     "backtest_win_pct": 64,
+     "circuit_days": [
+      "2026-07-31"
+     ],
+     "result": {
+      "entry": 4800.0,
+      "exit": 5040.0,
+      "exit_date": "2026-08-06",
+      "how": "target +5%",
+      "ret_pct": 4.8
+     }
+    },
+    {
      "sym": "ZEEL",
      "name": "Zee Entertainment Enterprises Ltd.",
      "industry": "Media Entertainment & Publication",
@@ -4216,8 +4556,8 @@
      "result": {
       "entry": 698.8,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 678.1,
+      "ret_pct": -3.16,
       "days_held": 51
      }
     },
@@ -6440,6 +6780,41 @@
      }
     },
     {
+     "sym": "CPPLUS",
+     "name": "Aditya Infotech Ltd.",
+     "industry": "Capital Goods",
+     "tier": "near",
+     "setup": "Near-rule (weaker)",
+     "strength": 46,
+     "direction": "up",
+     "fo": false,
+     "price_date": "2026-08-14",
+     "current": null,
+     "current_date": "2026-10-16",
+     "close": 3519.0,
+     "entry": "next open (reference \u20b93519.00)",
+     "entry_ref": 3519.0,
+     "target": 3694.95,
+     "target_pct": 5.0,
+     "risk_line": 3237.48,
+     "risk_pct": 8.0,
+     "exit_rule": "Same as the rule pick: +5% target, out after 5 closes. Weaker setup - smaller size.",
+     "hold_days": 5,
+     "basis": "3-day drop -7.5% (7-10% band) while 58.4% above the 200-day average; RSI 47",
+     "drop_3d_pct": -7.5,
+     "above_200dma_pct": 58.4,
+     "rsi14": 47,
+     "turnover_cr": 70.2,
+     "backtest_win_pct": 58,
+     "result": {
+      "entry": 3351.1,
+      "exit": 3518.66,
+      "exit_date": "2026-08-21",
+      "how": "target +5%",
+      "ret_pct": 4.8
+     }
+    },
+    {
      "sym": "EMBASSY",
      "name": "EMBASSY OFFICE PARKS REIT",
      "industry": "Realty",
@@ -6460,12 +6835,13 @@
      "risk_pct": 10.0,
      "exit_rule": "Trail a 15% stop from the highest close; out after 60 sessions. Safety line \u221210%.",
      "hold_days": 60,
-     "basis": "new 52-week high on 1.9x average volume, 7.5% above the 200-day average",
+     "basis": "new 52-week high on 1.9x average volume, 7.5% above the 200-day average; trade-to-trade (RR series): delivery only, no intraday, usually under exchange surveillance",
      "drop_3d_pct": 2.9,
      "above_200dma_pct": 7.5,
      "rsi14": 69,
      "turnover_cr": 19.9,
      "backtest_win_pct": 44,
+     "t2t": "RR",
      "result": {
       "entry": 439.99,
       "open": true,
@@ -6511,6 +6887,41 @@
       "entry": 1212.2,
       "exit": 1272.81,
       "exit_date": "2026-08-18",
+      "how": "target +5%",
+      "ret_pct": 4.8
+     }
+    },
+    {
+     "sym": "CPPLUS",
+     "name": "Aditya Infotech Ltd.",
+     "industry": "Capital Goods",
+     "tier": "rule",
+     "setup": "Rule pick",
+     "strength": 78,
+     "direction": "up",
+     "fo": false,
+     "price_date": "2026-08-17",
+     "current": null,
+     "current_date": "2026-10-16",
+     "close": 3343.1,
+     "entry": "next open (reference \u20b93343.10)",
+     "entry_ref": 3343.1,
+     "target": 3510.26,
+     "target_pct": 5.0,
+     "risk_line": 3075.65,
+     "risk_pct": 8.0,
+     "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
+     "hold_days": 5,
+     "basis": "3-day drop -14.3% while 49.8% above the 200-day average; RSI 41; turnover \u20b970 cr/day",
+     "drop_3d_pct": -14.3,
+     "above_200dma_pct": 49.8,
+     "rsi14": 41,
+     "turnover_cr": 70.2,
+     "backtest_win_pct": 64,
+     "result": {
+      "entry": 3260.1,
+      "exit": 3423.11,
+      "exit_date": "2026-08-20",
       "how": "target +5%",
       "ret_pct": 4.8
      }
@@ -6831,8 +7242,8 @@
      "result": {
       "entry": 1188.52,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 1155.7,
+      "ret_pct": -2.96,
       "days_held": 41
      }
     },
@@ -8203,8 +8614,8 @@
      "result": {
       "entry": 1929.7,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 2018.5,
+      "ret_pct": 4.4,
       "days_held": 34
      }
     },
@@ -8953,12 +9364,16 @@
      "risk_pct": 8.0,
      "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
      "hold_days": 5,
-     "basis": "3-day drop -10.0% while 80.1% above the 200-day average; RSI 51; turnover \u20b9424 cr/day",
+     "basis": "3-day drop -10.0% while 80.1% above the 200-day average; RSI 51; turnover \u20b9424 cr/day; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance; hit the lower circuit on 2026-09-01 - buy only if it trades freely at the open, skip if it is stuck at the limit",
      "drop_3d_pct": -10.0,
      "above_200dma_pct": 80.1,
      "rsi14": 51,
      "turnover_cr": 423.9,
      "backtest_win_pct": 64,
+     "t2t": "BE",
+     "circuit_days": [
+      "2026-09-01"
+     ],
      "result": {
       "entry": 229.78,
       "exit": 241.26,
@@ -9239,12 +9654,16 @@
      "risk_pct": 8.0,
      "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
      "hold_days": 5,
-     "basis": "3-day drop -11.5% while 74.5% above the 200-day average; RSI 47; turnover \u20b9417 cr/day",
+     "basis": "3-day drop -11.5% while 74.5% above the 200-day average; RSI 47; turnover \u20b9417 cr/day; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance; hit the lower circuit on 2026-09-01 - buy only if it trades freely at the open, skip if it is stuck at the limit",
      "drop_3d_pct": -11.5,
      "above_200dma_pct": 74.5,
      "rsi14": 47,
      "turnover_cr": 416.6,
      "backtest_win_pct": 64,
+     "t2t": "BE",
+     "circuit_days": [
+      "2026-09-01"
+     ],
      "result": {
       "entry": 225.79,
       "exit": 238.78,
@@ -9604,8 +10023,8 @@
      "result": {
       "entry": 422.8,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 407.6,
+      "ret_pct": -3.8,
       "days_held": 28
      }
     },
@@ -10173,12 +10592,13 @@
      "risk_pct": 10.0,
      "exit_rule": "Trail a 15% stop from the highest close; out after 60 sessions. Safety line \u221210%.",
      "hold_days": 60,
-     "basis": "new 52-week high on 2.1x average volume, 152.8% above the 200-day average",
+     "basis": "new 52-week high on 2.1x average volume, 152.8% above the 200-day average; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance",
      "drop_3d_pct": 15.6,
      "above_200dma_pct": 152.8,
      "rsi14": 81,
      "turnover_cr": 113.4,
      "backtest_win_pct": 44,
+     "t2t": "BE",
      "result": {
       "entry": 865.0,
       "exit": 994.75,
@@ -10468,8 +10888,8 @@
      "result": {
       "entry": 1406.4,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 1393.9,
+      "ret_pct": -1.09,
       "days_held": 24
      }
     },
@@ -10906,6 +11326,45 @@
      }
     },
     {
+     "sym": "HFCL",
+     "name": "HFCL Ltd.",
+     "industry": "Telecommunication",
+     "tier": "near",
+     "setup": "Near-rule (weaker)",
+     "strength": 53,
+     "direction": "up",
+     "fo": false,
+     "price_date": "2026-09-15",
+     "current": 256.01,
+     "current_date": "2026-10-16",
+     "close": 221.8,
+     "entry": "next open (reference \u20b9221.80)",
+     "entry_ref": 221.8,
+     "target": 232.89,
+     "target_pct": 5.0,
+     "risk_line": 204.06,
+     "risk_pct": 8.0,
+     "exit_rule": "Same as the rule pick: +5% target, out after 5 closes. Weaker setup - smaller size.",
+     "hold_days": 5,
+     "basis": "3-day drop -9.5% (7-10% band) while 68.1% above the 200-day average; RSI 46; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance; hit the lower circuit on 2026-09-15 - buy only if it trades freely at the open, skip if it is stuck at the limit",
+     "drop_3d_pct": -9.5,
+     "above_200dma_pct": 68.1,
+     "rsi14": 46,
+     "turnover_cr": 389.4,
+     "backtest_win_pct": 58,
+     "t2t": "BE",
+     "circuit_days": [
+      "2026-09-15"
+     ],
+     "result": {
+      "entry": 214.4,
+      "exit": 221.45,
+      "exit_date": "2026-09-23",
+      "how": "time exit",
+      "ret_pct": 3.09
+     }
+    },
+    {
      "sym": "MRPL",
      "name": "Mangalore Refinery & Petrochemicals Ltd.",
      "industry": "Oil Gas & Consumable Fuels",
@@ -11289,41 +11748,6 @@
       "how": "target +5%",
       "ret_pct": 4.8
      }
-    },
-    {
-     "sym": "WELCORP",
-     "name": "Welspun Corp Ltd.",
-     "industry": "Capital Goods",
-     "tier": "near",
-     "setup": "Near-rule (weaker)",
-     "strength": 46,
-     "direction": "up",
-     "fo": false,
-     "price_date": "2026-09-15",
-     "current": 2571.5,
-     "current_date": "2026-10-16",
-     "close": 2413.3,
-     "entry": "next open (reference \u20b92413.30)",
-     "entry_ref": 2413.3,
-     "target": 2533.97,
-     "target_pct": 5.0,
-     "risk_line": 2220.24,
-     "risk_pct": 8.0,
-     "exit_rule": "Same as the rule pick: +5% target, out after 5 closes. Weaker setup - smaller size.",
-     "hold_days": 5,
-     "basis": "3-day drop -7.5% (7-10% band) while 93.6% above the 200-day average; RSI 55",
-     "drop_3d_pct": -7.5,
-     "above_200dma_pct": 93.6,
-     "rsi14": 55,
-     "turnover_cr": 199.3,
-     "backtest_win_pct": 58,
-     "result": {
-      "entry": 2413.0,
-      "exit": 2533.65,
-      "exit_date": "2026-09-18",
-      "how": "target +5%",
-      "ret_pct": 4.8
-     }
     }
    ]
   },
@@ -11597,12 +12021,16 @@
      "risk_pct": 8.0,
      "exit_rule": "Same as the rule pick: +5% target, out after 5 closes. Weaker setup - smaller size.",
      "hold_days": 5,
-     "basis": "3-day drop -8.7% (7-10% band) while 60.4% above the 200-day average; RSI 42",
+     "basis": "3-day drop -8.7% (7-10% band) while 60.4% above the 200-day average; RSI 42; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance; hit the lower circuit on 2026-09-15 - buy only if it trades freely at the open, skip if it is stuck at the limit",
      "drop_3d_pct": -8.7,
      "above_200dma_pct": 60.4,
      "rsi14": 42,
      "turnover_cr": 386.8,
      "backtest_win_pct": 58,
+     "t2t": "BE",
+     "circuit_days": [
+      "2026-09-15"
+     ],
      "result": {
       "entry": 208.71,
       "exit": 219.14,
@@ -11772,12 +12200,15 @@
      "risk_pct": 8.0,
      "exit_rule": "Same as the rule pick: +5% target, out after 5 closes. Weaker setup - smaller size.",
      "hold_days": 5,
-     "basis": "3-day drop -7.0% (7-10% band) while 34.1% above the 200-day average; RSI 45",
+     "basis": "3-day drop -7.0% (7-10% band) while 34.1% above the 200-day average; RSI 45; hit the lower circuit on 2026-09-15 - buy only if it trades freely at the open, skip if it is stuck at the limit",
      "drop_3d_pct": -7.0,
      "above_200dma_pct": 34.1,
      "rsi14": 45,
      "turnover_cr": 76.1,
      "backtest_win_pct": 58,
+     "circuit_days": [
+      "2026-09-15"
+     ],
      "result": {
       "entry": 6802.0,
       "exit": 7142.1,
@@ -11848,12 +12279,16 @@
      "risk_pct": 8.0,
      "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
      "hold_days": 5,
-     "basis": "3-day drop -10.4% while 57.0% above the 200-day average; RSI 40; turnover \u20b9387 cr/day",
+     "basis": "3-day drop -10.4% while 57.0% above the 200-day average; RSI 40; turnover \u20b9387 cr/day; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance; hit the lower circuit on 2026-09-15 - buy only if it trades freely at the open, skip if it is stuck at the limit",
      "drop_3d_pct": -10.4,
      "above_200dma_pct": 57.0,
      "rsi14": 40,
      "turnover_cr": 386.8,
      "backtest_win_pct": 64,
+     "t2t": "BE",
+     "circuit_days": [
+      "2026-09-15"
+     ],
      "result": {
       "entry": 213.7,
       "exit": 224.39,
@@ -12128,12 +12563,16 @@
      "risk_pct": 8.0,
      "exit_rule": "Same as the rule pick: +5% target, out after 5 closes. Weaker setup - smaller size.",
      "hold_days": 5,
-     "basis": "3-day drop -7.8% (7-10% band) while 129.2% above the 200-day average; RSI 64",
+     "basis": "3-day drop -7.8% (7-10% band) while 129.2% above the 200-day average; RSI 64; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance; hit the lower circuit on 2026-09-15 - buy only if it trades freely at the open, skip if it is stuck at the limit",
      "drop_3d_pct": -7.8,
      "above_200dma_pct": 129.2,
      "rsi14": 64,
      "turnover_cr": 112.9,
      "backtest_win_pct": 58,
+     "t2t": "BE",
+     "circuit_days": [
+      "2026-09-15"
+     ],
      "result": {
       "entry": 852.0,
       "exit": 783.84,
@@ -12213,8 +12652,8 @@
      "result": {
       "entry": 439.0,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 407.6,
+      "ret_pct": -7.35,
       "days_held": 19
      }
     },
@@ -12353,8 +12792,8 @@
      "result": {
       "entry": 1243.0,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 1155.7,
+      "ret_pct": -7.22,
       "days_held": 19
      }
     },
@@ -13258,8 +13697,8 @@
      "result": {
       "entry": 201.9,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 196.23,
+      "ret_pct": -3.01,
       "days_held": 14
      }
     },
@@ -14078,12 +14517,13 @@
      "risk_pct": 10.0,
      "exit_rule": "Trail a 15% stop from the highest close; out after 60 sessions. Safety line \u221210%.",
      "hold_days": 60,
-     "basis": "new 52-week high on 2.8x average volume, 139.5% above the 200-day average",
+     "basis": "new 52-week high on 2.8x average volume, 139.5% above the 200-day average; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance",
      "drop_3d_pct": 15.8,
      "above_200dma_pct": 139.5,
      "rsi14": 72,
      "turnover_cr": 119.3,
      "backtest_win_pct": 44,
+     "t2t": "BE",
      "result": {
       "entry": 952.4,
       "exit": 857.16,
@@ -14224,12 +14664,13 @@
      "risk_pct": 10.0,
      "exit_rule": "Trail a 15% stop from the highest close; out after 60 sessions. Safety line \u221210%.",
      "hold_days": 60,
-     "basis": "new 52-week high on 1.9x average volume, 148.2% above the 200-day average",
+     "basis": "new 52-week high on 1.9x average volume, 148.2% above the 200-day average; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance",
      "drop_3d_pct": 15.5,
      "above_200dma_pct": 148.2,
      "rsi14": 75,
      "turnover_cr": 122.2,
      "backtest_win_pct": 44,
+     "t2t": "BE",
      "result": {
       "entry": 1034.4,
       "exit": 930.96,
@@ -14405,12 +14846,13 @@
      "risk_pct": 10.0,
      "exit_rule": "Trail a 15% stop from the highest close; out after 60 sessions. Safety line \u221210%.",
      "hold_days": 60,
-     "basis": "new 52-week high on 1.7x average volume, 149.2% above the 200-day average",
+     "basis": "new 52-week high on 1.7x average volume, 149.2% above the 200-day average; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance",
      "drop_3d_pct": 11.7,
      "above_200dma_pct": 149.2,
      "rsi14": 76,
      "turnover_cr": 122.2,
      "backtest_win_pct": 44,
+     "t2t": "BE",
      "result": {
       "entry": 1014.0,
       "exit": 912.6,
@@ -14495,10 +14937,10 @@
      "backtest_win_pct": 58,
      "result": {
       "entry": 2605.1,
-      "exit": NaN,
+      "exit": 2700.0,
       "exit_date": "2026-10-16",
       "how": "time exit",
-      "ret_pct": NaN
+      "ret_pct": 3.44
      }
     },
     {
@@ -14530,10 +14972,10 @@
      "backtest_win_pct": 58,
      "result": {
       "entry": 2534.4,
-      "exit": NaN,
+      "exit": 2524.7,
       "exit_date": "2026-10-16",
       "how": "time exit",
-      "ret_pct": NaN
+      "ret_pct": -0.58
      }
     },
     {
@@ -14607,8 +15049,8 @@
      "result": {
       "entry": 2641.0,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 2700.0,
+      "ret_pct": 2.03,
       "days_held": 5
      }
     },
@@ -14642,8 +15084,8 @@
      "result": {
       "entry": 2423.1,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 2301.8,
+      "ret_pct": -5.21,
       "days_held": 5
      }
     },
@@ -14677,8 +15119,8 @@
      "result": {
       "entry": 2530.1,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 2524.7,
+      "ret_pct": -0.41,
       "days_held": 5
      }
     },
@@ -14782,8 +15224,8 @@
      "result": {
       "entry": 1952.4,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 1888.7,
+      "ret_pct": -3.46,
       "days_held": 5
      }
     },
@@ -14928,8 +15370,8 @@
      "result": {
       "entry": 1925.0,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 1888.7,
+      "ret_pct": -2.09,
       "days_held": 4
      }
     },
@@ -14963,8 +15405,8 @@
      "result": {
       "entry": 2419.8,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 2301.8,
+      "ret_pct": -5.08,
       "days_held": 4
      }
     },
@@ -15033,8 +15475,8 @@
      "result": {
       "entry": 1401.3,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 1381.9,
+      "ret_pct": -1.58,
       "days_held": 4
      }
     },
@@ -15144,8 +15586,8 @@
      "result": {
       "entry": 4376.5,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 4109.1,
+      "ret_pct": -6.31,
       "days_held": 3
      }
     },
@@ -15179,8 +15621,8 @@
      "result": {
       "entry": 2375.0,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 2301.8,
+      "ret_pct": -3.28,
       "days_held": 3
      }
     },
@@ -15386,18 +15828,20 @@
      "risk_pct": 8.0,
      "exit_rule": "Same as the rule pick: +5% target, out after 5 closes. Weaker setup - smaller size.",
      "hold_days": 5,
-     "basis": "3-day drop -8.9% (7-10% band) while 112.7% above the 200-day average; RSI 56",
+     "basis": "3-day drop -8.9% (7-10% band) while 112.7% above the 200-day average; RSI 56; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance; hit the lower circuit on 2026-10-13 - buy only if it trades freely at the open, skip if it is stuck at the limit",
      "drop_3d_pct": -8.9,
      "above_200dma_pct": 112.7,
      "rsi14": 56,
      "turnover_cr": 126.6,
      "backtest_win_pct": 58,
+     "t2t": "BE",
+     "circuit_days": [
+      "2026-10-13"
+     ],
      "result": {
-      "entry": 878.45,
-      "open": true,
-      "last": 865.9,
-      "ret_pct": -1.63,
-      "days_held": 2
+      "skipped": true,
+      "how": "frozen at the lower circuit at the open - not bought",
+      "exit_date": "2026-10-15"
      }
     },
     {
@@ -15535,8 +15979,8 @@
      "result": {
       "entry": 390.55,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 384.2,
+      "ret_pct": 1.43,
       "days_held": 2
      }
     },
@@ -15570,8 +16014,8 @@
      "result": {
       "entry": 646.65,
       "open": true,
-      "last": NaN,
-      "ret_pct": NaN,
+      "last": 633.75,
+      "ret_pct": 1.79,
       "days_held": 2
      }
     }
@@ -15613,6 +16057,46 @@
       "open": true,
       "last": 378.25,
       "ret_pct": 0.34,
+      "days_held": 1
+     }
+    },
+    {
+     "sym": "STLTECH",
+     "name": "Sterlite Technologies Ltd.",
+     "industry": "Telecommunication",
+     "tier": "rule",
+     "setup": "Rule pick",
+     "strength": 77,
+     "direction": "up",
+     "fo": false,
+     "price_date": "2026-10-15",
+     "current": 865.9,
+     "current_date": "2026-10-16",
+     "close": 878.45,
+     "entry": "next open (reference \u20b9878.45)",
+     "entry_ref": 878.45,
+     "target": 922.37,
+     "target_pct": 5.0,
+     "risk_line": 808.17,
+     "risk_pct": 8.0,
+     "exit_rule": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line \u22128% (not part of the tested rule).",
+     "hold_days": 5,
+     "basis": "3-day drop -13.4% while 100.3% above the 200-day average; RSI 49; turnover \u20b9127 cr/day; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance; hit the lower circuit on 2026-10-13, 2026-10-15 - buy only if it trades freely at the open, skip if it is stuck at the limit",
+     "drop_3d_pct": -13.4,
+     "above_200dma_pct": 100.3,
+     "rsi14": 49,
+     "turnover_cr": 126.6,
+     "backtest_win_pct": 64,
+     "t2t": "BE",
+     "circuit_days": [
+      "2026-10-13",
+      "2026-10-15"
+     ],
+     "result": {
+      "entry": 850.1,
+      "open": true,
+      "last": 865.9,
+      "ret_pct": 1.66,
       "days_held": 1
      }
     },
@@ -15719,6 +16203,45 @@
       "last": 1538.6,
       "ret_pct": -3.86,
       "days_held": 1
+     }
+    },
+    {
+     "sym": "HFCL",
+     "name": "HFCL Ltd.",
+     "industry": "Telecommunication",
+     "tier": "near",
+     "setup": "Near-rule (weaker)",
+     "strength": 48,
+     "direction": "up",
+     "fo": false,
+     "price_date": "2026-10-15",
+     "current": 256.01,
+     "current_date": "2026-10-16",
+     "close": 243.82,
+     "entry": "next open (reference \u20b9243.82)",
+     "entry_ref": 243.82,
+     "target": 256.01,
+     "target_pct": 5.0,
+     "risk_line": 224.31,
+     "risk_pct": 8.0,
+     "exit_rule": "Same as the rule pick: +5% target, out after 5 closes. Weaker setup - smaller size.",
+     "hold_days": 5,
+     "basis": "3-day drop -8.2% (7-10% band) while 63.1% above the 200-day average; RSI 52; trade-to-trade (BE series): delivery only, no intraday, usually under exchange surveillance; hit the lower circuit on 2026-10-15 - buy only if it trades freely at the open, skip if it is stuck at the limit",
+     "drop_3d_pct": -8.2,
+     "above_200dma_pct": 63.1,
+     "rsi14": 52,
+     "turnover_cr": 220.6,
+     "backtest_win_pct": 58,
+     "t2t": "BE",
+     "circuit_days": [
+      "2026-10-15"
+     ],
+     "result": {
+      "entry": 240.0,
+      "exit": 252.0,
+      "exit_date": "2026-10-16",
+      "how": "target +5%",
+      "ret_pct": 4.8
      }
     },
     {
