@@ -36,6 +36,9 @@ names = pd.read_csv(os.path.join(HERE, "data", "stocks_list.csv")).set_index("Sy
 SMA200 = C.rolling(200, min_periods=200).mean(); R3 = C / C.shift(3) - 1
 TURN = (C * V).rolling(50, min_periods=20).median(); VOL50 = V.rolling(50, min_periods=50).mean()
 HI252 = H.rolling(252, min_periods=252).max().shift(1)
+# Market regime for the breakout watch (17 Oct 2026 search): equal-weight Nifty 500 index above its 100-day average.
+_EWI = (1 + (C / C.shift(1) - 1).mean(axis=1).fillna(0)).cumprod()
+MKT_UP = _EWI > _EWI.rolling(100, min_periods=100).mean()
 
 
 def rsi(s, n=14):
@@ -87,7 +90,7 @@ dates = C.index
 TIERS = {
     "rule": {"label": "Rule pick", "win": 64, "target_pct": 5.0, "hold": 5, "risk_pct": 8.0, "exit": "+5% limit sell at once; sell at the open after the 5th close if not filled. Safety line −8% (not part of the tested rule)."},
     "near": {"label": "Near-rule (weaker)", "win": 58, "target_pct": 5.0, "hold": 5, "risk_pct": 8.0, "exit": "Same as the rule pick: +5% target, out after 5 closes. Weaker setup - smaller size."},
-    "breakout": {"label": "Breakout watch", "win": 44, "target_pct": 15.0, "hold": 60, "risk_pct": 10.0, "exit": "Trail a 15% stop from the highest close; out after 60 sessions. Safety line −10%."},
+    "breakout": {"label": "Breakout watch (paper)", "win": 48, "target_pct": 15.0, "hold": 60, "risk_pct": 10.0, "exit": "Only while the market is up. Hold up to 60 sessions; sell at the next open once the equal-weight Nifty 500 closes below its 100-day average. Paper forward test - the backtest edge may be survivorship. Safety line −10% is for reference, not part of the tested rule."},
     "down": {"label": "Downside watch", "win": 42, "target_pct": -5.0, "hold": 5, "risk_pct": -8.0, "exit": "Expect a −5% pullback within 5 sessions; wrong if it rises 8% instead. Cash: do not buy / book profit if holding. F&O names: a put or short future is the only way to act on it. Weak evidence."},
 }
 FO = set(pd.read_csv(os.path.join(HERE, "data", "fo_list.csv"))["Symbol"].astype(str)) if os.path.exists(os.path.join(HERE, "data", "fo_list.csv")) else set()
@@ -128,7 +131,7 @@ def picks_on(i):
         elif drop <= -0.07:
             st = 35 + (-drop - 0.07) * 300 + 10 * liqscore + (5 if 20 <= (rs[s] or 50) <= 40 else 0)
             out.append(row(s, i, "near", min(100, st), f"3-day drop {drop*100:.1f}% (7-10% band) while {above*100:.1f}% above the 200-day average; RSI {rs[s]:.0f}"))
-        if not pd.isna(hi[s]) and c[s] > hi[s] and v50[s] and v[s] >= 1.5 * v50[s]:
+        if not pd.isna(hi[s]) and c[s] > hi[s] and v50[s] and v[s] >= 1.5 * v50[s] and bool(MKT_UP.iloc[i]):
             st = 30 + min(15, (v[s] / v50[s] - 1.5) * 10) + 10 * liqscore + min(10, above * 50)
             out.append(row(s, i, "breakout", min(100, st), f"new 52-week high on {v[s]/v50[s]:.1f}x average volume, {above*100:.1f}% above the 200-day average"))
     for r in out:
@@ -165,12 +168,10 @@ def settle(p, i):
                 return {"entry": round(entry, 2), "exit": round(tgt_d, 2), "exit_date": dates[k].date().isoformat(), "how": "fell to target −5%", "ret_pct": round((entry / tgt_d - 1) * 100 - 0.2, 2)}
             continue
         if p["tier"] == "breakout":
-            peak = max(peak, cl_)
-            if cl_ <= peak * 0.85 or lo_ <= risk:
-                px = cl_ if cl_ <= peak * 0.85 else risk
-                return {"entry": round(entry, 2), "exit": round(px, 2), "exit_date": dates[k].date().isoformat(), "how": "trailing stop" if cl_ <= peak * 0.85 else "risk line", "ret_pct": round((px / entry - 1) * 100 - 0.2, 2)}
-            if hi_ >= tgt:
-                return {"entry": round(entry, 2), "exit": round(tgt, 2), "exit_date": dates[k].date().isoformat(), "how": f"target +{t['target_pct']:.0f}%", "ret_pct": round((tgt / entry - 1) * 100 - 0.2, 2)}
+            if not bool(MKT_UP.iloc[k]) and k + 1 < len(dates) and not pd.isna(O.iloc[k + 1][s]):
+                px = float(O.iloc[k + 1][s])
+                return {"entry": round(entry, 2), "exit": round(px, 2), "exit_date": dates[k + 1].date().isoformat(), "how": "market turned down", "ret_pct": round((px / entry - 1) * 100 - 0.3, 2)}
+            continue
         else:
             if lo_ <= risk and k > i + 1:
                 return {"entry": round(entry, 2), "exit": round(risk, 2), "exit_date": dates[k].date().isoformat(), "how": "risk line", "ret_pct": round((risk / entry - 1) * 100 - 0.2, 2)}
@@ -214,7 +215,7 @@ try:
             above = bc[s_] / bs200[s_] - 1; drop = br3[s_]
             if above <= 0 or pd.isna(drop):
                 continue
-            tier = "rule" if drop <= -0.10 else "near" if drop <= -0.07 else ("breakout" if (not pd.isna(bhi[s_]) and bc[s_] > bhi[s_] and bv50[s_] and bv[s_] >= 1.5 * bv50[s_]) else None)
+            tier = "rule" if drop <= -0.10 else "near" if drop <= -0.07 else ("breakout" if (not pd.isna(bhi[s_]) and bc[s_] > bhi[s_] and bv50[s_] and bv[s_] >= 1.5 * bv50[s_] and bool(MKT_UP.iloc[-1])) else None)
             if not tier:
                 continue
             t = TIERS[tier]; c_ = float(bc[s_]); liqscore = min(1.0, np.log10(max(btu[s_], 1e7) / 1e7) / 2)
