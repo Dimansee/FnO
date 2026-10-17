@@ -47,8 +47,8 @@ def fake_candles(market, symbol, tf, days, ttl=None):
 
 
 MK.candles = fake_candles
-MK.last_price = lambda m, s: float(fake_candles(m, s, "1h", 30)["close"].iloc[-1])
-MK.completed = lambda df, tf, now=None: df[df.index + timedelta(minutes=MK.MINUTES[tf]) <= clock[0]]
+MK.last_price = lambda m, s: float(fake_candles(m, s, "4h", 365)["close"].iloc[-1])
+MK.completed = lambda df, tf, now=None, market="CRYPTO": df[df.index + timedelta(minutes=MK.MINUTES[tf]) <= clock[0]]
 MK.us_session_open = lambda now=None: False
 
 # 1. every candidate is a valid strategy
@@ -59,16 +59,20 @@ print("candidates valid:", sum(len(AP.all_specs(m)) for m in ("CRYPTO", "US")))
 
 # 2. qualification tests every pair and stores the result
 q = AP.qualify("CRYPTO", force=True)
-assert len(q["rows"]) == len(AP.CANDIDATES["CRYPTO"]) * len(AP.SYMBOLS["CRYPTO"]), len(q["rows"])
-print("qualify:", [(r["name"][12:30], r["symbol"], r["ok"], r["why"]) for r in q["rows"]][:6])
+assert len(q["rows"]) == len(AP.CANDIDATES["CRYPTO"]), len(q["rows"])
+assert all(len(r["per_symbol"]) == len(AP.SYMBOLS["CRYPTO"]) for r in q["rows"])
+print("qualify:", [(r["name"][12:40], r["ok"], r["why"][:60]) for r in q["rows"]])
 assert AP.qualify("CRYPTO")["t"] == q["t"]          # cached for a week
-ok_pairs = sum(len(v) for v in q["ok"].values())
-assert ok_pairs == len(AP.active_specs("CRYPTO")[0]["symbols"]) if len(q["ok"]) == 1 else True
+assert len(AP.active_specs("CRYPTO")) == len(q["ok"])
+# a changed candidate list forces a re-test even inside the week
+store.put("g_ap_qual:CRYPTO", {**q, "ids": ["s_old"]})
+q = AP.qualify("CRYPTO")
+assert q["ids"] == sorted(c["id"] for c in AP.CANDIDATES["CRYPTO"])
 
 # force a known pass so the trade path is exercised whatever the synthetic data gave
-store.put("g_ap_qual:CRYPTO", {**q, "ok": {"s_a00003": ["BTCUSDT"]}})
+store.put("g_ap_qual:CRYPTO", {**q, "ok": {"s_a10001": ["BTCUSDT"]}})
 specs, who = GB.runners("CRYPTO")
-assert who == "autopilot" and specs and specs[0]["id"] == "s_a00003" and specs[0]["symbols"] == ["BTCUSDT"]
+assert who == "autopilot" and specs and specs[0]["id"] == "s_a10001" and specs[0]["symbols"] == ["BTCUSDT"]
 
 # 3. a tick with NO user strategies uses the autopilot; make the last bar a fresh long signal
 import fno.custom as _cu
@@ -82,8 +86,8 @@ clock[0] = T0 + timedelta(minutes=1)
 res = GB.tick(("CRYPTO",))
 print("tick:", res["CRYPTO"])
 pos = GB.positions("CRYPTO")
-assert len(pos) == 1 and pos[0]["strategy_id"] == "s_a00003" and pos[0]["strategy_name"].startswith("Autopilot"), pos
-assert "s_a00003" in GB._spec_map()                 # exit rules found for the open position
+assert len(pos) == 1 and pos[0]["strategy_id"] == "s_a10001" and pos[0]["strategy_name"].startswith("Autopilot"), pos
+assert "s_a10001" in GB._spec_map()                 # exit rules found for the open position
 res2 = GB.tick(("CRYPTO",))                         # same bar never traded twice
 assert len(GB.positions("CRYPTO")) == 1, res2
 
@@ -97,10 +101,17 @@ assert pf["autopilot"]["in_use"] is False and pf["last_tick"]
 _cu.signals = orig
 
 # 5. nothing passes -> no autopilot trades, status explains
-store.put("g_ap_qual:US", {"t": 9e18, "at": "2026-10-16T00:00:00+00:00", "ok": {}, "rows": [{"id": "s_a00011", "name": "Autopilot · x", "symbol": "SPY", "ok": False, "why": "profit factor 0.8"}], "data_errors": 0})
+store.put("g_ap_qual:US", {"t": 9e18, "at": "2026-10-16T00:00:00+00:00", "ok": {}, "rows": [{"id": "s_a10011", "name": "Autopilot · x", "symbol": "all", "ok": False, "why": "recent profit factor 0.8", "per_symbol": {}}], "data_errors": 0})
 assert GB.runners("US") == ([], "autopilot")
 st = GB.portfolio("US")["autopilot"]
-assert st["in_use"] and st["tested"] == 1 and st["passed"] == []
+assert st["in_use"] and st["tested"] == 1 and st["passed"] == [] and len(st["failed"]) == 1 and "per_symbol" not in st["failed"][0]
+
+# 5b. US: the last bar of a session is complete at the 16:00 close, not 4 hours later
+import pandas as _pd
+ix = _pd.DatetimeIndex([_pd.Timestamp("2026-10-16 09:30", tz=MK.TZ["US"]), _pd.Timestamp("2026-10-16 13:30", tz=MK.TZ["US"])])
+ends = MK.bar_ends(ix, "4h", "US")
+assert ends[0].hour == 13 and ends[0].minute == 30 and ends[1].hour == 16 and ends[1].minute == 0, ends
+assert MK.history_days("US", "4h") > 150 and MK.history_days("CRYPTO", "4h") < 60
 
 # 6. runner stays off outside Render; health accepts the POST wake-up call
 assert RN.enabled() is False and RN.start() is False

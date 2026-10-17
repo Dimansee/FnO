@@ -224,10 +224,9 @@ def close_position(market: str, pid: str, px: float, reason: str) -> dict | None
 
 # ------------------------------------------------------------------ the tick
 def _bars_for(spec: dict, symbol: str, need_days: int = 14):
-    mins = CU.TIMEFRAMES[spec["timeframe"]]
     tf = spec["timeframe"]
-    days = max(need_days, int(mins * 320 / 1440) + 3)
-    return MK.completed(MK.candles(spec["market"], symbol, tf, days), tf)
+    days = max(need_days, MK.history_days(spec["market"], tf))
+    return MK.completed(MK.candles(spec["market"], symbol, tf, days), tf, market=spec["market"])
 
 
 def _sq_min(spec):
@@ -293,7 +292,7 @@ def _evaluate(market: str, spec: dict, symbol: str, out: list):
     mins = CU.TIMEFRAMES[spec["timeframe"]]
     lg, sh, _ = CU.signals(spec, bars)
     ts = bars.index[-1]
-    end = (ts + timedelta(minutes=mins)).astimezone(timezone.utc)
+    end = MK.bar_ends(bars.index[-1:], spec["timeframe"], market)[0].astimezone(timezone.utc)
     key = f"g_seen:{spec['id']}:{symbol}"
     seen = store.get(key)
     if seen == end.isoformat():

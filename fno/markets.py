@@ -10,6 +10,7 @@ import time as _t
 from datetime import datetime, time as dtime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
+import numpy as np
 import pandas as pd
 import requests
 
@@ -156,12 +157,31 @@ def candles(market: str, symbol: str, tf: str, days: int, ttl: int | None = None
     return M.cached(key, ttl, load)
 
 
-def completed(df: pd.DataFrame, tf: str, now: datetime | None = None) -> pd.DataFrame:
+def bar_ends(index, tf: str, market: str = "CRYPTO"):
+    """When each bar is finished. US intraday bars end at 16:00 New York at the latest: the last bar of a session
+    (e.g. the 13:30 4-hour bar) is complete at the close, not hours later when the market is shut."""
+    ends = index + timedelta(minutes=MINUTES[tf])
+    if market == "US" and MINUTES[tf] < 1440 and len(index):
+        close = index.normalize() + timedelta(hours=16)
+        ends = ends.where(ends <= close, close)
+    return ends
+
+
+def completed(df: pd.DataFrame, tf: str, now: datetime | None = None, market: str = "CRYPTO") -> pd.DataFrame:
     """Drop the bar still forming."""
     now = now or datetime.now(timezone.utc)
     if df.empty:
         return df
-    return df[df.index + timedelta(minutes=MINUTES[tf]) <= now]
+    return df[bar_ends(df.index, tf, market) <= now]
+
+
+def history_days(market: str, tf: str, bars: int = 320) -> int:
+    """Calendar days of history that give about `bars` bars (US trades ~6.5 h a day, 5 days a week)."""
+    mins = MINUTES[tf]
+    if market == "US":
+        per_day = 1 if mins >= 1440 else max(1, int(np.ceil(390 / mins)))
+        return int(bars / per_day * 7 / 5) + 5
+    return int(mins * bars / 1440) + 3
 
 
 def last_price(market: str, symbol: str) -> float:

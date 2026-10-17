@@ -183,7 +183,7 @@ def fake_candles(market, symbol, tf, days, ttl=None):
 
 MK.candles = fake_candles
 MK.last_price = lambda m, s: LAST[s]
-MK.completed = lambda df, tf, now=None: df[df.index + timedelta(minutes=MK.MINUTES[tf]) <= clock[0]]
+MK.completed = lambda df, tf, now=None, market="CRYPTO": df[df.index + timedelta(minutes=MK.MINUTES[tf]) <= clock[0]]
 cr = {"name": "Crypto always long", "market": "CRYPTO", "symbols": ["BTCUSDT"], "timeframe": "1h", "direction": "long", "enabled": True, "auto": True, "hold": "swing",
       "long": {"all": [{"l": {"price": "close"}, "op": "gt", "r": {"value": 1}}]},
       "exit": {"stop_atr": 1.0, "target_r": 1.5, "time_stop_bars": 5}, "filters": {"max_trades_day": 3}}

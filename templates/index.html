@@ -2904,8 +2904,9 @@ function gxAutopilot(d) {
   if (a.error) body = `Autopilot status unavailable: ${esc(a.error)}`;
   else if (!a.in_use) body = `Your own Auto strategies are trading this market (autopilot stands aside).`;
   else if (!a.tested_at) body = `Autopilot is running its first backtest of ${GX.mk === "CRYPTO" ? "crypto" : "US"} rules; trading starts once a rule passes (a few minutes).`;
-  else if (!(a.passed || []).length) body = `Autopilot tested ${a.tested} rule/symbol pairs on ${esc(a.tested_at.slice(0, 10))} and none passed (${esc(a.rules)}), so it is staying flat rather than trading a losing rule. It re-tests weekly.`;
-  else body = `Autopilot is trading ${a.passed.length} tested rule/symbol pair${a.passed.length > 1 ? "s" : ""}: ` + a.passed.map(r => `<b>${esc(r.symbol)}</b> ${esc(r.name.replace("Autopilot · ", ""))} <span class="muted">(${esc(r.why)})</span>`).join("; ") + `. Tested ${esc(a.tested_at.slice(0, 10))}.`;
+  else if (!(a.passed || []).length) body = `Autopilot checked ${a.tested} researched rules on ${esc(a.tested_at.slice(0, 10))} and none is working on recent data (${esc(a.rules)}), so it is staying flat rather than trading a losing rule. It re-checks weekly.`;
+  else body = `Autopilot is trading ${a.passed.length} of ${a.tested} researched rule${a.tested > 1 ? "s" : ""} (checked ${esc(a.tested_at.slice(0, 10))}):<br>` + a.passed.map(r => `• <b>${esc(r.name.replace("Autopilot · ", ""))}</b> on ${esc(r.symbol)} <span class="muted">— ${esc(r.why)}</span>`).join("<br>")
+    + ((a.failed || []).length ? `<br><span class="muted">Paused (not working lately): ${a.failed.map(r => `${esc(r.name.replace("Autopilot · ", ""))} — ${esc(r.why)}`).join("; ")}</span>` : "");
   return `<div class="card" style="margin-bottom:14px"><p style="margin:0">${body}</p><p class="muted" style="margin:6px 0 0;font-size:12.5px">Engine ${run}.</p></div>`;
 }
 function renderMarkets() {

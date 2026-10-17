@@ -1,23 +1,27 @@
 """Autopilot for the crypto and US paper books.
 
-Why this exists: the crypto / US books only traded strategies you had built and switched to "Auto paper-trade"
-in the Strategy lab. With none switched on, those books never opened a position. You asked for the app to trade
-by itself with no settings, so when a market has NO strategy of yours on auto, these built-in candidates run instead.
+When a market has NO strategy of yours on "Auto paper-trade", these built-in rules trade instead. Your own Auto
+strategies always take priority: switch one on for a market and the autopilot steps aside there.
 
-Nothing is switched on blindly. Once a week every candidate is backtested on that symbol's own recent history
-(same engine, same fees and slippage as the Strategy lab) and only the (strategy, symbol) pairs that pass ALL of
-these checks may trade:
-  - at least MIN_TRADES trades in the test
-  - average trade above MIN_AVG_R (after costs)
-  - profit factor at least MIN_PF
-  - the most recent 30% of the history (the part a fitted rule usually fails on) was profitable too
-If nothing passes, the market stays flat and the Markets tab says why, instead of trading a losing rule.
-Your own strategies always take priority: switch one to Auto for a market and the autopilot steps aside there.
+Where the rules come from (research/global_rules_search.py, 17 Oct 2026; write-up in the Project docs):
+10 textbook rule families x timeframes x long/both = 100 tests on 10 crypto pairs (Binance spot, Jan 2023 - Oct 2026)
+and 14 US stocks/ETFs (Yahoo 1h, ~2 years), same engine and costs as the app. Rules were chosen on the earlier part
+of the data only and judged on a later part they never saw. Mean-reversion rules and everything on 1-hour bars lost
+money after costs; slow trend-following (breakouts / Supertrend on 4-hour and daily bars) was the only family that
+held up on the unseen part, in both markets. Those are the candidates below. None is individually "proven"
+(t-stats 0.7-1.7 on the unseen data), so this is paper money testing the best evidence available, not a promise.
+
+Live check (weekly): every candidate is re-backtested on its recent history, pooled over its symbols. A rule trades only
+while that recent result is still positive (>= MIN_TRADES trades, avg >= MIN_AVG_R after costs, PF >= MIN_PF), and only on
+symbols where it has not been clearly losing (own avg >= SYMBOL_FLOOR_R, or too few trades to tell). If nothing passes,
+the market stays flat and the Markets tab says why.
 """
 from __future__ import annotations
 
 import time
 from datetime import datetime, timezone
+
+import numpy as np
 
 from . import custom as CU
 from . import markets as MK
@@ -25,98 +29,121 @@ from . import store
 
 QUAL_TTL = 7 * 86400          # re-test every week
 RETRY_TTL = 3 * 3600          # a market whose test could not run (data feed down) is retried sooner
-MIN_TRADES, MIN_AVG_R, MIN_PF = 25, 0.05, 1.10
-HISTORY_DAYS = {"5m": 58, "15m": 58, "30m": 58, "1h": 365, "4h": 730, "1d": 1500}   # free feeds: US intraday stops at ~60 days
-SYMBOLS = {"CRYPTO": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT"], "US": ["SPY", "QQQ", "AAPL", "NVDA", "MSFT"]}
+MIN_TRADES, MIN_AVG_R, MIN_PF = 30, 0.03, 1.05
+SYMBOL_FLOOR_R, SYMBOL_MIN_N = -0.10, 6
+CHECK_DAYS = {("CRYPTO", "4h"): 365, ("CRYPTO", "1d"): 1095, ("US", "4h"): 720, ("US", "1h"): 720}
+SYMBOLS = {"CRYPTO": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT", "ADAUSDT", "AVAXUSDT", "LINKUSDT", "TONUSDT"],
+           "US": ["SPY", "QQQ", "IWM", "DIA", "AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "AMD", "JPM", "GLD"]}
 
 
 def _c(l, op, r):
     return {"l": l, "op": op, "r": r}
 
 
-_EMA_ADX = {"long": {"all": [_c({"ind": "ema", "n": 9}, "crosses_above", {"ind": "ema", "n": 21}), _c({"ind": "adx", "n": 14, "out": "adx"}, "gt", {"value": 22})]},
-            "short": {"all": [_c({"ind": "ema", "n": 9}, "crosses_below", {"ind": "ema", "n": 21}), _c({"ind": "adx", "n": 14, "out": "adx"}, "gt", {"value": 22})]}}
-_RSI_DIP = {"long": {"all": [_c({"price": "close"}, "gt", {"ind": "ema", "n": 50}), _c({"ind": "rsi", "n": 7}, "crosses_above", {"value": 30})]},
-            "short": {"all": [_c({"price": "close"}, "lt", {"ind": "ema", "n": 50}), _c({"ind": "rsi", "n": 7}, "crosses_below", {"value": 70})]}}
+_P = {"price": "close"}
+_EX = {"target_r": None}
+_SUPERTREND = {"long": {"all": [_c({"ind": "supertrend", "n": 10, "mult": 3.0, "out": "dir"}, "crosses_above", {"value": 0})]},
+               "short": {"all": [_c({"ind": "supertrend", "n": 10, "mult": 3.0, "out": "dir"}, "crosses_below", {"value": 0})]},
+               "exit": {**_EX, "stop_atr": 2.0, "exit_on_opposite": True}}
 
-# Fixed ids (s_a + 5 hex) so open positions always find their exit rules again, even after a re-test.
+
+def _donchian(n, trail):
+    return {"long": {"all": [_c(_P, "crosses_above", {"ind": "donchian", "n": n, "out": "upper"})]},
+            "short": {"all": [_c(_P, "crosses_below", {"ind": "donchian", "n": n, "out": "lower"})]},
+            "exit": {**_EX, "stop_atr": 2.0, "trail_atr": trail}}
+
+
+_KELTNER = {"long": {"all": [_c(_P, "crosses_above", {"ind": "keltner", "n": 20, "mult": 2.0, "out": "upper"})]},
+            "short": {"all": [_c(_P, "crosses_below", {"ind": "keltner", "n": 20, "mult": 2.0, "out": "lower"})]},
+            "exit": {**_EX, "stop_atr": 2.0, "trail_atr": 3.0}}
+
+# Fixed ids so open positions always find their exit rules again, even after a re-test.
+# 'research' = pooled result on the unseen part of the history (avg R per trade after costs, trades).
 CANDIDATES = {
     "CRYPTO": [
-        {"id": "s_a00001", "preset": "Bollinger mean reversion", "timeframe": "1h"},
-        {"id": "s_a00002", "preset": "Donchian breakout (trend following)", "timeframe": "4h"},
-        {"id": "s_a00003", "name": "EMA 9/21 trend + ADX (1h)", "timeframe": "1h", "hold": "swing", **_EMA_ADX,
-         "exit": {"stop_atr": 2.0, "target_r": 3.0, "trail_atr": 2.5, "exit_on_opposite": True}, "filters": {"max_trades_day": 3}},
-        {"id": "s_a00004", "name": "RSI dip inside an uptrend (1h)", "timeframe": "1h", "hold": "swing", **_RSI_DIP,
-         "exit": {"stop_atr": 1.5, "target_r": 1.5, "time_stop_bars": 24}, "filters": {"max_trades_day": 3}},
+        {"id": "s_a10001", "name": "Supertrend 10/3 (4h)", "timeframe": "4h", "direction": "both", **_SUPERTREND, "research": "+0.15R over 487 unseen trades, every year positive"},
+        {"id": "s_a10002", "name": "Donchian 55 breakout, long (4h)", "timeframe": "4h", "direction": "long", **_donchian(55, 4.0), "research": "+0.14R over 298 unseen trades"},
+        {"id": "s_a10003", "name": "Donchian 20 breakout, long (daily)", "timeframe": "1d", "direction": "long", **_donchian(20, 3.0), "research": "+0.22R over 95 unseen trades, every year positive"},
+        {"id": "s_a10004", "name": "Supertrend 10/3 (daily)", "timeframe": "1d", "direction": "both", **_SUPERTREND, "research": "+0.33R over 73 unseen trades, depends on a few big winners"},
     ],
     "US": [
-        {"id": "s_a00011", "preset": "Opening-range breakout + volume", "timeframe": "5m"},
-        {"id": "s_a00012", "name": "EMA 9/21 trend + ADX (15m)", "timeframe": "15m", "hold": "intraday", **_EMA_ADX,
-         "exit": {"stop_atr": 1.5, "target_r": 2.0}, "filters": {"start": "10:00", "end": "15:00", "max_trades_day": 2}},
-        {"id": "s_a00013", "name": "RSI dip inside an uptrend (1h swing)", "timeframe": "1h", "hold": "swing", **_RSI_DIP,
-         "exit": {"stop_atr": 1.5, "target_r": 1.5, "time_stop_bars": 14}, "filters": {"max_trades_day": 1}},
+        {"id": "s_a10011", "name": "Donchian 55 breakout, long (4h)", "timeframe": "4h", "direction": "long", **_donchian(55, 4.0), "research": "+0.40R over 76 unseen trades"},
+        {"id": "s_a10012", "name": "Keltner breakout, long (4h)", "timeframe": "4h", "direction": "long", **_KELTNER, "research": "+0.32R over 115 unseen trades"},
     ],
 }
 
 
 def _spec(market: str, cand: dict, symbols: list[str]) -> dict:
-    base = next((p for p in CU.PRESETS if p["name"] == cand.get("preset")), {}) if cand.get("preset") else {}
-    raw = {**base, **{k: v for k, v in cand.items() if k not in ("preset",)}}
-    raw["name"] = "Autopilot · " + (cand.get("name") or base.get("name", cand["id"]))
-    raw.update(market=market, symbols=symbols or SYMBOLS[market][:1], direction=raw.get("direction", "both"), enabled=True, auto=True, version=1)
+    raw = {k: v for k, v in cand.items() if k != "research"}
+    raw.update(name="Autopilot · " + cand["name"], market=market, symbols=symbols or SYMBOLS[market][:1], hold="swing",
+               filters={"max_trades_day": 3}, enabled=True, auto=True, version=1)
     spec = CU.validate(raw, existing_id=cand["id"])
     spec["autopilot"] = True
     return spec
 
 
 def all_specs(market: str) -> list[dict]:
-    """Every candidate (all symbols). Used to find exit rules for positions the autopilot already holds."""
+    """Every candidate on every symbol. Used to find exit rules for positions the autopilot already holds."""
     return [_spec(market, c, SYMBOLS[market]) for c in CANDIDATES.get(market, [])]
 
 
-def _passes(res: dict) -> tuple[bool, str]:
-    t, u = res.get("total") or {}, res.get("unseen_30") or {}
-    if res.get("error"):
-        return False, res["error"]
-    if t.get("n", 0) < MIN_TRADES:
-        return False, f"only {t.get('n', 0)} trades in the test"
-    if (t.get("avg_R") or 0) < MIN_AVG_R:
-        return False, f"average trade {t.get('avg_R', 0):+.2f}R"
-    if t.get("profit_factor") is not None and t["profit_factor"] < MIN_PF:   # None = no losing trade at all
-        return False, f"profit factor {t.get('profit_factor')}"
-    if u.get("n", 0) < 8 or (u.get("avg_R") or 0) <= 0:
-        return False, f"recent 30% of history {u.get('avg_R', 0):+.2f}R over {u.get('n', 0)} trades"
-    return True, f"{t['n']} trades, {t['avg_R']:+.2f}R avg, PF {t['profit_factor'] or 'no losses'}, recent {u['avg_R']:+.2f}R"
+def _stats(rs):
+    r = np.asarray(rs, float)
+    if not len(r):
+        return {"n": 0, "avg_R": 0.0, "pf": None}
+    lo = -r[r <= 0].sum()
+    return {"n": int(len(r)), "avg_R": round(float(r.mean()), 3), "pf": round(float(r[r > 0].sum() / lo), 2) if lo > 0 else None}
+
+
+def _rule_ok(s: dict) -> tuple[bool, str]:
+    if s["n"] < MIN_TRADES:
+        return False, f"only {s['n']} trades in the recent check"
+    if s["avg_R"] < MIN_AVG_R:
+        return False, f"recent average {s['avg_R']:+.2f}R per trade"
+    if s["pf"] is not None and s["pf"] < MIN_PF:
+        return False, f"recent profit factor {s['pf']}"
+    return True, f"{s['n']} recent trades, {s['avg_R']:+.2f}R avg, PF {s['pf'] or 'no losses'}"
 
 
 def qualify(market: str, force: bool = False) -> dict:
-    """Backtest every candidate on every symbol and store which pairs may trade. Slow (network); run it off the request path."""
+    """Re-test every candidate on recent history and store which rules / symbols may trade. Slow (network): runs off the request path."""
     cur = store.get(f"g_ap_qual:{market}") or {}
+    fresh_ids = {c["id"] for c in CANDIDATES.get(market, [])}
+    stale_set = set(cur.get("ids") or []) != fresh_ids          # candidate list changed (new research): re-test now
     age = time.time() - float(cur.get("t", 0))
-    if not force and age < (RETRY_TTL if cur.get("data_errors") else QUAL_TTL):
+    if not force and not stale_set and age < (RETRY_TTL if cur.get("data_errors") else QUAL_TTL):
         return cur
     rows, ok, errors = [], {}, 0
     for cand in CANDIDATES.get(market, []):
         spec = _spec(market, cand, SYMBOLS[market])
-        days = HISTORY_DAYS[spec["timeframe"]]
+        days = CHECK_DAYS.get((market, spec["timeframe"]), 365)
+        pooled, per = [], {}
         for sym in SYMBOLS[market]:
             try:
                 df = MK.candles(market, sym, spec["timeframe"], days, ttl=3600)
-                res = CU.backtest(spec, df, sym)
-                good, why = _passes(res)
+                rs = [t["R"] for t in CU.simulate(spec, df)]
             except Exception as e:
-                good, why = False, f"data error: {str(e)[:80]}"
                 errors += 1
-            rows.append({"id": cand["id"], "name": spec["name"], "symbol": sym, "ok": good, "why": why})
-            if good:
-                ok.setdefault(cand["id"], []).append(sym)
-    out = {"t": time.time(), "at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "ok": ok, "rows": rows, "data_errors": errors}
+                per[sym] = {"error": str(e)[:80]}
+                continue
+            pooled += rs
+            per[sym] = _stats(rs)
+        s = _stats(pooled)
+        good, why = _rule_ok(s)
+        syms = [k for k, v in per.items() if "error" not in v and (v["n"] < SYMBOL_MIN_N or v["avg_R"] >= SYMBOL_FLOOR_R)] if good else []
+        dropped = [k for k in per if k not in syms and "error" not in per[k]] if good else []
+        if good and syms:
+            ok[cand["id"]] = syms
+        rows.append({"id": cand["id"], "name": spec["name"], "symbol": ", ".join(syms) if good else "all", "ok": bool(good and syms),
+                     "why": why + (f"; skipping {', '.join(dropped)} (losing there lately)" if dropped else ""), "research": cand.get("research"), "per_symbol": per})
+    out = {"t": time.time(), "at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "ok": ok, "rows": rows,
+           "data_errors": errors, "ids": sorted(fresh_ids)}
     store.put(f"g_ap_qual:{market}", out)
     return out
 
 
 def active_specs(market: str) -> list[dict]:
-    """The autopilot strategies allowed to open trades now (empty until the weekly test has run)."""
+    """The autopilot strategies allowed to open trades now (empty until the weekly check has run)."""
     q = store.get(f"g_ap_qual:{market}") or {}
     cands = {c["id"]: c for c in CANDIDATES.get(market, [])}
     return [_spec(market, cands[cid], syms) for cid, syms in (q.get("ok") or {}).items() if cid in cands and syms]
@@ -124,5 +151,6 @@ def active_specs(market: str) -> list[dict]:
 
 def status(market: str, in_use: bool) -> dict:
     q = store.get(f"g_ap_qual:{market}") or {}
-    return {"in_use": in_use, "tested_at": q.get("at"), "passed": [r for r in q.get("rows", []) if r["ok"]],
-            "tested": len(q.get("rows", [])), "rules": f"needs ≥{MIN_TRADES} trades, ≥{MIN_AVG_R}R average, profit factor ≥{MIN_PF} and a profitable recent 30%"}
+    rows = [{k: v for k, v in r.items() if k != "per_symbol"} for r in q.get("rows", [])]
+    return {"in_use": in_use, "tested_at": q.get("at"), "passed": [r for r in rows if r["ok"]], "failed": [r for r in rows if not r["ok"]],
+            "tested": len(rows), "rules": f"each rule needs ≥{MIN_TRADES} recent trades, ≥{MIN_AVG_R}R average and profit factor ≥{MIN_PF}"}
