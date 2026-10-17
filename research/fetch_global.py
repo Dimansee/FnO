@@ -1,6 +1,7 @@
 """Download crypto + US price history for the global-book research (runs on GitHub Actions, which has open internet).
 
-Crypto: Binance spot klines from data.binance.vision monthly files (the same exchange the app trades on paper), 1h,
+Crypto: Binance spot klines from data.binance.vision monthly files (the same exchange the app trades on paper), 1h
+        (plus 5m from Jan 2024 for BTC, ETH, SOL, BNB, XRP),
         Jan 2023 to the last full month, then the current month from the public API (falls back silently if blocked).
 US:     Yahoo Finance 1h (~730 days), 1d (max), 5m (~60 days).
 Writes gzip CSVs (ts in UTC, open, high, low, close, volume) to <out>/crypto_<SYM>_1h.csv.gz etc.
@@ -19,6 +20,7 @@ OUT = sys.argv[1] if len(sys.argv) > 1 else "research/data/global"
 os.makedirs(OUT, exist_ok=True)
 CRYPTO = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT", "ADAUSDT", "AVAXUSDT", "LINKUSDT", "TONUSDT"]
 US = ["SPY", "QQQ", "IWM", "DIA", "AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "AMD", "JPM", "GLD"]
+CRYPTO5 = CRYPTO[:5]   # 5-minute bars (Jan 2024 on) for the five main coins: intraday strategy tests and charts
 S = requests.Session()
 
 
@@ -29,10 +31,10 @@ def months(start=date(2023, 1, 1)):
         d = date(d.year + (d.month == 12), d.month % 12 + 1, 1)
 
 
-def crypto(sym):
+def crypto(sym, iv="1h", start_month=date(2023, 1, 1)):
     frames = []
-    for m in months():
-        url = f"https://data.binance.vision/data/spot/monthly/klines/{sym}/1h/{sym}-1h-{m:%Y-%m}.zip"
+    for m in months(start_month):
+        url = f"https://data.binance.vision/data/spot/monthly/klines/{sym}/{iv}/{sym}-{iv}-{m:%Y-%m}.zip"
         r = S.get(url, timeout=60)
         if r.status_code != 200:
             continue
@@ -44,7 +46,7 @@ def crypto(sym):
             start = int(pd.Timestamp(date.today().replace(day=1)).tz_localize("UTC").timestamp() * 1000)
             rows = []
             while True:
-                r = S.get(f"{host}/api/v3/klines", params={"symbol": sym, "interval": "1h", "startTime": start, "limit": 1000}, timeout=30)
+                r = S.get(f"{host}/api/v3/klines", params={"symbol": sym, "interval": iv, "startTime": start, "limit": 1000}, timeout=30)
                 if r.status_code != 200:
                     break
                 b = r.json()
@@ -68,8 +70,8 @@ def crypto(sym):
     ts = ts.where(ts < 1e14, ts // 1000)          # Binance switched some files to microseconds in 2025
     df["ts"] = pd.to_datetime(ts, unit="ms", utc=True)
     df = df.drop_duplicates("ts").sort_values("ts")
-    df.to_csv(f"{OUT}/crypto_{sym}_1h.csv.gz", index=False)
-    print(sym, len(df), df["ts"].iloc[0], df["ts"].iloc[-1])
+    df.to_csv(f"{OUT}/crypto_{sym}_{iv}.csv.gz", index=False)
+    print(sym, iv, len(df), df["ts"].iloc[0], df["ts"].iloc[-1])
 
 
 def us(sym):
@@ -121,5 +123,10 @@ for s in CRYPTO:
         funding(s)
     except Exception as e:
         print("funding fail", s, e)
+for s in CRYPTO5:
+    try:
+        crypto(s, "5m", date(2024, 1, 1))
+    except Exception as e:
+        print("crypto 5m fail", s, e)
 for s in US:
     us(s)
