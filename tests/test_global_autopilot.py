@@ -232,4 +232,51 @@ assert not any(p["id"] == o["id"] for p in GB.positions("CRYPTO"))
 rec = next(t for t in GB.trades("CRYPTO") if t["id"] == o["id"])
 assert rec["strategy_name"] == "Manual" and rec["reason"].startswith("Stop") and rec["pnl"] < 0, rec
 print("manual trades OK:", o["message"])
+
+# 12. order desk: market / limit / stop orders, leverage + liquidation, partial close, cancel
+from fno import gorders as GO
+GO.fx = lambda: {"USDINR": 88.0, "src": "test"}
+px = MK.last_price("CRYPTO", "SOLUSDT")
+pv = GO.preview("CRYPTO", {"symbol": "SOLUSDT", "side": "buy", "type": "market", "size_mode": "margin", "margin": 200, "leverage": 10})
+assert abs(pv["notional"] - 2000) < 5 and abs(pv["margin"] - 200) < 1 and pv["liq"] and pv["liq"] < px and pv["stop_is_liq"], pv
+assert abs(pv["liq"] - pv["entry"] * (1 - 0.1 + 0.005)) < 1e-6
+pv2 = GO.preview("CRYPTO", {"symbol": "SOLUSDT", "side": "buy", "type": "market", "size_mode": "qty", "qty": 1, "leverage": 20, "stop": px * 0.9})
+assert pv2["warnings"] and pv2["stop_is_liq"], pv2                  # 20x: liquidation (~-4.5%) before a -10% stop
+for bad in ({"type": "stop", "price": px * 0.99}, {"type": "limit"}, {"leverage": 40}, {"type": "market", "stop": px * 1.01}):
+    try:
+        GO.place("CRYPTO", {"symbol": "SOLUSDT", "side": "buy", "size_mode": "qty", "qty": 1, **bad}); raise SystemExit(f"bad order accepted {bad}")
+    except ValueError:
+        pass
+r = GO.place("CRYPTO", {"symbol": "SOLUSDT", "side": "sell", "type": "market", "size_mode": "pct", "pct": 10, "leverage": 5, "target": px * 0.9})
+pos = next(p for p in GB.positions("CRYPTO") if p["id"] == r["position"])
+assert pos["side"] == "short" and pos["leverage"] == 5 and pos["liq"] > px and abs(pos["state"]["sl"] - pos["liq"]) < 1e-6, pos
+out = GO.close_part("CRYPTO", pos["id"], 0.5)
+left = next(p for p in GB.positions("CRYPTO") if p["id"] == pos["id"])
+assert abs(left["qty"] - pos["qty"] / 2) < 1e-5 and "Partly closed" in next(t for t in GB.trades("CRYPTO") if t["symbol"] == "SOLUSDT" and t["side"] == "short")["reason"]
+GO.close_part("CRYPTO", pos["id"], 1)
+assert not any(p["id"] == pos["id"] for p in GB.positions("CRYPTO"))
+# limit buy below the market waits, then fills when a 1-minute candle trades through it
+lim = px * 0.95
+o = GO.place("CRYPTO", {"symbol": "SOLUSDT", "side": "buy", "type": "limit", "price": lim, "size_mode": "qty", "qty": 2, "stop": lim * 0.97, "target": lim * 1.05})
+assert not o["filled"] and len(GO.open_orders("CRYPTO")) == 1
+m1 = fake_candles("CRYPTO", "SOLUSDT", "4h", 365).tail(5).copy()
+idx = pd.date_range(end=clock[0] + timedelta(minutes=3), periods=5, freq="1min", tz="UTC")
+m1.index = idx
+m1[["open", "high", "low", "close"]] = px
+m1.iloc[-1, m1.columns.get_loc("low")] = lim * 0.999
+_c = MK.candles
+MK.candles = lambda m, s, tf, d, ttl=None: m1 if tf == "1m" else _c(m, s, tf, d, ttl)
+res = GO.process("CRYPTO")
+MK.candles = _c
+assert res and res[0].get("filled"), res
+fp = next(p for p in GB.positions("CRYPTO") if p["symbol"] == "SOLUSDT" and p["side"] == "long")
+assert abs(fp["entry"] - lim) < 1e-6 and fp["state"]["tp"] and GO.history("CRYPTO")[0]["status"] == "filled"
+# stop order placed then cancelled
+so = GO.place("CRYPTO", {"symbol": "BTCUSDT", "side": "buy", "type": "stop", "price": MK.last_price("CRYPTO", "BTCUSDT") * 1.05, "size_mode": "amount", "amount": 100})
+GO.cancel("CRYPTO", so["order"])
+assert not GO.open_orders("CRYPTO") and GO.history("CRYPTO")[0]["status"] == "cancelled"
+dk = GO.desk("CRYPTO")
+assert {"positions", "orders", "order_history", "trades", "fx", "equity", "free", "upnl"} <= set(dk) and all("roe" in p for p in dk["positions"])
+GO.close_part("CRYPTO", fp["id"], 1)
+print("order desk OK")
 print("ALL GLOBAL AUTOPILOT OK")

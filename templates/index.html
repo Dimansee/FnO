@@ -402,6 +402,31 @@ ul.tight{margin:4px 0 6px;padding-left:18px;color:var(--muted);font-size:13px}
 details summary{cursor:pointer;font-size:13px}
 .err{background:var(--red-bg);color:var(--red);padding:10px 12px;border-radius:10px}
 
+
+/* ---- Trade terminal (crypto / US) ---- */
+.tt-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;padding:10px 14px;margin-bottom:12px}
+.tt-top .px{font-size:26px;font-weight:750;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.tt-top .st{display:flex;flex-direction:column;font-size:12px;color:var(--muted)}.tt-top .st b{font-size:13.5px;color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+.tt-grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:12px}
+.tt-chart{height:520px;position:relative}
+.tt-side .bs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.tt-side .bs button{padding:10px;font-weight:750;border-radius:9px;border:1px solid var(--line2);background:var(--bg2);color:var(--muted)}
+.tt-side .bs button.on.buy{background:var(--green);color:#06150f;border-color:var(--green)}.tt-side .bs button.on.sell{background:var(--red);color:#1d0606;border-color:var(--red)}
+.tt-side label{font-size:12px;margin-top:10px}.tt-side input,.tt-side select{width:100%}
+.tt-in{display:flex;gap:6px}.tt-in input{flex:1;min-width:0}.tt-in select{width:auto;flex:0 0 auto}
+.tt-q{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:6px}.tt-q button{padding:4px 0;font-size:12px;border-radius:6px}
+.tt-lev{display:flex;align-items:center;gap:10px}.tt-lev input[type=range]{flex:1;accent-color:var(--accent)}.tt-lev b{min-width:44px;text-align:right;font-variant-numeric:tabular-nums}
+.tt-sum{margin-top:12px;border-top:1px solid var(--line);padding-top:10px;font-size:12.5px}
+.tt-sum div{display:flex;justify-content:space-between;padding:2px 0;color:var(--muted)}.tt-sum div b{color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+.tt-go{width:100%;margin-top:12px;padding:12px;font-size:15px;font-weight:750;border-radius:10px;border:none}
+.tt-go.buy{background:var(--green);color:#06150f}.tt-go.sell{background:var(--red);color:#1d0606}.tt-go:disabled{opacity:.45}
+.tt-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:8px;overflow-x:auto}
+.tt-tabs button{background:transparent;border:none;border-bottom:2px solid transparent;border-radius:0;padding:8px 12px;color:var(--muted);font-weight:650;white-space:nowrap}
+.tt-tabs button.on{color:var(--text);border-bottom-color:var(--accent)}
+.tt-acct{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--muted)}.tt-acct b{color:var(--text);font-variant-numeric:tabular-nums}
+.tt-live{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:6px;box-shadow:0 0 0 3px var(--green-bg)}
+.tt-live.off{background:var(--amber);box-shadow:0 0 0 3px var(--amber-bg)}
+@media(max-width:1100px){.tt-grid{grid-template-columns:minmax(0,1fr)}.tt-chart{height:380px}}
 /* phones: sidebar becomes a bottom dock */
 @media(max-width:900px){
   #app{grid-template-columns:minmax(0,1fr)!important}
@@ -462,6 +487,7 @@ details summary{cursor:pointer;font-size:13px}
       <button data-t="chain"><svg class="ic"><use href="#i-chain"/></svg><span class="lb">Option chain</span></button>
       <button data-t="portfolio"><svg class="ic"><use href="#i-portfolio"/></svg><span class="lb">Portfolio</span></button>
       <button data-t="markets"><svg class="ic"><use href="#i-markets"/></svg><span class="lb">Dashboard</span><span class="newb">NEW</span></button>
+      <button data-t="gtrade"><svg class="ic"><use href="#i-stocks"/></svg><span class="lb">Trade</span><span class="newb">NEW</span></button>
       <button data-t="gportfolio"><svg class="ic"><use href="#i-portfolio"/></svg><span class="lb">Portfolio</span></button>
       <div class="grp">Strategy lab</div>
       <button data-t="strategies"><svg class="ic"><use href="#i-strategies"/></svg><span class="lb">Strategies</span><span class="newb">NEW</span></button>
@@ -702,6 +728,35 @@ details summary{cursor:pointer;font-size:13px}
   <section id="t-data" class="hidden"><div id="dxBody"></div></section>
   <section id="t-strategies" class="hidden"><div id="sxBody"></div></section>
   <section id="t-learning" class="hidden"><div id="lxBody"></div></section>
+  <section id="t-gtrade" class="hidden">
+    <div class="card tt-top"><select id="ttSym" aria-label="Symbol" style="font-weight:700"></select>
+      <div><div class="px mono" id="ttPx">–</div><div class="muted mono" id="ttPxInr" style="font-size:12px"></div></div>
+      <div class="st">24h change<b id="ttChg">–</b></div><div class="st">24h high<b id="ttHi">–</b></div><div class="st">24h low<b id="ttLo">–</b></div><div class="st">24h volume<b id="ttVol">–</b></div>
+      <div style="flex:1"></div><span class="muted" style="font-size:12px"><span class="tt-live off" id="ttLive"></span><span id="ttFeed">connecting…</span></span>
+      <div class="segs" id="ttCur"><button class="seg" data-ttc="USDT">USDT</button><button class="seg" data-ttc="INR">₹ INR</button></div></div>
+    <div class="tt-grid">
+      <div class="card" style="padding:12px"><div class="row between wrap" style="gap:8px"><div class="segs" id="ttTf"></div><span class="muted" style="font-size:12px">Click the chart to set a limit / stop price</span></div>
+        <div class="tt-chart" id="ttChart" style="margin-top:8px"><div class="legend mono" id="ttLegend" style="position:absolute;left:10px;top:6px;z-index:3;font-size:12px;pointer-events:none"></div></div></div>
+      <div class="card tt-side">
+        <div class="bs"><button class="buy on" data-tts="long">Buy / Long</button><button class="sell" data-tts="short">Sell / Short</button></div>
+        <div class="segs" id="ttType" style="width:100%;display:flex"><button class="seg on" data-ttt="market" style="flex:1">Market</button><button class="seg" data-ttt="limit" style="flex:1">Limit</button><button class="seg" data-ttt="stop" style="flex:1">Stop</button></div>
+        <div id="ttPriceBox" class="hidden"><label id="ttPriceLb">Limit price</label><div class="tt-in"><input id="ttPrice" type="number" step="any"><button id="ttLast" class="mini" style="margin:0">Last</button></div></div>
+        <label>Size</label><div class="tt-in"><input id="ttSize" type="number" step="any" min="0" placeholder="0"><select id="ttUnit"></select></div>
+        <div class="tt-q"><button data-ttp="10">10%</button><button data-ttp="25">25%</button><button data-ttp="50">50%</button><button data-ttp="75">75%</button><button data-ttp="100">100%</button></div>
+        <label>Leverage</label><div class="tt-lev"><input type="range" id="ttLev" min="1" max="25" step="1" value="1"><b id="ttLevV">1x</b></div>
+        <label class="sw" style="margin-top:14px;display:flex;align-items:center;gap:8px;font-size:13px"><input type="checkbox" id="ttBr" style="width:auto"> Take-profit / stop-loss</label>
+        <div id="ttBrBox" class="hidden">
+          <div class="grid g2" style="gap:8px"><div><label>Take-profit price</label><input id="ttTp" type="number" step="any"></div><div><label>TP % move</label><input id="ttTpP" type="number" step="0.1" placeholder="e.g. 4"></div>
+          <div><label>Stop-loss price</label><input id="ttSl" type="number" step="any"></div><div><label>SL % move</label><input id="ttSlP" type="number" step="0.1" placeholder="e.g. 2"></div></div>
+          <label>Trailing stop % (optional)</label><input id="ttTrail" type="number" step="0.1" min="0" placeholder="off"></div>
+        <div class="tt-sum" id="ttSum"></div>
+        <button class="tt-go buy" id="ttGo" disabled>Buy / Long</button>
+        <label class="sw" style="margin-top:8px;display:flex;align-items:center;gap:8px;font-size:12px"><input type="checkbox" id="ttConfirm" checked style="width:auto"> Ask before placing</label>
+        <p class="muted" style="font-size:11.5px;margin:8px 0 0">Paper money only. Fills, fees (0.05%) and slippage are simulated; no order reaches an exchange.</p></div>
+    </div>
+    <div class="card" style="margin-top:12px"><div class="row between wrap" style="gap:8px"><div class="tt-tabs" id="ttTabs"><button class="on" data-ttb="pos">Positions</button><button data-ttb="ord">Open orders</button><button data-ttb="ohist">Order history</button><button data-ttb="trades">Trade history</button></div>
+      <div class="tt-acct" id="ttAcct"></div></div><div class="tablewrap" id="ttBottom" style="max-height:46vh"></div></div>
+  </section>
   <section id="t-gportfolio" class="hidden"><div id="gpBody"></div></section>
   <section id="t-gjournal" class="hidden"><div id="gjBody"></div></section>
   <section id="t-grules" class="hidden"><div id="grBody"></div></section>
@@ -713,19 +768,7 @@ details summary{cursor:pointer;font-size:13px}
       <div class="gxtools"><select id="gxSym" aria-label="Symbol"></select><div class="segs" id="gxTf"></div></div></div>
       <div class="gxchart" id="gxChart" style="margin-top:10px"><div class="legend mono" id="gxLegend"></div></div>
       <p class="muted" id="gxChartNote" style="margin:8px 0 0;font-size:12.5px"></p></div>
-    <div class="card" id="mtCard" style="margin-bottom:14px"><div class="row between wrap"><h3 style="margin:0">Manual trade <span class="muted" style="font-weight:400;font-size:13px">— paper money, at the live price, on the coin shown in the chart</span></h3>
-      <div class="segs" id="mtSide"><button class="seg on" data-mts="long">Buy</button><button class="seg" data-mts="short">Sell</button></div></div>
-      <div class="grid g4" style="margin-top:12px">
-        <div><label>Size by</label><select id="mtMode"><option value="risk">Risk % of account</option><option value="amount">Amount</option><option value="qty">Quantity</option></select></div>
-        <div><label id="mtSizeLb">Risk per trade (%)</label><input id="mtSize" type="number" step="any" min="0" value="1"></div>
-        <div><label>Stop-loss price</label><input id="mtStop" type="number" step="any"><div class="row wrap" style="gap:4px;margin-top:6px" id="mtStopQ"><button class="mini" data-mtq="1">1%</button><button class="mini" data-mtq="2">2%</button><button class="mini" data-mtq="3">3%</button><button class="mini" data-mtq="5">5%</button><button class="mini" data-mtq="swing" title="Beyond the lowest low (buy) or highest high (sell) of the last 20 candles on the chart">Chart swing</button></div></div>
-        <div><label>Target price (optional)</label><input id="mtTgt" type="number" step="any"><div class="row wrap" style="gap:4px;margin-top:6px"><button class="mini" data-mtr="1.5">1.5R</button><button class="mini" data-mtr="2">2R</button><button class="mini" data-mtr="3">3R</button><button class="mini" data-mtr="0">None</button></div></div>
-        <div><label>Trailing stop % (optional)</label><input id="mtTrail" type="number" step="0.1" min="0" placeholder="off"></div>
-        <div><label>Leverage (×)</label><input id="mtLev" type="number" step="0.5" min="1" value="1"></div>
-        <div style="grid-column:span 2"><label>Note for the journal (optional)</label><input id="mtNote" type="text" maxlength="200" placeholder="why you are taking it"></div>
-      </div>
-      <div id="mtPrev" class="muted" style="margin-top:12px;font-size:13.5px">Set a stop to see size, cost and risk.</div>
-      <div class="row wrap" style="margin-top:10px"><button class="primary" id="mtGo" disabled>Place paper trade</button></div></div>
+    <div class="card" style="margin-bottom:14px"><div class="row between wrap"><div><h3 style="margin:0">Want to trade yourself?</h3><p class="muted" style="margin:4px 0 0">Market, limit and stop orders with leverage, TP/SL and live P&amp;L in USDT or ₹ — on the Trade screen.</p></div><button class="primary" data-goto="gtrade">Open Trade screen</button></div></div>
     <div id="gxBody"></div></section>
 
   <section id="t-settings" class="hidden">
@@ -857,7 +900,7 @@ async function start() {
 /* ---- market workspace: India F&O, Crypto or US. Each shows only its own tabs and data. ---- */
 const WS = {mk: localStorage.getItem("ws") || "IN"};
 const WS_IN = new Set(["signal", "chain", "portfolio", "context", "stocks", "recs", "journal", "data", "backtest", "research", "rules", "stockrules", "settings"]);
-const WS_GLOBAL = new Set(["markets", "gportfolio", "gjournal", "grules", "gbacktest", "gresearch", "gcontext"]);
+const WS_GLOBAL = new Set(["gtrade", "markets", "gportfolio", "gjournal", "grules", "gbacktest", "gresearch", "gcontext"]);
 const wsAllows = t => WS.mk === "IN" ? !WS_GLOBAL.has(t) : !WS_IN.has(t);
 function applyWS() {
   document.querySelectorAll("#wsSwitch .seg").forEach(b => b.classList.toggle("on", b.dataset.ws === WS.mk));
@@ -919,6 +962,7 @@ async function load(quiet) {
     else if (S.tab === "learning") await loadLearning();
     else if (S.tab === "markets") await loadMarkets(quiet);
     else if (S.tab === "gportfolio") await loadGPortfolio();
+    else if (S.tab === "gtrade") await loadTrade(quiet);
     else if (S.tab === "gjournal") await loadGJournal();
     else if (S.tab === "grules") await loadGRules();
     else if (S.tab === "gbacktest") await loadGBacktest();
@@ -3084,55 +3128,267 @@ async function loadGContext() {
   <p class="muted" style="font-size:12.5px;margin:10px 0 0">The trend rules buy when a coin breaks out with its trend and stay out of coins trending down; a big daily swing means wider stops and smaller positions. ${mk === "CRYPTO" ? "Fear & Greed from alternative.me." : "VIX from Yahoo Finance."}</p></div>`;
 }
 
+/* ------------------------------ Trade terminal (Delta-style, paper) ------------------------------ */
+const TT = {sym: {}, tf: localStorage.getItem("tttf") || "5m", side: "long", type: "market", cur: localStorage.getItem("ttcur") || "USDT", pct: null,
+            chart: null, ser: null, vol: null, pls: [], bars: [], last: null, desk: null, fx: 88, ws: null, wsKey: null, poll: null, deskT: null, tab: "pos", prevT: null, key: null, token: 0};
+const ttMk = () => (WS.mk === "IN" ? "CRYPTO" : WS.mk);
+const ttSym = () => TT.sym[ttMk()] || (ttMk() === "CRYPTO" ? "BTCUSDT" : "SPY");
+const ttQuote = () => (ttMk() === "CRYPTO" ? "USDT" : "USD");
+const ttP = v => v == null || !isFinite(v) ? "–" : fmtN(v, v >= 1000 ? 2 : v >= 10 ? 3 : v >= 1 ? 4 : 6);
+function ttM(v, sign) {                                 // money in the chosen currency
+  if (v == null || !isFinite(v)) return "–";
+  const s = sign && v > 0 ? "+" : "";
+  return TT.cur === "INR" ? s + (v < 0 ? "-" : "") + "₹" + Math.abs(v * TT.fx).toLocaleString("en-IN", {maximumFractionDigits: Math.abs(v * TT.fx) < 100 ? 2 : 0})
+                          : s + fmtN(v) + " " + ttQuote();
+}
+function ttMakeChart() {
+  if (TT.chart) return;
+  TT.chart = LightweightCharts.createChart($("#ttChart"), {...CH_OPTS, timeScale: {...CH_OPTS.timeScale, rightOffset: 6, barSpacing: 7},
+    localization: {timeFormatter: t => new Date(t * 1000).toLocaleString("en-IN", {day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", hour12: false})}});
+  TT.ser = TT.chart.addCandlestickSeries(CANDLE);
+  TT.vol = TT.chart.addHistogramSeries({priceFormat: {type: "volume"}, priceScaleId: "vol"});
+  TT.chart.priceScale("vol").applyOptions({scaleMargins: {top: 0.84, bottom: 0}});
+  TT.chart.subscribeCrosshairMove(p => {
+    const b = p && p.time != null ? p.seriesData.get(TT.ser) : null, x = b || TT.bars[TT.bars.length - 1];
+    $("#ttLegend").innerHTML = x ? `O ${ttP(x.open)} · H ${ttP(x.high)} · L ${ttP(x.low)} · C <b class="${x.close >= x.open ? "up" : "down"}">${ttP(x.close)}</b>` : "";
+  });
+  TT.chart.subscribeClick(p => {
+    if (!p || !p.point || TT.type === "market") return;
+    const v = TT.ser.coordinateToPrice(p.point.y); if (v == null) return;
+    $("#ttPrice").value = +v.toPrecision(6); ttBracketFromPct("tp"); ttBracketFromPct("sl"); ttSchedule();
+  });
+}
+async function loadTrade(quiet) {
+  const mk = ttMk(); ttMakeChart();
+  document.querySelectorAll("#ttCur .seg").forEach(b => b.classList.toggle("on", b.dataset.ttc === TT.cur));
+  if (!quiet || TT.key !== mk + ttSym() + TT.tf) await ttLoadChart();
+  await ttLoadDesk();
+  ttStartFeed();
+  clearInterval(TT.deskT);
+  TT.deskT = setInterval(() => { if (S.tab !== "gtrade") { clearInterval(TT.deskT); ttStopFeed(); return; } if (!document.hidden) ttLoadDesk(); }, 5000);
+  if (!quiet) { ttUnits(); ttPreview(); }
+}
+async function ttLoadChart() {
+  const mk = ttMk(), sym = ttSym(), tf = TT.tf, tok = ++TT.token;
+  let r; try { r = await api(`/api/gbook/chart?market=${mk}&symbol=${sym}&tf=${tf}`); } catch (e) { toast(e.message); return; }
+  if (tok !== TT.token) return;
+  $("#ttSym").innerHTML = r.symbols.map(x => `<option value="${x.id}" ${x.id === sym ? "selected" : ""}>${esc(x.id.replace("USDT", mk === "CRYPTO" ? " / USDT" : ""))} · ${esc(x.label)}</option>`).join("");
+  $("#ttTf").innerHTML = r.timeframes.map(t => `<button class="seg ${t === tf ? "on" : ""}" data-tttf="${t}">${t}</button>`).join("");
+  TT.bars = r.candles || [];
+  const px = TT.bars.length ? TT.bars[TT.bars.length - 1].close : 1, prec = px >= 1000 ? 2 : px >= 10 ? 3 : px >= 1 ? 4 : px >= 0.01 ? 5 : 8;
+  TT.ser.applyOptions({priceFormat: {type: "price", precision: prec, minMove: Math.pow(10, -prec)}});
+  TT.chart.priceScale("right").applyOptions({autoScale: true});
+  TT.ser.setData(TT.bars.map(b => ({time: b.time, open: b.open, high: b.high, low: b.low, close: b.close})));
+  TT.vol.setData(TT.bars.map(b => ({time: b.time, value: b.volume, color: b.close >= b.open ? "rgba(63,191,143,.35)" : "rgba(226,103,90,.35)"})));
+  TT.markers = r.markers || [];
+  ttMarkers();
+  const n = TT.bars.length; if (n > 160) TT.chart.timeScale().setVisibleLogicalRange({from: n - 150, to: n + 6}); else TT.chart.timeScale().fitContent();
+  TT.key = mk + sym + tf; TT.last = px; ttHeaderPrice(px);
+}
+function ttMarkers() {
+  TT.ser.setMarkers((TT.markers || []).map(m => ({time: m.time, position: m.kind === "in" ? (m.side === "long" ? "belowBar" : "aboveBar") : (m.side === "long" ? "aboveBar" : "belowBar"),
+    color: m.kind === "in" ? (m.side === "long" ? "#3fbf8f" : "#e2675a") : "#8fa3b0", shape: m.kind === "in" ? (m.side === "long" ? "arrowUp" : "arrowDown") : "circle", text: m.text})));
+}
+function ttLines() {
+  if (!TT.ser || !TT.desk) return;
+  TT.pls.forEach(pl => TT.ser.removePriceLine(pl)); TT.pls = [];
+  const add = (price, color, title, st) => price != null && TT.pls.push(TT.ser.createPriceLine({price, color, title, lineWidth: 1, lineStyle: st, axisLabelVisible: true}));
+  TT.desk.positions.filter(p => p.symbol === ttSym()).forEach(p => {
+    add(p.entry, "#8fa3b0", `${p.side === "long" ? "Long" : "Short"} ${p.qty}${p.leverage > 1 ? " · " + p.leverage + "x" : ""}`, 0);
+    if (!p.stop_is_liq) add(p.stop, "#e2675a", "SL", 2);
+    add(p.target, "#3fbf8f", "TP", 2);
+    if (p.liq) add(p.liq, "#f2a93b", "Liq", 1);
+  });
+  TT.desk.orders.filter(o => o.symbol === ttSym()).forEach(o => add(o.trigger, "#7fb4d9", `${o.type} ${o.side === "long" ? "buy" : "sell"} ${o.qty}`, 2));
+}
+function ttHeaderPrice(px, tick) {
+  if (px == null) return;
+  const el = $("#ttPx"), prev = TT.lastShown; TT.lastShown = px;
+  el.textContent = ttP(px); el.className = "px mono " + (prev == null ? "" : px > prev ? "up" : px < prev ? "down" : el.className.includes("up") ? "up" : el.className.includes("down") ? "down" : "");
+  $("#ttPxInr").textContent = ttMk() === "CRYPTO" || TT.cur === "INR" ? "≈ ₹" + (px * TT.fx).toLocaleString("en-IN", {maximumFractionDigits: px * TT.fx < 100 ? 2 : 0}) : "";
+  if (tick) {
+    $("#ttChg").innerHTML = `<span class="${cls(tick.chg_pct)}">${tick.chg_pct > 0 ? "+" : ""}${(+tick.chg_pct).toFixed(2)}%</span>`;
+    $("#ttHi").textContent = ttP(+tick.high); $("#ttLo").textContent = ttP(+tick.low);
+    const vq = +tick.vol_quote * (TT.cur === "INR" ? TT.fx : 1);
+    $("#ttVol").textContent = (TT.cur === "INR" ? "₹" : "") + new Intl.NumberFormat("en-IN", {notation: "compact", maximumFractionDigits: 2}).format(vq) + (TT.cur === "INR" ? "" : " " + ttQuote());
+  }
+  if (TT.type === "market") ttSchedule(true);
+  ttRenderBottom(true);
+}
+/* live feed: Binance public websocket for crypto; polling fallback (and for US) */
+function ttStopFeed() { try { TT.ws && TT.ws.close(); } catch (e) {} TT.ws = null; TT.wsKey = null; clearInterval(TT.poll); TT.poll = null; }
+function ttLive(on, txt) { $("#ttLive").classList.toggle("off", !on); $("#ttFeed").textContent = txt; }
+function ttStartFeed() {
+  const mk = ttMk(), sym = ttSym(), key = mk + sym + TT.tf;
+  if (TT.wsKey === key && (TT.ws || TT.poll)) return;
+  ttStopFeed(); TT.wsKey = key;
+  const pollStart = why => {
+    if (TT.poll || TT.wsKey !== key) return;
+    ttLive(false, why);
+    const run = async () => {
+      if (S.tab !== "gtrade" || TT.wsKey !== key) return;
+      try {
+        const [r, t] = await Promise.all([api(`/api/gbook/chart?market=${mk}&symbol=${sym}&tf=${TT.tf}`), api(`/api/gbook/ticker?market=${mk}&symbol=${sym}`)]);
+        if (TT.wsKey !== key) return;
+        (r.candles || []).slice(-3).forEach(b => { TT.ser.update(b); TT.vol.update({time: b.time, value: b.volume}); ttBar(b); });
+        ttHeaderPrice(t.price, t);
+      } catch (e) {}
+    };
+    run(); TT.poll = setInterval(run, mk === "CRYPTO" ? 4000 : 15000);
+  };
+  if (mk !== "CRYPTO") { pollStart(MK_US_NOTE()); return; }
+  api(`/api/gbook/ticker?market=${mk}&symbol=${sym}`).then(t => TT.wsKey === key && ttHeaderPrice(t.price, t)).catch(() => {});
+  try {
+    const s = sym.toLowerCase(), ws = new WebSocket(`wss://data-stream.binance.vision/stream?streams=${s}@kline_${TT.tf}/${s}@ticker`);
+    TT.ws = ws; let opened = false;
+    const fail = setTimeout(() => { if (!opened) { try { ws.close(); } catch (e) {} TT.ws = null; pollStart("live feed blocked · updating every 4 s"); } }, 6000);
+    ws.onopen = () => { opened = true; clearTimeout(fail); ttLive(true, "live · Binance"); };
+    ws.onmessage = ev => {
+      if (TT.wsKey !== key) return;
+      const m = JSON.parse(ev.data), d = m.data || {};
+      if (d.e === "kline") {
+        const k = d.k, b = {time: Math.floor(k.t / 1000), open: +k.o, high: +k.h, low: +k.l, close: +k.c, volume: +k.v};
+        TT.ser.update(b); TT.vol.update({time: b.time, value: b.volume, color: b.close >= b.open ? "rgba(63,191,143,.35)" : "rgba(226,103,90,.35)"}); ttBar(b);
+        ttHeaderPrice(b.close);
+      } else if (d.e === "24hrTicker") ttHeaderPrice(+d.c, {chg_pct: +d.P, high: +d.h, low: +d.l, vol_quote: +d.q});
+    };
+    ws.onclose = () => { if (TT.ws === ws) { TT.ws = null; pollStart("live feed dropped · updating every 4 s"); } };
+    ws.onerror = () => {};
+  } catch (e) { pollStart("live feed unavailable · updating every 4 s"); }
+}
+const MK_US_NOTE = () => (MK_US_OPEN() ? "delayed · updating every 15 s" : "US market closed · last prices");
+const MK_US_OPEN = () => { const n = new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"})), m = n.getHours() * 60 + n.getMinutes(); return n.getDay() > 0 && n.getDay() < 6 && m >= 570 && m < 960; };
+function ttBar(b) {
+  const L = TT.bars; if (!L.length) return;
+  if (L[L.length - 1].time === b.time) L[L.length - 1] = b; else if (b.time > L[L.length - 1].time) L.push(b);
+  TT.last = b.close;
+}
+async function ttLoadDesk() {
+  try { TT.desk = await api("/api/gbook/desk?market=" + ttMk()); } catch (e) { return; }
+  TT.fx = (TT.desk.fx || {}).USDINR || TT.fx;
+  $("#ttLev").max = TT.desk.max_leverage;
+  ttLines(); ttRenderBottom();
+}
+function ttLivePos(p) {                                   // mark the selected coin's positions to the live feed price
+  const px = p.symbol === ttSym() && TT.last ? TT.last : p.mark, side = p.side === "long" ? 1 : -1, u = side * (px - p.entry) * p.qty;
+  return {px, u, roe: p.margin ? u / p.margin * 100 : null};
+}
+function ttRenderBottom(fast) {
+  const d = TT.desk; if (!d) return;
+  if (fast && TT.tab !== "pos") return;
+  if (fast) { const now = Date.now(); if (TT.rb && now - TT.rb < 800) return; TT.rb = now; }
+  const pos = d.positions.map(p => ({...p, ...ttLivePos(p)})), upnl = pos.reduce((a, p) => a + p.u, 0);
+  $("#ttAcct").innerHTML = `<span>Balance <b>${ttM(d.equity)}</b></span><span>Open P&L <b class="${cls(upnl)}">${ttM(upnl, true)}</b></span><span>Margin used <b>${ttM(d.used_margin)}</b></span><span>Free <b>${ttM(d.free)}</b></span>${TT.cur === "INR" ? `<span class="muted">1 USDT ≈ ₹${(+TT.fx).toFixed(2)}</span>` : ""}`;
+  document.querySelectorAll("#ttTabs button").forEach(b => { const n = {pos: d.positions.length, ord: d.orders.length}[b.dataset.ttb]; b.classList.toggle("on", b.dataset.ttb === TT.tab); b.textContent = {pos: "Positions", ord: "Open orders", ohist: "Order history", trades: "Trade history"}[b.dataset.ttb] + (n ? ` (${n})` : ""); });
+  const el = $("#ttBottom"), t = s => new Date(s).toLocaleString("en-IN", {day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", hour12: false});
+  const sd = s => `<span class="${s === "long" ? "up" : "down"}">${s === "long" ? "Long" : "Short"}</span>`;
+  if (TT.tab === "pos") el.innerHTML = `<table><tr><th>Symbol</th><th>Side</th><th>Size</th><th>Value</th><th>Entry</th><th>Mark</th><th>Liq. price</th><th>Margin</th><th>Unrealised P&L (ROE)</th><th>TP / SL</th><th></th></tr>${pos.map(p => `<tr>
+      <td><b>${esc(p.symbol)}</b><div class="muted" style="font-size:11.5px">${esc(p.strategy_name.replace("Autopilot · ", ""))}</div></td><td>${sd(p.side)} <span class="muted">${p.leverage}x</span></td>
+      <td class="mono">${p.qty}</td><td class="mono">${ttM(p.qty * p.px)}</td><td class="mono">${ttP(p.entry)}</td><td class="mono">${ttP(p.px)}</td><td class="mono" style="color:var(--amber)">${p.liq ? ttP(p.liq) : "–"}</td><td class="mono">${ttM(p.margin)}</td>
+      <td class="mono ${cls(p.u)}"><b>${ttM(p.u, true)}</b> <span style="font-size:12px">(${p.roe == null ? "–" : (p.roe > 0 ? "+" : "") + p.roe.toFixed(2) + "%"})</span></td>
+      <td class="mono" style="font-size:12.5px"><span class="up">${p.target == null ? "–" : ttP(p.target)}</span> / <span class="down">${p.stop_is_liq ? "none" : ttP(p.stop)}</span>${p.trail ? `<div class="muted">trailing</div>` : ""}</td>
+      <td style="white-space:nowrap"><button class="mini" data-gxe="${p.id}" data-sl="${p.stop_is_liq ? "" : p.stop}" data-tp="${p.target ?? ""}">TP/SL</button><button class="mini" data-ttx="${p.id}" data-f="0.5">50%</button><button class="mini" data-ttx="${p.id}" data-f="1" style="color:var(--red)">Close</button></td></tr>`).join("") || `<tr><td colspan="11" class="muted">No open positions.</td></tr>`}</table>`;
+  else if (TT.tab === "ord") el.innerHTML = `<table><tr><th>Placed</th><th>Symbol</th><th>Type</th><th>Side</th><th>Trigger</th><th>Size</th><th>Leverage</th><th>TP / SL</th><th></th></tr>${d.orders.map(o => `<tr><td class="mono">${t(o.created)}</td><td><b>${esc(o.symbol)}</b></td><td>${esc(o.type)}</td><td>${sd(o.side)}</td><td class="mono">${ttP(o.trigger)}</td><td class="mono">${o.qty}</td><td>${o.leverage}x</td><td class="mono">${o.target ? ttP(o.target) : "–"} / ${o.stop ? ttP(o.stop) : "–"}</td><td><button class="mini" data-ttcx="${o.id}" style="color:var(--red)">Cancel</button></td></tr>`).join("") || `<tr><td colspan="9" class="muted">No open orders. Limit and stop orders wait here until the price reaches them.</td></tr>`}</table>`;
+  else if (TT.tab === "ohist") el.innerHTML = `<table><tr><th>Time</th><th>Symbol</th><th>Type</th><th>Side</th><th>Price</th><th>Size</th><th>Status</th></tr>${d.order_history.map(o => `<tr><td class="mono">${t(o.filled || o.ended || o.created)}</td><td>${esc(o.symbol)}</td><td>${esc(o.type)}</td><td>${sd(o.side)}</td><td class="mono">${ttP(o.fill_price || o.trigger || o.entry)}</td><td class="mono">${o.qty}</td><td><span class="tag ${o.status === "filled" ? "tup" : o.status === "rejected" ? "tdown" : ""}">${esc(o.status)}</span>${o.reason ? `<div class="muted" style="font-size:11.5px">${esc(o.reason)}</div>` : ""}</td></tr>`).join("") || `<tr><td colspan="7" class="muted">No orders yet.</td></tr>`}</table>`;
+  else el.innerHTML = `<table><tr><th>Closed</th><th>Symbol</th><th>Side</th><th>Size</th><th>Entry → exit</th><th>P&L</th><th>R</th><th>By</th><th>Reason</th></tr>${d.trades.map(x => `<tr><td class="mono">${t(x.closed)}</td><td><b>${esc(x.symbol)}</b></td><td>${sd(x.side)} <span class="muted">${x.leverage || 1}x</span></td><td class="mono">${x.qty}</td><td class="mono">${ttP(x.entry)} → ${ttP(x.exit)}</td><td class="mono ${cls(x.pnl)}"><b>${ttM(x.pnl, true)}</b></td><td class="mono ${cls(x.R)}">${sgn(x.R)}</td><td>${esc((x.strategy_name || "").replace("Autopilot · ", ""))}</td><td>${esc(x.reason)}</td></tr>`).join("") || `<tr><td colspan="9" class="muted">No closed trades yet.</td></tr>`}</table>`;
+}
+/* order panel */
+function ttUnits() {
+  const q = ttQuote(), c = TT.cur === "INR" ? "₹" : q, coin = ttSym().replace("USDT", "");
+  const u = ttMk() === "CRYPTO" ? [["qty", coin], ["amount", `Value (${c})`], ["margin", `Margin (${c})`]] : [["qty", "Shares"], ["amount", `Value (${c})`]];
+  const cur = $("#ttUnit").value; $("#ttUnit").innerHTML = u.map(([k, v]) => `<option value="${k}" ${k === cur ? "selected" : ""}>${esc(v)}</option>`).join("");
+}
+function ttRef() { return TT.type !== "market" && +$("#ttPrice").value ? +$("#ttPrice").value : TT.last; }
+function ttBody() {
+  const unit = $("#ttUnit").value, v = +$("#ttSize").value || 0, inr = TT.cur === "INR" && unit !== "qty", val = inr ? v / TT.fx : v, br = $("#ttBr").checked;
+  const b = {market: ttMk(), symbol: ttSym(), side: TT.side, type: TT.type, price: TT.type === "market" ? null : $("#ttPrice").value, leverage: +$("#ttLev").value,
+             stop: br ? $("#ttSl").value : null, target: br ? $("#ttTp").value : null, trail_pct: br ? $("#ttTrail").value : null};
+  if (TT.pct) Object.assign(b, {size_mode: "pct", pct: TT.pct});
+  else Object.assign(b, {size_mode: unit, qty: unit === "qty" ? v : null, amount: unit === "amount" ? val : null, margin: unit === "margin" ? val : null});
+  return b;
+}
+function ttSchedule(fromTick) {
+  if (fromTick) { if (TT.prevBusy || Date.now() - (TT.prevAt || 0) < 5000) return; TT.prevAt = Date.now(); ttPreview(); return; }
+  clearTimeout(TT.prevT); TT.prevT = setTimeout(() => { TT.prevAt = Date.now(); ttPreview(); }, 300);
+}
+async function ttPreview() {
+  const go = $("#ttGo"), sum = $("#ttSum"), b = ttBody();
+  go.textContent = `${TT.side === "long" ? "Buy / Long" : "Sell / Short"} ${ttSym().replace("USDT", "")}`;
+  go.className = "tt-go " + (TT.side === "long" ? "buy" : "sell");
+  const noSize = !TT.pct && !(+$("#ttSize").value > 0), noPx = TT.type !== "market" && !(+$("#ttPrice").value > 0);
+  if (noSize || noPx) { sum.innerHTML = `<div><span>Available</span><b>${TT.desk ? ttM(TT.desk.free) : "–"}</b></div><p class="muted" style="margin:6px 0 0">${noPx ? `Enter the ${TT.type} price (or click the chart).` : "Enter a size or tap a % of your balance."}</p>`; go.disabled = true; TT.prev = null; return; }
+  TT.prevBusy = true;
+  try {
+    const r = await post("/api/gbook/order", {...b, preview: true}); TT.prev = r;
+    const row = (k, v, c = "") => `<div><span>${k}</span><b class="${c}">${v}</b></div>`;
+    sum.innerHTML = row("Size", `${r.qty} ${ttSym().replace("USDT", "")}`) + row("Order value", ttM(r.notional)) + row(`Margin (${r.leverage}x)`, ttM(r.margin))
+      + row(r.fills_now ? "Est. fill price" : `${r.type === "limit" ? "Limit" : "Trigger"} price`, ttP(r.fills_now ? r.entry : r.trigger)) + row("Fees (in + out)", ttM(r.fees_est))
+      + row("Liquidation price", r.liq ? ttP(r.liq) : "none (1x long)", "") + row(r.stop_is_liq ? (r.liq ? "Max loss (at liquidation)" : "Max loss (to zero)") : "Loss at stop-loss", `-${ttM(r.loss_at_stop)} (${r.loss_pct}%)`, "down")
+      + (r.gain_at_target != null ? row("Gain at take-profit", `+${ttM(r.gain_at_target)}${r.rr ? ` · ${r.rr}R` : ""}`, "up") : "") + row("Available", ttM(r.free))
+      + (r.warnings || []).map(w => `<p style="color:var(--amber);margin:6px 0 0;font-size:12px">⚠ ${esc(w)}</p>`).join("") + (r.error ? `<div class="err" style="margin-top:8px;font-size:12.5px">${esc(r.error)}</div>` : "");
+    go.disabled = !!r.error && !(r.error.startsWith("US market is closed") && !r.fills_now);
+  } catch (e) { sum.innerHTML = `<div class="err" style="font-size:12.5px">${esc(e.message)}</div>`; go.disabled = true; TT.prev = null; }
+  TT.prevBusy = false;
+}
+function ttBracketFromPct(which) {
+  const ref = ttRef(), s = TT.side === "long" ? 1 : -1; if (!ref) return;
+  if (which === "tp" && +$("#ttTpP").value) $("#ttTp").value = +(ref * (1 + s * $("#ttTpP").value / 100)).toPrecision(6);
+  if (which === "sl" && +$("#ttSlP").value) $("#ttSl").value = +(ref * (1 - s * $("#ttSlP").value / 100)).toPrecision(6);
+}
+function ttPctFromPrice(which) {
+  const ref = ttRef(), s = TT.side === "long" ? 1 : -1; if (!ref) return;
+  if (which === "tp" && +$("#ttTp").value) $("#ttTpP").value = +((s * ($("#ttTp").value / ref - 1)) * 100).toFixed(2);
+  if (which === "sl" && +$("#ttSl").value) $("#ttSlP").value = +((s * (1 - $("#ttSl").value / ref)) * 100).toFixed(2);
+}
+$("#t-gtrade").addEventListener("input", e => {
+  const id = e.target.id;
+  if (id === "ttSize") { TT.pct = null; document.querySelectorAll(".tt-q button").forEach(b => b.classList.remove("on")); }
+  if (id === "ttLev") $("#ttLevV").textContent = e.target.value + "x";
+  if (id === "ttTpP") ttBracketFromPct("tp"); if (id === "ttSlP") ttBracketFromPct("sl");
+  if (id === "ttTp") ttPctFromPrice("tp"); if (id === "ttSl") ttPctFromPrice("sl");
+  if (id === "ttPrice") { ttBracketFromPct("tp"); ttBracketFromPct("sl"); }
+  if (id && id.startsWith("tt")) ttSchedule();
+});
+$("#t-gtrade").addEventListener("change", e => {
+  if (e.target.id === "ttSym") { TT.sym[ttMk()] = e.target.value; ["#ttPrice", "#ttTp", "#ttSl", "#ttTpP", "#ttSlP"].forEach(q => $(q).value = ""); ttUnits(); ttStopFeed(); loadTrade(); }
+  else if (e.target.id === "ttUnit") { TT.pct = null; $("#ttSize").value = ""; ttSchedule(); }
+  else if (e.target.id === "ttBr") { $("#ttBrBox").classList.toggle("hidden", !e.target.checked); ttSchedule(); }
+});
+$("#t-gtrade").addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.tts) { TT.side = b.dataset.tts; document.querySelectorAll(".tt-side .bs button").forEach(x => x.classList.toggle("on", x === b)); ["#ttTp", "#ttSl"].forEach(q => $(q).value = ""); ttBracketFromPct("tp"); ttBracketFromPct("sl"); ttSchedule(); }
+  else if (b.dataset.ttt) { TT.type = b.dataset.ttt; document.querySelectorAll("#ttType .seg").forEach(x => x.classList.toggle("on", x === b)); $("#ttPriceBox").classList.toggle("hidden", TT.type === "market"); $("#ttPriceLb").textContent = TT.type === "limit" ? "Limit price" : "Stop (trigger) price"; if (TT.type !== "market" && !$("#ttPrice").value && TT.last) $("#ttPrice").value = +TT.last.toPrecision(6); ttBracketFromPct("tp"); ttBracketFromPct("sl"); ttSchedule(); }
+  else if (b.id === "ttLast") { if (TT.last) $("#ttPrice").value = +TT.last.toPrecision(6); ttBracketFromPct("tp"); ttBracketFromPct("sl"); ttSchedule(); }
+  else if (b.dataset.ttp) { TT.pct = +b.dataset.ttp; $("#ttSize").value = ""; document.querySelectorAll(".tt-q button").forEach(x => x.classList.toggle("on", x === b)); ttSchedule(); }
+  else if (b.dataset.tttf) { TT.tf = b.dataset.tttf; localStorage.setItem("tttf", TT.tf); ttStopFeed(); await ttLoadChart(); ttLines(); ttStartFeed(); }
+  else if (b.dataset.ttc) { TT.cur = b.dataset.ttc; localStorage.setItem("ttcur", TT.cur); document.querySelectorAll("#ttCur .seg").forEach(x => x.classList.toggle("on", x === b)); ttUnits(); $("#ttSize").value = ""; TT.pct = null; ttRenderBottom(); ttHeaderPrice(TT.last); ttSchedule(); }
+  else if (b.dataset.ttb) { TT.tab = b.dataset.ttb; ttRenderBottom(); }
+  else if (b.dataset.ttx) {
+    const f = +b.dataset.f, p = TT.desk.positions.find(x => x.id === b.dataset.ttx);
+    if (!confirm(`${f >= 1 ? "Close" : "Close 50% of"} ${p ? p.side + " " + p.symbol : "this position"} at the market price?`)) return;
+    try { const r = await post("/api/gbook/closepart", {market: ttMk(), id: b.dataset.ttx, frac: f}); toast(r.message); await ttLoadDesk(); await ttLoadChart(); ttLines(); } catch (er) { toast(er.message, 6000); }
+  }
+  else if (b.dataset.ttcx) { try { const r = await post("/api/gbook/cancel", {market: ttMk(), id: b.dataset.ttcx}); toast(r.message); await ttLoadDesk(); } catch (er) { toast(er.message, 6000); } }
+  else if (b.id === "ttGo") {
+    await ttPreview(); const r = TT.prev; if (!r || b.disabled) return;
+    if ($("#ttConfirm").checked && !confirm(`${r.side === "long" ? "BUY / LONG" : "SELL / SHORT"} ${r.symbol}\n${r.type.toUpperCase()}${r.fills_now ? " (fills now)" : " at " + ttP(r.trigger)} · size ${r.qty} · ${r.leverage}x\nValue ${ttM(r.notional)} · margin ${ttM(r.margin)}\n${r.liq ? "Liquidation " + ttP(r.liq) + "\n" : ""}${r.stop ? "Stop-loss " + ttP(r.stop) : "No stop-loss"}${r.target ? " · take-profit " + ttP(r.target) : ""}\nMax loss ${ttM(r.loss_at_stop)} (${r.loss_pct}% of the account)\n\nPaper money only. Place it?`)) return;
+    try {
+      const o = await post("/api/gbook/order", ttBody()); toast(o.message, 5000);
+      $("#ttSize").value = ""; TT.pct = null; document.querySelectorAll(".tt-q button").forEach(x => x.classList.remove("on"));
+      TT.tab = o.filled ? "pos" : "ord"; await ttLoadDesk(); if (o.filled) { await ttLoadChart(); ttLines(); } ttPreview();
+    } catch (er) { toast(er.message, 6000); }
+  }
+});
+document.addEventListener("click", e => { const b = e.target.closest("[data-goto]"); if (b) go(b.dataset.goto); });
+
 /* ------------------------------ Global markets (crypto / US) ------------------------------ */
 /* ------------------------------ manual paper trade (crypto / US) ------------------------------ */
 const gpx = v => v == null ? "–" : fmtN(v, v >= 1000 ? 2 : v >= 1 ? 4 : 6);
-const MT = {side: "long", prev: null, t: null};
-const mtSym = () => GX.sym[GX.mk] || (GX.mk === "CRYPTO" ? "BTCUSDT" : "SPY");
-const mtLast = () => (GX.bars && GX.bars.length ? GX.bars[GX.bars.length - 1].close : null);
-function mtBody() {
-  const m = $("#mtMode").value, v = $("#mtSize").value;
-  return {market: GX.mk, symbol: mtSym(), side: MT.side, size_mode: m, risk_pct: m === "risk" ? v : null, amount: m === "amount" ? v : null, qty: m === "qty" ? v : null,
-          stop: $("#mtStop").value, target: $("#mtTgt").value, trail_pct: $("#mtTrail").value, leverage: $("#mtLev").value, note: $("#mtNote").value};
-}
-function mtSchedule() { clearTimeout(MT.t); MT.t = setTimeout(mtPreview, 350); }
-async function mtPreview() {
-  const el = $("#mtPrev"), go = $("#mtGo");
-  if (!$("#mtStop").value) { el.textContent = "Set a stop to see size, cost and risk."; go.disabled = true; MT.prev = null; return; }
-  try {
-    const r = await post("/api/gbook/manual", {...mtBody(), preview: true}); MT.prev = r;
-    const c = r.currency;
-    el.innerHTML = `<b>${r.side === "long" ? "Buy" : "Sell"} ${esc(r.symbol)}</b> × <b class="mono">${r.qty}</b> at about <span class="mono">${gpx(r.entry)}</span> · value ${money(r.notional, c)} · margin ${money(r.margin, c)} at ${r.leverage}× (free ${money(r.cash, c)})<br>
-      If the stop hits: <b class="down mono">-${money(r.loss_at_stop, c)}</b> (${r.loss_pct}% of the account)${r.gain_at_target != null ? ` · at the target: <b class="up mono">+${money(r.gain_at_target, c)}</b> (${r.rr}R)` : ""} · fees about ${money(r.fees_est, c)}${r.trail_pct ? ` · trailing ${r.trail_pct}%` : ""}
-      ${r.error ? `<div class="err" style="margin-top:8px">${esc(r.error)}</div>` : ""}`;
-    go.disabled = !!r.error;
-  } catch (e) { el.innerHTML = `<span class="down">${esc(e.message)}</span>`; go.disabled = true; MT.prev = null; }
-}
-$("#mtCard").addEventListener("input", mtSchedule);
-$("#mtMode").onchange = () => { const m = $("#mtMode").value; $("#mtSizeLb").textContent = {risk: "Risk per trade (%)", amount: `Amount (${GX.mk === "CRYPTO" ? "USDT" : "USD"})`, qty: GX.mk === "CRYPTO" ? "Quantity (coins)" : "Shares"}[m]; $("#mtSize").value = m === "risk" ? 1 : ""; mtSchedule(); };
-$("#mtCard").addEventListener("click", async e => {
-  const b = e.target.closest("button"); if (!b) return;
-  const px = mtLast(), side = MT.side === "long" ? 1 : -1, dec = v => +v.toPrecision(6);
-  if (b.dataset.mts) { MT.side = b.dataset.mts; document.querySelectorAll("#mtSide .seg").forEach(x => x.classList.toggle("on", x === b)); $("#mtGo").textContent = MT.side === "long" ? "Place paper buy" : "Place paper sell"; $("#mtStop").value = ""; $("#mtTgt").value = ""; mtSchedule(); }
-  else if (b.dataset.mtq && px) {
-    if (b.dataset.mtq === "swing") { const w = GX.bars.slice(-20); const lv = side > 0 ? Math.min(...w.map(x => x.low)) : Math.max(...w.map(x => x.high)); $("#mtStop").value = dec(lv * (1 - side * 0.001)); }
-    else $("#mtStop").value = dec(px * (1 - side * +b.dataset.mtq / 100));
-    mtSchedule();
-  } else if (b.dataset.mtr != null) {
-    const st = +$("#mtStop").value; if (+b.dataset.mtr === 0) $("#mtTgt").value = ""; else if (px && st) $("#mtTgt").value = dec(px + side * Math.abs(px - st) * +b.dataset.mtr); else toast("Set the stop first");
-    mtSchedule();
-  } else if (b.id === "mtGo") {
-    await mtPreview(); const r = MT.prev; if (!r || r.error) return;
-    if (!confirm(`Paper ${r.side === "long" ? "BUY" : "SELL"} ${r.symbol} x ${r.qty} at about ${gpx(r.entry)}\nStop ${gpx(r.stop)}${r.target ? " · target " + gpx(r.target) : ""}\nRisk if stopped: ${money(r.loss_at_stop, r.currency)} (${r.loss_pct}% of the account)\n\nPaper money only. Place it?`)) return;
-    try { const o = await post("/api/gbook/manual", mtBody()); toast(o.message, 5000); ["#mtStop", "#mtTgt", "#mtTrail", "#mtNote"].forEach(q => $(q).value = ""); $("#mtPrev").textContent = "Placed. Set a stop to prepare another."; $("#mtGo").disabled = true; await loadMarkets(); }
-    catch (er) { toast(er.message, 6000); }
-  }
-});
 document.addEventListener("click", async e => {
   const b = e.target.closest("button[data-gxe]"); if (!b) return;
   const sl = prompt("New stop-loss price:", b.dataset.sl); if (sl == null) return;
   const tp = prompt("New target price (leave empty for no target):", b.dataset.tp); if (tp == null) return;
-  try { const r = await post("/api/gbook/modify", {market: GX.mk, id: b.dataset.gxe, stop: sl, target: tp}); toast(r.message); S.tab === "gportfolio" ? await loadGPortfolio() : await loadMarkets(); }
+  try { const r = await post("/api/gbook/modify", {market: GX.mk, id: b.dataset.gxe, stop: sl, target: tp}); toast(r.message); S.tab === "gportfolio" ? await loadGPortfolio() : S.tab === "gtrade" ? (await ttLoadDesk(), ttLines()) : await loadMarkets(); }
   catch (er) { toast(er.message, 6000); }
 });
 
@@ -3196,7 +3452,7 @@ async function loadGxChart(quiet) {
   $("#gxChartNote").innerHTML = `${bars.length} candles from ${mk === "CRYPTO" ? "Binance (Bybit if Binance is down)" : "Yahoo Finance (delayed)"}; refreshes every 30 s with Auto on. ${ln ? "Lines: " + ln + ". " : (tf === "4h" || tf === "1d" ? "" : "The autopilot rules run on 4h and daily bars; switch to those to see their lines. ")}Arrows = this book's entries, dots = exits.`;
   $("#gxLegend").innerHTML = "";
 }
-$("#gxSym").onchange = async () => { GX.sym[GX.mk] = $("#gxSym").value; GX.bars = []; $("#mtStop").value = ""; $("#mtTgt").value = ""; await loadGxChart(); mtSchedule(); };
+$("#gxSym").onchange = () => { GX.sym[GX.mk] = $("#gxSym").value; GX.bars = []; loadGxChart(); };
 $("#gxTf").onclick = e => { const b = e.target.closest("button"); if (!b) return; GX.tf = b.dataset.gtf; localStorage.setItem("gxtf", GX.tf); loadGxChart(); };
 function gxAutopilot(d) {
   const a = d.autopilot || {}, ago = d.last_tick ? Math.round((Date.now() - Date.parse(d.last_tick)) / 60000) : null;

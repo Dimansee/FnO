@@ -733,6 +733,73 @@ def gbook_chart():
         return jsonify({"error": str(e)}), 400
 
 
+_last_oproc = {}
+
+
+@app.get("/api/gbook/desk")
+def gbook_desk():
+    from fno import gorders as GO
+    m = _mk()
+    now = time.time()
+    if now - _last_oproc.get(m, 0) > 10:                     # an open terminal checks pending orders and stops every ~10 s
+        _last_oproc[m] = now
+        try:
+            if GO.open_orders(m):
+                GO.process(m)
+            if now - _last_gtick["t"] > 30:
+                _last_gtick["t"] = now
+                GB.tick((m,), manage_only=True)
+        except Exception:
+            traceback.print_exc()
+    return jsonify(SV.clean(GO.desk(m)))
+
+
+@app.post("/api/gbook/order")
+def gbook_order():
+    from fno import gorders as GO
+    b = request.get_json(force=True) or {}
+    try:
+        if b.get("preview"):
+            return jsonify(SV.clean(GO.preview(_mk(), b)))
+        return jsonify(SV.clean(GO.place(_mk(), b)))
+    except ValueError as e:
+        return jsonify({"ok": False, "error": str(e)}), 400
+
+
+@app.post("/api/gbook/cancel")
+def gbook_cancel():
+    from fno import gorders as GO
+    b = request.get_json(force=True) or {}
+    try:
+        return jsonify(GO.cancel(_mk(), b.get("id", "")))
+    except ValueError as e:
+        return jsonify({"ok": False, "error": str(e)}), 400
+
+
+@app.post("/api/gbook/closepart")
+def gbook_closepart():
+    from fno import gorders as GO
+    b = request.get_json(force=True) or {}
+    try:
+        return jsonify(SV.clean(GO.close_part(_mk(), b.get("id", ""), float(b.get("frac") or 1))))
+    except ValueError as e:
+        return jsonify({"ok": False, "error": str(e)}), 400
+
+
+@app.get("/api/gbook/ticker")
+def gbook_ticker():
+    try:
+        return jsonify(GB.ticker(_mk(), request.args.get("symbol", "")))
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+
+
+@app.get("/api/fx")
+def fx_rate():
+    from fno import gorders as GO
+    return jsonify(GO.fx())
+
+
 @app.post("/api/gbook/manual")
 def gbook_manual():
     b = request.get_json(force=True) or {}
