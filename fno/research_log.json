@@ -705,6 +705,39 @@
    "decision": "Not adopted",
    "summary": "The 64-70% win rate is real but wins are small and there is no stop; 34.8% only appears in a picked year (2024). Adding its signals to our rule lowered the result.",
    "period": "2021-08 to 2026-10"
+  },
+  {
+   "id": "x11",
+   "date": "2026-10-17",
+   "area": "Index options",
+   "title": "Round 14C leads on the current rules: trade the lagging index; breakouts after the implied move is spent",
+   "asked": "Do the two round-14C watch-list leads improve the current Noise + Camarilla rules?",
+   "result": "Baseline 910 trades, +Rs 222k, PF 1.28, fall -59k, unseen +41k. Laggard on Camarilla only: +163k, unseen +23k (perm p 0.46). Laggard on both rules: +115k, PF 1.35, fall -24k, positive every year, but half the profit and p 0.32. Implied move spent (>=100%) on both rules: +109k vs +156k on the same days, unseen -13k vs +41k; 80% and 120% thresholds also lose unseen.",
+   "decision": "Not adopted",
+   "summary": "Neither lead adds profit. 'Trade the laggard' on both rules cuts the deepest fall from Rs 59k to 24k but halves profit, and a random subset of trades does as well 32% of the time. 'Implied move spent' was a training-period effect and loses on unseen days.",
+   "period": "2023-01 to 2026-10 (implied move from Oct 2023)"
+  },
+  {
+   "id": "srch",
+   "date": "2026-10-17",
+   "area": "Stocks",
+   "title": "Stock strategy search: 25 entry rules x 3 market filters x 392 stop/target/trail exits",
+   "asked": "Is there any stock rule, indicator or combination - with a stop-loss, a target, and exit-or-trail at the target - that beats our dip rule?",
+   "result": "Nifty 500, 6 years; each rule's exit picked on 2021-24 only, measured as excess over a random entry on the same day with the same exit. Kept an edge on 2025-26: our dip rule, RSI(2)<5, 4 down days of 5, RSI(14)<30 (small, +0.2-0.5% a trade), and 52-week-high breakouts (+1.5-3% over 40 days). Failed: golden cross, MACD, EMA 9/21, Supertrend-style, NR7, inside-day, IBS, capitulation volume, Bollinger, ADX pullback. Portfolio Rs 1L, 10 slots: our rule 25.7% a year, fall -11.9%; adding a stop-loss (3xATR) cut unseen from 6.9% to 1.0%; RSI(2) alone 9.4%; target 3-7% x hold 3-7 days all 18-27% (current 5% / 5 days sits mid-plateau).",
+   "decision": "Not adopted",
+   "summary": "No new rule beats the current dip rule; a stop-loss makes it worse (dips that keep falling usually bounce within 5 days), and its +5% / 5-day exit is on a stable plateau, so nothing changes. Smaller mean-reversion signals are real but too thin after costs to add.",
+   "period": "2020-10 to 2026-10 (train to Dec 2024, unseen 2025-26)"
+  },
+  {
+   "id": "momb",
+   "date": "2026-10-17",
+   "area": "Stocks",
+   "title": "Momentum book: 52-week high on 1.5x volume, exit when the market turns down",
+   "asked": "Can a breakout book run alongside the dip rule?",
+   "result": "Nifty 500: hold 60 days, sell at the next open when an equal-weight market index closes below its 100-day average: 29-32% a year, fall -18%, positive every year; dip rule + up to 3 breakouts: 30% a year (vs 25.7%), fall -17% (vs -12%), unseen 15% (vs 4-7%); stable across 50-200 day averages and 40-90 day holds. Without the market exit: fall -31%, 2025 -16%. On 1,850 stocks OUTSIDE the Nifty 500 the same book made about 0% a year with 30-45% falls.",
+   "decision": "Watch-list",
+   "summary": "The market-turn exit is what makes breakouts work, but the edge vanishes outside today's Nifty 500 list, which is what survivorship looks like (stocks that broke out and kept rising are the ones now in the index). The market exit was also designed after seeing 2025. Paper forward test only; not added to picks.",
+   "period": "2020-10 to 2026-10"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -928,19 +961,20 @@
    "next": "Review after 3 months: keep rules whose live R per trade stays positive."
   },
   {
-   "id": "p-leads",
-   "area": "Index options",
-   "title": "Untested leads: trade the lagging index; breakouts after the implied move is spent",
-   "waiting_for": "Not tested yet",
-   "why": "Came up in the market-structure round; no data blocker, just not run yet.",
-   "collecting": "Data already available",
-   "since": "",
-   "need": 0,
-   "unit": "",
+   "id": "p-momb",
+   "area": "Stocks",
+   "title": "Momentum book (52-week high on 1.5x volume, exit when the market turns down) - paper forward test",
+   "waiting_for": "More live trades",
+   "why": "Strong on today's Nifty 500 (29-32% a year) but about 0% on stocks outside it - likely survivorship - and the market-turn exit was designed after seeing 2025.",
+   "collecting": "Signals from the nightly scan, settled forward (not traded)",
+   "since": "2026-10-19",
+   "need": 120,
+   "unit": "sessions",
    "refs": [
-    "r14c"
+    "momb",
+    "srch"
    ],
-   "next": "Backtest both on the existing 2023-26 data."
+   "next": "Record every signal from now on; adopt only if live signals beat a random entry by >1% a trade over 120 sessions."
   }
  ]
 }
