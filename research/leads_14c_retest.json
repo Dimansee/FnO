@@ -1,0 +1,218 @@
+{
+ "baseline (all days)": {
+  "n": 910,
+  "net_k": 222.4,
+  "pf": 1.28,
+  "dd_k": -59.4,
+  "train_k": 181.3,
+  "train_pf": 1.33,
+  "unseen_n": 265,
+  "unseen_k": 41.1,
+  "unseen_pf": 1.17,
+  "years_k": {
+   "2023": 30.4,
+   "2024": 95.9,
+   "2025": 15.7,
+   "2026": 80.3
+  },
+  "perm_p": null
+ },
+ "baseline, straddle days only (sub-baseline for B)": {
+  "n": 713,
+  "net_k": 155.6,
+  "pf": 1.24,
+  "dd_k": -59.4,
+  "train_k": 114.5,
+  "train_pf": 1.28,
+  "unseen_n": 265,
+  "unseen_k": 41.1,
+  "unseen_pf": 1.17,
+  "years_k": {
+   "2023": -14.2,
+   "2024": 73.8,
+   "2025": 15.7,
+   "2026": 80.3
+  },
+  "perm_p": null
+ },
+ "A1 laggard - Camarilla only (the lead)": {
+  "n": 649,
+  "net_k": 162.9,
+  "pf": 1.28,
+  "dd_k": -39.2,
+  "train_k": 140.3,
+  "train_pf": 1.35,
+  "unseen_n": 198,
+  "unseen_k": 22.6,
+  "unseen_pf": 1.13,
+  "years_k": {
+   "2023": 10.5,
+   "2024": 98.0,
+   "2025": 23.9,
+   "2026": 30.5
+  },
+  "perm_p": 0.46
+ },
+ "A2 laggard - Noise only": {
+  "n": 741,
+  "net_k": 163.6,
+  "pf": 1.26,
+  "dd_k": -55.3,
+  "train_k": 133.3,
+  "train_pf": 1.3,
+  "unseen_n": 215,
+  "unseen_k": 30.4,
+  "unseen_pf": 1.16,
+  "years_k": {
+   "2023": 30.6,
+   "2024": 57.3,
+   "2025": 8.5,
+   "2026": 67.2
+  },
+  "perm_p": 0.683
+ },
+ "A3 laggard - both rules": {
+  "n": 387,
+  "net_k": 115.4,
+  "pf": 1.35,
+  "dd_k": -23.6,
+  "train_k": 89.3,
+  "train_pf": 1.38,
+  "unseen_n": 117,
+  "unseen_k": 26.1,
+  "unseen_pf": 1.26,
+  "years_k": {
+   "2023": 20.6,
+   "2024": 34.5,
+   "2025": 34.7,
+   "2026": 25.5
+  },
+  "perm_p": 0.319
+ },
+ "A4 leader - Camarilla only [diag]": {
+  "n": 754,
+  "net_k": 168.4,
+  "pf": 1.26,
+  "dd_k": -45.6,
+  "train_k": 140.7,
+  "train_pf": 1.31,
+  "unseen_n": 215,
+  "unseen_k": 27.7,
+  "unseen_pf": 1.15,
+  "years_k": {
+   "2023": 29.9,
+   "2024": 79.9,
+   "2025": -0.7,
+   "2026": 59.2
+  },
+  "perm_p": 0.663
+ },
+ "B1 spent >=80% - both": {
+  "n": 551,
+  "net_k": 138.5,
+  "pf": 1.27,
+  "dd_k": -55.9,
+  "train_k": 141.1,
+  "train_pf": 1.45,
+  "unseen_n": 204,
+  "unseen_k": -2.7,
+  "unseen_pf": 0.99,
+  "years_k": {
+   "2023": -11.4,
+   "2024": 86.2,
+   "2025": 34.8,
+   "2026": 28.9
+  },
+  "perm_p": 0.314
+ },
+ "B2 spent >=100% - both (the lead)": {
+  "n": 455,
+  "net_k": 108.5,
+  "pf": 1.25,
+  "dd_k": -44.0,
+  "train_k": 121.4,
+  "train_pf": 1.43,
+  "unseen_n": 159,
+  "unseen_k": -12.9,
+  "unseen_pf": 0.91,
+  "years_k": {
+   "2023": -14.0,
+   "2024": 82.1,
+   "2025": 28.2,
+   "2026": 12.3
+  },
+  "perm_p": 0.412
+ },
+ "B3 spent >=120% - both": {
+  "n": 354,
+  "net_k": 45.8,
+  "pf": 1.13,
+  "dd_k": -38.2,
+  "train_k": 52.9,
+  "train_pf": 1.22,
+  "unseen_n": 113,
+  "unseen_k": -7.1,
+  "unseen_pf": 0.94,
+  "years_k": {
+   "2023": -11.9,
+   "2024": 40.1,
+   "2025": 0.7,
+   "2026": 16.9
+  },
+  "perm_p": 0.772
+ },
+ "B4 spent >=100% - Noise only": {
+  "n": 683,
+  "net_k": 160.9,
+  "pf": 1.26,
+  "dd_k": -63.3,
+  "train_k": 119.7,
+  "train_pf": 1.3,
+  "unseen_n": 249,
+  "unseen_k": 41.2,
+  "unseen_pf": 1.18,
+  "years_k": {
+   "2023": -18.1,
+   "2024": 85.6,
+   "2025": 12.4,
+   "2026": 81.1
+  },
+  "perm_p": 0.262
+ },
+ "B5 spent >=100% - Camarilla only": {
+  "n": 501,
+  "net_k": 132.2,
+  "pf": 1.28,
+  "dd_k": -39.2,
+  "train_k": 135.7,
+  "train_pf": 1.45,
+  "unseen_n": 180,
+  "unseen_k": -3.6,
+  "unseen_pf": 0.98,
+  "years_k": {
+   "2023": -8.7,
+   "2024": 81.7,
+   "2025": 37.8,
+   "2026": 21.4
+  },
+  "perm_p": 0.286
+ },
+ "B6 room <100% - both [diag]": {
+  "n": 403,
+  "net_k": 63.7,
+  "pf": 1.19,
+  "dd_k": -33.5,
+  "train_k": 19.6,
+  "train_pf": 1.09,
+  "unseen_n": 161,
+  "unseen_k": 44.1,
+  "unseen_pf": 1.33,
+  "years_k": {
+   "2023": -13.9,
+   "2024": 30.4,
+   "2025": -11.1,
+   "2026": 58.4
+  },
+  "perm_p": 0.731
+ }
+}
