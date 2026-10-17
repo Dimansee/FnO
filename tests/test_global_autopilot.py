@@ -163,4 +163,17 @@ import app as A
 c = A.app.test_client()
 r = c.post("/api/health")
 assert r.status_code == 200 and "global_runner" in r.get_json(), r.data
+
+# 7. slow rules may enter up to 4h after the signal bar; fast rules keep the 10-20 min window
+assert GB._max_age(240) == 240 and GB._max_age(1440) == 240 and GB._max_age(60) == 20 and GB._max_age(5) == 10
+
+# 8. live scanner: one row per watched coin (rule rows or a 'watched only' note), with trigger text for flat rules
+sc = GB.scanner("CRYPTO")
+assert {r["symbol"] for r in sc} == set(GB.WATCH["CRYPTO"]), sc
+for r in sc:
+    assert "error" not in r, r
+    if r.get("rule") and not r["in_position"]:
+        assert r["next"] and all(isinstance(x, str) and ("if a bar closes" in x or "already" in x or " when" in x) for x in r["next"]), r
+assert "scanner" in GB.portfolio("CRYPTO")
+print("scanner OK:", len(sc), "rows")
 print("ALL GLOBAL AUTOPILOT OK")

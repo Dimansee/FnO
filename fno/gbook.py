@@ -285,6 +285,16 @@ def _manage(market: str, pos: dict, spec: dict | None, out: list):
         _save_pos(pos)
 
 
+CATCHUP_MIN = 240   # slow rules (4h / daily bars) may still enter up to 4 hours after the signal bar closed
+
+
+def _max_age(mins: int) -> float:
+    """How old a signal may be and still be taken. Fast bars: 10-20 min. 4h and daily bars: up to 4 hours, so a signal is
+    not lost when the host was asleep or a tick was missed (research 17 Oct 2026: on the live crypto trend rules, entering
+    one 4h bar late kept the edge, +0.08R vs +0.085R; 2+ bars late it faded). The half-ATR price guard below still applies."""
+    return CATCHUP_MIN if mins >= 240 else max(10, min(mins, 20))
+
+
 def _evaluate(market: str, spec: dict, symbol: str, out: list):
     bars = _bars_for(spec, symbol)
     if len(bars) < 80:
@@ -302,7 +312,7 @@ def _evaluate(market: str, spec: dict, symbol: str, out: list):
     if side == 0:
         return
     age = (_now() - end).total_seconds() / 60
-    if age > max(10, min(mins, 20)):
+    if age > _max_age(mins):
         out.append({"skipped": f"{spec['name']} {symbol}: signal on the {_local(market, end):%H:%M} bar was {age:.0f} min old"})
         return
     if any(p["symbol"] == symbol and p["strategy_id"] == spec["id"] for p in positions(market)):
@@ -394,6 +404,85 @@ def _after_close():
     return done
 
 
+# ------------------------------------------------------------------ scanner (what every coin / rule is waiting for)
+WATCH = {"CRYPTO": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT"], "US": ["SPY", "QQQ", "AAPL", "NVDA", "MSFT"]}
+
+
+def _px(v: float) -> str:
+    return f"{v:,.0f}" if v >= 1000 else f"{v:,.2f}" if v >= 1 else f"{v:.4f}"
+
+
+def _trigger(spec: dict, bars: pd.DataFrame, cache: dict) -> list[str]:
+    """Plain words for the price that would fire the next entry, read from the rule's own first condition."""
+    from . import indicators as IND
+    close = float(bars["close"].iloc[-1])
+    out = []
+    for side_name, word in (("long", "buy"), ("short", "sell short")):
+        if spec["direction"] not in (side_name, "both"):
+            continue
+        conds = (spec.get(side_name) or {}).get("all") or []
+        if not conds:
+            continue
+        c = conds[0]
+        l, r = c["l"], c["r"]
+        if l.get("ind") == "supertrend" and len(conds) == 1:
+            tr, up, lo = IND.supertrend_bands(bars, int(l.get("n", 10)), float(l.get("mult", 3.0)))
+            if side_name == "long" and tr.iloc[-1] < 0:
+                lvl = float(up.iloc[-1])
+                out.append(f"{word} if a bar closes above {_px(lvl)} ({(lvl / close - 1) * 100:+.1f}%)")
+            elif side_name == "short" and tr.iloc[-1] > 0:
+                lvl = float(lo.iloc[-1])
+                out.append(f"{word} if a bar closes below {_px(lvl)} ({(lvl / close - 1) * 100:+.1f}%)")
+            else:
+                out.append(f"trend already {'up' if tr.iloc[-1] > 0 else 'down'} — no new {word} until it flips")
+        elif "price" in l and "ind" in r and len(conds) == 1 and c["op"] in ("crosses_above", "crosses_below", "gt", "lt"):
+            lvl = float(X.operand_series(bars, r, cache).iloc[-1])
+            if np.isfinite(lvl):
+                above = c["op"] in ("crosses_above", "gt")
+                out.append(f"{word} if a bar closes {'above' if above else 'below'} {_px(lvl)} ({(lvl / close - 1) * 100:+.1f}%)")
+                continue
+        else:                                                   # your own rules: show where each condition stands now
+            try:
+                out.append(f"{word} when: " + "; ".join(CU._describe_cond(x, bars, cache) for x in conds))
+            except Exception:
+                out.append(f"{word} when its conditions line up")
+    return out
+
+
+def scanner(market: str) -> list[dict]:
+    """One row per watched symbol and active rule: last signal, open position, and the level that triggers the next entry."""
+    def build():
+        rows = []
+        specs, held = runners(market)[0], positions(market)
+        for sym in WATCH[market]:
+            for spec in specs:
+                if sym not in spec["symbols"]:
+                    continue
+                try:
+                    bars = _bars_for(spec, sym)
+                    if len(bars) < 80:
+                        continue
+                    lg, sh, cache = CU.signals(spec, bars)
+                    sig = lg.astype(int) - sh.astype(int)
+                    hits = np.flatnonzero(sig.values)
+                    last = None
+                    if len(hits):
+                        k = int(hits[-1])
+                        last = {"side": "long" if sig.iloc[k] > 0 else "short", "at": MK.bar_ends(bars.index[k:k + 1], spec["timeframe"], market)[0].isoformat(timespec="minutes"),
+                                "bars_ago": int(len(bars) - 1 - k)}
+                    pos = next((p for p in held if p["symbol"] == sym and p["strategy_id"] == spec["id"]), None)
+                    rows.append({"symbol": sym, "rule": spec["name"].replace("Autopilot · ", ""), "tf": spec["timeframe"], "price": float(bars["close"].iloc[-1]),
+                                 "last_signal": last, "in_position": pos["side"] if pos else None, "next": [] if pos else _trigger(spec, bars, cache)})
+                except Exception as e:
+                    rows.append({"symbol": sym, "rule": spec["name"], "error": str(e)[:80]})
+        not_traded = [s for s in WATCH[market] if not any(r["symbol"] == s for r in rows)]
+        for s in not_traded:
+            rows.append({"symbol": s, "rule": None, "note": "no active rule is working on this symbol lately, so it is only watched"})
+        return rows
+    from . import market as M
+    return M.cached(f"g_scan:{market}:{len(positions(market))}", 120, build)
+
+
 # ------------------------------------------------------------------ read side
 def portfolio(market: str) -> dict:
     acct, pos, tr = account(market), positions(market), trades(market)
@@ -423,7 +512,15 @@ def portfolio(market: str) -> dict:
     return {"market": market, "currency": MK.CURRENCY[market], "capital_start": cap, "realised": round(realised, 2), "unrealised": round(unreal, 2),
             "equity": round(cap + realised + unreal, 2), "cash": round(cap + realised - sum(p["margin"] for p in pos), 2),
             "positions": out, "history": list(reversed([{k: v for k, v in t.items() if k not in ("state",)} for t in tr]))[:150], "stats": stats, "prefs": prefs(market),
-            "max_leverage": MAX_LEVERAGE[market], "autopilot": _ap_status(market), "last_tick": store.get("g_last_tick"), "lab": _lab(market)}
+            "max_leverage": MAX_LEVERAGE[market], "autopilot": _ap_status(market), "last_tick": store.get("g_last_tick"), "lab": _lab(market),
+            "scanner": _scan_safe(market)}
+
+
+def _scan_safe(market: str):
+    try:
+        return scanner(market)
+    except Exception as e:
+        return [{"error": str(e)[:120]}]
 
 
 def _lab(market: str):

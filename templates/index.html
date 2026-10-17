@@ -2942,12 +2942,20 @@ function gxLab(d) {
     <p style="margin:6px 0 0"><b>${esc(r.name)}</b>${r.regime ? ` · BTC now ${r.regime.bull ? '<span class="up">above</span>' : '<span class="down">below</span>'} its 200-day average (${fmtN(r.regime.close)} vs ${fmtN(r.regime.sma200)}) → ${r.regime.bull ? "longs only" : "shorts only"}` : ""}</p>
     <p class="muted" style="margin:4px 0 0;font-size:13px">Since ${esc(r.since)} — lab: ${st(r.lab)} | live rule without the switch: ${st(r.live_counterpart)}${(r.open || []).length ? ` | open: ${r.open.map(o => esc(o.symbol + " " + o.side)).join(", ")}` : ""}. Promote when ${esc(r.promote_when)}.</p>`).join("") + `</div>`;
 }
+function gxScanner(d) {
+  const rows = d.scanner || []; if (!rows.length) return "";
+  const ago = x => { if (!x) return "none in the window"; const b = x.bars_ago; return `${x.side === "long" ? "buy" : "sell"} · ${esc(x.at.slice(0, 16).replace("T", " "))} UTC (${b} bar${b === 1 ? "" : "s"} ago)`; };
+  return `<div class="card" style="margin-bottom:14px"><h3>Live scanner <span class="muted" style="font-weight:400;font-size:13px">— checked every minute; a trade opens by itself the moment a level below is hit on a finished bar</span></h3>
+  <div class="tablewrap"><table><tr><th>Symbol</th><th>Rule</th><th>Price</th><th>Last signal</th><th>Status / next entry</th></tr>${rows.map(r => r.error ? `<tr><td>${esc(r.symbol || "")}</td><td colspan="4" class="muted">${esc(r.rule || "")} ${esc(r.error)}</td></tr>`
+    : !r.rule ? `<tr><td><b>${esc(r.symbol)}</b></td><td colspan="4" class="muted">${esc(r.note)}</td></tr>`
+    : `<tr><td><b>${esc(r.symbol)}</b></td><td>${esc(r.rule)}</td><td class="mono">${fmtN(r.price)}</td><td class="muted">${ago(r.last_signal)}</td><td>${r.in_position ? `<span class="${r.in_position === "long" ? "up" : "down"}">In a ${esc(r.in_position)} trade</span>` : esc((r.next || []).join(" · ") || "waiting")}</td></tr>`).join("")}</table></div></div>`;
+}
 function renderMarkets() {
   const d = GX.data, el = $("#gxBody"); if (!d) return; const cur = d.currency, p = d.prefs || {}, st = d.stats || {};
   el.innerHTML = `
   <div class="pagehead"><div><h2>Global markets</h2><p class="muted">Separate paper accounts in ${cur}. They are kept apart from the India F&O account and from each other: own money, own rules, own settings. They trade your own strategies set to Auto; with none on Auto, the built-in crypto/US autopilot (separate from the India F&O autopilot switch) trades only the rules that pass its weekly check. ${GX.mk === "CRYPTO" ? "Crypto runs around the clock." : "US stocks trade 7:00 pm – 1:30 am IST (9:30 am – 4:00 pm New York)."}</p></div>
     <div class="segs">${["CRYPTO", "US"].map(k => `<button class="seg ${GX.mk === k ? "on" : ""}" data-gmk="${k}">${tabs[k]}</button>`).join("")}</div></div>
-  ${gxAutopilot(d)}${gxLab(d)}
+  ${gxAutopilot(d)}${gxScanner(d)}${gxLab(d)}
   <div class="grid g4">${kpiCard("Account value", money(d.equity, cur), `started with ${money(d.capital_start, cur)}`)}${kpiCard("Available", money(d.cash, cur), `${d.positions.length} open`)}${kpiCard("Realised", money(d.realised, cur), `${st.trades || 0} closed trades`, cls(d.realised))}${kpiCard("Open profit", money(d.unrealised, cur), "right now", cls(d.unrealised))}</div>
   <div class="grid g2" style="margin-top:14px">
     <div class="card"><h3>Account curve</h3><canvas id="gxCurve" class="flowcv" style="height:200px"></canvas>

@@ -1,0 +1,832 @@
+{
+ "summary": {
+  "avgR": {
+   "all": {
+    "n": 336,
+    "avg_R": 0.023,
+    "win": 29.8,
+    "total_R": 7.6,
+    "pf": 1.04,
+    "t": 0.21
+   },
+   "BTCUSDT": {
+    "n": 63,
+    "avg_R": -0.082,
+    "win": 25.4,
+    "total_R": -5.2,
+    "pf": 0.87,
+    "t": -0.27
+   },
+   "ETHUSDT": {
+    "n": 65,
+    "avg_R": 0.005,
+    "win": 27.7,
+    "total_R": 0.3,
+    "pf": 1.01,
+    "t": 0.02
+   },
+   "SOLUSDT": {
+    "n": 76,
+    "avg_R": 0.062,
+    "win": 35.5,
+    "total_R": 4.7,
+    "pf": 1.12,
+    "t": 0.35
+   },
+   "BNBUSDT": {
+    "n": 62,
+    "avg_R": -0.05,
+    "win": 32.3,
+    "total_R": -3.1,
+    "pf": 0.91,
+    "t": -0.28
+   },
+   "XRPUSDT": {
+    "n": 70,
+    "avg_R": 0.155,
+    "win": 27.1,
+    "total_R": 10.8,
+    "pf": 1.25,
+    "t": 0.59
+   }
+  },
+  "win": {
+   "all": {
+    "n": 455,
+    "avg_R": 0.015,
+    "win": 42.4,
+    "total_R": 6.7,
+    "pf": 1.03,
+    "t": 0.23
+   },
+   "BTCUSDT": {
+    "n": 90,
+    "avg_R": 0.073,
+    "win": 42.2,
+    "total_R": 6.6,
+    "pf": 1.16,
+    "t": 0.34
+   },
+   "ETHUSDT": {
+    "n": 62,
+    "avg_R": -0.123,
+    "win": 32.3,
+    "total_R": -7.6,
+    "pf": 0.8,
+    "t": -0.77
+   },
+   "SOLUSDT": {
+    "n": 129,
+    "avg_R": -0.094,
+    "win": 37.2,
+    "total_R": -12.1,
+    "pf": 0.79,
+    "t": -0.99
+   },
+   "BNBUSDT": {
+    "n": 62,
+    "avg_R": 0.285,
+    "win": 46.8,
+    "total_R": 17.7,
+    "pf": 1.76,
+    "t": 1.37
+   },
+   "XRPUSDT": {
+    "n": 112,
+    "avg_R": 0.019,
+    "win": 51.8,
+    "total_R": 2.1,
+    "pf": 1.05,
+    "t": 0.25
+   }
+  },
+  "fixed": {
+   "all": {
+    "n": 621,
+    "avg_R": 0.229,
+    "win": 32.4,
+    "total_R": 142.3,
+    "pf": 1.38,
+    "t": 1.95
+   },
+   "BTCUSDT": {
+    "n": 121,
+    "avg_R": 0.149,
+    "win": 32.2,
+    "total_R": 18.0,
+    "pf": 1.25,
+    "t": 0.69
+   },
+   "ETHUSDT": {
+    "n": 128,
+    "avg_R": 0.289,
+    "win": 32.0,
+    "total_R": 37.0,
+    "pf": 1.45,
+    "t": 1.17
+   },
+   "SOLUSDT": {
+    "n": 126,
+    "avg_R": 0.228,
+    "win": 31.7,
+    "total_R": 28.7,
+    "pf": 1.41,
+    "t": 1.19
+   },
+   "BNBUSDT": {
+    "n": 126,
+    "avg_R": 0.121,
+    "win": 32.5,
+    "total_R": 15.2,
+    "pf": 1.2,
+    "t": 0.65
+   },
+   "XRPUSDT": {
+    "n": 120,
+    "avg_R": 0.362,
+    "win": 33.3,
+    "total_R": 43.5,
+    "pf": 1.59,
+    "t": 0.85
+   }
+  }
+ },
+ "picks": {
+  "avgR": [
+   [
+    "2024-01-01",
+    "BTCUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2024-01-01",
+    "ETHUSDT",
+    "trend_pullback_rsi|4h|long"
+   ],
+   [
+    "2024-01-01",
+    "SOLUSDT",
+    "supertrend_10_3|4h|both"
+   ],
+   [
+    "2024-01-01",
+    "BNBUSDT",
+    "supertrend_10_3|1h|long"
+   ],
+   [
+    "2024-01-01",
+    "XRPUSDT",
+    "donchian55_trail4|4h|long"
+   ],
+   [
+    "2024-04-01",
+    "BTCUSDT",
+    "macd_ema200|4h|long"
+   ],
+   [
+    "2024-04-01",
+    "ETHUSDT",
+    "donchian55_trail4|4h|long"
+   ],
+   [
+    "2024-04-01",
+    "SOLUSDT",
+    "supertrend_10_3|4h|both"
+   ],
+   [
+    "2024-04-01",
+    "BNBUSDT",
+    "supertrend_10_3|1h|long"
+   ],
+   [
+    "2024-04-01",
+    "XRPUSDT",
+    "donchian55_trail4|4h|both"
+   ],
+   [
+    "2024-07-01",
+    "BTCUSDT",
+    "trend_pullback_rsi|4h|long"
+   ],
+   [
+    "2024-07-01",
+    "ETHUSDT",
+    "keltner_breakout|4h|long"
+   ],
+   [
+    "2024-07-01",
+    "SOLUSDT",
+    "supertrend_10_3|4h|both"
+   ],
+   [
+    "2024-07-01",
+    "BNBUSDT",
+    "supertrend_10_3|1h|long"
+   ],
+   [
+    "2024-07-01",
+    "XRPUSDT",
+    "bollinger_meanrev|4h|long"
+   ],
+   [
+    "2024-10-01",
+    "BTCUSDT",
+    "supertrend_10_3|4h|both"
+   ],
+   [
+    "2024-10-01",
+    "ETHUSDT",
+    "donchian55_trail4|4h|long"
+   ],
+   [
+    "2024-10-01",
+    "SOLUSDT",
+    "supertrend_10_3|4h|both"
+   ],
+   [
+    "2024-10-01",
+    "BNBUSDT",
+    "donchian55_trail4|4h|long"
+   ],
+   [
+    "2024-10-01",
+    "XRPUSDT",
+    "supertrend_10_3|4h|long"
+   ],
+   [
+    "2025-01-01",
+    "BTCUSDT",
+    "macd_ema200|4h|long"
+   ],
+   [
+    "2025-01-01",
+    "ETHUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2025-01-01",
+    "SOLUSDT",
+    "ema20_50_cross|4h|both"
+   ],
+   [
+    "2025-01-01",
+    "BNBUSDT",
+    "supertrend_10_3|4h|both"
+   ],
+   [
+    "2025-01-01",
+    "XRPUSDT",
+    "keltner_breakout|4h|long"
+   ],
+   [
+    "2025-04-01",
+    "BTCUSDT",
+    "ema9_21_adx|4h|long"
+   ],
+   [
+    "2025-04-01",
+    "ETHUSDT",
+    "trend_pullback_rsi|4h|both"
+   ],
+   [
+    "2025-04-01",
+    "SOLUSDT",
+    "ema20_50_cross|4h|both"
+   ],
+   [
+    "2025-04-01",
+    "BNBUSDT",
+    "keltner_breakout|4h|both"
+   ],
+   [
+    "2025-04-01",
+    "XRPUSDT",
+    "keltner_breakout|4h|long"
+   ],
+   [
+    "2025-07-01",
+    "BTCUSDT",
+    "ema9_21_adx|4h|long"
+   ],
+   [
+    "2025-07-01",
+    "ETHUSDT",
+    "donchian55_trail4|4h|long"
+   ],
+   [
+    "2025-07-01",
+    "SOLUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2025-07-01",
+    "BNBUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2025-07-01",
+    "XRPUSDT",
+    "keltner_breakout|4h|long"
+   ],
+   [
+    "2025-10-01",
+    "BTCUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2025-10-01",
+    "ETHUSDT",
+    "donchian55_trail4|4h|long"
+   ],
+   [
+    "2025-10-01",
+    "SOLUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2025-10-01",
+    "BNBUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2025-10-01",
+    "XRPUSDT",
+    "keltner_breakout|4h|long"
+   ],
+   [
+    "2026-01-01",
+    "BTCUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2026-01-01",
+    "ETHUSDT",
+    "donchian55_trail4|4h|long"
+   ],
+   [
+    "2026-01-01",
+    "SOLUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2026-01-01",
+    "BNBUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2026-01-01",
+    "XRPUSDT",
+    "donchian55_trail4|1h|long"
+   ],
+   [
+    "2026-04-01",
+    "BTCUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2026-04-01",
+    "ETHUSDT",
+    "macd_ema200|4h|long"
+   ],
+   [
+    "2026-04-01",
+    "SOLUSDT",
+    "trend_pullback_rsi|4h|both"
+   ],
+   [
+    "2026-04-01",
+    "BNBUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2026-04-01",
+    "XRPUSDT",
+    "donchian55_trail4|4h|long"
+   ],
+   [
+    "2026-07-01",
+    "BTCUSDT",
+    "supertrend_10_3|4h|both"
+   ],
+   [
+    "2026-07-01",
+    "ETHUSDT",
+    "donchian55_trail4|4h|long"
+   ],
+   [
+    "2026-07-01",
+    "SOLUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2026-07-01",
+    "BNBUSDT",
+    "macd_ema200|4h|long"
+   ],
+   [
+    "2026-07-01",
+    "XRPUSDT",
+    "donchian55_trail4|4h|long"
+   ]
+  ],
+  "win": [
+   [
+    "2024-01-01",
+    "BTCUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2024-01-01",
+    "ETHUSDT",
+    "trend_pullback_rsi|4h|long"
+   ],
+   [
+    "2024-01-01",
+    "SOLUSDT",
+    "bollinger_meanrev|4h|long"
+   ],
+   [
+    "2024-01-01",
+    "BNBUSDT",
+    "keltner_breakout|4h|both"
+   ],
+   [
+    "2024-01-01",
+    "XRPUSDT",
+    "bollinger_meanrev|4h|long"
+   ],
+   [
+    "2024-04-01",
+    "BTCUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2024-04-01",
+    "ETHUSDT",
+    "trend_pullback_rsi|4h|long"
+   ],
+   [
+    "2024-04-01",
+    "SOLUSDT",
+    "donchian55_trail4|4h|long"
+   ],
+   [
+    "2024-04-01",
+    "BNBUSDT",
+    "rsi2_meanrev_trend|4h|long"
+   ],
+   [
+    "2024-04-01",
+    "XRPUSDT",
+    "rsi2_meanrev_trend|1h|long"
+   ],
+   [
+    "2024-07-01",
+    "BTCUSDT",
+    "rsi2_meanrev_trend|4h|both"
+   ],
+   [
+    "2024-07-01",
+    "ETHUSDT",
+    "keltner_breakout|4h|long"
+   ],
+   [
+    "2024-07-01",
+    "SOLUSDT",
+    "donchian55_trail4|4h|long"
+   ],
+   [
+    "2024-07-01",
+    "BNBUSDT",
+    "rsi2_meanrev_trend|1d|long"
+   ],
+   [
+    "2024-07-01",
+    "XRPUSDT",
+    "bollinger_meanrev|4h|long"
+   ],
+   [
+    "2024-10-01",
+    "BTCUSDT",
+    "rsi2_meanrev_trend|1d|long"
+   ],
+   [
+    "2024-10-01",
+    "ETHUSDT",
+    "donchian55_trail4|4h|long"
+   ],
+   [
+    "2024-10-01",
+    "SOLUSDT",
+    "rsi2_meanrev_trend|1h|long"
+   ],
+   [
+    "2024-10-01",
+    "BNBUSDT",
+    "bollinger_meanrev|4h|long"
+   ],
+   [
+    "2024-10-01",
+    "XRPUSDT",
+    "bollinger_meanrev|4h|long"
+   ],
+   [
+    "2025-01-01",
+    "BTCUSDT",
+    "rsi2_meanrev_trend|1d|long"
+   ],
+   [
+    "2025-01-01",
+    "ETHUSDT",
+    "donchian55_trail4|4h|long"
+   ],
+   [
+    "2025-01-01",
+    "SOLUSDT",
+    "ema9_21_adx|1h|long"
+   ],
+   [
+    "2025-01-01",
+    "BNBUSDT",
+    "rsi2_meanrev_trend|1d|long"
+   ],
+   [
+    "2025-01-01",
+    "XRPUSDT",
+    "bollinger_meanrev|4h|long"
+   ],
+   [
+    "2025-04-01",
+    "BTCUSDT",
+    "ema9_21_adx|4h|both"
+   ],
+   [
+    "2025-04-01",
+    "ETHUSDT",
+    "trend_pullback_rsi|4h|both"
+   ],
+   [
+    "2025-04-01",
+    "SOLUSDT",
+    "keltner_breakout|4h|both"
+   ],
+   [
+    "2025-04-01",
+    "BNBUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2025-04-01",
+    "XRPUSDT",
+    "bollinger_meanrev|4h|long"
+   ],
+   [
+    "2025-07-01",
+    "BTCUSDT",
+    "bollinger_meanrev|4h|long"
+   ],
+   [
+    "2025-07-01",
+    "ETHUSDT",
+    "trend_pullback_rsi|4h|both"
+   ],
+   [
+    "2025-07-01",
+    "SOLUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2025-07-01",
+    "BNBUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2025-07-01",
+    "XRPUSDT",
+    "bollinger_meanrev|4h|long"
+   ],
+   [
+    "2025-10-01",
+    "BTCUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2025-10-01",
+    "ETHUSDT",
+    "donchian55_trail4|4h|long"
+   ],
+   [
+    "2025-10-01",
+    "SOLUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2025-10-01",
+    "BNBUSDT",
+    "rsi2_meanrev_trend|1d|both"
+   ],
+   [
+    "2025-10-01",
+    "XRPUSDT",
+    "bollinger_meanrev|4h|long"
+   ],
+   [
+    "2026-01-01",
+    "BTCUSDT",
+    "bollinger_meanrev|4h|long"
+   ],
+   [
+    "2026-01-01",
+    "ETHUSDT",
+    "keltner_breakout|4h|both"
+   ],
+   [
+    "2026-01-01",
+    "SOLUSDT",
+    "trend_pullback_rsi|4h|both"
+   ],
+   [
+    "2026-01-01",
+    "BNBUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2026-01-01",
+    "XRPUSDT",
+    "bollinger_meanrev|4h|long"
+   ],
+   [
+    "2026-04-01",
+    "BTCUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2026-04-01",
+    "ETHUSDT",
+    "keltner_breakout|4h|long"
+   ],
+   [
+    "2026-04-01",
+    "SOLUSDT",
+    "trend_pullback_rsi|4h|both"
+   ],
+   [
+    "2026-04-01",
+    "BNBUSDT",
+    "ema20_50_cross|4h|long"
+   ],
+   [
+    "2026-04-01",
+    "XRPUSDT",
+    "bollinger_meanrev|4h|long"
+   ],
+   [
+    "2026-07-01",
+    "BTCUSDT",
+    "supertrend_10_3|4h|both"
+   ],
+   [
+    "2026-07-01",
+    "ETHUSDT",
+    "keltner_breakout|4h|both"
+   ],
+   [
+    "2026-07-01",
+    "SOLUSDT",
+    "keltner_breakout|4h|both"
+   ],
+   [
+    "2026-07-01",
+    "BNBUSDT",
+    "rsi2_meanrev_trend|1d|both"
+   ],
+   [
+    "2026-07-01",
+    "XRPUSDT",
+    "bollinger_meanrev|4h|long"
+   ]
+  ]
+ },
+ "current": {
+  "BTCUSDT": {
+   "avgR": {
+    "setup": "supertrend_10_3|4h|both",
+    "last12m": {
+     "n": 35,
+     "avg_R": 0.371,
+     "win": 34.3,
+     "total_R": 13.0,
+     "pf": 1.6,
+     "t": 0.65
+    }
+   },
+   "win": {
+    "setup": "trend_pullback_rsi|4h|long",
+    "last12m": {
+     "n": 14,
+     "avg_R": 0.249,
+     "win": 42.9,
+     "total_R": 3.5,
+     "pf": 1.43,
+     "t": 0.61
+    }
+   }
+  },
+  "ETHUSDT": {
+   "avgR": {
+    "setup": "supertrend_10_3|4h|both",
+    "last12m": {
+     "n": 38,
+     "avg_R": 0.452,
+     "win": 28.9,
+     "total_R": 17.2,
+     "pf": 1.65,
+     "t": 0.8
+    }
+   },
+   "win": {
+    "setup": "trend_pullback_rsi|4h|both",
+    "last12m": {
+     "n": 25,
+     "avg_R": 0.156,
+     "win": 40.0,
+     "total_R": 3.9,
+     "pf": 1.25,
+     "t": 0.52
+    }
+   }
+  },
+  "SOLUSDT": {
+   "avgR": {
+    "setup": "supertrend_10_3|4h|both",
+    "last12m": {
+     "n": 36,
+     "avg_R": 0.464,
+     "win": 27.8,
+     "total_R": 16.7,
+     "pf": 1.69,
+     "t": 0.86
+    }
+   },
+   "win": {
+    "setup": "macd_ema200|1h|both",
+    "last12m": {
+     "n": 220,
+     "avg_R": 0.083,
+     "win": 37.7,
+     "total_R": 18.2,
+     "pf": 1.16,
+     "t": 0.77
+    }
+   }
+  },
+  "BNBUSDT": {
+   "avgR": {
+    "setup": "supertrend_10_3|1h|both",
+    "last12m": {
+     "n": 141,
+     "avg_R": 0.238,
+     "win": 31.2,
+     "total_R": 33.5,
+     "pf": 1.35,
+     "t": 0.82
+    }
+   },
+   "win": {
+    "setup": "supertrend_10_3|1h|both",
+    "last12m": {
+     "n": 141,
+     "avg_R": 0.238,
+     "win": 31.2,
+     "total_R": 33.5,
+     "pf": 1.35,
+     "t": 0.82
+    }
+   }
+  },
+  "XRPUSDT": {
+   "avgR": {
+    "setup": "donchian55_trail4|4h|long",
+    "last12m": {
+     "n": 16,
+     "avg_R": 0.514,
+     "win": 31.2,
+     "total_R": 8.2,
+     "pf": 1.83,
+     "t": 0.7
+    }
+   },
+   "win": {
+    "setup": "bollinger_meanrev|4h|long",
+    "last12m": {
+     "n": 32,
+     "avg_R": 0.198,
+     "win": 62.5,
+     "total_R": 6.3,
+     "pf": 1.5,
+     "t": 1.14
+    }
+   }
+  }
+ }
+}

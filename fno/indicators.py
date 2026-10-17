@@ -42,6 +42,11 @@ def vwap(df: pd.DataFrame) -> pd.Series:
 
 def supertrend(df: pd.DataFrame, n: int = 10, mult: float = 3.0) -> pd.Series:
     """Returns +1 (uptrend) / -1 (downtrend)."""
+    return supertrend_bands(df, n, mult)[0]
+
+
+def supertrend_bands(df: pd.DataFrame, n: int = 10, mult: float = 3.0):
+    """(trend, upper band, lower band). In an uptrend a close below the lower band flips it down; in a downtrend a close above the upper band flips it up."""
     a = atr(df, n)
     hl2 = (df["high"] + df["low"]) / 2
     upper = (hl2 + mult * a).values
@@ -56,7 +61,7 @@ def supertrend(df: pd.DataFrame, n: int = 10, mult: float = 3.0) -> pd.Series:
             trend[i] = -1 if close[i] < fl[i] else 1
         else:
             trend[i] = 1 if close[i] > fu[i] else -1
-    return pd.Series(trend, index=df.index)
+    return pd.Series(trend, index=df.index), pd.Series(fu, index=df.index), pd.Series(fl, index=df.index)
 
 
 def add_indicators(df: pd.DataFrame) -> pd.DataFrame:
