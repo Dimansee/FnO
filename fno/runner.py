@@ -31,7 +31,9 @@ state = {"started": None, "ticks": 0, "last_tick": None, "last_error": None, "la
 def enabled() -> bool:
     if os.environ.get("FNO_RUNNER", "").lower() in ("0", "off", "false"):
         return False
-    return bool(os.environ.get("RENDER") or os.environ.get("FNO_RUNNER"))   # never on Vercel / in tests unless asked
+    if os.environ.get("FNO_RUNNER") or os.environ.get("RENDER") or os.environ.get("RENDER_SERVICE_ID") or os.environ.get("RENDER_EXTERNAL_HOSTNAME"):
+        return True
+    return C.PRODUCTION_HOST.endswith(".onrender.com")   # never on Vercel / in tests unless asked
 
 
 def start() -> bool:

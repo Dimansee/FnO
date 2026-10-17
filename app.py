@@ -210,7 +210,7 @@ def health():
     from fno import runner as RN
     out = {"ok": True, "db": store.ping(), "time_ist": C.now_ist().isoformat(timespec="seconds"),
            "configured": bool(C.APP_PASSWORD and C.SESSION_SECRET and C.REDIS_URL),
-           "scheduler_connected": bool(C.QSTASH_TOKEN), "global_runner": RN.state}
+           "scheduler_connected": bool(C.QSTASH_TOKEN), "global_runner": {**RN.state, "enabled": RN.enabled()}}
     if request.args.get("deep") == "1":  # data-source reachability only (counts, no data)
         from fno import market as M
         checks = {
@@ -812,3 +812,11 @@ try:
     _runner.start()
 except Exception:
     traceback.print_exc()
+
+
+@app.before_request
+def _ensure_runner():          # belt and braces: the first request after a boot starts the loop if import-time start did not
+    try:
+        _runner.start()
+    except Exception:
+        pass
