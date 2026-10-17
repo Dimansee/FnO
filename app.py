@@ -205,12 +205,20 @@ def logout():
     return resp
 
 
+def _ap_counts():
+    out = {}
+    for m in ("CRYPTO", "US"):
+        q = store.get(f"g_ap_qual:{m}") or {}
+        out[m] = {"tested": len(q.get("rows", [])), "passed": sum(1 for r in q.get("rows", []) if r["ok"]), "data_errors": q.get("data_errors"), "at": q.get("at")}
+    return out
+
+
 @app.route("/api/health", methods=["GET", "POST", "HEAD"])   # POST: the 08:50 QStash wake-up call (was a 500 before)
 def health():
     from fno import runner as RN
     out = {"ok": True, "db": store.ping(), "time_ist": C.now_ist().isoformat(timespec="seconds"),
            "configured": bool(C.APP_PASSWORD and C.SESSION_SECRET and C.REDIS_URL),
-           "scheduler_connected": bool(C.QSTASH_TOKEN), "global_runner": {**RN.state, "enabled": RN.enabled()}}
+           "scheduler_connected": bool(C.QSTASH_TOKEN), "global_runner": {**RN.state, "enabled": RN.enabled(), "autopilot_pairs": _ap_counts()}}
     if request.args.get("deep") == "1":  # data-source reachability only (counts, no data)
         from fno import market as M
         checks = {
