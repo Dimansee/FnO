@@ -267,9 +267,45 @@ def research_log():
     import json as _j
     from pathlib import Path
     try:
-        return jsonify(_j.loads((Path(__file__).parent / "fno" / "research_log.json").read_text()))
+        log = _j.loads((Path(__file__).parent / "fno" / "research_log.json").read_text())
     except Exception:
         return jsonify({"items": [], "note": "Research log unavailable."})
+    try:
+        log["pending"] = [dict(p, **_pending_progress(p)) for p in log.get("pending", [])]
+    except Exception:
+        pass
+    return jsonify(log)
+
+
+def _pending_progress(p: dict) -> dict:
+    """Progress of a pending study: sessions / expiries / days collected since it started, and an estimated ready date."""
+    from datetime import date as _d, timedelta as _td
+    if not p.get("since") or not p.get("need"):
+        return {}
+    now = C.now_ist(); today = now.date(); start = _d.fromisoformat(p["since"]); unit = p.get("unit", "sessions")
+    if unit == "days":
+        done = max(0, (today - start).days)
+        return {"done": min(done, p["need"]), "eta": (start + _td(days=p["need"])).isoformat()}
+
+    def counts(d):
+        if d.weekday() >= 5 or d in C.HOLIDAYS:
+            return False
+        return d.weekday() == 1 if unit == "expiries" else True
+    last = today if now.hour * 60 + now.minute >= 15 * 60 + 30 else today - _td(days=1)
+    done, d = 0, start
+    while d <= last:
+        done += counts(d); d += _td(days=1)
+    eta, left, d = None, p["need"] - done, max(start, last + _td(days=1))
+    if left <= 0:
+        eta = last.isoformat()
+    else:
+        while left > 0:
+            if counts(d):
+                left -= 1
+                if left == 0:
+                    eta = d.isoformat()
+            d += _td(days=1)
+    return {"done": min(done, p["need"]), "eta": eta}
 
 
 @app.get("/api/dashboard")

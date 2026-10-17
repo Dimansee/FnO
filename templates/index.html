@@ -645,7 +645,8 @@ details summary{cursor:pointer;font-size:13px}
   </section>
 
   <section id="t-research" class="hidden">
-    <div class="card" style="margin-top:0">
+    <div id="rsPending"></div>
+    <div class="card" style="margin-top:14px">
       <div class="cardhead"><h3 style="margin:0">Research log</h3><span class="muted" id="rsCount"></span></div>
       <p class="muted" style="margin:6px 0 10px" id="rsNote"></p>
       <div style="display:flex;gap:8px;flex-wrap:wrap"><select id="rsArea"></select><select id="rsDec"></select><input id="rsQ" placeholder="Search…" style="min-width:160px"></div>
@@ -1825,8 +1826,32 @@ async function loadResearch() {
   if (A.options.length <= 1) areas.forEach(a => A.add(new Option(a, a)));
   if (!A.dataset.b) { A.dataset.b = 1; A.onchange = D.onchange = $("#rsQ").oninput = renderResearchList; }
   $("#rsNote").textContent = L.note || "";
+  renderPending();
   renderResearchList();
   await loadStudy(true);
+}
+function renderPending() {
+  const P = (S.rlog && S.rlog.pending) || [], E = (S.rlog && S.rlog.entries) || [];
+  if (!P.length) { $("#rsPending").innerHTML = ""; return; }
+  const title = id => (E.find(x => x.id === id) || {}).title || id;
+  const order = ["Live market data", "More live trades", "New data feed", "Broker features", "Not tested yet"];
+  const groups = order.map(g => [g, P.filter(p => p.waiting_for === g)]).concat([["Other", P.filter(p => !order.includes(p.waiting_for))]]).filter(([, a]) => a.length);
+  const fmt = d => d ? new Date(d + "T00:00:00").toLocaleDateString("en-IN", {day: "numeric", month: "short", year: "numeric"}) : "";
+  const prog = p => {
+    if (!p.need || p.done == null) return `<div class="muted" style="font-size:12px">${p.since ? "" : "No fixed count - see 'Next step'"}</div>`;
+    const pct = Math.round(100 * p.done / p.need), ready = p.done >= p.need;
+    return `<div class="stsum" style="margin:4px 0"><span class="mono" style="font-size:12px">${p.done} / ${p.need} ${esc(p.unit)}</span><div class="stbar"><i style="width:${pct}%;background:${ready ? "var(--up,#30ba78)" : "var(--accent,#f2a93b)"}"></i><span class="mono">${pct}%</span></div></div>
+      <div class="muted" style="font-size:12px">${ready ? "<b>Enough data - ready to re-run</b>" : `Collecting since ${fmt(p.since)} · ready about ${fmt(p.eta)}`}</div>`; };
+  const ready = P.filter(p => p.need && p.done >= p.need).length;
+  $("#rsPending").innerHTML = `<div class="card" style="margin-top:0"><div class="cardhead"><h3 style="margin:0">Pending research</h3><span class="muted">${P.length} studies waiting${ready ? ` · <b>${ready} ready to re-run</b>` : ""}</span></div>
+    <p class="muted" style="margin:6px 0 4px;font-size:12px">${esc(S.rlog.pending_note || "")}</p>
+    ${groups.map(([g, a]) => `<h4 style="margin:14px 0 6px">Waiting for: ${esc(g)} <span class="muted">(${a.length})</span></h4><div class="rcgrid">${a.map(p => `<div class="rc">
+      <div class="top"><div><b>${esc(p.title)}</b></div><span class="rstag">${esc(p.area)}</span></div>
+      ${prog(p)}
+      <p style="font-size:12.5px"><b>Why pending:</b> ${esc(p.why)}</p>
+      <p style="font-size:12.5px"><b>Collecting:</b> ${esc(p.collecting)}</p>
+      <p style="font-size:12.5px"><b>Next step:</b> ${esc(p.next)}</p>
+      ${(p.refs || []).length ? `<p class="muted" style="font-size:11.5px">From: ${p.refs.map(r => esc(title(r))).join(" · ")}</p>` : ""}</div>`).join("")}</div>`).join("")}</div>`;
 }
 function renderResearchList() {
   const items = (S.rlog && S.rlog.entries) || [];

@@ -706,5 +706,241 @@
    "summary": "The 64-70% win rate is real but wins are small and there is no stop; 34.8% only appears in a picked year (2024). Adding its signals to our rule lowered the result.",
    "period": "2021-08 to 2026-10"
   }
+ ],
+ "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
+ "pending": [
+  {
+   "id": "p-liq",
+   "area": "Index options",
+   "title": "Option liquidity as a signal: open interest, volume, bid-ask spread",
+   "waiting_for": "Live market data",
+   "why": "Index candles have no volume, and past option chains (OI, bid/ask) are not published. Also checks whether the 10% spread limit is the right level (it was a judgement, not measured).",
+   "collecting": "Option chains every 5 minutes (market recorder)",
+   "since": "2026-09-28",
+   "need": 60,
+   "unit": "sessions",
+   "refs": [
+    "r21e",
+    "r12",
+    "r18f"
+   ],
+   "next": "Re-test OI change, volume and spread as entry filters on the current rules; measure the real spread at entry."
+  },
+  {
+   "id": "p-combo",
+   "area": "Index options",
+   "title": "8-indicator combinations (VWAP cross + ATR expansion + volume + put/call ratio)",
+   "waiting_for": "Live market data",
+   "why": "24 combinations survived the backtest, 8 positive on unseen days, but on only 6-8 trades each - too few to decide.",
+   "collecting": "Live sessions with option-chain put/call ratio and volume",
+   "since": "2026-10-05",
+   "need": 60,
+   "unit": "sessions",
+   "refs": [
+    "r10"
+   ],
+   "next": "Re-run the 24 survivors on the new sessions; adopt only if they stay positive with 30+ trades."
+  },
+  {
+   "id": "p-reentry",
+   "area": "Index options",
+   "title": "Second trade only if the first did not lose",
+   "waiting_for": "More live trades",
+   "why": "Backtest: smaller deepest fall (Rs 41.8k vs 52.7k) but mixed profit by year.",
+   "collecting": "Live signals and paper trades",
+   "since": "2026-10-15",
+   "need": 60,
+   "unit": "sessions",
+   "refs": [
+    "r21d"
+   ],
+   "next": "Compare live second-signal outcomes with the one-trade rule."
+  },
+  {
+   "id": "p-vix13",
+   "area": "Index options",
+   "title": "Camarilla only when India VIX is 13 or more",
+   "waiting_for": "Live market data",
+   "why": "The result flipped with the exact threshold (12 / 13 / 14) - a curve-fit warning. Needs more low-VIX days.",
+   "collecting": "Live sessions (low-VIX days count most)",
+   "since": "2026-09-28",
+   "need": 60,
+   "unit": "sessions",
+   "refs": [
+    "r18c"
+   ],
+   "next": "Re-check Camarilla results by VIX band on the recorded days."
+  },
+  {
+   "id": "p-events",
+   "area": "Index options",
+   "title": "US Fed and RBI policy days",
+   "waiting_for": "Live market data",
+   "why": "Fed-day trades lost (26 trades, PF 0.73) and RBI days won (22 trades, PF 2.28), but the samples are too small to add a rule.",
+   "collecting": "Each new Fed / RBI decision day",
+   "since": "",
+   "need": 0,
+   "unit": "",
+   "refs": [
+    "r18d"
+   ],
+   "next": "Re-check when each has about 40 trades (roughly a year more of meetings)."
+  },
+  {
+   "id": "p-gamma",
+   "area": "Index options",
+   "title": "Dealer gamma from real option chains",
+   "waiting_for": "Live market data",
+   "why": "The free-data proxy showed nothing; the papers use real chains. Needs months of recorded chains.",
+   "collecting": "Option chains every 5 minutes (market recorder)",
+   "since": "2026-09-28",
+   "need": 120,
+   "unit": "sessions",
+   "refs": [
+    "x6"
+   ],
+   "next": "Rebuild gamma from recorded chains and test it against the day's range."
+  },
+  {
+   "id": "p-premium",
+   "area": "Index options",
+   "title": "Checks on real option prices (premium stop, 1-day-to-expiry pricing, option versions of index signals)",
+   "waiting_for": "Live market data",
+   "why": "These were tested on modelled premiums; real 1- and 5-minute option candles exist only for a few weeks (16 trades in one test).",
+   "collecting": "1-minute and 5-minute option candles (recorder + nightly job)",
+   "since": "2026-09-28",
+   "need": 120,
+   "unit": "sessions",
+   "refs": [
+    "x3",
+    "x4",
+    "r12"
+   ],
+   "next": "Replay the rules on real premiums; re-test a premium stop-loss and the formula's 1-day-to-expiry under-pricing (~15%)."
+  },
+  {
+   "id": "p-sideways",
+   "area": "Index options",
+   "title": "Sideways-day flags as a risk cut (opening-range width, first-30-minute efficiency)",
+   "waiting_for": "Live market data",
+   "why": "Both cut the deepest fall in the backtest but did not raise profit and are near chance after 50+ looks. Option-chain measures are untested.",
+   "collecting": "Live sessions with the flags computed at 09:45",
+   "since": "2026-10-16",
+   "need": 60,
+   "unit": "sessions",
+   "refs": [
+    "x7"
+   ],
+   "next": "Forward-test only as a smaller-size rule on flagged days, not a skip."
+  },
+  {
+   "id": "p-straddle",
+   "area": "Index options",
+   "title": "Expiry-day Nifty straddle",
+   "waiting_for": "Broker features",
+   "why": "A real edge on paper (+Rs 201k, 157 expiries) but with a Rs 23k one-day loss per lot; fills, margin and live quotes are not in the data, and the app cannot place sell orders with margin checks yet.",
+   "collecting": "Recorded Nifty expiry days (weekly, Tuesday)",
+   "since": "2026-09-28",
+   "need": 20,
+   "unit": "expiries",
+   "refs": [
+    "x5",
+    "r14b",
+    "r14d"
+   ],
+   "next": "Paper-test off by default with real expiry-day quotes; needs sell-side orders and margin checks first."
+  },
+  {
+   "id": "p-llm",
+   "area": "AI & models",
+   "title": "LLM trading desk as a filter ('desk agrees')",
+   "waiting_for": "More live trades",
+   "why": "+Rs 28.3k on 37 trades, but only one half-year of history.",
+   "collecting": "Side-by-side desk vs rules record",
+   "since": "2026-10-10",
+   "need": 120,
+   "unit": "sessions",
+   "refs": [
+    "r15"
+   ],
+   "next": "Keep recording; adopt only if the filter still helps on a second half-year."
+  },
+  {
+   "id": "p-live-opt",
+   "area": "Index options",
+   "title": "Live vs backtest: current option rules (Nifty vs Bank Nifty)",
+   "waiting_for": "More live trades",
+   "why": "8 live days were too few; the Noise setting sits at the top of its plateau, so live results should be weaker. Bank Nifty is the weaker leg.",
+   "collecting": "Paper trades and logged recommendations",
+   "since": "2026-10-05",
+   "need": 60,
+   "unit": "sessions",
+   "refs": [
+    "jr",
+    "r22c",
+    "r18e"
+   ],
+   "next": "Compare live win rate, R per trade and slippage with the backtest; decide on Bank Nifty."
+  },
+  {
+   "id": "p-live-stk",
+   "area": "Stocks",
+   "title": "Live record of stock picks with the 17 Oct changes (lower-circuit badge, outside Nifty 500 max 2)",
+   "waiting_for": "More live trades",
+   "why": "Live rule picks: 54% won, -0.07% a trade on 56 closed (last 60 sessions) vs 64-73% in the backtest. The new changes need their own record.",
+   "collecting": "Nightly picks settled from daily data",
+   "since": "2026-10-19",
+   "need": 60,
+   "unit": "sessions",
+   "refs": [
+    "r16",
+    "circ",
+    "univ"
+   ],
+   "next": "Compare live hit rate and return per trade with the backtest, split by Nifty 500 / outside / circuit picks."
+  },
+  {
+   "id": "p-odip",
+   "area": "Stocks",
+   "title": "Opening dip: buy stocks that open 3-8% down, sell at the close",
+   "waiting_for": "New data feed",
+   "why": "+1.24% a trade in the backtest, but only at the official open: buying at 09:20 shrank it to +0.35%. Needs pre-open (09:00-09:08) indicative prices and pre-open orders, which the app does not have yet.",
+   "collecting": "Not collecting yet - needs a pre-open price feed (broker)",
+   "since": "",
+   "need": 0,
+   "unit": "",
+   "refs": [
+    "odip"
+   ],
+   "next": "Add a pre-open feed, record the indicative price vs the final open for 40 sessions, then paper-trade."
+  },
+  {
+   "id": "p-global",
+   "area": "Crypto & US",
+   "title": "Crypto and US autopilot rules on paper",
+   "waiting_for": "More live trades",
+   "why": "Trend rules passed an unseen-data test, but 10 of 29 surviving is near what chance could give; US results are partly a 2-year bull market.",
+   "collecting": "Paper trades, weekly automatic rule check",
+   "since": "2026-10-17",
+   "need": 90,
+   "unit": "days",
+   "refs": [],
+   "next": "Review after 3 months: keep rules whose live R per trade stays positive."
+  },
+  {
+   "id": "p-leads",
+   "area": "Index options",
+   "title": "Untested leads: trade the lagging index; breakouts after the implied move is spent",
+   "waiting_for": "Not tested yet",
+   "why": "Came up in the market-structure round; no data blocker, just not run yet.",
+   "collecting": "Data already available",
+   "since": "",
+   "need": 0,
+   "unit": "",
+   "refs": [
+    "r14c"
+   ],
+   "next": "Backtest both on the existing 2023-26 data."
+  }
  ]
 }
