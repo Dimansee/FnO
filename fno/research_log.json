@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r30",
+   "date": "2026-10-18",
+   "area": "Index options",
+   "title": "Round 30: EMA crossover + volume + MACD (+ ADX, VWAP, Donchian) - 768 settings on three indices",
+   "asked": "Do EMA crossovers (9/21, 20/50, 5/13), MACD signals, EMA + MACD, or Donchian breakouts work with a volume filter, ADX and VWAP, on 5- or 15-minute bars, with four exit styles? Nifty, Bank Nifty, Sensex, options with costs, train 2023-25, judged on 2026.",
+   "result": "768 settings: 388 profitable in 2023-25, 199 in 2026, 65 in both. 23 robust on 2023-25 (every year positive, PF >= 1.1, 2 of 3 indices, 100+ trades); 2 of them positive in 2026 (+6.9k and +5.6k on ~35 trades). The robust group was mostly Donchian 15-min + volume >= 1.3 + ADX: +117k to +237k in training, -14k to -60k in 2026. Median by entry (train / 2026): Donchian +48k / -20k, EMA 20/50 +24k / -20k, EMA 20/50 + MACD +29k / -22k, EMA 9/21 -39k / -16k, MACD cross -14k / -29k. Volume filter raised training results by cutting trades; negative in 2026 at every level.",
+   "decision": "Not adopted",
+   "summary": "Crossover and MACD systems have no edge on these indices after option costs; a volume filter only removes trades. Donchian with volume and ADX worked in 2023-24 and stopped working - a regime that ended, not an edge to buy into.",
+   "period": "2023-01-16 to 2026-10-09, Nifty, Bank Nifty, Sensex"
+  },
+  {
    "id": "r29",
    "date": "2026-10-18",
    "area": "Index options",

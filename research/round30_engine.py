@@ -83,11 +83,11 @@ def run(sym, d5, x, vix, P):
         f, s_ = ent.split(":")[1].split(","); fa, sl_ = x[f"e{f}"], x[f"e{s_}"]
         long_sig = (fa > sl_) & (fa.shift(1) <= sl_.shift(1)); short_sig = (fa < sl_) & (fa.shift(1) >= sl_.shift(1))
         if ent.startswith("emamacd"):
-            long_sig &= x.hist > 0; short_sig &= x.hist < 0
+            long_sig &= x["hist"] > 0; short_sig &= x["hist"] < 0
         trend_up, trend_dn = fa > sl_, fa < sl_; slow = sl_
     elif ent == "macd":
-        long_sig = (x.hist > 0) & (x.hist.shift(1) <= 0); short_sig = (x.hist < 0) & (x.hist.shift(1) >= 0)
-        trend_up, trend_dn = x.hist > 0, x.hist < 0; slow = x.e21
+        long_sig = (x["hist"] > 0) & (x["hist"].shift(1) <= 0); short_sig = (x["hist"] < 0) & (x["hist"].shift(1) >= 0)
+        trend_up, trend_dn = x["hist"] > 0, x["hist"] < 0; slow = x.e21
     elif ent == "macd0":
         long_sig = (x.macd > 0) & (x.macd.shift(1) <= 0); short_sig = (x.macd < 0) & (x.macd.shift(1) >= 0)
         trend_up, trend_dn = x.macd > 0, x.macd < 0; slow = x.e21

@@ -482,3 +482,20 @@ Rolling 12 months from ₹2 lakh: median +41.1% vs +24.9%, worst -16.9% vs -4.3%
 windows; 2026 +84% vs +41% (same -17.5% fall). From ₹20k: worse (85% of windows end unable to buy a lot vs 62%).
 **Decision:** shipped as rule "fib" (own slot, Camarilla exits, entries to 13:00, VIX ≤ 20) for Nifty and Sensex on paper Autopilot,
 switched on only once equity reaches ₹2 lakh (`FIB_MIN_EQUITY`). App backtest reproduces the research trade-for-trade.
+
+## Round 30 — EMA crossover + volume + MACD (+ ADX, VWAP, Donchian) in depth (`round30_engine.py`, `round30_grid.py`, `round30_analyse.py`, results `round30_results.json`)
+768 settings × Nifty / Bank Nifty / Sensex (2,304 backtests, 625k trades): entries EMA 9/21, 20/50, 5/13 crossover; MACD(12,26,9)
+signal cross; MACD zero cross; EMA cross confirmed by the MACD histogram (9/21, 20/50); Donchian 20-bar breakout (turtle style) ×
+5- or 15-minute bars × volume (none / relative turnover ≥ 1.3× / ≥ 1.6×; the 10 Nifty heavyweights vs the same time of day, round 9's
+proxy - the index has no volume) × ADX ≥ 20 and rising on/off × price on the VWAP side on/off × exits (opposite signal, trail on the slow
+EMA, 2-ATR stop + breakeven + hold to 15:15, fixed 2R). 1-ITM option, same pricing as the app; ₹2,000 risk a trade; up to 2 trades a day.
+
+- 388 of 768 settings profitable in 2023-25, 199 in 2026, 65 in both.
+- **Robust on 2023-25** (every year positive, PF ≥ 1.1, ≥ 2 of 3 indices positive, ≥ 100 trades): **23 settings - 2 positive in 2026**
+  (Donchian 15-min, volume ≥ 1.6, ADX, opposite-signal exit: +₹6.9k and +₹5.6k on ~35 trades). 18 of the 23 were Donchian 15-min with
+  volume ≥ 1.3 and mostly ADX: +₹117k to +₹237k in training with 87-93% of neighbouring settings also profitable - and -₹14k to -₹60k in 2026.
+- Medians (2023-25 / 2026): Donchian +48k / -20k; EMA 20/50 +24k / -20k; EMA 20/50 + MACD +29k / -22k; EMA 9/21 -39k / -16k; EMA 9/21 + MACD
+  -38k / -15k; EMA 5/13 -18k / -12k; MACD signal cross -14k / -29k; MACD zero cross -8k / -14k.
+- Ingredients: volume filter -180k → +42k in training (by cutting trades, as in round 9) but every level negative in 2026; ADX helps a
+  little (+20k vs -42k; 2026 -11k vs -26k); VWAP side changes nothing; 15-minute bars beat 5-minute; fixed 2R targets worst.
+**Not adopted.** EMA / MACD crossovers have no edge here; Donchian + volume + ADX worked in 2023-24 and stopped in 2025-26.
