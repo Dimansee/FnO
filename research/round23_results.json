@@ -1,0 +1,2012 @@
+{
+ "variants": {
+  "V0 current rules": {
+   "train_2023_25": {
+    "n": 721,
+    "net": 130963,
+    "pf": 1.21,
+    "max_fall": -50663,
+    "win_pct": 28
+   },
+   "y2026": {
+    "n": 168,
+    "net": 104659,
+    "pf": 1.74,
+    "max_fall": -19740,
+    "win_pct": 35
+   },
+   "by_year": {
+    "2023": 22447,
+    "2024": 93534,
+    "2025": 14983,
+    "2026": 104659
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": 29227,
+    "BANKNIFTY:2024": 53607,
+    "BANKNIFTY:2025": -30886,
+    "BANKNIFTY:2026": 28647,
+    "NIFTY:2023": -6780,
+    "NIFTY:2024": 39927,
+    "NIFTY:2025": 45869,
+    "NIFTY:2026": 76012
+   },
+   "oct13": [
+    {
+     "sym": "NIFTY",
+     "strategy": "noise",
+     "entry_time": "09:45",
+     "exit_time": "10:45",
+     "reason": "trail",
+     "pnl": -1004.0
+    }
+   ]
+  },
+  "V1 no Camarilla 45-min time stop": {
+   "train_2023_25": {
+    "n": 711,
+    "net": 71600,
+    "pf": 1.09,
+    "max_fall": -62161,
+    "win_pct": 30
+   },
+   "y2026": {
+    "n": 165,
+    "net": 98316,
+    "pf": 1.55,
+    "max_fall": -21617,
+    "win_pct": 36
+   },
+   "by_year": {
+    "2023": -10022,
+    "2024": 74210,
+    "2025": 7412,
+    "2026": 98316
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": 19932,
+    "BANKNIFTY:2024": 43359,
+    "BANKNIFTY:2025": -33494,
+    "BANKNIFTY:2026": 25137,
+    "NIFTY:2023": -29954,
+    "NIFTY:2024": 30851,
+    "NIFTY:2025": 40906,
+    "NIFTY:2026": 73180
+   },
+   "oct13": [
+    {
+     "sym": "NIFTY",
+     "strategy": "noise",
+     "entry_time": "09:45",
+     "exit_time": "10:45",
+     "reason": "trail",
+     "pnl": -1004.0
+    }
+   ]
+  },
+  "V1b Camarilla time stop 90 min": {
+   "train_2023_25": {
+    "n": 713,
+    "net": 101818,
+    "pf": 1.15,
+    "max_fall": -49687,
+    "win_pct": 29
+   },
+   "y2026": {
+    "n": 165,
+    "net": 102663,
+    "pf": 1.63,
+    "max_fall": -19876,
+    "win_pct": 36
+   },
+   "by_year": {
+    "2023": 8918,
+    "2024": 80210,
+    "2025": 12690,
+    "2026": 102663
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": 28761,
+    "BANKNIFTY:2024": 54888,
+    "BANKNIFTY:2025": -30661,
+    "BANKNIFTY:2026": 29276,
+    "NIFTY:2023": -19843,
+    "NIFTY:2024": 25322,
+    "NIFTY:2025": 43351,
+    "NIFTY:2026": 73386
+   },
+   "oct13": [
+    {
+     "sym": "NIFTY",
+     "strategy": "noise",
+     "entry_time": "09:45",
+     "exit_time": "10:45",
+     "reason": "trail",
+     "pnl": -1004.0
+    }
+   ]
+  },
+  "V2 Noise trail on band only": {
+   "train_2023_25": {
+    "n": 721,
+    "net": 127126,
+    "pf": 1.2,
+    "max_fall": -49650,
+    "win_pct": 28
+   },
+   "y2026": {
+    "n": 168,
+    "net": 107156,
+    "pf": 1.76,
+    "max_fall": -19810,
+    "win_pct": 36
+   },
+   "by_year": {
+    "2023": 17821,
+    "2024": 94010,
+    "2025": 15295,
+    "2026": 107156
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": 26292,
+    "BANKNIFTY:2024": 53607,
+    "BANKNIFTY:2025": -31501,
+    "BANKNIFTY:2026": 28577,
+    "NIFTY:2023": -8472,
+    "NIFTY:2024": 40403,
+    "NIFTY:2025": 46797,
+    "NIFTY:2026": 78580
+   },
+   "oct13": [
+    {
+     "sym": "NIFTY",
+     "strategy": "noise",
+     "entry_time": "09:45",
+     "exit_time": "10:45",
+     "reason": "trail",
+     "pnl": -1004.0
+    }
+   ]
+  },
+  "V2b Noise VWAP trail only after +1R": {
+   "train_2023_25": {
+    "n": 721,
+    "net": 126819,
+    "pf": 1.2,
+    "max_fall": -52637,
+    "win_pct": 28
+   },
+   "y2026": {
+    "n": 168,
+    "net": 104588,
+    "pf": 1.74,
+    "max_fall": -19810,
+    "win_pct": 35
+   },
+   "by_year": {
+    "2023": 20976,
+    "2024": 93534,
+    "2025": 12309,
+    "2026": 104588
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": 27757,
+    "BANKNIFTY:2024": 53607,
+    "BANKNIFTY:2025": -31501,
+    "BANKNIFTY:2026": 28577,
+    "NIFTY:2023": -6780,
+    "NIFTY:2024": 39927,
+    "NIFTY:2025": 43810,
+    "NIFTY:2026": 76012
+   },
+   "oct13": [
+    {
+     "sym": "NIFTY",
+     "strategy": "noise",
+     "entry_time": "09:45",
+     "exit_time": "10:45",
+     "reason": "trail",
+     "pnl": -1004.0
+    }
+   ]
+  },
+  "V3 Noise and Camarilla may hold together": {
+   "train_2023_25": {
+    "n": 864,
+    "net": 194979,
+    "pf": 1.26,
+    "max_fall": -57006,
+    "win_pct": 29
+   },
+   "y2026": {
+    "n": 201,
+    "net": 107576,
+    "pf": 1.65,
+    "max_fall": -20964,
+    "win_pct": 36
+   },
+   "by_year": {
+    "2023": 45714,
+    "2024": 153303,
+    "2025": -4039,
+    "2026": 107576
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": 42659,
+    "BANKNIFTY:2024": 66690,
+    "BANKNIFTY:2025": -46402,
+    "BANKNIFTY:2026": 21434,
+    "NIFTY:2023": 3055,
+    "NIFTY:2024": 86614,
+    "NIFTY:2025": 42364,
+    "NIFTY:2026": 86142
+   },
+   "oct13": [
+    {
+     "sym": "NIFTY",
+     "strategy": "noise",
+     "entry_time": "09:45",
+     "exit_time": "10:45",
+     "reason": "trail",
+     "pnl": -1004.0
+    }
+   ]
+  },
+  "V4 one re-entry after a trail/time exit": {
+   "train_2023_25": {
+    "n": 824,
+    "net": 108477,
+    "pf": 1.15,
+    "max_fall": -57614,
+    "win_pct": 28
+   },
+   "y2026": {
+    "n": 197,
+    "net": 90325,
+    "pf": 1.54,
+    "max_fall": -23656,
+    "win_pct": 34
+   },
+   "by_year": {
+    "2023": -2240,
+    "2024": 81962,
+    "2025": 28754,
+    "2026": 90325
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": 15250,
+    "BANKNIFTY:2024": 51014,
+    "BANKNIFTY:2025": -20373,
+    "BANKNIFTY:2026": 20527,
+    "NIFTY:2023": -17490,
+    "NIFTY:2024": 30948,
+    "NIFTY:2025": 49127,
+    "NIFTY:2026": 69798
+   },
+   "oct13": [
+    {
+     "sym": "NIFTY",
+     "strategy": "noise",
+     "entry_time": "09:45",
+     "exit_time": "10:45",
+     "reason": "trail",
+     "pnl": -1004.0
+    }
+   ]
+  },
+  "V5 no VIX ceilings": {
+   "train_2023_25": {
+    "n": 746,
+    "net": 115594,
+    "pf": 1.18,
+    "max_fall": -52983,
+    "win_pct": 28
+   },
+   "y2026": {
+    "n": 187,
+    "net": 91107,
+    "pf": 1.53,
+    "max_fall": -26904,
+    "win_pct": 34
+   },
+   "by_year": {
+    "2023": 22878,
+    "2024": 84902,
+    "2025": 7815,
+    "2026": 91107
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": 29227,
+    "BANKNIFTY:2024": 48581,
+    "BANKNIFTY:2025": -34659,
+    "BANKNIFTY:2026": 20887,
+    "NIFTY:2023": -6350,
+    "NIFTY:2024": 36321,
+    "NIFTY:2025": 42474,
+    "NIFTY:2026": 70220
+   },
+   "oct13": [
+    {
+     "sym": "NIFTY",
+     "strategy": "noise",
+     "entry_time": "09:45",
+     "exit_time": "10:45",
+     "reason": "trail",
+     "pnl": -1004.0
+    }
+   ]
+  },
+  "V5b VIX ceilings 22 / 25": {
+   "train_2023_25": {
+    "n": 746,
+    "net": 115594,
+    "pf": 1.18,
+    "max_fall": -52983,
+    "win_pct": 28
+   },
+   "y2026": {
+    "n": 179,
+    "net": 96922,
+    "pf": 1.6,
+    "max_fall": -26904,
+    "win_pct": 34
+   },
+   "by_year": {
+    "2023": 22878,
+    "2024": 84902,
+    "2025": 7815,
+    "2026": 96922
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": 29227,
+    "BANKNIFTY:2024": 48581,
+    "BANKNIFTY:2025": -34659,
+    "BANKNIFTY:2026": 23444,
+    "NIFTY:2023": -6350,
+    "NIFTY:2024": 36321,
+    "NIFTY:2025": 42474,
+    "NIFTY:2026": 73478
+   },
+   "oct13": [
+    {
+     "sym": "NIFTY",
+     "strategy": "noise",
+     "entry_time": "09:45",
+     "exit_time": "10:45",
+     "reason": "trail",
+     "pnl": -1004.0
+    }
+   ]
+  },
+  "V6 Noise without the trailing exit": {
+   "train_2023_25": {
+    "n": 713,
+    "net": 121658,
+    "pf": 1.17,
+    "max_fall": -50146,
+    "win_pct": 29
+   },
+   "y2026": {
+    "n": 167,
+    "net": 96124,
+    "pf": 1.58,
+    "max_fall": -28504,
+    "win_pct": 35
+   },
+   "by_year": {
+    "2023": -696,
+    "2024": 105641,
+    "2025": 16714,
+    "2026": 96124
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": 19411,
+    "BANKNIFTY:2024": 56933,
+    "BANKNIFTY:2025": -21123,
+    "BANKNIFTY:2026": 21180,
+    "NIFTY:2023": -20107,
+    "NIFTY:2024": 48708,
+    "NIFTY:2025": 37837,
+    "NIFTY:2026": 74944
+   },
+   "oct13": [
+    {
+     "sym": "NIFTY",
+     "strategy": "noise",
+     "entry_time": "09:45",
+     "exit_time": "15:15",
+     "reason": "squareoff",
+     "pnl": 5861.0
+    }
+   ]
+  },
+  "V7 Noise VWAP-only trail": {
+   "train_2023_25": {
+    "n": 716,
+    "net": 118057,
+    "pf": 1.18,
+    "max_fall": -46251,
+    "win_pct": 28
+   },
+   "y2026": {
+    "n": 167,
+    "net": 90119,
+    "pf": 1.58,
+    "max_fall": -23097,
+    "win_pct": 31
+   },
+   "by_year": {
+    "2023": 9757,
+    "2024": 114962,
+    "2025": -6662,
+    "2026": 90119
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": 23170,
+    "BANKNIFTY:2024": 56318,
+    "BANKNIFTY:2025": -41515,
+    "BANKNIFTY:2026": 19285,
+    "NIFTY:2023": -13413,
+    "NIFTY:2024": 58644,
+    "NIFTY:2025": 34853,
+    "NIFTY:2026": 70835
+   },
+   "oct13": [
+    {
+     "sym": "NIFTY",
+     "strategy": "noise",
+     "entry_time": "09:45",
+     "exit_time": "10:45",
+     "reason": "trail",
+     "pnl": -1004.0
+    }
+   ]
+  }
+ },
+ "trend_grid": [
+  {
+   "setting": "10:45 share 0.8 stop vwap band 1.0 be 0",
+   "train_2023_25": {
+    "n": 418,
+    "net": -24885,
+    "pf": 0.95,
+    "max_fall": -84091,
+    "win_pct": 35
+   },
+   "y2026": {
+    "n": 98,
+    "net": 56868,
+    "pf": 1.55,
+    "max_fall": -21129,
+    "win_pct": 41
+   },
+   "by_year": {
+    "2023": -11100,
+    "2024": 26734,
+    "2025": -40520,
+    "2026": 56868
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -11197,
+    "BANKNIFTY:2024": -13443,
+    "BANKNIFTY:2025": -31967,
+    "BANKNIFTY:2026": 14460,
+    "NIFTY:2023": 97,
+    "NIFTY:2024": 40177,
+    "NIFTY:2025": -8553,
+    "NIFTY:2026": 42408
+   }
+  },
+  {
+   "setting": "10:45 share 0.8 stop vwap band 1.0 be 1.0",
+   "train_2023_25": {
+    "n": 418,
+    "net": -19587,
+    "pf": 0.96,
+    "max_fall": -86347,
+    "win_pct": 29
+   },
+   "y2026": {
+    "n": 98,
+    "net": 37324,
+    "pf": 1.37,
+    "max_fall": -24885,
+    "win_pct": 33
+   },
+   "by_year": {
+    "2023": -3145,
+    "2024": 26608,
+    "2025": -43050,
+    "2026": 37324
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -12516,
+    "BANKNIFTY:2024": 521,
+    "BANKNIFTY:2025": -36036,
+    "BANKNIFTY:2026": 10587,
+    "NIFTY:2023": 9371,
+    "NIFTY:2024": 26088,
+    "NIFTY:2025": -7015,
+    "NIFTY:2026": 26736
+   }
+  },
+  {
+   "setting": "10:45 share 0.8 stop vwap band 1.75 be 0",
+   "train_2023_25": {
+    "n": 192,
+    "net": 56936,
+    "pf": 1.28,
+    "max_fall": -37177,
+    "win_pct": 41
+   },
+   "y2026": {
+    "n": 62,
+    "net": 26918,
+    "pf": 1.42,
+    "max_fall": -13166,
+    "win_pct": 44
+   },
+   "by_year": {
+    "2023": 12751,
+    "2024": 65950,
+    "2025": -21766,
+    "2026": 26918
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": 9531,
+    "BANKNIFTY:2024": 25254,
+    "BANKNIFTY:2025": -22896,
+    "BANKNIFTY:2026": -8933,
+    "NIFTY:2023": 3220,
+    "NIFTY:2024": 40696,
+    "NIFTY:2025": 1130,
+    "NIFTY:2026": 35851
+   }
+  },
+  {
+   "setting": "10:45 share 0.8 stop vwap band 1.75 be 1.0",
+   "train_2023_25": {
+    "n": 192,
+    "net": 60575,
+    "pf": 1.33,
+    "max_fall": -48413,
+    "win_pct": 36
+   },
+   "y2026": {
+    "n": 62,
+    "net": 16181,
+    "pf": 1.25,
+    "max_fall": -15469,
+    "win_pct": 34
+   },
+   "by_year": {
+    "2023": 24262,
+    "2024": 65052,
+    "2025": -28739,
+    "2026": 16181
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": 10806,
+    "BANKNIFTY:2024": 26026,
+    "BANKNIFTY:2025": -27883,
+    "BANKNIFTY:2026": -9528,
+    "NIFTY:2023": 13456,
+    "NIFTY:2024": 39025,
+    "NIFTY:2025": -855,
+    "NIFTY:2026": 25709
+   }
+  },
+  {
+   "setting": "10:45 share 0.8 stop 2.0 band 1.0 be 0",
+   "train_2023_25": {
+    "n": 480,
+    "net": 31001,
+    "pf": 1.05,
+    "max_fall": -103438,
+    "win_pct": 35
+   },
+   "y2026": {
+    "n": 115,
+    "net": 23319,
+    "pf": 1.15,
+    "max_fall": -49738,
+    "win_pct": 37
+   },
+   "by_year": {
+    "2023": 3481,
+    "2024": 94371,
+    "2025": -66850,
+    "2026": 23319
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -26060,
+    "BANKNIFTY:2024": 38748,
+    "BANKNIFTY:2025": -57485,
+    "BANKNIFTY:2026": -20268,
+    "NIFTY:2023": 29541,
+    "NIFTY:2024": 55623,
+    "NIFTY:2025": -9365,
+    "NIFTY:2026": 43586
+   }
+  },
+  {
+   "setting": "10:45 share 0.8 stop 2.0 band 1.0 be 1.0",
+   "train_2023_25": {
+    "n": 480,
+    "net": 20504,
+    "pf": 1.04,
+    "max_fall": -100880,
+    "win_pct": 29
+   },
+   "y2026": {
+    "n": 115,
+    "net": 29933,
+    "pf": 1.22,
+    "max_fall": -54908,
+    "win_pct": 32
+   },
+   "by_year": {
+    "2023": -19979,
+    "2024": 112276,
+    "2025": -71793,
+    "2026": 29933
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -26315,
+    "BANKNIFTY:2024": 57875,
+    "BANKNIFTY:2025": -61549,
+    "BANKNIFTY:2026": -13537,
+    "NIFTY:2023": 6336,
+    "NIFTY:2024": 54401,
+    "NIFTY:2025": -10244,
+    "NIFTY:2026": 43471
+   }
+  },
+  {
+   "setting": "10:45 share 0.8 stop 2.0 band 1.75 be 0",
+   "train_2023_25": {
+    "n": 246,
+    "net": 52094,
+    "pf": 1.18,
+    "max_fall": -59980,
+    "win_pct": 39
+   },
+   "y2026": {
+    "n": 71,
+    "net": 23249,
+    "pf": 1.27,
+    "max_fall": -28026,
+    "win_pct": 44
+   },
+   "by_year": {
+    "2023": 14094,
+    "2024": 75193,
+    "2025": -37194,
+    "2026": 23249
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -604,
+    "BANKNIFTY:2024": 41330,
+    "BANKNIFTY:2025": -42432,
+    "BANKNIFTY:2026": -7062,
+    "NIFTY:2023": 14698,
+    "NIFTY:2024": 33864,
+    "NIFTY:2025": 5238,
+    "NIFTY:2026": 30311
+   }
+  },
+  {
+   "setting": "10:45 share 0.8 stop 2.0 band 1.75 be 1.0",
+   "train_2023_25": {
+    "n": 246,
+    "net": 55813,
+    "pf": 1.22,
+    "max_fall": -60409,
+    "win_pct": 32
+   },
+   "y2026": {
+    "n": 71,
+    "net": 13712,
+    "pf": 1.18,
+    "max_fall": -28952,
+    "win_pct": 35
+   },
+   "by_year": {
+    "2023": 18344,
+    "2024": 81817,
+    "2025": -44348,
+    "2026": 13712
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": 3816,
+    "BANKNIFTY:2024": 49057,
+    "BANKNIFTY:2025": -42844,
+    "BANKNIFTY:2026": -7277,
+    "NIFTY:2023": 14528,
+    "NIFTY:2024": 32760,
+    "NIFTY:2025": -1505,
+    "NIFTY:2026": 20989
+   }
+  },
+  {
+   "setting": "10:45 share 0.9 stop vwap band 1.0 be 0",
+   "train_2023_25": {
+    "n": 272,
+    "net": 32660,
+    "pf": 1.11,
+    "max_fall": -35599,
+    "win_pct": 37
+   },
+   "y2026": {
+    "n": 71,
+    "net": 48792,
+    "pf": 1.65,
+    "max_fall": -29271,
+    "win_pct": 42
+   },
+   "by_year": {
+    "2023": -19293,
+    "2024": 62459,
+    "2025": -10506,
+    "2026": 48792
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -26683,
+    "BANKNIFTY:2024": 1417,
+    "BANKNIFTY:2025": -27156,
+    "BANKNIFTY:2026": 20467,
+    "NIFTY:2023": 7390,
+    "NIFTY:2024": 61042,
+    "NIFTY:2025": 16650,
+    "NIFTY:2026": 28326
+   }
+  },
+  {
+   "setting": "10:45 share 0.9 stop vwap band 1.0 be 1.0",
+   "train_2023_25": {
+    "n": 272,
+    "net": 23998,
+    "pf": 1.09,
+    "max_fall": -42783,
+    "win_pct": 29
+   },
+   "y2026": {
+    "n": 71,
+    "net": 33339,
+    "pf": 1.48,
+    "max_fall": -29566,
+    "win_pct": 34
+   },
+   "by_year": {
+    "2023": -9523,
+    "2024": 54315,
+    "2025": -20794,
+    "2026": 33339
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -22777,
+    "BANKNIFTY:2024": 1610,
+    "BANKNIFTY:2025": -32890,
+    "BANKNIFTY:2026": 18220,
+    "NIFTY:2023": 13254,
+    "NIFTY:2024": 52705,
+    "NIFTY:2025": 12096,
+    "NIFTY:2026": 15119
+   }
+  },
+  {
+   "setting": "10:45 share 0.9 stop vwap band 1.75 be 0",
+   "train_2023_25": {
+    "n": 146,
+    "net": 21961,
+    "pf": 1.14,
+    "max_fall": -32948,
+    "win_pct": 41
+   },
+   "y2026": {
+    "n": 48,
+    "net": 28305,
+    "pf": 1.61,
+    "max_fall": -22491,
+    "win_pct": 44
+   },
+   "by_year": {
+    "2023": -9730,
+    "2024": 50631,
+    "2025": -18940,
+    "2026": 28305
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -13314,
+    "BANKNIFTY:2024": 7558,
+    "BANKNIFTY:2025": -25755,
+    "BANKNIFTY:2026": -3232,
+    "NIFTY:2023": 3584,
+    "NIFTY:2024": 43073,
+    "NIFTY:2025": 6816,
+    "NIFTY:2026": 31537
+   }
+  },
+  {
+   "setting": "10:45 share 0.9 stop vwap band 1.75 be 1.0",
+   "train_2023_25": {
+    "n": 146,
+    "net": 29737,
+    "pf": 1.2,
+    "max_fall": -39077,
+    "win_pct": 36
+   },
+   "y2026": {
+    "n": 48,
+    "net": 23110,
+    "pf": 1.54,
+    "max_fall": -22694,
+    "win_pct": 35
+   },
+   "by_year": {
+    "2023": 1023,
+    "2024": 53952,
+    "2025": -25238,
+    "2026": 23110
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -12089,
+    "BANKNIFTY:2024": 8287,
+    "BANKNIFTY:2025": -30767,
+    "BANKNIFTY:2026": -2775,
+    "NIFTY:2023": 13112,
+    "NIFTY:2024": 45665,
+    "NIFTY:2025": 5529,
+    "NIFTY:2026": 25885
+   }
+  },
+  {
+   "setting": "10:45 share 0.9 stop 2.0 band 1.0 be 0",
+   "train_2023_25": {
+    "n": 318,
+    "net": 11741,
+    "pf": 1.03,
+    "max_fall": -72221,
+    "win_pct": 36
+   },
+   "y2026": {
+    "n": 79,
+    "net": 35355,
+    "pf": 1.37,
+    "max_fall": -43904,
+    "win_pct": 43
+   },
+   "by_year": {
+    "2023": -3693,
+    "2024": 48797,
+    "2025": -33363,
+    "2026": 35355
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -23839,
+    "BANKNIFTY:2024": 6184,
+    "BANKNIFTY:2025": -35093,
+    "BANKNIFTY:2026": 8656,
+    "NIFTY:2023": 20146,
+    "NIFTY:2024": 42613,
+    "NIFTY:2025": 1730,
+    "NIFTY:2026": 26700
+   }
+  },
+  {
+   "setting": "10:45 share 0.9 stop 2.0 band 1.0 be 1.0",
+   "train_2023_25": {
+    "n": 318,
+    "net": 8869,
+    "pf": 1.02,
+    "max_fall": -76623,
+    "win_pct": 30
+   },
+   "y2026": {
+    "n": 79,
+    "net": 35875,
+    "pf": 1.41,
+    "max_fall": -43859,
+    "win_pct": 37
+   },
+   "by_year": {
+    "2023": -3651,
+    "2024": 55231,
+    "2025": -42711,
+    "2026": 35875
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -19534,
+    "BANKNIFTY:2024": 12202,
+    "BANKNIFTY:2025": -43087,
+    "BANKNIFTY:2026": 11397,
+    "NIFTY:2023": 15882,
+    "NIFTY:2024": 43029,
+    "NIFTY:2025": 376,
+    "NIFTY:2026": 24478
+   }
+  },
+  {
+   "setting": "10:45 share 0.9 stop 2.0 band 1.75 be 0",
+   "train_2023_25": {
+    "n": 184,
+    "net": 19633,
+    "pf": 1.09,
+    "max_fall": -47333,
+    "win_pct": 38
+   },
+   "y2026": {
+    "n": 54,
+    "net": 36412,
+    "pf": 1.62,
+    "max_fall": -22465,
+    "win_pct": 50
+   },
+   "by_year": {
+    "2023": 4397,
+    "2024": 41130,
+    "2025": -25894,
+    "2026": 36412
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -5481,
+    "BANKNIFTY:2024": 13999,
+    "BANKNIFTY:2025": -31141,
+    "BANKNIFTY:2026": 8285,
+    "NIFTY:2023": 9878,
+    "NIFTY:2024": 27131,
+    "NIFTY:2025": 5246,
+    "NIFTY:2026": 28127
+   }
+  },
+  {
+   "setting": "10:45 share 0.9 stop 2.0 band 1.75 be 1.0",
+   "train_2023_25": {
+    "n": 184,
+    "net": 25495,
+    "pf": 1.13,
+    "max_fall": -51925,
+    "win_pct": 32
+   },
+   "y2026": {
+    "n": 54,
+    "net": 26690,
+    "pf": 1.55,
+    "max_fall": -23835,
+    "win_pct": 39
+   },
+   "by_year": {
+    "2023": 7967,
+    "2024": 49429,
+    "2025": -31900,
+    "2026": 26690
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -4410,
+    "BANKNIFTY:2024": 20177,
+    "BANKNIFTY:2025": -36267,
+    "BANKNIFTY:2026": 5389,
+    "NIFTY:2023": 12377,
+    "NIFTY:2024": 29251,
+    "NIFTY:2025": 4367,
+    "NIFTY:2026": 21301
+   }
+  },
+  {
+   "setting": "11:45 share 0.8 stop vwap band 1.0 be 0",
+   "train_2023_25": {
+    "n": 366,
+    "net": -37961,
+    "pf": 0.91,
+    "max_fall": -82187,
+    "win_pct": 36
+   },
+   "y2026": {
+    "n": 86,
+    "net": 36495,
+    "pf": 1.36,
+    "max_fall": -28105,
+    "win_pct": 38
+   },
+   "by_year": {
+    "2023": 8308,
+    "2024": -2670,
+    "2025": -43599,
+    "2026": 36495
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -17873,
+    "BANKNIFTY:2024": -11708,
+    "BANKNIFTY:2025": -35883,
+    "BANKNIFTY:2026": 14500,
+    "NIFTY:2023": 26181,
+    "NIFTY:2024": 9038,
+    "NIFTY:2025": -7715,
+    "NIFTY:2026": 21995
+   }
+  },
+  {
+   "setting": "11:45 share 0.8 stop vwap band 1.0 be 1.0",
+   "train_2023_25": {
+    "n": 366,
+    "net": -35893,
+    "pf": 0.9,
+    "max_fall": -87450,
+    "win_pct": 30
+   },
+   "y2026": {
+    "n": 86,
+    "net": 38758,
+    "pf": 1.45,
+    "max_fall": -24317,
+    "win_pct": 30
+   },
+   "by_year": {
+    "2023": 3634,
+    "2024": 9057,
+    "2025": -48584,
+    "2026": 38758
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -22736,
+    "BANKNIFTY:2024": -5012,
+    "BANKNIFTY:2025": -44671,
+    "BANKNIFTY:2026": 15093,
+    "NIFTY:2023": 26370,
+    "NIFTY:2024": 14070,
+    "NIFTY:2025": -3913,
+    "NIFTY:2026": 23664
+   }
+  },
+  {
+   "setting": "11:45 share 0.8 stop vwap band 1.75 be 0",
+   "train_2023_25": {
+    "n": 177,
+    "net": 2659,
+    "pf": 1.01,
+    "max_fall": -44934,
+    "win_pct": 41
+   },
+   "y2026": {
+    "n": 50,
+    "net": 24866,
+    "pf": 1.46,
+    "max_fall": -14701,
+    "win_pct": 42
+   },
+   "by_year": {
+    "2023": 1708,
+    "2024": 22276,
+    "2025": -21326,
+    "2026": 24866
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -5500,
+    "BANKNIFTY:2024": -2245,
+    "BANKNIFTY:2025": -27282,
+    "BANKNIFTY:2026": 2727,
+    "NIFTY:2023": 7208,
+    "NIFTY:2024": 24521,
+    "NIFTY:2025": 5956,
+    "NIFTY:2026": 22138
+   }
+  },
+  {
+   "setting": "11:45 share 0.8 stop vwap band 1.75 be 1.0",
+   "train_2023_25": {
+    "n": 177,
+    "net": 8839,
+    "pf": 1.05,
+    "max_fall": -48080,
+    "win_pct": 37
+   },
+   "y2026": {
+    "n": 50,
+    "net": 28143,
+    "pf": 1.66,
+    "max_fall": -11988,
+    "win_pct": 34
+   },
+   "by_year": {
+    "2023": 4889,
+    "2024": 28421,
+    "2025": -24471,
+    "2026": 28143
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -6900,
+    "BANKNIFTY:2024": 1923,
+    "BANKNIFTY:2025": -26818,
+    "BANKNIFTY:2026": 1047,
+    "NIFTY:2023": 11789,
+    "NIFTY:2024": 26499,
+    "NIFTY:2025": 2347,
+    "NIFTY:2026": 27097
+   }
+  },
+  {
+   "setting": "11:45 share 0.8 stop 2.0 band 1.0 be 0",
+   "train_2023_25": {
+    "n": 419,
+    "net": 30573,
+    "pf": 1.06,
+    "max_fall": -46529,
+    "win_pct": 36
+   },
+   "y2026": {
+    "n": 98,
+    "net": 29805,
+    "pf": 1.24,
+    "max_fall": -32313,
+    "win_pct": 38
+   },
+   "by_year": {
+    "2023": 5411,
+    "2024": 49380,
+    "2025": -24217,
+    "2026": 29805
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -24974,
+    "BANKNIFTY:2024": 33559,
+    "BANKNIFTY:2025": -35571,
+    "BANKNIFTY:2026": -1787,
+    "NIFTY:2023": 30384,
+    "NIFTY:2024": 15820,
+    "NIFTY:2025": 11354,
+    "NIFTY:2026": 31592
+   }
+  },
+  {
+   "setting": "11:45 share 0.8 stop 2.0 band 1.0 be 1.0",
+   "train_2023_25": {
+    "n": 419,
+    "net": 23227,
+    "pf": 1.06,
+    "max_fall": -43171,
+    "win_pct": 30
+   },
+   "y2026": {
+    "n": 98,
+    "net": 39689,
+    "pf": 1.39,
+    "max_fall": -26481,
+    "win_pct": 33
+   },
+   "by_year": {
+    "2023": -10061,
+    "2024": 61977,
+    "2025": -28689,
+    "2026": 39689
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -27293,
+    "BANKNIFTY:2024": 39400,
+    "BANKNIFTY:2025": -39497,
+    "BANKNIFTY:2026": -1688,
+    "NIFTY:2023": 17231,
+    "NIFTY:2024": 22577,
+    "NIFTY:2025": 10808,
+    "NIFTY:2026": 41378
+   }
+  },
+  {
+   "setting": "11:45 share 0.8 stop 2.0 band 1.75 be 0",
+   "train_2023_25": {
+    "n": 216,
+    "net": 35013,
+    "pf": 1.15,
+    "max_fall": -25000,
+    "win_pct": 40
+   },
+   "y2026": {
+    "n": 56,
+    "net": 23054,
+    "pf": 1.35,
+    "max_fall": -16104,
+    "win_pct": 45
+   },
+   "by_year": {
+    "2023": 4993,
+    "2024": 32039,
+    "2025": -2019,
+    "2026": 23054
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -5054,
+    "BANKNIFTY:2024": 8040,
+    "BANKNIFTY:2025": -21031,
+    "BANKNIFTY:2026": 5282,
+    "NIFTY:2023": 10046,
+    "NIFTY:2024": 23999,
+    "NIFTY:2025": 19013,
+    "NIFTY:2026": 17772
+   }
+  },
+  {
+   "setting": "11:45 share 0.8 stop 2.0 band 1.75 be 1.0",
+   "train_2023_25": {
+    "n": 216,
+    "net": 42989,
+    "pf": 1.21,
+    "max_fall": -21316,
+    "win_pct": 34
+   },
+   "y2026": {
+    "n": 56,
+    "net": 12983,
+    "pf": 1.28,
+    "max_fall": -14710,
+    "win_pct": 38
+   },
+   "by_year": {
+    "2023": 10686,
+    "2024": 35545,
+    "2025": -3241,
+    "2026": 12983
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -3738,
+    "BANKNIFTY:2024": 11760,
+    "BANKNIFTY:2025": -15048,
+    "BANKNIFTY:2026": -4171,
+    "NIFTY:2023": 14423,
+    "NIFTY:2024": 23785,
+    "NIFTY:2025": 11807,
+    "NIFTY:2026": 17154
+   }
+  },
+  {
+   "setting": "11:45 share 0.9 stop vwap band 1.0 be 0",
+   "train_2023_25": {
+    "n": 242,
+    "net": -5004,
+    "pf": 0.98,
+    "max_fall": -50813,
+    "win_pct": 37
+   },
+   "y2026": {
+    "n": 61,
+    "net": 32725,
+    "pf": 1.44,
+    "max_fall": -23270,
+    "win_pct": 39
+   },
+   "by_year": {
+    "2023": -4858,
+    "2024": 26310,
+    "2025": -26456,
+    "2026": 32725
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -27079,
+    "BANKNIFTY:2024": 470,
+    "BANKNIFTY:2025": -30089,
+    "BANKNIFTY:2026": 17546,
+    "NIFTY:2023": 22221,
+    "NIFTY:2024": 25840,
+    "NIFTY:2025": 3633,
+    "NIFTY:2026": 15180
+   }
+  },
+  {
+   "setting": "11:45 share 0.9 stop vwap band 1.0 be 1.0",
+   "train_2023_25": {
+    "n": 242,
+    "net": -1354,
+    "pf": 0.99,
+    "max_fall": -51915,
+    "win_pct": 31
+   },
+   "y2026": {
+    "n": 61,
+    "net": 38799,
+    "pf": 1.65,
+    "max_fall": -20557,
+    "win_pct": 31
+   },
+   "by_year": {
+    "2023": -6214,
+    "2024": 31959,
+    "2025": -27099,
+    "2026": 38799
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -25095,
+    "BANKNIFTY:2024": 2832,
+    "BANKNIFTY:2025": -30724,
+    "BANKNIFTY:2026": 22515,
+    "NIFTY:2023": 18881,
+    "NIFTY:2024": 29127,
+    "NIFTY:2025": 3625,
+    "NIFTY:2026": 16284
+   }
+  },
+  {
+   "setting": "11:45 share 0.9 stop vwap band 1.75 be 0",
+   "train_2023_25": {
+    "n": 135,
+    "net": 721,
+    "pf": 1.0,
+    "max_fall": -33946,
+    "win_pct": 41
+   },
+   "y2026": {
+    "n": 40,
+    "net": 22880,
+    "pf": 1.5,
+    "max_fall": -11230,
+    "win_pct": 40
+   },
+   "by_year": {
+    "2023": -11060,
+    "2024": 29283,
+    "2025": -17502,
+    "2026": 22880
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -17734,
+    "BANKNIFTY:2024": -6529,
+    "BANKNIFTY:2025": -24143,
+    "BANKNIFTY:2026": 3759,
+    "NIFTY:2023": 6674,
+    "NIFTY:2024": 35812,
+    "NIFTY:2025": 6641,
+    "NIFTY:2026": 19121
+   }
+  },
+  {
+   "setting": "11:45 share 0.9 stop vwap band 1.75 be 1.0",
+   "train_2023_25": {
+    "n": 135,
+    "net": 6296,
+    "pf": 1.05,
+    "max_fall": -35201,
+    "win_pct": 36
+   },
+   "y2026": {
+    "n": 40,
+    "net": 31962,
+    "pf": 1.98,
+    "max_fall": -7369,
+    "win_pct": 35
+   },
+   "by_year": {
+    "2023": -8460,
+    "2024": 35428,
+    "2025": -20672,
+    "2026": 31962
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -17838,
+    "BANKNIFTY:2024": -2362,
+    "BANKNIFTY:2025": -23703,
+    "BANKNIFTY:2026": 7883,
+    "NIFTY:2023": 9378,
+    "NIFTY:2024": 37790,
+    "NIFTY:2025": 3031,
+    "NIFTY:2026": 24079
+   }
+  },
+  {
+   "setting": "11:45 share 0.9 stop 2.0 band 1.0 be 0",
+   "train_2023_25": {
+    "n": 275,
+    "net": -8119,
+    "pf": 0.98,
+    "max_fall": -44940,
+    "win_pct": 36
+   },
+   "y2026": {
+    "n": 68,
+    "net": 35944,
+    "pf": 1.46,
+    "max_fall": -28353,
+    "win_pct": 44
+   },
+   "by_year": {
+    "2023": -8828,
+    "2024": 3948,
+    "2025": -3239,
+    "2026": 35944
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -26450,
+    "BANKNIFTY:2024": -5965,
+    "BANKNIFTY:2025": -16329,
+    "BANKNIFTY:2026": 24320,
+    "NIFTY:2023": 17622,
+    "NIFTY:2024": 9913,
+    "NIFTY:2025": 13091,
+    "NIFTY:2026": 11624
+   }
+  },
+  {
+   "setting": "11:45 share 0.9 stop 2.0 band 1.0 be 1.0",
+   "train_2023_25": {
+    "n": 275,
+    "net": -7256,
+    "pf": 0.98,
+    "max_fall": -44462,
+    "win_pct": 30
+   },
+   "y2026": {
+    "n": 68,
+    "net": 41143,
+    "pf": 1.64,
+    "max_fall": -25394,
+    "win_pct": 38
+   },
+   "by_year": {
+    "2023": -4443,
+    "2024": 969,
+    "2025": -3783,
+    "2026": 41143
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -24844,
+    "BANKNIFTY:2024": -7968,
+    "BANKNIFTY:2025": -16846,
+    "BANKNIFTY:2026": 23166,
+    "NIFTY:2023": 20402,
+    "NIFTY:2024": 8937,
+    "NIFTY:2025": 13064,
+    "NIFTY:2026": 17977
+   }
+  },
+  {
+   "setting": "11:45 share 0.9 stop 2.0 band 1.75 be 0",
+   "train_2023_25": {
+    "n": 162,
+    "net": 14688,
+    "pf": 1.08,
+    "max_fall": -28067,
+    "win_pct": 39
+   },
+   "y2026": {
+    "n": 44,
+    "net": 28467,
+    "pf": 1.59,
+    "max_fall": -13569,
+    "win_pct": 48
+   },
+   "by_year": {
+    "2023": -6000,
+    "2024": 17751,
+    "2025": 2936,
+    "2026": 28467
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -11590,
+    "BANKNIFTY:2024": -5706,
+    "BANKNIFTY:2025": -13141,
+    "BANKNIFTY:2026": 14907,
+    "NIFTY:2023": 5590,
+    "NIFTY:2024": 23457,
+    "NIFTY:2025": 16078,
+    "NIFTY:2026": 13560
+   }
+  },
+  {
+   "setting": "11:45 share 0.9 stop 2.0 band 1.75 be 1.0",
+   "train_2023_25": {
+    "n": 162,
+    "net": 13868,
+    "pf": 1.08,
+    "max_fall": -28675,
+    "win_pct": 32
+   },
+   "y2026": {
+    "n": 44,
+    "net": 17956,
+    "pf": 1.51,
+    "max_fall": -10610,
+    "win_pct": 41
+   },
+   "by_year": {
+    "2023": -1018,
+    "2024": 14602,
+    "2025": 284,
+    "2026": 17956
+   },
+   "by_index_year": {
+    "BANKNIFTY:2023": -12315,
+    "BANKNIFTY:2024": -6721,
+    "BANKNIFTY:2025": -11873,
+    "BANKNIFTY:2026": 7395,
+    "NIFTY:2023": 11297,
+    "NIFTY:2024": 21323,
+    "NIFTY:2025": 12157,
+    "NIFTY:2026": 10561
+   }
+  }
+ ],
+ "final": {
+  "risk": {
+   "capital": 200000,
+   "current": {
+    "train_2023_25": {
+     "n": 721,
+     "net": 130963,
+     "pf": 1.21,
+     "max_fall": -50663,
+     "win_pct": 28
+    },
+    "y2026": {
+     "n": 168,
+     "net": 104659,
+     "pf": 1.74,
+     "max_fall": -19740,
+     "win_pct": 35
+    },
+    "by_year": {
+     "2023": 22447,
+     "2024": 93534,
+     "2025": 14983,
+     "2026": 104659
+    },
+    "by_index_year": {
+     "BANKNIFTY:2023": 29227,
+     "BANKNIFTY:2024": 53607,
+     "BANKNIFTY:2025": -30886,
+     "BANKNIFTY:2026": 28647,
+     "NIFTY:2023": -6780,
+     "NIFTY:2024": 39927,
+     "NIFTY:2025": 45869,
+     "NIFTY:2026": 76012
+    }
+   },
+   "trend_only": {
+    "train_2023_25": {
+     "n": 192,
+     "net": 60575,
+     "pf": 1.33,
+     "max_fall": -48413,
+     "win_pct": 36
+    },
+    "y2026": {
+     "n": 62,
+     "net": 16181,
+     "pf": 1.25,
+     "max_fall": -15469,
+     "win_pct": 34
+    },
+    "by_year": {
+     "2023": 24262,
+     "2024": 65052,
+     "2025": -28739,
+     "2026": 16181
+    },
+    "by_index_year": {
+     "BANKNIFTY:2023": 10806,
+     "BANKNIFTY:2024": 26026,
+     "BANKNIFTY:2025": -27883,
+     "BANKNIFTY:2026": -9528,
+     "NIFTY:2023": 13456,
+     "NIFTY:2024": 39025,
+     "NIFTY:2025": -855,
+     "NIFTY:2026": 25709
+    }
+   },
+   "improved": {
+    "train_2023_25": {
+     "n": 913,
+     "net": 191538,
+     "pf": 1.23,
+     "max_fall": -73729,
+     "win_pct": 30
+    },
+    "y2026": {
+     "n": 230,
+     "net": 120840,
+     "pf": 1.58,
+     "max_fall": -27062,
+     "win_pct": 35
+    },
+    "by_year": {
+     "2023": 46709,
+     "2024": 158586,
+     "2025": -13756,
+     "2026": 120840
+    },
+    "by_index_year": {
+     "BANKNIFTY:2023": 40033,
+     "BANKNIFTY:2024": 79633,
+     "BANKNIFTY:2025": -58770,
+     "BANKNIFTY:2026": 19119,
+     "NIFTY:2023": 6676,
+     "NIFTY:2024": 78953,
+     "NIFTY:2025": 45013,
+     "NIFTY:2026": 101721
+    }
+   },
+   "months_2026": {
+    "2026-01": {
+     "current": {
+      "n": 15,
+      "net": -12354
+     },
+     "trend": {
+      "n": 7,
+      "net": -2939
+     },
+     "improved": {
+      "n": 22,
+      "net": -15293
+     }
+    },
+    "2026-02": {
+     "current": {
+      "n": 19,
+      "net": 22707
+     },
+     "trend": {
+      "n": 7,
+      "net": 8293
+     },
+     "improved": {
+      "n": 26,
+      "net": 31000
+     }
+    },
+    "2026-03": {
+     "current": {
+      "n": 4,
+      "net": 11910
+     },
+     "trend": {
+      "n": 5,
+      "net": 10033
+     },
+     "improved": {
+      "n": 9,
+      "net": 21943
+     }
+    },
+    "2026-04": {
+     "current": {
+      "n": 10,
+      "net": 18552
+     },
+     "trend": {
+      "n": 4,
+      "net": -8885
+     },
+     "improved": {
+      "n": 14,
+      "net": 9667
+     }
+    },
+    "2026-05": {
+     "current": {
+      "n": 16,
+      "net": -872
+     },
+     "trend": {
+      "n": 7,
+      "net": 17
+     },
+     "improved": {
+      "n": 23,
+      "net": -855
+     }
+    },
+    "2026-06": {
+     "current": {
+      "n": 22,
+      "net": 36021
+     },
+     "trend": {
+      "n": 4,
+      "net": 7791
+     },
+     "improved": {
+      "n": 26,
+      "net": 43811
+     }
+    },
+    "2026-07": {
+     "current": {
+      "n": 29,
+      "net": 12947
+     },
+     "trend": {
+      "n": 8,
+      "net": -9833
+     },
+     "improved": {
+      "n": 37,
+      "net": 3114
+     }
+    },
+    "2026-08": {
+     "current": {
+      "n": 21,
+      "net": -1913
+     },
+     "trend": {
+      "n": 8,
+      "net": -4086
+     },
+     "improved": {
+      "n": 29,
+      "net": -5999
+     }
+    },
+    "2026-09": {
+     "current": {
+      "n": 20,
+      "net": 735
+     },
+     "trend": {
+      "n": 6,
+      "net": 10411
+     },
+     "improved": {
+      "n": 26,
+      "net": 11147
+     }
+    },
+    "2026-10": {
+     "current": {
+      "n": 12,
+      "net": 16927
+     },
+     "trend": {
+      "n": 6,
+      "net": 5379
+     },
+     "improved": {
+      "n": 18,
+      "net": 22306
+     }
+    }
+   },
+   "trend_trades_on_days_current_had_none": 12,
+   "trend_trades": 254
+  },
+  "one_lot": {
+   "capital": 20000,
+   "current": {
+    "train_2023_25": {
+     "n": 600,
+     "net": 38470,
+     "pf": 1.07,
+     "max_fall": -52914,
+     "win_pct": 27
+    },
+    "y2026": {
+     "n": 131,
+     "net": 86815,
+     "pf": 1.85,
+     "max_fall": -23735,
+     "win_pct": 36
+    },
+    "by_year": {
+     "2023": -265,
+     "2024": -4659,
+     "2025": 43394,
+     "2026": 86815
+    },
+    "by_index_year": {
+     "BANKNIFTY:2023": 6828,
+     "BANKNIFTY:2024": -35625,
+     "BANKNIFTY:2025": 828,
+     "BANKNIFTY:2026": 23903,
+     "NIFTY:2023": -7093,
+     "NIFTY:2024": 30966,
+     "NIFTY:2025": 42566,
+     "NIFTY:2026": 62912
+    }
+   },
+   "trend_only": {
+    "train_2023_25": {
+     "n": 198,
+     "net": 27125,
+     "pf": 1.13,
+     "max_fall": -43399,
+     "win_pct": 35
+    },
+    "y2026": {
+     "n": 49,
+     "net": 42565,
+     "pf": 2.16,
+     "max_fall": -6718,
+     "win_pct": 43
+    },
+    "by_year": {
+     "2023": 6851,
+     "2024": 42656,
+     "2025": -22382,
+     "2026": 42565
+    },
+    "by_index_year": {
+     "BANKNIFTY:2023": -8018,
+     "BANKNIFTY:2024": 422,
+     "BANKNIFTY:2025": -13406,
+     "BANKNIFTY:2026": 16894,
+     "NIFTY:2023": 14869,
+     "NIFTY:2024": 42234,
+     "NIFTY:2025": -8976,
+     "NIFTY:2026": 25670
+    }
+   },
+   "improved": {
+    "train_2023_25": {
+     "n": 798,
+     "net": 65595,
+     "pf": 1.09,
+     "max_fall": -66641,
+     "win_pct": 29
+    },
+    "y2026": {
+     "n": 180,
+     "net": 129380,
+     "pf": 1.93,
+     "max_fall": -26535,
+     "win_pct": 38
+    },
+    "by_year": {
+     "2023": 6586,
+     "2024": 37997,
+     "2025": 21012,
+     "2026": 129380
+    },
+    "by_index_year": {
+     "BANKNIFTY:2023": -1190,
+     "BANKNIFTY:2024": -35204,
+     "BANKNIFTY:2025": -12578,
+     "BANKNIFTY:2026": 40797,
+     "NIFTY:2023": 7776,
+     "NIFTY:2024": 73200,
+     "NIFTY:2025": 33590,
+     "NIFTY:2026": 88583
+    }
+   },
+   "months_2026": {
+    "2026-01": {
+     "current": {
+      "n": 17,
+      "net": -21491
+     },
+     "trend": {
+      "n": 9,
+      "net": -2800
+     },
+     "improved": {
+      "n": 26,
+      "net": -24290
+     }
+    },
+    "2026-02": {
+     "current": {
+      "n": 16,
+      "net": 29730
+     },
+     "trend": {
+      "n": 7,
+      "net": 8973
+     },
+     "improved": {
+      "n": 23,
+      "net": 38703
+     }
+    },
+    "2026-03": {
+     "current": {
+      "n": 3,
+      "net": 5671
+     },
+     "trend": {
+      "n": 5,
+      "net": 13424
+     },
+     "improved": {
+      "n": 8,
+      "net": 19094
+     }
+    },
+    "2026-04": {
+     "current": {
+      "n": 9,
+      "net": 9606
+     },
+     "trend": {
+      "n": 3,
+      "net": -6701
+     },
+     "improved": {
+      "n": 12,
+      "net": 2905
+     }
+    },
+    "2026-05": {
+     "current": {
+      "n": 10,
+      "net": 2996
+     },
+     "trend": {
+      "n": 2,
+      "net": 4936
+     },
+     "improved": {
+      "n": 12,
+      "net": 7931
+     }
+    },
+    "2026-06": {
+     "current": {
+      "n": 15,
+      "net": 23136
+     },
+     "trend": {
+      "n": 3,
+      "net": 9245
+     },
+     "improved": {
+      "n": 18,
+      "net": 32381
+     }
+    },
+    "2026-07": {
+     "current": {
+      "n": 21,
+      "net": 8795
+     },
+     "trend": {
+      "n": 5,
+      "net": -4606
+     },
+     "improved": {
+      "n": 26,
+      "net": 4189
+     }
+    },
+    "2026-08": {
+     "current": {
+      "n": 19,
+      "net": -3114
+     },
+     "trend": {
+      "n": 7,
+      "net": -1181
+     },
+     "improved": {
+      "n": 26,
+      "net": -4294
+     }
+    },
+    "2026-09": {
+     "current": {
+      "n": 13,
+      "net": 11678
+     },
+     "trend": {
+      "n": 4,
+      "net": 10350
+     },
+     "improved": {
+      "n": 17,
+      "net": 22028
+     }
+    },
+    "2026-10": {
+     "current": {
+      "n": 8,
+      "net": 19809
+     },
+     "trend": {
+      "n": 4,
+      "net": 10923
+     },
+     "improved": {
+      "n": 12,
+      "net": 30732
+     }
+    }
+   },
+   "trend_trades_on_days_current_had_none": 9,
+   "trend_trades": 247
+  }
+ }
+}

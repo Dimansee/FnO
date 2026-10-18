@@ -302,7 +302,7 @@ bars on that side of VWAP, stop = VWAP distance + 0.5 ATR (1-3 ATR), stop to ent
 | Current + catcher | +6.6k | +38.0k | +21.0k | +129.4k |
 
 Caveats: it does **not** fire on 13 Oct (price spent the 09:15-09:45 dip below VWAP, so the 80% rule failed) - it is a second,
-slower-exit position on trend days, not a fix for that day. 95% of its trades are on days the current rules also trade, same
-direction, so it mostly adds exposure on trending days: more profit in 3 of 4 years, a deeper fall (-50.7k → -73.7k on training).
+slower-exit position on trend days, not a fix for that day. 95% of its trades (242 of 254) are on days the current rules also
+trade, so it mostly adds exposure on trending days: more profit in 3 of 4 years, a deeper fall (-50.7k → -73.7k on training).
 Nifty carries it (+13k / +39k / -1k / +26k); Bank Nifty is about flat overall. Decision: shipped as a separate strategy
 ("trend", own slot) in paper Autopilot and as an option in Settings and the Backtest tab; the live record decides real money.
