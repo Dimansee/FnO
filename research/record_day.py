@@ -26,7 +26,8 @@ ROOT = "research/data/live"
 APP = (os.environ.get("FNO_APP_URL") or "https://fno-trainer.vercel.app").rstrip("/")
 LOOKBACK = int(os.environ.get("RECORD_LOOKBACK", "7"))
 STRIKE_WIDTH = 0.04
-INDEX = {"NIFTY": "NSE_INDEX|Nifty 50", "BANKNIFTY": "NSE_INDEX|Nifty Bank", "FINNIFTY": "NSE_INDEX|Nifty Fin Service"}
+INDEX = {"NIFTY": "NSE_INDEX|Nifty 50", "BANKNIFTY": "NSE_INDEX|Nifty Bank", "FINNIFTY": "NSE_INDEX|Nifty Fin Service",
+         "SENSEX": "BSE_INDEX|SENSEX"}   # Sensex (BSE) added Oct 2026 (round 27 trades it): index, near future and options
 VIX = "NSE_INDEX|India VIX"
 IST = timezone(timedelta(hours=5, minutes=30))
 UP = requests.Session(); UP.headers.update({"Accept": "application/json"})
@@ -74,6 +75,11 @@ def master():
     if _master is None:
         raw = requests.get("https://assets.upstox.com/market-quote/instruments/exchange/NSE.json.gz", timeout=90).content
         _master = json.loads(gzip.decompress(raw))
+        try:                                          # BSE F&O (Sensex); a failure here must not stop the NSE recording
+            rb = requests.get("https://assets.upstox.com/market-quote/instruments/exchange/BSE.json.gz", timeout=90).content
+            _master += [m for m in json.loads(gzip.decompress(rb)) if m.get("segment") == "BSE_FO"]
+        except Exception as e:
+            log("BSE instrument master failed:", e)
     return _master
 
 
@@ -98,7 +104,7 @@ def record_candles(d: date, out: str, man: dict):
         return False                                  # holiday, or data not out yet
     cs, err = candles(VIX, d)
     add("INDIAVIX", "IDX", None, None, cs)
-    fo = [m for m in master() if m.get("segment") == "NSE_FO" and m.get("underlying_symbol") in spot]
+    fo = [m for m in master() if m.get("segment") in ("NSE_FO", "BSE_FO") and m.get("underlying_symbol") in spot]
     futs = sorted((m for m in fo if m.get("instrument_type") == "FUT" and exp_date(m["expiry"]) >= d), key=lambda m: m["expiry"])
     for sym in spot:
         f = next((m for m in futs if m["underlying_symbol"] == sym), None)

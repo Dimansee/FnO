@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r28",
+   "date": "2026-10-18",
+   "area": "Index options",
+   "title": "Round 28: risk of the round-27 rule set at Rs 2 lakh and Rs 20k; Sensex option recording; Backtest 'Autopilot rules'",
+   "asked": "After round 27 changed which rules trade on each index, how does a year look at Rs 2 lakh and at Rs 20,000?",
+   "result": "Rolling 12-month windows (34), 1% risk compounding. Rs 2 lakh: median +24.9% (old set +18.9%), worst -4.3% (old -53.0%), losing windows 6% (old 24%), falls over 25% in 32% of windows (old 62%). Rs 20,000: median -49.0% (old -52.6%), 62% of windows end unable to buy a lot (old 68%).",
+   "decision": "Information. Recorder now saves Sensex options; Backtest tab defaults to Autopilot rules per index.",
+   "summary": "The round-27 set is much steadier at Rs 2 lakh. Rs 20,000 remains too small: one lot is about a tenth of the account.",
+   "period": "2023-01 to 2026-10-16, 34 rolling 12-month windows"
+  },
+  {
    "id": "r27",
    "date": "2026-10-18",
    "area": "Index options",
@@ -852,6 +863,22 @@
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
  "pending": [
+  {
+   "id": "p-sensex-real",
+   "area": "Index options",
+   "title": "Sensex trades vs real option prices",
+   "waiting_for": "Live market data",
+   "why": "Sensex was added to Autopilot on modelled premiums; its real option candles are recorded only from 19 Oct 2026.",
+   "collecting": "Nightly recorder (BSE F&O)",
+   "since": "2026-10-19",
+   "need": 60,
+   "unit": "sessions",
+   "refs": [
+    "r24",
+    "r27"
+   ],
+   "next": "Re-price Sensex Noise / catcher trades on real candles; drop Sensex from Autopilot if real results are clearly worse than the model."
+  },
   {
    "id": "p-trend",
    "area": "Index options",

@@ -430,3 +430,18 @@ Camarilla share a slot per index, catcher its own): **2023-25 +₹197k vs +₹15
 2026 +₹98k vs +₹91k** → adopted for Autopilot (Bank Nifty: Noise + Camarilla; Sensex: Noise + catcher; Nifty: all three).
 Re-picking rules by their recent record lost to the fixed pick in every test - rules that did well lately do not keep doing well, so
 the app does not rotate rules on recent results (the learning engine only vetoes / halves with strict evidence).
+
+## Round 28 — risk of the round-27 set, Sensex recording, Backtest "Autopilot rules" (`round28.py`, results `round28_results.json`)
+Same rolling test as round 25 (1% risk, compounding, app sizing / cash / weekly cap / catcher gate, 34 windows Jan 2023 - Oct 2025):
+
+| | Median 12 months | Worst 12 months | Losing windows | Windows with a fall > 25% |
+|---|---|---|---|---|
+| ₹2 lakh, old set | +18.9% | -53.0% | 24% | 62% |
+| **₹2 lakh, round-27 set** | **+24.9%** | **-4.3%** | **6%** | **32%** |
+| ₹20,000, old set | -52.6% | -65.4% | 74% | 100% (68% end unable to buy a lot) |
+| ₹20,000, round-27 set | -49.0% | -73.5% | 74% | 100% (62% end unable to buy a lot) |
+
+The round-27 pick mostly removed the 2025-type losing stretch (Bank Nifty catcher), which is why the worst ₹2 lakh window went from
+-53% to -4%. A ₹20,000 account is still too small for these rules: one lot is ~10% of it, so normal losing streaks end most years.
+Also: `record_day.py` now records Sensex index, near future and options (BSE F&O) every evening so Sensex trades can be checked
+against real premiums; the Backtest tab has "Autopilot rules for this index" (default) - exactly what Autopilot trades on each index.

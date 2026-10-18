@@ -1,0 +1,42 @@
+{
+ "old set": {
+  "Rs 200,000": {
+   "median_12m": 18.9,
+   "worst_12m": -53.0,
+   "best_12m": 113.2,
+   "windows_losing_pct": 24,
+   "median_fall": -26.9,
+   "windows_fall_over_25_pct": 62,
+   "windows_ending_below_12k_pct": null
+  },
+  "Rs 20,000": {
+   "median_12m": -52.6,
+   "worst_12m": -65.4,
+   "best_12m": 414.2,
+   "windows_losing_pct": 74,
+   "median_fall": -65.8,
+   "windows_fall_over_25_pct": 100,
+   "windows_ending_below_12k_pct": 68
+  }
+ },
+ "round 27 set": {
+  "Rs 200,000": {
+   "median_12m": 24.9,
+   "worst_12m": -4.3,
+   "best_12m": 94.2,
+   "windows_losing_pct": 6,
+   "median_fall": -23.6,
+   "windows_fall_over_25_pct": 32,
+   "windows_ending_below_12k_pct": null
+  },
+  "Rs 20,000": {
+   "median_12m": -49.0,
+   "worst_12m": -73.5,
+   "best_12m": 454.8,
+   "windows_losing_pct": 74,
+   "median_fall": -65.1,
+   "windows_fall_over_25_pct": 100,
+   "windows_ending_below_12k_pct": 62
+  }
+ }
+}

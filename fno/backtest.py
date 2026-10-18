@@ -141,15 +141,20 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
         idx = list(day.index)
         lv = S.camarilla_levels(hist)
         day_trades = []
-        if strategy in ("trend", "all"):                   # round 23: own slot, not blocked by an open Noise / Camarilla trade
+        if strategy == "autopilot":                       # round 27: exactly what Autopilot trades on this index
+            ap = C.AUTOPILOT_SYM_STRATEGIES.get(symbol, C.AUTOPILOT_STRATEGIES)
+            main_strats = [x for x in ("noise", "camarilla") if x in ap]
+            do_trend = "trend" in ap
+        else:
+            main_strats = ["noise", "camarilla"] if strategy in ("both", "all") else ([] if strategy == "trend" else [strategy])
+            do_trend = strategy in ("trend", "all")
+        if do_trend:                   # round 23: own slot, not blocked by an open Noise / Camarilla trade
             res = _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing, otm, budget_pct, I.exch_rate(symbol))
             if isinstance(res, tuple):
                 skips[res[2]] += 1
             elif res:
                 trades.append(res)
-            if strategy == "trend":
-                continue
-        for strat in (["noise", "camarilla"] if strategy in ("both", "all") else [strategy]):
+        for strat in main_strats:
             if strat == "camarilla" and (not lv or vix_at(day.index[0]) > C.CAM_VIX_MAX):
                 continue
             if strat == "noise" and vix_at(day.index[0]) >= C.NOISE_VIX_MAX:
