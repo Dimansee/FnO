@@ -30,7 +30,8 @@ SETTINGS_KEY = "scalp"
 POS, TRADES = "fno:scalp:positions", "fno:scalp:trades"
 DAY = "fno:scalp:day:{d}:{s}"
 
-DEFAULTS = {"on": False, "syms": ["NIFTY"], "capital": 20_000, "conf": 65, "setups": "ABC", "levels_on_chart": True}
+DEFAULTS = {"on": False, "syms": ["NIFTY"], "capital": 20_000, "conf": 65, "setups": "ABC", "levels_on_chart": True,
+            "sizing": "max", "strike": "best"}   # max lots the cash buys; best of 2 ITM .. 2 OTM (as asked; see BACKTEST)
 
 # Tested governor values (scalping-spec study). Kept here, not in Settings: changing them is a research question.
 GOV = {"day_loss": 0.02, "peak": 0.015, "giveback": 0.40, "charges": 0.30, "charges_after": 5, "streak": 3,
@@ -46,7 +47,13 @@ BACKTEST = {
         {"name": "Bank Nifty - the rules as set here", "trades_per_day": 1.3, "win_pct": 16.7, "pf": 0.36,
          "years": {"2023": -67881, "2024": -90279, "2025": -102829, "2026": -82504}, "unseen_120d": -58580},
         {"name": "Nifty - no governor", "pf": 0.45, "years": {"2023": -245063, "2024": -225823, "2025": -290658, "2026": -256295}},
+        {"name": "Nifty - max lots of ₹20,000, best of 2 ITM..2 OTM (your sizing)", "pf": 0.57,
+         "years": {"2023": -85144, "2024": -50797, "2025": -65532, "2026": -60601}, "unseen_120d": -35196},
+        {"name": "Bank Nifty - max lots, best strike", "pf": 0.36, "years": {"2023": -71222, "2024": -45357, "2025": -68441, "2026": -38644}},
     ],
+    "compound": "Max lots + best strike on one real ₹20,000 account that compounds: Nifty never got above ₹20,000, fell under "
+                "₹10,000 by 17 Feb 2023 and could no longer buy a lot after 27 Jun 2023 (₹1,359 left); Bank Nifty ran out by "
+                "23 Oct 2023. The chooser mostly picked 2-OTM strikes (most lots).",
     "why": "Entries averaged +0.75 index points; 73% of trades hit the tight 1-minute stop; fees of ~Rs 72 a round trip "
            "roughly doubled the loss. The classifier found 84% of trend days in the right direction, and the governor cut "
            "losses about 4x versus no governor, but neither creates an edge. Matches round 7 (0 of 1,458 scalping rules profitable). "
@@ -73,6 +80,10 @@ def save_settings(new: dict) -> dict:
         cur["conf"] = max(0, min(100, int(new["conf"])))
     if "setups" in new:
         cur["setups"] = "".join(x for x in "ABC" if x in str(new["setups"]).upper()) or "ABC"
+    if new.get("sizing") in ("max", "1lot"):
+        cur["sizing"] = new["sizing"]
+    if new.get("strike") in ("best", "itm1"):
+        cur["strike"] = new["strike"]
     if "levels_on_chart" in new:
         cur["levels_on_chart"] = bool(new["levels_on_chart"])
     store.put(SETTINGS_KEY, cur)
@@ -458,6 +469,15 @@ def state(sym: str, m, now=None, cfg=None, chain=None) -> dict:
                           dict(_day_state(now.date().isoformat(), sym)["orb_done"]), cfg["setups"])
         if sig and mode != "none":
             cand = plan(x, i, sig, mode, sym, lot)
+            try:
+                exps, lot_now = m.expiries_and_lot(sym)
+                exp = I.pick_trading_expiry(exps, C.INDICES[sym]["expiry"], now.date()) or exps[0]
+                ch2 = chain if chain is not None else m.chain(sym, exp, spot, m.vix()["level"], m.candles(sym))
+                pick, why = pick_strike(ch2, sym, cand["side"], spot, min(cand["room"], 2 * cand["risk"]), exp, now, cash(cfg),
+                                        {**cfg, "lot": lot_now}, ch2.attrs.get("source") == "live", m.vix()["level"])
+                cand["pick"] = {**pick, "moneyness": moneyness(pick["itm"])} if pick else {"error": why}
+            except Exception as e:
+                cand["pick"] = {"error": str(e)[:120]}
     return {**out, "spot": spot, "bar": x["d1"]["ts"][i], "score": score, "dir": sdir, "mode": mode,
             "parts": [{"key": k, "label": PART_LABELS[k], "ok": v} for k, v in parts.items()],
             "opening_range": [x["orh"], x["orl"]] if x["d1"]["m"][i] + 1 >= 570 else None,
@@ -465,37 +485,87 @@ def state(sym: str, m, now=None, cfg=None, chain=None) -> dict:
             "vwap": round(float(x["d1"]["twap"][i]), 2), "ema9": round(float(x["d1"]["e9"][i]), 2)}
 
 
+STRIKES_BEST = (2, 1, 0, -1, -2)      # steps in-the-money: 2 ITM, 1 ITM, ATM, 1 OTM, 2 OTM
+
+
+def cash(cfg, trs=None, open_=None) -> float:
+    """Scalp book cash: capital + all realised scalp P&L - premium tied up in open scalp positions (it compounds)."""
+    trs = trades() if trs is None else trs
+    open_ = positions() if open_ is None else open_
+    return cfg["capital"] + sum(t["pnl"] for t in trs) - sum(p["entry_prem"] * p["qty"] for p in open_)
+
+
+def pick_strike(ch, sym, side, spot, tgt, exp, now, cash_, cfg, live, vix=14.0):
+    """Choose the strike and quantity. sizing 'max' buys as many lots as the cash allows; strike 'best' compares
+    2 ITM .. 2 OTM and keeps the one with the highest expected net profit (after fees and spread) if the index moves
+    `tgt` points in the next 10 minutes - the same rule as research/scalp_spec.py. Returns (choice dict, None) or
+    (None, reason)."""
+    from .market import slip_pct, demo_iv
+    meta = C.INDICES[sym]
+    step, lot = meta["step"], int(cfg.get("lot") or meta["lot"])
+    opt, tag = ("CE", "ce") if side > 0 else ("PE", "pe")
+    atm = round(spot / step) * step
+    ok = lambda v: v is not None and not (isinstance(v, float) and math.isnan(v)) and float(v) > 0
+    itms = STRIKES_BEST if cfg.get("strike", "best") == "best" else (1,)
+    t_later = I.years_to_expiry(exp, now + timedelta(minutes=10))
+    best, why = None, "no strike in the option chain"
+    for itm in itms:
+        k = atm - side * itm * step
+        row = ch[ch["strike"] == float(k)]
+        if row.empty:
+            continue
+        r = row.iloc[0]
+        ltp, ask, bid = (r.get(f"{tag}_{f}") for f in ("ltp", "ask", "bid"))
+        if not ok(ltp):
+            continue
+        if ok(ask) and ok(bid) and (float(ask) - float(bid)) / float(ask) > C.MAX_SPREAD_PCT:
+            why = f"{k:g} {opt} spread too wide"
+            continue
+        buy = float(ask) if ok(ask) else round(float(ltp) * (1 + (slip_pct(float(ltp)) if live else 0)), 2)
+        if cfg.get("sizing", "max") == "max":
+            lots = int(cash_ * 0.95 // (buy * lot))
+        else:
+            lots = 1 if buy * lot <= cash_ * 0.95 else 0
+        if lots <= 0:
+            why = f"1 lot of {k:g} {opt} costs ₹{buy * lot:,.0f}, more than the scalp book's cash ₹{cash_:,.0f}"
+            continue
+        ivv = r.get(f"{tag}_iv")
+        iv = float(ivv) / 100 if ok(ivv) else demo_iv(sym, k, spot, vix)
+        later = I.bs_price(spot + side * tgt, k, t_later, iv, opt)
+        sell = later * (1 - slip_pct(later))
+        q = lots * lot
+        val = (sell - buy) * q - I.charges(buy, sell, q, exch_pct=I.exch_rate(sym))
+        dl = r.get(f"{tag}_delta")
+        cand = {"strike": float(k), "itm": itm, "opt": opt, "key": r[f"{tag}_key"], "price": buy, "lots": lots, "qty": q,
+                "expected": round(val, 2), "delta": abs(float(dl)) if ok(abs(float(dl or 0))) else 0.5}
+        if best is None or val > best["expected"]:
+            best = cand
+    return (best, None) if best else (None, why)
+
+
+def moneyness(itm):
+    return "ATM" if itm == 0 else f"{abs(itm)} {'ITM' if itm > 0 else 'OTM'}"
+
+
 def _open(sym, x, i, pl, m, now, cfg) -> tuple[bool, str]:
-    from .market import slip_pct
     exps, lot = m.expiries_and_lot(sym)
     exp = I.pick_trading_expiry(exps, C.INDICES[sym]["expiry"], now.date()) or exps[0]
     spot = pl["entry"]
-    ch = m.chain(sym, exp, spot, m.vix()["level"], m.candles(sym))
-    step = C.INDICES[sym]["step"]
-    strike = round(spot / step) * step - pl["side"] * step              # 1 strike in-the-money
-    opt, tag = ("CE", "ce") if pl["side"] > 0 else ("PE", "pe")
-    row = ch[ch["strike"] == float(strike)]
-    if row.empty:
-        return False, f"{strike:g} {opt} not in the option chain"
-    r = row.iloc[0]
-    ltp, ask, bid = (r.get(f"{tag}_{k}") for k in ("ltp", "ask", "bid"))
-    ok = lambda v: v is not None and not (isinstance(v, float) and math.isnan(v)) and float(v) > 0
-    if not ok(ltp):
-        return False, "no option price"
+    vix = m.vix()["level"]
+    ch = m.chain(sym, exp, spot, vix, m.candles(sym))
     live = ch.attrs.get("source") == "live"
-    price = float(ask) if ok(ask) else round(float(ltp) * (1 + (slip_pct(float(ltp)) if live else 0)), 2)
-    if ok(ask) and ok(bid) and (float(ask) - float(bid)) / float(ask) > C.MAX_SPREAD_PCT:
-        return False, f"{strike:g} {opt} spread too wide"
-    if price * lot > cfg["capital"] * 0.95:
-        return False, f"1 lot costs ₹{price * lot:,.0f}, more than the scalp book's capital"
-    delta = abs(float(r.get(f"{tag}_delta"))) if ok(abs(float(r.get(f"{tag}_delta") or 0))) else 0.6
+    c_, why = pick_strike(ch, sym, pl["side"], spot, min(pl["room"], 2 * pl["risk"]), exp, now, cash(cfg), {**cfg, "lot": lot}, live, vix)
+    if c_ is None:
+        return False, why
     pos = {"id": uuid.uuid4().hex[:8], "symbol": sym, "opened": now.isoformat(timespec="seconds"), "expiry": str(exp),
-           "legs": [{"side": "BUY", "strike": float(strike), "opt": opt, "key": r[f"{tag}_key"], "price": price,
+           "legs": [{"side": "BUY", "strike": c_["strike"], "opt": c_["opt"], "key": c_["key"], "price": c_["price"],
                      "src": m.br.name if live and m.br else "demo"}],
-           "lot": int(lot), "qty": int(lot), "entry_prem": price, "delta": delta, "source": m.source,
+           "lot": int(lot), "lots": c_["lots"], "qty": c_["qty"], "itm": c_["itm"], "expected": c_["expected"],
+           "entry_prem": c_["price"], "delta": c_["delta"], "source": m.source,
            "entry_m": int(x["d1"]["m"][i]), "last_m": int(x["d1"]["m"][i]), "hi_fav": pl["entry"], "trail_on": False, **pl}
     _save_pos(pos)
-    return True, f"Scalp {pl['tag']} {sym} {strike:g}{opt} at ₹{price:.2f} (stop {pos['stop']:.1f}, conf {pl['conf']:.0f})"
+    return True, (f"Scalp {pl['tag']} {sym} {c_['strike']:g}{c_['opt']} ({moneyness(c_['itm'])}) × {c_['lots']} lot(s) at ₹{c_['price']:.2f} "
+                  f"(stop {pos['stop']:.1f}, conf {pl['conf']:.0f})")
 
 
 def _close(p, idx_px, why, m, now, spot=None) -> dict | None:
@@ -517,7 +587,7 @@ def _close(p, idx_px, why, m, now, spot=None) -> dict | None:
     chg = I.charges(p["entry_prem"], sell, p["qty"], exch_pct=I.exch_rate(p["symbol"]))
     rec = {"id": p["id"], "symbol": p["symbol"], "tag": p["tag"], "side": p["side"], "mode": p["mode"], "opened": p["opened"],
            "closed": now.isoformat(timespec="seconds"), "strike": lg["strike"], "opt": lg["opt"], "expiry": p["expiry"],
-           "qty": p["qty"], "entry_prem": p["entry_prem"], "exit_prem": round(sell, 2), "gross": round(gross, 2),
+           "qty": p["qty"], "lots": p.get("lots", 1), "itm": p.get("itm", 1), "entry_prem": p["entry_prem"], "exit_prem": round(sell, 2), "gross": round(gross, 2),
            "charges": round(chg, 2), "pnl": round(gross - chg, 2), "reason": why, "entry_spot": p["entry"],
            "exit_spot": round(float(idx_px), 2), "pts": round(p["side"] * (idx_px - p["entry"]), 2), "risk": p["risk"],
            "conf": p["conf"], "price_src": "live" if lg.get("src", "demo") != "demo" else "formula"}
@@ -661,5 +731,5 @@ def page(m=None) -> dict:
             p["current_prem"] = cur
             p["unrealised"] = round((cur - p["entry_prem"]) * p["qty"], 2) if cur is not None else None
     return {"settings": cfg, "state": st, "positions": open_, "trades": trs[-300:][::-1], "summary": summary(trs),
-            "equity": round(cfg["capital"] + sum(t["pnl"] for t in trs), 2), "backtest": BACKTEST, "gov_rules": GOV,
+            "equity": round(cfg["capital"] + sum(t["pnl"] for t in trs), 2), "cash": round(cash(cfg, trs, open_), 2), "backtest": BACKTEST, "gov_rules": GOV,
             "source": m.source, "errors": list(dict.fromkeys(m.errors))[:5]}

@@ -243,3 +243,18 @@ stop, confidence 80) negative in all four years on both indices.
 - Decision: not adopted. Built as a separate, paper-only **Scalp book** (own ledger and capital, off by default) so the rules can be
   watched live; the live functions reproduce this backtest exactly (day type on 28,720 bars, 440 trades: same setup, stop, exit
   bar and reason — `tests/test_scalp.py`).
+
+**Sizing follow-up (same day):** "buy the most lots the cash allows, and pick the strike among 2 ITM … 2 OTM that gives the most profit".
+Strike chosen per signal by the best expected net profit (fees and spread included) if the index reaches the target (next level, max 2R)
+within 10 minutes — the same rule the live Scalp book uses (`pick_strike`).
+
+| ₹20,000 | 2023 | 2024 | 2025 | 2026 | PF | strikes picked |
+|---|---|---|---|---|---|---|
+| Nifty, 1 lot 1 ITM (spec) | −59.3k | −46.7k | −59.8k | −52.9k | 0.45 | all 1 ITM |
+| Nifty, max lots 1 ITM | −79.4k | −52.2k | −62.5k | −50.9k | 0.46 | all 1 ITM |
+| Nifty, max lots best strike | −85.1k | −50.8k | −65.5k | −60.6k | 0.57 | 71% 2-OTM / 1-OTM |
+| Bank Nifty, max lots best strike | −71.2k | −45.4k | −68.4k | −38.6k | 0.36 | mixed |
+
+(Rows above refill ₹20,000 every day.) On one real compounding ₹20,000 account, Nifty max lots + best strike never rose above ₹20,000,
+was under ₹10,000 by 17 Feb 2023 and could no longer afford a lot after 27 Jun 2023 (₹1,359 left); Bank Nifty ran out by 23 Oct 2023.
+Bigger size and cheaper OTM strikes magnify a losing edge. Built anyway as the Scalp book's default sizing (paper only), with this result on the page.

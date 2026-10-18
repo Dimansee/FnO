@@ -667,6 +667,8 @@ details summary{cursor:pointer;font-size:13px}
       <div class="row wrap" style="gap:16px;margin-top:10px">
         <label style="margin:0">Capital ₹ <input id="scCap" type="number" min="5000" step="1000" style="width:120px"></label>
         <label style="margin:0">Min confidence <input id="scConf" type="number" min="0" max="100" style="width:80px"></label>
+        <label style="margin:0">Size <select id="scSizing"><option value="max">Max lots the cash buys</option><option value="1lot">1 lot</option></select></label>
+        <label style="margin:0">Strike <select id="scStrike"><option value="best">Best of 2 ITM … 2 OTM</option><option value="itm1">1 strike ITM</option></select></label>
         <label style="margin:0">Setups <span class="chips" style="display:inline-flex"><label class="chip"><input type="checkbox" id="scA"> A breakout</label><label class="chip"><input type="checkbox" id="scB"> B pullback</label><label class="chip"><input type="checkbox" id="scC"> C retest</label></span></label>
         <button class="primary" id="scSave">Save</button>
       </div>
@@ -1050,7 +1052,7 @@ function scLive(sym, x) {
     <div class="cardhead"><h3 style="margin:0">${label} <span class="mono">${n2(x.spot)}</span></h3><span class="tag ${mc}">${mn} · ${x.score}/6 · ${dir}</span></div>
     <div class="muted" style="font-size:12px;margin-top:4px">last 1-min bar ${esc((x.bar || "").slice(11, 16))} · VWAP ${n2(x.vwap)} · EMA 9 ${n2(x.ema9)} · CPR width ${x.cpr_width_pct}%${x.opening_range ? ` · opening range ${n2(x.opening_range[1])}–${n2(x.opening_range[0])}` : ""}</div>
     <div style="margin-top:8px;font-size:13px">${(x.parts || []).map(p => `<div>${p.ok ? '<span class="up">✓</span>' : '<span class="muted">✗</span>'} ${esc(p.label)}</div>`).join("") || '<span class="muted">Day type is scored from 09:30.</span>'}</div>
-    <div class="${c ? "warn" : "note"}" style="margin-top:10px">${c ? `<b>Setup now: ${esc(SC_SETUP[c.tag])} ${c.side > 0 ? "(CALL)" : "(PUT)"}</b> · entry ${n2(c.entry)} · stop ${n2(c.stop)} (${n2(c.risk)} pts)${c.nl != null ? ` · next level ${n2(c.nl)}` : ""} · <b>confidence ${c.conf}</b>`
+    <div class="${c ? "warn" : "note"}" style="margin-top:10px">${c ? `<b>Setup now: ${esc(SC_SETUP[c.tag])} ${c.side > 0 ? "(CALL)" : "(PUT)"}</b> · entry ${n2(c.entry)} · stop ${n2(c.stop)} (${n2(c.risk)} pts)${c.nl != null ? ` · next level ${n2(c.nl)}` : ""} · <b>confidence ${c.conf}</b>${c.pick ? (c.pick.error ? `<br><span class="down">${esc(c.pick.error)}</span>` : `<br>Would buy <b>${c.pick.strike} ${c.pick.opt}</b> (${esc(c.pick.moneyness)}) × ${c.pick.lots} lot(s) = ${c.pick.qty} qty at ₹${n2(c.pick.price)} · cost ${rs(c.pick.price * c.pick.qty)} · expected ${rs(c.pick.expected)} if it reaches the target`) : ""}`
       : "No setup on the last 1-minute bar."}</div>
     <h4 style="margin:12px 0 6px">Support / resistance</h4>${scLevelsTable(z, x.spot)}
     <div class="muted" style="font-size:12px;margin-top:6px">${oi.call_wall != null ? `Call OI wall ${oi.call_wall} · Put OI wall ${oi.put_wall} · PCR ${oi.pcr}${oi.call_build ? ` · fresh call writing ${oi.call_build}` : ""}${oi.put_build ? ` · fresh put writing ${oi.put_build}` : ""}` : "Option-chain OI appears when a broker is connected."}</div>
@@ -1064,33 +1066,34 @@ async function loadScalp() {
     <p class="muted" style="font-size:13px;margin-top:4px">${esc(bt.period)}</p>
     <div class="tablewrap"><table><tr><th style="text-align:left">Test (1 lot)</th>${Y.map(y => `<th>${y}</th>`).join("")}<th>Profit factor</th></tr>
     ${bt.rows.map(r => `<tr><td style="text-align:left">${esc(r.name)}</td>${Y.map(y => `<td class="mono ${cls(r.years[y])}">${rs(r.years[y])}</td>`).join("")}<td class="mono">${r.pf}</td></tr>`).join("")}</table></div>
+    ${bt.compound ? `<div class="warn" style="margin-top:8px">${esc(bt.compound)}</div>` : ""}
     <p style="font-size:13px;margin-bottom:0">${esc(bt.why)} Keep it on paper and compare this book's journal with the table before trusting it.</p>`;
   $("#scOnPill").innerHTML = st.on ? '<span class="pill live"><span class="dot"></span><span>ON · paper</span></span>' : '<span class="pill demo"><span>OFF</span></span>';
   $("#scOn").checked = st.on; $("#scNifty").checked = st.syms.includes("NIFTY"); $("#scBank").checked = st.syms.includes("BANKNIFTY"); $("#scSensex").checked = st.syms.includes("SENSEX");
-  $("#scLv").checked = st.levels_on_chart !== false; $("#scCap").value = st.capital; $("#scConf").value = st.conf;
+  $("#scLv").checked = st.levels_on_chart !== false; $("#scCap").value = st.capital; $("#scConf").value = st.conf; $("#scSizing").value = st.sizing || "max"; $("#scStrike").value = st.strike || "best";
   ["A", "B", "C"].forEach(k => $("#sc" + k).checked = st.setups.includes(k));
   const g = d.gov_rules;
-  $("#scGovRules").textContent = `Governor (tested, fixed): stop for the day at −${g.day_loss * 100}% of capital or ${g.max_losses} losses; once the day peaks at +${g.peak * 100}%, stop when ${g.giveback * 100}% of it is given back; after ${g.charges_after} trades stop if fees exceed ${g.charges * 100}% of gross profit; ${g.streak} losses in a row pause ${g.pause_min} min; a setup that loses ${g.setup_losses}× is off for the day; skip trades with less than ${g.room_cost_x}× the fees of room to the next level. Each index trades 1 lot of the 1-strike-in-the-money option.`;
+  $("#scGovRules").textContent = `Governor (tested, fixed): stop for the day at −${g.day_loss * 100}% of capital or ${g.max_losses} losses; once the day peaks at +${g.peak * 100}%, stop when ${g.giveback * 100}% of it is given back; after ${g.charges_after} trades stop if fees exceed ${g.charges * 100}% of gross profit; ${g.streak} losses in a row pause ${g.pause_min} min; a setup that loses ${g.setup_losses}× is off for the day; skip trades with less than ${g.room_cost_x}× the fees of room to the next level. With Size = max lots, one stop-out can be bigger than the 2% day limit, so the day usually stops after the first loss.`;
   $("#scLive").innerHTML = Object.keys(IDX_LABEL).map(s => scLive(s, d.state[s] || {})).join("");
   Object.entries(d.state).forEach(([s, x]) => { if (x.zones) S.scalpLv[s] = {at: Date.now(), z: x.zones, mode: x.mode}; });
   $("#scPos").innerHTML = d.positions.length ? d.positions.map(p => { const l = p.legs[0]; return `
     <div class="leg" style="flex-wrap:wrap;gap:10px;padding:10px 12px">
-      <div style="flex:2;min-width:220px"><b>${esc(p.symbol)}</b> <span class="tag buy">BUY</span> ${l.strike}${l.opt} · ${esc(SC_SETUP[p.tag])}
+      <div style="flex:2;min-width:220px"><b>${esc(p.symbol)}</b> <span class="tag buy">BUY</span> ${l.strike}${l.opt} ${p.itm != null ? "(" + (p.itm === 0 ? "ATM" : Math.abs(p.itm) + (p.itm > 0 ? " ITM" : " OTM")) + ")" : ""} × ${p.lots || 1} lot(s) · ${p.qty} qty · ${esc(SC_SETUP[p.tag])}
         <div class="muted" style="font-size:12px">opened ${p.opened.slice(11, 16)} · index entry ${n2(p.entry)} · stop ${n2(p.stop)}${p.trail_on ? " (trailing)" : ""} · conf ${p.conf}</div></div>
       <div class="mono" style="flex:1">₹${n2(p.entry_prem)} → ₹${n2(p.current_prem)}</div>
       <div class="mono ${cls(p.unrealised)}" style="flex:1;font-weight:700">${rs(p.unrealised)}</div>
       <button class="danger" data-scexit="${p.id}">Exit</button></div>`; }).join("") : `<div class="empty">No open scalp position.</div>`;
   const s = d.summary || {};
-  $("#scKpis").innerHTML = kpi("Scalp book value", rs(d.equity), "started with " + rs(st.capital), "muted") +
+  $("#scKpis").innerHTML = kpi("Scalp book value", rs(d.equity), `started with ${rs(st.capital)} · cash ${rs(d.cash)}`, "muted") +
     kpi("Net P&L", `<span class="${cls(s.net)}">${rs(s.net || 0)}</span>`, s.trades ? `${s.trades} trades · ${s.per_day}/day` : "no trades yet", "muted") +
     kpi("Win rate · PF", s.trades ? `${s.win_pct}% · ${s.pf == null ? "∞" : s.pf}` : "–", s.trades ? `${s.green_days} of ${s.days} days green` : null, "muted") +
     kpi("Fees paid", rs(s.charges || 0), s.gross != null ? `gross before fees ${rs(s.gross)}` : null, "muted");
-  $("#scJournal").innerHTML = d.trades.length ? "<tr><th>Closed</th><th>Index</th><th>Setup</th><th>Mode</th><th>Option</th><th>Entry</th><th>Exit</th><th>Index pts</th><th>Fees</th><th>Net</th><th style='text-align:left'>Reason</th></tr>" +
+  $("#scJournal").innerHTML = d.trades.length ? "<tr><th>Closed</th><th>Index</th><th>Setup</th><th>Mode</th><th>Option</th><th>Lots</th><th>Entry</th><th>Exit</th><th>Index pts</th><th>Fees</th><th>Net</th><th style='text-align:left'>Reason</th></tr>" +
     d.trades.map(t => `<tr><td>${t.closed.slice(0, 16).replace("T", " ")}</td><td>${esc(t.symbol)}</td><td>${t.tag}</td><td>${esc((SC_MODE[t.mode] || [t.mode])[0])}</td>
-      <td>${t.strike}${t.opt}</td><td class="mono">${n2(t.entry_prem)}</td><td class="mono">${n2(t.exit_prem)}</td><td class="mono ${cls(t.pts)}">${sgn(t.pts)}</td>
+      <td>${t.strike}${t.opt}${t.itm != null ? ` <span class="muted">${t.itm === 0 ? "ATM" : Math.abs(t.itm) + (t.itm > 0 ? " ITM" : " OTM")}</span>` : ""}</td><td class="mono">${t.lots || 1}</td><td class="mono">${n2(t.entry_prem)}</td><td class="mono">${n2(t.exit_prem)}</td><td class="mono ${cls(t.pts)}">${sgn(t.pts)}</td>
       <td class="mono">${rs(t.charges)}</td><td class="mono ${cls(t.pnl)}"><b>${rs(t.pnl)}</b></td><td style="text-align:left">${esc(t.reason)}</td></tr>`).join("")
     : `<tr><td class="empty">Closed scalp trades will appear here.</td></tr>`;
-  $("#scCsv").onclick = () => downloadCsv("scalp_journal.csv", d.trades, ["opened", "closed", "symbol", "tag", "mode", "strike", "opt", "entry_prem", "exit_prem", "entry_spot", "exit_spot", "pts", "gross", "charges", "pnl", "conf", "reason"]);
+  $("#scCsv").onclick = () => downloadCsv("scalp_journal.csv", d.trades, ["opened", "closed", "symbol", "tag", "mode", "strike", "opt", "itm", "lots", "qty", "entry_prem", "exit_prem", "entry_spot", "exit_spot", "pts", "gross", "charges", "pnl", "conf", "reason"]);
   $("#scLive").insertAdjacentHTML("beforeend", (d.errors || []).length ? `<div class="err" style="grid-column:1/-1">${d.errors.map(esc).join("<br>")}</div>` : "");
 }
 $("#scSave").onclick = async () => {
@@ -1099,7 +1102,7 @@ $("#scSave").onclick = async () => {
   if ($("#scOn").checked && !(S.scalp && S.scalp.settings.on) &&
       !confirm("Switch the scalp book ON? It paper-trades automatically every minute. In the backtest these rules lost money every year (see the table).")) return;
   try {
-    await post("/api/scalp/settings", {on: $("#scOn").checked, syms, setups: setups || "ABC", capital: +$("#scCap").value, conf: +$("#scConf").value, levels_on_chart: $("#scLv").checked});
+    await post("/api/scalp/settings", {on: $("#scOn").checked, syms, setups: setups || "ABC", capital: +$("#scCap").value, conf: +$("#scConf").value, sizing: $("#scSizing").value, strike: $("#scStrike").value, levels_on_chart: $("#scLv").checked});
     toast("Scalp book settings saved."); S.scalpLv = {}; await loadScalp();
   } catch (e) { toast(e.message); }
 };

@@ -73,7 +73,18 @@
      "2024": -46686,
      "2025": -59833,
      "2026": -52895
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 1547,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 65.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -2846
    },
    "spec_full_slip0.1": {
     "train": {
@@ -136,7 +147,18 @@
      "2024": -21150,
      "2025": -28294,
      "2026": -32435
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 1845,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 65.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -2745
    },
    "A_only": {
     "train": {
@@ -199,7 +221,18 @@
      "2024": -7572,
      "2025": -4457,
      "2026": -16140
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 248,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 65.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -1096
    },
    "B_only": {
     "train": {
@@ -262,7 +295,18 @@
      "2024": -37930,
      "2025": -56420,
      "2026": -47206
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 1269,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 65.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -2846
    },
    "C_only": {
     "train": {
@@ -325,7 +369,18 @@
      "2024": -40428,
      "2025": -38272,
      "2026": -36683
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 1025,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 65.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -1417
    },
    "no_governor": {
     "train": {
@@ -388,7 +443,18 @@
      "2024": -225823,
      "2025": -290658,
      "2026": -256295
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 6958,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 65.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -2846
    },
    "no_classifier": {
     "train": {
@@ -451,7 +517,18 @@
      "2024": -82913,
      "2025": -50429,
      "2026": -99827
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 2064,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 65.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -3445
    },
    "no_time_stop": {
     "train": {
@@ -514,7 +591,18 @@
      "2024": -39722,
      "2025": -53707,
      "2026": -52323
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 1543,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 65.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -2846
    },
    "wide_stop_atr5": {
     "train": {
@@ -577,7 +665,18 @@
      "2024": -36710,
      "2025": -62512,
      "2026": -51497
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 1553,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 65.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -2846
    },
    "conf80": {
     "train": {
@@ -640,7 +739,291 @@
      "2024": -41339,
      "2025": -58470,
      "2026": -43823
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 1319,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 65.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -1608
+   },
+   "max_lots_1itm": {
+    "train": {
+     "trades": 1222,
+     "per_day": 1.52,
+     "win_pct": 19.3,
+     "net": -212514,
+     "gross": -115884,
+     "charges": 96630,
+     "pf": 0.46,
+     "avg_net": -173.9,
+     "avg_pts": 0.72,
+     "max_dd": 212514,
+     "green_days": 17.9,
+     "by_setup": {
+      "A": -24899,
+      "B": -157425,
+      "C": -30190
+     },
+     "exits": {
+      "stop": 894,
+      "trail": 249,
+      "time": 54,
+      "vwap": 11,
+      "level": 14,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 189,
+     "per_day": 1.57,
+     "win_pct": 19.0,
+     "net": -32491,
+     "gross": -17827,
+     "charges": 14663,
+     "pf": 0.43,
+     "avg_net": -171.9,
+     "avg_pts": 0.98,
+     "max_dd": 38344,
+     "green_days": 15.6,
+     "by_setup": {
+      "A": -8583,
+      "B": -19578,
+      "C": -4330
+     },
+     "exits": {
+      "stop": 138,
+      "trail": 37,
+      "time": 10,
+      "vwap": 2,
+      "level": 2,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 82.7,
+    "trend_days_net": -30713,
+    "quiet_days_with_trades_pct": 64.9,
+    "by_year": {
+     "2023": -79436,
+     "2024": -52249,
+     "2025": -62459,
+     "2026": -50859
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 1411,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 87.5,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -2846
+   },
+   "max_lots_best_strike": {
+    "train": {
+     "trades": 1189,
+     "per_day": 1.48,
+     "win_pct": 23.1,
+     "net": -226878,
+     "gross": -122648,
+     "charges": 104230,
+     "pf": 0.57,
+     "avg_net": -190.8,
+     "avg_pts": 0.56,
+     "max_dd": 226878,
+     "green_days": 18.8,
+     "by_setup": {
+      "A": -22982,
+      "B": -183196,
+      "C": -20701
+     },
+     "exits": {
+      "stop": 877,
+      "trail": 234,
+      "time": 51,
+      "vwap": 12,
+      "level": 15,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 179,
+     "per_day": 1.49,
+     "win_pct": 21.2,
+     "net": -35196,
+     "gross": -19564,
+     "charges": 15632,
+     "pf": 0.51,
+     "avg_net": -196.6,
+     "avg_pts": 0.8,
+     "max_dd": 45984,
+     "green_days": 16.7,
+     "by_setup": {
+      "A": -9862,
+      "B": -18126,
+      "C": -7208
+     },
+     "exits": {
+      "stop": 131,
+      "trail": 35,
+      "time": 10,
+      "vwap": 2,
+      "level": 1,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 83.3,
+    "trend_days_net": -30018,
+    "quiet_days_with_trades_pct": 64.9,
+    "by_year": {
+     "2023": -85144,
+     "2024": -50797,
+     "2025": -65532,
+     "2026": -60601
+    },
+    "strike_mix": {
+     "2": 120,
+     "1": 30,
+     "0": 96,
+     "-1": 282,
+     "-2": 840
+    },
+    "avg_qty": 202.3,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -3245
+   },
+   "1lot_best_strike": {
+    "train": {
+     "trades": 1280,
+     "per_day": 1.59,
+     "win_pct": 18.4,
+     "net": -213755,
+     "gross": -116885,
+     "charges": 96870,
+     "pf": 0.43,
+     "avg_net": -167.0,
+     "avg_pts": 0.63,
+     "max_dd": 213755,
+     "green_days": 15.9,
+     "by_setup": {
+      "A": -24632,
+      "B": -163182,
+      "C": -25942
+     },
+     "exits": {
+      "stop": 943,
+      "trail": 254,
+      "time": 56,
+      "vwap": 12,
+      "level": 15,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 187,
+     "per_day": 1.56,
+     "win_pct": 18.2,
+     "net": -32315,
+     "gross": -17541,
+     "charges": 14774,
+     "pf": 0.43,
+     "avg_net": -172.8,
+     "avg_pts": 0.71,
+     "max_dd": 39039,
+     "green_days": 15.6,
+     "by_setup": {
+      "A": -7939,
+      "B": -18592,
+      "C": -5784
+     },
+     "exits": {
+      "stop": 137,
+      "trail": 37,
+      "time": 10,
+      "vwap": 2,
+      "level": 1,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 83.3,
+    "trend_days_net": -33611,
+    "quiet_days_with_trades_pct": 64.9,
+    "by_year": {
+     "2023": -67080,
+     "2024": -56256,
+     "2025": -66677,
+     "2026": -56056
+    },
+    "strike_mix": {
+     "2": 1338,
+     "1": 56,
+     "0": 26,
+     "-1": 19,
+     "-2": 28
+    },
+    "avg_qty": 65.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -3245
+   },
+   "max_lots_best_strike_compound": {
+    "train": {
+     "trades": 145,
+     "per_day": 0.18,
+     "win_pct": 21.4,
+     "net": -18641,
+     "gross": -9409,
+     "charges": 9232,
+     "pf": 0.37,
+     "avg_net": -128.6,
+     "avg_pts": 0.65,
+     "max_dd": 18641,
+     "green_days": 11.1,
+     "by_setup": {
+      "A": -3160,
+      "B": -14976,
+      "C": -505
+     },
+     "exits": {
+      "stop": 113,
+      "trail": 27,
+      "time": 2,
+      "vwap": 0,
+      "level": 3,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 0
+    },
+    "trend_days_traded_right_way_pct": 8.0,
+    "trend_days_net": -52,
+    "quiet_days_with_trades_pct": 4.2,
+    "by_year": {
+     "2023": -18641,
+     "2024": 0,
+     "2025": 0,
+     "2026": 0
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 10,
+     "0": 16,
+     "-1": 29,
+     "-2": 90
+    },
+    "avg_qty": 112.1,
+    "equity_end": 1359,
+    "equity_min": 1359,
+    "worst_trade": -1063
    },
    "ride_AB": {
     "train": {
@@ -703,7 +1086,18 @@
      "2024": 1794,
      "2025": -34106,
      "2026": -43774
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 833,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 65.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -6760
    },
    "ride_A": {
     "train": {
@@ -766,7 +1160,18 @@
      "2024": -16635,
      "2025": -4956,
      "2026": -3934
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 138,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 65.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -2948
    },
    "ride_B_1": {
     "train": {
@@ -829,7 +1234,18 @@
      "2024": 28040,
      "2025": -14694,
      "2026": -26791
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 667,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 65.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -6760
    }
   },
   "app_rules_on_trend_days": {
@@ -931,7 +1347,18 @@
      "2024": -90279,
      "2025": -102829,
      "2026": -82504
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 1189,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 30.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -3228
    },
    "spec_full_slip0.1": {
     "train": {
@@ -994,7 +1421,18 @@
      "2024": -54354,
      "2025": -60840,
      "2026": -42820
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 1425,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 30.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -2910
    },
    "A_only": {
     "train": {
@@ -1057,7 +1495,18 @@
      "2024": 304,
      "2025": -26318,
      "2026": -7330
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 239,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 30.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -1916
    },
    "B_only": {
     "train": {
@@ -1120,7 +1569,18 @@
      "2024": -85678,
      "2025": -88957,
      "2026": -76991
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 1055,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 30.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -2454
    },
    "C_only": {
     "train": {
@@ -1183,7 +1643,18 @@
      "2024": -44560,
      "2025": -79644,
      "2026": -59554
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 842,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 30.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -3228
    },
    "no_governor": {
     "train": {
@@ -1246,7 +1717,18 @@
      "2024": -466968,
      "2025": -625152,
      "2026": -467789
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 6674,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 30.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -4172
    },
    "no_classifier": {
     "train": {
@@ -1309,7 +1791,18 @@
      "2024": -138679,
      "2025": -118910,
      "2026": -118515
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 1642,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 30.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -2351
    },
    "no_time_stop": {
     "train": {
@@ -1372,7 +1865,18 @@
      "2024": -89186,
      "2025": -105560,
      "2026": -83314
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 1183,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 30.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -3228
    },
    "wide_stop_atr5": {
     "train": {
@@ -1435,7 +1939,18 @@
      "2024": -84867,
      "2025": -104421,
      "2026": -84040
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 1191,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 30.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -3228
    },
    "conf80": {
     "train": {
@@ -1498,7 +2013,291 @@
      "2024": -61098,
      "2025": -94691,
      "2026": -64253
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 1051,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 30.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -2639
+   },
+   "max_lots_1itm": {
+    "train": {
+     "trades": 537,
+     "per_day": 0.67,
+     "win_pct": 16.9,
+     "net": -114293,
+     "gross": -69442,
+     "charges": 44851,
+     "pf": 0.4,
+     "avg_net": -212.8,
+     "avg_pts": 1.07,
+     "max_dd": 115205,
+     "green_days": 15.0,
+     "by_setup": {
+      "A": -12308,
+      "B": -81882,
+      "C": -20103
+     },
+     "exits": {
+      "stop": 396,
+      "trail": 103,
+      "time": 25,
+      "vwap": 7,
+      "level": 6,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 50,
+     "per_day": 0.42,
+     "win_pct": 20.0,
+     "net": -14785,
+     "gross": -10685,
+     "charges": 4101,
+     "pf": 0.25,
+     "avg_net": -295.7,
+     "avg_pts": -5.17,
+     "max_dd": 14948,
+     "green_days": 13.8,
+     "by_setup": {
+      "A": -1508,
+      "B": -12458,
+      "C": -820
+     },
+     "exits": {
+      "stop": 39,
+      "trail": 10,
+      "time": 1,
+      "vwap": 0,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 30.1,
+    "trend_days_net": -13120,
+    "quiet_days_with_trades_pct": 39.0,
+    "by_year": {
+     "2023": -49215,
+     "2024": -24366,
+     "2025": -34826,
+     "2026": -20672
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 587,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 30.9,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -1207
+   },
+   "max_lots_best_strike": {
+    "train": {
+     "trades": 761,
+     "per_day": 0.95,
+     "win_pct": 16.8,
+     "net": -195846,
+     "gross": -129443,
+     "charges": 66404,
+     "pf": 0.36,
+     "avg_net": -257.4,
+     "avg_pts": -0.09,
+     "max_dd": 195846,
+     "green_days": 13.2,
+     "by_setup": {
+      "A": -24106,
+      "B": -143601,
+      "C": -28140
+     },
+     "exits": {
+      "stop": 562,
+      "trail": 148,
+      "time": 35,
+      "vwap": 9,
+      "level": 7,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 89,
+     "per_day": 0.74,
+     "win_pct": 19.1,
+     "net": -27819,
+     "gross": -19985,
+     "charges": 7834,
+     "pf": 0.24,
+     "avg_net": -312.6,
+     "avg_pts": -2.42,
+     "max_dd": 27819,
+     "green_days": 11.8,
+     "by_setup": {
+      "A": -2656,
+      "B": -21960,
+      "C": -3203
+     },
+     "exits": {
+      "stop": 65,
+      "trail": 20,
+      "time": 1,
+      "vwap": 2,
+      "level": 1,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 50.4,
+    "trend_days_net": -34167,
+    "quiet_days_with_trades_pct": 49.0,
+    "by_year": {
+     "2023": -71222,
+     "2024": -45357,
+     "2025": -68441,
+     "2026": -38644
+    },
+    "strike_mix": {
+     "2": 175,
+     "1": 115,
+     "0": 85,
+     "-1": 139,
+     "-2": 336
+    },
+    "avg_qty": 37.7,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -2369
+   },
+   "1lot_best_strike": {
+    "train": {
+     "trades": 770,
+     "per_day": 0.96,
+     "win_pct": 16.4,
+     "net": -183359,
+     "gross": -117766,
+     "charges": 65593,
+     "pf": 0.35,
+     "avg_net": -238.1,
+     "avg_pts": -0.08,
+     "max_dd": 183359,
+     "green_days": 12.7,
+     "by_setup": {
+      "A": -20153,
+      "B": -138405,
+      "C": -24801
+     },
+     "exits": {
+      "stop": 569,
+      "trail": 150,
+      "time": 35,
+      "vwap": 9,
+      "level": 7,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 90,
+     "per_day": 0.75,
+     "win_pct": 18.9,
+     "net": -26160,
+     "gross": -18441,
+     "charges": 7720,
+     "pf": 0.24,
+     "avg_net": -290.7,
+     "avg_pts": -2.62,
+     "max_dd": 26160,
+     "green_days": 11.8,
+     "by_setup": {
+      "A": -2571,
+      "B": -20954,
+      "C": -2636
+     },
+     "exits": {
+      "stop": 66,
+      "trail": 20,
+      "time": 1,
+      "vwap": 2,
+      "level": 1,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 50.8,
+    "trend_days_net": -34209,
+    "quiet_days_with_trades_pct": 49.0,
+    "by_year": {
+     "2023": -63666,
+     "2024": -45947,
+     "2025": -63713,
+     "2026": -36194
+    },
+    "strike_mix": {
+     "2": 330,
+     "1": 119,
+     "0": 77,
+     "-1": 91,
+     "-2": 243
+    },
+    "avg_qty": 30.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -1267
+   },
+   "max_lots_best_strike_compound": {
+    "train": {
+     "trades": 78,
+     "per_day": 0.1,
+     "win_pct": 14.1,
+     "net": -17057,
+     "gross": -11333,
+     "charges": 5724,
+     "pf": 0.22,
+     "avg_net": -218.7,
+     "avg_pts": -4.56,
+     "max_dd": 17057,
+     "green_days": 5.1,
+     "by_setup": {
+      "A": -3090,
+      "B": -10722,
+      "C": -3245
+     },
+     "exits": {
+      "stop": 61,
+      "trail": 14,
+      "time": 3,
+      "vwap": 0,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 0
+    },
+    "trend_days_traded_right_way_pct": 3.4,
+    "trend_days_net": -3351,
+    "quiet_days_with_trades_pct": 2.0,
+    "by_year": {
+     "2023": -17057,
+     "2024": 0,
+     "2025": 0,
+     "2026": 0
+    },
+    "strike_mix": {
+     "2": 2,
+     "1": 3,
+     "0": 9,
+     "-1": 19,
+     "-2": 45
+    },
+    "avg_qty": 37.3,
+    "equity_end": 2943,
+    "equity_min": 2943,
+    "worst_trade": -757
    },
    "ride_AB": {
     "train": {
@@ -1561,7 +2360,18 @@
      "2024": 41135,
      "2025": -116091,
      "2026": -82920
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 815,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 30.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -7807
    },
    "ride_A": {
     "train": {
@@ -1624,7 +2434,18 @@
      "2024": 20648,
      "2025": -10199,
      "2026": -14364
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 131,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 30.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -3965
    },
    "ride_B_1": {
     "train": {
@@ -1687,7 +2508,18 @@
      "2024": 34964,
      "2025": -86514,
      "2026": -93418
-    }
+    },
+    "strike_mix": {
+     "2": 0,
+     "1": 659,
+     "0": 0,
+     "-1": 0,
+     "-2": 0
+    },
+    "avg_qty": 30.0,
+    "equity_end": null,
+    "equity_min": null,
+    "worst_trade": -7807
    }
   },
   "app_rules_on_trend_days": {

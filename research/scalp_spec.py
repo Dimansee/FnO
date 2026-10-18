@@ -122,8 +122,28 @@ def cost_points(dd, sym):
     return I.charges(prem, prem, lot) / lot / 0.6
 
 
+def choose(dd, sd, i, c, tgt, cap, sym, cfg):
+    """Strike (itm steps: 2 = 2 ITM ... -2 = 2 OTM) and quantity with the best expected net profit if the index moves
+    `tgt` points in 10 minutes, buying as many lots as `cap` allows (or 1 lot). Returns (itm, qty, expected net)."""
+    lot = E.META[sym]["lot"]
+    j = min(i + 10, len(dd.c) - 1)
+    slip, best = cfg["slip"], None
+    for itm in cfg.get("strikes", [1]):
+        p_in, p_t = m1.option_trade(dd, sd, i, j, c, c + sd * tgt, itm=itm)
+        buy, sell = p_in * (1 + slip), p_t * (1 - slip)
+        lots = int(cap * 0.95 // (buy * lot)) if cfg.get("sizing") == "max" else (1 if buy * lot <= cap * 0.95 else 0)
+        if lots <= 0:
+            continue
+        q = lots * lot
+        val = (sell - buy) * q - I.charges(buy, sell, q)
+        if best is None or val > best[2]:
+            best = (itm, q, val)
+    return best or (1, 0, 0.0)
+
+
 def run(data, sym, cfg):
     trades = []
+    eq = float(CAPITAL)
     for x in data:
         dd = x["dd"]
         n = len(dd.c)
@@ -244,16 +264,22 @@ def run(data, sym, cfg):
                 k += 1
             if exit_px is None:
                 k, exit_px, why = n - 1, dd.c[-1], "eod"
-            p_in, p_out = m1.option_trade(dd, sd, i, k, c, exit_px)
+            itm, qty = 1, E.META[sym]["lot"]
+            if cfg.get("sizing") == "max" or cfg.get("strikes"):
+                itm, qty, _ = choose(dd, sd, i, c, min(room, 2 * risk), eq if cfg.get("compound") else CAPITAL, sym, cfg)
+                if qty <= 0:
+                    i += 1
+                    continue
+            p_in, p_out = m1.option_trade(dd, sd, i, k, c, exit_px, itm=itm)
             slip = cfg["slip"]
             buy, sell = p_in * (1 + slip), p_out * (1 - slip)
-            lot = E.META[sym]["lot"]
-            chg = I.charges(buy, sell, lot)
-            gross = (sell - buy) * lot
+            chg = I.charges(buy, sell, qty)
+            gross = (sell - buy) * qty
             net = gross - chg
+            eq += net
             trades.append(dict(d=str(dd.d), tag=tag, side=sd, mode=mode, i=int(i), k=int(k), pts=float(sd * (exit_px - c)),
                                risk=float(risk), why=why, gross=float(gross), chg=float(chg), net=float(net), conf=float(conf),
-                               prem=float(buy)))
+                               prem=float(buy), itm=int(itm), qty=int(qty), eq=float(eq)))
             g["net"] += net
             g["chg"] += chg
             g["gross_pos"] += gross
@@ -327,6 +353,12 @@ CFGS = {
     "no_time_stop": dict(setups="ABC", governor=True, time_stop=False, conf=65, slip=0.005),
     "wide_stop_atr5": dict(setups="ABC", governor=True, time_stop=True, conf=65, slip=0.005, atr5=True),
     "conf80": dict(setups="ABC", governor=True, time_stop=True, conf=80, slip=0.005),
+    # sizing: as many lots as Rs 20,000 buys (reset daily, or compounding), strike = best of 2 ITM .. 2 OTM
+    "max_lots_1itm": dict(setups="ABC", governor=True, time_stop=True, conf=65, slip=0.005, sizing="max", strikes=[1]),
+    "max_lots_best_strike": dict(setups="ABC", governor=True, time_stop=True, conf=65, slip=0.005, sizing="max", strikes=[2, 1, 0, -1, -2]),
+    "1lot_best_strike": dict(setups="ABC", governor=True, time_stop=True, conf=65, slip=0.005, strikes=[2, 1, 0, -1, -2]),
+    "max_lots_best_strike_compound": dict(setups="ABC", governor=True, time_stop=True, conf=65, slip=0.005, sizing="max",
+                                          strikes=[2, 1, 0, -1, -2], compound=True),
     # not scalping: same classifier + entries, but ride the trend (2 x ATR 5-min stop, trail on the 5-min EMA 21)
     "ride_AB": dict(setups="AB", governor=True, time_stop=False, conf=65, slip=0.005, ride=True, max_trades=2),
     "ride_A": dict(setups="A", governor=True, time_stop=False, conf=65, slip=0.005, ride=True, max_trades=1),
@@ -358,6 +390,11 @@ if __name__ == "__main__":
                 "trend_days_net": round(sum(x["net"] for d in td for x in tdays.get(d, []))),
                 "quiet_days_with_trades_pct": round(100 * sum(1 for d in qd if tdays.get(d)) / max(1, len(qd)), 1),
                 "by_year": {y: round(sum(x["net"] for x in t if x["d"].startswith(y))) for y in ("2023", "2024", "2025", "2026")},
+                "strike_mix": {str(k): sum(1 for x in t if x.get("itm") == k) for k in (2, 1, 0, -1, -2)},
+                "avg_qty": round(float(np.mean([x.get("qty", 0) for x in t])), 1) if t else 0,
+                "equity_end": round(t[-1]["eq"]) if t and cfg.get("compound") else None,
+                "equity_min": round(min(x["eq"] for x in t)) if t and cfg.get("compound") else None,
+                "worst_trade": round(min(x["net"] for x in t)) if t else None,
             }
             r = res[sym]["runs"][name]
             print(sym, name, "train", r["train"].get("trades"), r["train"].get("net"), r["train"].get("pf"),

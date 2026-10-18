@@ -135,13 +135,26 @@ for minute in range(9 * 60 + 31, 15 * 60 + 21):
 trs = SC.trades()
 assert opened >= 1 and closed == opened == len(trs), (opened, closed, len(trs))
 assert not SC.positions(), "every scalp position must be closed by 15:15"
-assert all(t["charges"] > 40 and t["qty"] == 65 and t["tag"] in "ABC" for t in trs), trs[:2]
+assert all(t["charges"] > 40 and t["qty"] % 65 == 0 and t["qty"] >= 65 and t["tag"] in "ABC" for t in trs), trs[:2]
+assert all(t["entry_prem"] * t["qty"] <= 0.95 * (20_000 + sum(u["pnl"] for u in trs if u["closed"] < t["opened"])) + 1 for t in trs)
+assert any(t["lots"] > 1 for t in trs), [t["lots"] for t in trs]          # max-lot sizing actually buys several lots
 assert store.positions() == [] and store.trades() == [], "the scalp book must never write to the main ledger"
 gv = SC.governor(SC._today_trades("NIFTY", NOW[0]), 20_000)
 assert abs(gv["net"] - sum(t["pnl"] for t in trs)) < 1e-6
 st = SC.state("NIFTY", fm, NOW[0])
 assert st["mode"] in ("trend", "mid", "none") and st["zones"]["above"] and st["zones"]["below"], st.get("error")
 print(f"tick OK: {len(trs)} scalp trades on the synthetic day, net ₹{gv['net']:,.0f}, fees ₹{gv['charges']:,.0f}; main ledger untouched")
+
+# strike chooser: best of 2 ITM .. 2 OTM with max lots vs the old 1 lot / 1 ITM
+ch = M.theoretical_chain("NIFTY", EXP, 25000.0, 14.0)
+at = datetime(TODAY.year, TODAY.month, TODAY.day, 10, 0, tzinfo=IST)
+pk, why = SC.pick_strike(ch, "NIFTY", 1, 25000.0, 30.0, EXP, at, 20_000, {"sizing": "max", "strike": "best", "lot": 65}, False)
+assert pk and pk["qty"] % 65 == 0 and pk["price"] * pk["qty"] <= 19_000 and pk["itm"] in SC.STRIKES_BEST, (pk, why)
+one, _ = SC.pick_strike(ch, "NIFTY", -1, 25000.0, 30.0, EXP, at, 20_000, {"sizing": "1lot", "strike": "itm1", "lot": 65}, False)
+assert one["itm"] == 1 and one["qty"] == 65 and one["strike"] == 25050 and one["opt"] == "PE", one
+none, why = SC.pick_strike(ch, "NIFTY", 1, 25000.0, 30.0, EXP, at, 500, {"sizing": "max", "strike": "best", "lot": 65}, False)
+assert none is None and "costs" in why, why
+print(f"strike chooser OK: picked {pk['strike']:g}{pk['opt']} ({SC.moneyness(pk['itm'])}) x {pk['lots']} lots, expected ₹{pk['expected']:,.0f}")
 
 # OFF: no new trades, nothing open
 SC.reset()
