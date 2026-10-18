@@ -440,7 +440,7 @@ from fno import indicators as I  # noqa: E402
 ds = j(c.get("/api/dashboard?symbol=SENSEX"))
 assert ds["chain"] and M.lot_size("SENSEX") == 20 and M.instrument("SENSEX")["step"] == 100
 assert all(e.weekday() == 3 for e in I.demo_expiries("weekly", date(2026, 10, 19), 4, "BSE"))
-assert any("researched on Nifty and Bank Nifty only" in w for w in ds["signal"].get("warnings", [])), ds["signal"].get("warnings")
+assert any("trend-day catcher only" in w for w in ds["signal"].get("warnings", [])), ds["signal"].get("warnings")
 assert I.demo_expiries("weekly", date(2025, 3, 3), 1, "BSE")[0].weekday() == 1 and I.demo_expiries("weekly", date(2024, 3, 4), 1, "BSE")[0].weekday() == 4
 assert I.charges(100, 110, 20, exch_pct=I.exch_rate("SENSEX")) < I.charges(100, 110, 20)
 print("sensex OK:", ds["label"], ds["expiry"], "lot", ds["lot"], "order", ds["order"] and ds["order"]["strike"])
@@ -486,3 +486,9 @@ bt_ = j(c.post("/api/backtest", json={"symbol": "NIFTY", "capital": 200000, "str
 assert "summary" in bt_
 assert "trend" in C.AUTOPILOT_STRATEGIES
 print("trend-day catcher OK")
+# round 24: Sensex trades only the trend-day catcher on Autopilot; the trend slot waits for Rs 40k equity on Autopilot
+assert SV2.sym_strategies({"autopilot": True, "strategies": ["noise", "camarilla", "trend"]}, "SENSEX") == ["trend"]
+assert SV2.sym_strategies({"autopilot": True, "strategies": ["noise", "camarilla", "trend"]}, "NIFTY") == ["noise", "camarilla", "trend"]
+assert SV2.sym_strategies({"autopilot": False, "strategies": ["noise", "trend"]}, "SENSEX") == ["noise", "trend"]
+assert not SV2.trend_allowed({"autopilot": True}, 20000) and SV2.trend_allowed({"autopilot": True}, 40000) and SV2.trend_allowed({"autopilot": False}, 1000)
+print("round 24 autopilot rules OK")

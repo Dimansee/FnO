@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r24",
+   "date": "2026-10-18",
+   "area": "Index options",
+   "title": "Round 24: rules on Sensex, debit spreads on high-VIX days, an earlier trend-day catcher, a Rs 20k account",
+   "asked": "Do the rules work on Sensex (now that its 1-minute history is downloaded)? Can debit spreads make the VIX 18+ trend days tradable? Should the catcher start before 10:45 to catch opening drives like 13 Oct? How does the catcher change a Rs 20k account's year?",
+   "result": "Sensex, Rs 2L / 1% risk (never tuned on): Noise + Camarilla -19.2k / -2.3k / +10.0k / +17.2k (2023-26, train PF 0.96); Noise only +35.9k train but -14.0k in 2026; trend-day catcher -1.8k / +18.0k / +19.6k / +19.2k (train PF 1.32, 2026 PF 1.66). Debit spreads on VIX >= 18 days lost every year at 2-12 strikes wide (PF 0.07-0.56). Catcher starting 09:45 or 10:15: less profit in training (+30-52k vs +60.6k) and 2026, although 09:45 would have caught 13 Oct. Rs 20k one-year bootstrap: can't afford a lot after a year in 68.5% of paths (current), 73.5% with the catcher, 65.9% with the catcher gated until equity reaches Rs 40k.",
+   "decision": "Adopted: Sensex on Autopilot with the catcher only; catcher gated at Rs 40k equity on Autopilot. Spreads and an earlier start not adopted.",
+   "summary": "Sensex is the clearest out-of-sample check the catcher has had, and it passed; Noise and Camarilla did not. Spreads don't rescue high-VIX days. A Rs 20k account stays fragile under any rule set.",
+   "period": "2023-01 to 2026-10-16, Nifty, Bank Nifty and Sensex 1-minute (Upstox)"
+  },
+  {
    "id": "r23",
    "date": "2026-10-18",
    "area": "Index options",

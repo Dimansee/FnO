@@ -30,7 +30,7 @@ SV.prefs = lambda: {"autopilot": False, "sizing": "risk", "risk_pct": 1.0, "stra
 assert SV.eprefs()["sizing"] == "risk" and SV.eprefs()["auto"] is False            # OFF = exactly what is saved
 SV.prefs = lambda: {"autopilot": True, "sizing": "risk", "risk_pct": 2.0, "strategies": ["noise"], "auto": False, "auto_syms": ["NIFTY"], "enforce_limits": False}
 e = SV.eprefs()
-assert e["auto"] and e["sizing"] == "compound" and e["risk_pct"] == 1.0 and e["auto_syms"] == ["NIFTY", "BANKNIFTY"] and set(e["strategies"]) == {"noise", "camarilla", "trend"}
+assert e["auto"] and e["sizing"] == "compound" and e["risk_pct"] == 1.0 and e["auto_syms"] == ["NIFTY", "BANKNIFTY", "SENSEX"] and set(e["strategies"]) == {"noise", "camarilla", "trend"}
 rows = [{"strike": k, "ce_key": f"c{k}", "ce_ltp": 100, "ce_bid": 99, "ce_ask": 100, "ce_delta": .5} for k in (24950, 25000, 25050)]
 ch = pd.DataFrame(rows)
 plan = {"opt": "CE", "risk_pts": 30, "rr": 4, "strategy": "noise", "side": 1}

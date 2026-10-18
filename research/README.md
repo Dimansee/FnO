@@ -306,3 +306,39 @@ slower-exit position on trend days, not a fix for that day. 95% of its trades (2
 trade, so it mostly adds exposure on trending days: more profit in 3 of 4 years, a deeper fall (-50.7k → -73.7k on training).
 Nifty carries it (+13k / +39k / -1k / +26k); Bank Nifty is about flat overall. Decision: shipped as a separate strategy
 ("trend", own slot) in paper Autopilot and as an option in Settings and the Backtest tab; the live record decides real money.
+
+## Round 24 — Sensex, high-VIX spreads, an earlier catcher, a ₹20k account (`round24.py`, `round24_harness.py`, results `round24_results.json`)
+New data: Sensex 1-minute history 2 Jan 2023 → 16 Oct 2026 (940 sessions, `fetch_1m.py` on the research-data branch; it also
+refreshed Nifty / Bank Nifty / VIX to 16 Oct). Same pricing as the app backtester; train 2023-25, judged on 2026.
+
+**Sensex (never used to tune anything)** — ₹2 lakh, 1% risk, lot 20:
+
+| Rules on Sensex | 2023 | 2024 | 2025 | 2026 | train PF |
+|---|---|---|---|---|---|
+| Noise + Camarilla (as the app traded it) | -19.2k | -2.3k | +10.0k | +17.2k | 0.96 |
+| Noise only | -10.7k | +24.1k | +22.5k | -14.0k | 1.25 |
+| Trend-day catcher | -1.8k | +18.0k | +19.6k | +19.2k | 1.32 (2026 PF 1.66) |
+
+Camarilla is flat-to-negative on Sensex (PF 0.97 over 3.8 years); Noise alone flips sign between training and 2026; the catcher is
+the only rule positive in training and in 2026. → Autopilot now trades Sensex with the catcher only (`AUTOPILOT_SYM_STRATEGIES`).
+
+**Debit spreads on VIX ≥ 18 days (instead of the VIX ceilings):** buy the 1-ITM option, sell one 2 / 4 / 8 / 12 strikes further out.
+The spread trades lost in every year at every width (PF 0.07-0.56; e.g. 12 strikes, ₹2 lakh: -₹42k over 98 trades). With weeks-long
+expiries (Bank Nifty monthly) or high IV, neighbouring strikes move almost together, so a narrow spread barely moves while it pays
+four fills of slippage and charges; wide spreads are close to the bought option, which already lost on those days. Ceilings stay.
+
+**Earlier start for the catcher** (first check 09:45 / 10:15 / 10:45 × 70 / 80% of bars beside VWAP): 09:45 would have caught 13 Oct
+(+₹5.9k) but every earlier setting earned less in training (+₹30-52k vs +₹60.6k) and in 2026. 10:45 / 80% stays.
+
+**₹20,000 account, 1 lot, 2,000 one-year weekly bootstraps** (stop when equity < ₹12k, i.e. a lot is no longer affordable):
+
+| | Median end | 95th pct | Ends below ₹20k | Can't afford a lot |
+|---|---|---|---|---|
+| Current rules | ₹11.7k | ₹111k | 69.0% | 68.5% |
+| + catcher | ₹11.5k | ₹155k | 73.6% | 73.5% |
+| + catcher only when the index has no open trade | ₹11.6k | ₹120k | 69.7% | 69.2% |
+| + catcher once equity ≥ ₹40k | ₹11.7k | ₹155k | 66.1% | 65.9% |
+
+A ₹20k account is fragile under every rule (two out of three random years end unable to buy a lot - same message as rounds 20 and 22).
+Gating the catcher until equity reaches ₹40k keeps its upside and removes its extra small-account risk → adopted for Autopilot
+(`TREND_MIN_EQUITY`). Autopilot's 15% per-trade risk cap is not modelled here, so live results at ₹20k will trade less than this.

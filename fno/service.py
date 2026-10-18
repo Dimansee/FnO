@@ -94,6 +94,24 @@ def eprefs() -> dict:
             "sizing": "compound", "risk_pct": C.AUTOPILOT_RISK_PCT, "max_trade_risk": C.AUTOPILOT_MAX_TRADE_RISK}
 
 
+def sym_strategies(pf, symbol) -> list:
+    """Strategies this instrument trades with: Autopilot narrows some indices to what held up in their own backtest (round 24)."""
+    st = list(pf.get("strategies") or [])
+    if pf.get("autopilot") and symbol in C.AUTOPILOT_SYM_STRATEGIES:
+        st = [x for x in st if x in C.AUTOPILOT_SYM_STRATEGIES[symbol]]
+    return st
+
+
+def _trend_only(pf, symbol) -> bool:
+    """Autopilot trades this index with the trend-day slot only (no Noise / Camarilla / custom main-slot entries)."""
+    return bool(pf.get("autopilot")) and C.AUTOPILOT_SYM_STRATEGIES.get(symbol) == ["trend"]
+
+
+def trend_allowed(pf, equity: float) -> bool:
+    """Autopilot adds the trend-day slot only once the account has grown to TREND_MIN_EQUITY (round 24 small-account test)."""
+    return not pf.get("autopilot") or equity >= C.TREND_MIN_EQUITY
+
+
 def _traded_today(symbol, positions, trades) -> dict:
     """Which strategies already traded this instrument today (one trade per strategy per instrument)."""
     today = C.today_ist().isoformat()
@@ -489,7 +507,13 @@ def place_signal(symbol, strike=None, auto=False, which=None):
                        else "You already have an open signal trade in this instrument.")
     cstats = M.chain_stats(g["chain"], g["spot"])
     traded = _traded_today(symbol, pos, tr)
-    ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, news(symbol), gcues(), fii(), g["now"], guard, traded, pf["strategies"])
+    strats = sym_strategies(pf, symbol)
+    if which == "trend" and (("trend" not in strats) or not trend_allowed(pf, P.equity(acct, tr))):
+        return False, ("Trend-day catcher is off for this instrument." if "trend" not in strats else
+                       f"Autopilot adds the trend-day catcher once equity reaches ₹{C.TREND_MIN_EQUITY:,.0f}.")
+    if which != "trend" and _trend_only(pf, symbol):
+        return False, "Only the trend-day catcher trades this instrument."
+    ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, news(symbol), gcues(), fii(), g["now"], guard, traded, strats)
     if which == "trend":
         tv = ev.get("trend") or {}
         ev = {**ev, "plan": tv.get("plan"), "signal": tv.get("signal", "WAIT")}
@@ -885,11 +909,12 @@ def tick():
     if pf.get("auto") and C.FIRST_ENTRY_ANY <= t <= C.LAST_ENTRY_ANY:
         for sym in pf.get("auto_syms") or []:
             try:
-                ok, msg = place_signal(sym, auto=True)
+                strats = sym_strategies(pf, sym)
+                ok, msg = place_signal(sym, auto=True) if not _trend_only(pf, sym) else (False, "trend only")
                 if ok:
                     placed.append({"symbol": sym, "message": msg})
                     _push_safe(f"{sym}: paper trade placed", str(msg)[:160], f"placed:{sym}:{now.strftime('%H%M')}", "/#portfolio")
-                if "trend" in (pf.get("strategies") or []) and C.TREND_FIRST_CHECK <= t:
+                if "trend" in strats and C.TREND_FIRST_CHECK <= t:
                     ok, msg = place_signal(sym, auto=True, which="trend")
                     if ok:
                         placed.append({"symbol": sym, "message": msg, "strategy": "trend"})
@@ -940,8 +965,7 @@ def tick():
 
 def _untested_note(symbol, g, ev):
     if symbol in C.UNTESTED:
-        ev.setdefault("warnings", []).append(f"{g['meta']['label']}: the Noise band and Camarilla rules were researched on Nifty and Bank Nifty only. "
-                                             "They run unchanged here with no backtest of their own - paper-trade it and compare before trusting it.")
+        ev.setdefault("warnings", []).append(C.UNTESTED_NOTE.get(symbol) or f"{g['meta']['label']}: the rules were researched on Nifty and Bank Nifty only.")
 
 
 def scan(symbol, m=None, prefs_=None, want_order=True):
