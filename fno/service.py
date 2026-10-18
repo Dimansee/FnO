@@ -867,6 +867,14 @@ def _push_signal(sym, ev, order, g):
     return _push_safe(f"{sym} {ev.get('signal')}", body, f"reco:{sym}:{plan.get('strategy')}:{plan.get('signal_bar') or g['now'].strftime('%H:%M')}:{g['now'].date()}", "/#journal")
 
 
+def _note_skip_safe(sym, slot, msg, now):
+    try:                                                     # round 25: why a valid signal was not placed (for the day-end lag review)
+        from . import lag as LG
+        LG.note_skip(sym, slot, str(msg or ""), now)
+    except Exception:
+        pass
+
+
 def tick():
     """Called every minute by the database scheduler during market hours."""
     now = C.now_ist()
@@ -911,11 +919,15 @@ def tick():
             try:
                 strats = sym_strategies(pf, sym)
                 ok, msg = place_signal(sym, auto=True) if not _trend_only(pf, sym) else (False, "trend only")
+                if not ok:
+                    _note_skip_safe(sym, "main", msg, now)
                 if ok:
                     placed.append({"symbol": sym, "message": msg})
                     _push_safe(f"{sym}: paper trade placed", str(msg)[:160], f"placed:{sym}:{now.strftime('%H%M')}", "/#portfolio")
                 if "trend" in strats and C.TREND_FIRST_CHECK <= t:
                     ok, msg = place_signal(sym, auto=True, which="trend")
+                    if not ok:
+                        _note_skip_safe(sym, "trend", msg, now)
                     if ok:
                         placed.append({"symbol": sym, "message": msg, "strategy": "trend"})
                         _push_safe(f"{sym}: trend-day paper trade placed", str(msg)[:160], f"placedt:{sym}:{now.strftime('%H%M')}", "/#portfolio")

@@ -342,3 +342,34 @@ four fills of slippage and charges; wide spreads are close to the bought option,
 A ₹20k account is fragile under every rule (two out of three random years end unable to buy a lot - same message as rounds 20 and 22).
 Gating the catcher until equity reaches ₹40k keeps its upside and removes its extra small-account risk → adopted for Autopilot
 (`TREND_MIN_EQUITY`). Autopilot's 15% per-trade risk cap is not modelled here, so live results at ₹20k will trade less than this.
+
+## Round 25 — sizing a ₹2 lakh account, and the day-end lag review (`round25.py`, `round25_harness.py`, `round25_trend.py`, results `round25_results.json`; live code `fno/lag.py`)
+Question: with ₹2 lakh, should the app use more of the capital (more lots)? Per-lot trades of today's rule set (Noise + Camarilla on
+Nifty / Bank Nifty, trend-day catcher on all three indices) replayed with compounding from ₹2 lakh and the app's own sizing (lots =
+risk % of equity ÷ risk of one lot; 1-lot floor while one lot risks ≤ 15% of equity), free-cash limit, weekly loss cap and the ₹40k
+catcher gate. Judged on one path (2023-25 / 2026) **and** on every 12-month window from Jan 2023 to Oct 2025 (34 windows).
+
+| Risk per trade | Median 12 months | Worst 12 months | Median deepest fall | Windows with a fall > 25% | Lots (2026 avg) | Capital in a trade (median) |
+|---|---|---|---|---|---|---|
+| 1% (current) | +18.9% | -53.0% | -26.9% | 62% | 1.09 | 6.6% |
+| 1.5% | +16.9% | -53.1% | -32.0% | 79% | 1.35 | 8.2% |
+| 2% | +14.3% | -41.5% | -41.1% | 100% | 1.89 | 11.1% |
+| 3% | +23.3% | -80.5% | -58.5% | 100% | 3.44 | 17.5% |
+| 4% | -8.3% | -81.3% | -68.4% | 100% | 3.77 | 22.7% |
+| 1% + halve size at -10% / quarter at -20% | +18.5% | -53.0% | -27.1% | 65% | 1.07 | 6.6% |
+| 1%, 1 lot only while it risks ≤ 2% (≥ ₹1 lakh) | +19.5% | -38.8% | -24.6% | 41% | 1.09 | 6.4% |
+| same + throttle | -6.1% | -20.8% | -20.6% | 0% | 1.03 | 6.0% |
+| 2% + open risk ≤ 4% + throttle | +12.8% | -35.4% | -26.0% | 53% | 1.60 | 9.2% |
+
+Reading: at ₹2 lakh, 1% is ₹2,000 and one lot risks ₹1,900-2,600, so the account is a 1-lot account and lots step up as equity grows
+(about ₹5.5 lakh for 2 lots). More risk per trade raises the best windows but not the median, and every level above 1.5% has falls
+over 25% in all windows; 3-4% wipe out most of the account. Throttles and tighter caps stop the account trading after a fall and miss
+the recovery (median windows turn negative). "1 lot only while it risks ≤ 2%" was better on the 12-month windows but worse on the
+2023-25 path (+15.5% vs +22.6% a year) - not consistent enough to adopt. **Decision: sizing unchanged (1% of equity, compounding).**
+Even at 1%, a 12-month fall of 25%+ happened in 62% of windows with the full rule set - the expected range is now shown every evening.
+
+**Day-end lag review (`fno/lag.py`, in every after-close note, Learning tab):** per index - the day's move, how much the book caught,
+each trade's exit vs holding to 15:15, why a trend day was missed (VIX ceiling, no signal, opening drive, or a signal the scheduler could
+not place and its reason, now logged by `tick()`), and capital use (equity, risk budget, lots, ₹ needed for 2 / 3 lots). A 20-session
+tally ranks the causes by points / rupees left and links each to the round that tested its fix and the verdict; a cause seen 3+ times
+is marked "watch". Rule numbers are never changed from here.

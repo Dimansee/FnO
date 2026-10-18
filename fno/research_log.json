@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r25",
+   "date": "2026-10-18",
+   "area": "Index options",
+   "title": "Round 25: how a Rs 2 lakh account should size (risk 1-4%, caps, drawdown throttles) + a day-end lag review",
+   "asked": "With Rs 2 lakh, should the app use more of the capital - more lots per trade - and does a drawdown throttle or a cap on open risk help? Full current rule set on all three indices, compounding, every 12-month window from Jan 2023.",
+   "result": "Median 12-month return / worst 12 months / windows with a fall over 25%: 1% +18.9% / -53.0% / 62%; 1.5% +16.9% / -53.1% / 79%; 2% +14.3% / -41.5% / 100%; 3% +23.3% / -80.5% / 100%; 4% -8.3% / -81.3% / 100%. Halving size after a 10% fall and tighter 1-lot limits stopped trading after falls and turned the median window negative (-6% to -12%). '1 lot only while it risks <= 2%' helped the windows (+19.5% / -38.8% / 41%) but not the 2023-25 path (+15.5% vs +22.6% a year).",
+   "decision": "Sizing unchanged (1% of equity, compounding). Day-end lag review added to the after-close note.",
+   "summary": "At Rs 2 lakh one lot already uses the 1% risk budget; lots grow automatically with equity (about Rs 5.5 lakh for 2 lots). Using more of the cash raises the best years but brings 40-80% falls. The evening note now shows what was missed, why, what the tested fix would have done, and the capital use.",
+   "period": "2023-01 to 2026-10-16, Nifty, Bank Nifty, Sensex; Rs 2 lakh compounding"
+  },
+  {
    "id": "r24",
    "date": "2026-10-18",
    "area": "Index options",

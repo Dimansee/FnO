@@ -492,3 +492,24 @@ assert SV2.sym_strategies({"autopilot": True, "strategies": ["noise", "camarilla
 assert SV2.sym_strategies({"autopilot": False, "strategies": ["noise", "trend"]}, "SENSEX") == ["noise", "trend"]
 assert not SV2.trend_allowed({"autopilot": True}, 20000) and SV2.trend_allowed({"autopilot": True}, 40000) and SV2.trend_allowed({"autopilot": False}, 1000)
 print("round 24 autopilot rules OK")
+# round 25: day-end lag review (trend day, a trailing exit that left points, a skipped signal, capital use, 20-session tally)
+from fno import lag as LG2, learn as LN2  # noqa: E402
+d25 = "2026-10-13"
+ix25 = pd.date_range(f"{d25} 09:15", periods=75, freq="5min")
+px25 = 22300 + np.r_[np.linspace(0, 230, 6), np.linspace(230, 190, 30), np.linspace(190, 420, 39)]
+c25 = pd.DataFrame({"open": px25 - 3, "high": px25 + 5, "low": px25 - 6, "close": px25, "volume": 0}, index=ix25)
+c25.iloc[0, 0] = 22300.0
+hist25 = c25.copy(); hist25.index = hist25.index - pd.Timedelta(days=1)
+st25 = {"NIFTY": LN2._day_stats(c25, hist25)}
+tr25 = [{"symbol": "NIFTY", "mode": "signal", "opened": f"{d25}T09:45:04+05:30", "closed": f"{d25}T10:45:01+05:30", "lots": 1, "qty": 65,
+         "delta": 0.6, "margin": 14000, "pnl": -1229, "reason": "Trailing exit at 10:45: back inside the band / below VWAP",
+         "plan": {"strategy": "noise", "opt": "CE", "entry": 22530.0, "risk_pts": 64.0}}]
+LG2.note_skip("NIFTY", "main", "You already have an open signal trade in this instrument.", datetime(2026, 10, 13, 9, 51))
+LG2.note_skip("NIFTY", "main", "No valid signal right now (WAIT).", datetime(2026, 10, 13, 9, 52))
+lg25 = LG2.review_in(d25, {"NIFTY": c25}, st25, {"recommendations": []}, tr25, 200000, {"risk_pct": 1.0}, 14.5)
+n25 = lg25["indices"][0]
+assert n25["trend_day"] and n25["trades"][0]["tag"] == "trail_exit" and n25["trades"][0]["left_pts"] > 100, n25
+assert [s["cause"] for s in lg25["skips"]] == ["blocked_open"], lg25["skips"]
+assert lg25["capital"]["risk_budget"] == 2000 and lg25["capital"]["two_lots_from_equity"] > 200000
+assert any(x["cause"] == "trail_exit" and x["research"] == "r23" for x in lg25["rolling"]["causes"])
+print("lag review OK:", lg25["headline"])

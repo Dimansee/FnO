@@ -716,8 +716,8 @@ def post_close_in(day: str | None = None, force: bool = False) -> dict:
     if d.weekday() >= 5 or d in C.HOLIDAYS:
         return {"skipped": "not a trading day"}
     m = M.Market()
-    syms, levels, regs = {}, {}, {}
-    for sym in J.SYMS:
+    syms, levels, regs, todays = {}, {}, {}, {}
+    for sym in tuple(J.SYMS) + tuple(x for x in C.AUTOPILOT_SYMS if x not in J.SYMS):
         try:
             c = m.candles(sym)
         except Exception:
@@ -727,6 +727,7 @@ def post_close_in(day: str | None = None, force: bool = False) -> dict:
         if len(today) < 30:
             continue
         syms[sym] = _day_stats(today, hist)
+        todays[sym] = today
         regs[sym] = syms[sym]["regime"]
         full = pd.concat([hist, today])
         try:
@@ -812,6 +813,21 @@ def post_close_in(day: str | None = None, force: bool = False) -> dict:
             mean, se, n = _mean_se(v["r"])
             reg.append({"strategy": _strategy_name(strat), "regime": tag[7:], "n": v["n"], "mean_R": round(mean, 2)})
     report["regime_memory"] = sorted(reg, key=lambda x: (x["strategy"], x["regime"]))
+    try:                                                         # round 25: where the book lagged today, and the 20-session tally
+        from . import lag as LG
+        from . import paper as P
+        acct, _, tr_all, _ = P.snapshot()
+        opened = [t for t in tr_all if t.get("opened", "")[:10] == day and t.get("mode") == "signal"]
+        vo = None
+        for cx in ((jd.get("context") or {}).values() if jd else []):
+            if cx and isinstance(cx.get("vix"), dict) and cx["vix"].get("level") is not None:
+                vo = float(cx["vix"]["level"]); break
+        if vo is None and isinstance(vix_now, dict) and vix_now.get("level") is not None:
+            vo = float(vix_now["level"])
+        report["lag"] = LG.review_in(day, todays, syms, jd, opened, P.equity(acct, tr_all), SV.eprefs(), vo)
+        report["insights"].append("Where it lagged: " + report["lag"]["headline"])
+    except Exception as e:
+        report["lag"] = {"error": str(e)[:160]}
     new = review("IN")
     report["changes"] = [{"id": c["id"], "title": c["title"]} for c in new]
     monitor_variants()
