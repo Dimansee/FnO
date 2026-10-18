@@ -453,7 +453,7 @@ Bank Nifty / Sensex, 2023 → 16 Oct 2026; rules priced on options with costs, t
 **1. Are the levels special?** At the first touch of a level, does price move 0.3% back (reaction) before 0.3% through (break)?
 Random levels drawn from the same distances react 51.7%. Classic 52.8%, Fibonacci 52.1%, Woodie 53.3%, DeMark 53.4%, Camarilla
 53.8%, previous-day H/L/C 51.8% - indistinguishable from random. Only the **central pivot / CPR** stands out: 55-57% every year, and
-against a mirror level at the same distance from the open, +5 to +8 points (z 3.7-5.6). Price really does react there more often.
+against a mirror level at the same distance from the open, +5 to +8 points (z 2.6-5.6 for 0.5% to 0.2% moves). Price really does react there more often.
 
 **2. Rules on the levels** (₹2,000 risk a trade, 1 lot, all three indices; 2023-25 / 2026):
 
