@@ -1,7 +1,7 @@
 """Real option prices for the research (runs on GitHub Actions).
 
 1. NSE F&O bhavcopy (official end-of-day prices of every option, free) for every trading
-   day 2023-01 -> today: Nifty & Bank Nifty options, nearest 3 expiries, strikes within +-6%.
+   day 2023-01 -> today: Nifty & Bank Nifty options, nearest 3 expiries, strikes within +-15% of the close.
 2. Upstox public 5-minute candles of every Nifty / Bank Nifty option contract that is
    still listed (expired contracts need the paid Upstox Plus plan), strikes within +-6%.
 """
@@ -19,7 +19,8 @@ def L(*a):
 
 UND = {"NIFTY": pd.read_csv(f"{OUT}/NIFTY_1d.csv.gz", parse_dates=["ts"]).set_index("ts")["close"],
        "BANKNIFTY": pd.read_csv(f"{OUT}/BANKNIFTY_1d.csv.gz", parse_dates=["ts"]).set_index("ts")["close"]}
-WIDTH = 0.06
+WIDTH = 0.06          # Upstox 5-minute candles of listed contracts
+BHAV_WIDTH = 0.15     # bhavcopy: was 6% around the close, which dropped the strikes sold at the open on big-move days (round 31)
 
 # ------------------------------------------------------------------ 1. NSE bhavcopy
 NSE = requests.Session()
@@ -67,7 +68,7 @@ def bhav(d: date):
         u = UND[s][UND[s].index.date == d]
         spot = float(u.iloc[0]) if len(u) else float(g["strike"].median())
         exps = sorted(e for e in g["expiry"].unique() if e >= d)[:3]
-        keep.append(g[g["expiry"].isin(exps) & ((g["strike"] / spot - 1).abs() <= WIDTH)])
+        keep.append(g[g["expiry"].isin(exps) & ((g["strike"] / spot - 1).abs() <= BHAV_WIDTH)])
     return pd.concat(keep), None
 
 
