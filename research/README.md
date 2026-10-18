@@ -373,3 +373,28 @@ each trade's exit vs holding to 15:15, why a trend day was missed (VIX ceiling, 
 not place and its reason, now logged by `tick()`), and capital use (equity, risk budget, lots, ₹ needed for 2 / 3 lots). A 20-session
 tally ranks the causes by points / rupees left and links each to the round that tested its fix and the verdict; a cause seen 3+ times
 is marked "watch". Rule numbers are never changed from here.
+
+## Round 26 — large capital: fixed stop + fixed targets / T1-T2-T3 / small targets with more trades (`round26.py`, `round26_harness.py`, `round26_trend.py`, results `round26_results.json`)
+Idea tested: with many lots, exit at a fixed target (or T1/T2/T3 partial exits, or one target chosen by the market), no trailing and
+no waiting for 15:15, and take more trades with small targets. Same entries as the live rules, **10 lots on every trade**, brokerage
+per order (₹20 + GST, so it shrinks per lot), 0.5% slippage per fill. Train 2023-25, judged on 2026 (₹, 10 lots, all three indices).
+
+| Exits | 2023-25 | 2026 | PF (train / 2026) | Win % | Avg win / avg loss (R) | Trades a day |
+|---|---|---|---|---|---|---|
+| **Current (trail, breakeven, time stop, 15:15)** | **+₹25.2L** | **+₹10.2L** | 1.23 / 1.36 | 32% | +1.64 / -0.50 | ~1.6 |
+| Fixed SL + target 0.5R | -₹18.6L | +₹1.4L | 0.80 / 1.07 | 67% | +0.50 / -0.92 | |
+| Fixed SL + target 1R | -₹2.7L | +₹0.2L | 0.98 / 1.01 | 52% | +0.95 / -0.86 | |
+| Fixed SL + target 1.5R | +₹2.1L | +₹0.2L | 1.01 / 1.01 | 45% | | |
+| Fixed SL + target 2R | +₹9.3L | +₹5.0L | 1.07 / 1.13 | 41% | +1.48 / -0.81 | |
+| T1/T2/T3 = 0.5 / 1 / 1.5R (thirds) | -₹7.1L | +₹0.3L | 0.93 / 1.01 | 52% | | |
+| T1/T2/T3 = 1 / 2 / 3R (thirds) | +₹4.2L | +₹4.4L | 1.03 / 1.13 | 44% | +1.22 / -0.76 | |
+| Same + stop to entry after T1 | +₹6.3L | +₹3.7L | 1.05 / 1.11 | 51% | | |
+| One target by market (2R trending / 0.75R otherwise) | +₹7.6L | +₹4.4L | 1.06 / 1.12 | 47% | | |
+| Target 0.5R + up to 3 more trades after a target | -₹21.8L | -₹1.9L | 0.82 / 0.94 | 68% | +0.50 / -0.93 | more |
+| Target 1R + up to 3 more trades after a target | -₹4.2L | -₹0.6L | 0.97 / 0.99 | 53% | | more |
+
+Why: the current exits keep the average loss at **0.5R** (the trailing / time exits leave weak trades early) and let winners run to
+**1.6R** on trend days. A fixed stop lets every loser run to the full stop (~0.9R) while a small target caps the winners: 0.5R targets
+win two trades in three and still lose money. More lots multiply the per-lot result - a negative edge gets bigger with size, and
+real slippage on 10+ lots of an option is larger than the 0.5% modelled, which hurts small targets most. Re-entering after a
+target adds trades but each one has the same negative expectancy. Not adopted; exits unchanged for every account size.

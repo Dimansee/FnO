@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r26",
+   "date": "2026-10-18",
+   "area": "Index options",
+   "title": "Round 26: large capital - fixed stop + fixed targets, T1/T2/T3 partial exits, small targets with more trades",
+   "asked": "With many lots, should the rules exit at fixed targets (one target, T1/T2/T3, or a target chosen by the market) with no trailing and no waiting for 15:15, and take more trades with small targets? Same entries, 10 lots per trade, brokerage per order.",
+   "result": "10 lots, 2023-25 / 2026: current exits +25.2L / +10.2L (PF 1.23 / 1.36). Fixed target 0.5R -18.6L / +1.4L (67% wins, PF 0.80); 1R -2.7L / +0.2L; 2R +9.3L / +5.0L. T1/T2/T3 0.5/1/1.5R -7.1L / +0.3L; 1/2/3R +4.2L / +4.4L; with stop to entry after T1 +6.3L / +3.7L. Market-dependent target +7.6L / +4.4L. Small targets with up to 3 more trades after a target: 0.5R -21.8L / -1.9L, 1R -4.2L / -0.6L.",
+   "decision": "Not adopted - exits unchanged for every account size",
+   "summary": "The current exits win by cutting losers at about 0.5R and letting trend-day winners reach about 1.6R. Fixed stops let losers run to the full stop while small targets cap the winners, so high win rates still lose. Lot size multiplies the per-lot result; it does not turn a losing exit into a winning one.",
+   "period": "2023-01 to 2026-10-16, Nifty, Bank Nifty, Sensex, 10 lots per trade"
+  },
+  {
    "id": "r25",
    "date": "2026-10-18",
    "area": "Index options",
