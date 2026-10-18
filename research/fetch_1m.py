@@ -7,7 +7,7 @@ import pandas as pd
 import requests
 
 OUT = "research/data"
-KEYS = {"NIFTY": "NSE_INDEX|Nifty 50", "BANKNIFTY": "NSE_INDEX|Nifty Bank", "INDIAVIX": "NSE_INDEX|India VIX"}
+KEYS = {"NIFTY": "NSE_INDEX|Nifty 50", "BANKNIFTY": "NSE_INDEX|Nifty Bank", "INDIAVIX": "NSE_INDEX|India VIX", "SENSEX": "BSE_INDEX|SENSEX"}
 S = requests.Session(); S.headers.update({"Accept": "application/json"})
 log = []
 for name, key in KEYS.items():
