@@ -30,10 +30,14 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install pandas requests
-      - run: python research/record_day.py ${{ github.event.inputs.dates }}
+      - name: use the recorder script from main (the data branch keeps an old copy)
+        run: |
+          git fetch -q origin main
+          git show origin/main:research/record_day.py > "$RUNNER_TEMP/record_day.py"
+      - run: python "$RUNNER_TEMP/record_day.py" ${{ github.event.inputs.dates }}
         env:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
-          FNO_APP_URL: ${{ vars.APP_URL }}
+          FNO_APP_URL: ${{ vars.APP_URL || 'https://fno-trainer.onrender.com' }}
       - name: commit data
         if: always()
         run: |
