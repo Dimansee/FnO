@@ -699,7 +699,7 @@ details summary{cursor:pointer;font-size:13px}
       <p style="margin-top:0">Replays today's rules on the latest ~60 days of 5-minute data (the first 14 sessions are only used to measure the usual move). The studies that chose these rules, with dates and summaries, are in the <b>Research</b> tab.</p>
       <div class="formrow">
         <div><label>Instrument</label><select id="btSym" style="width:100%"></select></div>
-        <div><label>Strategy</label><select id="btStrat" style="width:100%"><option value="autopilot" selected>Autopilot rules for this index</option><option value="both">Noise + Camarilla</option><option value="noise">Noise band only</option><option value="camarilla">Camarilla breakout only</option><option value="trend">Trend-day catcher only</option><option value="all">Both + trend-day catcher</option><option value="ai">AI model (experimental)</option></select></div>
+        <div><label>Strategy</label><select id="btStrat" style="width:100%"><option value="autopilot" selected>Autopilot rules for this index</option><option value="both">Noise + Camarilla</option><option value="noise">Noise band only</option><option value="camarilla">Camarilla breakout only</option><option value="trend">Trend-day catcher only</option><option value="fib">Fibonacci 0.618 breakout only</option><option value="all">Both + trend-day catcher</option><option value="ai">AI model (experimental)</option></select></div>
         <div><label>Period</label><select id="btDays" style="width:100%"><option value="30">Last 30 trading days</option><option value="60" selected>Last 60 days</option><option value="90">Last 90 days</option><option value="120">Last 120 days</option><option value="180">Last 180 days</option><option value="250">Last 1 year (250 days)</option><option value="500">Last 2 years (500 days)</option></select></div>
         <div><label>Band width</label><select id="btMult" style="width:100%"><option value="1.5">1.5× usual move</option><option value="1.75" selected>1.75× (the rule)</option><option value="2">2× usual move</option></select></div>
         <div><label>Capital (₹)</label><input id="btCap" type="number" value="200000" min="1000" step="5000" style="width:100%"></div>
@@ -831,6 +831,7 @@ details summary{cursor:pointer;font-size:13px}
         <label class="tog"><input type="checkbox" id="pfNoise"> Noise-band momentum</label>
         <label class="tog" style="margin-left:14px"><input type="checkbox" id="pfCam"> Camarilla breakout</label>
         <label class="tog" style="margin-left:14px"><input type="checkbox" id="pfAI"> AI model (experimental - see its record in Backtest)</label>
+        <label class="tog" style="margin-left:14px"><input type="checkbox" id="pfFib"> Fibonacci 0.618 breakout (own slot, Camarilla exits - see Research round 29)</label>
         <label class="tog" style="margin-left:14px"><input type="checkbox" id="pfTrend"> Trend-day catcher (own slot, 10:45-14:15, holds to 15:15 - see Research round 23)</label>
         <label style="margin-top:12px">Daily risk limits</label>
         <label class="tog"><input type="checkbox" id="pfLimits"> Enforce them (stop for the day after 2 losers, a 2% loss or 4 trades). Off = shown as a tip only, since this is a demo account</label>
@@ -1969,7 +1970,7 @@ async function loadPortfolio() {
     eqs.setData(s.equity.map((e, i) => ({time: Math.floor(new Date(e.t).getTime() / 1000) + 19800 + i, value: e.v})));
     eqc.timeScale().fitContent();
   }
-  const stratOf = h => h.mode !== "signal" ? "Manual" : ({camarilla: "Camarilla", ai: "AI model", trend: "Trend-day"}[(h.plan || {}).strategy] || "Noise band") + ((h.plan || {}).auto ? " (auto)" : "");
+  const stratOf = h => h.mode !== "signal" ? "Manual" : ({camarilla: "Camarilla", ai: "AI model", trend: "Trend-day", fib: "Fibonacci"}[(h.plan || {}).strategy] || "Noise band") + ((h.plan || {}).auto ? " (auto)" : "");
   const groups = {};
   d.history.forEach(h => { const k = stratOf(h).replace(" (auto)", ""); (groups[k] = groups[k] || []).push(h.pnl); });
   const ex = d.expected || {};
@@ -2620,7 +2621,7 @@ async function loadJournal() {
       ${j.recommendations.length ? `<div class="tablewrap"><table class="prose"><tr><th>Time</th><th>Index</th><th>Strategy</th><th>Option</th><th>Premium entry / SL / target</th><th>Index entry / SL / target</th><th>Win % (backtest)</th><th>Basis</th><th>Outcome</th><th>Exit prem</th><th></th></tr>${j.recommendations.map(recoRow).join("")}</table></div>
       <p class="muted" style="font-size:12px">Win % is the strategy's historical win rate from the 2023-26 backtest (the AI's is its own estimate for that candle). "Market score" is the context score on the Signal page (global cues, gap, VIX, put/call ratio, news, FII) - shown for information, it does not decide trades. Premium SL / target are the option-price estimates of the index levels; the exit premium comes from the recorded 5-minute chain.</p>` : `<div class="empty">No recommendations recorded for this day${j.context.NIFTY ? " - the strategies did not fire" : ""}.</div>`}</div>
     <div class="grid g2" style="margin-top:14px">${["NIFTY", "BANKNIFTY"].map(sym => `<div class="card"><h3>AI view through the day · ${sym === "NIFTY" ? "Nifty" : "Bank Nifty"}</h3>${(j.ai[sym] || []).length ? `<div class="tablewrap" style="max-height:320px;overflow:auto"><table><tr><th>Candle</th><th>Spot</th><th>Best</th><th>Exp. R</th><th>Win</th><th></th></tr>${aiRows(sym)}</table></div>` : `<div class="muted">No AI scores recorded (switch the AI model on in Settings to log its view).</div>`}</div>`).join("")}</div>
-    ${j.paper_trades.length ? `<div class="card" style="margin-top:14px"><h3>Paper trades closed this day</h3><div class="tablewrap"><table><tr><th>Opened</th><th>Index</th><th>Strategy</th><th>Legs</th><th>Lots</th><th>In → out</th><th>P&L</th><th>Reason</th></tr>${j.paper_trades.map(t => `<tr><td class="mono">${esc((t.opened || "").slice(11, 16))}</td><td>${esc(t.symbol)}</td><td>${t.mode !== "signal" ? "Manual" : ({camarilla: "Camarilla", ai: "AI model", trend: "Trend-day"}[(t.plan || {}).strategy] || "Noise band")}</td><td>${(t.legs || []).map(l => `${l.side} ${l.strike}${l.opt}`).join(" / ")}</td><td>${t.lots}</td><td class="mono">₹${n2(t.entry_prem)} → ₹${n2(t.exit_prem)}</td><td class="mono ${cls(t.pnl)}">${rs(t.pnl)}</td><td>${esc(t.reason)}</td></tr>`).join("")}</table></div></div>` : ""}`;
+    ${j.paper_trades.length ? `<div class="card" style="margin-top:14px"><h3>Paper trades closed this day</h3><div class="tablewrap"><table><tr><th>Opened</th><th>Index</th><th>Strategy</th><th>Legs</th><th>Lots</th><th>In → out</th><th>P&L</th><th>Reason</th></tr>${j.paper_trades.map(t => `<tr><td class="mono">${esc((t.opened || "").slice(11, 16))}</td><td>${esc(t.symbol)}</td><td>${t.mode !== "signal" ? "Manual" : ({camarilla: "Camarilla", ai: "AI model", trend: "Trend-day", fib: "Fibonacci"}[(t.plan || {}).strategy] || "Noise band")}</td><td>${(t.legs || []).map(l => `${l.side} ${l.strike}${l.opt}`).join(" / ")}</td><td>${t.lots}</td><td class="mono">₹${n2(t.entry_prem)} → ₹${n2(t.exit_prem)}</td><td class="mono ${cls(t.pnl)}">${rs(t.pnl)}</td><td>${esc(t.reason)}</td></tr>`).join("")}</table></div></div>` : ""}`;
 }
 async function loadSettings() {
   const d = await api("/api/settings");
@@ -2633,7 +2634,7 @@ async function loadSettings() {
   S.prefs = pf;
   $("#pfSize").value = pf.sizing || "risk"; $("#pfRisk").value = String(pf.risk_pct ?? 1);
   $("#pfNoise").checked = (pf.strategies || []).includes("noise"); $("#pfCam").checked = (pf.strategies || []).includes("camarilla");
-  $("#pfAI").checked = (pf.strategies || []).includes("ai"); $("#pfTrend").checked = (pf.strategies || []).includes("trend");
+  $("#pfAI").checked = (pf.strategies || []).includes("ai"); $("#pfTrend").checked = (pf.strategies || []).includes("trend"); $("#pfFib").checked = (pf.strategies || []).includes("fib");
   $("#pfAutopilot").checked = !!pf.autopilot; $("#pfAuto").checked = !!pf.auto; $("#pfLimits").checked = !!pf.enforce_limits; $("#pfFills").value = pf.fills || "realistic";
   if (!PUSH_INIT) { PUSH_INIT = true; pushInit(); }
   $("#pfSyms").innerHTML = Object.keys(IDX_LABEL).map(x => `<label class="tog" style="margin-right:14px"><input type="checkbox" data-asym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${IDX_LABEL[x]}${x === "SENSEX" ? ' <span class="muted" style="font-size:11px">(rules not backtested on Sensex)</span>' : ""}</label>`).join("");
@@ -2678,7 +2679,7 @@ document.addEventListener("click", async e => {
   if (d) { await post("/api/settings", {broker: d.dataset.disc, disconnect: true}); toast("Disconnected"); loadSettings(); }
 });
 $("#pfSave").onclick = async () => {
-  const strategies = [$("#pfNoise").checked && "noise", $("#pfCam").checked && "camarilla", $("#pfAI").checked && "ai", $("#pfTrend").checked && "trend"].filter(Boolean);
+  const strategies = [$("#pfNoise").checked && "noise", $("#pfCam").checked && "camarilla", $("#pfAI").checked && "ai", $("#pfTrend").checked && "trend", $("#pfFib").checked && "fib"].filter(Boolean);
   const auto_syms = [...document.querySelectorAll("[data-asym]")].filter(x => x.checked).map(x => x.dataset.asym);
   try {
     await post("/api/settings", {prefs: {sizing: $("#pfSize").value, risk_pct: +$("#pfRisk").value, strategies, auto: $("#pfAuto").checked, autopilot: $("#pfAutopilot").checked, auto_syms, enforce_limits: $("#pfLimits").checked, fills: $("#pfFills").value}});

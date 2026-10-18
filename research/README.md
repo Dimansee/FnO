@@ -445,3 +445,40 @@ The round-27 pick mostly removed the 2025-type losing stretch (Bank Nifty catche
 -53% to -4%. A ₹20,000 account is still too small for these rules: one lot is ~10% of it, so normal losing streaks end most years.
 Also: `record_day.py` now records Sensex index, near future and options (BSE F&O) every evening so Sensex trades can be checked
 against real premiums; the Backtest tab has "Autopilot rules for this index" (default) - exactly what Autopilot trades on each index.
+
+## Round 29 — pivot points (`round29.py`, `round29_levels.py`, `round29_harness.py`, results `round29_results.json`; live rule "fib")
+Seven pivot families from the previous session (Classic, Fibonacci, Woodie, Camarilla, DeMark, CPR, previous-day H/L/C), Nifty /
+Bank Nifty / Sensex, 2023 → 16 Oct 2026; rules priced on options with costs, train 2023-25, judged on 2026.
+
+**1. Are the levels special?** At the first touch of a level, does price move 0.3% back (reaction) before 0.3% through (break)?
+Random levels drawn from the same distances react 51.7%. Classic 52.8%, Fibonacci 52.1%, Woodie 53.3%, DeMark 53.4%, Camarilla
+53.8%, previous-day H/L/C 51.8% - indistinguishable from random. Only the **central pivot / CPR** stands out: 55-57% every year, and
+against a mirror level at the same distance from the open, +5 to +8 points (z 3.7-5.6). Price really does react there more often.
+
+**2. Rules on the levels** (₹2,000 risk a trade, 1 lot, all three indices; 2023-25 / 2026):
+
+| Rule | 2023-25 | 2026 |
+|---|---|---|
+| Classic R1/S1 breakout | -31k (PF 0.96) | +37k |
+| Classic R2/S2 breakout | +113k (PF 1.34) | -18k |
+| **Fibonacci 0.618 breakout (stop 0.382)** | **+120k (PF 1.15)** | **+68k (PF 1.38)** |
+| Woodie R1/S1 breakout | -85k | +57k |
+| DeMark R1/S1 breakout | -112k | -15k |
+| CPR breakout | -459k (PF 0.62) | -90k |
+| Camarilla H4/L4 breakout (live) | +45k | +95k |
+| Central pivot fade, 1R / 2R | -120k / -90k | -18k / -11k |
+| CPR edge fade / Camarilla R3-S3 fade / R1 fade / S1 fade | -13k / -82k / -97k / -90k | -2k / -19k / -2k / -18k |
+
+The central-pivot reaction edge (~5 points of probability on a 0.3% move) is far smaller than option spread, slippage and decay - every
+fade loses. Only the Fibonacci 0.618 breakout is positive in both periods (Nifty +76k, Sensex +59k, Bank Nifty -15k in training).
+
+**3. Pivots as filters on the live set** (2023-25 / 2026, live +197k / +98k): skip narrow CPR +177k / +46k; skip wide CPR +209k / +68k;
+only with the daily pivot side +131k / +64k; weekly +166k / +29k; monthly +69k / +19k. None improves 2026 - not adopted.
+**4. "Narrow CPR = trend day"**: trend days followed 18.8% of narrow-CPR days vs 20.2% of wide ones; it flips by year. Not true here.
+
+**5. Fibonacci breakout with the live set** (picked on 2023-25 for Nifty and Sensex): as an extra own-slot rule +332k / +183k (Sharpe
+0.78 / 1.59) vs live +197k / +98k (0.69 / 1.32), deepest fall -123k vs -80k; instead of Camarilla +193k / +88k (worse).
+Rolling 12 months from ₹2 lakh: median +41.1% vs +24.9%, worst -16.9% vs -4.3%, losing windows 3% vs 6%, falls > 25% in 79% vs 32% of
+windows; 2026 +84% vs +41% (same -17.5% fall). From ₹20k: worse (85% of windows end unable to buy a lot vs 62%).
+**Decision:** shipped as rule "fib" (own slot, Camarilla exits, entries to 13:00, VIX ≤ 20) for Nifty and Sensex on paper Autopilot,
+switched on only once equity reaches ₹2 lakh (`FIB_MIN_EQUITY`). App backtest reproduces the research trade-for-trade.

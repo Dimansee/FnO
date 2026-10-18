@@ -141,6 +141,12 @@ TREND_FIRST_CHECK = time(10, 45)
 TREND_LAST_CHECK = time(14, 15)
 TREND_VWAP_SHARE = 0.80
 TREND_BE_R = 1.0
+# Fourth rule: Fibonacci 0.618 breakout (research round 29, pivot-point study). A 5-min close crossing yesterday's pivot + 0.618 x range
+# (buy CALL) or pivot - 0.618 x range (buy PUT), 09:20-13:00, stop at the 0.382 level (1-3 ATR), stop to entry at +1R, 45-min time
+# stop, else 15:15 - the Camarilla exits. Own slot. Picked on 2023-25 for Nifty and Sensex (Bank Nifty lost). Autopilot adds it once
+# equity reaches FIB_MIN_EQUITY: at Rs 2 lakh it lifted the median 12-month return +25% -> +41% but deepened the typical fall.
+FIB_MIN_EQUITY = 200_000
+SLOTS = ("trend", "fib")      # rules with their own position slot (may hold a trade while a Noise / Camarilla trade is open)
 TREND_MIN_EQUITY = 40_000   # round 24: Autopilot adds the trend slot only once equity is >= Rs 40k (1-year bootstrap from Rs 20k:
                             # 65.9% of paths ended unable to afford a lot vs 73.5% ungated and 68.5% without the catcher)
 # Market recorder (fno/recorder.py): option-chain snapshots kept for later research
@@ -183,8 +189,8 @@ AUTOPILOT_SYMS = ["NIFTY", "BANKNIFTY", "SENSEX"]
 # Round 27 "ultimate pick": each rule x index treated as a block and picked on 2023-25 only (profitable, positive in 2 of 3 years,
 # PF >= 1.05). Bank Nifty drops the trend-day catcher (-1k / +27k / -34k), Sensex adds Noise (-16k / +27k / +25k), Sensex Camarilla
 # stays off. Under the live slot rules: 2023-25 +197k vs +152k, deepest fall -80k vs -101k, 2026 +98k vs +91k (Rs 2,000 risk a trade).
-AUTOPILOT_SYM_STRATEGIES = {"BANKNIFTY": ["noise", "camarilla"], "SENSEX": ["noise", "trend"]}
-AUTOPILOT_STRATEGIES = ["noise", "camarilla", "trend"]   # trend added in round 23 (paper autopilot)
+AUTOPILOT_SYM_STRATEGIES = {"BANKNIFTY": ["noise", "camarilla"], "SENSEX": ["noise", "trend", "fib"]}   # fib: round 29 (Nifty + Sensex)
+AUTOPILOT_STRATEGIES = ["noise", "camarilla", "trend", "fib"]   # trend: round 23; fib: round 29 (paper autopilot)
 AUTOPILOT_RISK_PCT = 1.0            # lots = 1% of CURRENT equity / risk per lot (compounds as the account grows)
 AUTOPILOT_MAX_TRADE_RISK = 0.15     # a 1-lot floor is allowed only while one lot risks at most 15% of equity (round 20: 83% -> 46% of years dipping below half the account)
 AUTOPILOT_SMALL_ACCOUNT = 100_000   # below this equity the weekly loss cap is 15% (4% would block every trade after one loss)

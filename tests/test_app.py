@@ -487,7 +487,7 @@ assert "summary" in bt_
 assert "trend" in C.AUTOPILOT_STRATEGIES
 print("trend-day catcher OK")
 # round 24: Sensex trades only the trend-day catcher on Autopilot; the trend slot waits for Rs 40k equity on Autopilot
-assert SV2.sym_strategies({"autopilot": True, "strategies": ["noise", "camarilla", "trend"]}, "SENSEX") == ["noise", "trend"]
+assert SV2.sym_strategies({"autopilot": True, "strategies": ["noise", "camarilla", "trend", "fib"]}, "SENSEX") == ["noise", "trend", "fib"]
 assert SV2.sym_strategies({"autopilot": True, "strategies": ["noise", "camarilla", "trend"]}, "BANKNIFTY") == ["noise", "camarilla"]
 assert not SV2._trend_only({"autopilot": True}, "SENSEX")
 assert SV2.sym_strategies({"autopilot": True, "strategies": ["noise", "camarilla", "trend"]}, "NIFTY") == ["noise", "camarilla", "trend"]
@@ -515,3 +515,32 @@ assert [s["cause"] for s in lg25["skips"]] == ["blocked_open"], lg25["skips"]
 assert lg25["capital"]["risk_budget"] == 2000 and lg25["capital"]["two_lots_from_equity"] > 200000
 assert any(x["cause"] == "trail_exit" and x["research"] == "r23" for x in lg25["rolling"]["causes"])
 print("lag review OK:", lg25["headline"])
+
+# round 29: Fibonacci 0.618 breakout - levels, own slot next to the main and trend slots, Rs 2 lakh equity gate on Autopilot
+hist29 = pd.DataFrame({"open": [100.0, 104], "high": [110.0, 110], "low": [90.0, 95], "close": [100.0, 105]},
+                      index=pd.to_datetime(["2026-10-12 09:15", "2026-10-12 15:25"]))
+fl = S.fib_levels(hist29)
+assert abs(fl["h4"] - (101.6666 + 12.36)) < 0.01 and abs(fl["l3"] - (101.6666 - 7.64)) < 0.01 and fl["h4"] > fl["h3"] > fl["l3"] > fl["l4"]
+assert not SV2.fib_allowed({"autopilot": True}, 150000) and SV2.fib_allowed({"autopilot": True}, 200000) and SV2.fib_allowed({"autopilot": False}, 1)
+assert "fib" in C.AUTOPILOT_STRATEGIES and "fib" not in SV2.sym_strategies({"autopilot": True, "strategies": C.AUTOPILOT_STRATEGIES}, "BANKNIFTY")
+store.clear_positions(); store.clear_trades(); j(c.post("/api/account/reset", json={"capital": 200000}))
+for sid_, st_ in (("m29", "noise"), ("t29", "trend")):
+    store.insert_position({"id": sid_, "symbol": "NIFTY", "mode": "signal", "opened": "2026-10-01T09:50:00+05:30", "legs": [], "lots": 1, "lot": 65, "margin": 0,
+                           "plan": {"strategy": st_, "opt": "CE", "entry": 1, "sl": 0, "risk_pts": 1, "target": 9}})
+SV2.S.evaluate_camarilla_orig = SV2.S.evaluate_camarilla
+def _fake_cam(today, hist, vix, now, traded_today=False, lv_override=None, name="camarilla", label="Camarilla"):
+    r = SV2.S.evaluate_camarilla_orig(today, hist, vix, now, traded_today, lv_override, name, label)
+    if name == "fib" and not traded_today:
+        sp = float(today["close"].iloc[-1])
+        r["plan"] = {"strategy": "fib", "opt": "CE", "entry": sp, "risk_pts": 40.0, "sl": sp - 40, "signal_bar": "10:00", "target": None, "rr": None,
+                     "breakeven_at": sp + 40, "time_stop_min": 45, "trail": "x"}
+    return r
+SV2.S.evaluate_camarilla = _fake_cam
+assert j(c.post("/api/settings", json={"prefs": {"strategies": ["noise", "camarilla", "trend", "fib"], "auto": True, "autopilot": False}}))["ok"]
+ok_, msg_ = SV2.place_signal("NIFTY", auto=True, which="fib")
+assert ok_, msg_
+ok_, msg_ = SV2.place_signal("NIFTY", auto=True, which="fib")
+assert not ok_ and "Fibonacci" in msg_
+SV2.S.evaluate_camarilla = SV2.S.evaluate_camarilla_orig
+assert "summary" in j(c.post("/api/backtest", json={"symbol": "NIFTY", "capital": 200000, "strategy": "fib", "days": 30}))
+print("fibonacci slot OK")

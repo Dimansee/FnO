@@ -102,9 +102,15 @@ def sym_strategies(pf, symbol) -> list:
     return st
 
 
+def fib_allowed(pf, equity: float) -> bool:
+    """Autopilot adds the Fibonacci breakout once equity reaches FIB_MIN_EQUITY (round 29: tested at Rs 2 lakh)."""
+    return not pf.get("autopilot") or equity >= C.FIB_MIN_EQUITY
+
+
 def _trend_only(pf, symbol) -> bool:
     """Autopilot trades this index with the trend-day slot only (no Noise / Camarilla / custom main-slot entries)."""
-    return bool(pf.get("autopilot")) and C.AUTOPILOT_SYM_STRATEGIES.get(symbol) == ["trend"]
+    st = C.AUTOPILOT_SYM_STRATEGIES.get(symbol)
+    return bool(pf.get("autopilot")) and bool(st) and set(st) <= set(C.SLOTS)
 
 
 def trend_allowed(pf, equity: float) -> bool:
@@ -115,7 +121,7 @@ def trend_allowed(pf, equity: float) -> bool:
 def _traded_today(symbol, positions, trades) -> dict:
     """Which strategies already traded this instrument today (one trade per strategy per instrument)."""
     today = C.today_ist().isoformat()
-    done = {"noise": False, "camarilla": False, "trend": False}
+    done = {"noise": False, "camarilla": False, "trend": False, "fib": False}
     for x in list(positions) + list(trades):
         if x["symbol"] == symbol and x.get("mode") == "signal" and x["opened"][:10] == today:
             st = ((x.get("plan") or {}).get("strategy")) or "noise"
@@ -501,21 +507,25 @@ def place_signal(symbol, strike=None, auto=False, which=None):
         guard = calendar_guard(symbol, g["exps"], g["now"].date()) or guard
     if guard.get("blocked"):
         return False, guard["reason"]
-    is_trend = lambda p: (p.get("plan") or {}).get("strategy") == "trend"   # noqa: E731
-    if any(p["symbol"] == symbol and p["mode"] == "signal" and is_trend(p) == (which == "trend") for p in pos):
-        return False, ("You already have an open trend-day trade in this instrument." if which == "trend"
-                       else "You already have an open signal trade in this instrument.")
+    slot_of = lambda p: (p.get("plan") or {}).get("strategy") if (p.get("plan") or {}).get("strategy") in C.SLOTS else None   # noqa: E731
+    if any(p["symbol"] == symbol and p["mode"] == "signal" and slot_of(p) == which for p in pos):
+        return False, ({"trend": "You already have an open trend-day trade in this instrument.",
+                        "fib": "You already have an open Fibonacci-breakout trade in this instrument."}.get(which)
+                       or "You already have an open signal trade in this instrument.")
     cstats = M.chain_stats(g["chain"], g["spot"])
     traded = _traded_today(symbol, pos, tr)
     strats = sym_strategies(pf, symbol)
     if which == "trend" and (("trend" not in strats) or not trend_allowed(pf, P.equity(acct, tr))):
         return False, ("Trend-day catcher is off for this instrument." if "trend" not in strats else
                        f"Autopilot adds the trend-day catcher once equity reaches ₹{C.TREND_MIN_EQUITY:,.0f}.")
-    if which != "trend" and _trend_only(pf, symbol):
-        return False, "Only the trend-day catcher trades this instrument."
+    if which == "fib" and ("fib" not in strats or not fib_allowed(pf, P.equity(acct, tr))):
+        return False, ("Fibonacci breakout is off for this instrument." if "fib" not in strats else
+                       f"Autopilot adds the Fibonacci breakout once equity reaches ₹{C.FIB_MIN_EQUITY:,.0f}.")
+    if which is None and _trend_only(pf, symbol):
+        return False, "Only the own-slot rules trade this instrument."
     ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, news(symbol), gcues(), fii(), g["now"], guard, traded, strats)
-    if which == "trend":
-        tv = ev.get("trend") or {}
+    if which in C.SLOTS:
+        tv = ev.get(which) or {}
         ev = {**ev, "plan": tv.get("plan"), "signal": tv.get("signal", "WAIT")}
     else:
         ev = _with_ai(symbol, g, ev, pf, traded)
@@ -861,7 +871,7 @@ def _push_safe(title, body, event_id, url="/"):
 
 def _push_signal(sym, ev, order, g):
     plan = ev["plan"]
-    name = {"noise": "Noise-area", "camarilla": "Camarilla", "ai": "AI model", "trend": "Trend-day"}.get(plan.get("strategy"), plan.get("strategy"))
+    name = {"noise": "Noise-area", "camarilla": "Camarilla", "ai": "AI model", "trend": "Trend-day", "fib": "Fibonacci"}.get(plan.get("strategy"), plan.get("strategy"))
     body = (f"{name}: {order.get('strike'):g} {plan.get('opt')} @ ₹{order.get('entry_prem')} (SL ₹{order.get('sl_prem')}, target ₹{order.get('target_prem')}) "
             f"| index {plan.get('entry'):.0f} SL {plan.get('sl'):.0f} T {plan.get('target'):.0f} | score {ev.get('score')}")
     return _push_safe(f"{sym} {ev.get('signal')}", body, f"reco:{sym}:{plan.get('strategy')}:{plan.get('signal_bar') or g['now'].strftime('%H:%M')}:{g['now'].date()}", "/#journal")
@@ -924,13 +934,16 @@ def tick():
                 if ok:
                     placed.append({"symbol": sym, "message": msg})
                     _push_safe(f"{sym}: paper trade placed", str(msg)[:160], f"placed:{sym}:{now.strftime('%H%M')}", "/#portfolio")
-                if "trend" in strats and C.TREND_FIRST_CHECK <= t:
-                    ok, msg = place_signal(sym, auto=True, which="trend")
+                for slot in C.SLOTS:                      # own-slot rules (round 23 trend-day catcher, round 29 Fibonacci breakout)
+                    if slot not in strats or (slot == "trend" and t < C.TREND_FIRST_CHECK):
+                        continue
+                    ok, msg = place_signal(sym, auto=True, which=slot)
                     if not ok:
-                        _note_skip_safe(sym, "trend", msg, now)
+                        _note_skip_safe(sym, slot, msg, now)
                     if ok:
-                        placed.append({"symbol": sym, "message": msg, "strategy": "trend"})
-                        _push_safe(f"{sym}: trend-day paper trade placed", str(msg)[:160], f"placedt:{sym}:{now.strftime('%H%M')}", "/#portfolio")
+                        placed.append({"symbol": sym, "message": msg, "strategy": slot})
+                        _push_safe(f"{sym}: {'trend-day' if slot == 'trend' else 'Fibonacci'} paper trade placed", str(msg)[:160],
+                                   f"placed{slot}:{sym}:{now.strftime('%H%M')}", "/#portfolio")
             except Exception as e:                       # one instrument failing must not stop the others
                 placed.append({"symbol": sym, "error": str(e)[:120]})
     try:                                                     # scalp book (separate paper ledger, off unless switched on)

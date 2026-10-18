@@ -45,7 +45,8 @@ CAUSES = {
     "cash_skip": ("Signal skipped: not enough free cash", "r25", "Happens when several positions are open; lots shrink to fit the cash."),
     "weekly_cap": ("Signal skipped: weekly loss limit reached", "r18b, r20c", "Adopted rule (it improved profit and the deepest fall)."),
     "day_limit": ("Signal skipped: daily limit (2 losers / -2% / 4 trades)", "r19c", "Only advisory on paper unless enforced in Settings."),
-    "catcher_gate": ("Trend-day catcher waiting for Rs 40k equity (Autopilot)", "r24", "Small-account gate; removes the catcher's extra risk below Rs 40k."),
+    "catcher_gate": ("An own-slot rule waiting for its equity level (catcher Rs 40k, Fibonacci Rs 2 lakh)", "r24, r29",
+                     "Small-account gates: below these levels the extra rule added more risk than profit."),
     "learn_veto": ("Skipped by the learning engine (veto / half size)", "learning", "Guarded change with its own evidence; see Changes in this tab."),
     "other_skip": ("Signal skipped for another reason", "-", "See the message."),
 }

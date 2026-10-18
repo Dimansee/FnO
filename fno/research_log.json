@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r29",
+   "date": "2026-10-18",
+   "area": "Index options",
+   "title": "Round 29: pivot points - are the levels special, breakout / fade rules, pivots as filters, and a Fibonacci breakout rule",
+   "asked": "Seven pivot families (Classic, Fibonacci, Woodie, Camarilla, DeMark, CPR, previous-day H/L/C) on Nifty, Bank Nifty, Sensex 2023-26: do they get more reactions than random levels, which breakout / fade rules make money on options, do they help as filters, does a narrow CPR predict trend days?",
+   "result": "Reactions (0.3% back before 0.3% through): random 51.7%; Classic 52.8, Fib 52.1, Woodie 53.3, DeMark 53.4, Camarilla 53.8, prev-day 51.8; central pivot / CPR 55-57% and +5 to +8 points over a same-distance mirror level (z 3.7-5.6). Rules, Rs 2,000 risk, 2023-25 / 2026: Fibonacci 0.618 breakout +120k / +68k (only rule positive in both); Classic R2/S2 +113k / -18k; Classic R1/S1 -31k / +37k; Woodie -85k / +57k; DeMark -112k / -15k; CPR breakout -459k / -90k; every fade negative (central pivot -120k / -18k). Filters on the live set: none improved 2026. Narrow CPR: 18.8% trend days vs 20.2% wide. Fibonacci as an extra slot on Nifty + Sensex: +332k / +183k vs live +197k / +98k, Sharpe 0.78 / 1.59 vs 0.69 / 1.32, deepest fall -123k vs -80k; rolling 12 months at Rs 2 lakh median +41% vs +25%, falls > 25% in 79% vs 32% of windows.",
+   "decision": "Adopted: rule 'fib' (Fibonacci 0.618 breakout, own slot, Camarilla exits) for Nifty and Sensex on paper Autopilot once equity >= Rs 2 lakh. Fades, other breakouts and pivot filters not adopted.",
+   "summary": "Most pivot levels are no more special than random lines; the central pivot gets slightly more reactions but too few to pay for an option trade. The Fibonacci 0.618 breakout is the one pivot rule that earned in both periods; it adds profit and Sharpe to the live set at the cost of deeper falls, so it waits for Rs 2 lakh.",
+   "period": "2023-01 to 2026-10-16, Nifty, Bank Nifty, Sensex"
+  },
+  {
    "id": "r28",
    "date": "2026-10-18",
    "area": "Index options",
@@ -863,6 +874,21 @@
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
  "pending": [
+  {
+   "id": "p-fib",
+   "area": "Index options",
+   "title": "Fibonacci 0.618 breakout: live paper record",
+   "waiting_for": "More live trades",
+   "why": "Shipped in round 29 on backtest evidence; it deepens the typical fall, so it only trades from Rs 2 lakh equity.",
+   "collecting": "Paper Autopilot trades with strategy 'fib'",
+   "since": "2026-10-19",
+   "need": 60,
+   "unit": "sessions",
+   "refs": [
+    "r29"
+   ],
+   "next": "Compare live vs backtest; switch off if it loses over 60 sessions or the combined fall exceeds the backtest's."
+  },
   {
    "id": "p-sensex-real",
    "area": "Index options",

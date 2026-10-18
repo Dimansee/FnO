@@ -169,6 +169,10 @@ def evaluate(symbol, candles, vix, cstats, news, gcues, fii, now: datetime, day_
         res["trend"] = evaluate_trend(today, hist, vix, now, tt.get("trend", False))
         res["checks"].append((None, "Trend-day catcher (own slot, trades alongside the others):"))
         res["checks"] += res["trend"]["checks"]
+    if "fib" in enabled:                         # round 29: Fibonacci 0.618 breakout, own slot
+        res["fib"] = evaluate_camarilla(today, hist, vix, now, tt.get("fib", False), lv_override=fib_levels(hist), name="fib", label="Fibonacci 0.618")
+        res["checks"].append((None, "Fibonacci 0.618 breakout (own slot):"))
+        res["checks"] += res["fib"]["checks"]
     if "camarilla" not in enabled:
         return res
     res["checks"].append((None, "Second strategy - Camarilla breakout:"))
@@ -189,10 +193,20 @@ def camarilla_levels(hist: pd.DataFrame) -> dict | None:
     return {"h4": c + r / 2, "h3": c + r / 4, "l3": c - r / 4, "l4": c - r / 2, "pivot": (h + l + c) / 3}
 
 
-def evaluate_camarilla(today, hist, vix, now: datetime, traded_today=False) -> dict:
+def fib_levels(hist: pd.DataFrame) -> dict | None:
+    """Round 29: yesterday's pivot +/- 0.618 x range (entry) and +/- 0.382 x range (stop), in the Camarilla key names."""
+    if hist.empty:
+        return None
+    last = hist[hist.index.date == hist.index[-1].date()]
+    h, l, c = float(last["high"].max()), float(last["low"].min()), float(last["close"].iloc[-1])
+    p, r = (h + l + c) / 3, h - l
+    return {"h4": p + 0.618 * r, "h3": p + 0.382 * r, "l3": p - 0.382 * r, "l4": p - 0.618 * r, "pivot": p}
+
+
+def evaluate_camarilla(today, hist, vix, now: datetime, traded_today=False, lv_override=None, name="camarilla", label="Camarilla") -> dict:
     """Camarilla breakout: a 5-min close crossing yesterday's H4 (buy CALL) or L4 (buy PUT), 09:20-13:00,
     India VIX 11-22. Stop at H3/L3 (1-3 x ATR), stop to entry after +1R, 45-min time stop, no fixed target."""
-    out = {"levels": camarilla_levels(hist), "signal": "WAIT", "checks": [], "plan": None}
+    out = {"levels": lv_override if lv_override is not None else camarilla_levels(hist), "signal": "WAIT", "checks": [], "plan": None}
     lv = out["levels"]
     if not lv or today.empty or today.index[-1].date() != now.date():
         return out
@@ -204,11 +218,11 @@ def evaluate_camarilla(today, hist, vix, now: datetime, traded_today=False) -> d
         return out
     if traded_today:
         out["signal"] = "NO NEW ENTRIES"
-        out["checks"].append((False, "Camarilla trade already taken in this instrument today"))
+        out["checks"].append((False, f"{label} trade already taken in this instrument today"))
         return out
     if now.time() > C.CAM_LAST_ENTRY:
         out["signal"] = "NO NEW ENTRIES"
-        out["checks"].append((False, f"Camarilla entries only until {C.CAM_LAST_ENTRY:%H:%M}"))
+        out["checks"].append((False, f"{label} entries only until {C.CAM_LAST_ENTRY:%H:%M}"))
         return out
     if len(today) < 2:
         out["checks"].append((None, f"Levels: H4 {lv['h4']:.1f} / L4 {lv['l4']:.1f} - waiting for the first candles"))
@@ -237,7 +251,7 @@ def evaluate_camarilla(today, hist, vix, now: datetime, traded_today=False) -> d
         risk = min(max(abs(spot - ref), C.CAM_RMIN * a), C.CAM_RMAX * a)
         out["signal"] = "BUY CALL" if opt == "CE" else "BUY PUT"
         out["checks"].append((True, f"{end:%H:%M} close crossed {'above H4' if opt == 'CE' else 'below L4'}"))
-        out["plan"] = {"strategy": "camarilla", "opt": opt, "entry": spot, "risk_pts": risk, "sl": spot - sign * risk, "signal_bar": end.strftime("%H:%M"),
+        out["plan"] = {"strategy": name, "opt": opt, "entry": spot, "risk_pts": risk, "sl": spot - sign * risk, "signal_bar": end.strftime("%H:%M"),
                        "target": None, "rr": None, "breakeven_at": spot + sign * C.CAM_BE_R * risk,
                        "time_stop_min": C.CAM_TIME_STOP, "trail": "stop to entry at +1R; 45-min time stop"}
     else:
@@ -568,7 +582,7 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
     if t >= C.SQUARE_OFF or pos["opened"][:10] < now.date().isoformat():
         return "Square-off 15:15", upd
     is_custom = bool(plan) and str(plan.get("strategy", "")).startswith("custom:")
-    if not plan or (plan.get("strategy") not in ("noise", "camarilla", "ai", "trend") and not is_custom):
+    if not plan or (plan.get("strategy") not in ("noise", "camarilla", "ai", "trend", "fib") and not is_custom):
         if prem <= pos["sl_prem"]:
             return "Premium stop-loss hit", upd
         if prem >= pos["target_prem"]:

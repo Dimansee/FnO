@@ -145,8 +145,10 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
             ap = C.AUTOPILOT_SYM_STRATEGIES.get(symbol, C.AUTOPILOT_STRATEGIES)
             main_strats = [x for x in ("noise", "camarilla") if x in ap]
             do_trend = "trend" in ap
+            do_fib = "fib" in ap
         else:
-            main_strats = ["noise", "camarilla"] if strategy in ("both", "all") else ([] if strategy == "trend" else [strategy])
+            do_fib = strategy == "fib"
+            main_strats = ["noise", "camarilla"] if strategy in ("both", "all") else ([] if strategy in ("trend", "fib") else [strategy])
             do_trend = strategy in ("trend", "all")
         if do_trend:                   # round 23: own slot, not blocked by an open Noise / Camarilla trade
             res = _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing, otm, budget_pct, I.exch_rate(symbol))
@@ -154,6 +156,19 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
                 skips[res[2]] += 1
             elif res:
                 trades.append(res)
+        if do_fib and vix_at(day.index[0]) <= C.CAM_VIX_MAX:   # round 29: Fibonacci 0.618 breakout, own slot, Camarilla exits
+            flv, start = S.fib_levels(hist), 0
+            while flv:
+                res = _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d, mult, sizing, otm,
+                                 "camarilla", flv, budget_pct, I.exch_rate(symbol))
+                if res is None:
+                    break
+                if isinstance(res, tuple):
+                    skips[res[2]] += 1
+                    start = res[1] + 1
+                    continue
+                trades.append({**res, "strategy": "Fibonacci 0.618"})
+                break
         for strat in main_strats:
             if strat == "camarilla" and (not lv or vix_at(day.index[0]) > C.CAM_VIX_MAX):
                 continue
