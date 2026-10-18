@@ -181,6 +181,16 @@ class Upstox:
         df["ts"] = pd.to_datetime(df["ts"], utc=True).dt.tz_convert(IST)
         return df.drop_duplicates("ts").set_index("ts").sort_index().astype(float)
 
+    def candles1(self, key):
+        """Today's 1-minute candles (the scalp book)."""
+        enc = quote(key, safe="")
+        rows = (self._get(f"/v3/historical-candle/intraday/{enc}/minutes/1") or {}).get("candles", [])
+        if not rows:
+            return pd.DataFrame()
+        df = pd.DataFrame([r[:6] for r in rows], columns=["ts", "open", "high", "low", "close", "volume"])
+        df["ts"] = pd.to_datetime(df["ts"], utc=True).dt.tz_convert(IST)
+        return df.drop_duplicates("ts").set_index("ts").sort_index().astype(float)
+
 
 # =============================================================================
 # Fyers (API v3)
@@ -328,6 +338,18 @@ class Fyers:
         fr_d = to_d - timedelta(days=days + 4)
         j = self._get("/history", {"symbol": key, "resolution": "5", "date_format": "1",
                                    "range_from": fr_d.isoformat(), "range_to": to_d.isoformat(), "cont_flag": "1"})
+        rows = j.get("candles") or []
+        if not rows:
+            return pd.DataFrame()
+        df = pd.DataFrame([r[:6] for r in rows], columns=["ts", "open", "high", "low", "close", "volume"])
+        df["ts"] = pd.to_datetime(df["ts"], unit="s", utc=True).dt.tz_convert(IST)
+        return df.drop_duplicates("ts").set_index("ts").sort_index().astype(float)
+
+    def candles1(self, key):
+        """Today's 1-minute candles (the scalp book)."""
+        d = C.today_ist().isoformat()
+        j = self._get("/history", {"symbol": key, "resolution": "1", "date_format": "1",
+                                   "range_from": d, "range_to": d, "cont_flag": "1"})
         rows = j.get("candles") or []
         if not rows:
             return pd.DataFrame()

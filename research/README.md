@@ -211,3 +211,35 @@ Period Oct 2023 → Oct 2026 (NSE OI data starts then); tuned before 2026-04-09,
   max-OI strike crossed after 13:30 on expiry: Nifty 23 trades 65% wins +₹28k (1 ATM lot), Bank Nifty 11 trades 36% −₹12k. Watch-list; needs
   intraday OI (now being recorded) for a real test.
 - Not testable yet (need the recorder's 5-min option data): straddle-premium VWAP cross, ΔOI-PCR intraday cross, IV-percentile entries.
+
+## Scalping spec, Oct 2026 (`scalp_spec.py`, results `scalp_spec.json`; live code `fno/scalp.py`, parity test `tests/test_scalp.py`)
+Spec from the Oct 2026 research doc, tested as written on 1-minute data 2023-01 → 2026-10-01 (924 days), 1 lot of the 1-strike-ITM
+option, real-price-corrected premiums, 0.5% slippage per fill, fees at the 0.15% STT in force since 1 Apr 2026, ₹20k book per index.
+- Day type (6 points, every 15 min): narrow CPR, beyond PDH/PDL, outside the 09:15–09:30 range, 80% of 5-min closes on one side of VWAP,
+  ADX(14, 5m) > 25 rising, EMA 9/21/50 stack. 4+ Trend, 3 in-between (ORB only), else no trades.
+- Setups on 1-min closes: A opening-range breakout (09:30–11:00, ADX rising), B pullback to EMA 9 in Trend, C level break + retest.
+  Exits: stop at trigger/pullback low capped at 1 × ATR(1m); +1R → stop to entry + costs, then exit on a close through EMA 9;
+  5-bar time stop; close through VWAP; next level outside Trend; 15:15. Confidence ≥ 65 (volume and OI scored flat: no history).
+- Governor: −2% day, give-back (peak ≥ 1.5%, 40% given back), fees > 30% of gross after 5 trades, 3 losses → 30-min pause,
+  5 losses, a setup off after 2 losses, skip trades with < 3× fees of room to the next level.
+
+| Nifty, 1 lot | 2023 | 2024 | 2025 | 2026 | PF | unseen 120 d |
+|---|---|---|---|---|---|---|
+| Spec as written | −59.3k | −46.7k | −59.8k | −52.9k | 0.45 | −28.4k |
+| 0.1% slippage | −36.4k | −21.2k | −28.3k | −32.4k | 0.66 | −15.6k |
+| No governor | −245k | −226k | −291k | −256k | 0.45 | −178k |
+| Ride the trend (2×ATR5 stop, trail 5m EMA 21, 1 trade, setup B) | +19.5k | +28.0k | −14.7k | −26.8k | 1.05 train | −14.3k |
+
+Bank Nifty: spec PF 0.36 (−68k / −90k / −103k / −83k). Every other variant (A, B or C alone, no classifier, no time stop, 5-min ATR
+stop, confidence 80) negative in all four years on both indices.
+- Why: average entry +0.75 index points (round 7 found 1.3); 73% of trades hit the 1-minute stop; 19% wins; fees ≈ ₹72 a round trip
+  equal the gross loss again. The classifier traded 84% of Nifty trend days (|open→close| ≥ 0.8%) the right way but lost on them
+  with scalp exits; the governor cut the loss ~4× but cannot create an edge.
+- The current rules on trend days: Noise + Camarilla trade 69% of Nifty trend days (63% the right way) and make all their profit
+  there (+₹4.37 lakh on trend days vs +₹2.07 lakh in total, ₹2L / 1% risk). Missed Nifty up days: 24 of 65 — 10 VIX above the
+  ceilings (8 above 20, 2 at 18–20; rules off there since round 18), 7 slow grinds that never cleared the band or a Camarilla level,
+  4 a wrong-way first trade (1 trade per rule), 2 opening drives (half the move done by 09:45), 1 VIX < 11. Bank Nifty: 60 of 119 up
+  days missed — 23 slow grinds, 19 VIX ceilings, 8 wrong-way first, 6 opening drives, 4 VIX < 11.
+- Decision: not adopted. Built as a separate, paper-only **Scalp book** (own ledger and capital, off by default) so the rules can be
+  watched live; the live functions reproduce this backtest exactly (day type on 28,720 bars, 440 trades: same setup, stop, exit
+  bar and reason — `tests/test_scalp.py`).

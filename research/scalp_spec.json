@@ -1,0 +1,1718 @@
+{
+ "NIFTY": {
+  "days": 924,
+  "train": [
+   "2023-01-03",
+   "2026-04-09"
+  ],
+  "unseen": [
+   "2026-04-10",
+   "2026-10-01"
+  ],
+  "trend_days": 150,
+  "quiet_days": 239,
+  "runs": {
+   "spec_full": {
+    "train": {
+     "trades": 1355,
+     "per_day": 1.69,
+     "win_pct": 18.7,
+     "net": -190335,
+     "gross": -93357,
+     "charges": 96978,
+     "pf": 0.45,
+     "avg_net": -140.5,
+     "avg_pts": 0.75,
+     "max_dd": 190615,
+     "green_days": 17.3,
+     "by_setup": {
+      "A": -20868,
+      "B": -141659,
+      "C": -27808
+     },
+     "exits": {
+      "stop": 991,
+      "trail": 277,
+      "time": 59,
+      "vwap": 13,
+      "level": 15,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 192,
+     "per_day": 1.6,
+     "win_pct": 18.8,
+     "net": -28364,
+     "gross": -13888,
+     "charges": 14476,
+     "pf": 0.46,
+     "avg_net": -147.7,
+     "avg_pts": 0.92,
+     "max_dd": 34218,
+     "green_days": 15.6,
+     "by_setup": {
+      "A": -6964,
+      "B": -17110,
+      "C": -4290
+     },
+     "exits": {
+      "stop": 141,
+      "trail": 37,
+      "time": 10,
+      "vwap": 2,
+      "level": 2,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 84.0,
+    "trend_days_net": -27368,
+    "quiet_days_with_trades_pct": 64.9,
+    "by_year": {
+     "2023": -59284,
+     "2024": -46686,
+     "2025": -59833,
+     "2026": -52895
+    }
+   },
+   "spec_full_slip0.1": {
+    "train": {
+     "trades": 1599,
+     "per_day": 1.99,
+     "win_pct": 28.3,
+     "net": -102722,
+     "gross": 11852,
+     "charges": 114574,
+     "pf": 0.66,
+     "avg_net": -64.2,
+     "avg_pts": 0.6,
+     "max_dd": 105731,
+     "green_days": 25.1,
+     "by_setup": {
+      "A": -5999,
+      "B": -79463,
+      "C": -17260
+     },
+     "exits": {
+      "stop": 1176,
+      "trail": 321,
+      "time": 67,
+      "vwap": 20,
+      "level": 15,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 246,
+     "per_day": 2.05,
+     "win_pct": 29.3,
+     "net": -15590,
+     "gross": 2923,
+     "charges": 18514,
+     "pf": 0.67,
+     "avg_net": -63.4,
+     "avg_pts": 0.66,
+     "max_dd": 23636,
+     "green_days": 20.8,
+     "by_setup": {
+      "A": -3535,
+      "B": -10186,
+      "C": -1869
+     },
+     "exits": {
+      "stop": 180,
+      "trail": 48,
+      "time": 14,
+      "vwap": 2,
+      "level": 2,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 84.0,
+    "trend_days_net": -7440,
+    "quiet_days_with_trades_pct": 64.9,
+    "by_year": {
+     "2023": -36433,
+     "2024": -21150,
+     "2025": -28294,
+     "2026": -32435
+    }
+   },
+   "A_only": {
+    "train": {
+     "trades": 206,
+     "per_day": 0.26,
+     "win_pct": 23.8,
+     "net": -27310,
+     "gross": -12520,
+     "charges": 14790,
+     "pf": 0.5,
+     "avg_net": -132.6,
+     "avg_pts": 0.8,
+     "max_dd": 27310,
+     "green_days": 23.8,
+     "by_setup": {
+      "A": -27310,
+      "B": 0,
+      "C": 0
+     },
+     "exits": {
+      "stop": 140,
+      "trail": 36,
+      "time": 13,
+      "vwap": 2,
+      "level": 15,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 42,
+     "per_day": 0.35,
+     "win_pct": 11.9,
+     "net": -10677,
+     "gross": -7486,
+     "charges": 3191,
+     "pf": 0.22,
+     "avg_net": -254.2,
+     "avg_pts": -1.69,
+     "max_dd": 12770,
+     "green_days": 11.9,
+     "by_setup": {
+      "A": -10677,
+      "B": 0,
+      "C": 0
+     },
+     "exits": {
+      "stop": 35,
+      "trail": 4,
+      "time": 2,
+      "vwap": 0,
+      "level": 1,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 22.7,
+    "trend_days_net": -5029,
+    "quiet_days_with_trades_pct": 27.6,
+    "by_year": {
+     "2023": -9818,
+     "2024": -7572,
+     "2025": -4457,
+     "2026": -16140
+    }
+   },
+   "B_only": {
+    "train": {
+     "trades": 1108,
+     "per_day": 1.38,
+     "win_pct": 17.5,
+     "net": -177684,
+     "gross": -98334,
+     "charges": 79350,
+     "pf": 0.42,
+     "avg_net": -160.4,
+     "avg_pts": 0.27,
+     "max_dd": 177684,
+     "green_days": 15.5,
+     "by_setup": {
+      "A": 0,
+      "B": -177684,
+      "C": 0
+     },
+     "exits": {
+      "stop": 823,
+      "trail": 225,
+      "time": 50,
+      "vwap": 10,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 161,
+     "per_day": 1.34,
+     "win_pct": 21.1,
+     "net": -23373,
+     "gross": -11262,
+     "charges": 12111,
+     "pf": 0.46,
+     "avg_net": -145.2,
+     "avg_pts": 0.95,
+     "max_dd": 28248,
+     "green_days": 15.7,
+     "by_setup": {
+      "A": 0,
+      "B": -23373,
+      "C": 0
+     },
+     "exits": {
+      "stop": 107,
+      "trail": 39,
+      "time": 14,
+      "vwap": 1,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 83.3,
+    "trend_days_net": -22402,
+    "quiet_days_with_trades_pct": 58.2,
+    "by_year": {
+     "2023": -59501,
+     "2024": -37930,
+     "2025": -56420,
+     "2026": -47206
+    }
+   },
+   "C_only": {
+    "train": {
+     "trades": 878,
+     "per_day": 1.09,
+     "win_pct": 14.4,
+     "net": -136467,
+     "gross": -73068,
+     "charges": 63399,
+     "pf": 0.38,
+     "avg_net": -155.4,
+     "avg_pts": 0.45,
+     "max_dd": 137706,
+     "green_days": 12.8,
+     "by_setup": {
+      "A": 0,
+      "B": 0,
+      "C": -136467
+     },
+     "exits": {
+      "stop": 703,
+      "trail": 148,
+      "time": 15,
+      "vwap": 12,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 147,
+     "per_day": 1.23,
+     "win_pct": 18.4,
+     "net": -18764,
+     "gross": -7595,
+     "charges": 11169,
+     "pf": 0.49,
+     "avg_net": -127.6,
+     "avg_pts": 1.98,
+     "max_dd": 22169,
+     "green_days": 19.5,
+     "by_setup": {
+      "A": 0,
+      "B": 0,
+      "C": -18764
+     },
+     "exits": {
+      "stop": 110,
+      "trail": 33,
+      "time": 2,
+      "vwap": 2,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 74.0,
+    "trend_days_net": -24407,
+    "quiet_days_with_trades_pct": 47.7,
+    "by_year": {
+     "2023": -39849,
+     "2024": -40428,
+     "2025": -38272,
+     "2026": -36683
+    }
+   },
+   "no_governor": {
+    "train": {
+     "trades": 6036,
+     "per_day": 7.51,
+     "win_pct": 16.2,
+     "net": -839996,
+     "gross": -405502,
+     "charges": 434494,
+     "pf": 0.45,
+     "avg_net": -139.2,
+     "avg_pts": 0.87,
+     "max_dd": 839996,
+     "green_days": 13.2,
+     "by_setup": {
+      "A": -16728,
+      "B": -724551,
+      "C": -98718
+     },
+     "exits": {
+      "stop": 4651,
+      "trail": 1132,
+      "time": 181,
+      "vwap": 54,
+      "level": 16,
+      "eod": 2
+     }
+    },
+    "unseen": {
+     "trades": 922,
+     "per_day": 7.68,
+     "win_pct": 15.0,
+     "net": -177842,
+     "gross": -108200,
+     "charges": 69642,
+     "pf": 0.29,
+     "avg_net": -192.9,
+     "avg_pts": -0.04,
+     "max_dd": 182490,
+     "green_days": 9.3,
+     "by_setup": {
+      "A": -6928,
+      "B": -149087,
+      "C": -21826
+     },
+     "exits": {
+      "stop": 714,
+      "trail": 161,
+      "time": 40,
+      "vwap": 6,
+      "level": 1,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 90.0,
+    "trend_days_net": -102067,
+    "quiet_days_with_trades_pct": 66.5,
+    "by_year": {
+     "2023": -245063,
+     "2024": -225823,
+     "2025": -290658,
+     "2026": -256295
+    }
+   },
+   "no_classifier": {
+    "train": {
+     "trades": 1834,
+     "per_day": 2.28,
+     "win_pct": 21.0,
+     "net": -255550,
+     "gross": -124103,
+     "charges": 131447,
+     "pf": 0.56,
+     "avg_net": -139.3,
+     "avg_pts": 0.6,
+     "max_dd": 258086,
+     "green_days": 20.0,
+     "by_setup": {
+      "A": -47560,
+      "B": -131770,
+      "C": -76221
+     },
+     "exits": {
+      "stop": 1093,
+      "trail": 418,
+      "time": 122,
+      "vwap": 201,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 230,
+     "per_day": 1.92,
+     "win_pct": 15.2,
+     "net": -63259,
+     "gross": -46051,
+     "charges": 17207,
+     "pf": 0.25,
+     "avg_net": -275.0,
+     "avg_pts": -2.44,
+     "max_dd": 63259,
+     "green_days": 12.5,
+     "by_setup": {
+      "A": -2998,
+      "B": -45194,
+      "C": -15067
+     },
+     "exits": {
+      "stop": 136,
+      "trail": 43,
+      "time": 17,
+      "vwap": 34,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 78.7,
+    "trend_days_net": -23383,
+    "quiet_days_with_trades_pct": 100.0,
+    "by_year": {
+     "2023": -85640,
+     "2024": -82913,
+     "2025": -50429,
+     "2026": -99827
+    }
+   },
+   "no_time_stop": {
+    "train": {
+     "trades": 1349,
+     "per_day": 1.68,
+     "win_pct": 19.9,
+     "net": -176022,
+     "gross": -79393,
+     "charges": 96630,
+     "pf": 0.5,
+     "avg_net": -130.5,
+     "avg_pts": 1.04,
+     "max_dd": 176302,
+     "green_days": 19.7,
+     "by_setup": {
+      "A": -18810,
+      "B": -129619,
+      "C": -27593
+     },
+     "exits": {
+      "stop": 1022,
+      "trail": 298,
+      "time": 0,
+      "vwap": 13,
+      "level": 16,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 194,
+     "per_day": 1.62,
+     "win_pct": 20.1,
+     "net": -27503,
+     "gross": -12865,
+     "charges": 14639,
+     "pf": 0.49,
+     "avg_net": -141.8,
+     "avg_pts": 1.06,
+     "max_dd": 33148,
+     "green_days": 17.7,
+     "by_setup": {
+      "A": -5778,
+      "B": -17435,
+      "C": -4290
+     },
+     "exits": {
+      "stop": 149,
+      "trail": 41,
+      "time": 0,
+      "vwap": 2,
+      "level": 2,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 84.0,
+    "trend_days_net": -20251,
+    "quiet_days_with_trades_pct": 64.9,
+    "by_year": {
+     "2023": -57774,
+     "2024": -39722,
+     "2025": -53707,
+     "2026": -52323
+    }
+   },
+   "wide_stop_atr5": {
+    "train": {
+     "trades": 1351,
+     "per_day": 1.68,
+     "win_pct": 23.8,
+     "net": -188332,
+     "gross": -91671,
+     "charges": 96660,
+     "pf": 0.52,
+     "avg_net": -139.4,
+     "avg_pts": 0.77,
+     "max_dd": 188332,
+     "green_days": 18.9,
+     "by_setup": {
+      "A": -23394,
+      "B": -148044,
+      "C": -16894
+     },
+     "exits": {
+      "stop": 755,
+      "trail": 335,
+      "time": 223,
+      "vwap": 21,
+      "level": 17,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 202,
+     "per_day": 1.68,
+     "win_pct": 23.8,
+     "net": -26580,
+     "gross": -11289,
+     "charges": 15291,
+     "pf": 0.53,
+     "avg_net": -131.6,
+     "avg_pts": 1.5,
+     "max_dd": 33888,
+     "green_days": 20.8,
+     "by_setup": {
+      "A": -7071,
+      "B": -19046,
+      "C": -464
+     },
+     "exits": {
+      "stop": 117,
+      "trail": 48,
+      "time": 32,
+      "vwap": 3,
+      "level": 2,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 83.3,
+    "trend_days_net": -11685,
+    "quiet_days_with_trades_pct": 65.3,
+    "by_year": {
+     "2023": -64193,
+     "2024": -36710,
+     "2025": -62512,
+     "2026": -51497
+    }
+   },
+   "conf80": {
+    "train": {
+     "trades": 1153,
+     "per_day": 1.43,
+     "win_pct": 17.6,
+     "net": -168717,
+     "gross": -86202,
+     "charges": 82515,
+     "pf": 0.43,
+     "avg_net": -146.3,
+     "avg_pts": 0.66,
+     "max_dd": 170268,
+     "green_days": 14.7,
+     "by_setup": {
+      "A": -11809,
+      "B": -131843,
+      "C": -25065
+     },
+     "exits": {
+      "stop": 863,
+      "trail": 242,
+      "time": 43,
+      "vwap": 5,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 166,
+     "per_day": 1.38,
+     "win_pct": 20.5,
+     "net": -20805,
+     "gross": -8301,
+     "charges": 12504,
+     "pf": 0.51,
+     "avg_net": -125.3,
+     "avg_pts": 1.58,
+     "max_dd": 24910,
+     "green_days": 20.5,
+     "by_setup": {
+      "A": -3278,
+      "B": -14728,
+      "C": -2800
+     },
+     "exits": {
+      "stop": 122,
+      "trail": 37,
+      "time": 6,
+      "vwap": 1,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 82.0,
+    "trend_days_net": -14599,
+    "quiet_days_with_trades_pct": 56.9,
+    "by_year": {
+     "2023": -45890,
+     "2024": -41339,
+     "2025": -58470,
+     "2026": -43823
+    }
+   },
+   "ride_AB": {
+    "train": {
+     "trades": 726,
+     "per_day": 0.9,
+     "win_pct": 28.0,
+     "net": -58979,
+     "gross": -6565,
+     "charges": 52414,
+     "pf": 0.89,
+     "avg_net": -81.2,
+     "avg_pts": 3.02,
+     "max_dd": 90896,
+     "green_days": 29.6,
+     "by_setup": {
+      "A": -13037,
+      "B": -45942,
+      "C": 0
+     },
+     "exits": {
+      "stop": 203,
+      "trail": 460,
+      "time": 0,
+      "vwap": 0,
+      "level": 0,
+      "eod": 63
+     }
+    },
+    "unseen": {
+     "trades": 107,
+     "per_day": 0.89,
+     "win_pct": 27.1,
+     "net": -22175,
+     "gross": -14103,
+     "charges": 8071,
+     "pf": 0.73,
+     "avg_net": -207.2,
+     "avg_pts": -0.26,
+     "max_dd": 25513,
+     "green_days": 23.9,
+     "by_setup": {
+      "A": -5194,
+      "B": -16981,
+      "C": 0
+     },
+     "exits": {
+      "stop": 24,
+      "trail": 75,
+      "time": 0,
+      "vwap": 0,
+      "level": 0,
+      "eod": 8
+     }
+    },
+    "trend_days_traded_right_way_pct": 81.3,
+    "trend_days_net": 231939,
+    "quiet_days_with_trades_pct": 57.3,
+    "by_year": {
+     "2023": -5068,
+     "2024": 1794,
+     "2025": -34106,
+     "2026": -43774
+    }
+   },
+   "ride_A": {
+    "train": {
+     "trades": 111,
+     "per_day": 0.14,
+     "win_pct": 29.7,
+     "net": -31520,
+     "gross": -23632,
+     "charges": 7888,
+     "pf": 0.7,
+     "avg_net": -284.0,
+     "avg_pts": -2.93,
+     "max_dd": 36955,
+     "green_days": 29.7,
+     "by_setup": {
+      "A": -31520,
+      "B": 0,
+      "C": 0
+     },
+     "exits": {
+      "stop": 44,
+      "trail": 64,
+      "time": 0,
+      "vwap": 0,
+      "level": 0,
+      "eod": 3
+     }
+    },
+    "unseen": {
+     "trades": 27,
+     "per_day": 0.23,
+     "win_pct": 33.3,
+     "net": 885,
+     "gross": 2951,
+     "charges": 2066,
+     "pf": 1.04,
+     "avg_net": 32.8,
+     "avg_pts": 6.38,
+     "max_dd": 11293,
+     "green_days": 33.3,
+     "by_setup": {
+      "A": 885,
+      "B": 0,
+      "C": 0
+     },
+     "exits": {
+      "stop": 6,
+      "trail": 20,
+      "time": 0,
+      "vwap": 0,
+      "level": 0,
+      "eod": 1
+     }
+    },
+    "trend_days_traded_right_way_pct": 12.7,
+    "trend_days_net": 44050,
+    "quiet_days_with_trades_pct": 14.2,
+    "by_year": {
+     "2023": -5110,
+     "2024": -16635,
+     "2025": -4956,
+     "2026": -3934
+    }
+   },
+   "ride_B_1": {
+    "train": {
+     "trades": 580,
+     "per_day": 0.72,
+     "win_pct": 32.8,
+     "net": 20282,
+     "gross": 62301,
+     "charges": 42020,
+     "pf": 1.05,
+     "avg_net": 35.0,
+     "avg_pts": 6.27,
+     "max_dd": 52147,
+     "green_days": 32.8,
+     "by_setup": {
+      "A": 0,
+      "B": 20282,
+      "C": 0
+     },
+     "exits": {
+      "stop": 164,
+      "trail": 359,
+      "time": 0,
+      "vwap": 0,
+      "level": 0,
+      "eod": 57
+     }
+    },
+    "unseen": {
+     "trades": 87,
+     "per_day": 0.72,
+     "win_pct": 29.9,
+     "net": -14254,
+     "gross": -7646,
+     "charges": 6608,
+     "pf": 0.8,
+     "avg_net": -163.8,
+     "avg_pts": 1.2,
+     "max_dd": 20791,
+     "green_days": 29.9,
+     "by_setup": {
+      "A": 0,
+      "B": -14254,
+      "C": 0
+     },
+     "exits": {
+      "stop": 20,
+      "trail": 60,
+      "time": 0,
+      "vwap": 0,
+      "level": 0,
+      "eod": 7
+     }
+    },
+    "trend_days_traded_right_way_pct": 80.7,
+    "trend_days_net": 249502,
+    "quiet_days_with_trades_pct": 56.1,
+    "by_year": {
+     "2023": 19473,
+     "2024": 28040,
+     "2025": -14694,
+     "2026": -26791
+    }
+   }
+  },
+  "app_rules_on_trend_days": {
+   "trend_days": 150,
+   "traded_pct": 69.3,
+   "traded_right_way_pct": 63.3,
+   "trend_day_pnl_200k_1pct": 436836,
+   "all_days_pnl_200k_1pct": 206822,
+   "trades": 589,
+   "sample_keys": [
+    "R",
+    "budget_R",
+    "date",
+    "in",
+    "lots",
+    "out",
+    "pnl",
+    "prem_in",
+    "prem_out",
+    "side",
+    "spot_in",
+    "spot_out",
+    "strat",
+    "why"
+   ]
+  }
+ },
+ "BANKNIFTY": {
+  "days": 924,
+  "train": [
+   "2023-01-03",
+   "2026-04-09"
+  ],
+  "unseen": [
+   "2026-04-10",
+   "2026-10-01"
+  ],
+  "trend_days": 236,
+  "quiet_days": 100,
+  "runs": {
+   "spec_full": {
+    "train": {
+     "trades": 1029,
+     "per_day": 1.28,
+     "win_pct": 16.7,
+     "net": -284912,
+     "gross": -187412,
+     "charges": 97500,
+     "pf": 0.36,
+     "avg_net": -276.9,
+     "avg_pts": 0.54,
+     "max_dd": 289178,
+     "green_days": 12.8,
+     "by_setup": {
+      "A": -46485,
+      "B": -200376,
+      "C": -38051
+     },
+     "exits": {
+      "stop": 755,
+      "trail": 203,
+      "time": 47,
+      "vwap": 12,
+      "level": 12,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 160,
+     "per_day": 1.33,
+     "win_pct": 17.5,
+     "net": -58580,
+     "gross": -42493,
+     "charges": 16087,
+     "pf": 0.24,
+     "avg_net": -366.1,
+     "avg_pts": -3.62,
+     "max_dd": 58580,
+     "green_days": 11.0,
+     "by_setup": {
+      "A": -5842,
+      "B": -45890,
+      "C": -6848
+     },
+     "exits": {
+      "stop": 122,
+      "trail": 31,
+      "time": 2,
+      "vwap": 3,
+      "level": 2,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 79.2,
+    "trend_days_net": -70764,
+    "quiet_days_with_trades_pct": 57.0,
+    "by_year": {
+     "2023": -67881,
+     "2024": -90279,
+     "2025": -102829,
+     "2026": -82504
+    }
+   },
+   "spec_full_slip0.1": {
+    "train": {
+     "trades": 1234,
+     "per_day": 1.53,
+     "win_pct": 22.1,
+     "net": -159922,
+     "gross": -42475,
+     "charges": 117446,
+     "pf": 0.57,
+     "avg_net": -129.6,
+     "avg_pts": -0.39,
+     "max_dd": 168692,
+     "green_days": 19.8,
+     "by_setup": {
+      "A": -20564,
+      "B": -115845,
+      "C": -23512
+     },
+     "exits": {
+      "stop": 917,
+      "trail": 239,
+      "time": 52,
+      "vwap": 14,
+      "level": 12,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 191,
+     "per_day": 1.59,
+     "win_pct": 23.6,
+     "net": -33686,
+     "gross": -14511,
+     "charges": 19175,
+     "pf": 0.47,
+     "avg_net": -176.4,
+     "avg_pts": -3.04,
+     "max_dd": 33878,
+     "green_days": 15.0,
+     "by_setup": {
+      "A": -714,
+      "B": -27887,
+      "C": -5085
+     },
+     "exits": {
+      "stop": 147,
+      "trail": 35,
+      "time": 3,
+      "vwap": 4,
+      "level": 2,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 79.2,
+    "trend_days_net": -11681,
+    "quiet_days_with_trades_pct": 57.0,
+    "by_year": {
+     "2023": -35594,
+     "2024": -54354,
+     "2025": -60840,
+     "2026": -42820
+    }
+   },
+   "A_only": {
+    "train": {
+     "trades": 197,
+     "per_day": 0.25,
+     "win_pct": 19.8,
+     "net": -35322,
+     "gross": -16600,
+     "charges": 18722,
+     "pf": 0.56,
+     "avg_net": -179.3,
+     "avg_pts": 4.85,
+     "max_dd": 36287,
+     "green_days": 19.8,
+     "by_setup": {
+      "A": -35322,
+      "B": 0,
+      "C": 0
+     },
+     "exits": {
+      "stop": 134,
+      "trail": 37,
+      "time": 12,
+      "vwap": 1,
+      "level": 13,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 42,
+     "per_day": 0.35,
+     "win_pct": 26.2,
+     "net": -7367,
+     "gross": -3168,
+     "charges": 4199,
+     "pf": 0.5,
+     "avg_net": -175.4,
+     "avg_pts": 7.16,
+     "max_dd": 9531,
+     "green_days": 26.2,
+     "by_setup": {
+      "A": -7367,
+      "B": 0,
+      "C": 0
+     },
+     "exits": {
+      "stop": 28,
+      "trail": 12,
+      "time": 0,
+      "vwap": 0,
+      "level": 2,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 21.6,
+    "trend_days_net": 6059,
+    "quiet_days_with_trades_pct": 25.0,
+    "by_year": {
+     "2023": -9345,
+     "2024": 304,
+     "2025": -26318,
+     "2026": -7330
+    }
+   },
+   "B_only": {
+    "train": {
+     "trades": 912,
+     "per_day": 1.13,
+     "win_pct": 16.6,
+     "net": -262895,
+     "gross": -176064,
+     "charges": 86830,
+     "pf": 0.34,
+     "avg_net": -288.3,
+     "avg_pts": -0.12,
+     "max_dd": 266052,
+     "green_days": 11.4,
+     "by_setup": {
+      "A": 0,
+      "B": -262895,
+      "C": 0
+     },
+     "exits": {
+      "stop": 665,
+      "trail": 192,
+      "time": 46,
+      "vwap": 9,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 143,
+     "per_day": 1.19,
+     "win_pct": 18.2,
+     "net": -53080,
+     "gross": -38578,
+     "charges": 14502,
+     "pf": 0.27,
+     "avg_net": -371.2,
+     "avg_pts": -3.44,
+     "max_dd": 53152,
+     "green_days": 10.3,
+     "by_setup": {
+      "A": 0,
+      "B": -53080,
+      "C": 0
+     },
+     "exits": {
+      "stop": 106,
+      "trail": 31,
+      "time": 3,
+      "vwap": 3,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 79.2,
+    "trend_days_net": -73479,
+    "quiet_days_with_trades_pct": 51.0,
+    "by_year": {
+     "2023": -64348,
+     "2024": -85678,
+     "2025": -88957,
+     "2026": -76991
+    }
+   },
+   "C_only": {
+    "train": {
+     "trades": 731,
+     "per_day": 0.91,
+     "win_pct": 13.4,
+     "net": -203222,
+     "gross": -133897,
+     "charges": 69325,
+     "pf": 0.29,
+     "avg_net": -278.0,
+     "avg_pts": 1.24,
+     "max_dd": 203222,
+     "green_days": 12.5,
+     "by_setup": {
+      "A": 0,
+      "B": 0,
+      "C": -203222
+     },
+     "exits": {
+      "stop": 575,
+      "trail": 135,
+      "time": 13,
+      "vwap": 8,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 111,
+     "per_day": 0.93,
+     "win_pct": 7.2,
+     "net": -40983,
+     "gross": -29587,
+     "charges": 11395,
+     "pf": 0.17,
+     "avg_net": -369.2,
+     "avg_pts": -2.09,
+     "max_dd": 40983,
+     "green_days": 8.6,
+     "by_setup": {
+      "A": 0,
+      "B": 0,
+      "C": -40983
+     },
+     "exits": {
+      "stop": 96,
+      "trail": 12,
+      "time": 1,
+      "vwap": 2,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 68.6,
+    "trend_days_net": -51320,
+    "quiet_days_with_trades_pct": 47.0,
+    "by_year": {
+     "2023": -60447,
+     "2024": -44560,
+     "2025": -79644,
+     "2026": -59554
+    }
+   },
+   "no_governor": {
+    "train": {
+     "trades": 5805,
+     "per_day": 7.22,
+     "win_pct": 13.8,
+     "net": -1662057,
+     "gross": -1105746,
+     "charges": 556312,
+     "pf": 0.3,
+     "avg_net": -286.3,
+     "avg_pts": 0.22,
+     "max_dd": 1662057,
+     "green_days": 8.7,
+     "by_setup": {
+      "A": -37236,
+      "B": -1388000,
+      "C": -236822
+     },
+     "exits": {
+      "stop": 4440,
+      "trail": 1091,
+      "time": 209,
+      "vwap": 51,
+      "level": 13,
+      "eod": 1
+     }
+    },
+    "unseen": {
+     "trades": 869,
+     "per_day": 7.24,
+     "win_pct": 12.7,
+     "net": -302176,
+     "gross": -214877,
+     "charges": 87299,
+     "pf": 0.22,
+     "avg_net": -347.7,
+     "avg_pts": -1.78,
+     "max_dd": 302176,
+     "green_days": 5.9,
+     "by_setup": {
+      "A": -6789,
+      "B": -249879,
+      "C": -45508
+     },
+     "exits": {
+      "stop": 687,
+      "trail": 153,
+      "time": 17,
+      "vwap": 10,
+      "level": 2,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 84.7,
+    "trend_days_net": -564034,
+    "quiet_days_with_trades_pct": 57.0,
+    "by_year": {
+     "2023": -404325,
+     "2024": -466968,
+     "2025": -625152,
+     "2026": -467789
+    }
+   },
+   "no_classifier": {
+    "train": {
+     "trades": 1433,
+     "per_day": 1.78,
+     "win_pct": 18.4,
+     "net": -416029,
+     "gross": -280045,
+     "charges": 135984,
+     "pf": 0.4,
+     "avg_net": -290.3,
+     "avg_pts": -0.56,
+     "max_dd": 426458,
+     "green_days": 14.1,
+     "by_setup": {
+      "A": -53693,
+      "B": -285671,
+      "C": -76665
+     },
+     "exits": {
+      "stop": 798,
+      "trail": 306,
+      "time": 125,
+      "vwap": 204,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 209,
+     "per_day": 1.74,
+     "win_pct": 20.6,
+     "net": -77032,
+     "gross": -55964,
+     "charges": 21068,
+     "pf": 0.32,
+     "avg_net": -368.6,
+     "avg_pts": -3.3,
+     "max_dd": 77032,
+     "green_days": 12.5,
+     "by_setup": {
+      "A": -10977,
+      "B": -53510,
+      "C": -12545
+     },
+     "exits": {
+      "stop": 114,
+      "trail": 54,
+      "time": 13,
+      "vwap": 28,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 79.7,
+    "trend_days_net": -96071,
+    "quiet_days_with_trades_pct": 100.0,
+    "by_year": {
+     "2023": -116957,
+     "2024": -138679,
+     "2025": -118910,
+     "2026": -118515
+    }
+   },
+   "no_time_stop": {
+    "train": {
+     "trades": 1023,
+     "per_day": 1.27,
+     "win_pct": 17.5,
+     "net": -285972,
+     "gross": -188939,
+     "charges": 97034,
+     "pf": 0.36,
+     "avg_net": -279.5,
+     "avg_pts": 0.32,
+     "max_dd": 290562,
+     "green_days": 13.2,
+     "by_setup": {
+      "A": -47389,
+      "B": -200446,
+      "C": -38137
+     },
+     "exits": {
+      "stop": 786,
+      "trail": 209,
+      "time": 0,
+      "vwap": 15,
+      "level": 13,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 160,
+     "per_day": 1.33,
+     "win_pct": 17.5,
+     "net": -59228,
+     "gross": -43143,
+     "charges": 16086,
+     "pf": 0.24,
+     "avg_net": -370.2,
+     "avg_pts": -3.87,
+     "max_dd": 59228,
+     "green_days": 10.0,
+     "by_setup": {
+      "A": -5842,
+      "B": -46538,
+      "C": -6848
+     },
+     "exits": {
+      "stop": 124,
+      "trail": 31,
+      "time": 0,
+      "vwap": 3,
+      "level": 2,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 78.8,
+    "trend_days_net": -65455,
+    "quiet_days_with_trades_pct": 57.0,
+    "by_year": {
+     "2023": -67141,
+     "2024": -89186,
+     "2025": -105560,
+     "2026": -83314
+    }
+   },
+   "wide_stop_atr5": {
+    "train": {
+     "trades": 1032,
+     "per_day": 1.28,
+     "win_pct": 19.4,
+     "net": -285258,
+     "gross": -187568,
+     "charges": 97689,
+     "pf": 0.4,
+     "avg_net": -276.4,
+     "avg_pts": 0.33,
+     "max_dd": 287042,
+     "green_days": 13.8,
+     "by_setup": {
+      "A": -44524,
+      "B": -206401,
+      "C": -34333
+     },
+     "exits": {
+      "stop": 598,
+      "trail": 236,
+      "time": 165,
+      "vwap": 21,
+      "level": 12,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 159,
+     "per_day": 1.32,
+     "win_pct": 17.6,
+     "net": -59525,
+     "gross": -43583,
+     "charges": 15942,
+     "pf": 0.27,
+     "avg_net": -374.4,
+     "avg_pts": -4.05,
+     "max_dd": 59525,
+     "green_days": 11.0,
+     "by_setup": {
+      "A": -5622,
+      "B": -43198,
+      "C": -10706
+     },
+     "exits": {
+      "stop": 100,
+      "trail": 31,
+      "time": 21,
+      "vwap": 4,
+      "level": 3,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 78.8,
+    "trend_days_net": -64418,
+    "quiet_days_with_trades_pct": 57.0,
+    "by_year": {
+     "2023": -71455,
+     "2024": -84867,
+     "2025": -104421,
+     "2026": -84040
+    }
+   },
+   "conf80": {
+    "train": {
+     "trades": 924,
+     "per_day": 1.15,
+     "win_pct": 17.6,
+     "net": -240114,
+     "gross": -152390,
+     "charges": 87725,
+     "pf": 0.37,
+     "avg_net": -259.9,
+     "avg_pts": 1.52,
+     "max_dd": 245238,
+     "green_days": 12.1,
+     "by_setup": {
+      "A": -12574,
+      "B": -191428,
+      "C": -36113
+     },
+     "exits": {
+      "stop": 687,
+      "trail": 197,
+      "time": 30,
+      "vwap": 10,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "unseen": {
+     "trades": 127,
+     "per_day": 1.06,
+     "win_pct": 14.2,
+     "net": -38468,
+     "gross": -25484,
+     "charges": 12984,
+     "pf": 0.36,
+     "avg_net": -302.9,
+     "avg_pts": 1.64,
+     "max_dd": 39856,
+     "green_days": 7.1,
+     "by_setup": {
+      "A": -1226,
+      "B": -30448,
+      "C": -6794
+     },
+     "exits": {
+      "stop": 99,
+      "trail": 22,
+      "time": 3,
+      "vwap": 3,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 77.1,
+    "trend_days_net": -47926,
+    "quiet_days_with_trades_pct": 52.0,
+    "by_year": {
+     "2023": -58540,
+     "2024": -61098,
+     "2025": -94691,
+     "2026": -64253
+    }
+   },
+   "ride_AB": {
+    "train": {
+     "trades": 706,
+     "per_day": 0.88,
+     "win_pct": 28.0,
+     "net": -77510,
+     "gross": -9811,
+     "charges": 67699,
+     "pf": 0.89,
+     "avg_net": -109.8,
+     "avg_pts": 10.47,
+     "max_dd": 141325,
+     "green_days": 27.0,
+     "by_setup": {
+      "A": -13923,
+      "B": -63587,
+      "C": 0
+     },
+     "exits": {
+      "stop": 185,
+      "trail": 468,
+      "time": 0,
+      "vwap": 0,
+      "level": 0,
+      "eod": 53
+     }
+    },
+    "unseen": {
+     "trades": 109,
+     "per_day": 0.91,
+     "win_pct": 20.2,
+     "net": -85877,
+     "gross": -74940,
+     "charges": 10937,
+     "pf": 0.35,
+     "avg_net": -787.9,
+     "avg_pts": -28.92,
+     "max_dd": 89791,
+     "green_days": 17.9,
+     "by_setup": {
+      "A": -6862,
+      "B": -79015,
+      "C": 0
+     },
+     "exits": {
+      "stop": 30,
+      "trail": 73,
+      "time": 0,
+      "vwap": 0,
+      "level": 0,
+      "eod": 6
+     }
+    },
+    "trend_days_traded_right_way_pct": 77.1,
+    "trend_days_net": 336099,
+    "quiet_days_with_trades_pct": 52.0,
+    "by_year": {
+     "2023": -5510,
+     "2024": 41135,
+     "2025": -116091,
+     "2026": -82920
+    }
+   },
+   "ride_A": {
+    "train": {
+     "trades": 107,
+     "per_day": 0.13,
+     "win_pct": 31.8,
+     "net": 17346,
+     "gross": 27590,
+     "charges": 10244,
+     "pf": 1.16,
+     "avg_net": 162.1,
+     "avg_pts": 24.35,
+     "max_dd": 27162,
+     "green_days": 31.8,
+     "by_setup": {
+      "A": 17346,
+      "B": 0,
+      "C": 0
+     },
+     "exits": {
+      "stop": 32,
+      "trail": 73,
+      "time": 0,
+      "vwap": 0,
+      "level": 0,
+      "eod": 2
+     }
+    },
+    "unseen": {
+     "trades": 24,
+     "per_day": 0.2,
+     "win_pct": 20.8,
+     "net": -16819,
+     "gross": -14462,
+     "charges": 2356,
+     "pf": 0.3,
+     "avg_net": -700.8,
+     "avg_pts": -23.39,
+     "max_dd": 18354,
+     "green_days": 20.8,
+     "by_setup": {
+      "A": -16819,
+      "B": 0,
+      "C": 0
+     },
+     "exits": {
+      "stop": 5,
+      "trail": 19,
+      "time": 0,
+      "vwap": 0,
+      "level": 0,
+      "eod": 0
+     }
+    },
+    "trend_days_traded_right_way_pct": 13.6,
+    "trend_days_net": 94951,
+    "quiet_days_with_trades_pct": 17.0,
+    "by_year": {
+     "2023": 4443,
+     "2024": 20648,
+     "2025": -10199,
+     "2026": -14364
+    }
+   },
+   "ride_B_1": {
+    "train": {
+     "trades": 564,
+     "per_day": 0.7,
+     "win_pct": 29.3,
+     "net": -57744,
+     "gross": -3677,
+     "charges": 54067,
+     "pf": 0.9,
+     "avg_net": -102.4,
+     "avg_pts": 10.56,
+     "max_dd": 123691,
+     "green_days": 29.3,
+     "by_setup": {
+      "A": 0,
+      "B": -57744,
+      "C": 0
+     },
+     "exits": {
+      "stop": 162,
+      "trail": 368,
+      "time": 0,
+      "vwap": 0,
+      "level": 0,
+      "eod": 34
+     }
+    },
+    "unseen": {
+     "trades": 95,
+     "per_day": 0.79,
+     "win_pct": 20.0,
+     "net": -87085,
+     "gross": -77463,
+     "charges": 9622,
+     "pf": 0.3,
+     "avg_net": -916.7,
+     "avg_pts": -36.96,
+     "max_dd": 91498,
+     "green_days": 20.0,
+     "by_setup": {
+      "A": 0,
+      "B": -87085,
+      "C": 0
+     },
+     "exits": {
+      "stop": 28,
+      "trail": 63,
+      "time": 0,
+      "vwap": 0,
+      "level": 0,
+      "eod": 4
+     }
+    },
+    "trend_days_traded_right_way_pct": 77.5,
+    "trend_days_net": 303970,
+    "quiet_days_with_trades_pct": 51.0,
+    "by_year": {
+     "2023": 140,
+     "2024": 34964,
+     "2025": -86514,
+     "2026": -93418
+    }
+   }
+  },
+  "app_rules_on_trend_days": {
+   "trend_days": 236,
+   "traded_pct": 58.5,
+   "traded_right_way_pct": 54.2,
+   "trend_day_pnl_200k_1pct": 327959,
+   "all_days_pnl_200k_1pct": 94062,
+   "trades": 457,
+   "sample_keys": [
+    "R",
+    "budget_R",
+    "date",
+    "in",
+    "lots",
+    "out",
+    "pnl",
+    "prem_in",
+    "prem_out",
+    "side",
+    "spot_in",
+    "spot_out",
+    "strat",
+    "why"
+   ]
+  }
+ }
+}

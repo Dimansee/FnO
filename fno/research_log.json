@@ -1,7 +1,18 @@
 {
- "updated": "2026-10-17",
+ "updated": "2026-10-18",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
+  {
+   "id": "scalp",
+   "date": "2026-10-18",
+   "area": "Index options",
+   "title": "Scalping spec: day-type classifier + ORB / EMA-9 pullback / level retest, 1-minute exits, daily governor",
+   "asked": "Can an automated scalper (unlimited trades, stopped only by a loss / give-back / charges governor) make money, and would a trend-day classifier fix the days with no trade when the market runs up? 1-minute Nifty and Bank Nifty, 1 lot of the 1-strike-ITM option, 0.5% slippage, fees at 0.15% STT; tuned nothing, unseen = last 120 days. 13 variants.",
+   "result": "Lost money in every year on both indices. Nifty 1 lot: -Rs 59k / -47k / -60k / -53k (2023-26), PF 0.45, 1.7 trades a day, 19% wins, unseen 120 days -Rs 28k. Bank Nifty PF 0.36. Each setup alone, wider stops, no time stop, confidence 80+, 0.1% slippage: all negative. 'Ride the trend' exits: positive 2023-24, negative 2025-26. Entries average +0.75 index points; 73% hit the 1-minute stop; fees (~Rs 72 a round trip) double the loss. The classifier traded 84% of Nifty trend days the right way; the governor cut losses ~4x vs none. The current Noise + Camarilla rules trade 69% of Nifty trend days and make all their profit there; of the 24 of 65 strong up days they miss, 10 had VIX above the 18/20 ceilings, 7 were slow grinds that never cleared the band, 4 started with a wrong-way trade.",
+   "decision": "Not adopted - built as a separate paper-only Scalp book, off by default",
+   "summary": "Scalping 1-minute index moves with bought options does not survive fees and slippage, the same answer as round 7. The day-type classifier and support/resistance levels are shown on the Scalp page and the Signal chart for information.",
+   "period": "Jan 2023 - 1 Oct 2026, 1-minute data"
+  },
   {
    "id": "cus",
    "date": "2026-10-17",

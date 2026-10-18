@@ -269,6 +269,22 @@ class Market:
         # 30 days: the noise band needs the last 14 sessions
         return cached(f"c:yahoo:{symbol}", 45, lambda: yahoo_candles(instrument(symbol)["yahoo"], period="30d"))
 
+    def candles1(self, symbol) -> pd.DataFrame:
+        """Today's 1-minute candles (scalp book): broker first, else Yahoo (delayed)."""
+        if self.br and hasattr(self.br, "candles1"):
+            try:
+                df = cached(f"c1:{self.br.name}:{symbol}", 20, lambda: self.br.candles1(self.key(symbol)))
+                if df is not None and not df.empty:
+                    return df
+            except Exception as e:
+                self._fail("1-minute candles", e)
+        try:
+            df = cached(f"c1:yahoo:{symbol}", 45, lambda: yahoo_candles(instrument(symbol)["yahoo"], period="1d", interval="1m"))
+            return df if df is not None else pd.DataFrame()
+        except Exception as e:
+            self.errors.append(f"1-minute candles (Yahoo) failed: {e}")
+            return pd.DataFrame()
+
     def _fill_gaps(self, df: pd.DataFrame, symbol) -> pd.DataFrame:
         """The broker's history can lag a session behind (it showed Wednesday's close on Friday night).
         Any recent session it lacks is filled from Yahoo; broker bars always win where both exist."""

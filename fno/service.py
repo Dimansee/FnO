@@ -882,6 +882,17 @@ def tick():
                     _push_safe(f"{sym}: paper trade placed", str(msg)[:160], f"placed:{sym}:{now.strftime('%H%M')}", "/#portfolio")
             except Exception as e:                       # one instrument failing must not stop the others
                 placed.append({"symbol": sym, "error": str(e)[:120]})
+    try:                                                     # scalp book (separate paper ledger, off unless switched on)
+        from . import scalp as SC
+        sc = SC.tick(now)
+        if sc.get("closed"):                                 # one phone alert when the governor stops an index for the day
+            scfg = SC.settings()
+            for s in {c["symbol"] for c in sc["closed"]}:
+                gv = SC.governor(SC._today_trades(s, now), scfg["capital"])
+                if gv.get("stopped"):
+                    _push_safe(f"{s} scalp book stopped for today", gv["stopped"], f"scalpstop:{s}:{now.date()}", "/#scalp")
+    except Exception as e:
+        sc = {"error": str(e)[:160]}
     if t <= time(9, 45):
         try:
             stocks_morning_push(now)
@@ -910,7 +921,7 @@ def tick():
                     _push_safe("Upstox data token ending soon", h["text"] + ". Generate a new one in the Upstox developer page and paste it in Settings.", f"antoken:{now.date()}", "/#settings")
     except Exception:
         pass
-    return {"closed": closed, "placed": placed, "recorded": rec, "journal": jr, "time": now.isoformat(timespec="seconds")}
+    return {"closed": closed, "placed": placed, "scalp": sc, "recorded": rec, "journal": jr, "time": now.isoformat(timespec="seconds")}
 
 
 def scan(symbol, m=None, prefs_=None, want_order=True):

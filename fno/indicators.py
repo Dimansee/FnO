@@ -24,6 +24,20 @@ def atr(df: pd.DataFrame, n: int = 14) -> pd.Series:
     return tr.ewm(alpha=1 / n, adjust=False).mean()
 
 
+def adx(df: pd.DataFrame, n: int = 14) -> pd.Series:
+    """Wilder ADX (same formula as research/engine.py)."""
+    h, l, c = df["high"], df["low"], df["close"]
+    up, dn = h.diff(), -l.diff()
+    pdm = np.where((up > dn) & (up > 0), up, 0.0)
+    ndm = np.where((dn > up) & (dn > 0), dn, 0.0)
+    tr = pd.concat([h - l, (h - c.shift()).abs(), (l - c.shift()).abs()], axis=1).max(axis=1)
+    a = tr.ewm(alpha=1 / n, adjust=False).mean()
+    pdi = 100 * pd.Series(pdm, index=df.index).ewm(alpha=1 / n, adjust=False).mean() / a
+    ndi = 100 * pd.Series(ndm, index=df.index).ewm(alpha=1 / n, adjust=False).mean() / a
+    dx = 100 * (pdi - ndi).abs() / (pdi + ndi).replace(0, np.nan)
+    return dx.ewm(alpha=1 / n, adjust=False).mean()
+
+
 def vwap(df: pd.DataFrame) -> pd.Series:
     """Session VWAP, reset each day. Indices have no volume, so for them this
     falls back to a time-weighted average of typical price (TWAP)."""
@@ -181,7 +195,7 @@ def charges(premium_buy, premium_sell, qty, orders=2):
     discount-broker model. VERIFY against your broker's calculator."""
     buy_val, sell_val = premium_buy * qty, premium_sell * qty
     brokerage = 20 * orders
-    stt = 0.001 * sell_val                 # 0.1% on sell side premium
+    stt = 0.0015 * sell_val                # 0.15% on sell side premium (Budget 2026, from 1 Apr 2026; was 0.1%)
     exch = 0.0003503 * (buy_val + sell_val)
     sebi = 0.000001 * (buy_val + sell_val)
     stamp = 0.00003 * buy_val

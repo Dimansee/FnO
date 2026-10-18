@@ -347,6 +347,50 @@ def portfolio():
     return jsonify(SV.portfolio())
 
 
+# ---------------------------------------------------------------------------
+# Scalp book (separate paper ledger, scalping-spec study)
+# ---------------------------------------------------------------------------
+@app.get("/api/scalp")
+def scalp_page():
+    from fno import scalp as SC
+    return jsonify(SV.clean(SC.page()))
+
+
+@app.get("/api/scalp/levels")
+def scalp_levels():
+    from fno import scalp as SC
+    from fno import market as M
+    sym = request.args.get("symbol", "NIFTY")
+    if sym not in C.INDICES:
+        return jsonify({"zones": None, "mode": None})
+    st = SC.state(sym, M.Market())
+    return jsonify(SV.clean({"zones": st.get("zones"), "mode": st.get("mode"), "score": st.get("score")}))
+
+
+@app.post("/api/scalp/settings")
+def scalp_settings():
+    from fno import scalp as SC
+    return jsonify({"ok": True, "settings": SC.save_settings(request.get_json(force=True) or {})})
+
+
+@app.post("/api/scalp/exit")
+def scalp_exit():
+    from fno import scalp as SC
+    rec = SC.exit_now(str((request.get_json(force=True) or {}).get("id", "")))
+    if not rec:
+        return jsonify({"error": "That scalp position is already closed."}), 400
+    return jsonify({"ok": True, "trade": SV.clean(rec)})
+
+
+@app.post("/api/scalp/reset")
+def scalp_reset():
+    from fno import scalp as SC
+    if SC.positions():
+        return jsonify({"error": "Close the open scalp position first."}), 400
+    SC.reset()
+    return jsonify({"ok": True})
+
+
 @app.post("/api/trade/signal")
 def trade_signal():
     k = (request.get_json(silent=True) or {}).get("strike")
