@@ -14,10 +14,7 @@
    "2026-11-23"
   ]
  },
- "errors": [
-  "snapshots: Invalid URL '/api/recorder/day': No scheme supplied. Perhaps you meant https:///api/recorder/day?",
-  "journal: Invalid URL '/api/journal/day': No scheme supplied. Perhaps you meant https:///api/journal/day?"
- ],
+ "errors": [],
  "candles": {
   "rows": 148229,
   "instruments": 391,
@@ -26,5 +23,7 @@
  "bhav_fo_rows": 4199,
  "participant_oi": true,
  "participant_vol": true,
- "updated": "2026-10-17T13:24:40+05:30"
+ "updated": "2026-10-18T18:38:27+05:30",
+ "snapshots": 300,
+ "journal_recos": 0
 }

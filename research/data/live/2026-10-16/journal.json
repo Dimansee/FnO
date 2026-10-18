@@ -1,0 +1,1341 @@
+{
+ "ai": {
+  "BANKNIFTY": [
+   {
+    "bar": "09:35",
+    "exp_r": -0.324,
+    "p_win": 0.382,
+    "side": "CE",
+    "spot": 55556.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "09:40",
+    "exp_r": -0.32,
+    "p_win": 0.381,
+    "side": "CE",
+    "spot": 55633.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "09:45",
+    "exp_r": -0.302,
+    "p_win": 0.388,
+    "side": "CE",
+    "spot": 55605.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "09:50",
+    "exp_r": -0.315,
+    "p_win": 0.384,
+    "side": "CE",
+    "spot": 55589.4,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "09:55",
+    "exp_r": -0.3,
+    "p_win": 0.387,
+    "side": "CE",
+    "spot": 55628.4,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:00",
+    "exp_r": -0.307,
+    "p_win": 0.387,
+    "side": "CE",
+    "spot": 55613.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:05",
+    "exp_r": -0.282,
+    "p_win": 0.411,
+    "side": "CE",
+    "spot": 55717.6,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:10",
+    "exp_r": -0.278,
+    "p_win": 0.414,
+    "side": "CE",
+    "spot": 55707.9,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:15",
+    "exp_r": -0.268,
+    "p_win": 0.416,
+    "side": "CE",
+    "spot": 55761.0,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:20",
+    "exp_r": -0.27,
+    "p_win": 0.421,
+    "side": "CE",
+    "spot": 55839.4,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:25",
+    "exp_r": -0.268,
+    "p_win": 0.414,
+    "side": "CE",
+    "spot": 55800.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:30",
+    "exp_r": -0.261,
+    "p_win": 0.422,
+    "side": "CE",
+    "spot": 55830.6,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:35",
+    "exp_r": -0.265,
+    "p_win": 0.425,
+    "side": "CE",
+    "spot": 55863.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:40",
+    "exp_r": -0.263,
+    "p_win": 0.417,
+    "side": "CE",
+    "spot": 55809.9,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:45",
+    "exp_r": -0.279,
+    "p_win": 0.407,
+    "side": "CE",
+    "spot": 55712.9,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:50",
+    "exp_r": -0.281,
+    "p_win": 0.404,
+    "side": "CE",
+    "spot": 55645.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:55",
+    "exp_r": -0.28,
+    "p_win": 0.404,
+    "side": "CE",
+    "spot": 55635.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:00",
+    "exp_r": -0.28,
+    "p_win": 0.406,
+    "side": "CE",
+    "spot": 55662.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:05",
+    "exp_r": -0.274,
+    "p_win": 0.409,
+    "side": "CE",
+    "spot": 55680.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:10",
+    "exp_r": -0.285,
+    "p_win": 0.41,
+    "side": "CE",
+    "spot": 55606.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:15",
+    "exp_r": -0.278,
+    "p_win": 0.41,
+    "side": "CE",
+    "spot": 55634.6,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:20",
+    "exp_r": -0.282,
+    "p_win": 0.409,
+    "side": "CE",
+    "spot": 55641.6,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:25",
+    "exp_r": -0.249,
+    "p_win": 0.437,
+    "side": "CE",
+    "spot": 55734.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:30",
+    "exp_r": -0.249,
+    "p_win": 0.438,
+    "side": "CE",
+    "spot": 55758.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:35",
+    "exp_r": -0.252,
+    "p_win": 0.437,
+    "side": "CE",
+    "spot": 55723.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:40",
+    "exp_r": -0.253,
+    "p_win": 0.431,
+    "side": "CE",
+    "spot": 55704.9,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:45",
+    "exp_r": -0.25,
+    "p_win": 0.432,
+    "side": "CE",
+    "spot": 55709.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:50",
+    "exp_r": -0.255,
+    "p_win": 0.427,
+    "side": "CE",
+    "spot": 55713.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:55",
+    "exp_r": -0.243,
+    "p_win": 0.423,
+    "side": "CE",
+    "spot": 55709.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:00",
+    "exp_r": -0.246,
+    "p_win": 0.427,
+    "side": "CE",
+    "spot": 55711.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:05",
+    "exp_r": -0.255,
+    "p_win": 0.421,
+    "side": "CE",
+    "spot": 55667.9,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:10",
+    "exp_r": -0.251,
+    "p_win": 0.419,
+    "side": "CE",
+    "spot": 55701.9,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:15",
+    "exp_r": -0.248,
+    "p_win": 0.427,
+    "side": "CE",
+    "spot": 55715.9,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:20",
+    "exp_r": -0.248,
+    "p_win": 0.434,
+    "side": "CE",
+    "spot": 55716.4,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:25",
+    "exp_r": -0.251,
+    "p_win": 0.428,
+    "side": "CE",
+    "spot": 55681.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:30",
+    "exp_r": -0.245,
+    "p_win": 0.437,
+    "side": "CE",
+    "spot": 55727.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:35",
+    "exp_r": -0.247,
+    "p_win": 0.43,
+    "side": "CE",
+    "spot": 55731.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:40",
+    "exp_r": -0.244,
+    "p_win": 0.434,
+    "side": "CE",
+    "spot": 55775.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:45",
+    "exp_r": -0.247,
+    "p_win": 0.426,
+    "side": "CE",
+    "spot": 55766.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:50",
+    "exp_r": -0.242,
+    "p_win": 0.44,
+    "side": "CE",
+    "spot": 55781.6,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:55",
+    "exp_r": -0.251,
+    "p_win": 0.43,
+    "side": "CE",
+    "spot": 55768.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:00",
+    "exp_r": -0.258,
+    "p_win": 0.43,
+    "side": "CE",
+    "spot": 55649.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:05",
+    "exp_r": -0.246,
+    "p_win": 0.432,
+    "side": "CE",
+    "spot": 55697.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:10",
+    "exp_r": -0.231,
+    "p_win": 0.439,
+    "side": "CE",
+    "spot": 55723.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:15",
+    "exp_r": -0.234,
+    "p_win": 0.439,
+    "side": "CE",
+    "spot": 55708.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:20",
+    "exp_r": -0.232,
+    "p_win": 0.446,
+    "side": "CE",
+    "spot": 55735.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:25",
+    "exp_r": -0.216,
+    "p_win": 0.449,
+    "side": "CE",
+    "spot": 55804.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:30",
+    "exp_r": -0.199,
+    "p_win": 0.451,
+    "side": "CE",
+    "spot": 55822.4,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:35",
+    "exp_r": -0.195,
+    "p_win": 0.457,
+    "side": "CE",
+    "spot": 55884.9,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:40",
+    "exp_r": -0.19,
+    "p_win": 0.465,
+    "side": "CE",
+    "spot": 55877.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:45",
+    "exp_r": -0.184,
+    "p_win": 0.466,
+    "side": "CE",
+    "spot": 55863.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:50",
+    "exp_r": -0.177,
+    "p_win": 0.45,
+    "side": "PE",
+    "spot": 55809.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:55",
+    "exp_r": -0.164,
+    "p_win": 0.47,
+    "side": "CE",
+    "spot": 55843.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:00",
+    "exp_r": -0.164,
+    "p_win": 0.455,
+    "side": "PE",
+    "spot": 55782.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:05",
+    "exp_r": -0.144,
+    "p_win": 0.469,
+    "side": "PE",
+    "spot": 55791.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:10",
+    "exp_r": -0.135,
+    "p_win": 0.473,
+    "side": "PE",
+    "spot": 55791.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:15",
+    "exp_r": -0.13,
+    "p_win": 0.475,
+    "side": "PE",
+    "spot": 55769.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:20",
+    "exp_r": -0.126,
+    "p_win": 0.476,
+    "side": "PE",
+    "spot": 55737.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:25",
+    "exp_r": -0.121,
+    "p_win": 0.482,
+    "side": "CE",
+    "spot": 55745.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:30",
+    "exp_r": -0.111,
+    "p_win": 0.481,
+    "side": "CE",
+    "spot": 55719.4,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:35",
+    "exp_r": -0.113,
+    "p_win": 0.476,
+    "side": "CE",
+    "spot": 55681.8,
+    "stop_k": 2.0,
+    "trade": false
+   }
+  ],
+  "NIFTY": [
+   {
+    "bar": "09:35",
+    "exp_r": -0.322,
+    "p_win": 0.395,
+    "side": "CE",
+    "spot": 22932.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "09:40",
+    "exp_r": -0.313,
+    "p_win": 0.4,
+    "side": "CE",
+    "spot": 22964.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "09:45",
+    "exp_r": -0.301,
+    "p_win": 0.402,
+    "side": "CE",
+    "spot": 22974.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "09:50",
+    "exp_r": -0.297,
+    "p_win": 0.408,
+    "side": "CE",
+    "spot": 22963.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "09:55",
+    "exp_r": -0.288,
+    "p_win": 0.412,
+    "side": "CE",
+    "spot": 22983.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:00",
+    "exp_r": -0.291,
+    "p_win": 0.4,
+    "side": "CE",
+    "spot": 23027.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:05",
+    "exp_r": -0.276,
+    "p_win": 0.406,
+    "side": "CE",
+    "spot": 23052.0,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:10",
+    "exp_r": -0.276,
+    "p_win": 0.438,
+    "side": "PE",
+    "spot": 23062.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:15",
+    "exp_r": -0.277,
+    "p_win": 0.429,
+    "side": "PE",
+    "spot": 23094.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:20",
+    "exp_r": -0.278,
+    "p_win": 0.421,
+    "side": "PE",
+    "spot": 23140.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:25",
+    "exp_r": -0.281,
+    "p_win": 0.417,
+    "side": "CE",
+    "spot": 23131.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:30",
+    "exp_r": -0.28,
+    "p_win": 0.417,
+    "side": "CE",
+    "spot": 23140.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:35",
+    "exp_r": -0.274,
+    "p_win": 0.414,
+    "side": "PE",
+    "spot": 23143.4,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:40",
+    "exp_r": -0.275,
+    "p_win": 0.417,
+    "side": "PE",
+    "spot": 23137.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:45",
+    "exp_r": -0.272,
+    "p_win": 0.425,
+    "side": "CE",
+    "spot": 23108.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:50",
+    "exp_r": -0.272,
+    "p_win": 0.425,
+    "side": "CE",
+    "spot": 23094.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "10:55",
+    "exp_r": -0.262,
+    "p_win": 0.442,
+    "side": "PE",
+    "spot": 23095.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:00",
+    "exp_r": -0.263,
+    "p_win": 0.431,
+    "side": "PE",
+    "spot": 23109.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:05",
+    "exp_r": -0.258,
+    "p_win": 0.433,
+    "side": "PE",
+    "spot": 23104.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:10",
+    "exp_r": -0.247,
+    "p_win": 0.451,
+    "side": "PE",
+    "spot": 23068.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:15",
+    "exp_r": -0.26,
+    "p_win": 0.451,
+    "side": "PE",
+    "spot": 23088.9,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:20",
+    "exp_r": -0.244,
+    "p_win": 0.452,
+    "side": "PE",
+    "spot": 23081.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:25",
+    "exp_r": -0.255,
+    "p_win": 0.434,
+    "side": "PE",
+    "spot": 23110.0,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:30",
+    "exp_r": -0.251,
+    "p_win": 0.43,
+    "side": "PE",
+    "spot": 23117.4,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:35",
+    "exp_r": -0.256,
+    "p_win": 0.441,
+    "side": "PE",
+    "spot": 23121.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:40",
+    "exp_r": -0.251,
+    "p_win": 0.444,
+    "side": "PE",
+    "spot": 23123.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:45",
+    "exp_r": -0.248,
+    "p_win": 0.444,
+    "side": "PE",
+    "spot": 23121.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:50",
+    "exp_r": -0.245,
+    "p_win": 0.445,
+    "side": "PE",
+    "spot": 23115.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "11:55",
+    "exp_r": -0.246,
+    "p_win": 0.445,
+    "side": "PE",
+    "spot": 23120.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:00",
+    "exp_r": -0.232,
+    "p_win": 0.453,
+    "side": "PE",
+    "spot": 23122.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:05",
+    "exp_r": -0.228,
+    "p_win": 0.457,
+    "side": "PE",
+    "spot": 23106.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:10",
+    "exp_r": -0.215,
+    "p_win": 0.473,
+    "side": "PE",
+    "spot": 23110.0,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:15",
+    "exp_r": -0.214,
+    "p_win": 0.478,
+    "side": "PE",
+    "spot": 23117.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:20",
+    "exp_r": -0.2,
+    "p_win": 0.483,
+    "side": "PE",
+    "spot": 23123.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:25",
+    "exp_r": -0.213,
+    "p_win": 0.472,
+    "side": "PE",
+    "spot": 23106.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:30",
+    "exp_r": -0.199,
+    "p_win": 0.484,
+    "side": "PE",
+    "spot": 23120.0,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:35",
+    "exp_r": -0.197,
+    "p_win": 0.509,
+    "side": "PE",
+    "spot": 23124.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:40",
+    "exp_r": -0.194,
+    "p_win": 0.522,
+    "side": "PE",
+    "spot": 23133.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:45",
+    "exp_r": -0.204,
+    "p_win": 0.52,
+    "side": "PE",
+    "spot": 23123.0,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:50",
+    "exp_r": -0.199,
+    "p_win": 0.501,
+    "side": "PE",
+    "spot": 23130.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "12:55",
+    "exp_r": -0.207,
+    "p_win": 0.496,
+    "side": "PE",
+    "spot": 23125.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:00",
+    "exp_r": -0.202,
+    "p_win": 0.493,
+    "side": "PE",
+    "spot": 23096.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:05",
+    "exp_r": -0.199,
+    "p_win": 0.496,
+    "side": "PE",
+    "spot": 23102.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:10",
+    "exp_r": -0.19,
+    "p_win": 0.512,
+    "side": "PE",
+    "spot": 23115.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:15",
+    "exp_r": -0.19,
+    "p_win": 0.506,
+    "side": "PE",
+    "spot": 23116.4,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:20",
+    "exp_r": -0.184,
+    "p_win": 0.512,
+    "side": "PE",
+    "spot": 23130.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:25",
+    "exp_r": -0.179,
+    "p_win": 0.505,
+    "side": "PE",
+    "spot": 23130.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:30",
+    "exp_r": -0.182,
+    "p_win": 0.501,
+    "side": "PE",
+    "spot": 23124.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:35",
+    "exp_r": -0.163,
+    "p_win": 0.518,
+    "side": "PE",
+    "spot": 23137.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:40",
+    "exp_r": -0.147,
+    "p_win": 0.525,
+    "side": "PE",
+    "spot": 23132.7,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:45",
+    "exp_r": -0.147,
+    "p_win": 0.526,
+    "side": "PE",
+    "spot": 23129.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:50",
+    "exp_r": -0.147,
+    "p_win": 0.52,
+    "side": "PE",
+    "spot": 23126.1,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "13:55",
+    "exp_r": -0.14,
+    "p_win": 0.528,
+    "side": "PE",
+    "spot": 23123.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:00",
+    "exp_r": -0.128,
+    "p_win": 0.54,
+    "side": "PE",
+    "spot": 23127.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:05",
+    "exp_r": -0.115,
+    "p_win": 0.514,
+    "side": "PE",
+    "spot": 23115.6,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:10",
+    "exp_r": -0.108,
+    "p_win": 0.516,
+    "side": "PE",
+    "spot": 23106.8,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:15",
+    "exp_r": -0.104,
+    "p_win": 0.519,
+    "side": "PE",
+    "spot": 23111.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:20",
+    "exp_r": -0.094,
+    "p_win": 0.522,
+    "side": "PE",
+    "spot": 23105.2,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:25",
+    "exp_r": -0.091,
+    "p_win": 0.51,
+    "side": "PE",
+    "spot": 23082.5,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:30",
+    "exp_r": -0.078,
+    "p_win": 0.515,
+    "side": "PE",
+    "spot": 23085.3,
+    "stop_k": 2.0,
+    "trade": false
+   },
+   {
+    "bar": "14:35",
+    "exp_r": -0.077,
+    "p_win": 0.517,
+    "side": "PE",
+    "spot": 23086.7,
+    "stop_k": 2.0,
+    "trade": false
+   }
+  ]
+ },
+ "context": {
+  "BANKNIFTY": {
+   "atr_5m": 69.77353758168533,
+   "calendar": null,
+   "camarilla": {
+    "h3": 55447.0375,
+    "h4": 55578.075,
+    "l3": 55184.9625,
+    "l4": 55053.925,
+    "pivot": 55376.299999999996
+   },
+   "cpr": {
+    "bc": 55406.45,
+    "tc": 55346.149999999994,
+    "width_pct": 0.109
+   },
+   "expiries": [
+    "2026-10-27",
+    "2026-11-23",
+    "2026-12-29"
+   ],
+   "expiry": "2026-10-27",
+   "fii": {
+    "date": "15-Oct-2026",
+    "dii": 3319.39,
+    "fii": -5285.37,
+    "source": "NSE"
+   },
+   "gap_pct": 0.89,
+   "global": {
+    "avg_equity_chg": 0.9,
+    "notes": []
+   },
+   "lot": 30,
+   "noise_band_at": {
+    "09:45": [
+     54804.6,
+     55958.3
+    ],
+    "10:15": [
+     54844.0,
+     55918.9
+    ],
+    "11:15": [
+     54780.5,
+     55982.5
+    ],
+    "12:15": [
+     54777.4,
+     55985.6
+    ],
+    "13:15": [
+     54771.8,
+     55991.3
+    ],
+    "14:15": [
+     54705.4,
+     56057.8
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 55445.75,
+   "pcr_prev_close": 0.78,
+   "pivot": 55376.299999999996,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY",
+     "BANKNIFTY"
+    ],
+    "risk_pct": 2.0,
+    "sizing": "risk",
+    "strategies": [
+     "noise",
+     "camarilla",
+     "ai"
+    ]
+   },
+   "prev_close": 55316.0,
+   "prev_high": 55644.7,
+   "prev_low": 55168.2,
+   "symbol": "BANKNIFTY",
+   "time": "09:16",
+   "vix": {
+    "chg_pct": 1.425516749821809,
+    "level": 14.23
+   }
+  },
+  "NIFTY": {
+   "atr_5m": 20.822840093993655,
+   "calendar": null,
+   "camarilla": {
+    "h3": 22677.425,
+    "h4": 22732.15,
+    "l3": 22567.975000000002,
+    "l4": 22513.25,
+    "pivot": 22646.533333333336
+   },
+   "cpr": {
+    "bc": 22658.45,
+    "tc": 22634.616666666672,
+    "width_pct": 0.105
+   },
+   "expiries": [
+    "2026-10-19",
+    "2026-10-27",
+    "2026-11-03"
+   ],
+   "expiry": "2026-10-19",
+   "fii": {
+    "date": "15-Oct-2026",
+    "dii": 3319.39,
+    "fii": -5285.37,
+    "source": "NSE"
+   },
+   "gap_pct": 1.66,
+   "global": {
+    "avg_equity_chg": 0.9,
+    "notes": []
+   },
+   "lot": 65,
+   "noise_band_at": {
+    "09:45": [
+     22492.0,
+     22802.3
+    ],
+    "10:15": [
+     22461.6,
+     22832.8
+    ],
+    "11:15": [
+     22475.5,
+     22818.8
+    ],
+    "12:15": [
+     22450.7,
+     22843.6
+    ],
+    "13:15": [
+     22373.2,
+     22921.4
+    ],
+    "14:15": [
+     22343.3,
+     22951.3
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 22671.3,
+   "pcr_prev_close": 0.89,
+   "pivot": 22646.533333333336,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY",
+     "BANKNIFTY"
+    ],
+    "risk_pct": 2.0,
+    "sizing": "risk",
+    "strategies": [
+     "noise",
+     "camarilla",
+     "ai"
+    ]
+   },
+   "prev_close": 22622.7,
+   "prev_high": 22757.95,
+   "prev_low": 22558.95,
+   "symbol": "NIFTY",
+   "time": "09:16",
+   "vix": {
+    "chg_pct": 1.425516749821809,
+    "level": 14.23
+   }
+  }
+ },
+ "date": "2026-10-16",
+ "paper_trades": [
+  {
+   "charges": 85.17,
+   "closed": "2026-10-16T10:43:13+05:30",
+   "delta": null,
+   "entry_prem": 140.35,
+   "exit_prem": 162.35,
+   "expiry": "2026-10-19",
+   "gross_pnl": 2860.0,
+   "hi": 23145.9,
+   "id": "f9550e81",
+   "legs": [
+    {
+     "key": "NSE_FO|47161",
+     "opt": "CE",
+     "price": 140.35,
+     "side": "BUY",
+     "src": "upstox",
+     "strike": 23000.0
+    }
+   ],
+   "lo": 23075.55,
+   "lot": 65,
+   "lots": 2,
+   "margin": 18246.0,
+   "mode": "manual",
+   "opened": "2026-10-16T10:14:18+05:30",
+   "plan": null,
+   "pnl": 2774.83,
+   "qty": 130,
+   "reason": "Manual exit",
+   "sl_prem": 98.24,
+   "source": "LIVE \u00b7 Upstox",
+   "spot_at_entry": 23073.65,
+   "spot_exit": 23123.0,
+   "symbol": "NIFTY",
+   "target_prem": 224.56
+  }
+ ],
+ "recommendations": [],
+ "settled": {
+  "at": "2026-10-16T15:16:02+05:30",
+  "lesson": null,
+  "recos": 0
+ },
+ "summary": {
+  "by_outcome": {
+   "square-off": 0,
+   "stop": 0,
+   "target": 0
+  },
+  "by_strategy": {},
+  "paper_pnl": 2775.0,
+  "paper_trades": 1,
+  "recommendations": 0,
+  "settled": 0,
+  "sum_R": null
+ }
+}
