@@ -435,3 +435,12 @@ print("stocks OK")
 SV.stock_market = lambda force=False: {"generated": "2026-10-01", "data_to": "2026-10-01", "stocks": [{"sym": "ABC", "name": "ABC Ltd", "industry": "x", "close": 100.0, "chg_1d": 1.0, "chg_3d": -11.0, "chg_1m": 2.0, "chg_3m": 3.0, "vs_200dma": 3.0, "from_52w_high": -5.0, "rsi14": 40, "turnover_cr": 12.0, "cap_bucket": "Large", "analyst": {"target": 120.0, "upside_pct": 20.0, "n": 5, "rating": "buy", "high": 130, "low": 100}}], "industries": [{"industry": "x", "n": 1, "avg_1d": 1.0, "avg_1m": 2.0}]}
 assert j(c.get("/api/stocks/market"))["stocks"][0]["analyst"]["target"] == 120.0
 print("stock market OK")
+# Sensex (BSE): Thursday weekly expiry, lot 20, 100-point strikes, warned as untested, BSE fee rate
+from fno import indicators as I  # noqa: E402
+ds = j(c.get("/api/dashboard?symbol=SENSEX"))
+assert ds["chain"] and M.lot_size("SENSEX") == 20 and M.instrument("SENSEX")["step"] == 100
+assert all(e.weekday() == 3 for e in I.demo_expiries("weekly", date(2026, 10, 19), 4, "BSE"))
+assert any("researched on Nifty and Bank Nifty only" in w for w in ds["signal"].get("warnings", [])), ds["signal"].get("warnings")
+assert I.demo_expiries("weekly", date(2025, 3, 3), 1, "BSE")[0].weekday() == 1 and I.demo_expiries("weekly", date(2024, 3, 4), 1, "BSE")[0].weekday() == 4
+assert I.charges(100, 110, 20, exch_pct=I.exch_rate("SENSEX")) < I.charges(100, 110, 20)
+print("sensex OK:", ds["label"], ds["expiry"], "lot", ds["lot"], "order", ds["order"] and ds["order"]["strike"])

@@ -421,6 +421,7 @@ def dashboard(symbol, strike=None):
     ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, nw, gc, fi, g["now"], guard, traded, pf["strategies"])
     ev = _with_ai(symbol, g, ev, pf, traded)
     ev = _with_custom(symbol, g, ev, pf, traded)
+    _untested_note(symbol, g, ev)
     today, hist = S.session_frames(g["candles"], g["now"])
     prev = float(hist["close"].iloc[-1]) if not hist.empty else g["spot"]
 
@@ -924,6 +925,12 @@ def tick():
     return {"closed": closed, "placed": placed, "scalp": sc, "recorded": rec, "journal": jr, "time": now.isoformat(timespec="seconds")}
 
 
+def _untested_note(symbol, g, ev):
+    if symbol in C.UNTESTED:
+        ev.setdefault("warnings", []).append(f"{g['meta']['label']}: the Noise band and Camarilla rules were researched on Nifty and Bank Nifty only. "
+                                             "They run unchanged here with no backtest of their own - paper-trade it and compare before trusting it.")
+
+
 def scan(symbol, m=None, prefs_=None, want_order=True):
     """What the strategies say right now (no side effects): the same evaluation the Signal page shows."""
     from . import journal as J
@@ -952,6 +959,7 @@ def scan(symbol, m=None, prefs_=None, want_order=True):
             order = None
             if str(e).startswith("SKIP"):
                 ev.setdefault("warnings", []).append(str(e))
+    _untested_note(symbol, g, ev)
     if g["vix"].get("assumed"):
         ev.setdefault("warnings", []).append("India VIX is unavailable - 14.0 is being assumed, so the VIX filters (min 11, max 18/20) cannot be trusted right now. Check the VIX yourself before trading.")
     try:

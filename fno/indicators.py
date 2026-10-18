@@ -156,10 +156,18 @@ def _last_tuesday(y, m, wd=1):
     return d
 
 
-def demo_expiries(kind: str, today: date | None = None, n: int = 4) -> list[date]:
+def expiry_weekday(day: date, exchange: str = "NSE") -> int:
+    """Weekday of index option expiries on `day`. NSE: Thursday, Tuesday from Sep 2025.
+    BSE (Sensex): Friday, Tuesday from Jan 2025, Thursday from Sep 2025."""
+    if exchange == "BSE":
+        return 4 if day < date(2025, 1, 1) else 1 if day < date(2025, 9, 1) else 3
+    return 1 if day >= date(2025, 9, 1) else 3
+
+
+def demo_expiries(kind: str, today: date | None = None, n: int = 4, exchange: str = "NSE") -> list[date]:
     today = today or C.today_ist()
     out = []
-    wd = 1 if today >= date(2025, 9, 1) else 3          # NSE expiries moved from Thursday to Tuesday in Sep 2025
+    wd = expiry_weekday(today, exchange)
     if kind == "weekly":
         d = today
         while len(out) < n:
@@ -190,13 +198,21 @@ def pick_trading_expiry(expiries: list[date], kind: str, today: date | None = No
     return future[-1]
 
 
-def charges(premium_buy, premium_sell, qty, orders=2):
+EXCH_RATE = {"NSE": 0.0003503, "BSE": 0.000325}   # option transaction charge on premium turnover
+
+
+def exch_rate(symbol: str | None) -> float:
+    meta = C.INDICES.get(symbol or "") or {}
+    return EXCH_RATE.get(meta.get("exchange", "NSE"), EXCH_RATE["NSE"])
+
+
+def charges(premium_buy, premium_sell, qty, orders=2, exch_pct=None):
     """Approximate Indian options charges for one round trip (buy + sell),
-    discount-broker model. VERIFY against your broker's calculator."""
+    discount-broker model. VERIFY against your broker's calculator. exch_pct: exchange rate (default NSE)."""
     buy_val, sell_val = premium_buy * qty, premium_sell * qty
     brokerage = 20 * orders
     stt = 0.0015 * sell_val                # 0.15% on sell side premium (Budget 2026, from 1 Apr 2026; was 0.1%)
-    exch = 0.0003503 * (buy_val + sell_val)
+    exch = (EXCH_RATE["NSE"] if exch_pct is None else exch_pct) * (buy_val + sell_val)
     sebi = 0.000001 * (buy_val + sell_val)
     stamp = 0.00003 * buy_val
     gst = 0.18 * (brokerage + exch + sebi)

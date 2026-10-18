@@ -125,7 +125,7 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
 
         if vix_at(day.index[0]) < C.VIX_MIN:
             continue
-        day_exps = I.demo_expiries(meta["expiry"], d, 3)
+        day_exps = I.demo_expiries(meta["expiry"], d, 3, meta.get("exchange", "NSE"))
         if d in C.BUDGET_DAYS or (symbol in C.SKIP_OWN_EXPIRY and day_exps and day_exps[0] == d):
             continue                                  # calendar rules (research round 6)
         if meta["iv_mult"]:
@@ -148,7 +148,7 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
             start, day_why = 0, set()
             while True:
                 res = _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d, mult, sizing, otm,
-                                 strat, lv, budget_pct)
+                                 strat, lv, budget_pct, I.exch_rate(symbol))
                 if res is None:
                     break
                 if isinstance(res, tuple):          # ("skip", bar, why): too risky/costly for this capital, keep looking
@@ -213,7 +213,7 @@ def _run_ai(symbol, meta, candles, vix_intraday, vix_daily, lot, capital, sizing
     def exp_for_day(d):
         if d in C.BUDGET_DAYS:
             return None
-        return I.pick_trading_expiry(I.demo_expiries(meta["expiry"], d, 3), meta["expiry"], d)
+        return I.pick_trading_expiry(I.demo_expiries(meta["expiry"], d, 3, meta.get("exchange", "NSE")), meta["expiry"], d)
 
     def price_trade(day, i_in, opt, sl, tgt, exp, i_out, x_spot, reason, best):
         d = day.index[0].date()
@@ -252,7 +252,7 @@ def _run_ai(symbol, meta, candles, vix_intraday, vix_daily, lot, capital, sizing
         p_raw = prem(float(x_spot), x_ts, x_bar)
         p_out = PR.real_adjust(p_in / (1 + SLIP), p_raw, (exp - d).days, (x_ts - t_in).total_seconds() / 3600) * (1 - SLIP)
         qty = lots * lot
-        pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty)
+        pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty, exch_pct=I.exch_rate(symbol))
         state["equity"] += pnl
         risk = abs(spot - sl)
         return {"date": d.isoformat(), "entry_time": t_in.strftime("%H:%M"), "exit_time": x_ts.strftime("%H:%M"),
@@ -287,7 +287,7 @@ def _run_ai(symbol, meta, candles, vix_intraday, vix_daily, lot, capital, sizing
 
 
 def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d, mult, sizing="risk", otm=0,
-               strat="noise", lv=None, budget_pct=C.RISK_PER_TRADE):
+               strat="noise", lv=None, budget_pct=C.RISK_PER_TRADE, exch_pct=None):
         entry_i = None
         for i, ts in enumerate(idx):
             if i < start:
@@ -388,7 +388,7 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
         p_raw = prem(x_spot, x_ts, x_bar)
         p_out = PR.real_adjust(p_in / (1 + SLIP), p_raw, (exp - d).days, (x_ts - t_in).total_seconds() / 3600) * (1 - SLIP)
         qty = lots * lot
-        pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty)
+        pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty, exch_pct=exch_pct)
         equity += pnl
         return {
             "date": d.isoformat(), "entry_time": t_in.strftime("%H:%M"), "exit_time": x_ts.strftime("%H:%M"),

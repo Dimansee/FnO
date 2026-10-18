@@ -495,7 +495,7 @@ def option_pnl(spec_symbol: str, trades: list[dict], vix: pd.Series | None, capi
     for t in sorted(trades, key=lambda x: x["entry_ts"]):
         ts_in, ts_out = t["entry_ts"].to_pydatetime(), t["exit_ts"].to_pydatetime()
         d = ts_in.date()
-        exps = I.demo_expiries(kind, d, 4)
+        exps = I.demo_expiries(kind, d, 4, meta.get("exchange", "NSE"))
         exp = I.pick_trading_expiry(exps, kind, d)
         if exp is None:
             skipped += 1
@@ -531,7 +531,7 @@ def option_pnl(spec_symbol: str, trades: list[dict], vix: pd.Series | None, capi
         p_raw = prem(t["exit"], ts_out + timedelta(minutes=0), v_in)
         p_out = PR.real_adjust(p_in / (1 + SLIP), p_raw, dte, hours) * (1 - SLIP)
         qty = lots * lot
-        pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty)
+        pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty, exch_pct=I.exch_rate(meta.get("symbol")))
         eq += pnl
         out.append({"ts": t["entry_ts"], "pnl": round(pnl, 0), "equity": round(eq, 0), "lots": lots, "prem_in": round(p_in, 2), "prem_out": round(p_out, 2)})
     pnls = np.array([x["pnl"] for x in out], dtype=float)

@@ -161,6 +161,7 @@ r = c.post("/api/scalp/settings", json={"on": True, "syms": ["NIFTY", "BANKNIFTY
 s = r.get_json()["settings"]
 assert s["on"] and s["syms"] == ["NIFTY", "BANKNIFTY"] and s["conf"] == 70 and s["setups"] == "AB", s
 assert c.get("/api/scalp/levels?symbol=NIFTY").get_json()["zones"]["above"]
+assert SC.save_settings({"syms": ["SENSEX", "NIFTY"]})["syms"] == ["SENSEX", "NIFTY"] and "SENSEX" in c.get("/api/scalp").get_json()["state"]
 assert c.post("/api/scalp/reset").status_code == 200
 print("api OK")
 

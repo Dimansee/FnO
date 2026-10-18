@@ -49,7 +49,8 @@ BACKTEST = {
     ],
     "why": "Entries averaged +0.75 index points; 73% of trades hit the tight 1-minute stop; fees of ~Rs 72 a round trip "
            "roughly doubled the loss. The classifier found 84% of trend days in the right direction, and the governor cut "
-           "losses about 4x versus no governor, but neither creates an edge. Matches round 7 (0 of 1,458 scalping rules profitable).",
+           "losses about 4x versus no governor, but neither creates an edge. Matches round 7 (0 of 1,458 scalping rules profitable). "
+           "Sensex was not tested (no 1-minute Sensex history yet; the nightly data job now collects it).",
 }
 
 
@@ -254,7 +255,7 @@ def next_level(x, px, side):
 
 def cost_points(sym, spot, lot):
     prem = 0.012 * spot
-    return I.charges(prem, prem, lot) / lot / 0.6
+    return I.charges(prem, prem, lot, exch_pct=I.exch_rate(sym)) / lot / 0.6
 
 
 def find_signal(x, i, mode, sdir, orb_done, setups="ABC"):
@@ -513,7 +514,7 @@ def _close(p, idx_px, why, m, now, spot=None) -> dict | None:
     if "Stop" in why and lg.get("src", "demo") == "demo":
         sell = max(0.05, sell * (1 - slip_pct(sell)))
     gross = (sell - p["entry_prem"]) * p["qty"]
-    chg = I.charges(p["entry_prem"], sell, p["qty"])
+    chg = I.charges(p["entry_prem"], sell, p["qty"], exch_pct=I.exch_rate(p["symbol"]))
     rec = {"id": p["id"], "symbol": p["symbol"], "tag": p["tag"], "side": p["side"], "mode": p["mode"], "opened": p["opened"],
            "closed": now.isoformat(timespec="seconds"), "strike": lg["strike"], "opt": lg["opt"], "expiry": p["expiry"],
            "qty": p["qty"], "entry_prem": p["entry_prem"], "exit_prem": round(sell, 2), "gross": round(gross, 2),

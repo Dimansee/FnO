@@ -51,7 +51,14 @@ INDICES = {
         "label": "Bank Nifty", "upstox_key": "NSE_INDEX|Nifty Bank", "fyers": "NSE:NIFTYBANK-INDEX",
         "yahoo": "^NSEBANK", "lot": 30, "step": 100, "expiry": "monthly", "iv_mult": 1.2,
     },
+    # BSE Sensex (options on BSE / BFO). Lot 20 since BSE notice 20241021-13; weekly expiry Thursday since Sep 2025
+    # (BSE notice 20250623-59). The Noise / Camarilla rules were researched on Nifty and Bank Nifty only - see UNTESTED.
+    "SENSEX": {
+        "label": "Sensex", "upstox_key": "BSE_INDEX|SENSEX", "fyers": "BSE:SENSEX-INDEX",
+        "yahoo": "^BSESN", "lot": 20, "step": 100, "expiry": "weekly", "iv_mult": 1.0, "exchange": "BSE",
+    },
 }
+UNTESTED = {"SENSEX"}   # indices the rulebook was not backtested on: the app trades them with the same rules and says so
 
 # Stock lot sizes below are only demo fallbacks (VERIFY). The app reads the
 # real lot sizes from the exchange instrument master once a day.

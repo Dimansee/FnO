@@ -661,6 +661,7 @@ details summary{cursor:pointer;font-size:13px}
         <label class="chip"><input type="checkbox" id="scOn"> Scalp book ON (paper)</label>
         <label class="chip"><input type="checkbox" id="scNifty"> Nifty</label>
         <label class="chip"><input type="checkbox" id="scBank"> Bank Nifty</label>
+        <label class="chip"><input type="checkbox" id="scSensex"> Sensex</label>
         <label class="chip"><input type="checkbox" id="scLv"> Show levels on the Signal chart</label>
       </div>
       <div class="row wrap" style="gap:16px;margin-top:10px">
@@ -1007,6 +1008,7 @@ const kpi = (k, v, d, dc) => `<div class="card kpi"><div class="k">${k}</div><di
 
 /* ---------- scalp book (separate paper ledger · scalping-spec study, Oct 2026) ---------- */
 S.scalpLv = {};
+const IDX_LABEL = {NIFTY: "Nifty 50", BANKNIFTY: "Bank Nifty", SENSEX: "Sensex"};
 const SC_MODE = {trend: ["Trend", "tup"], mid: ["In-between", "twarn"], none: ["No trades", ""]};
 const SC_SETUP = {A: "A · opening-range breakout", B: "B · pullback to EMA 9", C: "C · level break + retest"};
 const scLvOn = () => !S.scalp || S.scalp.settings.levels_on_chart !== false;
@@ -1035,7 +1037,7 @@ function scLevelsTable(z, spot) {
     ${z.below.map(x => row(x, false)).join("")}</table></div>`;
 }
 function scLive(sym, x) {
-  const label = sym === "NIFTY" ? "Nifty 50" : "Bank Nifty", g = x.governor || {};
+  const label = IDX_LABEL[sym] || sym, g = x.governor || {};
   const gv = g.stopped ? `<span class="tag tdown">Stopped: ${esc(g.stopped)}</span>`
     : g.pause_until && new Date(g.pause_until) > new Date() ? `<span class="tag twarn">Paused after 3 losses until ${g.pause_until.slice(11, 16)}</span>`
     : `<span class="tag tup">Trading allowed</span>`;
@@ -1064,12 +1066,12 @@ async function loadScalp() {
     ${bt.rows.map(r => `<tr><td style="text-align:left">${esc(r.name)}</td>${Y.map(y => `<td class="mono ${cls(r.years[y])}">${rs(r.years[y])}</td>`).join("")}<td class="mono">${r.pf}</td></tr>`).join("")}</table></div>
     <p style="font-size:13px;margin-bottom:0">${esc(bt.why)} Keep it on paper and compare this book's journal with the table before trusting it.</p>`;
   $("#scOnPill").innerHTML = st.on ? '<span class="pill live"><span class="dot"></span><span>ON · paper</span></span>' : '<span class="pill demo"><span>OFF</span></span>';
-  $("#scOn").checked = st.on; $("#scNifty").checked = st.syms.includes("NIFTY"); $("#scBank").checked = st.syms.includes("BANKNIFTY");
+  $("#scOn").checked = st.on; $("#scNifty").checked = st.syms.includes("NIFTY"); $("#scBank").checked = st.syms.includes("BANKNIFTY"); $("#scSensex").checked = st.syms.includes("SENSEX");
   $("#scLv").checked = st.levels_on_chart !== false; $("#scCap").value = st.capital; $("#scConf").value = st.conf;
   ["A", "B", "C"].forEach(k => $("#sc" + k).checked = st.setups.includes(k));
   const g = d.gov_rules;
   $("#scGovRules").textContent = `Governor (tested, fixed): stop for the day at −${g.day_loss * 100}% of capital or ${g.max_losses} losses; once the day peaks at +${g.peak * 100}%, stop when ${g.giveback * 100}% of it is given back; after ${g.charges_after} trades stop if fees exceed ${g.charges * 100}% of gross profit; ${g.streak} losses in a row pause ${g.pause_min} min; a setup that loses ${g.setup_losses}× is off for the day; skip trades with less than ${g.room_cost_x}× the fees of room to the next level. Each index trades 1 lot of the 1-strike-in-the-money option.`;
-  $("#scLive").innerHTML = ["NIFTY", "BANKNIFTY"].map(s => scLive(s, d.state[s] || {})).join("");
+  $("#scLive").innerHTML = Object.keys(IDX_LABEL).map(s => scLive(s, d.state[s] || {})).join("");
   Object.entries(d.state).forEach(([s, x]) => { if (x.zones) S.scalpLv[s] = {at: Date.now(), z: x.zones, mode: x.mode}; });
   $("#scPos").innerHTML = d.positions.length ? d.positions.map(p => { const l = p.legs[0]; return `
     <div class="leg" style="flex-wrap:wrap;gap:10px;padding:10px 12px">
@@ -1092,7 +1094,7 @@ async function loadScalp() {
   $("#scLive").insertAdjacentHTML("beforeend", (d.errors || []).length ? `<div class="err" style="grid-column:1/-1">${d.errors.map(esc).join("<br>")}</div>` : "");
 }
 $("#scSave").onclick = async () => {
-  const syms = [["#scNifty", "NIFTY"], ["#scBank", "BANKNIFTY"]].filter(([q]) => $(q).checked).map(([, s]) => s);
+  const syms = [["#scNifty", "NIFTY"], ["#scBank", "BANKNIFTY"], ["#scSensex", "SENSEX"]].filter(([q]) => $(q).checked).map(([, s]) => s);
   const setups = ["A", "B", "C"].filter(k => $("#sc" + k).checked).join("");
   if ($("#scOn").checked && !(S.scalp && S.scalp.settings.on) &&
       !confirm("Switch the scalp book ON? It paper-trades automatically every minute. In the backtest these rules lost money every year (see the table).")) return;
@@ -2621,7 +2623,7 @@ async function loadSettings() {
   $("#pfAI").checked = (pf.strategies || []).includes("ai");
   $("#pfAutopilot").checked = !!pf.autopilot; $("#pfAuto").checked = !!pf.auto; $("#pfLimits").checked = !!pf.enforce_limits; $("#pfFills").value = pf.fills || "realistic";
   if (!PUSH_INIT) { PUSH_INIT = true; pushInit(); }
-  $("#pfSyms").innerHTML = ["NIFTY", "BANKNIFTY"].map(x => `<label class="tog" style="margin-right:14px"><input type="checkbox" data-asym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${x === "NIFTY" ? "Nifty 50" : "Bank Nifty"}</label>`).join("");
+  $("#pfSyms").innerHTML = Object.keys(IDX_LABEL).map(x => `<label class="tog" style="margin-right:14px"><input type="checkbox" data-asym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${IDX_LABEL[x]}${x === "SENSEX" ? ' <span class="muted" style="font-size:11px">(rules not backtested on Sensex)</span>' : ""}</label>`).join("");
   $("#fiiIn").value = d.fii_manual ? d.fii_manual.value : "";
   loadRecorder();
 }
@@ -2685,9 +2687,9 @@ const GLOSS = [
  ["Index options (Nifty and Bank Nifty)", [
   ["Option", "A contract that lets you profit if the market moves your way, while your loss is limited to what you paid. A CALL gains when the market goes UP, a PUT gains when it goes DOWN.", "You buy a Nifty call for ₹100. If Nifty rises, it may become ₹140. If Nifty falls, it may drop to ₹0 - you lose at most the ₹100."],
   ["Premium", "The price of the option - what you pay to buy it.", "Premium ₹100 × lot size 65 = ₹6,500 is the most you can lose on that trade."],
-  ["Lot size", "Options are sold in fixed bundles, not one at a time. Nifty is currently 65, Bank Nifty 30 (the exchange can change this).", "Premium moves ₹10 on a Nifty lot → ₹650 profit or loss."],
+  ["Lot size", "Options are sold in fixed bundles, not one at a time. Nifty is currently 65, Bank Nifty 30, Sensex 20 (the exchange can change this).", "Premium moves ₹10 on a Nifty lot → ₹650 profit or loss."],
   ["Strike: ATM / ITM / OTM", "The strike is the index level the option is based on. ATM = at the current level (moves the most per rupee). ITM = already in profit side (costlier). OTM = needs a bigger move (cheap but rarely pays).", "Nifty at 25,000: the 25,000 option is ATM, 25,500 call is OTM."],
-  ["Expiry", "The date the option stops existing. Nifty has weekly expiry, Bank Nifty monthly. Near expiry options are cheap but die fast.", ""],
+  ["Expiry", "The date the option stops existing. Nifty has weekly expiry (Tuesday), Sensex weekly (Thursday, on BSE), Bank Nifty monthly. Near expiry options are cheap but die fast.", ""],
   ["Time decay (theta)", "An option loses a little value every hour just because time passes. A sideways day loses money for the buyer even if the index ends where it started.", "This is why the app exits by 15:15 and avoids slow, flat days."],
   ["IV (implied volatility)", "How big a move the market expects, already priced into the option. High IV = expensive options. It often drops after big news, hurting buyers even when the index moves their way.", ""],
   ["India VIX", "The market's 'fear meter'. High = big swings expected. The app takes no trades when VIX is below 11 (moves too small to pay for the option) or above 18 for Noise / 20 for Camarilla (fear spikes lost money in testing).", ""],

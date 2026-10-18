@@ -86,7 +86,7 @@ def close_position(pos_id, prices: dict, reason: str, extra: dict | None = None)
     for lg in pos["legs"]:
         now = prices.get(lg["key"], lg["price"])
         b, s = (lg["price"], now) if lg["side"] == "BUY" else (now, lg["price"])
-        ch += I.charges(b, s, pos["qty"])
+        ch += I.charges(b, s, pos["qty"], exch_pct=I.exch_rate(pos.get("symbol")))
     rec = {**pos, "closed": C.now_ist().isoformat(timespec="seconds"), "exit_prem": round(exit_net, 2),
            "gross_pnl": round(gross, 2), "charges": round(ch, 2), "pnl": round(gross - ch, 2), "reason": reason, **(extra or {})}
     store.insert_trade(rec)

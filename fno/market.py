@@ -332,7 +332,7 @@ class Market:
                     return exps, int(lot or lot_size(symbol))
             except Exception as e:
                 self._fail("Expiry list", e)
-        return I.demo_expiries(meta["expiry"]), lot_size(symbol)
+        return I.demo_expiries(meta["expiry"], exchange=meta.get("exchange", "NSE")), lot_size(symbol)
 
     def chain(self, symbol, expiry: date, spot, vix, candles=None) -> pd.DataFrame:
         if self.br:
