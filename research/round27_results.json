@@ -1,0 +1,633 @@
+{
+ "combinations": {
+  "M0 current live set": {
+   "blocks": {
+    "BANKNIFTY:camarilla": 1.0,
+    "BANKNIFTY:catcher": 1.0,
+    "BANKNIFTY:noise": 1.0,
+    "NIFTY:camarilla": 1.0,
+    "NIFTY:catcher": 1.0,
+    "NIFTY:noise": 1.0,
+    "SENSEX:catcher": 1.0
+   },
+   "train": {
+    "net": 240147,
+    "maxdd": -119372,
+    "sharpe": 0.89
+   },
+   "y2026": {
+    "net": 99620,
+    "maxdd": -42130,
+    "sharpe": 1.43
+   },
+   "years": {
+    "2023": 56624,
+    "2024": 236969,
+    "2025": -53446,
+    "2026": 99620
+   },
+   "months_2026": {
+    "2026-01": -21621,
+    "2026-02": 32675,
+    "2026-03": 30646,
+    "2026-04": 25,
+    "2026-05": -4964,
+    "2026-06": 23769,
+    "2026-07": -8780,
+    "2026-08": -12735,
+    "2026-09": 17372,
+    "2026-10": 43232
+   },
+   "note": "",
+   "y2024_25": {
+    "net": 183523,
+    "maxdd": -119372,
+    "sharpe": 1.07
+   }
+  },
+  "M1 all 9 blocks": {
+   "blocks": {
+    "BANKNIFTY:camarilla": 1.0,
+    "BANKNIFTY:catcher": 1.0,
+    "BANKNIFTY:noise": 1.0,
+    "NIFTY:camarilla": 1.0,
+    "NIFTY:catcher": 1.0,
+    "NIFTY:noise": 1.0,
+    "SENSEX:camarilla": 1.0,
+    "SENSEX:catcher": 1.0,
+    "SENSEX:noise": 1.0
+   },
+   "train": {
+    "net": 244580,
+    "maxdd": -141236,
+    "sharpe": 0.72
+   },
+   "y2026": {
+    "net": 130786,
+    "maxdd": -53749,
+    "sharpe": 1.5
+   },
+   "years": {
+    "2023": 29340,
+    "2024": 255706,
+    "2025": -40467,
+    "2026": 130786
+   },
+   "months_2026": {
+    "2026-01": -28716,
+    "2026-02": 56502,
+    "2026-03": 40036,
+    "2026-04": 1814,
+    "2026-05": -4077,
+    "2026-06": 35503,
+    "2026-07": -5719,
+    "2026-08": -17503,
+    "2026-09": 13652,
+    "2026-10": 39292
+   },
+   "note": ""
+  },
+  "M2 picked on 2023-25 (profitable, 2 of 3 yrs, PF>=1.05)": {
+   "blocks": {
+    "BANKNIFTY:camarilla": 1.0,
+    "BANKNIFTY:noise": 1.0,
+    "NIFTY:camarilla": 1.0,
+    "NIFTY:catcher": 1.0,
+    "NIFTY:noise": 1.0,
+    "SENSEX:catcher": 1.0,
+    "SENSEX:noise": 1.0
+   },
+   "train": {
+    "net": 284416,
+    "maxdd": -100776,
+    "sharpe": 1.02
+   },
+   "y2026": {
+    "net": 106156,
+    "maxdd": -42383,
+    "sharpe": 1.58
+   },
+   "years": {
+    "2023": 42094,
+    "2024": 237156,
+    "2025": 5166,
+    "2026": 106156
+   },
+   "months_2026": {
+    "2026-01": -18150,
+    "2026-02": 32516,
+    "2026-03": 25442,
+    "2026-04": 1608,
+    "2026-05": 1069,
+    "2026-06": 19864,
+    "2026-07": -5057,
+    "2026-08": -11755,
+    "2026-09": 17168,
+    "2026-10": 43450
+   },
+   "note": "",
+   "y2024_25": {
+    "net": 242322,
+    "maxdd": -79051,
+    "sharpe": 1.32
+   }
+  },
+  "M3 picked + inverse-volatility weights": {
+   "blocks": {
+    "BANKNIFTY:camarilla": 0.76,
+    "BANKNIFTY:noise": 1.12,
+    "NIFTY:camarilla": 0.79,
+    "NIFTY:catcher": 1.15,
+    "NIFTY:noise": 0.93,
+    "SENSEX:catcher": 1.19,
+    "SENSEX:noise": 1.06
+   },
+   "train": {
+    "net": 279714,
+    "maxdd": -102958,
+    "sharpe": 1.02
+   },
+   "y2026": {
+    "net": 98474,
+    "maxdd": -42199,
+    "sharpe": 1.5
+   },
+   "years": {
+    "2023": 32696,
+    "2024": 235848,
+    "2025": 11170,
+    "2026": 98474
+   },
+   "months_2026": {
+    "2026-01": -15522,
+    "2026-02": 29057,
+    "2026-03": 22569,
+    "2026-04": -2607,
+    "2026-05": 4465,
+    "2026-06": 19600,
+    "2026-07": -9305,
+    "2026-08": -12405,
+    "2026-09": 19808,
+    "2026-10": 42813
+   },
+   "note": ""
+  },
+  "M6 top 3 blocks by 2023-25 Sharpe": {
+   "blocks": {
+    "NIFTY:catcher": 1.0,
+    "NIFTY:noise": 1.0,
+    "SENSEX:catcher": 1.0
+   },
+   "train": {
+    "net": 155375,
+    "maxdd": -50880,
+    "sharpe": 1.15
+   },
+   "y2026": {
+    "net": 49655,
+    "maxdd": -22267,
+    "sharpe": 1.38
+   },
+   "years": {
+    "2023": 6021,
+    "2024": 121923,
+    "2025": 27430,
+    "2026": 49655
+   },
+   "months_2026": {
+    "2026-01": -8474,
+    "2026-02": 8164,
+    "2026-03": 7715,
+    "2026-04": -9481,
+    "2026-05": 11820,
+    "2026-06": 10649,
+    "2026-07": -15822,
+    "2026-08": -4435,
+    "2026-09": 15585,
+    "2026-10": 33933
+   },
+   "note": ""
+  },
+  "M4 walk-forward: blocks with a profitable last 12 months": {
+   "picks": {
+    "2024Q1": [
+     "BANKNIFTY:camarilla",
+     "BANKNIFTY:noise",
+     "NIFTY:catcher"
+    ],
+    "2024Q2": [
+     "BANKNIFTY:camarilla",
+     "NIFTY:camarilla",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:camarilla",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2024Q3": [
+     "BANKNIFTY:camarilla",
+     "BANKNIFTY:catcher",
+     "NIFTY:camarilla",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:camarilla",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2024Q4": [
+     "BANKNIFTY:camarilla",
+     "BANKNIFTY:catcher",
+     "BANKNIFTY:noise",
+     "NIFTY:camarilla",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:camarilla",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2025Q1": [
+     "BANKNIFTY:camarilla",
+     "BANKNIFTY:catcher",
+     "BANKNIFTY:noise",
+     "NIFTY:camarilla",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2025Q2": [
+     "BANKNIFTY:camarilla",
+     "BANKNIFTY:noise",
+     "NIFTY:camarilla",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2025Q3": [
+     "BANKNIFTY:camarilla",
+     "BANKNIFTY:noise",
+     "NIFTY:camarilla",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2025Q4": [
+     "NIFTY:camarilla",
+     "NIFTY:noise",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2026Q1": [
+     "NIFTY:camarilla",
+     "NIFTY:noise",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2026Q2": [
+     "BANKNIFTY:noise",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2026Q3": [
+     "NIFTY:camarilla",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:camarilla",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2026Q4": [
+     "BANKNIFTY:noise",
+     "NIFTY:camarilla",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:camarilla"
+    ]
+   },
+   "y2024_25": {
+    "net": 71213,
+    "maxdd": -72836,
+    "sharpe": 0.46
+   },
+   "y2026": {
+    "net": 66139,
+    "maxdd": -39750,
+    "sharpe": 1.28
+   },
+   "years": {
+    "2024": 72151,
+    "2025": -938,
+    "2026": 66139
+   },
+   "months_2026": {
+    "2026-01": -17091,
+    "2026-02": 20573,
+    "2026-03": 8530,
+    "2026-04": -10420,
+    "2026-05": 6784,
+    "2026-06": 14488,
+    "2026-07": -1555,
+    "2026-08": -9168,
+    "2026-09": 15440,
+    "2026-10": 38558
+   }
+  },
+  "M5 walk-forward: weights by last-12-month Sharpe": {
+   "picks": {
+    "2024Q1": [
+     "BANKNIFTY:camarilla",
+     "BANKNIFTY:noise",
+     "NIFTY:catcher"
+    ],
+    "2024Q2": [
+     "BANKNIFTY:camarilla",
+     "NIFTY:camarilla",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:camarilla",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2024Q3": [
+     "BANKNIFTY:camarilla",
+     "BANKNIFTY:catcher",
+     "NIFTY:camarilla",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:camarilla",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2024Q4": [
+     "BANKNIFTY:camarilla",
+     "BANKNIFTY:catcher",
+     "BANKNIFTY:noise",
+     "NIFTY:camarilla",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:camarilla",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2025Q1": [
+     "BANKNIFTY:camarilla",
+     "BANKNIFTY:catcher",
+     "BANKNIFTY:noise",
+     "NIFTY:camarilla",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2025Q2": [
+     "BANKNIFTY:camarilla",
+     "BANKNIFTY:noise",
+     "NIFTY:camarilla",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2025Q3": [
+     "BANKNIFTY:camarilla",
+     "BANKNIFTY:noise",
+     "NIFTY:camarilla",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2025Q4": [
+     "NIFTY:camarilla",
+     "NIFTY:noise",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2026Q1": [
+     "NIFTY:camarilla",
+     "NIFTY:noise",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2026Q2": [
+     "BANKNIFTY:noise",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2026Q3": [
+     "NIFTY:camarilla",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:camarilla",
+     "SENSEX:catcher",
+     "SENSEX:noise"
+    ],
+    "2026Q4": [
+     "BANKNIFTY:noise",
+     "NIFTY:camarilla",
+     "NIFTY:catcher",
+     "NIFTY:noise",
+     "SENSEX:camarilla"
+    ]
+   },
+   "y2024_25": {
+    "net": 77634,
+    "maxdd": -90268,
+    "sharpe": 0.49
+   },
+   "y2026": {
+    "net": 23719,
+    "maxdd": -53186,
+    "sharpe": 0.5
+   },
+   "years": {
+    "2024": 96735,
+    "2025": -19102,
+    "2026": 23719
+   },
+   "months_2026": {
+    "2026-01": -12442,
+    "2026-02": 10860,
+    "2026-03": 4213,
+    "2026-04": -7469,
+    "2026-05": 166,
+    "2026-06": 9317,
+    "2026-07": -6630,
+    "2026-08": -18033,
+    "2026-09": 6177,
+    "2026-10": 37560
+   }
+  },
+  "correlation_train": {
+   "BANKNIFTY:camarilla": {
+    "BANKNIFTY:camarilla": 1.0,
+    "BANKNIFTY:catcher": 0.35,
+    "BANKNIFTY:noise": 0.48,
+    "NIFTY:camarilla": 0.31,
+    "NIFTY:catcher": 0.24,
+    "NIFTY:noise": 0.31,
+    "SENSEX:camarilla": 0.28,
+    "SENSEX:catcher": 0.22,
+    "SENSEX:noise": 0.23
+   },
+   "BANKNIFTY:catcher": {
+    "BANKNIFTY:camarilla": 0.35,
+    "BANKNIFTY:catcher": 1.0,
+    "BANKNIFTY:noise": 0.57,
+    "NIFTY:camarilla": 0.26,
+    "NIFTY:catcher": 0.43,
+    "NIFTY:noise": 0.3,
+    "SENSEX:camarilla": 0.24,
+    "SENSEX:catcher": 0.42,
+    "SENSEX:noise": 0.27
+   },
+   "BANKNIFTY:noise": {
+    "BANKNIFTY:camarilla": 0.48,
+    "BANKNIFTY:catcher": 0.57,
+    "BANKNIFTY:noise": 1.0,
+    "NIFTY:camarilla": 0.19,
+    "NIFTY:catcher": 0.3,
+    "NIFTY:noise": 0.4,
+    "SENSEX:camarilla": 0.2,
+    "SENSEX:catcher": 0.26,
+    "SENSEX:noise": 0.32
+   },
+   "NIFTY:camarilla": {
+    "BANKNIFTY:camarilla": 0.31,
+    "BANKNIFTY:catcher": 0.26,
+    "BANKNIFTY:noise": 0.19,
+    "NIFTY:camarilla": 1.0,
+    "NIFTY:catcher": 0.33,
+    "NIFTY:noise": 0.33,
+    "SENSEX:camarilla": 0.74,
+    "SENSEX:catcher": 0.34,
+    "SENSEX:noise": 0.3
+   },
+   "NIFTY:catcher": {
+    "BANKNIFTY:camarilla": 0.24,
+    "BANKNIFTY:catcher": 0.43,
+    "BANKNIFTY:noise": 0.3,
+    "NIFTY:camarilla": 0.33,
+    "NIFTY:catcher": 1.0,
+    "NIFTY:noise": 0.57,
+    "SENSEX:camarilla": 0.26,
+    "SENSEX:catcher": 0.78,
+    "SENSEX:noise": 0.51
+   },
+   "NIFTY:noise": {
+    "BANKNIFTY:camarilla": 0.31,
+    "BANKNIFTY:catcher": 0.3,
+    "BANKNIFTY:noise": 0.4,
+    "NIFTY:camarilla": 0.33,
+    "NIFTY:catcher": 0.57,
+    "NIFTY:noise": 1.0,
+    "SENSEX:camarilla": 0.31,
+    "SENSEX:catcher": 0.51,
+    "SENSEX:noise": 0.69
+   },
+   "SENSEX:camarilla": {
+    "BANKNIFTY:camarilla": 0.28,
+    "BANKNIFTY:catcher": 0.24,
+    "BANKNIFTY:noise": 0.2,
+    "NIFTY:camarilla": 0.74,
+    "NIFTY:catcher": 0.26,
+    "NIFTY:noise": 0.31,
+    "SENSEX:camarilla": 1.0,
+    "SENSEX:catcher": 0.29,
+    "SENSEX:noise": 0.3
+   },
+   "SENSEX:catcher": {
+    "BANKNIFTY:camarilla": 0.22,
+    "BANKNIFTY:catcher": 0.42,
+    "BANKNIFTY:noise": 0.26,
+    "NIFTY:camarilla": 0.34,
+    "NIFTY:catcher": 0.78,
+    "NIFTY:noise": 0.51,
+    "SENSEX:camarilla": 0.29,
+    "SENSEX:catcher": 1.0,
+    "SENSEX:noise": 0.57
+   },
+   "SENSEX:noise": {
+    "BANKNIFTY:camarilla": 0.23,
+    "BANKNIFTY:catcher": 0.27,
+    "BANKNIFTY:noise": 0.32,
+    "NIFTY:camarilla": 0.3,
+    "NIFTY:catcher": 0.51,
+    "NIFTY:noise": 0.69,
+    "SENSEX:camarilla": 0.3,
+    "SENSEX:catcher": 0.57,
+    "SENSEX:noise": 1.0
+   }
+  }
+ },
+ "live_slot_rules": {
+  "current live set": {
+   "train": {
+    "net": 152431,
+    "maxdd": -100946,
+    "sharpe": 0.56
+   },
+   "y2026": {
+    "net": 91481,
+    "maxdd": -48641,
+    "sharpe": 1.18
+   },
+   "years": {
+    "2023": 31660,
+    "2024": 160773,
+    "2025": -40002,
+    "2026": 91481
+   },
+   "months_2026": {
+    "2026-01": -19465,
+    "2026-02": 34292,
+    "2026-03": 30646,
+    "2026-04": 351,
+    "2026-05": -1711,
+    "2026-06": 21130,
+    "2026-07": -8608,
+    "2026-08": -23235,
+    "2026-09": 20991,
+    "2026-10": 37091
+   },
+   "trades": 1465
+  },
+  "ultimate pick (M2 under live slot rules)": {
+   "train": {
+    "net": 196701,
+    "maxdd": -79692,
+    "sharpe": 0.69
+   },
+   "y2026": {
+    "net": 98018,
+    "maxdd": -42484,
+    "sharpe": 1.32
+   },
+   "years": {
+    "2023": 17130,
+    "2024": 160960,
+    "2025": 18610,
+    "2026": 98018
+   },
+   "months_2026": {
+    "2026-01": -15994,
+    "2026-02": 34133,
+    "2026-03": 25442,
+    "2026-04": 1934,
+    "2026-05": 4322,
+    "2026-06": 17225,
+    "2026-07": -4885,
+    "2026-08": -22255,
+    "2026-09": 20787,
+    "2026-10": 37309
+   },
+   "trades": 1521
+  }
+ }
+}

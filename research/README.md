@@ -398,3 +398,35 @@ Why: the current exits keep the average loss at **0.5R** (the trailing / time ex
 win two trades in three and still lose money. More lots multiply the per-lot result - a negative edge gets bigger with size, and
 real slippage on 10+ lots of an option is larger than the 0.5% modelled, which hurts small targets most. Re-entering after a
 target adds trades but each one has the same negative expectancy. Not adopted; exits unchanged for every account size.
+
+## Round 27 — the "ultimate" combination: pick the good pieces (`round27.py`, results `round27_results.json`)
+Every rule × index is a building block (Noise, Camarilla, trend-day catcher × Nifty, Bank Nifty, Sensex = 9), traded alone at ₹2,000
+risk a trade. Blocks were picked and weighted on **2023-25 only** and judged on 2026.
+
+| Block (₹, ₹2,000 risk a trade) | 2023 | 2024 | 2025 | 2026 |
+|---|---|---|---|---|
+| Nifty Noise | -0.8k | +51.7k | +22.6k | +19.6k |
+| Nifty Camarilla | -12.3k | +23.6k | +6.6k | +61.2k |
+| Nifty catcher | +12.2k | +39.2k | -9.6k | +19.2k |
+| Bank Nifty Noise | +10.0k | +26.0k | -18.6k | +7.7k |
+| Bank Nifty Camarilla | +54.2k | +38.7k | -34.8k | -5.0k |
+| Bank Nifty catcher | -1.3k | +26.7k | -34.1k | -13.9k |
+| Sensex Noise | -15.8k | +26.9k | +24.5k | -7.3k |
+| Sensex Camarilla | -11.5k | -8.2k | -11.6k | +38.5k |
+| Sensex catcher | -5.4k | +31.1k | +14.5k | +10.9k |
+
+| Combination (blocks independent) | 2023-25 | fall | Sharpe | 2026 | fall | Sharpe |
+|---|---|---|---|---|---|---|
+| Current live set | +240k | -119k | 0.89 | +100k | -42k | 1.43 |
+| All 9 blocks | +245k | -141k | 0.72 | +131k | -54k | 1.50 |
+| **Picked on 2023-25** (profitable, 2 of 3 years positive, PF ≥ 1.05) | **+284k** | **-101k** | **1.02** | **+106k** | -42k | **1.58** |
+| Picked + inverse-volatility weights | +280k | -103k | 1.02 | +98k | -42k | 1.50 |
+| Top 3 blocks by Sharpe | +155k | -51k | 1.15 | +50k | -22k | 1.38 |
+| Walk-forward: re-pick each quarter (last 12 months profitable) | 2024-25 +71k | -73k | 0.46 | +66k | -40k | 1.28 |
+| Walk-forward: weights by last-12-month Sharpe | 2024-25 +78k | -90k | 0.49 | +24k | -53k | 0.50 |
+
+The pick: every block except Bank Nifty catcher and Sensex Camarilla. Re-checked under the app's real slot rules (Noise and
+Camarilla share a slot per index, catcher its own): **2023-25 +₹197k vs +₹152k, deepest fall -₹80k vs -₹101k, 2025 +₹19k vs -₹40k,
+2026 +₹98k vs +₹91k** → adopted for Autopilot (Bank Nifty: Noise + Camarilla; Sensex: Noise + catcher; Nifty: all three).
+Re-picking rules by their recent record lost to the fixed pick in every test - rules that did well lately do not keep doing well, so
+the app does not rotate rules on recent results (the learning engine only vetoes / halves with strict evidence).

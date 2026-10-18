@@ -61,9 +61,9 @@ INDICES = {
 UNTESTED = {"SENSEX"}   # indices where only part of the rulebook held up in backtests: the app says so on the Signal page
 # Round 24 (Sensex 1-minute history 2023-01 -> 2026-10): trend-day catcher +35.8k on 2023-25 and +19.2k in 2026 (Rs 2L, 1% risk,
 # never tuned on Sensex); Noise + Camarilla -11.5k on 2023-25 (Camarilla PF 0.97), Noise alone -14.0k in 2026. Autopilot: catcher only.
-UNTESTED_NOTE = {"SENSEX": "Sensex backtest (round 24, 2023 - Oct 2026): only the trend-day catcher held up (+₹35.8k in 2023-25, +₹19.2k in 2026 "
-                           "at ₹2 lakh / 1% risk). Noise and Camarilla did not (2023-25 -₹11.5k), so Autopilot trades Sensex with the "
-                           "trend-day catcher only."}
+UNTESTED_NOTE = {"SENSEX": "Sensex backtest (rounds 24 and 27, 2023 - Oct 2026): the trend-day catcher and Noise were picked on 2023-25 "
+                           "(catcher -5k / +31k / +14k, Noise -16k / +27k / +25k at ₹2,000 risk a trade); Camarilla lost in all three "
+                           "years, so Autopilot trades Sensex with Noise + the trend-day catcher, not Camarilla."}
 
 # Stock lot sizes below are only demo fallbacks (VERIFY). The app reads the
 # real lot sizes from the exchange instrument master once a day.
@@ -180,7 +180,10 @@ RISK_FREE = 0.065
 
 # Autopilot (round 20): one switch that chooses everything from the tested rules and the account size
 AUTOPILOT_SYMS = ["NIFTY", "BANKNIFTY", "SENSEX"]
-AUTOPILOT_SYM_STRATEGIES = {"SENSEX": ["trend"]}   # round 24: on Sensex only the trend-day catcher held up
+# Round 27 "ultimate pick": each rule x index treated as a block and picked on 2023-25 only (profitable, positive in 2 of 3 years,
+# PF >= 1.05). Bank Nifty drops the trend-day catcher (-1k / +27k / -34k), Sensex adds Noise (-16k / +27k / +25k), Sensex Camarilla
+# stays off. Under the live slot rules: 2023-25 +197k vs +152k, deepest fall -80k vs -101k, 2026 +98k vs +91k (Rs 2,000 risk a trade).
+AUTOPILOT_SYM_STRATEGIES = {"BANKNIFTY": ["noise", "camarilla"], "SENSEX": ["noise", "trend"]}
 AUTOPILOT_STRATEGIES = ["noise", "camarilla", "trend"]   # trend added in round 23 (paper autopilot)
 AUTOPILOT_RISK_PCT = 1.0            # lots = 1% of CURRENT equity / risk per lot (compounds as the account grows)
 AUTOPILOT_MAX_TRADE_RISK = 0.15     # a 1-lot floor is allowed only while one lot risks at most 15% of equity (round 20: 83% -> 46% of years dipping below half the account)

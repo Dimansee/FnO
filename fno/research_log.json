@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r27",
+   "date": "2026-10-18",
+   "area": "Index options",
+   "title": "Round 27: an 'ultimate' combination - pick the good rule x index blocks, weight them, or rotate them",
+   "asked": "Can the best pieces of everything tested be combined into one better system? 9 blocks (Noise, Camarilla, trend-day catcher on Nifty, Bank Nifty, Sensex), picked and weighted on 2023-25 only, judged on 2026; walk-forward rotation tested too.",
+   "result": "Blocks independent, Rs 2,000 risk a trade (2023-25 / 2026): current set +240k / +100k (Sharpe 0.89 / 1.43); all 9 +245k / +131k (0.72 / 1.50); picked on 2023-25 +284k / +106k (1.02 / 1.58, fall -101k vs -119k); inverse-volatility weights +280k / +98k; top 3 +155k / +50k; quarterly re-pick from the last 12 months 2024-25 +71k / 2026 +66k, Sharpe-weighted rotation +78k / +24k. Under the live slot rules: picked set +197k / +98k vs current +152k / +91k, deepest fall -80k vs -101k, 2025 +19k vs -40k.",
+   "decision": "Adopted for Autopilot: Nifty all three rules, Bank Nifty Noise + Camarilla (no catcher), Sensex Noise + catcher (no Camarilla)",
+   "summary": "A fixed pick made on 2023-25 beats the current set on profit, the worst fall and 2026. Rotating rules by their recent results loses - so the app does not chase whichever rule did best lately.",
+   "period": "2023-01 to 2026-10-16, Nifty, Bank Nifty, Sensex"
+  },
+  {
    "id": "r26",
    "date": "2026-10-18",
    "area": "Index options",
