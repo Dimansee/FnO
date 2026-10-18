@@ -258,3 +258,51 @@ within 10 minutes — the same rule the live Scalp book uses (`pick_strike`).
 (Rows above refill ₹20,000 every day.) On one real compounding ₹20,000 account, Nifty max lots + best strike never rose above ₹20,000,
 was under ₹10,000 by 17 Feb 2023 and could no longer afford a lot after 27 Jun 2023 (₹1,359 left); Bank Nifty ran out by 23 Oct 2023.
 Bigger size and cheaper OTM strikes magnify a losing edge. Built anyway as the Scalp book's default sizing (paper only), with this result on the page.
+
+## Round 23 — the 13 Oct 2026 rally day, and a trend-day catcher (`round23.py`, `round23_harness.py`, `round23_trend.py`, results `round23_results.json`)
+Question: Nifty rose ~430 points (low to close) on 13 Oct 2026 and Sensex ~1,500, yet the book lost money that day. Why, and can
+rules catch these days without hurting the rest? Same pricing as the app's backtester (its trades are reproduced exactly);
+train = 2023-2025, judged on 2026 (Jan - 16 Oct, recorder days added); both indices; ₹2 lakh at 1% risk unless stated.
+
+**What happened on 13 Oct (journal + backtest agree):** trades *were* taken. Nifty Noise CALL at 09:45 (the open drive was already
++186 points), trailing exit at 10:45 when price dipped back under VWAP during the 09:45-13:45 pause (-₹1,229 live); Bank Nifty
+Camarilla CALL 09:50, 45-minute time stop at 10:35 (-₹1,566). The Nifty Camarilla H4 break at 09:50 (would have made +₹7,325 by
+15:15) was blocked because the Noise trade was still open (one open signal trade per index). The real move came after 14:15,
+after the last Noise entry check. Net -₹2,794 on a +1.6% day.
+
+| Variant (both indices) | Train 2023-25 | 2026 | 2025 | 13 Oct |
+|---|---|---|---|---|
+| V0 current rules | +₹131.0k, PF 1.21, fall -50.7k | +₹104.7k, PF 1.74 | +15.0k | -1.0k |
+| No Camarilla 45-min time stop | +71.6k | +98.3k | +7.4k | -1.0k |
+| Camarilla time stop 90 min | +101.8k | +102.7k | +12.7k | -1.0k |
+| Noise trail on band only | +127.1k | +107.2k | +15.3k | -1.0k |
+| Noise without the trailing exit (stop / 4R / 15:15) | +121.7k | +96.1k, fall -28.5k | +16.7k | **+5.9k** |
+| Noise and Camarilla may hold together | +195.0k, fall -57.0k | +107.6k | -4.0k | -1.0k |
+| One re-entry after a trail / time exit | +108.5k | +90.3k | +28.8k | -1.0k |
+| No VIX ceilings | +115.6k | +91.1k | +7.8k | -1.0k |
+
+Holding the 13 Oct trade to the close would have paid, but removing the trailing exit costs money over the 3.8 years and in 2026:
+the exits that hurt on this day are the ones that save money on the many days that reverse. The VIX ceilings also hold: 2026's
+missed trend days were mostly March-April with VIX 18-28, and trading them lost.
+
+**Trend-day catcher (new, own slot):** 32 settings (first check 10:45 / 11:45, ≥ 80 / 90% of bars on one side of VWAP, VWAP-based or
+2×ATR stop, band 1.0 / 1.75×, breakeven at +1R or not). All 16 band-1.75 settings were profitable in training and in 2026; most
+lost in 2025 (a range year). Picked on training only: 10:45-14:15 checks, close beyond the 1.75× band and VWAP, ≥ 80% of today's
+bars on that side of VWAP, stop = VWAP distance + 0.5 ATR (1-3 ATR), stop to entry at +1R, no target, hold to 15:15.
+
+| ₹2 lakh, 1% risk | 2023 | 2024 | 2025 | 2026 | fall (train) |
+|---|---|---|---|---|---|
+| Current rules | +22.4k | +93.5k | +15.0k | +104.7k | -50.7k |
+| Trend-day catcher alone | +24.3k | +65.1k | -28.7k | +16.2k | -48.4k |
+| Current + catcher | +46.7k | +158.6k | -13.8k | +120.8k (PF 1.58, fall -27.1k) | -73.7k |
+
+| ₹20,000, 1 lot | 2023 | 2024 | 2025 | 2026 |
+|---|---|---|---|---|
+| Current rules | -0.3k | -4.7k | +43.4k | +86.8k |
+| Current + catcher | +6.6k | +38.0k | +21.0k | +129.4k |
+
+Caveats: it does **not** fire on 13 Oct (price spent the 09:15-09:45 dip below VWAP, so the 80% rule failed) - it is a second,
+slower-exit position on trend days, not a fix for that day. 95% of its trades are on days the current rules also trade, same
+direction, so it mostly adds exposure on trending days: more profit in 3 of 4 years, a deeper fall (-50.7k → -73.7k on training).
+Nifty carries it (+13k / +39k / -1k / +26k); Bank Nifty is about flat overall. Decision: shipped as a separate strategy
+("trend", own slot) in paper Autopilot and as an option in Settings and the Backtest tab; the live record decides real money.

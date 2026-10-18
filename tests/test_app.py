@@ -444,3 +444,45 @@ assert any("researched on Nifty and Bank Nifty only" in w for w in ds["signal"].
 assert I.demo_expiries("weekly", date(2025, 3, 3), 1, "BSE")[0].weekday() == 1 and I.demo_expiries("weekly", date(2024, 3, 4), 1, "BSE")[0].weekday() == 4
 assert I.charges(100, 110, 20, exch_pct=I.exch_rate("SENSEX")) < I.charges(100, 110, 20)
 print("sensex OK:", ds["label"], ds["expiry"], "lot", ds["lot"], "order", ds["order"] and ds["order"]["strike"])
+# ---------- trend-day catcher (round 23): own slot next to Noise / Camarilla ----------
+from fno import backtest as BT, service as SV2  # noqa: E402
+idx_ = pd.date_range("2026-10-01 09:15", periods=60, freq="5min", tz=C.IST)
+px_ = 25000 + np.arange(60) * 6.0                           # steady climb: above VWAP almost all day
+td_ = pd.DataFrame({"open": px_ - 2, "high": px_ + 3, "low": px_ - 4, "close": px_, "volume": 0}, index=idx_)
+td_ = I.add_indicators(td_)
+bands_ = pd.DataFrame({"up": px_ - 30, "lo": px_ - 400}, index=idx_)
+k_ = [i for i, t in enumerate(idx_) if S._is_check(t) and (t + timedelta(minutes=5)).time() == C.TREND_FIRST_CHECK][0]
+assert S.trend_signal(td_, bands_, k_) == "CE"
+td2_ = td_.copy(); td2_["close"] = td2_["close"].where(np.arange(60) % 3 != 0, td2_["vwap"] - 50)   # a third of bars below VWAP
+assert S.trend_signal(td2_, bands_, k_) is None
+r_ = S.trend_risk(td_.iloc[k_], 10.0)
+assert 10.0 <= r_ <= 30.0
+pt_ = {"symbol": "NIFTY", "mode": "signal", "opened": "2026-10-01T10:50:00+05:30", "sl_prem": 1, "target_prem": 999,
+       "plan": {"strategy": "trend", "opt": "CE", "entry": 100.0, "risk_pts": 2.0, "sl": 98.0, "target": None, "rr": None,
+                "breakeven_at": 102.0, "time_stop_min": None}}
+why, upd = S.exit_check(pt_, 101.0, 1, datetime(2026, 10, 1, 13, 0, tzinfo=C.IST))
+assert why is None and not upd, (why, upd)                 # no premium exits, no time stop
+why, upd = S.exit_check(pt_, 102.5, 1, datetime(2026, 10, 1, 13, 0, tzinfo=C.IST))
+assert why is None and upd.get("at_breakeven") and upd.get("live_sl") == 100.0
+why, _ = S.exit_check({**pt_, **upd}, 99.9, 1, datetime(2026, 10, 1, 13, 5, tzinfo=C.IST))
+assert why and "Breakeven" in why
+assert S.exit_check(pt_, 101.0, 1, datetime(2026, 10, 1, 15, 15, tzinfo=C.IST))[0] == "Square-off 15:15"
+# the trend slot is not blocked by an open main-slot trade, and only one trend trade per index per day
+store.clear_positions(); store.clear_trades(); j(c.post("/api/account/reset", json={"capital": 200000}))
+store.insert_position({"id": "mainslot", "symbol": "NIFTY", "mode": "signal", "opened": "2026-10-01T09:50:00+05:30", "legs": [], "lots": 1, "lot": 65, "margin": 0,
+                       "plan": {"strategy": "noise", "opt": "CE", "entry": 1, "sl": 0, "risk_pts": 1, "target": 9}})
+ok_, msg_ = SV2.place_signal("NIFTY", auto=True)
+assert not ok_ and "already have an open signal trade" in msg_
+SV2.S.evaluate_trend = lambda today, hist, vix, now, traded_today=False: {"signal": "BUY CALL", "checks": [], "plan": None if traded_today else {
+    "strategy": "trend", "opt": "CE", "entry": float(today["close"].iloc[-1]), "risk_pts": 40.0, "sl": float(today["close"].iloc[-1]) - 40,
+    "signal_bar": "10:45", "target": None, "rr": None, "breakeven_at": float(today["close"].iloc[-1]) + 40, "time_stop_min": None, "trail": "x"}}
+assert j(c.post("/api/settings", json={"prefs": {"strategies": ["noise", "camarilla", "trend"], "auto": True, "autopilot": False}}))["ok"]
+ok_, msg_ = SV2.place_signal("NIFTY", auto=True, which="trend")
+assert ok_, msg_
+assert any((p_.get("plan") or {}).get("strategy") == "trend" for p_ in store.positions())
+ok_, msg_ = SV2.place_signal("NIFTY", auto=True, which="trend")
+assert not ok_ and "trend-day" in msg_
+bt_ = j(c.post("/api/backtest", json={"symbol": "NIFTY", "capital": 200000, "strategy": "all", "days": 30}))
+assert "summary" in bt_
+assert "trend" in C.AUTOPILOT_STRATEGIES
+print("trend-day catcher OK")

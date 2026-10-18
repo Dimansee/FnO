@@ -77,7 +77,8 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
     """sizing: "risk" = lots so that 1% of capital is at risk (1 lot allowed up to 1.5%);
     "one_lot" = always 1 lot if the premium fits in the cash (small accounts - much riskier).
     otm: -1 = 1 strike in the money (the rule), 0 = ATM, 1/2 = that many strikes out of the money (cheaper).
-    strategy: "noise", "camarilla" or "both" (one open trade per instrument at a time, like the live app).
+    strategy: "noise", "camarilla" or "both" (one open trade per instrument at a time, like the live app), "trend" (trend-day
+    catcher, round 23) or "all" (both + trend in its own slot).
     days: only trade the last N sessions (earlier sessions are used to warm up the indicators)."""
     meta = D.instrument(symbol)
     lot = lot or meta["lot"]
@@ -140,7 +141,15 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
         idx = list(day.index)
         lv = S.camarilla_levels(hist)
         day_trades = []
-        for strat in (["noise", "camarilla"] if strategy == "both" else [strategy]):
+        if strategy in ("trend", "all"):                   # round 23: own slot, not blocked by an open Noise / Camarilla trade
+            res = _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing, otm, budget_pct, I.exch_rate(symbol))
+            if isinstance(res, tuple):
+                skips[res[2]] += 1
+            elif res:
+                trades.append(res)
+            if strategy == "trend":
+                continue
+        for strat in (["noise", "camarilla"] if strategy in ("both", "all") else [strategy]):
             if strat == "camarilla" and (not lv or vix_at(day.index[0]) > C.CAM_VIX_MAX):
                 continue
             if strat == "noise" and vix_at(day.index[0]) >= C.NOISE_VIX_MAX:
@@ -168,6 +177,7 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
                 continue
             trades.append(t)
             busy_until = t["exit_time"]
+    trades.sort(key=lambda t: (t["date"], t["entry_time"]))
     eq = capital
     for t in trades:
         eq += t["pnl"]
@@ -414,3 +424,76 @@ def _summary(trades, capital, traded_days):
         "max_dd_pct": ((eq - peak) / peak).min() * 100, "avg_R": t.R.mean(),
     }
     return {"trades": t, "summary": summary, "days": traded_days}
+
+
+def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="risk", otm=0, budget_pct=C.RISK_PER_TRADE,
+                 exch_pct=None):
+    """Trend-day catcher (research round 23): first half-hour check 10:45-14:15 where S.trend_signal fires; stop = VWAP
+    distance + 0.5 ATR (1-3 ATR), stop to entry at +1R, no target, square-off 15:15."""
+    entry_i = opt = None
+    for i, ts in enumerate(idx):
+        end = ts + timedelta(minutes=C.CANDLE_MIN)
+        if end.time() < C.TREND_FIRST_CHECK or end.time() > C.TREND_LAST_CHECK or not S._is_check(ts):
+            continue
+        o = S.trend_signal(day, bands, i)
+        if o:
+            entry_i, opt = i, o
+            break
+    if entry_i is None:
+        return None
+    ts_in = idx[entry_i]
+    bar = day.loc[ts_in]
+    sign = 1 if opt == "CE" else -1
+    spot, a = float(bar["close"]), float(bar["atr"])
+    risk = S.trend_risk(bar, a)
+    sl = spot - sign * risk
+    t_in = ts_in + timedelta(minutes=C.CANDLE_MIN)
+    k = round(spot / step) * step + sign * otm * step
+
+    def prem(s, when, ts):
+        t = I.years_to_expiry(exp, when.to_pydatetime().replace(tzinfo=None))
+        return I.bs_price(s, k, max(t, 1 / (365 * 24 * 12)), iv_of(ts, s, k, opt), opt)
+
+    p_in = prem(spot, t_in, ts_in) * (1 + SLIP)
+    risk_unit = max(p_in - prem(sl, t_in, ts_in), p_in * 0.05)
+    cost = p_in * lot
+    if cost > capital:
+        return ("skip", entry_i, "cash")
+    if sizing == "one_lot":
+        lots = 1
+    else:
+        budget = capital * budget_pct
+        lots = int(budget // (risk_unit * lot))
+        if lots == 0 and risk_unit * lot <= 1.5 * budget:
+            lots = 1
+        if lots == 0:
+            return ("skip", entry_i, "risk")
+        lots = min(lots, int(capital // cost))
+    live_sl, reason, x_spot, x_ts, x_bar = sl, None, None, None, None
+    for ts in idx[entry_i + 1:]:
+        c = day.loc[ts]
+        end = ts + timedelta(minutes=C.CANDLE_MIN)
+        adverse, favour = (c["low"], c["high"]) if sign > 0 else (c["high"], c["low"])
+        if sign * (adverse - live_sl) <= 0:
+            reason = "Breakeven stop" if live_sl == spot else "Stop-loss (VWAP)"
+            x_spot = c["open"] if sign * (c["open"] - live_sl) < 0 else live_sl
+        elif sign * (favour - (spot + sign * C.TREND_BE_R * risk)) >= 0 and sign * (live_sl - spot) < 0:
+            live_sl = spot
+        if reason is None and end.time() >= C.SQUARE_OFF:
+            reason, x_spot = "Square-off", float(c["close"])
+        if reason:
+            x_ts, x_bar = end, ts
+            break
+    if reason is None:
+        x_bar = idx[-1]
+        reason, x_spot, x_ts = "Square-off", float(day["close"].iloc[-1]), idx[-1] + timedelta(minutes=5)
+    p_out = PR.real_adjust(p_in / (1 + SLIP), prem(x_spot, x_ts, x_bar), (exp - d).days, (x_ts - t_in).total_seconds() / 3600) * (1 - SLIP)
+    qty = lots * lot
+    pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty, exch_pct=exch_pct)
+    return {
+        "date": d.isoformat(), "entry_time": t_in.strftime("%H:%M"), "exit_time": x_ts.strftime("%H:%M"),
+        "side": "CALL" if opt == "CE" else "PUT", "type": "ATM option" if not otm else (f"{otm} OTM option" if otm > 0 else f"{-otm} ITM option"),
+        "band": C.NOISE_MULT, "spot_in": round(spot, 1), "spot_out": round(float(x_spot), 1), "R": round(sign * (x_spot - spot) / risk, 2),
+        "prem_in": round(p_in, 2), "prem_out": round(p_out, 2), "lots": lots, "pnl": round(pnl, 0),
+        "reason": reason, "equity": 0, "strategy": "Trend-day",
+    }

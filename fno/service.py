@@ -97,7 +97,7 @@ def eprefs() -> dict:
 def _traded_today(symbol, positions, trades) -> dict:
     """Which strategies already traded this instrument today (one trade per strategy per instrument)."""
     today = C.today_ist().isoformat()
-    done = {"noise": False, "camarilla": False}
+    done = {"noise": False, "camarilla": False, "trend": False}
     for x in list(positions) + list(trades):
         if x["symbol"] == symbol and x.get("mode") == "signal" and x["opened"][:10] == today:
             st = ((x.get("plan") or {}).get("strategy")) or "noise"
@@ -471,7 +471,9 @@ def chain_view(symbol, expiry: str | None = None):
 # ---------------------------------------------------------------------------
 # Trading actions
 # ---------------------------------------------------------------------------
-def place_signal(symbol, strike=None, auto=False):
+def place_signal(symbol, strike=None, auto=False, which=None):
+    """which=None: the main slot (Noise / Camarilla / AI / custom). which="trend": the trend-day catcher's own slot (round 23),
+    which may hold one position while a main-slot trade is open in the same index."""
     m = M.Market()
     g = _gather(symbol, m)
     acct, pos, tr, cash = P.snapshot()
@@ -481,13 +483,19 @@ def place_signal(symbol, strike=None, auto=False):
         guard = calendar_guard(symbol, g["exps"], g["now"].date()) or guard
     if guard.get("blocked"):
         return False, guard["reason"]
-    if any(p["symbol"] == symbol and p["mode"] == "signal" for p in pos):
-        return False, "You already have an open signal trade in this instrument."
+    is_trend = lambda p: (p.get("plan") or {}).get("strategy") == "trend"   # noqa: E731
+    if any(p["symbol"] == symbol and p["mode"] == "signal" and is_trend(p) == (which == "trend") for p in pos):
+        return False, ("You already have an open trend-day trade in this instrument." if which == "trend"
+                       else "You already have an open signal trade in this instrument.")
     cstats = M.chain_stats(g["chain"], g["spot"])
     traded = _traded_today(symbol, pos, tr)
     ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, news(symbol), gcues(), fii(), g["now"], guard, traded, pf["strategies"])
-    ev = _with_ai(symbol, g, ev, pf, traded)
-    ev = _with_custom(symbol, g, ev, pf, traded)
+    if which == "trend":
+        tv = ev.get("trend") or {}
+        ev = {**ev, "plan": tv.get("plan"), "signal": tv.get("signal", "WAIT")}
+    else:
+        ev = _with_ai(symbol, g, ev, pf, traded)
+        ev = _with_custom(symbol, g, ev, pf, traded)
     if not ev["plan"]:
         return False, f"No valid signal right now ({ev['signal']}). The setup may have changed - refresh."
     if auto and not _custom_auto_ok(ev["plan"]):
@@ -829,7 +837,7 @@ def _push_safe(title, body, event_id, url="/"):
 
 def _push_signal(sym, ev, order, g):
     plan = ev["plan"]
-    name = {"noise": "Noise-area", "camarilla": "Camarilla", "ai": "AI model"}.get(plan.get("strategy"), plan.get("strategy"))
+    name = {"noise": "Noise-area", "camarilla": "Camarilla", "ai": "AI model", "trend": "Trend-day"}.get(plan.get("strategy"), plan.get("strategy"))
     body = (f"{name}: {order.get('strike'):g} {plan.get('opt')} @ ₹{order.get('entry_prem')} (SL ₹{order.get('sl_prem')}, target ₹{order.get('target_prem')}) "
             f"| index {plan.get('entry'):.0f} SL {plan.get('sl'):.0f} T {plan.get('target'):.0f} | score {ev.get('score')}")
     return _push_safe(f"{sym} {ev.get('signal')}", body, f"reco:{sym}:{plan.get('strategy')}:{plan.get('signal_bar') or g['now'].strftime('%H:%M')}:{g['now'].date()}", "/#journal")
@@ -881,6 +889,11 @@ def tick():
                 if ok:
                     placed.append({"symbol": sym, "message": msg})
                     _push_safe(f"{sym}: paper trade placed", str(msg)[:160], f"placed:{sym}:{now.strftime('%H%M')}", "/#portfolio")
+                if "trend" in (pf.get("strategies") or []) and C.TREND_FIRST_CHECK <= t:
+                    ok, msg = place_signal(sym, auto=True, which="trend")
+                    if ok:
+                        placed.append({"symbol": sym, "message": msg, "strategy": "trend"})
+                        _push_safe(f"{sym}: trend-day paper trade placed", str(msg)[:160], f"placedt:{sym}:{now.strftime('%H%M')}", "/#portfolio")
             except Exception as e:                       # one instrument failing must not stop the others
                 placed.append({"symbol": sym, "error": str(e)[:120]})
     try:                                                     # scalp book (separate paper ledger, off unless switched on)

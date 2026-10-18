@@ -288,7 +288,7 @@ def _strategy_name(st: str) -> str:
             return sp["name"] if sp else st
         except Exception:
             return st
-    return {"noise": "Noise-area", "camarilla": "Camarilla", "ai": "AI model"}.get(st, st)
+    return {"noise": "Noise-area", "camarilla": "Camarilla", "ai": "AI model", "trend": "Trend-day"}.get(st, st)
 
 
 def on_close_in(rec: dict):

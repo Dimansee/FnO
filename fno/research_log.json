@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r23",
+   "date": "2026-10-18",
+   "area": "Index options",
+   "title": "Round 23: the 13 Oct rally day (+1.6%) that lost money, exit/re-entry variants, and a trend-day catcher",
+   "asked": "Nifty rose ~430 points on 13 Oct 2026 (Sensex ~1,500) but the book lost. Why, and can rules catch such days without hurting the rest? Train 2023-25, judged on 2026 (Jan-16 Oct), both indices, Rs 2 lakh / 1% risk and Rs 20k / 1 lot, same pricing as the app backtester.",
+   "result": "13 Oct: trades were taken - Nifty Noise CALL 09:45 left at 10:45 on the VWAP trail (-1.2k live), Bank Nifty Camarilla 09:50 hit the 45-min time stop (-1.6k); the Nifty Camarilla H4 break (+7.3k by the close) was blocked by the open Noise trade; the real move came after 14:15. Variants (2026 vs current +104.7k): no Camarilla time stop +98.3k, Noise trail on band only +107.2k (train -3.8k), no Noise trail +96.1k (wins 13 Oct +5.9k but loses overall), both rules may hold together +107.6k (2025 negative, deeper fall), re-entry +90.3k, no VIX ceilings +91.1k. Trend-day catcher (own slot, picked on 2023-25 from 32 settings): alone +24.3k / +65.1k / -28.7k / +16.2k (2023-26); current + catcher 2026 +120.8k vs +104.7k, training +191.5k vs +131.0k, 2025 -13.8k vs +15.0k, deepest training fall -73.7k vs -50.7k. Rs 20k / 1 lot: 2026 +129.4k vs +86.8k.",
+   "decision": "Adopted for paper Autopilot (own slot), live record decides real money",
+   "summary": "The losing exits on 13 Oct are the same exits that save money on reversal days, so they stay. The catcher does not fire on 13 Oct itself (the opening dip put price under VWAP); it adds a slower, hold-to-close position on trend days that the rules already trade, raising profit in 3 of 4 years at the cost of a deeper fall and a losing 2025.",
+   "period": "2023-01 to 2026-10-16 (Upstox 1-minute + recorder days), both indices"
+  },
+  {
    "id": "scalp",
    "date": "2026-10-18",
    "area": "Index options",
@@ -797,6 +808,21 @@
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
  "pending": [
+  {
+   "id": "p-trend",
+   "area": "Index options",
+   "title": "Trend-day catcher: live paper record",
+   "waiting_for": "More live trades",
+   "why": "Round 23 shipped it on backtest evidence that is positive in 3 of 4 years but lost in 2025 and deepens the worst fall.",
+   "collecting": "Paper Autopilot trades with strategy 'trend'",
+   "since": "2026-10-19",
+   "need": 60,
+   "unit": "sessions",
+   "refs": [
+    "r23"
+   ],
+   "next": "Compare live vs backtest; switch off if it loses over 60 sessions or the combined fall exceeds the backtest's."
+  },
   {
    "id": "p-liq",
    "area": "Index options",

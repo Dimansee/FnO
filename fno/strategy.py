@@ -165,6 +165,10 @@ def evaluate(symbol, candles, vix, cstats, news, gcues, fii, now: datetime, day_
     res["camarilla"] = {k: cam[k] for k in ("levels", "signal")}
     if res["signal"] in ("STOP FOR TODAY", "MARKET CLOSED"):
         return res
+    if "trend" in enabled:                       # own slot: reported separately, never replaces the main plan
+        res["trend"] = evaluate_trend(today, hist, vix, now, tt.get("trend", False))
+        res["checks"].append((None, "Trend-day catcher (own slot, trades alongside the others):"))
+        res["checks"] += res["trend"]["checks"]
     if "camarilla" not in enabled:
         return res
     res["checks"].append((None, "Second strategy - Camarilla breakout:"))
@@ -239,6 +243,81 @@ def evaluate_camarilla(today, hist, vix, now: datetime, traded_today=False) -> d
     else:
         side = "above H4" if spot >= lv["pivot"] else "below L4"
         out["checks"].append((False, f"Waiting for a 5-min close {side} (now {spot:.1f})"))
+    return out
+
+
+def trend_signal(today: pd.DataFrame, bands: pd.DataFrame, i: int):
+    """Trend-day catcher on bar i (the backtest and the live check share this): close beyond the noise band and VWAP,
+    with price on that side of VWAP for >= TREND_VWAP_SHARE of today's bars so far. Returns "CE", "PE" or None."""
+    b = today.iloc[i]
+    up, lo = bands["up"].iloc[i], bands["lo"].iloc[i]
+    if pd.isna(up) or pd.isna(lo):
+        return None
+    share_up = float((today["close"].iloc[:i + 1] > today["vwap"].iloc[:i + 1]).mean())
+    if b["close"] > up and b["close"] > b["vwap"] and share_up >= C.TREND_VWAP_SHARE:
+        return "CE"
+    if b["close"] < lo and b["close"] < b["vwap"] and 1 - share_up >= C.TREND_VWAP_SHARE:
+        return "PE"
+    return None
+
+
+def trend_risk(b, a: float) -> float:
+    """Stop distance: to VWAP plus half an ATR, kept between 1 and 3 ATR."""
+    return min(max(abs(float(b["close"]) - float(b["vwap"])) + 0.5 * a, 1.0 * a), 3.0 * a)
+
+
+def evaluate_trend(today, hist, vix, now: datetime, traded_today=False) -> dict:
+    """Trend-day catcher (round 23): its own slot, one trade per index per day, checks 10:45-14:15 on the half hour."""
+    out = {"signal": "WAIT", "checks": [], "plan": None}
+    if today.empty or today.index[-1].date() != now.date():
+        return out
+    vlev = float(vix.get("level") or 0)
+    if vlev < C.VIX_MIN:
+        out["signal"] = "NO TRADE TODAY"
+        out["checks"].append((False, f"India VIX {vlev:.2f} below {C.VIX_MIN:g}"))
+        return out
+    if traded_today:
+        out["signal"] = "NO NEW ENTRIES"
+        out["checks"].append((False, "Trend-day trade already taken in this instrument today"))
+        return out
+    sigma = noise_sigma(hist)
+    if not sigma or hist.empty:
+        out["checks"].append((False, "Not enough past sessions for the noise band"))
+        return out
+    t = now.time()
+    if t < C.TREND_FIRST_CHECK:
+        out["checks"].append((None, f"First trend-day check at {C.TREND_FIRST_CHECK:%H:%M}"))
+        return out
+    if t > (datetime.combine(now.date(), C.TREND_LAST_CHECK) + timedelta(minutes=C.SIGNAL_VALID_MIN)).time():
+        out["signal"] = "NO NEW ENTRIES"
+        out["checks"].append((False, f"Trend-day entries only until {C.TREND_LAST_CHECK:%H:%M}"))
+        return out
+    bands = noise_bands(today, float(hist["close"].iloc[-1]), sigma)
+    checks = [k for k, ts in enumerate(today.index) if _is_check(ts) and C.TREND_FIRST_CHECK <= (ts + timedelta(minutes=C.CANDLE_MIN)).time() <= C.TREND_LAST_CHECK]
+    if not checks:
+        out["checks"].append((None, "Waiting for the next half-hour check"))
+        return out
+    k = checks[-1]
+    end = today.index[k] + timedelta(minutes=C.CANDLE_MIN)
+    fresh = (now - end).total_seconds() / 60 <= C.SIGNAL_VALID_MIN
+    b = today.iloc[k]
+    share_up = float((today["close"].iloc[:k + 1] > today["vwap"].iloc[:k + 1]).mean())
+    out["checks"].append((None, f"{end:%H:%M} check · band {float(bands['lo'].iloc[k]):.1f} – {float(bands['up'].iloc[k]):.1f} · "
+                                f"price above VWAP on {share_up * 100:.0f}% of today's bars (needs {C.TREND_VWAP_SHARE * 100:.0f}% on one side)"))
+    opt = trend_signal(today, bands, k)
+    spot = float(today["close"].iloc[-1])
+    if opt and fresh and ((opt == "CE" and spot > float(bands["up"].iloc[k])) or (opt == "PE" and spot < float(bands["lo"].iloc[k]))):
+        sign = 1 if opt == "CE" else -1
+        a = float(today["atr"].iloc[-1])
+        risk = trend_risk(b, a)
+        out["signal"] = "BUY CALL" if opt == "CE" else "BUY PUT"
+        out["checks"].append((True, f"Trend day {'up' if opt == 'CE' else 'down'}: beyond the band and VWAP, held one side of VWAP all day"))
+        out["plan"] = {"strategy": "trend", "opt": opt, "entry": spot, "risk_pts": risk, "sl": spot - sign * risk,
+                       "signal_bar": end.strftime("%H:%M"), "target": None, "rr": None,
+                       "breakeven_at": spot + sign * C.TREND_BE_R * risk, "time_stop_min": None,
+                       "trail": "stop to entry at +1R; hold to 15:15"}
+    else:
+        out["checks"].append((False, "No trend-day setup at this check"))
     return out
 
 
@@ -489,7 +568,7 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
     if t >= C.SQUARE_OFF or pos["opened"][:10] < now.date().isoformat():
         return "Square-off 15:15", upd
     is_custom = bool(plan) and str(plan.get("strategy", "")).startswith("custom:")
-    if not plan or (plan.get("strategy") not in ("noise", "camarilla", "ai") and not is_custom):
+    if not plan or (plan.get("strategy") not in ("noise", "camarilla", "ai", "trend") and not is_custom):
         if prem <= pos["sl_prem"]:
             return "Premium stop-loss hit", upd
         if prem >= pos["target_prem"]:

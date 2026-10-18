@@ -128,6 +128,14 @@ CAM_VIX_MAX = 20.0         # round 18: Camarilla trades with VIX 19+ lost (11 tr
 CAM_BE_R = 1.0             # stop moves to entry after +1R
 CAM_TIME_STOP = 45         # exit if +0.5R not reached within 45 minutes
 CAM_RMIN, CAM_RMAX = 1.0, 3.0   # stop distance kept between 1 and 3 x ATR
+# Third strategy: trend-day catcher (research round 23, Oct 2026 - research/trend_day.py, fno/research_log.json "r23").
+# Half-hour checks 10:45-14:15: 5-min close beyond the 1.75x noise band AND beyond VWAP, with price on that side of VWAP for
+# at least 80% of today's 5-min bars. Stop = distance to VWAP + 0.5 ATR (1-3 ATR), stop to entry at +1R, no target, hold to 15:15.
+# Runs in its own slot (it may hold a position while a Noise / Camarilla trade is open in the same index). VIX >= 11, no ceiling.
+TREND_FIRST_CHECK = time(10, 45)
+TREND_LAST_CHECK = time(14, 15)
+TREND_VWAP_SHARE = 0.80
+TREND_BE_R = 1.0
 # Market recorder (fno/recorder.py): option-chain snapshots kept for later research
 RECORD_EVERY_MIN = 5       # one snapshot every 5 minutes, 09:15-15:30
 RECORD_STRIKES = 15        # strikes each side of the money
@@ -165,7 +173,7 @@ RISK_FREE = 0.065
 
 # Autopilot (round 20): one switch that chooses everything from the tested rules and the account size
 AUTOPILOT_SYMS = ["NIFTY", "BANKNIFTY"]
-AUTOPILOT_STRATEGIES = ["noise", "camarilla"]
+AUTOPILOT_STRATEGIES = ["noise", "camarilla", "trend"]   # trend added in round 23 (paper autopilot)
 AUTOPILOT_RISK_PCT = 1.0            # lots = 1% of CURRENT equity / risk per lot (compounds as the account grows)
 AUTOPILOT_MAX_TRADE_RISK = 0.15     # a 1-lot floor is allowed only while one lot risks at most 15% of equity (round 20: 83% -> 46% of years dipping below half the account)
 AUTOPILOT_SMALL_ACCOUNT = 100_000   # below this equity the weekly loss cap is 15% (4% would block every trade after one loss)
