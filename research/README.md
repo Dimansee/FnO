@@ -252,7 +252,7 @@ within 10 minutes — the same rule the live Scalp book uses (`pick_strike`).
 |---|---|---|---|---|---|---|
 | Nifty, 1 lot 1 ITM (spec) | −59.3k | −46.7k | −59.8k | −52.9k | 0.45 | all 1 ITM |
 | Nifty, max lots 1 ITM | −79.4k | −52.2k | −62.5k | −50.9k | 0.46 | all 1 ITM |
-| Nifty, max lots best strike | −85.1k | −50.8k | −65.5k | −60.6k | 0.57 | 71% 2-OTM / 1-OTM |
+| Nifty, max lots best strike | −85.1k | −50.8k | −65.5k | −60.6k | 0.57 | 82% 2-OTM or 1-OTM |
 | Bank Nifty, max lots best strike | −71.2k | −45.4k | −68.4k | −38.6k | 0.36 | mixed |
 
 (Rows above refill ₹20,000 every day.) On one real compounding ₹20,000 account, Nifty max lots + best strike never rose above ₹20,000,
