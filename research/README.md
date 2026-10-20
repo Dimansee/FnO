@@ -561,3 +561,9 @@ minute's open plus half the real bid-ask spread), real futures volume (>= 1.3x t
 - **Spread <= 0.5% at entry: -Rs 14 a trade vs -Rs 324** (win 47% vs 37%; better on 9 of 11 days; Nifty about +Rs 1, Bank Nifty -Rs 243).
 **Not adopted.** No edge before costs; more lots scale slippage and spread with the lot count. Pending item p-scalp-spread collects
 more sessions for the spread filter. The app acts once a minute, so true HFT is not possible on it.
+
+**Follow-up (21 Oct): "HFT" = out within 5 minutes of entry** (`python round34.py --five`, `round34_five_min_results.json`). Same entries
+and volume filter, stop 0.5 / 1 / 2 ATR, target 1 / 1.5x, every trade closed at the latest 5 minutes after entry (72 settings):
+0 of 72 profitable at 0.5%, 0.25% or 0.1% slippage; 1.66 million trades averaged -0.38 index points before costs, then ~Rs 119 fees
+and ~Rs 154 slippage. Real prices (11 sessions): -Rs 36.4L vs model -Rs 31.8L; 14 of 144 rows positive, all with the spread filter and
+on 11-93 trades each. Same verdict.

@@ -205,7 +205,16 @@ for chart, ent, f5 in (("1m", "cross", False), ("1m", "pull", False), ("1m", "cr
 
 
 def label(P):
-    return f"{P['chart']} {P['entry']}{' +5m trend' if P['f5'] else ''}{' vol>=1.3' if P['vol'] else ''} | stop {P['k']:g} ATR, target {P['r']:g}x{' , time stop' if P['tstop'] else ''}"
+    ts = f", out within {P['tmax']} min" if P.get("tmax") else (" , time stop" if P["tstop"] else "")
+    return f"{P['chart']} {P['entry']}{' +5m trend' if P['f5'] else ''}{' vol>=1.3' if P['vol'] else ''} | stop {P['k']:g} ATR, target {P['r']:g}x{ts}"
+
+
+# Follow-up (21 Oct): "HFT" = every trade closed within 5 minutes of entry
+GRID5 = []
+for chart, ent, f5 in (("1m", "cross", False), ("1m", "pull", False), ("1m", "cross", True), ("1m", "pull", True),
+                       ("5m", "cross", False), ("5m", "pull", False)):
+    for vol, k, r in itertools.product((None, 1.3), (0.5, 1.0, 2.0), (1.0, 1.5)):
+        GRID5.append(dict(chart=chart, entry=ent, f5=f5, vol=vol, k=k, r=r, tstop=True, tmax=5))
 
 
 def part_a():
@@ -219,10 +228,10 @@ def part_a():
                 sig = (F["cr1"] if P["entry"] == "cross" else F["pl1"]).copy()
                 if P["f5"]:
                     sig[(sig > 0) & ~F["up5"]] = 0; sig[(sig < 0) & ~F["dn5"]] = 0
-                atrs, upx, dnx, ts = F["at1"], F["up1"], ~F["up1"], (10 if P["tstop"] else 0)
+                atrs, upx, dnx, ts = F["at1"], F["up1"], ~F["up1"], P.get("tmax") or (10 if P["tstop"] else 0)
             else:
                 sig = (F["cr5"] if P["entry"] == "cross" else F["pl5"]).copy()
-                atrs, upx, dnx, ts = F["atr5"], F["up5"], F["dn5"], (30 if P["tstop"] else 0)
+                atrs, upx, dnx, ts = F["atr5"], F["up5"], F["dn5"], P.get("tmax") or (30 if P["tstop"] else 0)
             if P["vol"]:
                 sig[~(F["rel"] >= P["vol"])] = 0
             out = sim(F["o"], F["h"], F["l"], F["c"], F["mins"], F["day"], sig.astype(np.int8), atrs.astype(np.float64),
@@ -342,10 +351,10 @@ def part_b():
                 sig = (F["cr1"] if P["entry"] == "cross" else F["pl1"]).copy()
                 if P["f5"]:
                     sig[(sig > 0) & ~F["up5"]] = 0; sig[(sig < 0) & ~F["dn5"]] = 0
-                atrs, upx, dnx, ts = F["at1"], F["up1"], ~F["up1"], (10 if P["tstop"] else 0); vr = r1
+                atrs, upx, dnx, ts = F["at1"], F["up1"], ~F["up1"], P.get("tmax") or (10 if P["tstop"] else 0); vr = r1
             else:
                 sig = (F["cr5"] if P["entry"] == "cross" else F["pl5"]).copy()
-                atrs, upx, dnx, ts = F["atr5"], F["up5"], F["dn5"], (30 if P["tstop"] else 0); vr = r5
+                atrs, upx, dnx, ts = F["atr5"], F["up5"], F["dn5"], P.get("tmax") or (30 if P["tstop"] else 0); vr = r5
             sig[~live_mask] = 0
             if P["vol"]:
                 sig[~(vr >= P["vol"])] = 0
@@ -404,6 +413,14 @@ def summarise_b(B):
                          corr_real_model=round(float(B.real.corr(B.model)), 2))
     print({k: v for k, v in RES["part_b"].items() if k != "top"})
 
+
+if __name__ == "__main__" and "--five" in sys.argv:
+    GRID[:] = GRID5
+    A = part_a(); A.to_pickle("/tmp/round34_A5.pkl"); summarise_a(A)
+    B = part_b(); B.to_pickle("/tmp/round34_B5.pkl"); summarise_b(B)
+    RES["holds_minutes_A"] = {str(k): int(v) for k, v in A.hold.value_counts().sort_index().items()}
+    json.dump(RES, open(os.path.join(HERE, "round34_five_min_results.json"), "w"), indent=1, default=str)
+    print("saved five-minute run"); sys.exit(0)
 
 if __name__ == "__main__":
     A = part_a() if not os.path.exists("/tmp/round34_A.pkl") or "--fresh" in sys.argv else pd.read_pickle("/tmp/round34_A.pkl")
