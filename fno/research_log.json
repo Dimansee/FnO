@@ -3,6 +3,28 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r33",
+   "date": "2026-10-21",
+   "area": "Index options",
+   "title": "Sideways cut, 5-min / 15-min / 1-hour trend lines, conviction size, partial booking",
+   "asked": "Can cutting sideways trades, multi-timeframe trend lines and bigger size on high-conviction trades with partial booking cut the deepest fall and raise profit or win rate?",
+   "result": "On the current rules (Rs 2,000 risk a trade, 2023-25 / 2026): as now +3.32L / +1.83L, fall -1.23L / -54k. Sideways cuts: best +2.90L / +1.88L (lower training profit); re-entry after a cut worse. Agreement score >= 5 as a filter: fall -51k / -37k but 2026 profit +1.07L. Partial booking half at 1R: win rate 45-48% but profit +40k / +94k. Conviction size 1.33x on score 5-6, 0.67x below (same average risk): +4.23L / +1.93L, fall -99k / -54k, better in every year; score effect present in every year and slot (p = 0.01), Nifty and Sensex only. Round-32 logic: no improvement makes it work.",
+   "decision": "Adopted",
+   "summary": "Decision: Adopted (conviction sizing, Nifty + Sensex Autopilot). Whether the 5-min, 15-min and 1-hour charts agree with the trade is the first add-on in many rounds that separates good trades from weak ones in every year. Used for size, not as a filter, it adds profit at the same risk. Cutting sideways trades and booking partial profits both cut the trend-day winners that pay for the system.",
+   "period": "2023-01 to 2026-10-16"
+  },
+  {
+   "id": "r32",
+   "date": "2026-10-20",
+   "area": "Index options",
+   "title": "One-direction day: trend lines + candle open/close + pivot points + trailing stop",
+   "asked": "Is one direction a day with trend-line / candle / pivot entries and a trailing stop more profitable than the current rules?",
+   "result": "480 settings x Nifty / Bank Nifty / Sensex (927k trades): 6 biases (none, first trade, first 15-min candle colour, daily pivot side, CPR side, candle + pivot agree) x 5 entries (trend-line break, green candle above previous high, pullback candle, pivot-level break, trend line + candle) x 4 trails (previous candle, swing, 2 ATR, pivot target) x 5/15 min x 1 or 3 trades a day. 6 profitable in 2023-25, none robust (each lost in 2025). Before costs the entries average +0.01 to +0.05R a trade; after option costs -0.10 to -0.22R. A one-direction bias cuts losses (candle + pivot agree: better than no bias in 89% of pairs) mostly by trading less, not by better trades. Wider stops (>= 1 ATR, trail after +1R): same picture. Current rules 2026 +Rs 1.83 lakh (Rs 2,000 risk a trade, fall -53k); best new pick (Nifty, chosen on 2023-25) 2026 +43k, fall -52k; current + pick +2.26 lakh but fall -96k and lower Sharpe.",
+   "decision": "Not adopted",
+   "summary": "These are the most common retail intraday rules; on index options they have almost no edge before costs and lose after them. The one-direction idea is worth keeping as a lesson (it filters out losing trades) but there is no profitable system to filter. Current rules stay.",
+   "period": "2023-01 to 2026-10-16"
+  },
+  {
    "id": "r30",
    "date": "2026-10-18",
    "area": "Index options",
@@ -20,8 +42,8 @@
    "title": "Round 29: pivot points - are the levels special, breakout / fade rules, pivots as filters, and a Fibonacci breakout rule",
    "asked": "Seven pivot families (Classic, Fibonacci, Woodie, Camarilla, DeMark, CPR, previous-day H/L/C) on Nifty, Bank Nifty, Sensex 2023-26: do they get more reactions than random levels, which breakout / fade rules make money on options, do they help as filters, does a narrow CPR predict trend days?",
    "result": "Reactions (0.3% back before 0.3% through): random 51.7%; Classic 52.8, Fib 52.1, Woodie 53.3, DeMark 53.4, Camarilla 53.8, prev-day 51.8; central pivot / CPR 55-57% and +5 to +8 points over a same-distance mirror level (z 3.7-5.6). Rules, Rs 2,000 risk, 2023-25 / 2026: Fibonacci 0.618 breakout +120k / +68k (only rule positive in both); Classic R2/S2 +113k / -18k; Classic R1/S1 -31k / +37k; Woodie -85k / +57k; DeMark -112k / -15k; CPR breakout -459k / -90k; every fade negative (central pivot -120k / -18k). Filters on the live set: none improved 2026. Narrow CPR: 18.8% trend days vs 20.2% wide. Fibonacci as an extra slot on Nifty + Sensex: +332k / +183k vs live +197k / +98k, Sharpe 0.78 / 1.59 vs 0.69 / 1.32, deepest fall -123k vs -80k; rolling 12 months at Rs 2 lakh median +41% vs +25%, falls > 25% in 79% vs 32% of windows.",
-   "decision": "Adopted: rule 'fib' (Fibonacci 0.618 breakout, own slot, Camarilla exits) for Nifty and Sensex on paper Autopilot once equity >= Rs 2 lakh. Fades, other breakouts and pivot filters not adopted.",
-   "summary": "Most pivot levels are no more special than random lines; the central pivot gets slightly more reactions but too few to pay for an option trade. The Fibonacci 0.618 breakout is the one pivot rule that earned in both periods; it adds profit and Sharpe to the live set at the cost of deeper falls, so it waits for Rs 2 lakh.",
+   "decision": "Adopted",
+   "summary": "Decision: Adopted: rule 'fib' (Fibonacci 0.618 breakout, own slot, Camarilla exits) for Nifty and Sensex on paper Autopilot once equity >= Rs 2 lakh. Fades, other breakouts and pivot filters not adopted. Most pivot levels are no more special than random lines; the central pivot gets slightly more reactions but too few to pay for an option trade. The Fibonacci 0.618 breakout is the one pivot rule that earned in both periods; it adds profit and Sharpe to the live set at the cost of deeper falls, so it waits for Rs 2 lakh.",
    "period": "2023-01 to 2026-10-16, Nifty, Bank Nifty, Sensex"
   },
   {
@@ -31,8 +53,8 @@
    "title": "Round 28: risk of the round-27 rule set at Rs 2 lakh and Rs 20k; Sensex option recording; Backtest 'Autopilot rules'",
    "asked": "After round 27 changed which rules trade on each index, how does a year look at Rs 2 lakh and at Rs 20,000?",
    "result": "Rolling 12-month windows (34), 1% risk compounding. Rs 2 lakh: median +24.9% (old set +18.9%), worst -4.3% (old -53.0%), losing windows 6% (old 24%), falls over 25% in 32% of windows (old 62%). Rs 20,000: median -49.0% (old -52.6%), 62% of windows end unable to buy a lot (old 68%).",
-   "decision": "Information. Recorder now saves Sensex options; Backtest tab defaults to Autopilot rules per index.",
-   "summary": "The round-27 set is much steadier at Rs 2 lakh. Rs 20,000 remains too small: one lot is about a tenth of the account.",
+   "decision": "Information",
+   "summary": "Decision: Information. Recorder now saves Sensex options; Backtest tab defaults to Autopilot rules per index. The round-27 set is much steadier at Rs 2 lakh. Rs 20,000 remains too small: one lot is about a tenth of the account.",
    "period": "2023-01 to 2026-10-16, 34 rolling 12-month windows"
   },
   {
@@ -42,8 +64,8 @@
    "title": "Round 27: an 'ultimate' combination - pick the good rule x index blocks, weight them, or rotate them",
    "asked": "Can the best pieces of everything tested be combined into one better system? 9 blocks (Noise, Camarilla, trend-day catcher on Nifty, Bank Nifty, Sensex), picked and weighted on 2023-25 only, judged on 2026; walk-forward rotation tested too.",
    "result": "Blocks independent, Rs 2,000 risk a trade (2023-25 / 2026): current set +240k / +100k (Sharpe 0.89 / 1.43); all 9 +245k / +131k (0.72 / 1.50); picked on 2023-25 +284k / +106k (1.02 / 1.58, fall -101k vs -119k); inverse-volatility weights +280k / +98k; top 3 +155k / +50k; quarterly re-pick from the last 12 months 2024-25 +71k / 2026 +66k, Sharpe-weighted rotation +78k / +24k. Under the live slot rules: picked set +197k / +98k vs current +152k / +91k, deepest fall -80k vs -101k, 2025 +19k vs -40k.",
-   "decision": "Adopted for Autopilot: Nifty all three rules, Bank Nifty Noise + Camarilla (no catcher), Sensex Noise + catcher (no Camarilla)",
-   "summary": "A fixed pick made on 2023-25 beats the current set on profit, the worst fall and 2026. Rotating rules by their recent results loses - so the app does not chase whichever rule did best lately.",
+   "decision": "Adopted",
+   "summary": "Decision: Adopted for Autopilot: Nifty all three rules, Bank Nifty Noise + Camarilla (no catcher), Sensex Noise + catcher (no Camarilla). A fixed pick made on 2023-25 beats the current set on profit, the worst fall and 2026. Rotating rules by their recent results loses - so the app does not chase whichever rule did best lately.",
    "period": "2023-01 to 2026-10-16, Nifty, Bank Nifty, Sensex"
   },
   {
@@ -53,8 +75,8 @@
    "title": "Round 26: large capital - fixed stop + fixed targets, T1/T2/T3 partial exits, small targets with more trades",
    "asked": "With many lots, should the rules exit at fixed targets (one target, T1/T2/T3, or a target chosen by the market) with no trailing and no waiting for 15:15, and take more trades with small targets? Same entries, 10 lots per trade, brokerage per order.",
    "result": "10 lots, 2023-25 / 2026: current exits +25.2L / +10.2L (PF 1.23 / 1.36). Fixed target 0.5R -18.6L / +1.4L (67% wins, PF 0.80); 1R -2.7L / +0.2L; 2R +9.3L / +5.0L. T1/T2/T3 0.5/1/1.5R -7.1L / +0.3L; 1/2/3R +4.2L / +4.4L; with stop to entry after T1 +6.3L / +3.7L. Market-dependent target +7.6L / +4.4L. Small targets with up to 3 more trades after a target: 0.5R -21.8L / -1.9L, 1R -4.2L / -0.6L.",
-   "decision": "Not adopted - exits unchanged for every account size",
-   "summary": "The current exits win by cutting losers at about 0.5R and letting trend-day winners reach about 1.6R. Fixed stops let losers run to the full stop while small targets cap the winners, so high win rates still lose. Lot size multiplies the per-lot result; it does not turn a losing exit into a winning one.",
+   "decision": "Not adopted",
+   "summary": "Decision: Not adopted - exits unchanged for every account size. The current exits win by cutting losers at about 0.5R and letting trend-day winners reach about 1.6R. Fixed stops let losers run to the full stop while small targets cap the winners, so high win rates still lose. Lot size multiplies the per-lot result; it does not turn a losing exit into a winning one.",
    "period": "2023-01 to 2026-10-16, Nifty, Bank Nifty, Sensex, 10 lots per trade"
   },
   {
@@ -64,8 +86,8 @@
    "title": "Round 25: how a Rs 2 lakh account should size (risk 1-4%, caps, drawdown throttles) + a day-end lag review",
    "asked": "With Rs 2 lakh, should the app use more of the capital - more lots per trade - and does a drawdown throttle or a cap on open risk help? Full current rule set on all three indices, compounding, every 12-month window from Jan 2023.",
    "result": "Median 12-month return / worst 12 months / windows with a fall over 25%: 1% +18.9% / -53.0% / 62%; 1.5% +16.9% / -53.1% / 79%; 2% +14.3% / -41.5% / 100%; 3% +23.3% / -80.5% / 100%; 4% -8.3% / -81.3% / 100%. Halving size after a 10% fall and tighter 1-lot limits stopped trading after falls and turned the median window negative (-6% to -12%). '1 lot only while it risks <= 2%' helped the windows (+19.5% / -38.8% / 41%) but not the 2023-25 path (+15.5% vs +22.6% a year).",
-   "decision": "Sizing unchanged (1% of equity, compounding). Day-end lag review added to the after-close note.",
-   "summary": "At Rs 2 lakh one lot already uses the 1% risk budget; lots grow automatically with equity (about Rs 5.5 lakh for 2 lots). Using more of the cash raises the best years but brings 40-80% falls. The evening note now shows what was missed, why, what the tested fix would have done, and the capital use.",
+   "decision": "Adopted",
+   "summary": "Decision: Sizing unchanged (1% of equity, compounding). Day-end lag review added to the after-close note. At Rs 2 lakh one lot already uses the 1% risk budget; lots grow automatically with equity (about Rs 5.5 lakh for 2 lots). Using more of the cash raises the best years but brings 40-80% falls. The evening note now shows what was missed, why, what the tested fix would have done, and the capital use.",
    "period": "2023-01 to 2026-10-16, Nifty, Bank Nifty, Sensex; Rs 2 lakh compounding"
   },
   {
@@ -75,8 +97,8 @@
    "title": "Round 24: rules on Sensex, debit spreads on high-VIX days, an earlier trend-day catcher, a Rs 20k account",
    "asked": "Do the rules work on Sensex (now that its 1-minute history is downloaded)? Can debit spreads make the VIX 18+ trend days tradable? Should the catcher start before 10:45 to catch opening drives like 13 Oct? How does the catcher change a Rs 20k account's year?",
    "result": "Sensex, Rs 2L / 1% risk (never tuned on): Noise + Camarilla -19.2k / -2.3k / +10.0k / +17.2k (2023-26, train PF 0.96); Noise only +35.9k train but -14.0k in 2026; trend-day catcher -1.8k / +18.0k / +19.6k / +19.2k (train PF 1.32, 2026 PF 1.66). Debit spreads on VIX >= 18 days lost every year at 2-12 strikes wide (PF 0.07-0.56). Catcher starting 09:45 or 10:15: less profit in training (+30-52k vs +60.6k) and 2026, although 09:45 would have caught 13 Oct. Rs 20k one-year bootstrap: can't afford a lot after a year in 68.5% of paths (current), 73.5% with the catcher, 65.9% with the catcher gated until equity reaches Rs 40k.",
-   "decision": "Adopted: Sensex on Autopilot with the catcher only; catcher gated at Rs 40k equity on Autopilot. Spreads and an earlier start not adopted.",
-   "summary": "Sensex is the clearest out-of-sample check the catcher has had, and it passed; Noise and Camarilla did not. Spreads don't rescue high-VIX days. A Rs 20k account stays fragile under any rule set.",
+   "decision": "Adopted",
+   "summary": "Decision: Adopted: Sensex on Autopilot with the catcher only; catcher gated at Rs 40k equity on Autopilot. Spreads and an earlier start not adopted. Sensex is the clearest out-of-sample check the catcher has had, and it passed; Noise and Camarilla did not. Spreads don't rescue high-VIX days. A Rs 20k account stays fragile under any rule set.",
    "period": "2023-01 to 2026-10-16, Nifty, Bank Nifty and Sensex 1-minute (Upstox)"
   },
   {
@@ -86,8 +108,8 @@
    "title": "Round 23: the 13 Oct rally day (+1.6%) that lost money, exit/re-entry variants, and a trend-day catcher",
    "asked": "Nifty rose ~430 points on 13 Oct 2026 (Sensex ~1,500) but the book lost. Why, and can rules catch such days without hurting the rest? Train 2023-25, judged on 2026 (Jan-16 Oct), both indices, Rs 2 lakh / 1% risk and Rs 20k / 1 lot, same pricing as the app backtester.",
    "result": "13 Oct: trades were taken - Nifty Noise CALL 09:45 left at 10:45 on the VWAP trail (-1.2k live), Bank Nifty Camarilla 09:50 hit the 45-min time stop (-1.6k); the Nifty Camarilla H4 break (+7.3k by the close) was blocked by the open Noise trade; the real move came after 14:15. Variants (2026 vs current +104.7k): no Camarilla time stop +98.3k, Noise trail on band only +107.2k (train -3.8k), no Noise trail +96.1k (wins 13 Oct +5.9k but loses overall), both rules may hold together +107.6k (2025 negative, deeper fall), re-entry +90.3k, no VIX ceilings +91.1k. Trend-day catcher (own slot, picked on 2023-25 from 32 settings): alone +24.3k / +65.1k / -28.7k / +16.2k (2023-26); current + catcher 2026 +120.8k vs +104.7k, training +191.5k vs +131.0k, 2025 -13.8k vs +15.0k, deepest training fall -73.7k vs -50.7k. Rs 20k / 1 lot: 2026 +129.4k vs +86.8k.",
-   "decision": "Adopted for paper Autopilot (own slot), live record decides real money",
-   "summary": "The losing exits on 13 Oct are the same exits that save money on reversal days, so they stay. The catcher does not fire on 13 Oct itself (the opening dip put price under VWAP); it adds a slower, hold-to-close position on trend days that the rules already trade, raising profit in 3 of 4 years at the cost of a deeper fall and a losing 2025.",
+   "decision": "Adopted",
+   "summary": "Decision: Adopted for paper Autopilot (own slot), live record decides real money. The losing exits on 13 Oct are the same exits that save money on reversal days, so they stay. The catcher does not fire on 13 Oct itself (the opening dip put price under VWAP); it adds a slower, hold-to-close position on trend days that the rules already trade, raising profit in 3 of 4 years at the cost of a deeper fall and a losing 2025.",
    "period": "2023-01 to 2026-10-16 (Upstox 1-minute + recorder days), both indices"
   },
   {
@@ -97,9 +119,31 @@
    "title": "Scalping spec: day-type classifier + ORB / EMA-9 pullback / level retest, 1-minute exits, daily governor",
    "asked": "Can an automated scalper (unlimited trades, stopped only by a loss / give-back / charges governor) make money, and would a trend-day classifier fix the days with no trade when the market runs up? 1-minute Nifty and Bank Nifty, 1 lot of the 1-strike-ITM option, 0.5% slippage, fees at 0.15% STT; tuned nothing, unseen = last 120 days. 13 variants.",
    "result": "Lost money in every year on both indices. Nifty 1 lot: -Rs 59k / -47k / -60k / -53k (2023-26), PF 0.45, 1.7 trades a day, 19% wins, unseen 120 days -Rs 28k. Bank Nifty PF 0.36. Each setup alone, wider stops, no time stop, confidence 80+, 0.1% slippage: all negative. 'Ride the trend' exits: positive 2023-24, negative 2025-26. Entries average +0.75 index points; 73% hit the 1-minute stop; fees (~Rs 72 a round trip) double the loss. The classifier traded 84% of Nifty trend days the right way; the governor cut losses ~4x vs none. The current Noise + Camarilla rules trade 69% of Nifty trend days and make all their profit there; of the 24 of 65 strong up days they miss, 10 had VIX above the 18/20 ceilings, 7 were slow grinds that never cleared the band, 4 started with a wrong-way trade.",
-   "decision": "Not adopted - built as a separate paper-only Scalp book, off by default",
-   "summary": "Scalping 1-minute index moves with bought options does not survive fees and slippage, the same answer as round 7. The day-type classifier and support/resistance levels are shown on the Scalp page and the Signal chart for information.",
+   "decision": "Not adopted",
+   "summary": "Decision: Not adopted - built as a separate paper-only Scalp book, off by default. Scalping 1-minute index moves with bought options does not survive fees and slippage, the same answer as round 7. The day-type classifier and support/resistance levels are shown on the Scalp page and the Signal chart for information.",
    "period": "Jan 2023 - 1 Oct 2026, 1-minute data"
+  },
+  {
+   "id": "r31",
+   "date": "2026-10-18",
+   "area": "Index options",
+   "title": "Round 31: option selling on real prices - 9:20 straddle / strangle with 25-30% stop per leg, VIX expected-move strangles and iron condors",
+   "asked": "Do the common retail option-selling backtests work on real NSE option prices: 9:20 short straddle / strangle with a 25-30% stop per leg, and short strangles / iron condors placed at the day's or week's expected move from India VIX?",
+   "result": "First run on NSE bhavcopy (Nifty, Bank Nifty, 2023-26) looked strong for the Nifty weekly iron condor (1x / 2x expected move) and the no-stop intraday straddle; the 25-30% stop per leg made the intraday straddle much worse, and Bank Nifty selling was weak or negative. But the option file kept only strikes within 6% of the close, which dropped crash days (4 Jun 2024 missing) and left 116 of 157 weeks testable - exactly the days that decide whether selling works. The results were discarded; the data is now fetched with strikes within 15%.",
+   "decision": "Watch-list",
+   "summary": "No valid result yet, and on hold: option selling is not wanted for now (18 Oct). If it is picked up again, the study re-runs on the 15% strike data (about an hour). The earlier expiry-day straddle checks (x5, r14b, r14d) used the same option file and should be re-checked on it too.",
+   "period": "2023-01 to 2026-10 (incomplete option data; discarded)"
+  },
+  {
+   "id": "jr2",
+   "date": "2026-10-18",
+   "area": "Data & live checks",
+   "title": "Live review 16 Oct 2026: a manual 23050 CE trade, why no rule fired, and a recorder fix",
+   "asked": "On 16 Oct a manual Nifty 23050 CE trade (2 lots, 86.70 -> 93.20, the option closed at 120.60) was not in the app. Why, and why did the system take no trade on that day?",
+   "result": "Nifty opened 23,065, fell to 22,914 by 09:36, then rallied about 236 points to 23,150 by 10:36 and closed 23,146 (VIX flat at 14). No rule level was reached: Noise needed a close above 23,216-23,376, Camarilla H4 was 23,228, the trend-day catcher needs a close above the noise band, and the Fibonacci 0.618 level (23,156, Rs 2 lakh accounts only) was missed by 6 points. A minute-by-minute replay of the rules agrees: no trade. The 23050 CE trade was placed at the broker, so the app never saw it; the only trade it recorded that day was a separate manual 23000 CE (2 lots, 140.35 -> 162.35, +Rs 2,775). The nightly recorder had stopped saving the app's journal and snapshots from 16 Oct because the job ran an old copy of its script with no app address; it now runs the current script, 16 Oct was re-recorded, and Sensex is recorded from 19 Oct (checked).",
+   "decision": "Information",
+   "summary": "The system behaved as designed on 16 Oct: it was a day inside the normal range, and the profit came from a quick bounce off the morning low, which no current rule tries to catch. Earlier fade tests (round 29) lost money, so one day is not a reason to add such a rule. Trades only count in the app's reviews if they are placed in the app.",
+   "period": "2026-10-16"
   },
   {
    "id": "cus",
@@ -119,8 +163,8 @@
    "title": "Best setup per coin (by profit or by win %), and late entries on slow rules",
    "asked": "If each coin (BTC, ETH, SOL, BNB, XRP) trades whichever of 60 setups did best on it over the last 12 months, re-chosen every quarter, does it make money the next quarter? And can a 4h/daily signal still be taken if the engine missed the bar close?",
    "result": "Best-profit pick per coin: 336 unseen trades, +0.02R, PF 1.04 (break-even). Best-win-% pick: 455 trades, +0.02R, 42% wins (break-even). Fixed live trend rules on the same quarters: 621 trades, +0.23R, PF 1.38. Entering one 4h bar late kept the edge (Supertrend 4h +0.080R vs +0.085R on time); 2+ bars late it faded.",
-   "decision": "Partly adopted",
-   "summary": "Per-coin chasing not adopted. Slow rules may now enter up to 4 hours after the signal bar; live scanner added to the dashboard.",
+   "decision": "Adopted",
+   "summary": "Decision: Partly adopted. Per-coin chasing not adopted. Slow rules may now enter up to 4 hours after the signal bar; live scanner added to the dashboard.",
    "period": "Jan 2024 - 17 Oct 2026"
   },
   {
@@ -144,6 +188,94 @@
    "decision": "Adopted",
    "summary": "These are the autopilot's built-in rules; each still has to pass a weekly re-test on recent data before it may trade.",
    "period": "Jan 2023 - 17 Oct 2026"
+  },
+  {
+   "id": "circ",
+   "date": "2026-10-17",
+   "area": "Stocks",
+   "title": "Lower-circuit stocks",
+   "asked": "Should stocks locked on their lower circuit be recommended?",
+   "result": "Retested with real fills (a stock frozen all day at its lower limit can't be sold or bought): dips that touched the lower circuit bounced better, 84% / +3.2% a trade (train) and 72% / +2.2% (unseen) vs 74% / +1.9% and 59% / +0.5% for other dips. Skipping them cut the realistic all-stock backtest from 18.8% to 8.5% a year; Nifty 500 only 20.1% to 16.7%.",
+   "decision": "Adopted",
+   "summary": "The 15 Oct fix skipped stocks that closed on the lower circuit. The real risk is only a stock frozen at the limit at the next open (38 of 305 cases). So circuit dips stay in the list with a 'Lower circuit' badge and their dates, and are not bought if frozen at the open (09:30 live check; the record marks them 'not bought'). Circuit detection now uses NSE's real price band per stock (No Band = F&O, no circuit); trade-to-trade (BE) stocks get a T2T badge.",
+   "period": "2020-10 to 2026-10"
+  },
+  {
+   "id": "univ",
+   "date": "2026-10-17",
+   "area": "Stocks",
+   "title": "All NSE stocks, not only the Nifty 500",
+   "asked": "Should picks come from every NSE stock (Nifty 50 / 500 and beyond)?",
+   "result": "2,344 stocks, 6 years. Nifty 500 only: 20.1% a year, worst fall -12.4%. All stocks ranked by drop: 18.8%, fall -39%. Nifty 500 first plus at most 2 of 10 slots outside: 26.2%, fall -17.5%, unseen 11.2% vs 4.6%. Caps of 1-5 all beat Nifty 500 only.",
+   "decision": "Adopted",
+   "summary": "Outside the Nifty 500 the dip still bounces (73% hit per signal) but small caps that fall hardest can keep falling, so letting them take any slot tripled the worst fall. The scan now covers every investable NSE stock: Nifty 500 picks first, and the 2 strongest outside rule picks join the list with an 'Outside N500 · max 2' badge.",
+   "period": "2020-10 to 2026-10"
+  },
+  {
+   "id": "bigmv",
+   "date": "2026-10-17",
+   "area": "Stocks",
+   "title": "Catching big one-day jumps (like HBL Engineering +17%)",
+   "asked": "Can the app find stocks about to jump 10%+ in a day, or catch them early?",
+   "result": "+10% days: 0.34% of stock-days. Best pre-signal (5x volume and +5% today) raises that only to 3.2%; buying such stocks at the next open lost 0.4% a trade. Gap-ups at the open fade (+3-5% gap: -0.55% open to close; +8% gap: -2.1%). After a +15% day on 10x volume, buying next open lost 0.4-1.0% over 1-5 days. Only 19% of +10% days had any warning the day before.",
+   "decision": "Not adopted",
+   "summary": "HBL's jump came on 40x normal volume after a quiet, falling week - nothing in daily data flagged it. Chasing jumps after they start loses after costs. The opposite works: stocks that gap DOWN 3-8% at the open (above their 200-day average) rose +1.1% a trade open to close, every year 2021-26 (see Opening dip).",
+   "period": "2021-10 to 2026-10"
+  },
+  {
+   "id": "odip",
+   "date": "2026-10-17",
+   "area": "Stocks",
+   "title": "Opening dip (gap down 3-8%, buy the open, sell the close)",
+   "asked": "Is there a same-day stock trade with an edge?",
+   "result": "All NSE stocks above their 200-day average, >= Rs 1 cr turnover, not frozen: 8,454 trades, +1.24% a trade after 0.1% costs, 57% win, positive every year (train +1.27%, unseen +1.07%). Nifty 500: +1.13%, 35 a month.",
+   "decision": "Watch-list",
+   "summary": "The edge needs the official opening price: on 5-minute data the gain shrank from +0.86% at the open to +0.35% when buying at 09:20. Usable only with a pre-open (09:00-09:08) limit order through the broker, which the app does not place yet. Next step: record live pre-open prices and paper-test.",
+   "period": "2021-10 to 2026-10"
+  },
+  {
+   "id": "rsi10",
+   "date": "2026-10-17",
+   "area": "Stocks",
+   "title": "SMA 200 + RSI(10) pullback (Instagram post)",
+   "asked": "Does the posted strategy (34.8% a year, 78% win) work in India, and is it better than our rule?",
+   "result": "Nifty 500, 10 slots: 8.0% a year, fall -25.7%, unseen -6.8% vs our rule 18.3%, -12.0%, +8.4%. Nifty 50: 2.5-3.0% a year. As index call options: 10 trades, 3 won, -Rs 65k per lot.",
+   "decision": "Not adopted",
+   "summary": "The 64-70% win rate is real but wins are small and there is no stop; 34.8% only appears in a picked year (2024). Adding its signals to our rule lowered the result.",
+   "period": "2021-08 to 2026-10"
+  },
+  {
+   "id": "x11",
+   "date": "2026-10-17",
+   "area": "Index options",
+   "title": "Round 14C leads on the current rules: trade the lagging index; breakouts after the implied move is spent",
+   "asked": "Do the two round-14C watch-list leads improve the current Noise + Camarilla rules?",
+   "result": "Baseline 910 trades, +Rs 222k, PF 1.28, fall -59k, unseen +41k. Laggard on Camarilla only: +163k, unseen +23k (perm p 0.46). Laggard on both rules: +115k, PF 1.35, fall -24k, positive every year, but half the profit and p 0.32. Implied move spent (>=100%) on both rules: +109k vs +156k on the same days, unseen -13k vs +41k; 80% and 120% thresholds also lose unseen.",
+   "decision": "Not adopted",
+   "summary": "Neither lead adds profit. 'Trade the laggard' on both rules cuts the deepest fall from Rs 59k to 24k but halves profit, and a random subset of trades does as well 32% of the time. 'Implied move spent' was a training-period effect and loses on unseen days.",
+   "period": "2023-01 to 2026-10 (implied move from Oct 2023)"
+  },
+  {
+   "id": "srch",
+   "date": "2026-10-17",
+   "area": "Stocks",
+   "title": "Stock strategy search: 25 entry rules x 3 market filters x 392 stop/target/trail exits",
+   "asked": "Is there any stock rule, indicator or combination - with a stop-loss, a target, and exit-or-trail at the target - that beats our dip rule?",
+   "result": "Nifty 500, 6 years; each rule's exit picked on 2021-24 only, measured as excess over a random entry on the same day with the same exit. Kept an edge on 2025-26: our dip rule, RSI(2)<5, 4 down days of 5, RSI(14)<30 (small, +0.2-0.5% a trade), and 52-week-high breakouts (+1.5-3% over 40 days). Failed: golden cross, MACD, EMA 9/21, Supertrend-style, NR7, inside-day, IBS, capitulation volume, Bollinger, ADX pullback. Portfolio Rs 1L, 10 slots: our rule 25.7% a year, fall -11.9%; adding a stop-loss (3xATR) cut unseen from 6.9% to 1.0%; RSI(2) alone 9.4%; target 3-7% x hold 3-7 days all 18-27% (current 5% / 5 days sits mid-plateau).",
+   "decision": "Not adopted",
+   "summary": "No new rule beats the current dip rule; a stop-loss makes it worse (dips that keep falling usually bounce within 5 days), and its +5% / 5-day exit is on a stable plateau, so nothing changes. Smaller mean-reversion signals are real but too thin after costs to add.",
+   "period": "2020-10 to 2026-10 (train to Dec 2024, unseen 2025-26)"
+  },
+  {
+   "id": "momb",
+   "date": "2026-10-17",
+   "area": "Stocks",
+   "title": "Momentum book: 52-week high on 1.5x volume, exit when the market turns down",
+   "asked": "Can a breakout book run alongside the dip rule?",
+   "result": "Nifty 500: hold 60 days, sell at the next open when an equal-weight market index closes below its 100-day average: 29-32% a year, fall -18%, positive every year; dip rule + up to 3 breakouts: 30% a year (vs 25.7%), fall -17% (vs -12%), unseen 15% (vs 4-7%); stable across 50-200 day averages and 40-90 day holds. Without the market exit: fall -31%, 2025 -16%. On 1,850 stocks OUTSIDE the Nifty 500 the same book made about 0% a year with 30-45% falls.",
+   "decision": "Watch-list",
+   "summary": "The market-turn exit is what makes breakouts work, but the edge vanishes outside today's Nifty 500 list, which is what survivorship looks like (stocks that broke out and kept rising are the ones now in the index). The market exit was also designed after seeing 2025. Paper forward test only; not added to picks.",
+   "period": "2020-10 to 2026-10"
   },
   {
    "id": "x10",
@@ -262,7 +394,7 @@
    "title": "Round 22: how much slippage can the rules survive?",
    "asked": "The rules assume 0.5% slippage on each option fill. At what level does the profit disappear?",
    "result": "Slippage 0.5%: ₹255.7k (PF 1.34). 1.0%: ₹129.3k (PF 1.16). 1.5%: ₹16.0k (PF 1.02). 2.0%: −₹72.5k. 3.0%: −₹271.9k.",
-   "decision": "Information only (no rule change)",
+   "decision": "Information",
    "summary": "The edge breaks even at roughly 1.5% slippage per fill, three times what we assume. Real fills on thin or fast strikes can cost more, so check the live paper P&L against the formula before trusting the backtest.",
    "period": "2023-01 to 2026-10, both indices, current rules"
   },
@@ -273,7 +405,7 @@
    "title": "Round 22: how concentrated is the profit?",
    "asked": "If the best few trades are removed, how much profit is left?",
    "result": "Total ₹255.7k. Without the best 5 trades: ₹184.8k. Without the best 10: ₹122.3k. Without the best 20 (of 872): ₹12.9k. The best 20 trades are 95% of the profit.",
-   "decision": "Information only (no rule change)",
+   "decision": "Information",
    "summary": "This is normal for trend-following (many small losses, a few big trend days), but it means a few weeks without a big trend day will look bad, and cutting the big winners (targets, partial exits) removes the edge.",
    "period": "2023-01 to 2026-10, both indices, current rules"
   },
@@ -284,8 +416,8 @@
    "title": "Round 22: are the parameters on a stable plateau?",
    "asked": "Do small changes to the Noise band multiplier (1.5-2.0), ATR stop (1.5-2.5) and the VIX ceilings (14-22) keep the result similar?",
    "result": "Noise leg, 9 neighbours: ₹12k to ₹89k; our setting (1.75 / 2.0) is the best cell at ₹89k, and most cells lose in 2023. VIX ceilings: noise <16 to <22 with Camarilla ≤20 gives ₹250-260k; no ceiling gives ₹235-243k.",
-   "decision": "Not changed; confidence lowered",
-   "summary": "All neighbours of the Noise setting stay positive overall, but ours sits at the top of the range, so expect a weaker live result. The VIX ceilings add roughly ₹10-20k, which is inside the ±₹20k noise band, so they are a mild safety rule rather than a proven edge.",
+   "decision": "Information",
+   "summary": "Decision: Not changed; confidence lowered. All neighbours of the Noise setting stay positive overall, but ours sits at the top of the range, so expect a weaker live result. The VIX ceilings add roughly ₹10-20k, which is inside the ±₹20k noise band, so they are a mild safety rule rather than a proven edge.",
    "period": "2023-01 to 2026-10, both indices"
   },
   {
@@ -295,7 +427,7 @@
    "title": "Round 22: ₹20K to ₹2 lakh with whole lots (1,000-run weekly bootstrap)",
    "asked": "With whole lots only, what happens over 52 weeks at different starting capital, using fixed 1 lot, risk-based lots, and half size below the peak?",
    "result": "₹20K: median end ₹62-71k, 5th percentile ₹4-6k, chance of ending below start 35-40%, chance of a 50% fall 45%. ₹50K: median ₹120k, 50% fall 20%. ₹1 lakh: median ₹170k, 50% fall 4%. ₹2 lakh: median ₹262-270k, 50% fall 0%. The sizing modes make almost no difference because one lot is already close to the 1% risk size at these amounts.",
-   "decision": "Information only (no rule change)",
+   "decision": "Information",
    "summary": "Capital matters far more than the sizing rule. The bootstrap reshuffles the historical weeks, so it shows the range of luck, not a forecast. ₹20K is possible but with a coin-flip chance of a 50% fall within a year.",
    "period": "2023-01 to 2026-10, weekly block bootstrap of 872 trades"
   },
@@ -496,17 +628,6 @@
    "decision": "Information",
    "summary": "Repeated re-logging inflates the counts (20 of the 32 rows were the same Nifty put idea on 8 Oct). A positive index result did not always mean an option profit (a Bank Nifty idea at +0.37R lost 8.8% on the premium). All five 45-minute time-stop exits lost; the winners held to 15:15. Several signal trades (for example on 7 and 12 Oct) have no matching journal recommendation. Eight days is too few to change any rule.",
    "period": "2026-10-05 to 2026-10-14"
-  },
-  {
-   "id": "circ",
-   "date": "2026-10-17",
-   "area": "Stocks",
-   "title": "Lower-circuit stocks",
-   "asked": "Should stocks locked on their lower circuit be recommended?",
-   "result": "Retested with real fills (a stock frozen all day at its lower limit can't be sold or bought): dips that touched the lower circuit bounced better, 84% / +3.2% a trade (train) and 72% / +2.2% (unseen) vs 74% / +1.9% and 59% / +0.5% for other dips. Skipping them cut the realistic all-stock backtest from 18.8% to 8.5% a year; Nifty 500 only 20.1% to 16.7%.",
-   "decision": "Adopted",
-   "summary": "The 15 Oct fix skipped stocks that closed on the lower circuit. The real risk is only a stock frozen at the limit at the next open (38 of 305 cases). So circuit dips stay in the list with a 'Lower circuit' badge and their dates, and are not bought if frozen at the open (09:30 live check; the record marks them 'not bought'). Circuit detection now uses NSE's real price band per stock (No Band = F&O, no circuit); trade-to-trade (BE) stocks get a T2T badge.",
-   "period": "2020-10 to 2026-10"
   },
   {
    "id": "r17",
@@ -804,105 +925,6 @@
    "decision": "Information",
    "summary": "Expired-option prices, bid/ask spreads, chain open interest and FII/DII positioning are not available for past dates, so the app and a nightly GitHub job now save them as they happen for later studies.",
    "period": "from 2026-09-28"
-  },
-  {
-   "id": "univ",
-   "date": "2026-10-17",
-   "area": "Stocks",
-   "title": "All NSE stocks, not only the Nifty 500",
-   "asked": "Should picks come from every NSE stock (Nifty 50 / 500 and beyond)?",
-   "result": "2,344 stocks, 6 years. Nifty 500 only: 20.1% a year, worst fall -12.4%. All stocks ranked by drop: 18.8%, fall -39%. Nifty 500 first plus at most 2 of 10 slots outside: 26.2%, fall -17.5%, unseen 11.2% vs 4.6%. Caps of 1-5 all beat Nifty 500 only.",
-   "decision": "Adopted",
-   "summary": "Outside the Nifty 500 the dip still bounces (73% hit per signal) but small caps that fall hardest can keep falling, so letting them take any slot tripled the worst fall. The scan now covers every investable NSE stock: Nifty 500 picks first, and the 2 strongest outside rule picks join the list with an 'Outside N500 · max 2' badge.",
-   "period": "2020-10 to 2026-10"
-  },
-  {
-   "id": "bigmv",
-   "date": "2026-10-17",
-   "area": "Stocks",
-   "title": "Catching big one-day jumps (like HBL Engineering +17%)",
-   "asked": "Can the app find stocks about to jump 10%+ in a day, or catch them early?",
-   "result": "+10% days: 0.34% of stock-days. Best pre-signal (5x volume and +5% today) raises that only to 3.2%; buying such stocks at the next open lost 0.4% a trade. Gap-ups at the open fade (+3-5% gap: -0.55% open to close; +8% gap: -2.1%). After a +15% day on 10x volume, buying next open lost 0.4-1.0% over 1-5 days. Only 19% of +10% days had any warning the day before.",
-   "decision": "Not adopted",
-   "summary": "HBL's jump came on 40x normal volume after a quiet, falling week - nothing in daily data flagged it. Chasing jumps after they start loses after costs. The opposite works: stocks that gap DOWN 3-8% at the open (above their 200-day average) rose +1.1% a trade open to close, every year 2021-26 (see Opening dip).",
-   "period": "2021-10 to 2026-10"
-  },
-  {
-   "id": "odip",
-   "date": "2026-10-17",
-   "area": "Stocks",
-   "title": "Opening dip (gap down 3-8%, buy the open, sell the close)",
-   "asked": "Is there a same-day stock trade with an edge?",
-   "result": "All NSE stocks above their 200-day average, >= Rs 1 cr turnover, not frozen: 8,454 trades, +1.24% a trade after 0.1% costs, 57% win, positive every year (train +1.27%, unseen +1.07%). Nifty 500: +1.13%, 35 a month.",
-   "decision": "Watch-list",
-   "summary": "The edge needs the official opening price: on 5-minute data the gain shrank from +0.86% at the open to +0.35% when buying at 09:20. Usable only with a pre-open (09:00-09:08) limit order through the broker, which the app does not place yet. Next step: record live pre-open prices and paper-test.",
-   "period": "2021-10 to 2026-10"
-  },
-  {
-   "id": "rsi10",
-   "date": "2026-10-17",
-   "area": "Stocks",
-   "title": "SMA 200 + RSI(10) pullback (Instagram post)",
-   "asked": "Does the posted strategy (34.8% a year, 78% win) work in India, and is it better than our rule?",
-   "result": "Nifty 500, 10 slots: 8.0% a year, fall -25.7%, unseen -6.8% vs our rule 18.3%, -12.0%, +8.4%. Nifty 50: 2.5-3.0% a year. As index call options: 10 trades, 3 won, -Rs 65k per lot.",
-   "decision": "Not adopted",
-   "summary": "The 64-70% win rate is real but wins are small and there is no stop; 34.8% only appears in a picked year (2024). Adding its signals to our rule lowered the result.",
-   "period": "2021-08 to 2026-10"
-  },
-  {
-   "id": "x11",
-   "date": "2026-10-17",
-   "area": "Index options",
-   "title": "Round 14C leads on the current rules: trade the lagging index; breakouts after the implied move is spent",
-   "asked": "Do the two round-14C watch-list leads improve the current Noise + Camarilla rules?",
-   "result": "Baseline 910 trades, +Rs 222k, PF 1.28, fall -59k, unseen +41k. Laggard on Camarilla only: +163k, unseen +23k (perm p 0.46). Laggard on both rules: +115k, PF 1.35, fall -24k, positive every year, but half the profit and p 0.32. Implied move spent (>=100%) on both rules: +109k vs +156k on the same days, unseen -13k vs +41k; 80% and 120% thresholds also lose unseen.",
-   "decision": "Not adopted",
-   "summary": "Neither lead adds profit. 'Trade the laggard' on both rules cuts the deepest fall from Rs 59k to 24k but halves profit, and a random subset of trades does as well 32% of the time. 'Implied move spent' was a training-period effect and loses on unseen days.",
-   "period": "2023-01 to 2026-10 (implied move from Oct 2023)"
-  },
-  {
-   "id": "srch",
-   "date": "2026-10-17",
-   "area": "Stocks",
-   "title": "Stock strategy search: 25 entry rules x 3 market filters x 392 stop/target/trail exits",
-   "asked": "Is there any stock rule, indicator or combination - with a stop-loss, a target, and exit-or-trail at the target - that beats our dip rule?",
-   "result": "Nifty 500, 6 years; each rule's exit picked on 2021-24 only, measured as excess over a random entry on the same day with the same exit. Kept an edge on 2025-26: our dip rule, RSI(2)<5, 4 down days of 5, RSI(14)<30 (small, +0.2-0.5% a trade), and 52-week-high breakouts (+1.5-3% over 40 days). Failed: golden cross, MACD, EMA 9/21, Supertrend-style, NR7, inside-day, IBS, capitulation volume, Bollinger, ADX pullback. Portfolio Rs 1L, 10 slots: our rule 25.7% a year, fall -11.9%; adding a stop-loss (3xATR) cut unseen from 6.9% to 1.0%; RSI(2) alone 9.4%; target 3-7% x hold 3-7 days all 18-27% (current 5% / 5 days sits mid-plateau).",
-   "decision": "Not adopted",
-   "summary": "No new rule beats the current dip rule; a stop-loss makes it worse (dips that keep falling usually bounce within 5 days), and its +5% / 5-day exit is on a stable plateau, so nothing changes. Smaller mean-reversion signals are real but too thin after costs to add.",
-   "period": "2020-10 to 2026-10 (train to Dec 2024, unseen 2025-26)"
-  },
-  {
-   "id": "momb",
-   "date": "2026-10-17",
-   "area": "Stocks",
-   "title": "Momentum book: 52-week high on 1.5x volume, exit when the market turns down",
-   "asked": "Can a breakout book run alongside the dip rule?",
-   "result": "Nifty 500: hold 60 days, sell at the next open when an equal-weight market index closes below its 100-day average: 29-32% a year, fall -18%, positive every year; dip rule + up to 3 breakouts: 30% a year (vs 25.7%), fall -17% (vs -12%), unseen 15% (vs 4-7%); stable across 50-200 day averages and 40-90 day holds. Without the market exit: fall -31%, 2025 -16%. On 1,850 stocks OUTSIDE the Nifty 500 the same book made about 0% a year with 30-45% falls.",
-   "decision": "Watch-list",
-   "summary": "The market-turn exit is what makes breakouts work, but the edge vanishes outside today's Nifty 500 list, which is what survivorship looks like (stocks that broke out and kept rising are the ones now in the index). The market exit was also designed after seeing 2025. Paper forward test only; not added to picks.",
-   "period": "2020-10 to 2026-10"
-  },
-  {
-   "id": "r32",
-   "date": "2026-10-20",
-   "area": "Index options",
-   "title": "One-direction day: trend lines + candle open/close + pivot points + trailing stop",
-   "asked": "Is one direction a day with trend-line / candle / pivot entries and a trailing stop more profitable than the current rules?",
-   "result": "480 settings x Nifty / Bank Nifty / Sensex (927k trades): 6 biases (none, first trade, first 15-min candle colour, daily pivot side, CPR side, candle + pivot agree) x 5 entries (trend-line break, green candle above previous high, pullback candle, pivot-level break, trend line + candle) x 4 trails (previous candle, swing, 2 ATR, pivot target) x 5/15 min x 1 or 3 trades a day. 6 profitable in 2023-25, none robust (each lost in 2025). Before costs the entries average +0.01 to +0.05R a trade; after option costs -0.10 to -0.22R. A one-direction bias cuts losses (candle + pivot agree: better than no bias in 89% of pairs) mostly by trading less, not by better trades. Wider stops (>= 1 ATR, trail after +1R): same picture. Current rules 2026 +Rs 1.83 lakh (Rs 2,000 risk a trade, fall -53k); best new pick (Nifty, chosen on 2023-25) 2026 +43k, fall -52k; current + pick +2.26 lakh but fall -96k and lower Sharpe.",
-   "decision": "Not adopted",
-   "summary": "These are the most common retail intraday rules; on index options they have almost no edge before costs and lose after them. The one-direction idea is worth keeping as a lesson (it filters out losing trades) but there is no profitable system to filter. Current rules stay.",
-   "period": "2023-01 to 2026-10-16"
-  },
-  {
-   "id": "r33",
-   "date": "2026-10-21",
-   "area": "Index options",
-   "title": "Sideways cut, 5-min / 15-min / 1-hour trend lines, conviction size, partial booking",
-   "asked": "Can cutting sideways trades, multi-timeframe trend lines and bigger size on high-conviction trades with partial booking cut the deepest fall and raise profit or win rate?",
-   "result": "On the current rules (Rs 2,000 risk a trade, 2023-25 / 2026): as now +3.32L / +1.83L, fall -1.23L / -54k. Sideways cuts: best +2.90L / +1.88L (lower training profit); re-entry after a cut worse. Agreement score >= 5 as a filter: fall -51k / -37k but 2026 profit +1.07L. Partial booking half at 1R: win rate 45-48% but profit +40k / +94k. Conviction size 1.33x on score 5-6, 0.67x below (same average risk): +4.23L / +1.93L, fall -99k / -54k, better in every year; score effect present in every year and slot (p = 0.01), Nifty and Sensex only. Round-32 logic: no improvement makes it work.",
-   "decision": "Adopted (conviction sizing, Nifty + Sensex Autopilot)",
-   "summary": "Whether the 5-min, 15-min and 1-hour charts agree with the trade is the first add-on in many rounds that separates good trades from weak ones in every year. Used for size, not as a filter, it adds profit at the same risk. Cutting sideways trades and booking partial profits both cut the trend-day winners that pay for the system.",
-   "period": "2023-01 to 2026-10-16"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -927,7 +949,7 @@
    "area": "Index options",
    "title": "Sensex trades vs real option prices",
    "waiting_for": "Live market data",
-   "why": "Sensex was added to Autopilot on modelled premiums; its real option candles are recorded only from 19 Oct 2026.",
+   "why": "Sensex was added to Autopilot on modelled premiums; its real option candles are recorded only from 19 Oct 2026 (first day checked: Sensex index and options saved).",
    "collecting": "Nightly recorder (BSE F&O)",
    "since": "2026-10-19",
    "need": 60,
@@ -1067,12 +1089,13 @@
    "area": "Index options",
    "title": "Sideways-day flags as a risk cut (opening-range width, first-30-minute efficiency)",
    "waiting_for": "Live market data",
-   "why": "Both cut the deepest fall in the backtest but did not raise profit and are near chance after 50+ looks. Option-chain measures are untested.",
+   "why": "Both cut the deepest fall in the backtest but did not raise profit and are near chance after 50+ looks. Option-chain measures are untested. Round 33: cutting trades that stall (no progress in 30-60 minutes, choppy, weak ADX) lowered training profit; re-entry after the cut was mixed.",
    "collecting": "Live sessions with the flags computed at 09:45",
    "since": "2026-10-16",
    "need": 60,
    "unit": "sessions",
    "refs": [
+    "r33",
     "x7"
    ],
    "next": "Forward-test only as a smaller-size rule on flagged days, not a skip."
@@ -1082,15 +1105,16 @@
    "area": "Index options",
    "title": "Expiry-day Nifty straddle",
    "waiting_for": "Broker features",
-   "why": "A real edge on paper (+Rs 201k, 157 expiries) but with a Rs 23k one-day loss per lot; fills, margin and live quotes are not in the data, and the app cannot place sell orders with margin checks yet.",
+   "why": "A real edge on paper (+Rs 201k, 157 expiries) but with a Rs 23k one-day loss per lot; fills, margin and live quotes are not in the data, and the app cannot place sell orders with margin checks yet. Its backtests used option data limited to strikes within 6% of the close (see r31); they need a re-check on the wider data. On hold: no option selling for now (18 Oct).",
    "collecting": "Recorded Nifty expiry days (weekly, Tuesday)",
    "since": "2026-09-28",
    "need": 20,
    "unit": "expiries",
    "refs": [
-    "x5",
     "r14b",
-    "r14d"
+    "r14d",
+    "r31",
+    "x5"
    ],
    "next": "Paper-test off by default with real expiry-day quotes; needs sell-side orders and margin checks first."
   },
