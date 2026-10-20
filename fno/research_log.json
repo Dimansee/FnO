@@ -1192,7 +1192,7 @@
    "area": "Index options",
    "title": "Conviction sizing: live paper record",
    "waiting_for": "More live trades",
-   "why": "Round 33 shipped size by 5/15/60-min agreement on backtest evidence; the 2026 fall was 2-10% deeper from Rs 5 lakh.",
+   "why": "Round 33 shipped size by 5/15/60-min agreement on backtest evidence; the 2026 fall was 6-10% deeper from Rs 5 lakh.",
    "collecting": "Paper Autopilot trades with plan.conviction (score, mult)",
    "since": "2026-10-21",
    "need": 60,
