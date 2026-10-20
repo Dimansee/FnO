@@ -499,3 +499,23 @@ EMA, 2-ATR stop + breakeven + hold to 15:15, fixed 2R). 1-ITM option, same prici
 - Ingredients: volume filter -180k → +42k in training (by cutting trades, as in round 9) but every level negative in 2026; ADX helps a
   little (+20k vs -42k; 2026 -11k vs -26k); VWAP side changes nothing; 15-minute bars beat 5-minute; fixed 2R targets worst.
 **Not adopted.** EMA / MACD crossovers have no edge here; Donchian + volume + ADX worked in 2023-24 and stopped in 2025-26.
+
+## Round 32 — One direction a day: trend lines + candle open/close + pivot points + trailing stop (`round32_engine.py`, `round32_grid.py`, `round32_wide.py`, `round32_baseline.py`, `round32_analyse.py`, results `round32_results.json`)
+Each day gets one allowed direction set at 09:30: none (control), the first trade's direction, the first 15-minute candle's colour,
+price vs the classic daily pivot, price vs the CPR, or candle colour and pivot side agreeing. Entries in that direction only: trend-line
+break (line through the last two falling swing highs / rising swing lows), a green candle closing above the previous high, the same after
+a red pullback candle, a close through a classic pivot level (S2-R2), or a trend-line break on such a candle. Trailing stop on the
+previous candle, the last swing, 2 ATR, or a pivot-level target. 5- or 15-minute candles, 1 or 3 trades a day. 480 settings x 3 indices,
+927k trades, same option pricing and costs as the app, Rs 2,000 risk a trade, 2023-01 to 2026-10-16.
+
+- 6 of 480 profitable on 2023-25, 31 in 2026, 4 in both; **none robust** (all 6 lost in 2025).
+- Before option costs the entries average +0.01 to +0.05R a trade (index move only); after slippage, decay and charges -0.10 to -0.22R.
+  Candle-based stops are tight, so costs are a large share of each trade's risk.
+- One-direction bias vs none (same entry / trail / timeframe): candle + pivot agree better in 89% of pairs (median +3.3 lakh in training),
+  CPR 81%, pivot 61%, first-candle colour 50%, first-trade lock 39% - mostly by cutting trades (95k vs 199k), not by better trades.
+- Best ingredients: pivot-level break, swing trail, 15-minute candles, 1 trade a day. Worst: pullback candle, 5-minute candles.
+- Wider version (stop >= 1 ATR, trail only after +1R, 15 min): same result, none robust.
+- **Vs the current Autopilot rules** (Rs 2,000 risk a trade): current 2026 +1.83 lakh, fall -53k, Sharpe 1.66; best new pick chosen on
+  2023-25 (Nifty: pivot break, swing trail, 15 min, 3 a day) 2026 +43k, fall -52k, Sharpe 0.59; current + pick 2026 +2.26 lakh but fall
+  -96k, Sharpe 1.50. Month by month the new pick only beat the current rules in Jan, May-Jul and Aug's loss was larger.
+**Not adopted.** Current rules stay.

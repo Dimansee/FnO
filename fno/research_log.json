@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-18",
+ "updated": "2026-10-20",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
@@ -881,6 +881,17 @@
    "decision": "Watch-list",
    "summary": "The market-turn exit is what makes breakouts work, but the edge vanishes outside today's Nifty 500 list, which is what survivorship looks like (stocks that broke out and kept rising are the ones now in the index). The market exit was also designed after seeing 2025. Paper forward test only; not added to picks.",
    "period": "2020-10 to 2026-10"
+  },
+  {
+   "id": "r32",
+   "date": "2026-10-20",
+   "area": "Index options",
+   "title": "One-direction day: trend lines + candle open/close + pivot points + trailing stop",
+   "asked": "Is one direction a day with trend-line / candle / pivot entries and a trailing stop more profitable than the current rules?",
+   "result": "480 settings x Nifty / Bank Nifty / Sensex (927k trades): 6 biases (none, first trade, first 15-min candle colour, daily pivot side, CPR side, candle + pivot agree) x 5 entries (trend-line break, green candle above previous high, pullback candle, pivot-level break, trend line + candle) x 4 trails (previous candle, swing, 2 ATR, pivot target) x 5/15 min x 1 or 3 trades a day. 6 profitable in 2023-25, none robust (each lost in 2025). Before costs the entries average +0.01 to +0.05R a trade; after option costs -0.10 to -0.22R. A one-direction bias cuts losses (candle + pivot agree: better than no bias in 89% of pairs) mostly by trading less, not by better trades. Wider stops (>= 1 ATR, trail after +1R): same picture. Current rules 2026 +Rs 1.83 lakh (Rs 2,000 risk a trade, fall -53k); best new pick (Nifty, chosen on 2023-25) 2026 +43k, fall -52k; current + pick +2.26 lakh but fall -96k and lower Sharpe.",
+   "decision": "Not adopted",
+   "summary": "These are the most common retail intraday rules; on index options they have almost no edge before costs and lose after them. The one-direction idea is worth keeping as a lesson (it filters out losing trades) but there is no profitable system to filter. Current rules stay.",
+   "period": "2023-01 to 2026-10-16"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
