@@ -517,5 +517,5 @@ previous candle, the last swing, 2 ATR, or a pivot-level target. 5- or 15-minute
 - Wider version (stop >= 1 ATR, trail only after +1R, 15 min): same result, none robust.
 - **Vs the current Autopilot rules** (Rs 2,000 risk a trade): current 2026 +1.83 lakh, fall -53k, Sharpe 1.66; best new pick chosen on
   2023-25 (Nifty: pivot break, swing trail, 15 min, 3 a day) 2026 +43k, fall -52k, Sharpe 0.59; current + pick 2026 +2.26 lakh but fall
-  -96k, Sharpe 1.50. Month by month the new pick only beat the current rules in Jan, May-Jul and Aug's loss was larger.
+  -96k, Sharpe 1.50. Month by month in 2026 the new pick beat the current rules only in January and July.
 **Not adopted.** Current rules stay.
