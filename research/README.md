@@ -546,3 +546,18 @@ Rs 2,000 risk a trade; 2023-25 / 2026 (to 16 Oct).
 - On the round-32 logic nothing helps enough: best (score >= 5) 2023-25 +88k, 2026 -18k.
 **Adopted:** conviction sizing for Autopilot on Nifty and Sensex (config CONVICTION_*, strategy.mtf_score_at, service._conviction,
 backtest size_fn). Sideways cuts, re-entry, the score filter and partial booking not adopted.
+
+## Round 34 — Scalping on 1-min / 5-min charts: EMA 9 / 15, volume, liquidity, small stop and target, many lots (`round34.py`, results `round34_results.json`)
+Part A (2023 to 16 Oct 2026, Nifty / Bank Nifty / Sensex 1-minute index data, ATM option priced like the app, Rs 2 lakh account,
+Rs 2,000 risk a trade, lots up to 40, brokerage per order): 96 settings = 1-min EMA 9/15 cross or pullback (with / without the
+5-min trend), 5-min cross or pullback x volume (none / heavyweight turnover >= 1.3x) x stop 1 / 2 ATR x target 1 / 1.5x x time stop.
+- **0 of 96 profitable** at 0.5%, 0.25% or 0.1% slippage a fill; none positive in every year.
+- 1.7 million trades averaged **-0.64 index points before costs**; then ~Rs 117 fees and ~Rs 149 slippage (0.25%) a trade.
+- Best on Nifty: 5-min pullback, volume, 2 ATR stop, 1.5x target: +8k / +51k / -41k / -60k (2023-26), PF 0.96.
+Part B (11 recorded sessions with snapshots, 28 Sep - 19 Oct 2026): same rules on REAL 1-min option prices (entry / exit at the next
+minute's open plus half the real bid-ask spread), real futures volume (>= 1.3x the last 20 minutes):
+- Real -Rs 32.6L vs model -Rs 25.4L on the same trades (correlation 0.91): the model is, if anything, kind.
+- Median ATM spread 0.79% of the premium; only 26% of signals had a spread <= 0.5%.
+- **Spread <= 0.5% at entry: -Rs 14 a trade vs -Rs 324** (win 47% vs 37%; better on 9 of 11 days; Nifty about +Rs 1, Bank Nifty -Rs 243).
+**Not adopted.** No edge before costs; more lots scale slippage and spread with the lot count. Pending item p-scalp-spread collects
+more sessions for the spread filter. The app acts once a minute, so true HFT is not possible on it.

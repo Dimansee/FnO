@@ -50,11 +50,17 @@ BACKTEST = {
         {"name": "Nifty - max lots of ₹20,000, best of 2 ITM..2 OTM (your sizing)", "pf": 0.57,
          "years": {"2023": -85144, "2024": -50797, "2025": -65532, "2026": -60601}, "unseen_120d": -35196},
         {"name": "Bank Nifty - max lots, best strike", "pf": 0.36, "years": {"2023": -71222, "2024": -45357, "2025": -68441, "2026": -38644}},
+        {"name": "Round 34: EMA 9/15 on 1-min / 5-min + volume, Rs 2,000 risk a trade (more lots), best of 96 settings on Nifty "
+                 "(5-min pullback, volume >= 1.3x, stop 2 ATR, target 1.5x), 0.25% slippage", "trades_per_day": 2.0, "win_pct": 36.3,
+         "pf": 0.96, "years": {"2023": 8043, "2024": 51129, "2025": -41113, "2026": -59703}},
     ],
     "compound": "Max lots + best strike on one real ₹20,000 account that compounds: Nifty never got above ₹20,000, fell under "
                 "₹10,000 by 17 Feb 2023 and could no longer buy a lot after 27 Jun 2023 (₹1,359 left); Bank Nifty ran out by "
                 "23 Oct 2023. The chooser mostly picked 2-OTM strikes (most lots).",
-    "why": "Entries averaged +0.75 index points; 73% of trades hit the tight 1-minute stop; fees of ~Rs 72 a round trip "
+    "why": "Round 34 (EMA 9/15 + volume + liquidity, 1-min / 5-min, many lots): 0 of 96 settings profitable on any index even at "
+           "0.1% slippage; on 11 recorded sessions real option prices lost 28% more than the model and the median ATM bid-ask spread was "
+           "0.79% of the premium; trading only when the spread is <= 0.5% cut the loss from -Rs 324 to -Rs 14 a trade (Nifty about "
+           "break-even) - collecting more sessions. Earlier: entries averaged +0.75 index points; 73% of trades hit the tight 1-minute stop; fees of ~Rs 72 a round trip "
            "roughly doubled the loss. The classifier found 84% of trend days in the right direction, and the governor cut "
            "losses about 4x versus no governor, but neither creates an edge. Matches round 7 (0 of 1,458 scalping rules profitable). "
            "Sensex was not tested (no 1-minute Sensex history yet; the nightly data job now collects it).",
