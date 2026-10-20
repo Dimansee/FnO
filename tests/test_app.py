@@ -544,3 +544,19 @@ assert not ok_ and "Fibonacci" in msg_
 SV2.S.evaluate_camarilla = SV2.S.evaluate_camarilla_orig
 assert "summary" in j(c.post("/api/backtest", json={"symbol": "NIFTY", "capital": 200000, "strategy": "fib", "days": 30}))
 print("fibonacci slot OK")
+
+# round 33: multi-timeframe conviction score and sizing (Autopilot, Nifty / Sensex only)
+import numpy as _np
+_ix = pd.date_range("2026-10-12 09:15", periods=75, freq="5min").append(pd.date_range("2026-10-13 09:15", periods=75, freq="5min"))
+_up = pd.Series(_np.linspace(100, 160, len(_ix)) + _np.sin(_np.arange(len(_ix))) * 2, index=_ix)
+_c5 = pd.DataFrame({"open": _up - 0.5, "high": _up + 1, "low": _up - 1, "close": _up, "volume": 1000})
+_fr = S.mtf_frames(_c5); _te = _ix[-1] + pd.Timedelta(minutes=5)
+assert S.mtf_score_at(_fr, _te, 1) > S.mtf_score_at(_fr, _te, -1), "a rising market should score calls above puts"
+assert S.mtf_score_at(S.mtf_frames(_c5.iloc[:-10]), _ix[-11] + pd.Timedelta(minutes=5), 1) == S.mtf_score_at(_fr, _ix[-11] + pd.Timedelta(minutes=5), 1), "no look-ahead"
+assert S.conviction_mult(6) == C.CONVICTION_HIGH and S.conviction_mult(4) == C.CONVICTION_LOW
+_g = {"candles": _c5, "now": _ix[-1] + pd.Timedelta(minutes=6)}
+assert SV2._conviction("NIFTY", _g, {"strategy": "noise", "opt": "CE"}, {"autopilot": True})["mult"] in (C.CONVICTION_HIGH, C.CONVICTION_LOW)
+assert SV2._conviction("BANKNIFTY", _g, {"strategy": "noise", "opt": "CE"}, {"autopilot": True}) is None
+assert SV2._conviction("NIFTY", _g, {"strategy": "noise", "opt": "CE"}, {"autopilot": False}) is None
+assert SV2._conviction("NIFTY", _g, {"strategy": "custom", "opt": "CE"}, {"autopilot": True}) is None
+print("conviction sizing OK")

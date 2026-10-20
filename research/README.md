@@ -519,3 +519,30 @@ previous candle, the last swing, 2 ATR, or a pivot-level target. 5- or 15-minute
   2023-25 (Nifty: pivot break, swing trail, 15 min, 3 a day) 2026 +43k, fall -52k, Sharpe 0.59; current + pick 2026 +2.26 lakh but fall
   -96k, Sharpe 1.50. Month by month in 2026 the new pick beat the current rules only in January and July.
 **Not adopted.** Current rules stay.
+
+## Round 33 — Sideways cut, 5-min / 15-min / 1-hour trend lines, conviction size and partial booking (`round33.py`, results `round33_results.json`)
+Applied to the current Autopilot trades (2,227; re-priced bar by bar, parity with the harness exact) and to the best round-32 logic.
+Rs 2,000 risk a trade; 2023-25 / 2026 (to 16 Oct).
+
+| Current rules | 2023-25 net | fall | win | 2026 net | fall | win |
+|---|---|---|---|---|---|---|
+| as now | +3.32L | -1.23L | 30.0% | +1.83L | -54k | 33.3% |
+| sideways cut: no +0.5R after 60 min (best of 5 cut rules) | +2.90L | -1.16L | 29.5% | +1.88L | -50k | 32.3% |
+| sideways cut 5-min ADX < 20 and falling | +3.44L | -1.11L | 28.9% | +1.77L | -54k | 33.3% |
+| any cut + re-entry on breakout of the stall range | lower than the cut alone in 9 of 10 cases | | | | | |
+| 5/15/60-min agreement score >= 5 only (filter) | +3.04L | -51k | 32.4% | +1.07L | -37k | 33.5% |
+| partial booking: half at +1R | +40k | -1.34L | 44.7% | +94k | -36k | 48.2% |
+| partial booking: thirds at 1R / 2R / runner | +1.08L | -1.27L | 43.8% | +87k | -36k | 45.0% |
+| size 2x on score >= 5 (more risk) | +6.35L | -1.48L | 30.0% | +2.90L | -80k | 33.3% |
+| **conviction size 1.33x on score >= 5, 0.67x below (same risk)** | **+4.23L** | **-99k** | 30.0% | **+1.93L** | **-54k** | 33.3% |
+
+- The score (per timeframe: price on the trade's side of the 20-EMA, and of the trend line through the last two swing lows / highs)
+  separates trades in every year: score 5-6 vs 0-4 average Rs +302 vs -254 (2023), +493 vs +234, +334 vs +39, +599 vs +295 (2026);
+  in every slot (main / trend / fib); Nifty and Sensex yes, Bank Nifty no. Shuffle p = 0.01.
+- Conviction sizing is better in every year (2023 +9k -> +61k, 2024 +2.19L -> +2.32L, 2025 +1.03L -> +1.29L, 2026 +1.83L -> +1.93L).
+  Nifty + Sensex only (Bank Nifty: 38.3k -> 38.5k / 6.2k -> -1.7k). With whole lots: Rs 2L +5% / unchanged (10% of trades change
+  lot count), Rs 5L +19% / +5%, Rs 10L +36% / +13%; 2023-25 fall smaller at every size, 2026 fall 2-10% deeper from Rs 5L.
+- Partial booking lifts the win rate to 45-49% but cuts profit by 50-90%: the few big trend-day winners pay for everything.
+- On the round-32 logic nothing helps enough: best (score >= 5) 2023-25 +88k, 2026 -18k.
+**Adopted:** conviction sizing for Autopilot on Nifty and Sensex (config CONVICTION_*, strategy.mtf_score_at, service._conviction,
+backtest size_fn). Sideways cuts, re-entry, the score filter and partial booking not adopted.

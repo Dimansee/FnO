@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-20",
+ "updated": "2026-10-21",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
@@ -892,6 +892,17 @@
    "decision": "Not adopted",
    "summary": "These are the most common retail intraday rules; on index options they have almost no edge before costs and lose after them. The one-direction idea is worth keeping as a lesson (it filters out losing trades) but there is no profitable system to filter. Current rules stay.",
    "period": "2023-01 to 2026-10-16"
+  },
+  {
+   "id": "r33",
+   "date": "2026-10-21",
+   "area": "Index options",
+   "title": "Sideways cut, 5-min / 15-min / 1-hour trend lines, conviction size, partial booking",
+   "asked": "Can cutting sideways trades, multi-timeframe trend lines and bigger size on high-conviction trades with partial booking cut the deepest fall and raise profit or win rate?",
+   "result": "On the current rules (Rs 2,000 risk a trade, 2023-25 / 2026): as now +3.32L / +1.83L, fall -1.23L / -54k. Sideways cuts: best +2.90L / +1.88L (lower training profit); re-entry after a cut worse. Agreement score >= 5 as a filter: fall -51k / -37k but 2026 profit +1.07L. Partial booking half at 1R: win rate 45-48% but profit +40k / +94k. Conviction size 1.33x on score 5-6, 0.67x below (same average risk): +4.23L / +1.93L, fall -99k / -54k, better in every year; score effect present in every year and slot (p = 0.01), Nifty and Sensex only. Round-32 logic: no improvement makes it work.",
+   "decision": "Adopted (conviction sizing, Nifty + Sensex Autopilot)",
+   "summary": "Whether the 5-min, 15-min and 1-hour charts agree with the trade is the first add-on in many rounds that separates good trades from weak ones in every year. Used for size, not as a filter, it adds profit at the same risk. Cutting sideways trades and booking partial profits both cut the trend-day winners that pay for the system.",
+   "period": "2023-01 to 2026-10-16"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -1175,6 +1186,21 @@
     "srch"
    ],
    "next": "Record every signal from now on; adopt only if live signals beat a random entry by >1% a trade over 120 sessions."
+  },
+  {
+   "id": "p-conviction",
+   "area": "Index options",
+   "title": "Conviction sizing: live paper record",
+   "waiting_for": "More live trades",
+   "why": "Round 33 shipped size by 5/15/60-min agreement on backtest evidence; the 2026 fall was 2-10% deeper from Rs 5 lakh.",
+   "collecting": "Paper Autopilot trades with plan.conviction (score, mult)",
+   "since": "2026-10-21",
+   "need": 60,
+   "unit": "sessions",
+   "refs": [
+    "r33"
+   ],
+   "next": "Compare score 5-6 vs 0-4 live; switch off if high-score trades are not better over 60 sessions."
   }
  ]
 }

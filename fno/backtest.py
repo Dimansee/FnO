@@ -103,6 +103,10 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
     traded_days = 0
     vx = vix_intraday.sort_index() if vix_intraday is not None and len(vix_intraday) else None
     budget_pct = (risk_pct or C.RISK_PER_TRADE * 100) / 100
+    size_fn = None
+    if strategy == "autopilot" and symbol in C.CONVICTION_SYMS and sizing != "one_lot":   # round 33 conviction sizing
+        mtf = S.mtf_frames(candles)
+        size_fn = lambda ts, sg: S.conviction_mult(S.mtf_score_at(mtf, ts + timedelta(minutes=C.CANDLE_MIN), sg))  # noqa: E731
     for n, (d, day) in enumerate(frames):
         if n == 0 or len(day) < 60 or (trade_from and d < trade_from):
             continue
@@ -141,6 +145,7 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
         idx = list(day.index)
         lv = S.camarilla_levels(hist)
         day_trades = []
+        sfn = size_fn if strategy == "autopilot" else None
         if strategy == "autopilot":                       # round 27: exactly what Autopilot trades on this index
             ap = C.AUTOPILOT_SYM_STRATEGIES.get(symbol, C.AUTOPILOT_STRATEGIES)
             main_strats = [x for x in ("noise", "camarilla") if x in ap]
@@ -151,7 +156,8 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
             main_strats = ["noise", "camarilla"] if strategy in ("both", "all") else ([] if strategy in ("trend", "fib") else [strategy])
             do_trend = strategy in ("trend", "all")
         if do_trend:                   # round 23: own slot, not blocked by an open Noise / Camarilla trade
-            res = _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing, otm, budget_pct, I.exch_rate(symbol))
+            res = _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing, otm, budget_pct, I.exch_rate(symbol),
+                               size_fn=sfn)
             if isinstance(res, tuple):
                 skips[res[2]] += 1
             elif res:
@@ -160,7 +166,7 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
             flv, start = S.fib_levels(hist), 0
             while flv:
                 res = _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d, mult, sizing, otm,
-                                 "camarilla", flv, budget_pct, I.exch_rate(symbol))
+                                 "camarilla", flv, budget_pct, I.exch_rate(symbol), size_fn=sfn)
                 if res is None:
                     break
                 if isinstance(res, tuple):
@@ -177,7 +183,7 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
             start, day_why = 0, set()
             while True:
                 res = _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d, mult, sizing, otm,
-                                 strat, lv, budget_pct, I.exch_rate(symbol))
+                                 strat, lv, budget_pct, I.exch_rate(symbol), size_fn=sfn)
                 if res is None:
                     break
                 if isinstance(res, tuple):          # ("skip", bar, why): too risky/costly for this capital, keep looking
@@ -317,7 +323,7 @@ def _run_ai(symbol, meta, candles, vix_intraday, vix_daily, lot, capital, sizing
 
 
 def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d, mult, sizing="risk", otm=0,
-               strat="noise", lv=None, budget_pct=C.RISK_PER_TRADE, exch_pct=None):
+               strat="noise", lv=None, budget_pct=C.RISK_PER_TRADE, exch_pct=None, size_fn=None):
         entry_i = None
         for i, ts in enumerate(idx):
             if i < start:
@@ -378,9 +384,9 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
         if sizing == "one_lot":
             lots = 1
         else:
-            budget = capital * budget_pct
+            budget = capital * budget_pct * (size_fn(ts_in, sign) if size_fn else 1.0)   # round 33 conviction (Autopilot)
             lots = int(budget // (risk_unit * lot))
-            if lots == 0 and risk_unit * lot <= 1.5 * budget:
+            if lots == 0 and risk_unit * lot <= 1.5 * capital * budget_pct:   # conviction resizes, never skips
                 lots = 1
             if lots == 0:
                 return ("skip", entry_i, "risk")   # 1 lot would risk more than 1.5% of capital
@@ -447,7 +453,7 @@ def _summary(trades, capital, traded_days):
 
 
 def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="risk", otm=0, budget_pct=C.RISK_PER_TRADE,
-                 exch_pct=None):
+                 exch_pct=None, size_fn=None):
     """Trend-day catcher (research round 23): first half-hour check 10:45-14:15 where S.trend_signal fires; stop = VWAP
     distance + 0.5 ATR (1-3 ATR), stop to entry at +1R, no target, square-off 15:15."""
     entry_i = opt = None
@@ -482,9 +488,9 @@ def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="ris
     if sizing == "one_lot":
         lots = 1
     else:
-        budget = capital * budget_pct
+        budget = capital * budget_pct * (size_fn(ts_in, sign) if size_fn else 1.0)
         lots = int(budget // (risk_unit * lot))
-        if lots == 0 and risk_unit * lot <= 1.5 * budget:
+        if lots == 0 and risk_unit * lot <= 1.5 * capital * budget_pct:
             lots = 1
         if lots == 0:
             return ("skip", entry_i, "risk")

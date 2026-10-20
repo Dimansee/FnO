@@ -190,6 +190,14 @@ AUTOPILOT_SYMS = ["NIFTY", "BANKNIFTY", "SENSEX"]
 # PF >= 1.05). Bank Nifty drops the trend-day catcher (-1k / +27k / -34k), Sensex adds Noise (-16k / +27k / +25k), Sensex Camarilla
 # stays off. Under the live slot rules: 2023-25 +197k vs +152k, deepest fall -80k vs -101k, 2026 +98k vs +91k (Rs 2,000 risk a trade).
 AUTOPILOT_SYM_STRATEGIES = {"BANKNIFTY": ["noise", "camarilla"], "SENSEX": ["noise", "trend", "fib"]}   # fib: round 29 (Nifty + Sensex)
+# Round 33: conviction sizing. Score 0-6 = on 5-min, 15-min and 1-hour candles, price on the trade's side of its 20-EMA (1)
+# and of its trend line (1). Autopilot risks 1.33x on scores >= 5 and 0.67x below (same average risk). Better in every year
+# 2023-26 on Nifty / Sensex (shuffle p = 0.01); no help on Bank Nifty, so not used there.
+CONVICTION_SYMS = {"NIFTY", "SENSEX"}
+CONVICTION_MIN_SCORE = 5
+CONVICTION_HIGH = 1.33
+CONVICTION_LOW = 0.67
+CONVICTION_STRATS = ("noise", "camarilla", "trend", "fib")
 AUTOPILOT_STRATEGIES = ["noise", "camarilla", "trend", "fib"]   # trend: round 23; fib: round 29 (paper autopilot)
 AUTOPILOT_RISK_PCT = 1.0            # lots = 1% of CURRENT equity / risk per lot (compounds as the account grows)
 AUTOPILOT_MAX_TRADE_RISK = 0.15     # a 1-lot floor is allowed only while one lot risks at most 15% of equity (round 20: 83% -> 46% of years dipping below half the account)

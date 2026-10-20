@@ -540,6 +540,10 @@ def place_signal(symbol, strike=None, auto=False, which=None):
             return False, why
         if mult < 1:
             pf = {**pf, "risk_pct": float(pf.get("risk_pct") or 1.0) * mult}
+    conv = _conviction(symbol, g, ev["plan"], pf)
+    if conv:
+        pf = {**pf, "risk_pct": float(pf.get("risk_pct") or 1.0) * conv["mult"]}
+        ev = {**ev, "plan": {**ev["plan"], "conviction": conv}}
     try:
         order = S.build_order(ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], _size_capital(acct, tr, pf),
                               strike=strike, cash=cash, prefs=pf)
@@ -551,6 +555,25 @@ def place_signal(symbol, strike=None, auto=False, which=None):
     legs = [{**lg, "src": src} for lg in order["legs"]]
     return P.open_position(cash, symbol, legs, order["lots"], g["lot"], g["trade_exp"], g["spot"], m.source,
                            clean(order), clean({**ev["plan"], "auto": auto, "ctx": _entry_ctx(g)}))
+
+
+def _conviction(symbol, g, plan, pf) -> dict | None:
+    """Round 33: Autopilot sizes Nifty / Sensex trades by the 5-min / 15-min / 1-hour agreement score (1.33x risk on 5-6 of 6,
+    0.67x below). None when it does not apply or the score cannot be worked out (the trade then keeps its normal size)."""
+    if not pf.get("autopilot") or symbol not in C.CONVICTION_SYMS or (plan or {}).get("strategy") not in C.CONVICTION_STRATS:
+        return None
+    try:
+        today, hist = S.session_frames(g["candles"], g["now"])
+        c5 = pd.concat([hist, today])[["open", "high", "low", "close"]]
+        if len(c5) < 100:
+            return None
+        if getattr(c5.index, "tz", None) is not None:
+            c5.index = c5.index.tz_localize(None)
+        side = 1 if plan.get("opt") == "CE" else -1
+        sc = S.mtf_score_at(S.mtf_frames(c5), c5.index[-1] + pd.Timedelta(minutes=C.CANDLE_MIN), side)
+        return {"score": int(sc), "mult": S.conviction_mult(sc)}
+    except Exception:
+        return None
 
 
 def place_manual(symbol, expiry, strike, opt, side, lots):

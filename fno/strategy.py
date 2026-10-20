@@ -643,3 +643,54 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
             if not reached and mins >= plan["time_stop_min"]:
                 return f"Time stop ({plan['time_stop_min']} min, no follow-through)", upd
     return None, upd
+
+
+# ---------------- round 33: multi-timeframe conviction score
+def _mtf_tf(c5: pd.DataFrame, tf: int) -> pd.DataFrame:
+    """20-EMA side and trend-line side on one timeframe, indexed by each candle's END time (known only then)."""
+    import numpy as np
+    if tf == 5:
+        s = c5[["open", "high", "low", "close"]]; end = s.index + pd.Timedelta(minutes=5)
+    else:
+        parts = []
+        for _, g in c5.groupby(c5.index.date):
+            parts.append(g[["open", "high", "low", "close"]].resample(
+                f"{tf}min", origin=g.index[0].normalize() + pd.Timedelta(hours=9, minutes=15), label="left", closed="left").agg(
+                {"open": "first", "high": "max", "low": "min", "close": "last"}).dropna())
+        s = pd.concat(parts)
+        end = pd.DatetimeIndex([min(t + pd.Timedelta(minutes=tf), t.normalize() + pd.Timedelta(hours=15, minutes=30)) for t in s.index])
+    Hh, L, Cc = s["high"].values, s["low"].values, s["close"].values; n = len(s)
+    ema = s["close"].ewm(span=20, adjust=False).mean().values
+    up_tl = np.zeros(n, bool); dn_tl = np.zeros(n, bool); sh, sl = [], []; F = 2
+    for k in range(n):
+        q = k - F
+        if q >= F:
+            if Hh[q] == Hh[q - F:q + F + 1].max(): sh.append(q)
+            if L[q] == L[q - F:q + F + 1].min(): sl.append(q)
+        if len(sl) >= 2 and L[sl[-1]] > L[sl[-2]]:
+            a, b = sl[-2], sl[-1]; up_tl[k] = Cc[k] > L[b] + (L[b] - L[a]) / (b - a) * (k - b)
+        if len(sh) >= 2 and Hh[sh[-1]] < Hh[sh[-2]]:
+            a, b = sh[-2], sh[-1]; dn_tl[k] = Cc[k] < Hh[b] + (Hh[b] - Hh[a]) / (b - a) * (k - b)
+    return pd.DataFrame({"ema_up": Cc > ema, "ema_dn": Cc < ema, "up_tl": up_tl, "dn_tl": dn_tl}, index=end)
+
+
+def mtf_frames(c5: pd.DataFrame) -> dict:
+    """Features for the 5-min, 15-min and 1-hour candles built from completed 5-minute candles."""
+    return {tf: _mtf_tf(c5, tf) for tf in (5, 15, 60)}
+
+
+def mtf_score_at(frames: dict, ts_end, side: int) -> int:
+    """0-6 for a call (side 1) or put (-1) entered when the 5-minute candle ending at ts_end closes: per timeframe, price on
+    the trade's side of the 20-EMA (1) and of the trend line through the last two swing lows / highs (1). Completed candles only."""
+    sc = 0
+    for tf in (5, 15, 60):
+        f = frames[tf]; k = f.index.searchsorted(ts_end, side="right") - 1
+        if k < 0:
+            continue
+        r = f.iloc[k]
+        sc += int(r["ema_up"] if side > 0 else r["ema_dn"]) + int(r["up_tl"] if side > 0 else r["dn_tl"])
+    return sc
+
+
+def conviction_mult(score: int) -> float:
+    return C.CONVICTION_HIGH if score >= C.CONVICTION_MIN_SCORE else C.CONVICTION_LOW
