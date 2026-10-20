@@ -30,7 +30,7 @@ from . import store
 KEEP_DAYS = 120
 CK = "fno:data:c:"                     # candles hash per MARKET:SYMBOL, field = date
 META = "fno:data:meta"
-REPO = os.environ.get("GITHUB_REPO", "Dimansee/fno")
+REPO = os.environ.get("GITHUB_REPO", "Dimansee/FnO")
 ARCHIVE_BRANCH = "research-data"
 ARCHIVE_PATH = "research/data/live"
 MAX_BYTES = 4_000_000                  # Vercel serverless responses are capped near 4.5 MB
@@ -188,20 +188,56 @@ def catalog() -> list[dict]:
 
 
 def archive() -> dict:
-    """Days kept permanently in the research-data branch on GitHub (public repo, no key needed)."""
+    """Days kept permanently in the research-data branch on GitHub (public repo, no key needed).
+    1) index.json written by the nightly recorder, read from raw.githubusercontent.com (a file server: no API rate limit);
+    2) the GitHub contents API (60 calls an hour per IP without a key - shared Render IPs often run out: "GitHub 403");
+    3) the last list that was read successfully (kept in Redis)."""
     from . import market as M
+    hdr = {"User-Agent": "fno-trainer"}
+    tok = os.environ.get("GITHUB_TOKEN")
+
+    def from_index():
+        r = requests.get(f"https://raw.githubusercontent.com/{REPO}/{ARCHIVE_BRANCH}/{ARCHIVE_PATH}/index.json", timeout=12, headers=hdr)
+        if r.status_code != 200:
+            raise RuntimeError(f"index {r.status_code}")
+        days = r.json().get("days") or []
+        if not days:
+            raise RuntimeError("index empty")
+        return sorted(days)
+
+    def from_api():
+        h = {**hdr, "Accept": "application/vnd.github+json", **({"Authorization": f"Bearer {tok}"} if tok else {})}
+        r = requests.get(f"https://api.github.com/repos/{REPO}/contents/{ARCHIVE_PATH}", params={"ref": ARCHIVE_BRANCH}, timeout=12, headers=h)
+        if r.status_code != 200:
+            raise RuntimeError(f"GitHub {r.status_code}" + (" (hourly limit for this server reached)" if r.status_code in (403, 429) else ""))
+        return sorted(x["name"] for x in r.json() if x["type"] == "dir")
 
     def load():
-        r = requests.get(f"https://api.github.com/repos/{REPO}/contents/{ARCHIVE_PATH}", params={"ref": ARCHIVE_BRANCH}, timeout=12,
-                         headers={"Accept": "application/vnd.github+json", "User-Agent": "fno-trainer"})
-        if r.status_code != 200:
-            raise RuntimeError(f"GitHub {r.status_code}")
-        return sorted(x["name"] for x in r.json() if x["type"] == "dir")
+        errs = []
+        for fn in (from_index, from_api):
+            try:
+                names = fn()
+                try:
+                    store.put("data:archive:last", {"days": names, "at": datetime.now(timezone.utc).isoformat()})
+                except Exception:
+                    pass
+                return {"days": names, "stale": None}
+            except Exception as e:
+                errs.append(str(e)[:80])
+        last = None
+        try:
+            last = store.get("data:archive:last")
+        except Exception:
+            pass
+        if last and last.get("days"):
+            return {"days": last["days"], "stale": last.get("at")}
+        raise RuntimeError("; ".join(errs))
+    base = {"repo": REPO, "branch": ARCHIVE_BRANCH, "path": ARCHIVE_PATH}
     try:
-        names = M.cached("data:archive", 3600, load)
+        got = M.cached("data:archive", 3600, load)
     except Exception as e:
-        return {"ok": False, "error": str(e)[:100], "days": [], "repo": REPO, "branch": ARCHIVE_BRANCH, "path": ARCHIVE_PATH}
-    return {"ok": True, "days": names, "repo": REPO, "branch": ARCHIVE_BRANCH, "path": ARCHIVE_PATH,
+        return {"ok": False, "error": str(e)[:120], "days": [], **base}
+    return {"ok": True, "days": got["days"], "stale": got["stale"], **base,
             "files": ["candles_1m.csv.gz", "bhav_fo.csv.gz", "participant_oi.csv", "participant_vol.csv", "snapshots.json.gz", "manifest.json"]}
 
 

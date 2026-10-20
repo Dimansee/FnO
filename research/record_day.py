@@ -241,3 +241,8 @@ if __name__ == "__main__":
             run(d)
         except Exception as e:
             log(d, "FAILED", repr(e))
+    try:                                              # list of recorded days for the app (read without the GitHub API limit)
+        rec = sorted(x for x in os.listdir(ROOT) if os.path.isdir(os.path.join(ROOT, x)) and x[:2] == "20")
+        json.dump({"days": rec, "updated": datetime.now(IST).isoformat(timespec="seconds")}, open(f"{ROOT}/index.json", "w"), indent=0)
+    except Exception as e:
+        log("index.json FAILED", repr(e))
