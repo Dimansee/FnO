@@ -50,8 +50,7 @@ BACKTEST = {
         {"name": "Nifty - max lots of ₹20,000, best of 2 ITM..2 OTM (your sizing)", "pf": 0.57,
          "years": {"2023": -85144, "2024": -50797, "2025": -65532, "2026": -60601}, "unseen_120d": -35196},
         {"name": "Bank Nifty - max lots, best strike", "pf": 0.36, "years": {"2023": -71222, "2024": -45357, "2025": -68441, "2026": -38644}},
-        {"name": "Round 34: EMA 9/15 on 1-min / 5-min + volume, Rs 2,000 risk a trade (more lots), best of 96 settings on Nifty "
-                 "(5-min pullback, volume >= 1.3x, stop 2 ATR, target 1.5x), 0.25% slippage", "trades_per_day": 2.0, "win_pct": 36.3,
+        {"name": "Round 34: EMA 9/15 + volume, more lots - best of 96 on Nifty (5-min pullback, 0.25% slippage)", "trades_per_day": 2.0, "win_pct": 36.3,
          "pf": 0.96, "years": {"2023": 8043, "2024": 51129, "2025": -41113, "2026": -59703}},
     ],
     "compound": "Max lots + best strike on one real ₹20,000 account that compounds: Nifty never got above ₹20,000, fell under "
