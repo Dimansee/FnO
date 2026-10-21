@@ -416,11 +416,18 @@ def trade_exit():
 def account_capital():
     """Change the demo capital without clearing positions, trades or the journal."""
     cap = float((request.get_json(force=True) or {}).get("capital", C.DEFAULT_CAPITAL))
-    if not 10_000 <= cap <= 100_000_000:
-        return jsonify({"ok": False, "message": "Capital must be between ₹10,000 and ₹10 crore."}), 400
     from fno import paper as P
     a = P.account()
-    store.put("account", {**a, "capital_start": cap})
+    if cap == 0:                                   # "profit only": take the starting money out, keep trading the realised profit
+        eq0 = P.equity(a, store.trades()) - float(a["capital_start"])
+        if eq0 < 10_000:
+            return jsonify({"ok": False, "message": f"Capital 0 means trading only the profit already made, which is ₹{eq0:,.0f} - at least ₹10,000 is needed."}), 400
+        before = float(a["capital_start"]) if float(a["capital_start"]) > 0 else a.get("capital_before")
+        store.put("account", {**a, "capital_start": 0.0, "capital_before": before, "profit_only_since": C.now_ist().isoformat(timespec="seconds")})
+        return jsonify({"ok": True, "message": f"Capital set to ₹0: the account now trades only its profit, ₹{eq0:,.0f} (positions and journal kept)."})
+    if not 10_000 <= cap <= 100_000_000:
+        return jsonify({"ok": False, "message": "Capital must be 0 (trade only your profit) or between ₹10,000 and ₹10 crore."}), 400
+    store.put("account", {**{k: v for k, v in a.items() if k not in ("capital_before", "profit_only_since")}, "capital_start": cap})
     return jsonify({"ok": True, "message": f"Demo capital set to ₹{cap:,.0f} (positions and journal kept)."})
 
 

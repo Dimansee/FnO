@@ -181,6 +181,19 @@ def equity(acct, trades) -> float:
     return float(acct["capital_start"]) + sum(h["pnl"] for h in trades)
 
 
+def base(acct, trades) -> float:
+    """The capital the risk limits and fixed sizing are measured on: the starting capital, or - when it is set to 0 to trade
+    only the profit already made - the current equity (never 0, so a 2% limit is never 'any loss')."""
+    cs = float(acct["capital_start"])
+    return cs if cs > 0 else max(equity(acct, trades), 1.0)
+
+
+def stats_capital(acct) -> float:
+    """Starting point of the equity curve in the stats: the capital before 'profit only' was switched on, if it was."""
+    cs = float(acct["capital_start"])
+    return cs if cs > 0 else float(acct.get("capital_before") or 0) or 1.0
+
+
 def week_guard(trades, capital, limit=None) -> dict:
     """Round 18: after losing 4% of capital in a week, no new trades until Monday."""
     today = C.today_ist()

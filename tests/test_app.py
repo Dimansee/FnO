@@ -595,3 +595,24 @@ _g = SV3.risk_guard(store.positions(), store.trades(), 215000, _pf, auto=True)
 assert _g["blocked"] and "manual trades not counted" in _g["reason"], _g
 store.clear_trades()
 print("limits count system trades only OK")
+
+# capital 0 = trade only the profit already made
+from fno import paper as P4
+store.clear_positions(); store.clear_trades(); j(c.post("/api/account/reset", json={"capital": 200000}))
+store.insert_trade({"id": "pp1", "symbol": "NIFTY", "mode": "signal", "plan": {"strategy": "noise", "auto": True},
+                    "opened": "2026-09-20T10:00:00+05:30", "closed": "2026-09-20T11:00:00+05:30", "pnl": 25421.0, "legs": []})
+r = j(c.post("/api/account/capital", json={"capital": 0}))
+assert r["ok"], r
+a4 = P4.account()
+assert a4["capital_start"] == 0 and a4["capital_before"] == 200000
+assert P4.equity(a4, store.trades()) == 25421 and P4.snapshot()[3] == 25421 and P4.base(a4, store.trades()) == 25421
+pf_ = j(c.get("/api/portfolio"))
+assert pf_["profit_only_since"] and pf_["stats"]                        # stats still measured from the original Rs 2 lakh
+g4 = SV3.risk_guard([], store.trades(), P4.base(a4, store.trades()), {"autopilot": True}, auto=True, equity=P4.equity(a4, store.trades()))
+assert not g4.get("blocked"), g4
+assert j(c.post("/api/account/capital", json={"capital": 5000}))["ok"] is False
+assert j(c.post("/api/account/capital", json={"capital": 200000}))["ok"] and "capital_before" not in P4.account()
+store.clear_trades(); j(c.post("/api/account/reset", json={"capital": 200000}))
+r = j(c.post("/api/account/capital", json={"capital": 0}))
+assert r["ok"] is False and "profit" in r["message"]                     # no profit yet: refused
+print("capital 0 (profit only) OK")

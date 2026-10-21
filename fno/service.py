@@ -329,15 +329,15 @@ def _entry_ctx(g) -> dict:
 
 def _size_capital(acct, tr, pf) -> float:
     """Capital the position size is worked out from: the starting capital, or the current equity when compounding."""
-    return P.equity(acct, tr) if pf.get("sizing") == "compound" else acct["capital_start"]
+    return P.equity(acct, tr) if pf.get("sizing") == "compound" else P.base(acct, tr)
 
 
-def risk_guard(pos, tr, capital, pf, auto=False) -> dict:
+def risk_guard(pos, tr, capital, pf, auto=False, equity=None) -> dict:
     """The daily risk limits (two losers / -2% / max trades). On the demo account they only advise unless enforced in Settings.
     Autopilot / automatic entries count only the system's own trades (signal trades): the limits were tested on the rules' trades
     (rounds 18 and 20), and a manual trade's loss must not switch the system off (19 Oct 2026: a manual -Rs 8,321 tripped the weekly
     limit and blocked Autopilot for three days although its own trades were well inside it)."""
-    eq = float(capital) + sum(h["pnl"] for h in tr)                 # account equity (all trades) - the size of the limit
+    eq = float(equity) if equity is not None else float(capital) + sum(h["pnl"] for h in tr)   # account equity (all trades) - the size of the limit
     if pf.get("autopilot") or auto:
         tr = [h for h in tr if h.get("mode") == "signal"]
         pos = [p for p in pos if p.get("mode") == "signal"]
@@ -446,7 +446,7 @@ def dashboard(symbol, strike=None):
     cstats = M.chain_stats(g["chain"], g["spot"])
     gc, nw, fi = gcues(), news(symbol), fii()
     pf = eprefs()
-    guard = risk_guard(pos, tr, acct["capital_start"], pf)
+    guard = risk_guard(pos, tr, P.base(acct, tr), pf, equity=P.equity(acct, tr))
     if not guard.get("blocked"):
         guard = calendar_guard(symbol, g["exps"], g["now"].date()) or guard
     traded = _traded_today(symbol, pos, tr)
@@ -461,7 +461,7 @@ def dashboard(symbol, strike=None):
     if ev["plan"]:
         if any(p["symbol"] == symbol and p["mode"] == "signal" for p in pos):
             ev["warnings"].append("You already have an open signal trade in this instrument.")
-        args = (ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], acct["capital_start"])
+        args = (ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], P.base(acct, tr))
         try:
             order = S.build_order(*args, strike=strike, cash=cash, prefs=pf)
         except ValueError:
@@ -510,7 +510,7 @@ def place_signal(symbol, strike=None, auto=False, which=None):
     g = _gather(symbol, m)
     acct, pos, tr, cash = P.snapshot()
     pf = eprefs()
-    guard = risk_guard(pos, tr, acct["capital_start"], pf, auto=auto)
+    guard = risk_guard(pos, tr, P.base(acct, tr), pf, auto=auto, equity=P.equity(acct, tr))
     if not guard.get("blocked"):
         guard = calendar_guard(symbol, g["exps"], g["now"].date()) or guard
     if guard.get("blocked"):
@@ -705,9 +705,10 @@ def portfolio():
         out.append({**p, "current_prem": round(P.net_price(p["legs"], prices), 2), "unrealised": round(u, 2),
                     "price_src": "live" if all(l.get("src", "demo") in m.clients for l in p["legs"]) else "formula"})
     return clean({
-        "capital_start": acct["capital_start"], "cash": cash, "unrealised": unreal,
+        "capital_start": acct["capital_start"], "capital_before": acct.get("capital_before"), "profit_only_since": acct.get("profit_only_since"),
+        "cash": cash, "unrealised": unreal,
         "realised": sum(t["pnl"] for t in tr), "account_value": cash + sum(p["margin"] for p in pos) + unreal,
-        "positions": out, "history": list(reversed(tr)), "stats": P.stats(tr, acct["capital_start"]),
+        "positions": out, "history": list(reversed(tr)), "stats": P.stats(tr, P.stats_capital(acct)),
         "closed_now": closed, "source": m.source, "errors": m.errors[-3:], "expected": _expected(),
     })
 
@@ -1032,7 +1033,7 @@ def scan(symbol, m=None, prefs_=None, want_order=True):
     acct, pos, tr, cash = P.snapshot()
     cstats = M.chain_stats(g["chain"], g["spot"])
     pf = prefs_ or eprefs()
-    guard = risk_guard(pos, tr, acct["capital_start"], pf)
+    guard = risk_guard(pos, tr, P.base(acct, tr), pf, equity=P.equity(acct, tr))
     if not guard.get("blocked"):
         guard = calendar_guard(symbol, g["exps"], g["now"].date()) or guard
     traded = _traded_today(symbol, pos, tr)

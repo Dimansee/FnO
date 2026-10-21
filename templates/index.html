@@ -876,8 +876,8 @@ details summary{cursor:pointer;font-size:13px}
       <div class="card">
         <h3>Demo account</h3>
         <label>Demo capital (₹)</label>
-        <div class="copy"><input id="capIn" type="number" value="200000" step="50000"><button class="primary" id="capSave" title="Change the capital, keep positions and the journal">Save</button><button class="danger" id="resetBtn" title="Clears all positions and the journal">Reset account</button></div>
-        <p class="muted" style="font-size:12px;margin:6px 0 0">Save changes the capital and keeps everything else. Reset starts over with this capital and clears all positions and the trade journal.</p>
+        <div class="copy"><input id="capIn" type="number" value="200000" min="0" step="1000"><button class="primary" id="capSave" title="Change the capital, keep positions and the journal">Save</button><button class="danger" id="resetBtn" title="Clears all positions and the journal">Reset account</button></div>
+        <p class="muted" style="font-size:12px;margin:6px 0 0">Save changes the capital and keeps everything else. Reset starts over with this capital and clears all positions and the trade journal. <b>0</b> = take the starting money out and keep trading only the profit already made (needs ₹10,000+ of profit).</p>
         <h4 style="margin:16px 0 6px">Trades in the P&amp;L</h4>
         <div id="originBox" class="muted" style="font-size:12.5px">Loading…</div>
         <label class="tog" style="margin-top:8px"><input type="checkbox" id="rmManual" checked> Manual orders (option chain / order ticket)</label>
@@ -1976,7 +1976,7 @@ async function loadPortfolio() {
   setSource(d.source, d.source.startsWith("LIVE"));
   (d.closed_now || []).forEach(c => toast(`Auto-exit ${c.symbol}: ${c.reason} → ${rs(c.pnl)}`, 6000));
   $("#pKpis").innerHTML = kpi("Demo cash", rs(d.cash)) + kpi("Open P&L", rs(d.unrealised), null) +
-    kpi("Realised P&L", `<span class="${cls(d.realised)}">${rs(d.realised)}</span>`) + kpi("Account value", rs(d.account_value), "started with " + rs(d.capital_start), "muted");
+    kpi("Realised P&L", `<span class="${cls(d.realised)}">${rs(d.realised)}</span>`) + kpi("Account value", rs(d.account_value), d.profit_only_since ? `trading profit only since ${esc(d.profit_only_since.slice(0, 10))} (started with ${rs(d.capital_before)})` : "started with " + rs(d.capital_start), "muted");
   $("#positions").innerHTML = d.positions.length ? d.positions.map(p => `
     <div class="leg" style="flex-wrap:wrap;gap:10px;padding:10px 12px">
       <div style="flex:2;min-width:200px"><b>${esc(p.symbol)}</b> ${p.legs.map(l => `<span class="tag ${l.side.toLowerCase()}">${l.side}</span> ${l.strike}${l.opt}`).join(" / ")}
