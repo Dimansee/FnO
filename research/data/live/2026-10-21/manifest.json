@@ -1,0 +1,33 @@
+{
+ "date": "2026-10-21",
+ "expiries": {
+  "NIFTY": [
+   "2026-10-27",
+   "2026-11-03"
+  ],
+  "BANKNIFTY": [
+   "2026-10-27",
+   "2026-11-23"
+  ],
+  "FINNIFTY": [
+   "2026-10-27",
+   "2026-11-23"
+  ],
+  "SENSEX": [
+   "2026-10-22",
+   "2026-10-29"
+  ]
+ },
+ "errors": [],
+ "candles": {
+  "rows": 225652,
+  "instruments": 617,
+  "options_without_data": 72
+ },
+ "bhav_fo_rows": 4219,
+ "participant_oi": true,
+ "participant_vol": true,
+ "snapshots": 300,
+ "journal_recos": 3,
+ "updated": "2026-10-21T23:55:45+05:30"
+}

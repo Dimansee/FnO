@@ -1,0 +1,680 @@
+{
+ "ai": {
+  "BANKNIFTY": [],
+  "NIFTY": []
+ },
+ "context": {
+  "BANKNIFTY": {
+   "atr_5m": 53.29131115309585,
+   "calendar": null,
+   "camarilla": {
+    "h3": 55971.39375,
+    "h4": 56098.7875,
+    "l3": 55716.60625,
+    "l4": 55589.2125,
+    "pivot": 55786.61666666667
+   },
+   "cpr": {
+    "bc": 55757.925,
+    "tc": 55815.308333333334,
+    "width_pct": 0.103
+   },
+   "expiries": [
+    "2026-10-27",
+    "2026-11-23",
+    "2026-12-29"
+   ],
+   "expiry": "2026-10-27",
+   "fii": {
+    "date": "19-Oct-2026",
+    "dii": 3201.19,
+    "fii": -1148.64,
+    "source": "NSE"
+   },
+   "gap_pct": -0.64,
+   "global": {
+    "avg_equity_chg": 0.88,
+    "notes": []
+   },
+   "lot": 30,
+   "noise_band_at": {
+    "09:45": [
+     55303.8,
+     56367.8
+    ],
+    "10:15": [
+     55337.4,
+     56334.2
+    ],
+    "11:15": [
+     55254.8,
+     56416.8
+    ],
+    "12:15": [
+     55254.6,
+     56417.0
+    ],
+    "13:15": [
+     55213.0,
+     56458.7
+    ],
+    "14:15": [
+     55210.6,
+     56461.0
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 55827.45,
+   "pcr_prev_close": 0.88,
+   "pivot": 55786.61666666667,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY",
+     "BANKNIFTY",
+     "SENSEX"
+    ],
+    "risk_pct": 1.0,
+    "sizing": "compound",
+    "strategies": [
+     "noise",
+     "camarilla",
+     "trend",
+     "fib"
+    ]
+   },
+   "prev_close": 55844.0,
+   "prev_high": 55989.55,
+   "prev_low": 55526.3,
+   "symbol": "BANKNIFTY",
+   "time": "09:16",
+   "vix": {
+    "chg_pct": 0.4739336492890933,
+    "level": 14.84
+   }
+  },
+  "NIFTY": {
+   "atr_5m": 21.868225878676373,
+   "calendar": null,
+   "camarilla": {
+    "h3": 23211.06375,
+    "h4": 23275.9775,
+    "l3": 23081.23625,
+    "l4": 23016.322500000002,
+    "pivot": 23069.93333333333
+   },
+   "cpr": {
+    "bc": 23031.824999999997,
+    "tc": 23108.041666666664,
+    "width_pct": 0.329
+   },
+   "expiries": [
+    "2026-10-27",
+    "2026-11-03",
+    "2026-11-09"
+   ],
+   "expiry": "2026-10-27",
+   "fii": {
+    "date": "19-Oct-2026",
+    "dii": 3201.19,
+    "fii": -1148.64,
+    "source": "NSE"
+   },
+   "gap_pct": -1.11,
+   "global": {
+    "avg_equity_chg": 0.88,
+    "notes": []
+   },
+   "lot": 65,
+   "noise_band_at": {
+    "09:45": [
+     22994.3,
+     23302.8
+    ],
+    "10:15": [
+     22956.9,
+     23340.2
+    ],
+    "11:15": [
+     22966.8,
+     23330.3
+    ],
+    "12:15": [
+     22935.2,
+     23361.8
+    ],
+    "13:15": [
+     22847.0,
+     23450.1
+    ],
+    "14:15": [
+     22836.9,
+     23460.1
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 23150.85,
+   "pcr_prev_close": 0.94,
+   "pivot": 23069.93333333333,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY",
+     "BANKNIFTY",
+     "SENSEX"
+    ],
+    "risk_pct": 1.0,
+    "sizing": "compound",
+    "strategies": [
+     "noise",
+     "camarilla",
+     "trend",
+     "fib"
+    ]
+   },
+   "prev_close": 23146.15,
+   "prev_high": 23149.85,
+   "prev_low": 22913.8,
+   "symbol": "NIFTY",
+   "time": "09:16",
+   "vix": {
+    "chg_pct": 0.4739336492890933,
+    "level": 14.84
+   }
+  }
+ },
+ "date": "2026-10-21",
+ "paper_trades": [],
+ "recommendations": [
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 14.95 between 11 and 18 (enough movement to pay for an option, but not a fear spike)"
+     ],
+     [
+      null,
+      "First check at 09:45 - the noise band needs the first half hour"
+     ],
+     [
+      null,
+      "Trend-day catcher (own slot, trades alongside the others):"
+     ],
+     [
+      null,
+      "First trend-day check at 10:45"
+     ],
+     [
+      null,
+      "Fibonacci 0.618 breakout (own slot):"
+     ],
+     [
+      true,
+      "India VIX 14.95 between 11 and 20"
+     ],
+     [
+      null,
+      "Yesterday's levels: H4 23173.8 \u00b7 H3 23095.9 \u00b7 L3 22843.6 \u00b7 L4 22765.6"
+     ],
+     [
+      false,
+      "Waiting for a 5-min close above H4 (now 23079.8)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 14.95 between 11 and 20"
+     ],
+     [
+      null,
+      "Yesterday's levels: H4 23070.6 \u00b7 H3 22979.8 \u00b7 L3 22798.1 \u00b7 L4 22707.3"
+     ],
+     [
+      true,
+      "09:25 close crossed above H4"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": 1,
+      "value": "+0.67% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 1,
+      "value": "+0.56%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 0,
+      "value": "14.95 (+1.2%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "0.95"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-1,149 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": 1,
+      "value": "23079.8 vs 23056.6"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": 1,
+      "value": "Up"
+     }
+    ],
+    "p_win": null,
+    "score": 3,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "id": "NIFTY:camarilla:09:25",
+   "index": {
+    "entry": 23079.85,
+    "risk_pts": 99.4205272472139,
+    "rr": null,
+    "sl": 22980.429472752785,
+    "target": null
+   },
+   "lot": 65,
+   "opt": "CE",
+   "option": {
+    "cost_per_lot": 12382.0,
+    "delta": 0.54,
+    "entry_prem": 190.5,
+    "expiry": "2026-10-27",
+    "lots": 1,
+    "ltp": 189.95,
+    "sl_prem": 136.91,
+    "strike": 23050.0,
+    "target_prem": 351.26
+   },
+   "result": {
+    "R": -1.0,
+    "at": "10:10",
+    "close_15_15": 22739.2,
+    "exit_spot": 22980.4,
+    "index_outcome": "stop",
+    "mae_pts": 429.9,
+    "mfe_pts": 41.1,
+    "premium": {
+     "at_exit": 140.6,
+     "entry": 190.5,
+     "high": 213.05,
+     "last": 59.55,
+     "low": 48.2,
+     "max_gain_pct": 11.8,
+     "max_loss_pct": -74.7,
+     "pnl_1lot_if_followed": -3244.0
+    }
+   },
+   "signal": "BUY CALL",
+   "signal_bar": "09:25",
+   "spot": 23079.85,
+   "strategy": "camarilla",
+   "symbol": "NIFTY",
+   "time": "09:31:08",
+   "vix": 14.95
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 14.82 between 11 and 18 (enough movement to pay for an option, but not a fear spike)"
+     ],
+     [
+      null,
+      "First check at 09:45 - the noise band needs the first half hour"
+     ],
+     [
+      null,
+      "Trend-day catcher (own slot, trades alongside the others):"
+     ],
+     [
+      null,
+      "First trend-day check at 10:45"
+     ],
+     [
+      null,
+      "Fibonacci 0.618 breakout (own slot):"
+     ],
+     [
+      true,
+      "India VIX 14.82 between 11 and 20"
+     ],
+     [
+      null,
+      "Yesterday's levels: H4 55909.1 \u00b7 H3 55778.7 \u00b7 L3 55356.5 \u00b7 L4 55226.1"
+     ],
+     [
+      false,
+      "Waiting for a 5-min close above H4 (now 55822.2)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 14.82 between 11 and 20"
+     ],
+     [
+      null,
+      "Yesterday's levels: H4 55792.0 \u00b7 H3 55640.1 \u00b7 L3 55336.1 \u00b7 L4 55184.2"
+     ],
+     [
+      true,
+      "09:35 close crossed above H4"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": 1,
+      "value": "+0.67% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 1,
+      "value": "+0.40%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 0,
+      "value": "14.82 (+0.3%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "0.97"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-1,149 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": 1,
+      "value": "55822.2 vs 55717.0"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": 1,
+      "value": "Up"
+     }
+    ],
+    "p_win": null,
+    "score": 3,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "id": "BANKNIFTY:camarilla:09:35",
+   "index": {
+    "entry": 55822.25,
+    "risk_pts": 182.18500000000495,
+    "rr": null,
+    "sl": 55640.064999999995,
+    "target": null
+   },
+   "lot": 30,
+   "opt": "CE",
+   "option": {
+    "cost_per_lot": 16396.0,
+    "delta": 0.58,
+    "entry_prem": 546.55,
+    "expiry": "2026-10-27",
+    "lots": 1,
+    "ltp": 547.95,
+    "sl_prem": 440.94,
+    "strike": 55700.0,
+    "target_prem": 863.39
+   },
+   "result": {
+    "R": -1.0,
+    "at": "09:55",
+    "close_15_15": 54898.05,
+    "exit_spot": 55640.1,
+    "index_outcome": "stop",
+    "mae_pts": 1125.8,
+    "mfe_pts": 36.4,
+    "premium": {
+     "at_exit": 437.65,
+     "entry": 546.55,
+     "high": 547.7,
+     "last": 172.6,
+     "low": 145.75,
+     "max_gain_pct": 0.2,
+     "max_loss_pct": -73.3,
+     "pnl_1lot_if_followed": -3267.0
+    }
+   },
+   "signal": "BUY CALL",
+   "signal_bar": "09:35",
+   "spot": 55822.25,
+   "strategy": "camarilla",
+   "symbol": "BANKNIFTY",
+   "time": "09:36:09",
+   "vix": 14.82
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 15.93 between 11 and 18 (enough movement to pay for an option, but not a fear spike)"
+     ],
+     [
+      null,
+      "Last check 12:15 (next 12:45) \u00b7 band 54974.7 \u2013 56223.2"
+     ],
+     [
+      "True",
+      "12:15 close 54787.2 below lower band 54974.7"
+     ],
+     [
+      "True",
+      "Below VWAP 55389.0"
+     ],
+     [
+      true,
+      "Still below the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Trend-day catcher (own slot, trades alongside the others):"
+     ],
+     [
+      null,
+      "12:15 check \u00b7 band 54974.7 \u2013 56223.2 \u00b7 price above VWAP on 14% of today's bars (needs 80% on one side)"
+     ],
+     [
+      true,
+      "Trend day down: beyond the band and VWAP, held one side of VWAP all day"
+     ],
+     [
+      null,
+      "Fibonacci 0.618 breakout (own slot):"
+     ],
+     [
+      true,
+      "India VIX 15.93 between 11 and 20"
+     ],
+     [
+      null,
+      "Yesterday's levels: H4 55909.1 \u00b7 H3 55778.7 \u00b7 L3 55356.5 \u00b7 L4 55226.1"
+     ],
+     [
+      false,
+      "Waiting for a 5-min close below L4 (now 54787.2)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 15.93 between 11 and 20"
+     ],
+     [
+      null,
+      "Yesterday's levels: H4 55792.0 \u00b7 H3 55640.1 \u00b7 L3 55336.1 \u00b7 L4 55184.2"
+     ],
+     [
+      false,
+      "Waiting for a 5-min close below L4 (now 54787.2)"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": 1,
+      "value": "+0.70% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 1,
+      "value": "+0.40%"
+     },
+     {
+      "factor": "India VIX",
+      "score": -1,
+      "value": "15.93 (+7.9%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "0.85"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": -1,
+      "value": "\u20b9-1,149 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "54787.2 vs 55389.0"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -2,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "BANKNIFTY:noise:12:15",
+   "index": {
+    "entry": 54787.25,
+    "risk_pts": 171.72979489432763,
+    "rr": 4.0,
+    "sl": 54958.97979489433,
+    "target": 54100.33082042269
+   },
+   "lot": 30,
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 14223.0,
+    "delta": 0.51,
+    "entry_prem": 474.1,
+    "expiry": "2026-10-27",
+    "lots": 1,
+    "ltp": 472.85,
+    "sl_prem": 387.03,
+    "strike": 54900.0,
+    "target_prem": 822.37
+   },
+   "result": {
+    "R": -0.65,
+    "at": "15:15",
+    "close_15_15": 54898.05,
+    "exit_spot": 54898.1,
+    "index_outcome": "square-off",
+    "mae_pts": 140.8,
+    "mfe_pts": 90.8,
+    "premium": {
+     "at_exit": 377.05,
+     "entry": 474.1,
+     "high": 496.25,
+     "last": 377.05,
+     "low": 377.05,
+     "max_gain_pct": 4.7,
+     "max_loss_pct": -20.5,
+     "pnl_1lot_if_followed": -2912.0
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "12:15",
+   "spot": 54787.25,
+   "strategy": "noise",
+   "symbol": "BANKNIFTY",
+   "time": "12:16:09",
+   "vix": 15.93
+  }
+ ],
+ "settled": {
+  "at": "2026-10-21T15:16:05+05:30",
+  "lesson": "3 recommendations: 0 target, 2 stop, 1 squared off; -2.6R in total. Worst: BANKNIFTY CE 55700 at 09:36 (-1.0R). India VIX was 14.8 at the open - the band where the rules did best historically (50-75th percentile) is roughly 13-16. 0 of 2 high-score (3+) ideas ended positive. Carry forward: one trade per rule per day, the index-level stop decides, premium paths are shown so you can see where the plan and the option diverged.",
+  "recos": 3
+ },
+ "summary": {
+  "by_outcome": {
+   "square-off": 1,
+   "stop": 2,
+   "target": 0
+  },
+  "by_strategy": {
+   "camarilla": {
+    "R": -2.0,
+    "n": 2
+   },
+   "noise": {
+    "R": -0.65,
+    "n": 1
+   }
+  },
+  "paper_pnl": 0,
+  "paper_trades": 0,
+  "recommendations": 3,
+  "settled": 3,
+  "sum_R": -2.65
+ }
+}
