@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r35",
+   "date": "2026-10-21",
+   "area": "Index options",
+   "title": "Round 35: where can rounds 31-33 be improved? Conviction score robustness, graded size, one-direction on the current rules",
+   "asked": "Is there anything left to improve in rounds 31-33?",
+   "result": "Conviction score (round 33): no single part (5/15/60-min EMA or trend-line side) helps in all 4 years, but the 6-part total does; simpler scores are not better in both periods. Score >= 5 improves 2023-25 for every EMA length (10/20/50) and swing size (2/3); 2026 ranges +1.62L to +2.05L vs +1.83L. Walk-forward (choose on 2023-24) picks the same score >= 5 with 1.5x / 0.6x: 2025-26 +3.69L (fall -82k) vs shipped +3.35L (-78k) vs none +2.86L (-76k). Graded sizes are no better. Round 32's one-direction idea on the current rules is mixed by year (skipping trades against the first 15-min candle cuts 2023-25 from +3.32L to +1.14L). Trades against the 09:30 CPR side averaged Rs +585 vs +153, better every year (p = 0.02), but out of sample a 1.25x tilt adds only ~Rs 4k.",
+   "decision": "Information",
+   "summary": "The round-33 conviction sizing holds up: a walk-forward choice lands on the same threshold, and it is stable across settings. Nothing tested improves it in both periods, so no rule change. Round 31 (option selling) stays on hold. One lead - trades that break against the 09:30 CPR side - is on the watch-list.",
+   "period": "2023-01 to 2026-10-16"
+  },
+  {
    "id": "r34",
    "date": "2026-10-21",
    "area": "Index options",
@@ -19,7 +30,7 @@
    "area": "Index options",
    "title": "Sideways cut, 5-min / 15-min / 1-hour trend lines, conviction size, partial booking",
    "asked": "Can cutting sideways trades, multi-timeframe trend lines and bigger size on high-conviction trades with partial booking cut the deepest fall and raise profit or win rate?",
-   "result": "On the current rules (Rs 2,000 risk a trade, 2023-25 / 2026): as now +3.32L / +1.83L, fall -1.23L / -54k. Sideways cuts: best +2.90L / +1.88L (lower training profit); re-entry after a cut worse. Agreement score >= 5 as a filter: fall -51k / -37k but 2026 profit +1.07L. Partial booking half at 1R: win rate 45-48% but profit +40k / +94k. Conviction size 1.33x on score 5-6, 0.67x below (same average risk): +4.23L / +1.93L, fall -99k / -54k, better in every year; score effect present in every year and slot (p = 0.01), Nifty and Sensex only. Round-32 logic: no improvement makes it work.",
+   "result": "On the current rules (Rs 2,000 risk a trade, 2023-25 / 2026): as now +3.32L / +1.83L, fall -1.23L / -54k. Sideways cuts: best +2.90L / +1.88L (lower training profit); re-entry after a cut worse. Agreement score >= 5 as a filter: fall -51k / -37k but 2026 profit +1.07L. Partial booking half at 1R: win rate 45-48% but profit +40k / +94k. Conviction size 1.33x on score 5-6, 0.67x below (same average risk): +4.23L / +1.93L, fall -99k / -54k, better in every year; score effect present in every year and slot (p = 0.01), Nifty and Sensex only. Round-32 logic: no improvement makes it work. As shipped (Nifty and Sensex only, round 35 check): 2023-25 +4.22L (fall -1.08L), 2026 +2.01L (fall -57k, about 6% deeper than without).",
    "decision": "Adopted",
    "summary": "Decision: Adopted (conviction sizing, Nifty + Sensex Autopilot). Whether the 5-min, 15-min and 1-hour charts agree with the trade is the first add-on in many rounds that separates good trades from weak ones in every year. Used for size, not as a filter, it adds profit at the same risk. Cutting sideways trades and booking partial profits both cut the trend-day winners that pay for the system.",
    "period": "2023-01 to 2026-10-16"
@@ -1251,6 +1262,21 @@
     "r34"
    ],
    "next": "Re-run round 34 part B on 60+ sessions; only if Nifty with the spread filter is clearly positive, add it as a paper setup in the Scalp book."
+  },
+  {
+   "id": "p-cpr-against",
+   "area": "Index options",
+   "title": "Trades against the 09:30 CPR side: bigger size?",
+   "waiting_for": "More live trades",
+   "why": "Round 35: these trades averaged about 4x the others in every year 2023-26, but out of sample (chosen on 2023-24) a 1.25x tilt added only ~Rs 4k on 2025-26.",
+   "collecting": "Paper Autopilot trades (entry side vs the 09:30 CPR side)",
+   "since": "2026-10-21",
+   "need": 60,
+   "unit": "sessions",
+   "refs": [
+    "r35"
+   ],
+   "next": "If against-CPR trades keep beating the rest by a wide margin over 60 more sessions, test a 1.25x size for them on top of conviction sizing."
   }
  ]
 }

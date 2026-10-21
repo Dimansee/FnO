@@ -567,3 +567,22 @@ and volume filter, stop 0.5 / 1 / 2 ATR, target 1 / 1.5x, every trade closed at 
 0 of 72 profitable at 0.5%, 0.25% or 0.1% slippage; 1.66 million trades averaged -0.38 index points before costs, then ~Rs 119 fees
 and ~Rs 154 slippage. Real prices (11 sessions): -Rs 36.4L vs model -Rs 31.8L; 14 of 144 rows positive, all with the spread filter and
 on 11-93 trades each. Same verdict.
+
+## Round 35 — Where can rounds 31-33 be improved? (`round35.py`, results `round35_results.json`)
+Current-rule trades of round 33 (2,227, re-priced exactly), Rs 2,000 risk a trade. Round 31 (option selling) stays on hold.
+- **As shipped in round 33 (Nifty + Sensex only)**: 2023-25 +4.22L (fall -1.08L) vs +3.32L (-1.23L) without; 2026 +2.01L (fall -57k)
+  vs +1.83L (-54k). The 2026 fall is ~6% deeper than without (the all-index table in round 33 showed it unchanged).
+- **Which parts carry the score**: no single part (5 / 15 / 60-min EMA side or trend-line side) helps in all 4 years (best: 3 of 4);
+  the 6-part total does. Simpler scores (EMA parts only, trend lines only, 15-min + 1-hour only) are not better in both periods.
+- **Stability**: score >= 5 improves 2023-25 for every EMA length (10 / 20 / 50) and swing size (2 / 3): return / fall 3.6-3.8 vs 2.7.
+  2026 varies by setting (+1.62L to +2.05L vs +1.83L); the shipped EMA 20 / swing 2 sits in the middle-upper part of that range.
+- **Walk-forward** (choose on 2023-24 only, judge on 2025-26): it picks the same threshold, score >= 5, with 1.5x / 0.6x.
+  2025-26: +3.69L (fall -82k) vs shipped +3.35L (-78k) vs none +2.86L (-76k). Kept at 1.33x / 0.67x: the stronger tilt adds ~10%
+  profit but also deepens the fall.
+- **Graded size** (3 or 4 steps, linear): no better than the two-step rule.
+- **Round 32's one-direction idea on the current rules**: trades against the first 15-min candle were better in 2023 and 2025 and worse
+  in 2024 and 2026; skipping them cuts 2023-25 profit from +3.32L to +1.14L. Candle + pivot and CPR side: also mixed. Not adopted.
+- **One lead**: trades AGAINST the 09:30 CPR side (15% of trades) averaged Rs +585 vs +153 with it, better in every year, slot and
+  index (p = 0.02). But chosen on 2023-24 and judged on 2025-26 a 1.25x tilt adds only ~Rs 4k and deepens the fall slightly: the effect
+  is mostly 2023-24. Watch-list (pending item p-cpr-against).
+**No rule change.** The round-33 conviction sizing holds up; nothing tested here improves it in both periods.
