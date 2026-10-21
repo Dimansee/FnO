@@ -194,6 +194,12 @@ def stats_capital(acct) -> float:
     return cs if cs > 0 else float(acct.get("capital_before") or 0) or 1.0
 
 
+def week_pnl(trades) -> float:
+    today = C.today_ist()
+    wk_start = (today - timedelta(days=today.weekday())).isoformat()
+    return float(sum(h["pnl"] for h in trades if wk_start <= h["opened"][:10] <= today.isoformat()))
+
+
 def week_guard(trades, capital, limit=None) -> dict:
     """Round 18: after losing 4% of capital in a week, no new trades until Monday."""
     today = C.today_ist()

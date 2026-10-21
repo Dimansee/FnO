@@ -593,6 +593,13 @@ def settings_post():
             cur["enforce_limits"] = bool(p["enforce_limits"])
         if "auto_syms" in p:
             cur["auto_syms"] = [x for x in p["auto_syms"] if x in SV.ALL_SYMBOLS][:4]
+        if p.get("weekly_limit") in ("auto", "off", "custom"):
+            cur["weekly_limit"] = p["weekly_limit"]
+        if "weekly_limit_rs" in p:
+            v = float(p["weekly_limit_rs"] or 0)
+            if cur.get("weekly_limit") == "custom" and not 500 <= v <= 10_000_000:
+                raise ValueError("Weekly loss limit must be between ₹500 and ₹1 crore.")
+            cur["weekly_limit_rs"] = v
         store.put("prefs", cur)
     if "fii_manual" in b:
         v = b["fii_manual"]

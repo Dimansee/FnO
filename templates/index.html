@@ -836,6 +836,11 @@ details summary{cursor:pointer;font-size:13px}
       <div class="card" id="autoCard" style="border-left:3px solid var(--accent,#f2a93b)">
         <h3>🤖 Autopilot</h3>
         <label class="tog"><input type="checkbox" id="pfAutopilot"> Autopilot - the app decides everything itself and trades automatically</label>
+        <div class="row wrap" style="gap:10px;margin-top:10px;align-items:flex-end">
+          <div><label>Weekly loss limit</label><select id="pfWeekly"><option value="auto">Tested rule: 4% of equity (15% below ₹1 lakh)</option><option value="custom">My own amount per week</option><option value="off">Off - never stop for the week</option></select></div>
+          <div id="pfWeeklyRsBox"><label>Amount (₹)</label><input id="pfWeeklyRs" type="number" min="500" step="500" placeholder="e.g. 5000" style="width:130px"></div>
+        </div>
+        <p class="muted" style="font-size:12px;margin:6px 0 0" id="pfWeeklyNote"></p>
         <p class="muted" style="margin:8px 0 0">When ON it ignores the preferences below and uses the tested rules per index: Nifty - Noise band, Camarilla, trend-day catcher (from ₹40,000 equity) and Fibonacci breakout (from ₹2 lakh); Bank Nifty - Noise band and Camarilla; Sensex - Noise band, trend-day catcher and Fibonacci. Always the 1-strike in-the-money option. Position size is worked out from your <b>current equity</b> (so it compounds): lots = 1% of equity ÷ risk per lot - 1.33% when the 5-min, 15-min and 1-hour charts agree with the trade, 0.67% when they don't (Nifty and Sensex, round 33) - with a minimum of 1 lot while one lot risks no more than 15% of equity, otherwise it skips the trade. A weekly loss limit (15% below ₹1 lakh, 4% above), counted on the system's own trades only, stops new trades. When OFF, everything works exactly as set below. It is rule-based, not a promise of profit - see the Research tab (round 20) for the small-account results. Press <b>Save preferences</b> below after switching it.</p>
       </div>
       <div class="card" id="prefCard">
@@ -2662,6 +2667,7 @@ async function loadSettings() {
   $("#pfSize").value = pf.sizing || "risk"; $("#pfRisk").value = String(pf.risk_pct ?? 1);
   $("#pfNoise").checked = (pf.strategies || []).includes("noise"); $("#pfCam").checked = (pf.strategies || []).includes("camarilla");
   $("#pfAI").checked = (pf.strategies || []).includes("ai"); $("#pfTrend").checked = (pf.strategies || []).includes("trend"); $("#pfFib").checked = (pf.strategies || []).includes("fib");
+  $("#pfWeekly").value = pf.weekly_limit || "auto"; $("#pfWeeklyRs").value = pf.weekly_limit_rs || ""; weeklyUi();
   $("#pfAutopilot").checked = !!pf.autopilot; $("#pfAuto").checked = !!pf.auto; $("#pfLimits").checked = !!pf.enforce_limits; $("#pfFills").value = pf.fills || "realistic";
   if (!PUSH_INIT) { PUSH_INIT = true; pushInit(); }
   $("#pfSyms").innerHTML = Object.keys(IDX_LABEL).map(x => `<label class="tog" style="margin-right:14px"><input type="checkbox" data-asym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${IDX_LABEL[x]}${x === "SENSEX" ? ' <span class="muted" style="font-size:11px">(Noise + trend-day + Fibonacci; real Sensex option prices recorded from 19 Oct 2026)</span>' : ""}</label>`).join("");
@@ -2709,10 +2715,17 @@ $("#pfSave").onclick = async () => {
   const strategies = [$("#pfNoise").checked && "noise", $("#pfCam").checked && "camarilla", $("#pfAI").checked && "ai", $("#pfTrend").checked && "trend", $("#pfFib").checked && "fib"].filter(Boolean);
   const auto_syms = [...document.querySelectorAll("[data-asym]")].filter(x => x.checked).map(x => x.dataset.asym);
   try {
-    await post("/api/settings", {prefs: {sizing: $("#pfSize").value, risk_pct: +$("#pfRisk").value, strategies, auto: $("#pfAuto").checked, autopilot: $("#pfAutopilot").checked, auto_syms, enforce_limits: $("#pfLimits").checked, fills: $("#pfFills").value}});
+    await post("/api/settings", {prefs: {sizing: $("#pfSize").value, risk_pct: +$("#pfRisk").value, strategies, auto: $("#pfAuto").checked, autopilot: $("#pfAutopilot").checked, auto_syms, enforce_limits: $("#pfLimits").checked, fills: $("#pfFills").value, weekly_limit: $("#pfWeekly").value, weekly_limit_rs: +$("#pfWeeklyRs").value || 0}});
     toast("Preferences saved"); loadSettings();
   } catch (e) { toast(e.message); }
 };
+function weeklyUi() {
+  const v = $("#pfWeekly").value; $("#pfWeeklyRsBox").style.display = v === "custom" ? "" : "none";
+  $("#pfWeeklyNote").textContent = {auto: "Counts only the system's own trades. Tested in rounds 18 and 20: on large accounts it raised profit and cut the deepest fall; on small accounts (15%) it made about the same as no limit.",
+    custom: "Stops new automatic trades for the rest of the week once the system's own trades have lost this much since Monday. Not backtested - your choice.",
+    off: "No weekly stop. On a ₹20,000 account this tested about the same as the 15% limit; on large accounts the 4% limit did better."}[v];
+}
+$("#pfWeekly").onchange = weeklyUi;
 $("#pref").onchange = async () => { await post("/api/settings", {broker_pref: $("#pref").value}); toast("Saved"); };
 $("#fiiSave").onclick = async () => { await post("/api/settings", {fii_manual: $("#fiiIn").value}); toast("Saved"); };
 $("#capSave").onclick = async () => { try { const r = await post("/api/account/capital", {capital: +$("#capIn").value}); toast(r.message); } catch (e) { toast(e.message); } };

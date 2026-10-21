@@ -341,7 +341,13 @@ def risk_guard(pos, tr, capital, pf, auto=False, equity=None) -> dict:
     if pf.get("autopilot") or auto:
         tr = [h for h in tr if h.get("mode") == "signal"]
         pos = [p for p in pos if p.get("mode") == "signal"]
-    if pf.get("autopilot"):
+    wl = pf.get("weekly_limit") or "auto"                         # Settings: auto (tested rule) / off / custom rupee amount
+    if wl == "off":
+        wg = {"blocked": False}
+    elif wl == "custom" and float(pf.get("weekly_limit_rs") or 0) > 0:
+        lim = float(pf["weekly_limit_rs"]); wk = P.week_pnl(tr)
+        wg = {"blocked": wk <= -lim, "reason": f"Weekly loss limit hit (₹{wk:,.0f} this week, your limit ₹{lim:,.0f} in Settings). No new trades until Monday."}
+    elif pf.get("autopilot"):
         wg = P.week_guard(tr, eq, C.AUTOPILOT_WEEKLY_SMALL if eq < C.AUTOPILOT_SMALL_ACCOUNT else None)
     else:
         wg = P.week_guard(tr, capital)

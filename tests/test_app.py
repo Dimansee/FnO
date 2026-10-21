@@ -616,3 +616,18 @@ store.clear_trades(); j(c.post("/api/account/reset", json={"capital": 200000}))
 r = j(c.post("/api/account/capital", json={"capital": 0}))
 assert r["ok"] is False and "profit" in r["message"]                     # no profit yet: refused
 print("capital 0 (profit only) OK")
+
+# weekly loss limit: tested rule / own amount / off
+store.clear_trades()
+_mon = (C.today_ist() - timedelta(days=C.today_ist().weekday())).isoformat()
+store.insert_trade({"id": "wl1", "symbol": "NIFTY", "mode": "signal", "plan": {"strategy": "noise", "auto": True},
+                    "opened": f"{_mon}T09:30:00+05:30", "closed": f"{_mon}T10:00:00+05:30", "pnl": -3000.0, "legs": []})
+_t = store.trades()
+assert SV3.risk_guard([], _t, 25000, {"autopilot": True}, auto=True, equity=25000)["blocked"] is False          # 15% of 25k = 3,750
+assert SV3.risk_guard([], _t, 25000, {"autopilot": True, "weekly_limit": "custom", "weekly_limit_rs": 2500}, auto=True, equity=25000)["blocked"]
+assert not SV3.risk_guard([], _t, 25000, {"autopilot": True, "weekly_limit": "off"}, auto=True, equity=25000).get("blocked") or \
+       "Weekly" not in SV3.risk_guard([], _t, 25000, {"autopilot": True, "weekly_limit": "off"}, auto=True, equity=25000).get("reason", "")
+assert j(c.post("/api/settings", json={"prefs": {"weekly_limit": "custom", "weekly_limit_rs": 4000}}))["ok"]
+assert SV3.prefs()["weekly_limit"] == "custom" and SV3.prefs()["weekly_limit_rs"] == 4000
+j(c.post("/api/settings", json={"prefs": {"weekly_limit": "auto"}})); store.clear_trades()
+print("weekly limit choice OK")
