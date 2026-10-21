@@ -578,3 +578,20 @@ assert j(c.get("/api/account/origins"))["removed_total"] == 2
 assert j(c.post("/api/account/restore-trades", json={}))["restored"] == 2 and len(store.trades()) == 3
 store.clear_trades()
 print("remove / restore own trades OK")
+
+# Autopilot's weekly / daily limits count only the system's own trades (19 Oct 2026: a manual loss blocked Autopilot)
+from fno import service as SV3, paper as P3
+store.clear_positions(); store.clear_trades()
+_mon = (C.today_ist() - timedelta(days=C.today_ist().weekday())).isoformat()
+for tid, mode, pnl in (("w1", "signal", -6415.0), ("w2", "manual", -8321.0)):
+    store.insert_trade({"id": tid, "symbol": "NIFTY", "mode": mode, "plan": ({"strategy": "noise", "auto": True} if mode == "signal" else None),
+                        "opened": f"{_mon}T09:30:00+05:30", "closed": f"{_mon}T10:00:00+05:30", "pnl": pnl, "legs": []})
+_pf = {"autopilot": True, "enforce_limits": False}
+_g = SV3.risk_guard(store.positions(), store.trades(), 215000, _pf, auto=True)
+assert not _g.get("blocked") or "Weekly" not in _g.get("reason", ""), _g          # system trades alone: -6,415 < 4% of equity
+store.insert_trade({"id": "w3", "symbol": "NIFTY", "mode": "signal", "plan": {"strategy": "noise", "auto": True},
+                    "opened": f"{_mon}T11:00:00+05:30", "closed": f"{_mon}T11:30:00+05:30", "pnl": -4000.0, "legs": []})
+_g = SV3.risk_guard(store.positions(), store.trades(), 215000, _pf, auto=True)
+assert _g["blocked"] and "manual trades not counted" in _g["reason"], _g
+store.clear_trades()
+print("limits count system trades only OK")

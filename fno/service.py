@@ -333,12 +333,20 @@ def _size_capital(acct, tr, pf) -> float:
 
 
 def risk_guard(pos, tr, capital, pf, auto=False) -> dict:
-    """The daily risk limits (two losers / -2% / max trades). On the demo account they only advise unless enforced in Settings."""
+    """The daily risk limits (two losers / -2% / max trades). On the demo account they only advise unless enforced in Settings.
+    Autopilot / automatic entries count only the system's own trades (signal trades): the limits were tested on the rules' trades
+    (rounds 18 and 20), and a manual trade's loss must not switch the system off (19 Oct 2026: a manual -Rs 8,321 tripped the weekly
+    limit and blocked Autopilot for three days although its own trades were well inside it)."""
+    eq = float(capital) + sum(h["pnl"] for h in tr)                 # account equity (all trades) - the size of the limit
+    if pf.get("autopilot") or auto:
+        tr = [h for h in tr if h.get("mode") == "signal"]
+        pos = [p for p in pos if p.get("mode") == "signal"]
     if pf.get("autopilot"):
-        eq = float(capital) + sum(h["pnl"] for h in tr)
         wg = P.week_guard(tr, eq, C.AUTOPILOT_WEEKLY_SMALL if eq < C.AUTOPILOT_SMALL_ACCOUNT else None)
     else:
         wg = P.week_guard(tr, capital)
+    if (pf.get("autopilot") or auto) and wg.get("blocked"):
+        wg = {**wg, "reason": wg["reason"].replace(" this week,", " this week on the system's own trades - manual trades not counted,")}
     if wg.get("blocked") and (auto or pf.get("enforce_limits")):   # the weekly limit always applies to automatic trades (round 18: it improved profit and the deepest fall)
         return wg
     g = P.day_guard(pos, tr, capital)
