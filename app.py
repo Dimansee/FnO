@@ -431,6 +431,21 @@ def account_capital():
     return jsonify({"ok": True, "message": f"Demo capital set to ₹{cap:,.0f} (positions and journal kept)."})
 
 
+@app.get("/api/changes")
+def changes_list():
+    return jsonify({"changes": SV.changes()})
+
+
+@app.post("/api/changes/<cid>")
+def changes_set(cid):
+    b = request.get_json(force=True) or {}
+    try:
+        msg = SV.revert_change(cid, b.get("on"))
+    except ValueError as e:
+        return jsonify({"ok": False, "message": str(e)}), 400
+    return jsonify({"ok": True, "message": msg, "changes": SV.changes()})
+
+
 @app.get("/api/account/origins")
 def account_origins():
     from fno import paper as P

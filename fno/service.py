@@ -338,7 +338,7 @@ def risk_guard(pos, tr, capital, pf, auto=False, equity=None) -> dict:
     (rounds 18 and 20), and a manual trade's loss must not switch the system off (19 Oct 2026: a manual -Rs 8,321 tripped the weekly
     limit and blocked Autopilot for three days although its own trades were well inside it)."""
     eq = float(equity) if equity is not None else float(capital) + sum(h["pnl"] for h in tr)   # account equity (all trades) - the size of the limit
-    if pf.get("autopilot") or auto:
+    if (pf.get("autopilot") or auto) and flag("limits_system_only"):
         tr = [h for h in tr if h.get("mode") == "signal"]
         pos = [p for p in pos if p.get("mode") == "signal"]
     wl = pf.get("weekly_limit") or "auto"                         # Settings: auto (tested rule) / off / custom rupee amount
@@ -351,7 +351,7 @@ def risk_guard(pos, tr, capital, pf, auto=False, equity=None) -> dict:
         wg = P.week_guard(tr, eq, C.AUTOPILOT_WEEKLY_SMALL if eq < C.AUTOPILOT_SMALL_ACCOUNT else None)
     else:
         wg = P.week_guard(tr, capital)
-    if (pf.get("autopilot") or auto) and wg.get("blocked"):
+    if (pf.get("autopilot") or auto) and wg.get("blocked") and flag("limits_system_only"):
         wg = {**wg, "reason": wg["reason"].replace(" this week,", " this week on the system's own trades - manual trades not counted,")}
     if wg.get("blocked") and (auto or pf.get("enforce_limits")):   # the weekly limit always applies to automatic trades (round 18: it improved profit and the deepest fall)
         return wg
@@ -571,10 +571,76 @@ def place_signal(symbol, strike=None, auto=False, which=None):
                            clean(order), clean({**ev["plan"], "auto": auto, "ctx": _entry_ctx(g)}))
 
 
+# ---------------- recent changes the user can switch back (Research tab -> Recent changes)
+FLAGS_KEY = "change_flags"
+
+
+def flag(name: str) -> bool:
+    """True = the change is in use (default); False = switched back to how it worked before."""
+    try:
+        return bool((store.get(FLAGS_KEY) or {}).get(name, True))
+    except Exception:
+        return True
+
+
+def set_flag(name: str, on: bool):
+    f = store.get(FLAGS_KEY) or {}
+    f[name] = bool(on)
+    store.put(FLAGS_KEY, f)
+
+
+def changes() -> list[dict]:
+    """The recent changes, with their state, for the Research tab."""
+    acct = P.account(); pf = prefs()
+    try:
+        removed = P.origin_summary()["removed_total"]
+    except Exception:
+        removed = 0
+    po = float(acct.get("capital_start") or 0) <= 0 and acct.get("capital_before")
+    return [
+        {"id": "conviction", "date": "2026-10-21", "title": "Conviction sizing (round 33)",
+         "what": "Autopilot risks 1.33% when the 5-min, 15-min and 1-hour charts agree with the trade (score 5-6) and 0.67% when they don't, on Nifty and Sensex.",
+         "before": "Every trade risks 1% of equity.", "on": flag("conviction"), "kind": "switch"},
+        {"id": "limits_system_only", "date": "2026-10-21", "title": "Loss limits count only the system's own trades",
+         "what": "Autopilot's weekly and daily loss limits ignore your manual trades, so a manual loss can't stop the system.",
+         "before": "Every trade in the account, manual ones included, counts towards the limits.", "on": flag("limits_system_only"), "kind": "switch"},
+        {"id": "weekly_limit", "date": "2026-10-21", "title": "Your weekly loss limit choice",
+         "what": {"auto": "Tested rule (4% of equity, 15% below ₹1 lakh).", "off": "Off - never stops for the week.",
+                  "custom": f"Your own amount: ₹{float(pf.get('weekly_limit_rs') or 0):,.0f} a week."}[pf.get("weekly_limit") or "auto"],
+         "before": "Tested rule (4% of equity, 15% below ₹1 lakh).", "on": (pf.get("weekly_limit") or "auto") != "auto", "kind": "action",
+         "action": "Back to the tested rule"},
+        {"id": "profit_only", "date": "2026-10-21", "title": "Capital 0 - trading only the profit",
+         "what": f"The starting ₹{float(acct.get('capital_before') or 0):,.0f} is taken out; the account trades its profit only." if po else "Not in use.",
+         "before": f"Capital back to ₹{float(acct.get('capital_before') or 0):,.0f}." if po else "", "on": bool(po), "kind": "action",
+         "action": "Put the starting capital back"},
+        {"id": "removed_trades", "date": "2026-10-21", "title": "Your own trades taken out of the P&L",
+         "what": f"{removed} trade(s) kept aside, not counted in P&L or stats." if removed else "Not in use.",
+         "before": "All trades counted.", "on": bool(removed), "kind": "action", "action": "Put them back"},
+    ]
+
+
+def revert_change(cid: str, on: bool | None = None) -> str:
+    if cid in ("conviction", "limits_system_only"):
+        set_flag(cid, bool(on))
+        return ("Switched on again." if on else "Switched back to how it worked before.")
+    if cid == "weekly_limit":
+        cur = store.get("prefs") or {}; cur["weekly_limit"] = "auto"; store.put("prefs", cur)
+        return "Weekly loss limit back to the tested rule."
+    if cid == "profit_only":
+        a = P.account()
+        if float(a.get("capital_start") or 0) > 0 or not a.get("capital_before"):
+            return "Capital is not set to 0 - nothing to change."
+        store.put("account", {**{k: v for k, v in a.items() if k not in ("capital_before", "profit_only_since")}, "capital_start": float(a["capital_before"])})
+        return f"Starting capital back to ₹{float(a['capital_before']):,.0f}."
+    if cid == "removed_trades":
+        return f"Restored {P.restore_removed()['restored']} trade(s)."
+    raise ValueError("Unknown change.")
+
+
 def _conviction(symbol, g, plan, pf) -> dict | None:
     """Round 33: Autopilot sizes Nifty / Sensex trades by the 5-min / 15-min / 1-hour agreement score (1.33x risk on 5-6 of 6,
     0.67x below). None when it does not apply or the score cannot be worked out (the trade then keeps its normal size)."""
-    if not pf.get("autopilot") or symbol not in C.CONVICTION_SYMS or (plan or {}).get("strategy") not in C.CONVICTION_STRATS:
+    if not pf.get("autopilot") or symbol not in C.CONVICTION_SYMS or (plan or {}).get("strategy") not in C.CONVICTION_STRATS or not flag("conviction"):
         return None
     try:
         today, hist = S.session_frames(g["candles"], g["now"])

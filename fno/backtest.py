@@ -104,7 +104,12 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
     vx = vix_intraday.sort_index() if vix_intraday is not None and len(vix_intraday) else None
     budget_pct = (risk_pct or C.RISK_PER_TRADE * 100) / 100
     size_fn = None
-    if strategy == "autopilot" and symbol in C.CONVICTION_SYMS and sizing != "one_lot":   # round 33 conviction sizing
+    try:
+        from . import store as _st
+        conv_on = bool((_st.get("change_flags") or {}).get("conviction", True))
+    except Exception:
+        conv_on = True
+    if strategy == "autopilot" and symbol in C.CONVICTION_SYMS and sizing != "one_lot" and conv_on:   # round 33 conviction sizing
         mtf = S.mtf_frames(candles)
         size_fn = lambda ts, sg: S.conviction_mult(S.mtf_score_at(mtf, ts + timedelta(minutes=C.CANDLE_MIN), sg))  # noqa: E731
     for n, (d, day) in enumerate(frames):

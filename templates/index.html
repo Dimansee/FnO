@@ -729,7 +729,8 @@ details summary{cursor:pointer;font-size:13px}
   </section>
 
   <section id="t-research" class="hidden">
-    <div id="rsPending"></div>
+    <div class="card" id="rsChanges"><h3 style="margin:0 0 4px">Recent changes</h3><p class="muted" style="margin:0">Loading…</p></div>
+    <div id="rsPending" style="margin-top:14px"></div>
     <div class="card" style="margin-top:14px">
       <div class="cardhead"><h3 style="margin:0">Research log</h3><span class="muted" id="rsCount"></span></div>
       <p class="muted" style="margin:6px 0 10px" id="rsNote"></p>
@@ -2112,7 +2113,23 @@ function studyR7(x, k) {
 }
 
 const RS_DEC = {"Adopted": "up", "Not adopted": "down", "Watch-list": "", "Information": "muted"};
+async function loadChanges() {
+  try {
+    const d = await api("/api/changes");
+    const row = c => `<div class="lnote"><div class="row between wrap" style="gap:10px"><div style="flex:1;min-width:240px"><b>${esc(c.title)}</b> <span class="muted mono" style="font-size:12px">${esc(c.date)}</span>
+      <span class="tag ${c.on ? "tup" : ""}" style="margin-left:6px">${c.kind === "switch" ? (c.on ? "In use" : "Switched back") : (c.on ? "In use" : "Not in use")}</span>
+      <div style="font-size:13.5px;margin-top:3px">${esc(c.what)}</div>${c.before ? `<div class="muted" style="font-size:12.5px">Before: ${esc(c.before)}</div>` : ""}</div>
+      <div>${c.kind === "switch" ? `<button class="${c.on ? "danger" : "primary"}" data-chg="${c.id}" data-on="${c.on ? 0 : 1}">${c.on ? "Switch back to before" : "Switch on again"}</button>`
+        : (c.on ? `<button class="danger" data-chg="${c.id}">${esc(c.action)}</button>` : "")}</div></div></div>`;
+    $("#rsChanges").innerHTML = `<h3 style="margin:0 0 4px">Recent changes</h3><p class="muted" style="margin:0 0 8px;font-size:12.5px">If something feels off after a change, switch it back here - it takes effect from the next trade. Nothing is deleted.</p>${d.changes.map(row).join("")}`;
+    document.querySelectorAll("[data-chg]").forEach(b => b.onclick = async () => {
+      if (!confirm("Change this back? It takes effect from the next trade.".replace("back", b.dataset.on === "1" ? "on again" : "back"))) return;
+      try { const r = await post("/api/changes/" + b.dataset.chg, {on: b.dataset.on === "1"}); toast(r.message); loadChanges(); } catch (e) { toast(e.message); }
+    });
+  } catch (e) { $("#rsChanges").innerHTML = `<h3>Recent changes</h3><p class="muted">Could not load: ${esc(e.message)}</p>`; }
+}
 async function loadResearch() {
+  loadChanges();
   if (!S.rlog) S.rlog = await api("/api/research/log");
   const L = S.rlog, items = L.entries || [];
   const areas = [...new Set(items.map(x => x.area))];

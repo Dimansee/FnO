@@ -631,3 +631,31 @@ assert j(c.post("/api/settings", json={"prefs": {"weekly_limit": "custom", "week
 assert SV3.prefs()["weekly_limit"] == "custom" and SV3.prefs()["weekly_limit_rs"] == 4000
 j(c.post("/api/settings", json={"prefs": {"weekly_limit": "auto"}})); store.clear_trades()
 print("weekly limit choice OK")
+
+# Research tab: recent changes can be switched back
+ch = {c["id"]: c for c in j(c.get("/api/changes"))["changes"]}
+assert ch["conviction"]["on"] and ch["limits_system_only"]["on"]
+assert j(c.post("/api/changes/conviction", json={"on": False}))["ok"]
+assert not SV3.flag("conviction")
+assert SV3._conviction("NIFTY", _g, {"strategy": "noise", "opt": "CE"}, {"autopilot": True}) is None       # switched back: normal size
+j(c.post("/api/changes/conviction", json={"on": True})); assert SV3.flag("conviction")
+# limits: switched back -> manual losses count again
+store.clear_trades()
+for tid, mode, pnl in (("v1", "signal", -2000.0), ("v2", "manual", -7000.0)):
+    store.insert_trade({"id": tid, "symbol": "NIFTY", "mode": mode, "plan": ({"strategy": "noise", "auto": True} if mode == "signal" else None),
+                        "opened": f"{_mon}T09:30:00+05:30", "closed": f"{_mon}T10:00:00+05:30", "pnl": pnl, "legs": []})
+_t = store.trades()
+assert not SV3.risk_guard([], _t, 200000, {"autopilot": True}, auto=True, equity=191000).get("blocked")
+j(c.post("/api/changes/limits_system_only", json={"on": False}))
+assert SV3.risk_guard([], _t, 200000, {"autopilot": True}, auto=True, equity=191000)["blocked"]
+j(c.post("/api/changes/limits_system_only", json={"on": True}))
+# weekly limit and profit-only reverts
+j(c.post("/api/settings", json={"prefs": {"weekly_limit": "off"}}))
+assert j(c.post("/api/changes/weekly_limit", json={}))["ok"] and SV3.prefs()["weekly_limit"] == "auto"
+store.clear_trades(); j(c.post("/api/account/reset", json={"capital": 200000}))
+store.insert_trade({"id": "pp2", "symbol": "NIFTY", "mode": "signal", "plan": {"strategy": "noise", "auto": True},
+                    "opened": "2026-09-20T10:00:00+05:30", "closed": "2026-09-20T11:00:00+05:30", "pnl": 25000.0, "legs": []})
+assert j(c.post("/api/account/capital", json={"capital": 0}))["ok"]
+assert j(c.post("/api/changes/profit_only", json={}))["ok"] and P4.account()["capital_start"] == 200000
+store.clear_trades()
+print("recent changes revert OK")
