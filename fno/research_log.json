@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "jr3",
+   "date": "2026-10-21",
+   "area": "Data & live checks",
+   "title": "Live review 19-21 Oct 2026: a manual trade switched Autopilot off for three days",
+   "asked": "What does the after-close learning note for 19-21 Oct show, and is anything to fix?",
+   "result": "On Monday 19 Oct Autopilot's own trades lost Rs 6,415 (two Camarilla puts stopped at 09:35 / 09:38, two Fibonacci puts made Rs 1,556). Two manual Nifty trades lost Rs 8,092 (one -Rs 8,321 closed at 13:12). Together -Rs 14,507 tripped the 4% weekly limit at 13:13, and every Autopilot signal was skipped for the rest of Monday and all of Wednesday 21 Oct (20 Oct was the Dussehra holiday) - 13 skipped signals. The system's own trades alone were well inside the limit (about Rs 8,600).",
+   "decision": "Adopted",
+   "summary": "Fixed: Autopilot's weekly and daily limits now count only the system's own trades, as in the research (rounds 18 and 20); a manual trade can no longer switch the system off, and the limit message says so. Also: 'Where it lagged' groups repeated reasons and labels its day move as open -> close.",
+   "period": "2026-10-19 to 2026-10-21"
+  },
+  {
    "id": "r35",
    "date": "2026-10-21",
    "area": "Index options",
