@@ -204,7 +204,7 @@ details[open] summary::before{transform:rotate(45deg) translate(-2px,-2px)}
 .legend .t{font-family:var(--display);font-weight:650;color:var(--text);font-size:12.5px}
 .legend b{color:var(--text);font-weight:600}
 .lay button svg{display:block}
-.tog{display:inline-flex;align-items:center;gap:7px;margin:0;font-size:13.5px;color:var(--text);cursor:pointer;white-space:nowrap}
+.tog{display:inline-flex;align-items:flex-start;gap:7px;margin:0;font-size:13.5px;color:var(--text);cursor:pointer;white-space:normal;max-width:100%;line-height:1.45}.tog input{flex:none;margin-top:3px}
 .tog input{min-width:auto}
 .hint{font-size:12.5px;margin-top:6px}
 #compareCard.max{position:fixed;inset:0;z-index:120;margin:0!important;border-radius:0;overflow:auto;padding:14px 16px}
@@ -226,7 +226,7 @@ body.chartmax{overflow:hidden}
 .news li{padding:9px 0;border-bottom:1px solid var(--rowline);list-style:none;display:flex;gap:10px}
 .news ul{padding:0;margin:0}
 .formrow{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
-.formrow>div{flex:1;min-width:120px}
+.formrow>div{flex:1 1 160px;min-width:150px}
 .seg{display:inline-flex;border:1px solid var(--line2);border-radius:var(--r-sm);overflow:hidden;background:var(--bg2)}
 .seg button{border:none;border-radius:0;background:transparent;padding:7px 13px;white-space:nowrap;color:var(--muted)}
 .seg button.on{background:var(--gold);color:var(--gold-ink);font-weight:650}
@@ -395,7 +395,7 @@ button.ghost{background:transparent;border-style:dashed;color:var(--muted)}
 label.mini{display:inline-flex;align-items:center;gap:4px;margin:0;font-size:12px}
 .cond .x{padding:4px 8px;margin-left:auto;background:transparent;border-color:transparent;color:var(--faint)}
 .verdict ul{margin:0;padding-left:18px;display:grid;gap:5px}
-.note,.lesson,.pend,.rule2{padding:10px 0;border-top:1px solid var(--line)}.note:first-of-type,.lesson:first-child,.pend:first-of-type,.rule2:first-of-type{border-top:none;padding-top:0}
+.lnote,.lesson,.pend,.rule2{padding:10px 0;border-top:1px solid var(--line)}.lnote:first-of-type,.lesson:first-child,.pend:first-of-type,.rule2:first-of-type{border-top:none;padding-top:0}
 .rule2{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
 .lb{padding:4px 0;font-size:13px}
 ul.tight{margin:4px 0 6px;padding-left:18px;color:var(--muted);font-size:13px}
@@ -452,6 +452,22 @@ details summary{cursor:pointer;font-size:13px}
 .seg.ghostseg{border:1px solid var(--line);padding:4px 10px;font-size:12.5px}
 .copy{display:flex;gap:8px}.copy input{flex:1}.flowoff #flowBody,.flowoff #flowEmpty{display:none!important}.flowoff #flowNote{display:block}
 #flowCard:not(.flowoff) #flowNote{display:none}
+
+/* layout review (Oct 2026) */
+.k5{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media(max-width:900px){.k5{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:520px){.k5{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.grid.g2>.span2{grid-column:1/-1}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:10px;align-items:end}.formgrid>div{min-width:0}
+@media (pointer:coarse),(max-width:600px){button.mini,.ghostseg,button.ghost{min-height:34px;padding-top:5px;padding-bottom:5px}button.mini{padding-left:10px;padding-right:10px}}
+@media(max-width:600px){
+  header .bar{flex-wrap:wrap;row-gap:8px;column-gap:8px}
+  header .bar .spacer{display:none}
+  header .brand{order:1}#wsSwitch{order:2}#themeBtn{order:3;margin-left:auto}
+  #symbol{order:4;flex:1 1 120px;min-width:0}#srcPill{order:5;max-width:140px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  header .bar>label{order:6}#refresh{order:7}
+  #factors td:first-child{min-width:150px;white-space:normal}#factors .muted,#factors small{display:none}
+}
 </style>
 </head>
 <body>
@@ -698,7 +714,7 @@ details summary{cursor:pointer;font-size:13px}
   <section id="t-backtest" class="hidden">
     <div class="card">
       <p style="margin-top:0">Replays today's rules on the latest ~60 days of 5-minute data (the first 14 sessions are only used to measure the usual move). The studies that chose these rules, with dates and summaries, are in the <b>Research</b> tab.</p>
-      <div class="formrow">
+      <div class="formrow formgrid">
         <div><label>Instrument</label><select id="btSym" style="width:100%"></select></div>
         <div><label>Strategy</label><select id="btStrat" style="width:100%"><option value="autopilot" selected>Autopilot rules for this index</option><option value="both">Noise + Camarilla</option><option value="noise">Noise band only</option><option value="camarilla">Camarilla breakout only</option><option value="trend">Trend-day catcher only</option><option value="fib">Fibonacci 0.618 breakout only</option><option value="all">Both + trend-day catcher</option><option value="ai">AI model (experimental)</option></select></div>
         <div><label>Period</label><select id="btDays" style="width:100%"><option value="30">Last 30 trading days</option><option value="60" selected>Last 60 days</option><option value="90">Last 90 days</option><option value="120">Last 120 days</option><option value="180">Last 180 days</option><option value="250">Last 1 year (250 days)</option><option value="500">Last 2 years (500 days)</option></select></div>
@@ -706,7 +722,7 @@ details summary{cursor:pointer;font-size:13px}
         <div><label>Capital (₹)</label><input id="btCap" type="number" value="200000" min="1000" step="5000" style="width:100%"></div>
         <div><label>Position size</label><select id="btSize" style="width:100%"><option value="risk" selected>Risk 1% per trade (the rule)</option><option value="one_lot">Always 1 lot (small accounts)</option></select></div>
         <div><label>Strike</label><select id="btOtm" style="width:100%"><option value="-1" selected>1 strike ITM (the rule)</option><option value="0">ATM</option><option value="1">1 strike OTM (cheaper)</option><option value="2">2 strikes OTM (cheapest)</option></select></div>
-        <div style="flex:0"><button class="primary" id="btRun">▶ Run backtest</button></div>
+        <div><button class="primary" id="btRun" style="width:100%">▶ Run backtest</button></div>
       </div>
     </div>
     <div id="btOut" style="margin-top:14px"></div>
@@ -820,7 +836,7 @@ details summary{cursor:pointer;font-size:13px}
       <div class="card" id="autoCard" style="border-left:3px solid var(--accent,#f2a93b)">
         <h3>🤖 Autopilot</h3>
         <label class="tog"><input type="checkbox" id="pfAutopilot"> Autopilot - the app decides everything itself and trades automatically</label>
-        <p class="muted" style="margin:8px 0 0">When ON it ignores the preferences below and uses the tested rules: Nifty + Bank Nifty, both strategies, the 1-strike in-the-money option, a stop of 2 × ATR, and a noise band of 1.75×. Position size is worked out from your <b>current equity</b> (so it compounds): lots = 1% of equity ÷ risk per lot, with a minimum of 1 lot while one lot risks no more than 15% of equity, otherwise it skips the trade. A weekly loss limit (15% below ₹1 lakh, 4% above) stops new trades. When OFF, everything works exactly as set below. It is rule-based, not a promise of profit - see the Research tab (round 20) for the small-account results. Press <b>Save preferences</b> below after switching it.</p>
+        <p class="muted" style="margin:8px 0 0">When ON it ignores the preferences below and uses the tested rules per index: Nifty - Noise band, Camarilla, trend-day catcher (from ₹40,000 equity) and Fibonacci breakout (from ₹2 lakh); Bank Nifty - Noise band and Camarilla; Sensex - Noise band, trend-day catcher and Fibonacci. Always the 1-strike in-the-money option. Position size is worked out from your <b>current equity</b> (so it compounds): lots = 1% of equity ÷ risk per lot - 1.33% when the 5-min, 15-min and 1-hour charts agree with the trade, 0.67% when they don't (Nifty and Sensex, round 33) - with a minimum of 1 lot while one lot risks no more than 15% of equity, otherwise it skips the trade. A weekly loss limit (15% below ₹1 lakh, 4% above), counted on the system's own trades only, stops new trades. When OFF, everything works exactly as set below. It is rule-based, not a promise of profit - see the Research tab (round 20) for the small-account results. Press <b>Save preferences</b> below after switching it.</p>
       </div>
       <div class="card" id="prefCard">
         <h3>Trading preferences</h3>
@@ -2624,7 +2640,7 @@ async function loadJournal() {
     <td><details><summary style="cursor:pointer">basis</summary><ul class="checks" style="font-size:12px">${r.basis.checks.map(([ok, t]) => `<li><span class="ic">${ok === true ? "✅" : ok === false ? "❌" : "👀"}</span><span>${esc(t)}</span></li>`).join("")}</ul>${r.basis.ai ? `<div class="muted" style="font-size:12px">${r.basis.ai.reasons.map(x => `${esc(x.factor)} ${sgn(x.effect)}R`).join(" · ")}</div>` : ""}</details></td></tr>`; };
   const aiRows = sym => (j.ai[sym] || []).map(x => `<tr><td class="mono">${esc(x.bar)}</td><td class="mono">${n2(x.spot)}</td><td class="${x.side === "CE" ? "up" : "down"}">${x.side === "CE" ? "CALL" : "PUT"} · ${x.stop_k}×ATR</td><td class="mono ${cls(x.exp_r)}">${sgn(x.exp_r)}</td><td class="mono">${Math.round(x.p_win * 100)}%</td><td>${x.trade ? '<span class="badge ok">trade</span>' : '<span class="muted">wait</span>'}</td></tr>`).join("");
   $("#jrBody").innerHTML = `
-    <div class="k4" style="margin-top:14px;grid-template-columns:repeat(5,1fr)">${kpi("Recommendations", sm.recommendations, `${sm.settled} settled`, "muted")}${kpi("Outcomes", `${sm.by_outcome.target} / ${sm.by_outcome.stop} / ${sm.by_outcome["square-off"]}`, "target / stop / square-off", "muted")}${kpi("Sum of R", sm.sum_R == null ? "–" : sgn(sm.sum_R), "on the index path", "muted")}${kpi("Win % (this day)", sm.settled ? Math.round(sm.by_outcome.target / sm.settled * 100) + "%" : "–", "targets ÷ settled", "muted")}${kpi("Paper trades", sm.paper_trades, `P&L ${rs(sm.paper_pnl)}`, "muted")}</div>
+    <div class="k4 k5" style="margin-top:14px">${kpi("Recommendations", sm.recommendations, `${sm.settled} settled`, "muted")}${kpi("Outcomes", `${sm.by_outcome.target} / ${sm.by_outcome.stop} / ${sm.by_outcome["square-off"]}`, "target / stop / square-off", "muted")}${kpi("Sum of R", sm.sum_R == null ? "–" : sgn(sm.sum_R), "on the index path", "muted")}${kpi("Win % (this day)", sm.settled ? Math.round(sm.by_outcome.target / sm.settled * 100) + "%" : "–", "targets ÷ settled", "muted")}${kpi("Paper trades", sm.paper_trades, `P&L ${rs(sm.paper_pnl)}`, "muted")}</div>
     ${j.settled && j.settled.lesson ? `<div class="card" style="margin-top:14px;border-left:3px solid var(--accent,#f2a93b)"><h3>Session wrap-up</h3><p style="margin:0">${esc(j.settled.lesson)}</p><p class="muted" style="font-size:12px;margin:6px 0 0">Written by rules from the day's journal after the close (no AI) - what the recommendations did, the context, and the one thing to carry forward.</p></div>` : ""}
     <div class="grid g2" style="margin-top:14px">${ctxCard("NIFTY")}${ctxCard("BANKNIFTY")}</div>
     <div class="card" style="margin-top:14px"><h3>Recommendations and what happened</h3>
@@ -2648,7 +2664,7 @@ async function loadSettings() {
   $("#pfAI").checked = (pf.strategies || []).includes("ai"); $("#pfTrend").checked = (pf.strategies || []).includes("trend"); $("#pfFib").checked = (pf.strategies || []).includes("fib");
   $("#pfAutopilot").checked = !!pf.autopilot; $("#pfAuto").checked = !!pf.auto; $("#pfLimits").checked = !!pf.enforce_limits; $("#pfFills").value = pf.fills || "realistic";
   if (!PUSH_INIT) { PUSH_INIT = true; pushInit(); }
-  $("#pfSyms").innerHTML = Object.keys(IDX_LABEL).map(x => `<label class="tog" style="margin-right:14px"><input type="checkbox" data-asym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${IDX_LABEL[x]}${x === "SENSEX" ? ' <span class="muted" style="font-size:11px">(rules not backtested on Sensex)</span>' : ""}</label>`).join("");
+  $("#pfSyms").innerHTML = Object.keys(IDX_LABEL).map(x => `<label class="tog" style="margin-right:14px"><input type="checkbox" data-asym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${IDX_LABEL[x]}${x === "SENSEX" ? ' <span class="muted" style="font-size:11px">(Noise + trend-day + Fibonacci; real Sensex option prices recorded from 19 Oct 2026)</span>' : ""}</label>`).join("");
   $("#fiiIn").value = d.fii_manual ? d.fii_manual.value : "";
   loadRecorder();
 }
@@ -2658,7 +2674,7 @@ async function loadRecorder() {
   const days = r.days || [];
   const when = r.last_ok ? new Date(r.last_ok).toLocaleString("en-IN", {timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit"}) : null;
   $("#recBody").innerHTML = `
-    <p style="margin-top:0">Saves the Nifty and Bank Nifty option chain every ${r.every_min} minutes in market hours (price, bid/ask, open interest, volume and IV for ${r.strikes_each_side} strikes each side, nearest two expiries). Every evening a free GitHub job also keeps 1-minute candles with open interest for every nearby strike, plus NSE's end-of-day and FII/DII/Pro/Client position files. This is the data free history doesn't keep, so after a few weeks we can study it for patterns.</p>
+    <p style="margin-top:0">Saves the Nifty and Bank Nifty option chain every ${r.every_min} minutes in market hours (price, bid/ask, open interest, volume and IV for ${r.strikes_each_side} strikes each side, nearest two expiries). Every evening a free GitHub job also keeps 1-minute candles with open interest for every nearby strike (Nifty, Bank Nifty and, from 19 Oct 2026, Sensex), plus NSE's end-of-day and FII/DII/Pro/Client position files. This is the data free history doesn't keep, so after a few weeks we can study it for patterns.</p>
     <div class="formrow">
       <div>${kpi("Days recorded", days.length, days.length ? days[0].date + " → " + days[days.length - 1].date : "starts next trading day", "muted")}</div>
       <div>${kpi("Last snapshot", when || "–", r.src && r.src.length ? "source: " + r.src.join(", ").replace("nse", "NSE public chain") : "", "muted")}</div>
@@ -3191,11 +3207,11 @@ function renderLearning() {
     <p class="muted" style="margin:6px 0 0;font-size:12.5px">Guard-rails: needs ${d.limits.min_signals_veto}+ signals and a very clear negative result (z ≤ −${d.limits.z_veto}) in both halves before skipping anything · at most ${d.limits.max_vetoes_per_strategy} skips per strategy · skips expire after ${d.limits.veto_days} days · the built-in Noise and Camarilla numbers are never changed automatically.</p></div>
   ${pend.length ? `<div class="card" style="margin-top:14px"><h3>Waiting for your approval</h3>${pend.map(c => `<div class="row between wrap pend"><div><b>${esc(c.title)}</b><div class="muted" style="font-size:13px">${esc(JSON.stringify(c.evidence || {}))}</div></div><button class="primary" data-lapply="${c.id}">Approve</button></div>`).join("")}</div>` : ""}
   <div class="grid g2" style="margin-top:14px">
-    <div class="card"><h3>Active rules from learning</h3>${(d.rules || []).length ? (d.rules || []).filter(r => !LX.mk || r.market === LX.mk).map(r => { const ch = changeFor(r); return `<div class="rule2"><div><span class="tag ${r.type === "veto" ? "tdown" : "twarn"}">${r.type === "veto" ? "SKIP" : "HALF SIZE"}</span> ${esc(r.reason)}<div class="muted" style="font-size:12.5px;margin-top:3px">since ${esc(r.since)}${r.expires ? " · expires " + esc(r.expires) : ""}</div></div>${ch ? `<button class="danger" data-lrev="${ch.id}">Undo</button>` : ""}</div>`; }).join("") || `<p class="muted">None.</p>` : `<p class="muted">No rules yet. They appear only when the evidence is strong, so a quiet list is normal early on.</p>`}</div>
-    <div class="card"><h3>How each strategy is doing</h3><div class="tablewrap"><table><tr><th>Strategy</th><th>Mkt</th><th>Based on</th><th>Count</th><th>Avg R</th><th>Last 20</th><th>Total</th></tr>${(d.health || []).map(h => `<tr><td>${esc(h.name)}</td><td>${h.market}</td><td class="muted">${h.set === "S" ? "signals seen" : "closed trades"}</td><td class="mono">${h.n}</td><td class="mono ${cls(h.avg_R)}">${sgn(h.avg_R)}</td><td class="mono ${cls(h.last20_R)}">${sgn(h.last20_R)}</td><td class="mono ${cls(h.total_R)}">${sgn(h.total_R)}R</td></tr>`).join("") || `<tr><td colspan="7" class="muted">No closed trades yet.</td></tr>`}</table></div></div>
+    <div class="card span2"><h3>Active rules from learning</h3>${(d.rules || []).length ? (d.rules || []).filter(r => !LX.mk || r.market === LX.mk).map(r => { const ch = changeFor(r); return `<div class="rule2"><div><span class="tag ${r.type === "veto" ? "tdown" : "twarn"}">${r.type === "veto" ? "SKIP" : "HALF SIZE"}</span> ${esc(r.reason)}<div class="muted" style="font-size:12.5px;margin-top:3px">since ${esc(r.since)}${r.expires ? " · expires " + esc(r.expires) : ""}</div></div>${ch ? `<button class="danger" data-lrev="${ch.id}">Undo</button>` : ""}</div>`; }).join("") || `<p class="muted">None.</p>` : `<p class="muted">No rules yet. They appear only when the evidence is strong, so a quiet list is normal early on.</p>`}</div>
+    <div class="card span2"><h3>How each strategy is doing</h3><div class="tablewrap"><table><tr><th>Strategy</th><th>Mkt</th><th>Based on</th><th>Count</th><th>Avg R</th><th>Last 20</th><th>Total</th></tr>${(d.health || []).map(h => `<tr><td>${esc(h.name)}</td><td>${h.market}</td><td class="muted">${h.set === "S" ? "signals seen" : "closed trades"}</td><td class="mono">${h.n}</td><td class="mono ${cls(h.avg_R)}">${sgn(h.avg_R)}</td><td class="mono ${cls(h.last20_R)}">${sgn(h.last20_R)}</td><td class="mono ${cls(h.total_R)}">${sgn(h.total_R)}R</td></tr>`).join("") || `<tr><td colspan="7" class="muted">No closed trades yet.</td></tr>`}</table></div></div>
   </div>
   <div class="grid g2" style="margin-top:14px">
-    <div class="card"><h3>Latest after-close notes</h3>${(d.research || []).slice(0, 4).map(r => `<div class="note"><div class="row between"><b>${esc(r.date)}</b><span class="tag">${esc(r.market)}</span></div><div style="margin:4px 0">${esc(r.headline || "")}</div><ul class="tight">${(r.insights || []).slice(0, 6).map(i => `<li>${esc(i)}</li>`).join("")}</ul>${lagHtml(r.lag)}${r.levels_for_tomorrow ? `<details><summary class="muted">Levels for tomorrow</summary><div class="tablewrap"><table><tr><th></th><th>H4</th><th>H3</th><th>Pivot</th><th>L3</th><th>L4</th></tr>${Object.entries(r.levels_for_tomorrow).map(([s, v]) => `<tr><td>${esc(s)}</td><td class="mono">${n2(v.cam_h4)}</td><td class="mono">${n2(v.cam_h3)}</td><td class="mono">${n2(v.pivot)}</td><td class="mono">${n2(v.cam_l3)}</td><td class="mono">${n2(v.cam_l4)}</td></tr>`).join("")}</table></div></details>` : ""}</div>`).join("") || `<p class="muted">The first note is written after the next market close (15:35 IST for India), or press the button above.</p>`}</div>
+    <div class="card"><h3>Latest after-close notes</h3>${(d.research || []).slice(0, 4).map(r => `<div class="lnote"><div class="row between"><b>${esc(r.date)}</b><span class="tag">${esc(r.market)}</span></div><div style="margin:4px 0">${esc(r.headline || "")}</div><ul class="tight">${(r.insights || []).slice(0, 6).map(i => `<li>${esc(i)}</li>`).join("")}</ul>${lagHtml(r.lag)}${r.levels_for_tomorrow ? `<details><summary class="muted">Levels for tomorrow</summary><div class="tablewrap"><table><tr><th></th><th>H4</th><th>H3</th><th>Pivot</th><th>L3</th><th>L4</th></tr>${Object.entries(r.levels_for_tomorrow).map(([s, v]) => `<tr><td>${esc(s)}</td><td class="mono">${n2(v.cam_h4)}</td><td class="mono">${n2(v.cam_h3)}</td><td class="mono">${n2(v.pivot)}</td><td class="mono">${n2(v.cam_l3)}</td><td class="mono">${n2(v.cam_l4)}</td></tr>`).join("")}</table></div></details>` : ""}</div>`).join("") || `<p class="muted">The first note is written after the next market close (15:35 IST for India), or press the button above.</p>`}</div>
     <div class="card"><h3>What works and what doesn't</h3>${["best", "worst"].map(k => `<div class="muted" style="font-size:12.5px;margin:${k === "best" ? 0 : 12}px 0 4px">${k === "best" ? "Best conditions so far" : "Weakest conditions so far"}</div>${((d.leaderboard || {})[k] || []).map(x => `<div class="row between lb"><span>${esc(x.name)} · <b>${esc(x.tag)}</b> <span class="muted">(${x.market})</span></span><span class="mono ${cls(x.mean_R)}">${sgn(x.mean_R)}R · n=${x.n}</span></div>`).join("") || `<div class="muted">Not enough data.</div>`}`).join("")}</div>
   </div>
   <div class="card" style="margin-top:14px"><h3>Lessons from recent trades</h3><div class="lessons">${(d.lessons || []).map(l => { const k = KIND[l.kind] || [l.kind, ""]; return `<div class="lesson"><div class="row between"><span class="tag ${k[1] === "up" ? "tup" : k[1] === "down" ? "tdown" : k[1] === "warn" ? "twarn" : ""}">${esc(k[0])}</span><span class="muted mono" style="font-size:12px">${esc((l.closed || "").slice(0, 16).replace("T", " "))} · ${esc(l.market)}</span></div><p style="margin:6px 0 0">${esc(l.text)}</p></div>`; }).join("") || `<p class="muted">Lessons appear here as soon as a paper trade closes.</p>`}</div></div>
