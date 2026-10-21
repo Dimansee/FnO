@@ -560,3 +560,21 @@ assert SV2._conviction("BANKNIFTY", _g, {"strategy": "noise", "opt": "CE"}, {"au
 assert SV2._conviction("NIFTY", _g, {"strategy": "noise", "opt": "CE"}, {"autopilot": False}) is None
 assert SV2._conviction("NIFTY", _g, {"strategy": "custom", "opt": "CE"}, {"autopilot": True}) is None
 print("conviction sizing OK")
+
+# trades in the P&L: remove your own trades (kept aside) and restore them
+store.clear_positions(); store.clear_trades(); j(c.post("/api/account/reset", json={"capital": 200000}))
+for tid, mode, auto, pnl in (("a1", "signal", True, 1000.0), ("s1", "signal", False, -300.0), ("m1", "manual", None, 2775.0)):
+    store.insert_trade({"id": tid, "symbol": "NIFTY", "mode": mode, "plan": ({"strategy": "noise", "auto": auto} if mode == "signal" else None),
+                        "opened": "2026-10-16T10:00:00+05:30", "closed": "2026-10-16T10:40:00+05:30", "pnl": pnl, "legs": []})
+o = j(c.get("/api/account/origins"))
+assert o["closed"]["auto"]["n"] == 1 and o["closed"]["signal"]["n"] == 1 and o["closed"]["manual"]["n"] == 1
+from fno import paper as P_
+assert P_.snapshot()[3] == 200000 + 1000 - 300 + 2775
+r = j(c.post("/api/account/remove-trades", json={"kinds": ["manual", "signal"]}))
+assert r["removed"] == 2 and abs(r["pnl_removed"] - 2475) < 0.01
+assert P_.snapshot()[3] == 201000 and [t["id"] for t in store.trades()] == ["a1"]
+assert j(c.post("/api/account/remove-trades", json={"kinds": ["auto"]}))["ok"] is False      # automatic trades can't be removed
+assert j(c.get("/api/account/origins"))["removed_total"] == 2
+assert j(c.post("/api/account/restore-trades", json={}))["restored"] == 2 and len(store.trades()) == 3
+store.clear_trades()
+print("remove / restore own trades OK")

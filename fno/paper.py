@@ -31,9 +31,67 @@ def snapshot():
     return a, pos, tr, round(cash, 2)
 
 
+REMOVED = "fno:trades:removed"          # trades taken out of the P&L by the user (kept here so they can be restored)
+ORIGINS = {"manual": "Manual orders (option chain / order ticket)", "signal": "Signals you placed yourself", "auto": "Automatic (Autopilot / auto-trade)"}
+
+
+def origin(t: dict) -> str:
+    """Who opened it: 'auto' = the system on its own, 'signal' = a system signal you placed by hand, 'manual' = your own order."""
+    if t.get("mode") != "signal":
+        return "manual"
+    return "auto" if (t.get("plan") or {}).get("auto") else "signal"
+
+
+def _group(rows, pnl=True) -> dict:
+    out = {k: {"n": 0, "pnl": 0.0} for k in ORIGINS}
+    for t in rows:
+        g = out[origin(t)]; g["n"] += 1
+        if pnl:
+            g["pnl"] += float(t.get("pnl") or 0)
+    return {k: {"label": ORIGINS[k], "n": v["n"], "pnl": round(v["pnl"], 2)} for k, v in out.items()}
+
+
+def origin_summary() -> dict:
+    """Closed trades and open positions by origin, plus what is parked in the removed list."""
+    removed = _removed()
+    return {"closed": _group(store.trades()), "open": _group(store.positions(), pnl=False), "removed": _group(removed),
+            "removed_total": len(removed)}
+
+
+def _removed() -> list[dict]:
+    import json as _j
+    return [_j.loads(v) for v in (store._cmd("HVALS", REMOVED) or [])]
+
+
+def remove_trades(kinds) -> dict:
+    """Take closed trades of the given origins out of the ledger (P&L, cash, equity and every stat are derived from it).
+    Each one is copied to REMOVED first, then deleted, so restore_removed() can put it back. Open positions are not touched."""
+    import json as _j
+    kinds = [k for k in kinds if k in ("manual", "signal")]          # automatic trades can never be removed here
+    if not kinds:
+        raise ValueError("Pick manual orders and/or signals you placed yourself.")
+    moved, pnl = 0, 0.0
+    for t in store.trades():
+        if origin(t) in kinds:
+            store._cmd("HSET", REMOVED, t["id"], store._dump(t))
+            store._cmd("HDEL", store.TRADES, t["id"])
+            moved += 1; pnl += float(t.get("pnl") or 0)
+    return {"removed": moved, "pnl_removed": round(pnl, 2)}
+
+
+def restore_removed() -> dict:
+    import json as _j
+    n = 0
+    for t in _removed():
+        store._cmd("HSET", store.TRADES, t["id"], store._dump(t))
+        store._cmd("HDEL", REMOVED, t["id"]); n += 1
+    return {"restored": n}
+
+
 def reset(capital: float):
     store.clear_positions()
     store.clear_trades()
+    store._cmd("DEL", REMOVED)
     store.put("account", {"capital_start": float(capital), "created": C.now_ist().isoformat(timespec="seconds")})
 
 

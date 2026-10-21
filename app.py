@@ -424,6 +424,31 @@ def account_capital():
     return jsonify({"ok": True, "message": f"Demo capital set to ₹{cap:,.0f} (positions and journal kept)."})
 
 
+@app.get("/api/account/origins")
+def account_origins():
+    from fno import paper as P
+    return jsonify(P.origin_summary())
+
+
+@app.post("/api/account/remove-trades")
+def account_remove_trades():
+    """Take your own trades out of the P&L (kept aside; Restore brings them back)."""
+    from fno import paper as P
+    kinds = (request.get_json(force=True) or {}).get("kinds") or ["manual"]
+    try:
+        r = P.remove_trades(kinds)
+    except ValueError as e:
+        return jsonify({"ok": False, "message": str(e)}), 400
+    return jsonify({"ok": True, **r, "message": f"Removed {r['removed']} trade(s) (P&L ₹{r['pnl_removed']:,.0f}) from the account. Restore brings them back."})
+
+
+@app.post("/api/account/restore-trades")
+def account_restore_trades():
+    from fno import paper as P
+    r = P.restore_removed()
+    return jsonify({"ok": True, **r, "message": f"Restored {r['restored']} trade(s)."})
+
+
 @app.post("/api/account/reset")
 def account_reset():
     cap = float((request.get_json(force=True) or {}).get("capital", C.DEFAULT_CAPITAL))

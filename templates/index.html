@@ -861,6 +861,12 @@ details summary{cursor:pointer;font-size:13px}
         <label>Demo capital (₹)</label>
         <div class="copy"><input id="capIn" type="number" value="200000" step="50000"><button class="primary" id="capSave" title="Change the capital, keep positions and the journal">Save</button><button class="danger" id="resetBtn" title="Clears all positions and the journal">Reset account</button></div>
         <p class="muted" style="font-size:12px;margin:6px 0 0">Save changes the capital and keeps everything else. Reset starts over with this capital and clears all positions and the trade journal.</p>
+        <h4 style="margin:16px 0 6px">Trades in the P&amp;L</h4>
+        <div id="originBox" class="muted" style="font-size:12.5px">Loading…</div>
+        <label class="tog" style="margin-top:8px"><input type="checkbox" id="rmManual" checked> Manual orders (option chain / order ticket)</label>
+        <label class="tog"><input type="checkbox" id="rmSignal" checked> Signals you placed yourself</label>
+        <div class="copy" style="margin-top:6px"><button class="danger" id="rmTrades" title="Takes the ticked kinds of closed trades out of P&amp;L, cash, equity and every stat">Remove from P&amp;L</button><button id="rsTrades" title="Puts every removed trade back">Restore removed trades</button></div>
+        <p class="muted" style="font-size:12px;margin:6px 0 0">Automatic trades always stay. Removed trades are kept aside, not deleted, so Restore puts them back. Open positions are not touched.</p>
         <div style="margin-top:18px"><button id="logout">Sign out</button></div>
       </div>
     </div>
@@ -2624,6 +2630,7 @@ async function loadJournal() {
     ${j.paper_trades.length ? `<div class="card" style="margin-top:14px"><h3>Paper trades closed this day</h3><div class="tablewrap"><table><tr><th>Opened</th><th>Index</th><th>Strategy</th><th>Legs</th><th>Lots</th><th>In → out</th><th>P&L</th><th>Reason</th></tr>${j.paper_trades.map(t => `<tr><td class="mono">${esc((t.opened || "").slice(11, 16))}</td><td>${esc(t.symbol)}</td><td>${t.mode !== "signal" ? "Manual" : ({camarilla: "Camarilla", ai: "AI model", trend: "Trend-day", fib: "Fibonacci"}[(t.plan || {}).strategy] || "Noise band")}</td><td>${(t.legs || []).map(l => `${l.side} ${l.strike}${l.opt}`).join(" / ")}</td><td>${t.lots}</td><td class="mono">₹${n2(t.entry_prem)} → ₹${n2(t.exit_prem)}</td><td class="mono ${cls(t.pnl)}">${rs(t.pnl)}</td><td>${esc(t.reason)}</td></tr>`).join("")}</table></div></div>` : ""}`;
 }
 async function loadSettings() {
+  loadOrigins();
   const d = await api("/api/settings");
   $("#upCard").innerHTML = brokerCard("upstox", "Upstox", "API Key", d.upstox,
     `<li>Open <a href="https://account.upstox.com/developer/apps" target="_blank" rel="noopener">account.upstox.com/developer/apps</a> → New App.</li><li>Paste the redirect URL below, create the app, copy the API Key &amp; Secret here and save.</li><li>Click Log in each trading morning.</li>`);
@@ -2693,6 +2700,21 @@ $("#resetBtn").onclick = async () => {
   if (!confirm("Reset the demo account? This deletes all positions and the trade journal.")) return;
   try { const r = await post("/api/account/reset", {capital: +$("#capIn").value}); toast(r.message); } catch (e) { toast(e.message); }
 };
+async function loadOrigins() {
+  try {
+    const o = await api("/api/account/origins"), row = (k, x) => `${esc(x.label)}: <b>${x.n}</b> closed${x.n ? ` (P&amp;L ${fmtN(x.pnl)})` : ""}${o.open[k].n ? ` · ${o.open[k].n} open` : ""}`;
+    $("#originBox").innerHTML = ["auto", "signal", "manual"].map(k => row(k, o.closed[k])).join("<br>") +
+      (o.removed_total ? `<br>Removed and kept aside: <b>${o.removed_total}</b> (P&amp;L ${fmtN(o.removed.manual.pnl + o.removed.signal.pnl)})` : "");
+    $("#rsTrades").style.display = o.removed_total ? "" : "none";
+  } catch (e) { $("#originBox").textContent = "Could not load: " + e.message; }
+}
+$("#rmTrades").onclick = async () => {
+  const kinds = [$("#rmManual").checked && "manual", $("#rmSignal").checked && "signal"].filter(Boolean);
+  if (!kinds.length) return toast("Tick at least one kind of trade.");
+  if (!confirm("Take these trades out of the P&L and every stat? Automatic trades stay. You can restore them later.")) return;
+  try { const r = await post("/api/account/remove-trades", {kinds}); toast(r.message); loadOrigins(); } catch (e) { toast(e.message); }
+};
+$("#rsTrades").onclick = async () => { try { const r = await post("/api/account/restore-trades", {}); toast(r.message); loadOrigins(); } catch (e) { toast(e.message); } };
 $("#logout").onclick = async () => { await post("/api/logout"); location.reload(); };
 
 /* ---------- rulebook ---------- */
