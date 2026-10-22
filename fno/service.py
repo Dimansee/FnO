@@ -8,6 +8,7 @@ from datetime import date, datetime, time, timedelta
 import numpy as np
 import pandas as pd
 
+from . import ai_judge as AJ
 from . import backtest as BT
 from . import brokers as B
 from . import config as C
@@ -554,10 +555,17 @@ def place_signal(symbol, strike=None, auto=False, which=None):
             return False, why
         if mult < 1:
             pf = {**pf, "risk_pct": float(pf.get("risk_pct") or 1.0) * mult}
+    rp0 = float(pf.get("risk_pct") or 1.0)
     conv = _conviction(symbol, g, ev["plan"], pf)
     if conv:
-        pf = {**pf, "risk_pct": float(pf.get("risk_pct") or 1.0) * conv["mult"]}
+        pf = {**pf, "risk_pct": rp0 * conv["mult"]}
         ev = {**ev, "plan": {**ev["plan"], "conviction": conv}}
+    jd = _ai_judge(symbol, g, ev["plan"], pf, which, m)
+    if jd:                                                          # round 39: on top of conviction, capped 0.5x - 1.6x
+        lo, hi = AJ.meta()["clip"]
+        jd["total_mult"] = round(min(max((conv["mult"] if conv else 1.0) * jd["mult"], lo), hi), 3)
+        pf = {**pf, "risk_pct": rp0 * jd["total_mult"]}
+        ev = {**ev, "plan": {**ev["plan"], "ai_judge": jd}}
     if strike is None:
         strike = _small_account_strike(ev["plan"], g["chain"], g["spot"], pf, P.equity(acct, tr))
         if strike is not None:
@@ -617,6 +625,9 @@ def changes() -> list[dict]:
         removed = 0
     po = float(acct.get("capital_start") or 0) <= 0 and acct.get("capital_before")
     return [
+        {"id": "ai_judge", "date": "2026-10-23", "title": "AI judge sizes Nifty signals (round 39)",
+         "what": "A small AI model scores each Noise / Camarilla / trend / Fibonacci signal on Nifty from 64 market features of the signal candle. Autopilot risks 1.33x on the better half and 0.67x on the weaker half, on top of conviction sizing (total kept between 0.5x and 1.6x).",
+         "before": "Only conviction sizing (1.33x / 0.67x by the 5-min / 15-min / 1-hour charts).", "on": flag("ai_judge"), "kind": "switch"},
         {"id": "small_otm", "date": "2026-10-23", "title": "Small account: 1 strike out of the money (round 38)",
          "what": f"While equity is below ₹{C.SMALL_OTM_BELOW:,.0f}, Autopilot buys the strike 1 step out of the money. The cheaper lot passes the cash and 15% risk checks more often, so a small account keeps trading after a dip.",
          "before": "Always 1 strike in the money.", "on": flag("small_otm"), "kind": "switch"},
@@ -642,7 +653,7 @@ def changes() -> list[dict]:
 
 
 def revert_change(cid: str, on: bool | None = None) -> str:
-    if cid in ("conviction", "limits_system_only", "small_otm"):
+    if cid in ("conviction", "limits_system_only", "small_otm", "ai_judge"):
         set_flag(cid, bool(on))
         return ("Switched on again." if on else "Switched back to how it worked before.")
     if cid == "weekly_limit":
@@ -674,6 +685,24 @@ def _conviction(symbol, g, plan, pf) -> dict | None:
         side = 1 if plan.get("opt") == "CE" else -1
         sc = S.mtf_score_at(S.mtf_frames(c5), c5.index[-1] + pd.Timedelta(minutes=C.CANDLE_MIN), side)
         return {"score": int(sc), "mult": S.conviction_mult(sc)}
+    except Exception:
+        return None
+
+
+def _ai_judge(symbol, g, plan, pf, which=None, m=None) -> dict | None:
+    """Round 39: the AI judge scores the rule's own signal (features of the signal bar, turned to the trade's side). Autopilot,
+    Nifty, Noise / Camarilla / trend / Fibonacci only. None when it does not apply (the trade keeps its conviction size)."""
+    try:
+        if not pf.get("autopilot") or not flag("ai_judge") or not AJ.available():
+            return None
+        st = (plan or {}).get("strategy")
+        if symbol not in AJ.meta()["syms"] or st not in ("noise", "camarilla", "trend", "fib"):
+            return None
+        f = AJ.bar_features(symbol, g["candles"], g["vix"], g["now"], g["trade_exp"], plan.get("signal_bar"),
+                            (gcues() or {}).get("avg_equity_chg"), _vix_prev_chg(), vix_series=m.vix_candles() if m else None)
+        if f is None:
+            return None
+        return AJ.judge(f, 1 if plan.get("opt") == "CE" else -1, which if which in ("trend", "fib") else "main", st)
     except Exception:
         return None
 

@@ -1,0 +1,298 @@
+{
+ "A_why_the_ai_stopped_trading": {
+  "quarters": [
+   {
+    "quarter": "2024Q1",
+    "train_rows": 28670,
+    "mean_best_expR": -0.141,
+    "share_ge_0_2": 6.11,
+    "share_ge_0_3": 5.01,
+    "realised_R_top_decile": 0.227,
+    "realised_R_bottom_decile": 0.004
+   },
+   {
+    "quarter": "2024Q2",
+    "train_rows": 36112,
+    "mean_best_expR": -0.136,
+    "share_ge_0_2": 9.26,
+    "share_ge_0_3": 5.9,
+    "realised_R_top_decile": -0.077,
+    "realised_R_bottom_decile": -0.134
+   },
+   {
+    "quarter": "2024Q3",
+    "train_rows": 43432,
+    "mean_best_expR": -0.122,
+    "share_ge_0_2": 5.57,
+    "share_ge_0_3": 2.37,
+    "realised_R_top_decile": 0.07,
+    "realised_R_bottom_decile": 0.046
+   },
+   {
+    "quarter": "2024Q4",
+    "train_rows": 51240,
+    "mean_best_expR": -0.173,
+    "share_ge_0_2": 5.99,
+    "share_ge_0_3": 4.13,
+    "realised_R_top_decile": -0.115,
+    "realised_R_bottom_decile": -0.079
+   },
+   {
+    "quarter": "2025Q1",
+    "train_rows": 58682,
+    "mean_best_expR": -0.199,
+    "share_ge_0_2": 2.75,
+    "share_ge_0_3": 1.14,
+    "realised_R_top_decile": -0.178,
+    "realised_R_bottom_decile": -0.033
+   },
+   {
+    "quarter": "2025Q2",
+    "train_rows": 66246,
+    "mean_best_expR": -0.166,
+    "share_ge_0_2": 7.47,
+    "share_ge_0_3": 6.57,
+    "realised_R_top_decile": -0.283,
+    "realised_R_bottom_decile": -0.108
+   },
+   {
+    "quarter": "2025Q3",
+    "train_rows": 73688,
+    "mean_best_expR": -0.231,
+    "share_ge_0_2": 1.19,
+    "share_ge_0_3": 0.45,
+    "realised_R_top_decile": -0.069,
+    "realised_R_bottom_decile": -0.069
+   },
+   {
+    "quarter": "2025Q4",
+    "train_rows": 81496,
+    "mean_best_expR": -0.243,
+    "share_ge_0_2": 4.07,
+    "share_ge_0_3": 2.69,
+    "realised_R_top_decile": 0.025,
+    "realised_R_bottom_decile": -0.074
+   },
+   {
+    "quarter": "2026Q1",
+    "train_rows": 88938,
+    "mean_best_expR": -0.163,
+    "share_ge_0_2": 4.93,
+    "share_ge_0_3": 3.52,
+    "realised_R_top_decile": 0.225,
+    "realised_R_bottom_decile": 0.084
+   },
+   {
+    "quarter": "2026Q2",
+    "train_rows": 96258,
+    "mean_best_expR": -0.139,
+    "share_ge_0_2": 8.66,
+    "share_ge_0_3": 6.11,
+    "realised_R_top_decile": -0.013,
+    "realised_R_bottom_decile": -0.021
+   },
+   {
+    "quarter": "2026Q3",
+    "train_rows": 103578,
+    "mean_best_expR": -0.25,
+    "share_ge_0_2": 1.53,
+    "share_ge_0_3": 0.59,
+    "realised_R_top_decile": 0.159,
+    "realised_R_bottom_decile": -0.151
+   },
+   {
+    "quarter": "2026Q4",
+    "train_rows": 111508,
+    "mean_best_expR": -0.24,
+    "share_ge_0_2": 0.0,
+    "share_ge_0_3": 0.0,
+    "realised_R_top_decile": 0.074,
+    "realised_R_bottom_decile": 1.345
+   }
+  ],
+  "policies": {
+   "fixed0.2": {
+    "trades": 163,
+    "avg_R_before_costs": -0.01,
+    "by_year": {
+     "2024": [
+      94,
+      -0.3
+     ],
+     "2025": [
+      36,
+      -4.6
+     ],
+     "2026": [
+      33,
+      3.2
+     ]
+    }
+   },
+   "fixed0.3": {
+    "trades": 116,
+    "avg_R_before_costs": -0.029,
+    "by_year": {
+     "2024": [
+      65,
+      1.8
+     ],
+     "2025": [
+      27,
+      -7.1
+     ],
+     "2026": [
+      24,
+      2.0
+     ]
+    }
+   },
+   "top1%": {
+    "trades": 15,
+    "avg_R_before_costs": -0.393,
+    "by_year": {
+     "2024": [
+      2,
+      -2.0
+     ],
+     "2025": [
+      8,
+      -3.6
+     ],
+     "2026": [
+      5,
+      -0.3
+     ]
+    }
+   },
+   "top0.5%": {
+    "trades": 7,
+    "avg_R_before_costs": -0.333,
+    "by_year": {
+     "2024": [
+      2,
+      -2.0
+     ],
+     "2025": [
+      3,
+      -0.0
+     ],
+     "2026": [
+      2,
+      -0.3
+     ]
+    }
+   }
+  },
+  "note": "index R before option costs; option costs and decay take roughly 0.1-0.2R a trade"
+ },
+ "B_meta_label_q": {
+  "all trades (now)": {
+   "n": 987,
+   "net": 219970,
+   "fall": -56379,
+   "by_year": {
+    "2024": 122474,
+    "2025": 27235,
+    "2026": 70261
+   }
+  },
+  "skip bottom 25%": {
+   "n": 834,
+   "net": 231663,
+   "fall": -60391,
+   "by_year": {
+    "2024": 141823,
+    "2025": 27337,
+    "2026": 62504
+   }
+  },
+  "skip bottom 40%": {
+   "n": 711,
+   "net": 249825,
+   "fall": -49825,
+   "by_year": {
+    "2024": 151365,
+    "2025": 54462,
+    "2026": 43998
+   }
+  },
+  "size 1.33 / 0.67": {
+   "n": 987,
+   "net": 293094,
+   "fall": -68788,
+   "by_year": {
+    "2024": 158171,
+    "2025": 47494,
+    "2026": 87429
+   }
+  },
+  "avg u top half vs bottom half": [
+   360,
+   -2
+  ]
+ },
+ "B_meta_label_m": {
+  "all trades (now)": {
+   "n": 987,
+   "net": 219970,
+   "fall": -56379,
+   "by_year": {
+    "2024": 122474,
+    "2025": 27235,
+    "2026": 70261
+   }
+  },
+  "skip bottom 25%": {
+   "n": 835,
+   "net": 233727,
+   "fall": -59683,
+   "by_year": {
+    "2024": 128274,
+    "2025": 36711,
+    "2026": 68741
+   }
+  },
+  "skip bottom 40%": {
+   "n": 707,
+   "net": 235128,
+   "fall": -52764,
+   "by_year": {
+    "2024": 114473,
+    "2025": 45356,
+    "2026": 75298
+   }
+  },
+  "size 1.33 / 0.67": {
+   "n": 987,
+   "net": 292934,
+   "fall": -66176,
+   "by_year": {
+    "2024": 151094,
+    "2025": 46502,
+    "2026": 95338
+   }
+  },
+  "avg u top half vs bottom half": [
+   362,
+   -2
+  ]
+ },
+ "B_shuffle_control": {
+  "skip bottom 25%": {
+   "real_gain": 11693,
+   "shuffled_median": -50460,
+   "p_value": 0.1
+  },
+  "skip bottom 40%": {
+   "real_gain": 29855,
+   "shuffled_median": -90016,
+   "p_value": 0.0
+  },
+  "size 1.33 / 0.67": {
+   "real_gain": 73124,
+   "shuffled_median": 8279,
+   "p_value": 0.05
+  }
+ }
+}

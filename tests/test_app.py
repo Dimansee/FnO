@@ -677,3 +677,16 @@ _tr = [{"date": "2026-10-08", "entry_time": "09:30", "exit_time": "15:15", "stra
 _k, _w = B38._autopilot_replay(_tr, 20000, 65)
 assert [t["strategy"] for t in _k] == ["Camarilla"] and _w["fib_gate"] == 1 and _w["risk15"] == 1 and _w["trend_gate"] == 1   # equity 32k < 40k
 print("round 38 small-account strike + live-rules replay OK")
+
+# Round 39: the AI judge (meta-label of the rules' signals) - Nifty, Autopilot, switchable
+from fno import ai_judge as AJ39
+assert AJ39.available() and AJ39.meta()["syms"] == ["NIFTY"] and len(AJ39.meta()["cols"]) >= 60
+_f = {c: 0.0 for c in AJ39.meta()["cols"]}
+_j = AJ39.judge(_f, 1, "main", "camarilla"); assert _j["mult"] in (1.33, 0.67) and "pred" in _j
+assert AJ39.row(_f | {"vs_vwap": 0.5}, -1, "fib", "fib")[AJ39.meta()["cols"].index("vs_vwap")] == -0.5   # turned to the put side
+assert SV3._ai_judge("NIFTY", {}, {"strategy": "noise", "opt": "CE"}, {}) is None              # Autopilot off: never sizes
+assert SV3._ai_judge("BANKNIFTY", {}, {"strategy": "noise", "opt": "CE"}, {"autopilot": True}) is None   # Nifty only
+ch = {c["id"]: c for c in j(c.get("/api/changes"))["changes"]}; assert ch["ai_judge"]["on"]
+j(c.post("/api/changes/ai_judge", json={"on": False})); assert not SV3.flag("ai_judge")
+j(c.post("/api/changes/ai_judge", json={"on": True})); assert SV3.flag("ai_judge")
+print("round 39 AI judge OK")

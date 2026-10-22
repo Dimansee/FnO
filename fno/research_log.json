@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r39",
+   "date": "2026-10-23",
+   "area": "Index options",
+   "title": "Round 39: improving the AI experimental strategy - from finding its own trades to judging the rules' signals",
+   "asked": "How can the AI strategy (indicators, candles, patterns, sessions, learning from the market) predict the market better?",
+   "result": "Part A, the AI as it is (LightGBM, 64 features, finds its own trades): it has not traded since mid-July. Each retrain makes its predictions more cautious, so none clear the fixed 0.3 bar. Walk-forward 2024 to Oct 2026, retrained every quarter, it made -0.01R a trade before costs at the 0.2 bar (163 trades) and -0.03R at 0.3. Its top-10% bars did no better than its bottom-10% in 6 of 12 quarters. Ranking bars instead of a fixed bar made it worse (-0.39R). On its own it cannot tell a good 5-minute bar from a bad one. Part B, the same model turned into a judge of the rules' own signals (Noise, Camarilla, trend-day, Fibonacci; Nifty and Bank Nifty; 1,318 trades, Rs 2,000 risk a trade). Walk-forward from 2024 on Nifty: signals it rated in the better half averaged +Rs 529 to +Rs 725 a trade on the main and Fibonacci slots; the weaker half averaged -Rs 341 to -Rs 40. Sizing 1.33x / 0.67x by its rating made +Rs 3.00L against +Rs 2.09L flat and +Rs 2.33L with conviction. Combined with conviction (capped 0.5x-1.6x): +Rs 3.05L, deepest fall -Rs 34.8k vs -34.2k, better than conviction alone in every year (2024 +23k, 2025 +30k, 2026 +18k). In 20 label-shuffled runs no shuffled model matched the real gain (p = 0.00). Monthly retraining gave the same as quarterly. On Bank Nifty it rated backwards (better half -Rs 113, weaker half +Rs 282), so Bank Nifty is left out. Skipping the weaker 40% instead of sizing cut the fall to -29k but made 2026 worse, so it was not adopted. Without its VIX-change and global-context inputs the 2026 gain disappears, so live uses intraday India VIX to match the training data (live and research agree on good/weak for 91.5% of tested trades).",
+   "decision": "Adopted",
+   "summary": "The AI judge sizes Autopilot's Nifty signals on top of conviction (switch: Research → Recent changes). It never skips a trade. The standalone AI strategy stays optional and off by default: it has no tested edge. The judge is trained up to 9 Oct 2026; retrain and re-test it every quarter, not daily.",
+   "period": "2024-01 to 2026-10-09"
+  },
+  {
    "id": "r38",
    "date": "2026-10-23",
    "area": "Index options",

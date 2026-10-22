@@ -269,6 +269,28 @@ class Market:
         # 30 days: the noise band needs the last 14 sessions
         return cached(f"c:yahoo:{symbol}", 45, lambda: yahoo_candles(instrument(symbol)["yahoo"], period="30d"))
 
+    def vix_candles(self) -> pd.Series | None:
+        """Today's 5-minute India VIX closes (the AI judge's per-bar VIX). Broker first, else Yahoo; None if unavailable."""
+        def get():
+            df = None
+            if self.br:
+                try:
+                    df = self.br.candles(self.br.vix_key(), days=2)
+                except Exception:
+                    df = None
+            if df is None or df.empty:
+                df = yahoo_candles(C.INDIA_VIX_YAHOO, period="1d", interval="5m")
+            return df
+        try:
+            df = cached(f"vixc:{self.br.name if self.br else 'yahoo'}", 60, get)
+            if df is None or df.empty:
+                return None
+            today = C.today_ist()
+            s = df["close"][df.index.date == today]
+            return s if len(s) else None
+        except Exception:
+            return None
+
     def candles1(self, symbol) -> pd.DataFrame:
         """Today's 1-minute candles (scalp book): broker first, else Yahoo (delayed)."""
         if self.br and hasattr(self.br, "candles1"):
