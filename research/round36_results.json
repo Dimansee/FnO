@@ -1,0 +1,525 @@
+{
+ "part_a": {
+  "settings": 768,
+  "trades": 15234411,
+  "positive_full_25": 2,
+  "positive_full_10": 30,
+  "positive_both_halves_25": 0,
+  "positive_both_halves_10": 3,
+  "positive_every_year_10": 0,
+  "positive_pts_pick": 503,
+  "positive_pts_both": 451,
+  "picked_on_2023_24": [
+   {
+    "setting": "5m any breakout + strong candle | 5m trend + one-way | exit ema15, stop atr",
+    "trades_per_day": 1.6,
+    "pick_net25": 348312,
+    "judge_net25": -266623,
+    "judge_net10": -100400,
+    "pick_pts": 10.64,
+    "judge_pts": 5.16,
+    "judge_win": 27.8,
+    "years_10": {
+     "2023": 342134,
+     "2024": 181441,
+     "2025": -243760,
+     "2026": 143360
+    }
+   },
+   {
+    "setting": "5m range breakout + strong candle | 5m trend + one-way | exit ema15, stop atr",
+    "trades_per_day": 1.5,
+    "pick_net25": 336730,
+    "judge_net25": -244832,
+    "judge_net10": -84774,
+    "pick_pts": 10.85,
+    "judge_pts": 5.62,
+    "judge_win": 28.1,
+    "years_10": {
+     "2023": 339209,
+     "2024": 167023,
+     "2025": -234656,
+     "2026": 149882
+    }
+   },
+   {
+    "setting": "5m level breakout + strong candle | 5m trend + one-way | exit ema15, stop atr",
+    "trades_per_day": 1.4,
+    "pick_net25": 231083,
+    "judge_net25": -236193,
+    "judge_net10": -86095,
+    "pick_pts": 10.36,
+    "judge_pts": 5.99,
+    "judge_win": 27.4,
+    "years_10": {
+     "2023": 163604,
+     "2024": 225893,
+     "2025": -267594,
+     "2026": 181499
+    }
+   },
+   {
+    "setting": "5m range breakout + strong candle | no direction filter | exit ema15, stop atr",
+    "trades_per_day": 2.5,
+    "pick_net25": 196058,
+    "judge_net25": -474064,
+    "judge_net10": -217188,
+    "pick_pts": 7.63,
+    "judge_pts": 5.07,
+    "judge_win": 27.1,
+    "years_10": {
+     "2023": 441630,
+     "2024": 29778,
+     "2025": -424404,
+     "2026": 207216
+    }
+   },
+   {
+    "setting": "5m range breakout + strong candle | 5m trend | exit ema15, stop atr",
+    "trades_per_day": 2.5,
+    "pick_net25": 196058,
+    "judge_net25": -474064,
+    "judge_net10": -217188,
+    "pick_pts": 7.63,
+    "judge_pts": 5.07,
+    "judge_win": 27.1,
+    "years_10": {
+     "2023": 441630,
+     "2024": 29778,
+     "2025": -424404,
+     "2026": 207216
+    }
+   },
+   {
+    "setting": "5m any breakout + strong candle | 5m trend + one-way | exit ema15, stop candle",
+    "trades_per_day": 1.6,
+    "pick_net25": 182906,
+    "judge_net25": -269815,
+    "judge_net10": -136746,
+    "pick_pts": 10.89,
+    "judge_pts": 4.06,
+    "judge_win": 30.5,
+    "years_10": {
+     "2023": 228826,
+     "2024": 91121,
+     "2025": -190773,
+     "2026": 54027
+    }
+   },
+   {
+    "setting": "5m range breakout + strong candle | 5m trend + one-way | exit ema15, stop candle",
+    "trades_per_day": 1.5,
+    "pick_net25": 155650,
+    "judge_net25": -257910,
+    "judge_net10": -130445,
+    "pick_pts": 10.91,
+    "judge_pts": 4.12,
+    "judge_win": 30.7,
+    "years_10": {
+     "2023": 210888,
+     "2024": 76721,
+     "2025": -186403,
+     "2026": 55958
+    }
+   },
+   {
+    "setting": "5m any breakout + strong candle | 5m trend + one-way | exit ema9, stop atr",
+    "trades_per_day": 1.6,
+    "pick_net25": 146059,
+    "judge_net25": -199823,
+    "judge_net10": -28928,
+    "pick_pts": 7.89,
+    "judge_pts": 5.43,
+    "judge_win": 28.7,
+    "years_10": {
+     "2023": 258490,
+     "2024": 70244,
+     "2025": -194328,
+     "2026": 165401
+    }
+   },
+   {
+    "setting": "5m level breakout + strong candle | 5m trend + one-way | exit ema15, stop candle",
+    "trades_per_day": 1.4,
+    "pick_net25": 125398,
+    "judge_net25": -239788,
+    "judge_net10": -121300,
+    "pick_pts": 10.67,
+    "judge_pts": 4.57,
+    "judge_win": 30.5,
+    "years_10": {
+     "2023": 119384,
+     "2024": 128137,
+     "2025": -212876,
+     "2026": 91576
+    }
+   },
+   {
+    "setting": "5m range breakout + strong candle | 5m trend + one-way | exit ema9, stop atr",
+    "trades_per_day": 1.6,
+    "pick_net25": 120472,
+    "judge_net25": -180821,
+    "judge_net10": -16596,
+    "pick_pts": 7.85,
+    "judge_pts": 5.82,
+    "judge_win": 29.2,
+    "years_10": {
+     "2023": 248958,
+     "2024": 48156,
+     "2025": -195155,
+     "2026": 178559
+    }
+   }
+  ],
+  "best_edge_on_2023_24": [
+   {
+    "setting": "5m range breakout + strong candle | 5m trend + one-way + day bias | exit ema15, stop atr",
+    "n": 2036,
+    "pick_pts": 11.08,
+    "judge_pts": 5.16,
+    "judge_net25": -87064,
+    "judge_net10": -15061
+   },
+   {
+    "setting": "5m level breakout + strong candle | 5m trend + one-way + day bias | exit ema15, stop atr",
+    "n": 1746,
+    "pick_pts": 10.93,
+    "judge_pts": 4.75,
+    "judge_net25": -76875,
+    "judge_net10": -13901
+   },
+   {
+    "setting": "5m range breakout + strong candle | 5m trend + one-way | exit ema15, stop candle",
+    "n": 4233,
+    "pick_pts": 10.91,
+    "judge_pts": 4.12,
+    "judge_net25": -257910,
+    "judge_net10": -130445
+   },
+   {
+    "setting": "5m any breakout + strong candle | 5m trend + one-way | exit ema15, stop candle",
+    "n": 4373,
+    "pick_pts": 10.89,
+    "judge_pts": 4.06,
+    "judge_net25": -269815,
+    "judge_net10": -136746
+   },
+   {
+    "setting": "5m range breakout + strong candle | 5m trend + one-way | exit ema15, stop atr",
+    "n": 4333,
+    "pick_pts": 10.85,
+    "judge_pts": 5.62,
+    "judge_net25": -244832,
+    "judge_net10": -84774
+   },
+   {
+    "setting": "5m level breakout + strong candle | 5m trend + one-way | exit ema15, stop candle",
+    "n": 3941,
+    "pick_pts": 10.67,
+    "judge_pts": 4.57,
+    "judge_net25": -239788,
+    "judge_net10": -121300
+   },
+   {
+    "setting": "5m any breakout + strong candle | 5m trend + one-way | exit ema15, stop atr",
+    "n": 4484,
+    "pick_pts": 10.64,
+    "judge_pts": 5.16,
+    "judge_net25": -266623,
+    "judge_net10": -100400
+   },
+   {
+    "setting": "5m any breakout + strong candle | 5m trend + one-way + day bias | exit ema15, stop atr",
+    "n": 2089,
+    "pick_pts": 10.6,
+    "judge_pts": 4.7,
+    "judge_net25": -85684,
+    "judge_net10": -11591
+   },
+   {
+    "setting": "5m level breakout + strong candle | 5m trend + one-way | exit ema15, stop atr",
+    "n": 4037,
+    "pick_pts": 10.36,
+    "judge_pts": 5.99,
+    "judge_net25": -236193,
+    "judge_net10": -86095
+   },
+   {
+    "setting": "5m level breakout + strong candle | 5m trend + one-way + day bias | exit ema15, stop candle",
+    "n": 1704,
+    "pick_pts": 10.13,
+    "judge_pts": 3.94,
+    "judge_net25": -112162,
+    "judge_net10": -62881
+   }
+  ],
+  "rule_effects": {
+   "strong": {
+    "vs": "False",
+    "change_in_points_per_trade": {
+     "True": {
+      "pick": 1.32,
+      "judge": 0.94
+     }
+    }
+   },
+   "dir": {
+    "vs": "0",
+    "change_in_points_per_trade": {
+     "1": {
+      "pick": 0.22,
+      "judge": 0.22
+     },
+     "2": {
+      "pick": 2.16,
+      "judge": 0.92
+     },
+     "3": {
+      "pick": 2.89,
+      "judge": -0.12
+     }
+    }
+   },
+   "entry": {
+    "vs": "range",
+    "change_in_points_per_trade": {
+     "level": {
+      "pick": -0.33,
+      "judge": 0.16
+     },
+     "any": {
+      "pick": -0.54,
+      "judge": 0.14
+     },
+     "bounce": {
+      "pick": -1.79,
+      "judge": -0.25
+     }
+    }
+   },
+   "exit": {
+    "vs": "ema9",
+    "change_in_points_per_trade": {
+     "ema15": {
+      "pick": 0.6,
+      "judge": 0.14
+     },
+     "1.5R": {
+      "pick": -0.69,
+      "judge": -0.86
+     }
+    }
+   },
+   "stop": {
+    "vs": "atr",
+    "change_in_points_per_trade": {
+     "candle": {
+      "pick": 0.01,
+      "judge": -0.03
+     }
+    }
+   },
+   "tcap": {
+    "vs": "False",
+    "change_in_points_per_trade": {
+     "True": {
+      "pick": -1.49,
+      "judge": -1.06
+     }
+    }
+   },
+   "chart": {
+    "vs": "1m",
+    "change_in_points_per_trade": {
+     "5m": {
+      "pick": 1.13,
+      "judge": 1.26
+     }
+    }
+   }
+  },
+  "costs": {
+   "avg_pts": 0.44,
+   "gross_rs": 13,
+   "fees_rs": 119,
+   "slip_rs_25": 154
+  }
+ },
+ "oi_study_history": {
+  "rows": [
+   {
+    "filter": "all trades (no OI filter)",
+    "n": 46469,
+    "pts": 2.91,
+    "rs25": -98,
+    "pick_rs25": -58,
+    "judge_rs25": -124
+   },
+   {
+    "filter": "PCR agrees (long if PCR >= 1, short if < 1)",
+    "n": 23743,
+    "pts": 3.94,
+    "rs25": -43,
+    "pick_rs25": 28,
+    "judge_rs25": -91
+   },
+   {
+    "filter": "PCR disagrees",
+    "n": 22726,
+    "pts": 1.83,
+    "rs25": -154,
+    "pick_rs25": -148,
+    "judge_rs25": -158
+   },
+   {
+    "filter": "biggest OI wall >= 3 ATR away in trade direction",
+    "n": 34088,
+    "pts": 3.13,
+    "rs25": -94,
+    "pick_rs25": -71,
+    "judge_rs25": -108
+   },
+   {
+    "filter": "OI wall < 3 ATR away",
+    "n": 12381,
+    "pts": 2.29,
+    "rs25": -109,
+    "pick_rs25": -22,
+    "judge_rs25": -166
+   },
+   {
+    "filter": "next key level >= 1.5 ATR away (room to run)",
+    "n": 12538,
+    "pts": 6.01,
+    "rs25": -24,
+    "pick_rs25": -8,
+    "judge_rs25": -35
+   },
+   {
+    "filter": "next key level < 1.5 ATR away",
+    "n": 33931,
+    "pts": 1.76,
+    "rs25": -125,
+    "pick_rs25": -77,
+    "judge_rs25": -156
+   }
+  ]
+ },
+ "part_b": {
+  "days": 12,
+  "trades": 128328,
+  "real_total": -31196422,
+  "model_total": -19800350,
+  "corr": 0.95,
+  "median_spread_pct": 0.7,
+  "settings_positive_real": "128 of 768",
+  "history_top10_on_real": [
+   {
+    "setting": "5m any breakout + strong candle | 5m trend + one-way | exit ema15, stop atr",
+    "n": 42,
+    "real": -38902,
+    "liquid_real": -1311
+   },
+   {
+    "setting": "5m range breakout + strong candle | 5m trend + one-way | exit ema15, stop atr",
+    "n": 38,
+    "real": -32553,
+    "liquid_real": -1311
+   },
+   {
+    "setting": "5m level breakout + strong candle | 5m trend + one-way | exit ema15, stop atr",
+    "n": 34,
+    "real": -29899,
+    "liquid_real": 549
+   },
+   {
+    "setting": "5m range breakout + strong candle | no direction filter | exit ema15, stop atr",
+    "n": 54,
+    "real": -28493,
+    "liquid_real": 5297
+   },
+   {
+    "setting": "5m range breakout + strong candle | 5m trend | exit ema15, stop atr",
+    "n": 54,
+    "real": -28493,
+    "liquid_real": 5297
+   },
+   {
+    "setting": "5m any breakout + strong candle | 5m trend + one-way | exit ema15, stop candle",
+    "n": 41,
+    "real": -36693,
+    "liquid_real": -2415
+   },
+   {
+    "setting": "5m range breakout + strong candle | 5m trend + one-way | exit ema15, stop candle",
+    "n": 37,
+    "real": -29104,
+    "liquid_real": -2415
+   },
+   {
+    "setting": "5m any breakout + strong candle | 5m trend + one-way | exit ema9, stop atr",
+    "n": 43,
+    "real": -35284,
+    "liquid_real": -6029
+   },
+   {
+    "setting": "5m level breakout + strong candle | 5m trend + one-way | exit ema15, stop candle",
+    "n": 34,
+    "real": -28620,
+    "liquid_real": 1388
+   },
+   {
+    "setting": "5m range breakout + strong candle | 5m trend + one-way | exit ema9, stop atr",
+    "n": 39,
+    "real": -28935,
+    "liquid_real": -6029
+   }
+  ],
+  "oi_intraday": {
+   "agree": {
+    "n": 64301,
+    "avg_real": -275,
+    "win": 31.2,
+    "pts": 0.48
+   },
+   "disagree": {
+    "n": 63515,
+    "avg_real": -207,
+    "win": 32.8,
+    "pts": 2.04
+   }
+  },
+  "liquid": {
+   "liquid_avg": -85,
+   "wide_avg": -313,
+   "liquid_share": 30.6
+  },
+  "best_real_with_spread_and_oi": [
+   {
+    "setting": "1m any breakout + strong candle | 5m trend + one-way + day bias | exit ema15, stop candle",
+    "n": 13,
+    "real": 37886
+   },
+   {
+    "setting": "1m any breakout + strong candle | 5m trend + one-way | exit ema15, stop candle",
+    "n": 14,
+    "real": 35147
+   },
+   {
+    "setting": "1m any breakout + strong candle | 5m trend + one-way + day bias | exit ema15, stop atr",
+    "n": 14,
+    "real": 32746
+   },
+   {
+    "setting": "1m any breakout + strong candle | 5m trend + one-way | exit ema15, stop atr",
+    "n": 15,
+    "real": 31593
+   },
+   {
+    "setting": "1m range breakout | 5m trend + one-way + day bias | exit ema15, stop candle",
+    "n": 14,
+    "real": 31184
+   }
+  ]
+ }
+}
