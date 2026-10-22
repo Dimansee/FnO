@@ -76,9 +76,10 @@ PB = dict(objective="regression", learning_rate=0.03, num_leaves=7, min_data_in_
 
 def trades_with_features():
     L = pd.read_pickle("/tmp/round32_live.pkl"); L = L[L.sym.isin(["NIFTY", "BANKNIFTY"])].copy()
+    L = L.rename(columns={"sym": "symn"})
     h, m = L.entry_time.str[:2].astype(int), L.entry_time.str[3:].astype(int)
     L["i"] = ((h * 60 + m) - (9 * 60 + 15)) // 5 - 1
-    J = L.merge(D[["symn", "date", "i"] + COLS].rename(columns={"symn": "sym"}), on=["sym", "date", "i"], how="inner")
+    J = L.merge(D[["symn", "date", "i"] + COLS], on=["symn", "date", "i"], how="inner")
     sg = np.where(J.side == "CE", 1.0, -1.0)
     for c in DIR:
         if c in J: J[c] = J[c] * sg
@@ -124,10 +125,12 @@ def policies(J, preds, trp, period="q"):
 
 
 if __name__ == "__main__":
-    RES["A_why_the_ai_stopped_trading"] = part_a()
+    CA = "/tmp/round39_partA.json"
+    RES["A_why_the_ai_stopped_trading"] = json.load(open(CA)) if os.path.exists(CA) else part_a()
+    json.dump(RES["A_why_the_ai_stopped_trading"], open(CA, "w"))
     J = trades_with_features()
     FB = COLS + ["slot_id", "strat_id"]
-    print("rule trades with features", len(J), J.groupby(["sym", "slot"]).size().to_dict(), flush=True)
+    print("rule trades with features", len(J), J.groupby(["symn", "slot"]).size().to_dict(), flush=True)
     for per in ("q", "m"):
         pr, trp = walk(J, per)
         RES[f"B_meta_label_{per}"] = policies(J, pr, trp, per)
