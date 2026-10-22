@@ -1,7 +1,18 @@
 {
- "updated": "2026-10-21",
+ "updated": "2026-10-22",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
+  {
+   "id": "r37",
+   "date": "2026-10-22",
+   "area": "Index options",
+   "title": "Round 37: re-check - a second trade on the same rule only if the first did not lose (current Autopilot set)",
+   "asked": "Should Autopilot adopt round 21's 're-enter only after a non-losing first trade'?",
+   "result": "On the current set (Noise + Camarilla on Nifty / Bank Nifty, Noise on Sensex, trend-day and Fibonacci slots unchanged), 2023 to 16 Oct 2026, Rs 2,000 risk a trade: it adds only 53 trades in almost 4 years. Net +Rs 5.26L vs +Rs 5.15L now (+2%), deepest fall -Rs 1.31L vs -Rs 1.23L (deeper). By year vs now: 2023 -Rs 10.6k, 2024 +Rs 23.9k, 2025 +Rs 7.0k, 2026 -Rs 9.6k. Same-direction-only gives the same trades. Round 21's smaller deepest fall (Rs 42k vs 53k on the old two-index set) does not reproduce.",
+   "decision": "Not adopted",
+   "summary": "Too few extra trades to matter, worse in 2023 and 2026, and a deeper fall - the same mixed picture as round 21 and now without its one advantage. One trade per rule per day stays.",
+   "period": "2023-01 to 2026-10-16"
+  },
   {
    "id": "jr3",
    "date": "2026-10-21",
@@ -1045,13 +1056,14 @@
    "area": "Index options",
    "title": "Second trade only if the first did not lose",
    "waiting_for": "More live trades",
-   "why": "Backtest: smaller deepest fall (Rs 41.8k vs 52.7k) but mixed profit by year.",
+   "why": "Backtest: smaller deepest fall (Rs 41.8k vs 52.7k) but mixed profit by year. Round 37 re-check on the current set: +2% profit from 53 extra trades in 4 years, worse in 2023 and 2026, deeper fall.",
    "collecting": "Live signals and paper trades",
    "since": "2026-10-15",
    "need": 60,
    "unit": "sessions",
    "refs": [
-    "r21d"
+    "r21d",
+    "r37"
    ],
    "next": "Compare live second-signal outcomes with the one-trade rule."
   },

@@ -124,6 +124,10 @@ def run(symbol, candles, vix, P, capital=200000, start='2023-01-01'):
                 if res is None: break
                 if isinstance(res, tuple): start_i = res[1]+1; continue
                 day_trades.append(res); ntr += 1
+                if P.get('reentry_nonloss'):          # round 37: a 2nd trade on the same rule only if the 1st did not lose
+                    if ntr > P.get('reentry', 1) or res['pnl'] < 0 or res['reason'] == 'squareoff': break
+                    start_i = res['xi'] + 1; side = res['side'] if P.get('reentry_same_side') else None
+                    continue
                 # re-entry rule: only after a non-stop exit (trail/time), same direction, max P['reentry'] extra
                 if ntr > P.get('reentry', 0) or res['reason'] in ('stop', 'target', 'squareoff', 'stop_be'): break
                 if P.get('reentry_only_if_trail') and res['reason'] not in ('trail', 'time'): break
