@@ -415,7 +415,7 @@ def summarise_a(A):
     R["rule_effects"] = eff
     # cost picture
     R["costs"] = dict(avg_pts=round(float(A.pts.mean()), 2), gross_rs=round(float(A.gross.mean())), fees_rs=round(float(A["chg_0.0025"].mean())),
-                      slip_rs_25=round(float(((A.p_in + A.p_out) * 0.0025 * A.lots * A.sym.map(lambda s: D.instrument(s)["lot"])).mean())))
+                      slip_rs_25=round(float(((A.p_in + A.p_out) * 0.0025 * A.lots * A.sym.map(lambda s: D.instrument(s)["lot"]).astype(float)).mean())))
     RES["part_a"] = R
     S.to_pickle(f"{WORK}/round36_S.pkl")
     pd.set_option("display.width", 260); pd.set_option("display.max_colwidth", 95)
