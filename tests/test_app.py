@@ -659,3 +659,21 @@ assert j(c.post("/api/account/capital", json={"capital": 0}))["ok"]
 assert j(c.post("/api/changes/profit_only", json={}))["ok"] and P4.account()["capital_start"] == 200000
 store.clear_trades()
 print("recent changes revert OK")
+
+# Round 38: small-account strike (1 OTM below Rs 60k equity, Autopilot only, switchable) and the backtest's live-rules replay
+import pandas as _pd38
+from fno import backtest as B38, config as C38
+_ch = _pd38.DataFrame({"strike": [22400.0, 22450.0, 22500.0, 22550.0, 22600.0]})
+assert SV3._small_account_strike({"opt": "CE"}, _ch, 22502, {"autopilot": True}, 25000) == 22550.0
+assert SV3._small_account_strike({"opt": "PE"}, _ch, 22502, {"autopilot": True}, 25000) == 22450.0
+assert SV3._small_account_strike({"opt": "CE"}, _ch, 22502, {"autopilot": True}, 80000) is None      # big enough: the 1-ITM rule
+assert SV3._small_account_strike({"opt": "CE"}, _ch, 22502, {}, 25000) is None                         # Autopilot off: untouched
+j(c.post("/api/changes/small_otm", json={"on": False})); assert SV3._small_account_strike({"opt": "CE"}, _ch, 22502, {"autopilot": True}, 25000) is None
+j(c.post("/api/changes/small_otm", json={"on": True}))
+_tr = [{"date": "2026-10-08", "entry_time": "09:30", "exit_time": "15:15", "strategy": "Camarilla", "prem_in": 150.0, "lots": 1, "pnl": 12000.0, "risk_lot": 1900},
+       {"date": "2026-10-08", "entry_time": "09:30", "exit_time": "15:15", "strategy": "Fibonacci 0.618", "prem_in": 150.0, "lots": 1, "pnl": 12000.0, "risk_lot": 1900},
+       {"date": "2026-10-08", "entry_time": "10:45", "exit_time": "15:15", "strategy": "Trend-day", "prem_in": 160.0, "lots": 1, "pnl": 9000.0, "risk_lot": 1900},
+       {"date": "2026-10-09", "entry_time": "09:45", "exit_time": "10:30", "strategy": "Noise band", "prem_in": 160.0, "lots": 1, "pnl": -900.0, "risk_lot": 9000}]
+_k, _w = B38._autopilot_replay(_tr, 20000, 65)
+assert [t["strategy"] for t in _k] == ["Camarilla"] and _w["fib_gate"] == 1 and _w["risk15"] == 1 and _w["trend_gate"] == 1   # equity 32k < 40k
+print("round 38 small-account strike + live-rules replay OK")

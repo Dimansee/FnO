@@ -1,7 +1,18 @@
 {
- "updated": "2026-10-22",
+ "updated": "2026-10-23",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
+  {
+   "id": "r38",
+   "date": "2026-10-23",
+   "area": "Index options",
+   "title": "Round 38: why a Rs 20k '1 lot' backtest shows the same Net P&L for 30 and 60 days, and what a small account really earns",
+   "asked": "60-day and 30-day backtests at Rs 20,000, always 1 lot, both show about +Rs 49k. Why, and how can net P&L be improved in actual conditions?",
+   "result": "Why 30 = 60: the earlier 30 sessions made -Rs 2k on Nifty (Aug-Sep 2026 was flat), so all the profit is in the last 30. Three trades on 8 and 15 Oct made 75% of it. With 1 lot the rupee P&L does not depend on the capital. Across all 60-day windows since 2023 the earlier half lost money 30% of the time on Nifty. Actual conditions: the plain backtest also took trend-day and Fibonacci trades that live Autopilot only takes from Rs 40k and Rs 2 lakh equity. It stacked up to 3 lots on one move without checking total cash, and it skipped the 15% one-lot risk check and the weekly limit. Live paper trades from 6-22 Oct made +Rs 13k per lot against +Rs 55k in the backtest. On matched trades the price model was within about 10%, except the 19 Oct gap stop (real loss 38% worse). Replay with the live rules, a fresh account started every month from Feb 2023 and run 12 months (33 starts): at Rs 20k, Nifty 1 ITM made a median -Rs 8k and lost in 67% of starts, against +Rs 82k in the plain backtest. At Rs 40k: median +Rs 34k, 12% losing. At Rs 60k: median +Rs 45k, 3% losing. Strike: below about Rs 60k a 1-OTM lot did better. Rs 20k Nifty + Sensex: median +Rs 14k vs -Rs 3k with 1 ITM. Rs 40k: +Rs 41k with 0% losing starts vs +Rs 38k with 24% losing. From Rs 60k up, 1 ITM was as good or better. Opening the trend slot from day one and blocking stacked positions did not help.",
+   "decision": "Adopted",
+   "summary": "The app backtest now replays Autopilot's live rules (strategy Autopilot) and shows what it skipped. Below Rs 60k equity Autopilot buys 1 strike OTM (switchable in Recent changes). The real lever is capital: one lot needs about Rs 40-60k to ride out the dips that come before the big trend days.",
+   "period": "2023-01 to 2026-10-22"
+  },
   {
    "id": "r37",
    "date": "2026-10-22",

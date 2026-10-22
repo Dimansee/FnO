@@ -1,0 +1,2466 @@
+{
+ "NIFTY | why 30 ~ 60": {
+  "pct_earlier30_negative": 30,
+  "pct_60_within_15pct_of_30": 10,
+  "top5_days_share_of_net": 0.49,
+  "best_10pct_days_share": 2.68
+ },
+ "NIFTY | 1 ITM (rule) | bt": {
+  "n": 1025,
+  "net": 328533,
+  "end_equity": 348533,
+  "max_fall": -47146,
+  "lowest_equity": 10099,
+  "win": 30.2,
+  "months_up": "30/46",
+  "top5_share": 0.23,
+  "years": {
+   "2023": -288,
+   "2024": 102106,
+   "2025": 103537,
+   "2026": 123178
+  },
+  "by_strategy": {
+   "Camarilla": 73634,
+   "Fibonacci 0.618": 131952,
+   "Noise band": 49146,
+   "Trend-day": 73801
+  },
+  "median_30d": 9562,
+  "pct_30d_windows_negative": 31,
+  "pct_earlier30_negative": 34,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 81729,
+   "p10_net": 61738,
+   "p90_net": 110203,
+   "pct_losing": 0,
+   "pct_below_half": 61,
+   "median_fall": -33071
+  }
+ },
+ "NIFTY | 1 ITM (rule) | live": {
+  "n": 183,
+  "net": 44259,
+  "end_equity": 64259,
+  "max_fall": -20192,
+  "lowest_equity": 8308,
+  "win": 32.2,
+  "months_up": "14/27",
+  "top5_share": 1.27,
+  "years": {
+   "2023": -11253,
+   "2024": 817,
+   "2025": 1488,
+   "2026": 53207
+  },
+  "by_strategy": {
+   "Camarilla": 31320,
+   "Noise band": 1321,
+   "Trend-day": 11618
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 40,
+  "pct_earlier30_negative": 44,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -8258,
+   "p10_net": -11795,
+   "p90_net": 22979,
+   "pct_losing": 67,
+   "pct_below_half": 45,
+   "median_fall": -15910
+  }
+ },
+ "NIFTY | 1 ITM (rule) | live_1pos": {
+  "n": 178,
+  "net": 34145,
+  "end_equity": 54145,
+  "max_fall": -20192,
+  "lowest_equity": 8308,
+  "win": 30.9,
+  "months_up": "14/27",
+  "top5_share": 1.58,
+  "years": {
+   "2023": -11253,
+   "2024": 817,
+   "2025": 1488,
+   "2026": 43093
+  },
+  "by_strategy": {
+   "Camarilla": 31320,
+   "Noise band": 759,
+   "Trend-day": 2066
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 40,
+  "pct_earlier30_negative": 44,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -8258,
+   "p10_net": -11795,
+   "p90_net": 20236,
+   "pct_losing": 67,
+   "pct_below_half": 45,
+   "median_fall": -15910
+  }
+ },
+ "NIFTY | 1 ITM (rule) | live_tr0": {
+  "n": 199,
+  "net": -11575,
+  "end_equity": 8425,
+  "max_fall": -35726,
+  "lowest_equity": 8299,
+  "win": 27.6,
+  "months_up": "13/28",
+  "top5_share": null,
+  "years": {
+   "2023": -10082,
+   "2024": -363,
+   "2025": 635,
+   "2026": -1765
+  },
+  "by_strategy": {
+   "Camarilla": -16786,
+   "Noise band": -5318,
+   "Trend-day": 10529
+  },
+  "median_30d": -13,
+  "pct_30d_windows_negative": 51,
+  "pct_earlier30_negative": 53,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -8860,
+   "p10_net": -11637,
+   "p90_net": 34861,
+   "pct_losing": 76,
+   "pct_below_half": 58,
+   "median_fall": -16556
+  }
+ },
+ "NIFTY | 1 ITM (rule) | live_tr0_1pos": {
+  "n": 218,
+  "net": 11788,
+  "end_equity": 31788,
+  "max_fall": -25896,
+  "lowest_equity": 9038,
+  "win": 30.3,
+  "months_up": "19/33",
+  "top5_share": 3.59,
+  "years": {
+   "2023": -10962,
+   "2024": 1946,
+   "2025": -1122,
+   "2026": 21926
+  },
+  "by_strategy": {
+   "Camarilla": -3370,
+   "Noise band": 88,
+   "Trend-day": 15070
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 41,
+  "pct_earlier30_negative": 45,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -9511,
+   "p10_net": -11515,
+   "p90_net": 8767,
+   "pct_losing": 79,
+   "pct_below_half": 67,
+   "median_fall": -16369
+  }
+ },
+ "NIFTY | ATM | bt": {
+  "n": 1026,
+  "net": 303451,
+  "end_equity": 323451,
+  "max_fall": -39330,
+  "lowest_equity": 14645,
+  "win": 30.0,
+  "months_up": "30/46",
+  "top5_share": 0.23,
+  "years": {
+   "2023": 3297,
+   "2024": 94602,
+   "2025": 96754,
+   "2026": 108798
+  },
+  "by_strategy": {
+   "Camarilla": 70331,
+   "Fibonacci 0.618": 123262,
+   "Noise band": 46173,
+   "Trend-day": 63685
+  },
+  "median_30d": 8620,
+  "pct_30d_windows_negative": 31,
+  "pct_earlier30_negative": 34,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 77083,
+   "p10_net": 52696,
+   "p90_net": 103383,
+   "pct_losing": 0,
+   "pct_below_half": 58,
+   "median_fall": -29177
+  }
+ },
+ "NIFTY | ATM | live": {
+  "n": 168,
+  "net": 8650,
+  "end_equity": 28650,
+  "max_fall": -25491,
+  "lowest_equity": 6872,
+  "win": 31.0,
+  "months_up": "14/29",
+  "top5_share": 4.21,
+  "years": {
+   "2023": -10825,
+   "2024": -1256,
+   "2025": 1296,
+   "2026": 19435
+  },
+  "by_strategy": {
+   "Camarilla": 10200,
+   "Noise band": -1550
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 43,
+  "pct_earlier30_negative": 47,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -4091,
+   "p10_net": -13084,
+   "p90_net": 49886,
+   "pct_losing": 52,
+   "pct_below_half": 39,
+   "median_fall": -17896
+  }
+ },
+ "NIFTY | ATM | live_1pos": {
+  "n": 168,
+  "net": 8650,
+  "end_equity": 28650,
+  "max_fall": -25491,
+  "lowest_equity": 6872,
+  "win": 31.0,
+  "months_up": "14/29",
+  "top5_share": 4.21,
+  "years": {
+   "2023": -10825,
+   "2024": -1256,
+   "2025": 1296,
+   "2026": 19435
+  },
+  "by_strategy": {
+   "Camarilla": 10200,
+   "Noise band": -1550
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 43,
+  "pct_earlier30_negative": 47,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -4091,
+   "p10_net": -13084,
+   "p90_net": 35719,
+   "pct_losing": 52,
+   "pct_below_half": 39,
+   "median_fall": -17267
+  }
+ },
+ "NIFTY | ATM | live_tr0": {
+  "n": 657,
+  "net": 169262,
+  "end_equity": 189262,
+  "max_fall": -35869,
+  "lowest_equity": 16307,
+  "win": 30.4,
+  "months_up": "30/46",
+  "top5_share": 0.38,
+  "years": {
+   "2023": 9077,
+   "2024": 55489,
+   "2025": 33134,
+   "2026": 71562
+  },
+  "by_strategy": {
+   "Camarilla": 82357,
+   "Noise band": 32059,
+   "Trend-day": 54846
+  },
+  "median_30d": 5334,
+  "pct_30d_windows_negative": 32,
+  "pct_earlier30_negative": 35,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -10670,
+   "p10_net": -12915,
+   "p90_net": 32058,
+   "pct_losing": 85,
+   "pct_below_half": 76,
+   "median_fall": -19673
+  }
+ },
+ "NIFTY | ATM | live_tr0_1pos": {
+  "n": 251,
+  "net": 10276,
+  "end_equity": 30276,
+  "max_fall": -25854,
+  "lowest_equity": 7743,
+  "win": 29.9,
+  "months_up": "18/36",
+  "top5_share": 3.93,
+  "years": {
+   "2023": -11891,
+   "2024": 2192,
+   "2025": -650,
+   "2026": 20625
+  },
+  "by_strategy": {
+   "Camarilla": 1132,
+   "Noise band": 3134,
+   "Trend-day": 6010
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 44,
+  "pct_earlier30_negative": 47,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -9779,
+   "p10_net": -12584,
+   "p90_net": 25816,
+   "pct_losing": 70,
+   "pct_below_half": 70,
+   "median_fall": -17267
+  }
+ },
+ "NIFTY | 1 OTM | bt": {
+  "n": 1027,
+  "net": 277340,
+  "end_equity": 297340,
+  "max_fall": -32280,
+  "lowest_equity": 15365,
+  "win": 29.8,
+  "months_up": "31/46",
+  "top5_share": 0.24,
+  "years": {
+   "2023": 6004,
+   "2024": 86882,
+   "2025": 87629,
+   "2026": 96825
+  },
+  "by_strategy": {
+   "Camarilla": 64899,
+   "Fibonacci 0.618": 114094,
+   "Noise band": 43042,
+   "Trend-day": 55305
+  },
+  "median_30d": 7904,
+  "pct_30d_windows_negative": 30,
+  "pct_earlier30_negative": 34,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 72224,
+   "p10_net": 44121,
+   "p90_net": 94331,
+   "pct_losing": 0,
+   "pct_below_half": 55,
+   "median_fall": -26499
+  }
+ },
+ "NIFTY | 1 OTM | live": {
+  "n": 618,
+  "net": 138574,
+  "end_equity": 158574,
+  "max_fall": -32416,
+  "lowest_equity": 14737,
+  "win": 29.8,
+  "months_up": "29/46",
+  "top5_share": 0.43,
+  "years": {
+   "2023": -2572,
+   "2024": 51485,
+   "2025": 30399,
+   "2026": 59262
+  },
+  "by_strategy": {
+   "Camarilla": 68158,
+   "Noise band": 43042,
+   "Trend-day": 27374
+  },
+  "median_30d": 4379,
+  "pct_30d_windows_negative": 34,
+  "pct_earlier30_negative": 37,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -3760,
+   "p10_net": -13414,
+   "p90_net": 42858,
+   "pct_losing": 55,
+   "pct_below_half": 55,
+   "median_fall": -17460
+  }
+ },
+ "NIFTY | 1 OTM | live_1pos": {
+  "n": 526,
+  "net": 104683,
+  "end_equity": 124683,
+  "max_fall": -26055,
+  "lowest_equity": 14737,
+  "win": 28.7,
+  "months_up": "29/46",
+  "top5_share": 0.57,
+  "years": {
+   "2023": -2572,
+   "2024": 34162,
+   "2025": 26524,
+   "2026": 46569
+  },
+  "by_strategy": {
+   "Camarilla": 67654,
+   "Noise band": 39900,
+   "Trend-day": -2871
+  },
+  "median_30d": 4124,
+  "pct_30d_windows_negative": 33,
+  "pct_earlier30_negative": 36,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -1243,
+   "p10_net": -13414,
+   "p90_net": 31040,
+   "pct_losing": 52,
+   "pct_below_half": 55,
+   "median_fall": -16483
+  }
+ },
+ "NIFTY | 1 OTM | live_tr0": {
+  "n": 670,
+  "net": 160511,
+  "end_equity": 180511,
+  "max_fall": -32416,
+  "lowest_equity": 16783,
+  "win": 30.1,
+  "months_up": "30/46",
+  "top5_share": 0.37,
+  "years": {
+   "2023": 10079,
+   "2024": 61558,
+   "2025": 29612,
+   "2026": 59262
+  },
+  "by_strategy": {
+   "Camarilla": 66532,
+   "Noise band": 42255,
+   "Trend-day": 51724
+  },
+  "median_30d": 5754,
+  "pct_30d_windows_negative": 31,
+  "pct_earlier30_negative": 34,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -10213,
+   "p10_net": -13399,
+   "p90_net": 52334,
+   "pct_losing": 67,
+   "pct_below_half": 73,
+   "median_fall": -18553
+  }
+ },
+ "NIFTY | 1 OTM | live_tr0_1pos": {
+  "n": 527,
+  "net": 103645,
+  "end_equity": 123645,
+  "max_fall": -26055,
+  "lowest_equity": 13699,
+  "win": 28.7,
+  "months_up": "30/46",
+  "top5_share": 0.58,
+  "years": {
+   "2023": -3236,
+   "2024": 33788,
+   "2025": 26524,
+   "2026": 46569
+  },
+  "by_strategy": {
+   "Camarilla": 64388,
+   "Noise band": 35610,
+   "Trend-day": 3647
+  },
+  "median_30d": 4071,
+  "pct_30d_windows_negative": 33,
+  "pct_earlier30_negative": 36,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -11348,
+   "p10_net": -13304,
+   "p90_net": 28792,
+   "pct_losing": 70,
+   "pct_below_half": 73,
+   "median_fall": -17682
+  }
+ },
+ "BANKNIFTY | why 30 ~ 60": {
+  "pct_earlier30_negative": 65,
+  "pct_60_within_15pct_of_30": 7,
+  "top5_days_share_of_net": -4.48,
+  "best_10pct_days_share": -11.79
+ },
+ "BANKNIFTY | 1 ITM (rule) | bt": {
+  "n": 230,
+  "net": -13723,
+  "end_equity": 6277,
+  "max_fall": -76527,
+  "lowest_equity": -32210,
+  "win": 28.3,
+  "months_up": "21/43",
+  "top5_share": null,
+  "years": {
+   "2023": 6831,
+   "2024": -35621,
+   "2025": 830,
+   "2026": 14237
+  },
+  "by_strategy": {
+   "Camarilla": -8193,
+   "Noise band": -5530
+  },
+  "median_30d": -889,
+  "pct_30d_windows_negative": 52,
+  "pct_earlier30_negative": 54,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -7788,
+   "p10_net": -45561,
+   "p90_net": 23106,
+   "pct_losing": 58,
+   "pct_below_half": 76,
+   "median_fall": -35669
+  }
+ },
+ "BANKNIFTY | 1 ITM (rule) | live": {
+  "n": 106,
+  "net": -8686,
+  "end_equity": 11314,
+  "max_fall": -33003,
+  "lowest_equity": 11314,
+  "win": 21.7,
+  "months_up": "10/28",
+  "top5_share": null,
+  "years": {
+   "2023": 6831,
+   "2024": -12919,
+   "2025": -2053,
+   "2026": -545
+  },
+  "by_strategy": {
+   "Camarilla": 14774,
+   "Noise band": -23460
+  },
+  "median_30d": -290,
+  "pct_30d_windows_negative": 51,
+  "pct_earlier30_negative": 54,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -6048,
+   "p10_net": -8386,
+   "p90_net": 26382,
+   "pct_losing": 52,
+   "pct_below_half": 0,
+   "median_fall": -9622
+  }
+ },
+ "BANKNIFTY | 1 ITM (rule) | live_1pos": {
+  "n": 106,
+  "net": -8686,
+  "end_equity": 11314,
+  "max_fall": -33003,
+  "lowest_equity": 11314,
+  "win": 21.7,
+  "months_up": "10/28",
+  "top5_share": null,
+  "years": {
+   "2023": 6831,
+   "2024": -12919,
+   "2025": -2053,
+   "2026": -545
+  },
+  "by_strategy": {
+   "Camarilla": 14774,
+   "Noise band": -23460
+  },
+  "median_30d": -290,
+  "pct_30d_windows_negative": 51,
+  "pct_earlier30_negative": 54,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -6048,
+   "p10_net": -8386,
+   "p90_net": 26382,
+   "pct_losing": 52,
+   "pct_below_half": 0,
+   "median_fall": -9622
+  }
+ },
+ "BANKNIFTY | 1 ITM (rule) | live_tr0": {
+  "n": 106,
+  "net": -8686,
+  "end_equity": 11314,
+  "max_fall": -33003,
+  "lowest_equity": 11314,
+  "win": 21.7,
+  "months_up": "10/28",
+  "top5_share": null,
+  "years": {
+   "2023": 6831,
+   "2024": -12919,
+   "2025": -2053,
+   "2026": -545
+  },
+  "by_strategy": {
+   "Camarilla": 14774,
+   "Noise band": -23460
+  },
+  "median_30d": -290,
+  "pct_30d_windows_negative": 51,
+  "pct_earlier30_negative": 54,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -6048,
+   "p10_net": -8386,
+   "p90_net": 26382,
+   "pct_losing": 52,
+   "pct_below_half": 0,
+   "median_fall": -9622
+  }
+ },
+ "BANKNIFTY | 1 ITM (rule) | live_tr0_1pos": {
+  "n": 106,
+  "net": -8686,
+  "end_equity": 11314,
+  "max_fall": -33003,
+  "lowest_equity": 11314,
+  "win": 21.7,
+  "months_up": "10/28",
+  "top5_share": null,
+  "years": {
+   "2023": 6831,
+   "2024": -12919,
+   "2025": -2053,
+   "2026": -545
+  },
+  "by_strategy": {
+   "Camarilla": 14774,
+   "Noise band": -23460
+  },
+  "median_30d": -290,
+  "pct_30d_windows_negative": 51,
+  "pct_earlier30_negative": 54,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -6048,
+   "p10_net": -8386,
+   "p90_net": 26382,
+   "pct_losing": 52,
+   "pct_below_half": 0,
+   "median_fall": -9622
+  }
+ },
+ "BANKNIFTY | ATM | bt": {
+  "n": 281,
+  "net": 20251,
+  "end_equity": 40251,
+  "max_fall": -66901,
+  "lowest_equity": -3934,
+  "win": 28.1,
+  "months_up": "22/43",
+  "top5_share": 3.03,
+  "years": {
+   "2023": 22947,
+   "2024": -15566,
+   "2025": -6588,
+   "2026": 19458
+  },
+  "by_strategy": {
+   "Camarilla": 31583,
+   "Noise band": -11332
+  },
+  "median_30d": -995,
+  "pct_30d_windows_negative": 53,
+  "pct_earlier30_negative": 56,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -6050,
+   "p10_net": -37628,
+   "p90_net": 23038,
+   "pct_losing": 67,
+   "pct_below_half": 88,
+   "median_fall": -32217
+  }
+ },
+ "BANKNIFTY | ATM | live": {
+  "n": 159,
+  "net": 26044,
+  "end_equity": 46044,
+  "max_fall": -40729,
+  "lowest_equity": 11579,
+  "win": 26.4,
+  "months_up": "15/34",
+  "top5_share": 2.27,
+  "years": {
+   "2023": 12288,
+   "2024": -19480,
+   "2025": 3123,
+   "2026": 30113
+  },
+  "by_strategy": {
+   "Camarilla": 34426,
+   "Noise band": -8382
+  },
+  "median_30d": -137,
+  "pct_30d_windows_negative": 48,
+  "pct_earlier30_negative": 50,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -32,
+   "p10_net": -9170,
+   "p90_net": 31373,
+   "pct_losing": 52,
+   "pct_below_half": 0,
+   "median_fall": -16435
+  }
+ },
+ "BANKNIFTY | ATM | live_1pos": {
+  "n": 159,
+  "net": 26044,
+  "end_equity": 46044,
+  "max_fall": -40729,
+  "lowest_equity": 11579,
+  "win": 26.4,
+  "months_up": "15/34",
+  "top5_share": 2.27,
+  "years": {
+   "2023": 12288,
+   "2024": -19480,
+   "2025": 3123,
+   "2026": 30113
+  },
+  "by_strategy": {
+   "Camarilla": 34426,
+   "Noise band": -8382
+  },
+  "median_30d": -137,
+  "pct_30d_windows_negative": 48,
+  "pct_earlier30_negative": 50,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -32,
+   "p10_net": -9170,
+   "p90_net": 31373,
+   "pct_losing": 52,
+   "pct_below_half": 0,
+   "median_fall": -16435
+  }
+ },
+ "BANKNIFTY | ATM | live_tr0": {
+  "n": 159,
+  "net": 26044,
+  "end_equity": 46044,
+  "max_fall": -40729,
+  "lowest_equity": 11579,
+  "win": 26.4,
+  "months_up": "15/34",
+  "top5_share": 2.27,
+  "years": {
+   "2023": 12288,
+   "2024": -19480,
+   "2025": 3123,
+   "2026": 30113
+  },
+  "by_strategy": {
+   "Camarilla": 34426,
+   "Noise band": -8382
+  },
+  "median_30d": -137,
+  "pct_30d_windows_negative": 48,
+  "pct_earlier30_negative": 50,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -32,
+   "p10_net": -9170,
+   "p90_net": 31373,
+   "pct_losing": 52,
+   "pct_below_half": 0,
+   "median_fall": -16435
+  }
+ },
+ "BANKNIFTY | ATM | live_tr0_1pos": {
+  "n": 159,
+  "net": 26044,
+  "end_equity": 46044,
+  "max_fall": -40729,
+  "lowest_equity": 11579,
+  "win": 26.4,
+  "months_up": "15/34",
+  "top5_share": 2.27,
+  "years": {
+   "2023": 12288,
+   "2024": -19480,
+   "2025": 3123,
+   "2026": 30113
+  },
+  "by_strategy": {
+   "Camarilla": 34426,
+   "Noise band": -8382
+  },
+  "median_30d": -137,
+  "pct_30d_windows_negative": 48,
+  "pct_earlier30_negative": 50,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -32,
+   "p10_net": -9170,
+   "p90_net": 31373,
+   "pct_losing": 52,
+   "pct_below_half": 0,
+   "median_fall": -16435
+  }
+ },
+ "BANKNIFTY | 1 OTM | bt": {
+  "n": 314,
+  "net": 61619,
+  "end_equity": 81619,
+  "max_fall": -52869,
+  "lowest_equity": 13087,
+  "win": 29.6,
+  "months_up": "23/44",
+  "top5_share": 1.01,
+  "years": {
+   "2023": 28313,
+   "2024": 26794,
+   "2025": -6477,
+   "2026": 12989
+  },
+  "by_strategy": {
+   "Camarilla": 60419,
+   "Noise band": 1200
+  },
+  "median_30d": 1732,
+  "pct_30d_windows_negative": 44,
+  "pct_earlier30_negative": 46,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 4632,
+   "p10_net": -19333,
+   "p90_net": 45082,
+   "pct_losing": 39,
+   "pct_below_half": 82,
+   "median_fall": -27351
+  }
+ },
+ "BANKNIFTY | 1 OTM | live": {
+  "n": 179,
+  "net": 18212,
+  "end_equity": 38212,
+  "max_fall": -45847,
+  "lowest_equity": 9819,
+  "win": 26.3,
+  "months_up": "14/34",
+  "top5_share": 3.1,
+  "years": {
+   "2023": 18023,
+   "2024": -27043,
+   "2025": 2842,
+   "2026": 24390
+  },
+  "by_strategy": {
+   "Camarilla": 24032,
+   "Noise band": -5820
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 47,
+  "pct_earlier30_negative": 49,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -1082,
+   "p10_net": -10309,
+   "p90_net": 40962,
+   "pct_losing": 52,
+   "pct_below_half": 21,
+   "median_fall": -16584
+  }
+ },
+ "BANKNIFTY | 1 OTM | live_1pos": {
+  "n": 179,
+  "net": 18212,
+  "end_equity": 38212,
+  "max_fall": -45847,
+  "lowest_equity": 9819,
+  "win": 26.3,
+  "months_up": "14/34",
+  "top5_share": 3.1,
+  "years": {
+   "2023": 18023,
+   "2024": -27043,
+   "2025": 2842,
+   "2026": 24390
+  },
+  "by_strategy": {
+   "Camarilla": 24032,
+   "Noise band": -5820
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 47,
+  "pct_earlier30_negative": 49,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -1082,
+   "p10_net": -10309,
+   "p90_net": 40962,
+   "pct_losing": 52,
+   "pct_below_half": 21,
+   "median_fall": -16584
+  }
+ },
+ "BANKNIFTY | 1 OTM | live_tr0": {
+  "n": 179,
+  "net": 18212,
+  "end_equity": 38212,
+  "max_fall": -45847,
+  "lowest_equity": 9819,
+  "win": 26.3,
+  "months_up": "14/34",
+  "top5_share": 3.1,
+  "years": {
+   "2023": 18023,
+   "2024": -27043,
+   "2025": 2842,
+   "2026": 24390
+  },
+  "by_strategy": {
+   "Camarilla": 24032,
+   "Noise band": -5820
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 47,
+  "pct_earlier30_negative": 49,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -1082,
+   "p10_net": -10309,
+   "p90_net": 40962,
+   "pct_losing": 52,
+   "pct_below_half": 21,
+   "median_fall": -16584
+  }
+ },
+ "BANKNIFTY | 1 OTM | live_tr0_1pos": {
+  "n": 179,
+  "net": 18212,
+  "end_equity": 38212,
+  "max_fall": -45847,
+  "lowest_equity": 9819,
+  "win": 26.3,
+  "months_up": "14/34",
+  "top5_share": 3.1,
+  "years": {
+   "2023": 18023,
+   "2024": -27043,
+   "2025": 2842,
+   "2026": 24390
+  },
+  "by_strategy": {
+   "Camarilla": 24032,
+   "Noise band": -5820
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 47,
+  "pct_earlier30_negative": 49,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -1082,
+   "p10_net": -10309,
+   "p90_net": 40962,
+   "pct_losing": 52,
+   "pct_below_half": 21,
+   "median_fall": -16584
+  }
+ },
+ "SENSEX | why 30 ~ 60": {
+  "pct_earlier30_negative": 39,
+  "pct_60_within_15pct_of_30": 9,
+  "top5_days_share_of_net": 0.95,
+  "best_10pct_days_share": 4.09
+ },
+ "SENSEX | 1 ITM (rule) | bt": {
+  "n": 753,
+  "net": 142023,
+  "end_equity": 162023,
+  "max_fall": -41368,
+  "lowest_equity": -3253,
+  "win": 31.7,
+  "months_up": "25/46",
+  "top5_share": 0.46,
+  "years": {
+   "2023": -15427,
+   "2024": 83902,
+   "2025": 76598,
+   "2026": -3050
+  },
+  "by_strategy": {
+   "Fibonacci 0.618": 67877,
+   "Noise band": 24079,
+   "Trend-day": 50067
+  },
+  "median_30d": 2578,
+  "pct_30d_windows_negative": 43,
+  "pct_earlier30_negative": 44,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 64661,
+   "p10_net": 2352,
+   "p90_net": 85152,
+   "pct_losing": 12,
+   "pct_below_half": 61,
+   "median_fall": -33507
+  }
+ },
+ "SENSEX | 1 ITM (rule) | live": {
+  "n": 171,
+  "net": 2252,
+  "end_equity": 22252,
+  "max_fall": -16963,
+  "lowest_equity": 9939,
+  "win": 35.1,
+  "months_up": "20/41",
+  "top5_share": 18.36,
+  "years": {
+   "2023": -9213,
+   "2024": 10363,
+   "2025": 15914,
+   "2026": -14812
+  },
+  "by_strategy": {
+   "Noise band": 2252
+  },
+  "median_30d": 43,
+  "pct_30d_windows_negative": 42,
+  "pct_earlier30_negative": 42,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 4917,
+   "p10_net": -6831,
+   "p90_net": 22875,
+   "pct_losing": 42,
+   "pct_below_half": 6,
+   "median_fall": -11699
+  }
+ },
+ "SENSEX | 1 ITM (rule) | live_1pos": {
+  "n": 171,
+  "net": 2252,
+  "end_equity": 22252,
+  "max_fall": -16963,
+  "lowest_equity": 9939,
+  "win": 35.1,
+  "months_up": "20/41",
+  "top5_share": 18.36,
+  "years": {
+   "2023": -9213,
+   "2024": 10363,
+   "2025": 15914,
+   "2026": -14812
+  },
+  "by_strategy": {
+   "Noise band": 2252
+  },
+  "median_30d": 43,
+  "pct_30d_windows_negative": 42,
+  "pct_earlier30_negative": 42,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 4917,
+   "p10_net": -6831,
+   "p90_net": 22720,
+   "pct_losing": 42,
+   "pct_below_half": 6,
+   "median_fall": -11699
+  }
+ },
+ "SENSEX | 1 ITM (rule) | live_tr0": {
+  "n": 263,
+  "net": 16158,
+  "end_equity": 36158,
+  "max_fall": -25910,
+  "lowest_equity": 9110,
+  "win": 36.1,
+  "months_up": "23/44",
+  "top5_share": 2.51,
+  "years": {
+   "2023": -9285,
+   "2024": 3277,
+   "2025": 29168,
+   "2026": -7002
+  },
+  "by_strategy": {
+   "Noise band": 6301,
+   "Trend-day": 9857
+  },
+  "median_30d": 340,
+  "pct_30d_windows_negative": 43,
+  "pct_earlier30_negative": 44,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 6851,
+   "p10_net": -11795,
+   "p90_net": 27342,
+   "pct_losing": 33,
+   "pct_below_half": 21,
+   "median_fall": -15292
+  }
+ },
+ "SENSEX | 1 ITM (rule) | live_tr0_1pos": {
+  "n": 193,
+  "net": 22873,
+  "end_equity": 42873,
+  "max_fall": -19353,
+  "lowest_equity": 7902,
+  "win": 37.3,
+  "months_up": "24/44",
+  "top5_share": 1.77,
+  "years": {
+   "2023": -9439,
+   "2024": 3856,
+   "2025": 23083,
+   "2026": 5373
+  },
+  "by_strategy": {
+   "Noise band": 6131,
+   "Trend-day": 16742
+  },
+  "median_30d": 424,
+  "pct_30d_windows_negative": 40,
+  "pct_earlier30_negative": 42,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 9642,
+   "p10_net": -12388,
+   "p90_net": 21610,
+   "pct_losing": 24,
+   "pct_below_half": 21,
+   "median_fall": -15013
+  }
+ },
+ "SENSEX | ATM | bt": {
+  "n": 754,
+  "net": 145816,
+  "end_equity": 165816,
+  "max_fall": -39073,
+  "lowest_equity": 411,
+  "win": 32.0,
+  "months_up": "25/46",
+  "top5_share": 0.44,
+  "years": {
+   "2023": -12375,
+   "2024": 83688,
+   "2025": 76037,
+   "2026": -1534
+  },
+  "by_strategy": {
+   "Fibonacci 0.618": 70190,
+   "Noise band": 25489,
+   "Trend-day": 50137
+  },
+  "median_30d": 2916,
+  "pct_30d_windows_negative": 41,
+  "pct_earlier30_negative": 42,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 64485,
+   "p10_net": 3553,
+   "p90_net": 84518,
+   "pct_losing": 9,
+   "pct_below_half": 58,
+   "median_fall": -30960
+  }
+ },
+ "SENSEX | ATM | live": {
+  "n": 155,
+  "net": -4472,
+  "end_equity": 15528,
+  "max_fall": -14974,
+  "lowest_equity": 10430,
+  "win": 36.1,
+  "months_up": "19/40",
+  "top5_share": null,
+  "years": {
+   "2023": -9570,
+   "2024": 3904,
+   "2025": 7755,
+   "2026": -6561
+  },
+  "by_strategy": {
+   "Noise band": -4472
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 47,
+  "pct_earlier30_negative": 49,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 8919,
+   "p10_net": -7057,
+   "p90_net": 28719,
+   "pct_losing": 45,
+   "pct_below_half": 3,
+   "median_fall": -11867
+  }
+ },
+ "SENSEX | ATM | live_1pos": {
+  "n": 155,
+  "net": -4472,
+  "end_equity": 15528,
+  "max_fall": -14974,
+  "lowest_equity": 10430,
+  "win": 36.1,
+  "months_up": "19/40",
+  "top5_share": null,
+  "years": {
+   "2023": -9570,
+   "2024": 3904,
+   "2025": 7755,
+   "2026": -6561
+  },
+  "by_strategy": {
+   "Noise band": -4472
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 47,
+  "pct_earlier30_negative": 49,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 8630,
+   "p10_net": -7057,
+   "p90_net": 24486,
+   "pct_losing": 45,
+   "pct_below_half": 3,
+   "median_fall": -11867
+  }
+ },
+ "SENSEX | ATM | live_tr0": {
+  "n": 225,
+  "net": 7826,
+  "end_equity": 27826,
+  "max_fall": -19922,
+  "lowest_equity": 9455,
+  "win": 37.8,
+  "months_up": "20/43",
+  "top5_share": 4.63,
+  "years": {
+   "2023": -10045,
+   "2024": 2825,
+   "2025": 8407,
+   "2026": 6639
+  },
+  "by_strategy": {
+   "Noise band": -1556,
+   "Trend-day": 9382
+  },
+  "median_30d": -114,
+  "pct_30d_windows_negative": 49,
+  "pct_earlier30_negative": 51,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 6222,
+   "p10_net": -10469,
+   "p90_net": 36550,
+   "pct_losing": 33,
+   "pct_below_half": 27,
+   "median_fall": -15541
+  }
+ },
+ "SENSEX | ATM | live_tr0_1pos": {
+  "n": 212,
+  "net": 21171,
+  "end_equity": 41171,
+  "max_fall": -18761,
+  "lowest_equity": 8055,
+  "win": 37.3,
+  "months_up": "23/44",
+  "top5_share": 1.91,
+  "years": {
+   "2023": -10229,
+   "2024": 6372,
+   "2025": 19634,
+   "2026": 5394
+  },
+  "by_strategy": {
+   "Noise band": 6988,
+   "Trend-day": 14183
+  },
+  "median_30d": 212,
+  "pct_30d_windows_negative": 44,
+  "pct_earlier30_negative": 45,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 9317,
+   "p10_net": -9759,
+   "p90_net": 19000,
+   "pct_losing": 21,
+   "pct_below_half": 18,
+   "median_fall": -14143
+  }
+ },
+ "SENSEX | 1 OTM | bt": {
+  "n": 756,
+  "net": 158917,
+  "end_equity": 178917,
+  "max_fall": -32919,
+  "lowest_equity": 3517,
+  "win": 32.1,
+  "months_up": "25/46",
+  "top5_share": 0.39,
+  "years": {
+   "2023": -9873,
+   "2024": 90183,
+   "2025": 74908,
+   "2026": 3699
+  },
+  "by_strategy": {
+   "Fibonacci 0.618": 71399,
+   "Noise band": 26461,
+   "Trend-day": 61057
+  },
+  "median_30d": 3048,
+  "pct_30d_windows_negative": 40,
+  "pct_earlier30_negative": 41,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 69771,
+   "p10_net": 8300,
+   "p90_net": 88242,
+   "pct_losing": 9,
+   "pct_below_half": 58,
+   "median_fall": -27447
+  }
+ },
+ "SENSEX | 1 OTM | live": {
+  "n": 127,
+  "net": -5778,
+  "end_equity": 14222,
+  "max_fall": -14660,
+  "lowest_equity": 9306,
+  "win": 38.6,
+  "months_up": "18/38",
+  "top5_share": null,
+  "years": {
+   "2023": -8426,
+   "2024": -2071,
+   "2025": 11144,
+   "2026": -6425
+  },
+  "by_strategy": {
+   "Noise band": -5778
+  },
+  "median_30d": -197,
+  "pct_30d_windows_negative": 49,
+  "pct_earlier30_negative": 51,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 6839,
+   "p10_net": -8684,
+   "p90_net": 26427,
+   "pct_losing": 45,
+   "pct_below_half": 18,
+   "median_fall": -12150
+  }
+ },
+ "SENSEX | 1 OTM | live_1pos": {
+  "n": 127,
+  "net": -5778,
+  "end_equity": 14222,
+  "max_fall": -14660,
+  "lowest_equity": 9306,
+  "win": 38.6,
+  "months_up": "18/38",
+  "top5_share": null,
+  "years": {
+   "2023": -8426,
+   "2024": -2071,
+   "2025": 11144,
+   "2026": -6425
+  },
+  "by_strategy": {
+   "Noise band": -5778
+  },
+  "median_30d": -197,
+  "pct_30d_windows_negative": 49,
+  "pct_earlier30_negative": 51,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 6839,
+   "p10_net": -8684,
+   "p90_net": 23357,
+   "pct_losing": 45,
+   "pct_below_half": 18,
+   "median_fall": -12150
+  }
+ },
+ "SENSEX | 1 OTM | live_tr0": {
+  "n": 261,
+  "net": 17365,
+  "end_equity": 37365,
+  "max_fall": -20178,
+  "lowest_equity": 8312,
+  "win": 36.4,
+  "months_up": "21/44",
+  "top5_share": 2.17,
+  "years": {
+   "2023": -11227,
+   "2024": 3531,
+   "2025": 26825,
+   "2026": -1764
+  },
+  "by_strategy": {
+   "Noise band": 4169,
+   "Trend-day": 13196
+  },
+  "median_30d": 20,
+  "pct_30d_windows_negative": 47,
+  "pct_earlier30_negative": 48,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -2158,
+   "p10_net": -10816,
+   "p90_net": 38899,
+   "pct_losing": 52,
+   "pct_below_half": 36,
+   "median_fall": -13593
+  }
+ },
+ "SENSEX | 1 OTM | live_tr0_1pos": {
+  "n": 207,
+  "net": 23463,
+  "end_equity": 43463,
+  "max_fall": -17009,
+  "lowest_equity": 9341,
+  "win": 36.7,
+  "months_up": "24/44",
+  "top5_share": 1.6,
+  "years": {
+   "2023": -8505,
+   "2024": 1084,
+   "2025": 21563,
+   "2026": 9321
+  },
+  "by_strategy": {
+   "Noise band": 8125,
+   "Trend-day": 15338
+  },
+  "median_30d": 428,
+  "pct_30d_windows_negative": 41,
+  "pct_earlier30_negative": 42,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 11648,
+   "p10_net": -5503,
+   "p90_net": 29090,
+   "pct_losing": 21,
+   "pct_below_half": 18,
+   "median_fall": -12321
+  }
+ },
+ "NIFTY+SENSEX | 1 ITM (rule) | bt": {
+  "n": 1778,
+  "net": 470556,
+  "end_equity": 490556,
+  "max_fall": -86530,
+  "lowest_equity": -13154,
+  "win": 30.9,
+  "months_up": "27/46",
+  "top5_share": 0.16,
+  "years": {
+   "2023": -15715,
+   "2024": 186008,
+   "2025": 180135,
+   "2026": 120128
+  },
+  "by_strategy": {
+   "Camarilla": 73634,
+   "Fibonacci 0.618": 199829,
+   "Noise band": 73225,
+   "Trend-day": 123868
+  },
+  "median_30d": 10567,
+  "pct_30d_windows_negative": 34,
+  "pct_earlier30_negative": 34,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 154568,
+   "p10_net": 50687,
+   "p90_net": 193568,
+   "pct_losing": 0,
+   "pct_below_half": 73,
+   "median_fall": -57968
+  }
+ },
+ "NIFTY+SENSEX | 1 ITM (rule) | live": {
+  "n": 314,
+  "net": 59338,
+  "end_equity": 79338,
+  "max_fall": -21161,
+  "lowest_equity": 8336,
+  "win": 35.4,
+  "months_up": "20/34",
+  "top5_share": 1.03,
+  "years": {
+   "2023": -11664,
+   "2024": 1041,
+   "2025": 1851,
+   "2026": 68110
+  },
+  "by_strategy": {
+   "Camarilla": 32036,
+   "Noise band": 6149,
+   "Trend-day": 21153
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 42,
+  "pct_earlier30_negative": 46,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -2843,
+   "p10_net": -11433,
+   "p90_net": 56487,
+   "pct_losing": 58,
+   "pct_below_half": 48,
+   "median_fall": -17883
+  }
+ },
+ "NIFTY+SENSEX | 1 ITM (rule) | live_1pos": {
+  "n": 295,
+  "net": 45963,
+  "end_equity": 65963,
+  "max_fall": -21161,
+  "lowest_equity": 8336,
+  "win": 33.9,
+  "months_up": "19/34",
+  "top5_share": 1.3,
+  "years": {
+   "2023": -11664,
+   "2024": 1041,
+   "2025": 1851,
+   "2026": 54735
+  },
+  "by_strategy": {
+   "Camarilla": 32036,
+   "Noise band": 4340,
+   "Trend-day": 9587
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 42,
+  "pct_earlier30_negative": 46,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -2843,
+   "p10_net": -11433,
+   "p90_net": 38869,
+   "pct_losing": 58,
+   "pct_below_half": 48,
+   "median_fall": -17883
+  }
+ },
+ "NIFTY+SENSEX | 1 ITM (rule) | live_tr0": {
+  "n": 495,
+  "net": 68197,
+  "end_equity": 88197,
+  "max_fall": -39339,
+  "lowest_equity": 9022,
+  "win": 32.9,
+  "months_up": "26/43",
+  "top5_share": 0.9,
+  "years": {
+   "2023": -7631,
+   "2024": 4585,
+   "2025": -5009,
+   "2026": 76252
+  },
+  "by_strategy": {
+   "Camarilla": 20290,
+   "Noise band": 1095,
+   "Trend-day": 46812
+  },
+  "median_30d": 730,
+  "pct_30d_windows_negative": 40,
+  "pct_earlier30_negative": 42,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -2604,
+   "p10_net": -10957,
+   "p90_net": 62190,
+   "pct_losing": 58,
+   "pct_below_half": 58,
+   "median_fall": -19763
+  }
+ },
+ "NIFTY+SENSEX | 1 ITM (rule) | live_tr0_1pos": {
+  "n": 371,
+  "net": 39986,
+  "end_equity": 59986,
+  "max_fall": -28338,
+  "lowest_equity": 9030,
+  "win": 31.0,
+  "months_up": "20/41",
+  "top5_share": 1.38,
+  "years": {
+   "2023": -10131,
+   "2024": 7409,
+   "2025": -6837,
+   "2026": 49545
+  },
+  "by_strategy": {
+   "Camarilla": 21538,
+   "Noise band": -3542,
+   "Trend-day": 21990
+  },
+  "median_30d": -150,
+  "pct_30d_windows_negative": 48,
+  "pct_earlier30_negative": 53,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -3219,
+   "p10_net": -10970,
+   "p90_net": 44402,
+   "pct_losing": 55,
+   "pct_below_half": 52,
+   "median_fall": -18195
+  }
+ },
+ "NIFTY+SENSEX | ATM | bt": {
+  "n": 1780,
+  "net": 449267,
+  "end_equity": 469267,
+  "max_fall": -74616,
+  "lowest_equity": -4841,
+  "win": 30.8,
+  "months_up": "27/46",
+  "top5_share": 0.16,
+  "years": {
+   "2023": -9078,
+   "2024": 178290,
+   "2025": 172791,
+   "2026": 107264
+  },
+  "by_strategy": {
+   "Camarilla": 70331,
+   "Fibonacci 0.618": 193452,
+   "Noise band": 71662,
+   "Trend-day": 113822
+  },
+  "median_30d": 10124,
+  "pct_30d_windows_negative": 34,
+  "pct_earlier30_negative": 34,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 151236,
+   "p10_net": 52189,
+   "p90_net": 184986,
+   "pct_losing": 0,
+   "pct_below_half": 73,
+   "median_fall": -53425
+  }
+ },
+ "NIFTY+SENSEX | ATM | live": {
+  "n": 368,
+  "net": 56381,
+  "end_equity": 76381,
+  "max_fall": -25744,
+  "lowest_equity": 7568,
+  "win": 34.8,
+  "months_up": "22/38",
+  "top5_share": 1.01,
+  "years": {
+   "2023": -11810,
+   "2024": 1485,
+   "2025": 1062,
+   "2026": 65644
+  },
+  "by_strategy": {
+   "Camarilla": 28769,
+   "Noise band": 4612,
+   "Trend-day": 23000
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 45,
+  "pct_earlier30_negative": 49,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 8793,
+   "p10_net": -12219,
+   "p90_net": 58146,
+   "pct_losing": 42,
+   "pct_below_half": 45,
+   "median_fall": -19849
+  }
+ },
+ "NIFTY+SENSEX | ATM | live_1pos": {
+  "n": 351,
+  "net": 42641,
+  "end_equity": 62641,
+  "max_fall": -25744,
+  "lowest_equity": 7568,
+  "win": 33.3,
+  "months_up": "22/38",
+  "top5_share": 1.32,
+  "years": {
+   "2023": -11810,
+   "2024": 1485,
+   "2025": 1062,
+   "2026": 51904
+  },
+  "by_strategy": {
+   "Camarilla": 28769,
+   "Noise band": 1345,
+   "Trend-day": 12527
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 45,
+  "pct_earlier30_negative": 49,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 8793,
+   "p10_net": -12219,
+   "p90_net": 40278,
+   "pct_losing": 42,
+   "pct_below_half": 45,
+   "median_fall": -18333
+  }
+ },
+ "NIFTY+SENSEX | ATM | live_tr0": {
+  "n": 436,
+  "net": 50590,
+  "end_equity": 70590,
+  "max_fall": -41049,
+  "lowest_equity": 7478,
+  "win": 32.8,
+  "months_up": "22/42",
+  "top5_share": 1.04,
+  "years": {
+   "2023": -10458,
+   "2024": -1147,
+   "2025": 373,
+   "2026": 61822
+  },
+  "by_strategy": {
+   "Camarilla": 15764,
+   "Noise band": 3342,
+   "Trend-day": 31484
+  },
+  "median_30d": -469,
+  "pct_30d_windows_negative": 51,
+  "pct_earlier30_negative": 56,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -5611,
+   "p10_net": -11924,
+   "p90_net": 57845,
+   "pct_losing": 64,
+   "pct_below_half": 61,
+   "median_fall": -20579
+  }
+ },
+ "NIFTY+SENSEX | ATM | live_tr0_1pos": {
+  "n": 322,
+  "net": 19065,
+  "end_equity": 39065,
+  "max_fall": -28555,
+  "lowest_equity": 7446,
+  "win": 31.7,
+  "months_up": "18/39",
+  "top5_share": 2.19,
+  "years": {
+   "2023": -12532,
+   "2024": 2468,
+   "2025": -1725,
+   "2026": 30854
+  },
+  "by_strategy": {
+   "Camarilla": 5037,
+   "Noise band": -1319,
+   "Trend-day": 15347
+  },
+  "median_30d": -99,
+  "pct_30d_windows_negative": 48,
+  "pct_earlier30_negative": 52,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -7714,
+   "p10_net": -12953,
+   "p90_net": 40500,
+   "pct_losing": 64,
+   "pct_below_half": 64,
+   "median_fall": -19298
+  }
+ },
+ "NIFTY+SENSEX | 1 OTM | bt": {
+  "n": 1783,
+  "net": 436257,
+  "end_equity": 456257,
+  "max_fall": -63851,
+  "lowest_equity": 1816,
+  "win": 30.8,
+  "months_up": "27/46",
+  "top5_share": 0.16,
+  "years": {
+   "2023": -3869,
+   "2024": 177065,
+   "2025": 162537,
+   "2026": 100524
+  },
+  "by_strategy": {
+   "Camarilla": 64899,
+   "Fibonacci 0.618": 185493,
+   "Noise band": 69503,
+   "Trend-day": 116362
+  },
+  "median_30d": 10058,
+  "pct_30d_windows_negative": 33,
+  "pct_earlier30_negative": 33,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 145914,
+   "p10_net": 51292,
+   "p90_net": 177943,
+   "pct_losing": 0,
+   "pct_below_half": 70,
+   "median_fall": -47845
+  }
+ },
+ "NIFTY+SENSEX | 1 OTM | live": {
+  "n": 385,
+  "net": 41427,
+  "end_equity": 61427,
+  "max_fall": -25529,
+  "lowest_equity": 6669,
+  "win": 33.2,
+  "months_up": "23/43",
+  "top5_share": 1.18,
+  "years": {
+   "2023": -12037,
+   "2024": 3977,
+   "2025": -3718,
+   "2026": 53205
+  },
+  "by_strategy": {
+   "Camarilla": 27047,
+   "Noise band": -3871,
+   "Trend-day": 18251
+  },
+  "median_30d": -154,
+  "pct_30d_windows_negative": 49,
+  "pct_earlier30_negative": 54,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 13837,
+   "p10_net": -13496,
+   "p90_net": 94861,
+   "pct_losing": 45,
+   "pct_below_half": 58,
+   "median_fall": -19114
+  }
+ },
+ "NIFTY+SENSEX | 1 OTM | live_1pos": {
+  "n": 378,
+  "net": 33404,
+  "end_equity": 53404,
+  "max_fall": -25529,
+  "lowest_equity": 6669,
+  "win": 32.5,
+  "months_up": "23/43",
+  "top5_share": 1.44,
+  "years": {
+   "2023": -12037,
+   "2024": 3977,
+   "2025": -3718,
+   "2026": 45182
+  },
+  "by_strategy": {
+   "Camarilla": 27047,
+   "Noise band": -3701,
+   "Trend-day": 10058
+  },
+  "median_30d": -154,
+  "pct_30d_windows_negative": 49,
+  "pct_earlier30_negative": 54,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 13837,
+   "p10_net": -13496,
+   "p90_net": 60342,
+   "pct_losing": 45,
+   "pct_below_half": 58,
+   "median_fall": -16879
+  }
+ },
+ "NIFTY+SENSEX | 1 OTM | live_tr0": {
+  "n": 1158,
+  "net": 294120,
+  "end_equity": 314120,
+  "max_fall": -41787,
+  "lowest_equity": 15184,
+  "win": 32.9,
+  "months_up": "31/46",
+  "top5_share": 0.21,
+  "years": {
+   "2023": -1504,
+   "2024": 108185,
+   "2025": 85085,
+   "2026": 102354
+  },
+  "by_strategy": {
+   "Camarilla": 71372,
+   "Fibonacci 0.618": 40270,
+   "Noise band": 72568,
+   "Trend-day": 109910
+  },
+  "median_30d": 7686,
+  "pct_30d_windows_negative": 34,
+  "pct_earlier30_negative": 34,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 40145,
+   "p10_net": -12043,
+   "p90_net": 120470,
+   "pct_losing": 36,
+   "pct_below_half": 42,
+   "median_fall": -24958
+  }
+ },
+ "NIFTY+SENSEX | 1 OTM | live_tr0_1pos": {
+  "n": 340,
+  "net": 29664,
+  "end_equity": 49664,
+  "max_fall": -27988,
+  "lowest_equity": 6654,
+  "win": 31.8,
+  "months_up": "18/38",
+  "top5_share": 1.59,
+  "years": {
+   "2023": -13346,
+   "2024": 973,
+   "2025": 238,
+   "2026": 41799
+  },
+  "by_strategy": {
+   "Camarilla": 21544,
+   "Noise band": -8227,
+   "Trend-day": 16347
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 46,
+  "pct_earlier30_negative": 51,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 21170,
+   "p10_net": -13706,
+   "p90_net": 66193,
+   "pct_losing": 45,
+   "pct_below_half": 55,
+   "median_fall": -20601
+  }
+ },
+ "all three | 1 ITM (rule) | bt": {
+  "n": 2008,
+  "net": 456833,
+  "end_equity": 476833,
+  "max_fall": -103679,
+  "lowest_equity": -7659,
+  "win": 30.6,
+  "months_up": "26/46",
+  "top5_share": 0.17,
+  "years": {
+   "2023": -8884,
+   "2024": 150387,
+   "2025": 180965,
+   "2026": 134365
+  },
+  "by_strategy": {
+   "Camarilla": 65441,
+   "Fibonacci 0.618": 199829,
+   "Noise band": 67695,
+   "Trend-day": 123868
+  },
+  "median_30d": 12776,
+  "pct_30d_windows_negative": 36,
+  "pct_earlier30_negative": 36,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 121476,
+   "p10_net": 66559,
+   "p90_net": 175169,
+   "pct_losing": 0,
+   "pct_below_half": 79,
+   "median_fall": -67237
+  }
+ },
+ "all three | 1 ITM (rule) | live": {
+  "n": 126,
+  "net": -13259,
+  "end_equity": 6741,
+  "max_fall": -22197,
+  "lowest_equity": 6741,
+  "win": 23.8,
+  "months_up": "4/11",
+  "top5_share": null,
+  "years": {
+   "2023": -13259
+  },
+  "by_strategy": {
+   "Camarilla": -7777,
+   "Noise band": -5482
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 19,
+  "pct_earlier30_negative": 21,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -6530,
+   "p10_net": -11148,
+   "p90_net": 78767,
+   "pct_losing": 70,
+   "pct_below_half": 55,
+   "median_fall": -19763
+  }
+ },
+ "all three | 1 ITM (rule) | live_1pos": {
+  "n": 126,
+  "net": -13259,
+  "end_equity": 6741,
+  "max_fall": -22197,
+  "lowest_equity": 6741,
+  "win": 23.8,
+  "months_up": "4/11",
+  "top5_share": null,
+  "years": {
+   "2023": -13259
+  },
+  "by_strategy": {
+   "Camarilla": -7777,
+   "Noise band": -5482
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 19,
+  "pct_earlier30_negative": 21,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -4487,
+   "p10_net": -11148,
+   "p90_net": 52674,
+   "pct_losing": 64,
+   "pct_below_half": 45,
+   "median_fall": -19594
+  }
+ },
+ "all three | 1 ITM (rule) | live_tr0": {
+  "n": 520,
+  "net": 62519,
+  "end_equity": 82519,
+  "max_fall": -51910,
+  "lowest_equity": 8852,
+  "win": 31.9,
+  "months_up": "20/40",
+  "top5_share": 1.08,
+  "years": {
+   "2023": -6326,
+   "2024": -4441,
+   "2025": 717,
+   "2026": 72569
+  },
+  "by_strategy": {
+   "Camarilla": 25878,
+   "Noise band": 3723,
+   "Trend-day": 32918
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 46,
+  "pct_earlier30_negative": 49,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -6832,
+   "p10_net": -10602,
+   "p90_net": 46069,
+   "pct_losing": 79,
+   "pct_below_half": 79,
+   "median_fall": -20146
+  }
+ },
+ "all three | 1 ITM (rule) | live_tr0_1pos": {
+  "n": 467,
+  "net": 56366,
+  "end_equity": 76366,
+  "max_fall": -40772,
+  "lowest_equity": 8964,
+  "win": 30.2,
+  "months_up": "23/41",
+  "top5_share": 1.2,
+  "years": {
+   "2023": -10709,
+   "2024": 2780,
+   "2025": -2009,
+   "2026": 66304
+  },
+  "by_strategy": {
+   "Camarilla": 22270,
+   "Noise band": -2181,
+   "Trend-day": 36277
+  },
+  "median_30d": 34,
+  "pct_30d_windows_negative": 44,
+  "pct_earlier30_negative": 47,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -6349,
+   "p10_net": -12188,
+   "p90_net": 31715,
+   "pct_losing": 67,
+   "pct_below_half": 76,
+   "median_fall": -18672
+  }
+ },
+ "all three | ATM | bt": {
+  "n": 2061,
+  "net": 469518,
+  "end_equity": 489518,
+  "max_fall": -95705,
+  "lowest_equity": 11952,
+  "win": 30.5,
+  "months_up": "28/46",
+  "top5_share": 0.16,
+  "years": {
+   "2023": 13869,
+   "2024": 162724,
+   "2025": 166203,
+   "2026": 126722
+  },
+  "by_strategy": {
+   "Camarilla": 101914,
+   "Fibonacci 0.618": 193452,
+   "Noise band": 60330,
+   "Trend-day": 113822
+  },
+  "median_30d": 15860,
+  "pct_30d_windows_negative": 35,
+  "pct_earlier30_negative": 36,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 133714,
+   "p10_net": 60272,
+   "p90_net": 183705,
+   "pct_losing": 0,
+   "pct_below_half": 79,
+   "median_fall": -65461
+  }
+ },
+ "all three | ATM | live": {
+  "n": 302,
+  "net": -11537,
+  "end_equity": 8463,
+  "max_fall": -54075,
+  "lowest_equity": 6759,
+  "win": 27.8,
+  "months_up": "12/28",
+  "top5_share": null,
+  "years": {
+   "2023": -8888,
+   "2024": -3306,
+   "2025": -770,
+   "2026": 1427
+  },
+  "by_strategy": {
+   "Camarilla": 8872,
+   "Noise band": -22243,
+   "Trend-day": 1834
+  },
+  "median_30d": -9,
+  "pct_30d_windows_negative": 48,
+  "pct_earlier30_negative": 51,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -7904,
+   "p10_net": -11953,
+   "p90_net": 73762,
+   "pct_losing": 67,
+   "pct_below_half": 70,
+   "median_fall": -19356
+  }
+ },
+ "all three | ATM | live_1pos": {
+  "n": 419,
+  "net": 37496,
+  "end_equity": 57496,
+  "max_fall": -44405,
+  "lowest_equity": 7483,
+  "win": 30.5,
+  "months_up": "22/39",
+  "top5_share": 1.62,
+  "years": {
+   "2023": -10881,
+   "2024": -690,
+   "2025": 2065,
+   "2026": 47002
+  },
+  "by_strategy": {
+   "Camarilla": 34106,
+   "Noise band": -10444,
+   "Trend-day": 13834
+  },
+  "median_30d": 0,
+  "pct_30d_windows_negative": 46,
+  "pct_earlier30_negative": 50,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -8173,
+   "p10_net": -11953,
+   "p90_net": 68883,
+   "pct_losing": 70,
+   "pct_below_half": 73,
+   "median_fall": -19356
+  }
+ },
+ "all three | ATM | live_tr0": {
+  "n": 1191,
+  "net": 225879,
+  "end_equity": 245879,
+  "max_fall": -52233,
+  "lowest_equity": 16307,
+  "win": 31.8,
+  "months_up": "25/46",
+  "top5_share": 0.3,
+  "years": {
+   "2023": 5730,
+   "2024": 80848,
+   "2025": 28401,
+   "2026": 110900
+  },
+  "by_strategy": {
+   "Camarilla": 94851,
+   "Fibonacci 0.618": 5649,
+   "Noise band": 49528,
+   "Trend-day": 75851
+  },
+  "median_30d": 4152,
+  "pct_30d_windows_negative": 41,
+  "pct_earlier30_negative": 42,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -5686,
+   "p10_net": -11750,
+   "p90_net": 60898,
+   "pct_losing": 61,
+   "pct_below_half": 70,
+   "median_fall": -19955
+  }
+ },
+ "all three | ATM | live_tr0_1pos": {
+  "n": 471,
+  "net": 54002,
+  "end_equity": 74002,
+  "max_fall": -43113,
+  "lowest_equity": 7604,
+  "win": 30.8,
+  "months_up": "22/42",
+  "top5_share": 1.18,
+  "years": {
+   "2023": -8413,
+   "2024": -3171,
+   "2025": 619,
+   "2026": 64967
+  },
+  "by_strategy": {
+   "Camarilla": 43345,
+   "Noise band": -18207,
+   "Trend-day": 28864
+  },
+  "median_30d": -469,
+  "pct_30d_windows_negative": 51,
+  "pct_earlier30_negative": 56,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -7890,
+   "p10_net": -13479,
+   "p90_net": 45196,
+   "pct_losing": 73,
+   "pct_below_half": 85,
+   "median_fall": -18779
+  }
+ },
+ "all three | 1 OTM | bt": {
+  "n": 2097,
+  "net": 497876,
+  "end_equity": 517876,
+  "max_fall": -77702,
+  "lowest_equity": 12909,
+  "win": 30.6,
+  "months_up": "28/46",
+  "top5_share": 0.14,
+  "years": {
+   "2023": 24444,
+   "2024": 203859,
+   "2025": 156060,
+   "2026": 113513
+  },
+  "by_strategy": {
+   "Camarilla": 125318,
+   "Fibonacci 0.618": 185493,
+   "Noise band": 70703,
+   "Trend-day": 116362
+  },
+  "median_30d": 18074,
+  "pct_30d_windows_negative": 33,
+  "pct_earlier30_negative": 33,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": 131026,
+   "p10_net": 54923,
+   "p90_net": 216593,
+   "pct_losing": 0,
+   "pct_below_half": 79,
+   "median_fall": -60989
+  }
+ },
+ "all three | 1 OTM | live": {
+  "n": 1415,
+  "net": 332613,
+  "end_equity": 352613,
+  "max_fall": -49212,
+  "lowest_equity": 15481,
+  "win": 31.9,
+  "months_up": "28/46",
+  "top5_share": 0.2,
+  "years": {
+   "2023": -1207,
+   "2024": 117289,
+   "2025": 79582,
+   "2026": 136949
+  },
+  "by_strategy": {
+   "Camarilla": 123692,
+   "Fibonacci 0.618": 54166,
+   "Noise band": 68539,
+   "Trend-day": 86216
+  },
+  "median_30d": 12994,
+  "pct_30d_windows_negative": 33,
+  "pct_earlier30_negative": 34,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -7928,
+   "p10_net": -13348,
+   "p90_net": 62845,
+   "pct_losing": 61,
+   "pct_below_half": 70,
+   "median_fall": -24332
+  }
+ },
+ "all three | 1 OTM | live_1pos": {
+  "n": 1037,
+  "net": 205709,
+  "end_equity": 225709,
+  "max_fall": -39701,
+  "lowest_equity": 11521,
+  "win": 30.8,
+  "months_up": "29/46",
+  "top5_share": 0.32,
+  "years": {
+   "2023": -6163,
+   "2024": 103291,
+   "2025": 35420,
+   "2026": 73161
+  },
+  "by_strategy": {
+   "Camarilla": 109313,
+   "Fibonacci 0.618": 21255,
+   "Noise band": 69688,
+   "Trend-day": 5453
+  },
+  "median_30d": 5866,
+  "pct_30d_windows_negative": 36,
+  "pct_earlier30_negative": 39,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -7928,
+   "p10_net": -13247,
+   "p90_net": 64027,
+   "pct_losing": 61,
+   "pct_below_half": 70,
+   "median_fall": -24332
+  }
+ },
+ "all three | 1 OTM | live_tr0": {
+  "n": 1449,
+  "net": 332702,
+  "end_equity": 352702,
+  "max_fall": -50701,
+  "lowest_equity": 16758,
+  "win": 31.9,
+  "months_up": "28/46",
+  "top5_share": 0.2,
+  "years": {
+   "2023": 3035,
+   "2024": 113671,
+   "2025": 78093,
+   "2026": 137903
+  },
+  "by_strategy": {
+   "Camarilla": 115319,
+   "Fibonacci 0.618": 55120,
+   "Noise band": 70983,
+   "Trend-day": 91280
+  },
+  "median_30d": 12024,
+  "pct_30d_windows_negative": 35,
+  "pct_earlier30_negative": 35,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -443,
+   "p10_net": -12447,
+   "p90_net": 102035,
+   "pct_losing": 52,
+   "pct_below_half": 61,
+   "median_fall": -25773
+  }
+ },
+ "all three | 1 OTM | live_tr0_1pos": {
+  "n": 388,
+  "net": -11133,
+  "end_equity": 8867,
+  "max_fall": -41499,
+  "lowest_equity": 6388,
+  "win": 28.4,
+  "months_up": "16/39",
+  "top5_share": null,
+  "years": {
+   "2023": -10587,
+   "2024": 3381,
+   "2025": -5675,
+   "2026": 1748
+  },
+  "by_strategy": {
+   "Camarilla": 7053,
+   "Noise band": -28583,
+   "Trend-day": 10397
+  },
+  "median_30d": -14,
+  "pct_30d_windows_negative": 48,
+  "pct_earlier30_negative": 52,
+  "rolling_12m_from_20k": {
+   "windows": 33,
+   "median_net": -5162,
+   "p10_net": -12794,
+   "p90_net": 73729,
+   "pct_losing": 58,
+   "pct_below_half": 70,
+   "median_fall": -21552
+  }
+ }
+}

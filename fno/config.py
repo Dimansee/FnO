@@ -203,3 +203,5 @@ AUTOPILOT_RISK_PCT = 1.0            # lots = 1% of CURRENT equity / risk per lot
 AUTOPILOT_MAX_TRADE_RISK = 0.15     # a 1-lot floor is allowed only while one lot risks at most 15% of equity (round 20: 83% -> 46% of years dipping below half the account)
 AUTOPILOT_SMALL_ACCOUNT = 100_000   # below this equity the weekly loss cap is 15% (4% would block every trade after one loss)
 AUTOPILOT_WEEKLY_SMALL = 0.15
+SMALL_OTM_BELOW = 60_000    # round 38: below this equity Autopilot buys 1 strike OUT of the money (cheaper lot -> passes the
+SMALL_OTM_STRIKES = 1       # 15% risk and cash checks more often); Rs 20k / 40k 1-lot accounts: median 12 months better, fewer losing

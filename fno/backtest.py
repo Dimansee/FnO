@@ -73,13 +73,16 @@ def history(symbol: str, days: int):
 def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_MULT, candles: pd.DataFrame | None = None,
         vix_intraday: pd.Series | None = None, vix_daily: pd.Series | None = None, lot: int | None = None,
         sizing: str = "risk", otm: int = -C.STRIKE_ITM, strategy: str = "both", days: int | None = None,
-        risk_pct: float | None = None):
+        risk_pct: float | None = None, live_rules: bool = True):
     """sizing: "risk" = lots so that 1% of capital is at risk (1 lot allowed up to 1.5%);
     "one_lot" = always 1 lot if the premium fits in the cash (small accounts - much riskier).
     otm: -1 = 1 strike in the money (the rule), 0 = ATM, 1/2 = that many strikes out of the money (cheaper).
     strategy: "noise", "camarilla" or "both" (one open trade per instrument at a time, like the live app), "trend" (trend-day
     catcher, round 23) or "all" (both + trend in its own slot).
-    days: only trade the last N sessions (earlier sessions are used to warm up the indicators)."""
+    days: only trade the last N sessions (earlier sessions are used to warm up the indicators).
+    live_rules (strategy "autopilot" only): replay the trades in time order with the rules live Autopilot applies and a plain
+    backtest does not (round 38): trend slot from Rs 40k equity, Fibonacci from Rs 2 lakh, all open premiums together within
+    the equity, a 1-lot trade only while it risks <= 15% of equity, the weekly loss limit, and the small-account 1-OTM strike."""
     meta = D.instrument(symbol)
     lot = lot or meta["lot"]
     source = "given"
@@ -209,12 +212,22 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
             trades.append(t)
             busy_until = t["exit_time"]
     trades.sort(key=lambda t: (t["date"], t["entry_time"]))
+    live = None
+    if strategy == "autopilot" and live_rules:
+        alt = None
+        if _flag("small_otm") and otm == -C.STRIKE_ITM and capital < C.SMALL_OTM_BELOW * 3:
+            alt = run(symbol, capital, mult, candles, vix_intraday, vix_daily, lot, sizing, C.SMALL_OTM_STRIKES, strategy, days,
+                      risk_pct, live_rules=False).get("trades")
+            alt = alt.to_dict("records") if isinstance(alt, pd.DataFrame) else alt
+        trades, live = _autopilot_replay(trades, capital, lot, alt)
     eq = capital
     for t in trades:
         eq += t["pnl"]
         t["equity"] = round(eq, 0)
     out = _summary(trades, capital, traded_days)
     out["summary"]["skipped"] = skips
+    if live is not None:
+        out["summary"]["live_rules"] = live
     out["summary"]["sizing"] = sizing
     out["summary"]["source"] = source
     out["summary"]["period"] = [str(frames[-min(days or len(frames), len(frames))][0]), str(frames[-1][0])] if frames else None
@@ -437,7 +450,53 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
             "spot_in": round(spot, 1), "spot_out": round(float(x_spot), 1), "R": round(sign * (x_spot - spot) / risk, 2),
             "prem_in": round(p_in, 2), "prem_out": round(p_out, 2), "lots": lots, "pnl": round(pnl, 0),
             "reason": reason, "equity": round(equity, 0), "strategy": "Noise band" if strat == "noise" else "Camarilla",
+            "risk_lot": round(risk_unit * lot, 0),
         }
+
+
+def _flag(name):
+    try:
+        from . import store as _st
+        return bool((_st.get("change_flags") or {}).get(name, True))
+    except Exception:
+        return True
+
+
+def _autopilot_replay(trades, capital, lot, alt=None):
+    """Round 38: what live Autopilot would actually have taken from these signals, in time order with running equity.
+    alt: the same signals priced on the 1-OTM strike, used while equity is below SMALL_OTM_BELOW."""
+    alt_of = {(t["date"], t["entry_time"], t["strategy"]): t for t in (alt or [])}
+    eq = float(capital); kept, open_ = [], []
+    why = {"trend_gate": 0, "fib_gate": 0, "cash_open": 0, "risk15": 0, "weekly": 0, "otm_swaps": 0, "plain_backtest_trades": len(trades)}
+    wk = None; wk_pnl = 0.0; wk_start = eq
+    for t in trades:
+        swapped = False
+        if eq < C.SMALL_OTM_BELOW and alt is not None:
+            a = alt_of.get((t["date"], t["entry_time"], t["strategy"]))
+            if a is not None:
+                t, swapped = a, True
+        ts_in, ts_out = f'{t["date"]} {t["entry_time"]}', f'{t["date"]} {t["exit_time"]}'
+        open_ = [p for p in open_ if p[0] > ts_in]
+        w = pd.Timestamp(t["date"]).to_period("W")
+        if w != wk:
+            wk, wk_pnl, wk_start = w, 0.0, eq
+        lim = (C.AUTOPILOT_WEEKLY_SMALL if wk_start < C.AUTOPILOT_SMALL_ACCOUNT else C.MAX_WEEKLY_LOSS) * wk_start
+        cost = t["prem_in"] * lot * t["lots"]
+        if wk_pnl <= -lim:
+            why["weekly"] += 1; continue
+        if t["strategy"] == "Trend-day" and eq < C.TREND_MIN_EQUITY:
+            why["trend_gate"] += 1; continue
+        if t["strategy"].startswith("Fibonacci") and eq < C.FIB_MIN_EQUITY:
+            why["fib_gate"] += 1; continue
+        if t["lots"] == 1 and t.get("risk_lot") and t["risk_lot"] > C.AUTOPILOT_MAX_TRADE_RISK * eq:
+            why["risk15"] += 1; continue
+        if cost + sum(p[1] for p in open_) > eq:
+            why["cash_open"] += 1; continue
+        open_.append((ts_out, cost)); wk_pnl += t["pnl"]; eq += t["pnl"]
+        why["otm_swaps"] += swapped
+        kept.append(t)
+    why["kept"] = len(kept)
+    return kept, why
 
 
 def _summary(trades, capital, traded_days):
@@ -526,5 +585,5 @@ def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="ris
         "side": "CALL" if opt == "CE" else "PUT", "type": "ATM option" if not otm else (f"{otm} OTM option" if otm > 0 else f"{-otm} ITM option"),
         "band": C.NOISE_MULT, "spot_in": round(spot, 1), "spot_out": round(float(x_spot), 1), "R": round(sign * (x_spot - spot) / risk, 2),
         "prem_in": round(p_in, 2), "prem_out": round(p_out, 2), "lots": lots, "pnl": round(pnl, 0),
-        "reason": reason, "equity": 0, "strategy": "Trend-day",
+        "reason": reason, "equity": 0, "strategy": "Trend-day", "risk_lot": round(risk_unit * lot, 0),
     }
