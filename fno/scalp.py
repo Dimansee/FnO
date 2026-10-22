@@ -10,6 +10,10 @@ The rules are the ones that study tested, line for line (research/scalp_spec.py)
   exits     stop at the trigger / pullback low, capped at 1 x ATR(14, 1-min); at +1R stop to entry + costs, then exit
             on a 1-min close through EMA 9; 5-bar time stop; close back through VWAP; next level (outside Trend); 15:15
   governor  -2% day, give-back lock, charges budget, 3-loss pause, 5 losses, setup off after 2 losses, minimum room
+Setup D (round 36, research/round36.py, opt-in): on a 5-min close - EMA 9 vs 15 + candle colour, breakout of the 30-min range or a
+  key level (yesterday's high/low, floor pivots, opening range, OI walls, 5-min swings, trend lines), strong candle, one-way last
+  30 min, PCR at the open agrees, room >= 1.5 ATR; stop 1 ATR (5-min), exit on a 5-min close through EMA 15; spread <= 0.5%.
+  Not gated by the day-type classifier. It lost money in 2025 and on recorded real prices - paper only, re-check after 60 sessions.
 Index VWAP = time-weighted (indices have no volume), the same as the research data.
 """
 from __future__ import annotations
@@ -38,6 +42,17 @@ GOV = {"day_loss": 0.02, "peak": 0.015, "giveback": 0.40, "charges": 0.30, "char
        "pause_min": 30, "max_losses": 5, "setup_losses": 2, "room_cost_x": 3.0}
 FIRST, LAST_ENTRY, ORB_END, SQUARE = 570, 885, 660, 915      # minutes from midnight (bar close): 09:30, 14:45, 11:00, 15:15
 
+# Setup D = research/round36.py, the best of 768 settings picked on 2023-24 plus the two filters that helped in both halves:
+#   5-min breakout (15-min high/low or a key level) + strong candle + 5-min trend + one-way 30 min + PCR agrees + room >= 1.5 ATR,
+#   stop 1 x ATR(14, 5-min), exit on a 5-min close through the 5-min EMA 15, square-off 15:15, option spread <= 0.5%.
+R36 = {"brk_n": 6, "body": 0.6, "wick": 0.25, "avg_n": 10, "er_n": 30, "er_min": 0.30, "room_atr": 1.5, "pcr_n": 10,
+       "max_spread": 0.005, "first": 560, "last": 900, "swing_days": 4}
+R36_PF = {"base": 1.02, "full": 1.17}
+D_CHECKS = {"ema": "EMA 9 vs 15 (5-min) and a close beyond EMA 9 with the candle's colour", "breakout": "Breakout: 30-min high/low or a key level",
+            "strong": "Strong candle (body ≥ 60%, close in the outer 25%, range ≥ 10-candle average)",
+            "oneway": "One-way: last 30 min efficiency ≥ 0.30, same direction", "pcr": "PCR at the open agrees (≥ 1 for calls, < 1 for puts)",
+            "room": "Room to the next key level ≥ 1.5 × ATR (5-min)", "window": "Entry window 09:20-15:00"}
+
 BACKTEST = {
     "period": "Jan 2023 - Oct 2026, 1-minute bars, 1 lot of the 1-strike-ITM option, 0.5% slippage per fill, fees at 0.15% STT",
     "rows": [
@@ -52,6 +67,10 @@ BACKTEST = {
         {"name": "Bank Nifty - max lots, best strike", "pf": 0.36, "years": {"2023": -71222, "2024": -45357, "2025": -68441, "2026": -38644}},
         {"name": "Round 34: EMA 9/15 + volume, more lots - best of 96 on Nifty (5-min pullback, 0.25% slippage)", "trades_per_day": 2.0, "win_pct": 36.3,
          "pf": 0.96, "years": {"2023": 8043, "2024": 51129, "2025": -41113, "2026": -59703}},
+        {"name": "Round 36: D without the PCR / room filters - best of 768 picked on 2023-24, 3 indices, ATM, ₹2,000 risk, 0.25% slippage",
+         "trades_per_day": 1.6, "win_pct": 28.0, "pf": R36_PF["base"], "years": {"2023": 249889, "2024": 98423, "2025": -336420, "2026": 69797}},
+        {"name": "Round 36: setup D as here (+ PCR agrees + room ≥ 1.5 ATR), Nifty + Bank Nifty from Oct 2023 - filters chosen on the same data",
+         "trades_per_day": 0.45, "win_pct": 28.0, "pf": R36_PF["full"], "years": {"2023": 16872, "2024": 27664, "2025": -34423, "2026": 53769}},
     ],
     "compound": "Max lots + best strike on one real ₹20,000 account that compounds: Nifty never got above ₹20,000, fell under "
                 "₹10,000 by 17 Feb 2023 and could no longer buy a lot after 27 Jun 2023 (₹1,359 left); Bank Nifty ran out by "
@@ -84,7 +103,7 @@ def save_settings(new: dict) -> dict:
     if "conf" in new:
         cur["conf"] = max(0, min(100, int(new["conf"])))
     if "setups" in new:
-        cur["setups"] = "".join(x for x in "ABC" if x in str(new["setups"]).upper()) or "ABC"
+        cur["setups"] = "".join(x for x in "ABCD" if x in str(new["setups"]).upper()) or "ABC"
     if new.get("sizing") in ("max", "1lot"):
         cur["sizing"] = new["sizing"]
     if new.get("strike") in ("best", "itm1"):
@@ -424,6 +443,192 @@ def zones(x, spot, chain=None, n=3):
 
 
 # =============================================================================
+# Setup D (round 36): same logic as research/round36.py, chart = 5 minutes
+# =============================================================================
+def five_d(c5: pd.DataFrame, d1: dict, today) -> dict | None:
+    """5-minute bars: the broker's 5-min candles for earlier days + today's candles rebuilt from today's completed 1-minute
+    bars (a 5-min candle counts once its last minute has closed). EMA 9 / 15 and ATR(14) run over the whole series."""
+    if c5 is None or c5.empty or d1 is None or not len(d1["m"]):
+        return None
+    h5 = c5[["open", "high", "low", "close"]].copy()
+    tm = h5.index.time
+    h5 = h5[(tm >= time(9, 15)) & (tm <= time(15, 25)) & (h5.index.date < today)]
+    keep = sorted(set(h5.index.date))[-30:]
+    h5 = h5[np.isin(h5.index.date, keep)]
+    t, dy, o, h, l, c, m1 = [], [], [], [], [], [], []
+    for ts, r in h5.iterrows():
+        t.append(ts.hour * 60 + ts.minute); dy.append(ts.date().toordinal())
+        o.append(r["open"]); h.append(r["high"]); l.append(r["low"]); c.append(r["close"]); m1.append(-1)
+    k0 = len(c)
+    mm = d1["m"]
+    for st in range(555, 930, 5):
+        sel = np.where((mm >= st) & (mm <= st + 4))[0]
+        if not len(sel) or mm[sel[-1]] != st + 4:
+            continue
+        t.append(st); dy.append(today.toordinal()); o.append(d1["o"][sel[0]]); h.append(float(d1["h"][sel].max()))
+        l.append(float(d1["l"][sel].min())); c.append(d1["c"][sel[-1]]); m1.append(int(sel[-1]))
+    if len(c) - k0 <= 0 or k0 == 0:
+        return None
+    o, h, l, c = (np.asarray(v, float) for v in (o, h, l, c))
+    return dict(t=np.asarray(t), day=np.asarray(dy), o=o, h=h, l=l, c=c, e9=ema_arr(c, 9), e15=ema_arr(c, 15),
+                at=atr1_arr(h, l, c), k0=k0, m1=np.asarray(m1), by_close={int(t[k]) + 4: k for k in range(k0, len(c))})
+
+
+def d_static(F: dict, d1: dict, walls=None) -> list:
+    """Per-day levels as in round 36: yesterday's high / low, floor pivots, the 09:15-09:30 opening range, OI walls."""
+    pd_ = F["day"] == F["day"][F["k0"] - 1]
+    ph, pl, pc = float(F["h"][:F["k0"]][pd_[:F["k0"]]].max()), float(F["l"][:F["k0"]][pd_[:F["k0"]]].min()), float(F["c"][F["k0"] - 1])
+    pv = (ph + pl + pc) / 3
+    lv = [ph, pl, pv, 2 * pv - pl, 2 * pv - ph, pv + (ph - pl), pv - (ph - pl)]
+    orm = (d1["m"] >= 555) & (d1["m"] <= 569)
+    orr = (float(d1["h"][orm].max()), float(d1["l"][orm].min())) if orm.any() else None
+    return [lv, orr, [w for w in (walls or []) if w is not None and w == w], pc]
+
+
+def d_levels(F: dict, statics: list, upto: int) -> dict:
+    """round36.level_kernel on the 5-min chart for bar `upto`: crossed a level up / down, room to the next level above / below.
+    Levels = statics + 5-min swing highs / lows (2 candles each side) of the last trading day or two + the trend lines through
+    the last two swing highs (falling) / swing lows (rising)."""
+    h, l, c, day = F["h"], F["l"], F["c"], F["day"]
+    K = 8
+    sh, sl_ = [(np.nan, np.nan, -1)] * K, [(np.nan, np.nan, -1)] * K
+    nsh = nsl = 0
+    ev_h, ev_l = {}, {}
+    for k in range(2, upto - 1):                                  # swing at k is confirmed at the close of k + 2 (<= upto)
+        if k + 2 > upto or day[k - 2] != day[k + 2]:
+            continue
+        if h[k] > max(h[k - 2], h[k - 1], h[k + 1], h[k + 2]):
+            ev_h[k + 2] = (h[k], float(k))
+        if l[k] < min(l[k - 2], l[k - 1], l[k + 1], l[k + 2]):
+            ev_l[k + 2] = (l[k], float(k))
+    for i in range(upto + 1):
+        if i in ev_h:
+            sh = sh[1:] + [(ev_h[i][0], ev_h[i][1], day[i])]; nsh = min(nsh + 1, K)
+        if i in ev_l:
+            sl_ = sl_[1:] + [(ev_l[i][0], ev_l[i][1], day[i])]; nsl = min(nsl + 1, K)
+    i = upto
+    lv, orr, walls, _ = statics
+    lev = list(lv) + list(walls)
+    if orr is not None and F["t"][i] + 4 >= 569:
+        lev += list(orr)
+    dmin = day[i] - R36["swing_days"]
+    lev += [v for v, _, d in sh if d >= dmin and v == v] + [v for v, _, d in sl_ if d >= dmin and v == v]
+    if nsh >= 2 and sh[-2][2] >= dmin and sh[-1][0] < sh[-2][0] and sh[-1][1] > sh[-2][1]:
+        lev.append(sh[-1][0] + (sh[-1][0] - sh[-2][0]) / (sh[-1][1] - sh[-2][1]) * (i - sh[-1][1]))
+    if nsl >= 2 and sl_[-2][2] >= dmin and sl_[-1][0] > sl_[-2][0] and sl_[-1][1] > sl_[-2][1]:
+        lev.append(sl_[-1][0] + (sl_[-1][0] - sl_[-2][0]) / (sl_[-1][1] - sl_[-2][1]) * (i - sl_[-1][1]))
+    same = i > 0 and day[i - 1] == day[i]
+    up = dn = False
+    ru = rd = math.inf
+    for v in lev:
+        if same and c[i - 1] <= v < c[i]:
+            up = True
+        if same and c[i - 1] >= v > c[i]:
+            dn = True
+        if v > c[i]:
+            ru = min(ru, v - c[i])
+        if v < c[i]:
+            rd = min(rd, c[i] - v)
+    return dict(brk_up=up, brk_dn=dn, room_up=ru, room_dn=rd, levels=sorted(lev))
+
+
+def d_signal(F: dict, d1: dict, k: int, statics: list, pcr) -> dict:
+    """Setup D on the close of 5-min bar k (round 36). Returns side, every check, entry, 1-ATR stop and room."""
+    o, h, l, c, e9, e15, at = (F[x][k] for x in ("o", "h", "l", "c", "e9", "e15", "at"))
+    side = 1 if (e9 > e15 and c > e9 and c > o) else -1 if (e9 < e15 and c < e9 and c < o) else 0
+    N = R36["brk_n"]
+    L = d_levels(F, statics, k)
+    rng_up = k - N >= 0 and F["day"][k - N] == F["day"][k] and c > F["h"][k - N:k].max()
+    rng_dn = k - N >= 0 and F["day"][k - N] == F["day"][k] and c < F["l"][k - N:k].min()
+    rg = h - l
+    avg = float(np.mean(F["h"][k - R36["avg_n"]:k] - F["l"][k - R36["avg_n"]:k])) if k >= R36["avg_n"] else math.inf
+    body = abs(c - o)
+    strong_up = c > o and body >= R36["body"] * rg and (h - c) <= R36["wick"] * rg and rg >= avg
+    strong_dn = c < o and body >= R36["body"] * rg and (c - l) <= R36["wick"] * rg and rg >= avg
+    j, n = int(F["m1"][k]), R36["er_n"]
+    er, mv = 0.0, 0.0
+    if j >= n:
+        cc = np.asarray(d1["c"][j - n:j + 1], float)
+        mv = float(cc[-1] - cc[0])
+        tot = float(np.abs(np.diff(cc)).sum())
+        er = abs(mv) / tot if tot > 0 else 0.0
+    room = (L["room_up"] if side > 0 else L["room_dn"]) if side else math.inf
+    close_m = int(F["t"][k]) + 5
+    checks = {"ema": side != 0,
+              "breakout": bool(side > 0 and (rng_up or L["brk_up"]) or side < 0 and (rng_dn or L["brk_dn"])),
+              "strong": bool(side > 0 and strong_up or side < 0 and strong_dn),
+              "oneway": bool(side and er >= R36["er_min"] and mv * side > 0),
+              "pcr": bool(side and pcr is not None and (pcr >= 1 if side > 0 else pcr < 1)),
+              "room": bool(side and at > 0 and room / at >= R36["room_atr"]),
+              "window": R36["first"] <= close_m <= R36["last"]}
+    nl = (c + side * room) if side and math.isfinite(room) else None
+    return dict(side=side, checks=checks, ok=all(checks.values()) and at > 0, entry=float(c), risk=float(at),
+                stop=float(c - side * at) if side else None, room=float(room) if math.isfinite(room) else None, nl=nl,
+                er=round(er, 2), pcr=pcr, bar_close=f"{close_m // 60:02d}:{close_m % 60:02d}")
+
+
+def plan_d(sig: dict, sym: str, lot: int) -> dict:
+    room = sig["room"] if sig["room"] is not None else 10 * sig["risk"]
+    return dict(tag="D", side=sig["side"], entry=sig["entry"], risk=sig["risk"], stop=sig["stop"], nl=sig["nl"], room=float(room),
+                conf=100.0, cp=float(cost_points(sym, sig["entry"], lot)), mode="d")
+
+
+def open_oi(chain, spot, sym) -> dict | None:
+    """PCR within 10 strikes of spot and the biggest call / put OI strikes - read once near the open, when OI still mostly
+    reflects yesterday's close (round 36 used the previous day's bhavcopy)."""
+    if chain is None or chain.empty or "ce_oi" not in chain:
+        return None
+    ce, pe = pd.to_numeric(chain["ce_oi"], errors="coerce").fillna(0), pd.to_numeric(chain["pe_oi"], errors="coerce").fillna(0)
+    near = (chain["strike"] - spot).abs() <= R36["pcr_n"] * C.INDICES[sym]["step"]
+    if ce[near].sum() <= 0:
+        return None
+    above, below = chain["strike"] > spot, chain["strike"] < spot
+    cw = float(chain["strike"][above].iloc[int(ce[above].values.argmax())]) if above.any() and ce[above].max() > 0 else None
+    pw = float(chain["strike"][below].iloc[int(pe[below].values.argmax())]) if below.any() and pe[below].max() > 0 else None
+    return {"pcr": round(float(pe[near].sum() / ce[near].sum()), 3), "walls": [cw, pw]}
+
+
+def _ensure_open_oi(sym, m, now, ds, spot) -> None:
+    if ds.get("oi_open"):
+        return
+    try:
+        exps, _ = m.expiries_and_lot(sym)
+        exp = I.pick_trading_expiry(exps, C.INDICES[sym]["expiry"], now.date()) or exps[0]
+        oi = open_oi(m.chain(sym, exp, spot, m.vix()["level"], m.candles(sym)), spot, sym)
+        if oi:
+            ds["oi_open"] = {**oi, "at": now.strftime("%H:%M")}
+    except Exception:
+        pass
+
+
+def d_context(sym, m, x, now, ds):
+    """(5-min chart, today's statics, PCR at the open) for setup D, or (None, reason)."""
+    F = five_d(m.candles(sym), x["d1"], now.date())
+    if F is None:
+        return None, "Setup D waits for a completed 5-minute candle and earlier days' 5-minute history."
+    oi = ds.get("oi_open") or {}
+    return (F, d_static(F, x["d1"], oi.get("walls")), oi.get("pcr")), None
+
+
+def exit_step_d(p, d1, F, k):
+    """Setup D exits on 1-min bar k: 1-ATR stop (intrabar), a 5-min close through the 5-min EMA 15, 15:15 square-off."""
+    sd = p["side"]
+    adverse = d1["l"][k] if sd > 0 else d1["h"][k]
+    if sd * (adverse - p["stop"]) <= 0:
+        ok = d1["o"][k]
+        return (p["stop"] if sd * (ok - p["stop"]) > 0 else float(ok)), "Stop"
+    fav = d1["h"][k] if sd > 0 else d1["l"][k]
+    if sd * (fav - p["hi_fav"]) > 0:
+        p["hi_fav"] = float(fav)
+    j = F["by_close"].get(int(d1["m"][k])) if F is not None else None
+    if j is not None and sd * (F["c"][j] - F["e15"][j]) < 0:
+        return float(d1["c"][k]), "Closed through EMA 15 (5-min)"
+    if d1["m"][k] + 1 >= SQUARE:
+        return float(d1["c"][k]), "Square-off 15:15"
+    return None
+
+
+# =============================================================================
 # Live: state for the page, and the every-minute tick
 # =============================================================================
 PART_LABELS = {"narrow_cpr": "Narrow CPR (bottom 30% of 20 days)", "beyond_prev_day": "Beyond yesterday's high/low",
@@ -483,7 +688,34 @@ def state(sym: str, m, now=None, cfg=None, chain=None) -> dict:
                 cand["pick"] = {**pick, "moneyness": moneyness(pick["itm"])} if pick else {"error": why}
             except Exception as e:
                 cand["pick"] = {"error": str(e)[:120]}
-    return {**out, "spot": spot, "bar": x["d1"]["ts"][i], "score": score, "dir": sdir, "mode": mode,
+    setup_d = None
+    try:
+        ds = _day_state(now.date().isoformat(), sym)
+        oi = ds.get("oi_open") or (open_oi(chain, spot, sym) if chain is not None else None) or {}
+        F5 = five_d(m.candles(sym), x["d1"], now.date())
+        if F5 is None:
+            setup_d = {"error": "Waiting for a completed 5-minute candle today."}
+        else:
+            k5 = len(F5["c"]) - 1
+            sg = d_signal(F5, x["d1"], k5, d_static(F5, x["d1"], oi.get("walls")), oi.get("pcr"))
+            setup_d = {"bar": sg["bar_close"], "side": sg["side"], "ok": sg["ok"], "er": sg["er"], "pcr": sg["pcr"],
+                       "pcr_src": f"at {ds['oi_open']['at']}" if ds.get("oi_open") else ("now" if oi else None),
+                       "room_atr": round(sg["room"] / sg["risk"], 2) if sg["room"] is not None and sg["risk"] > 0 else None,
+                       "checks": [{"key": k, "label": D_CHECKS[k], "ok": v} for k, v in sg["checks"].items()]}
+            if sg["ok"] and cand is None and "D" in cfg["setups"]:
+                cand = plan_d(sg, sym, lot)
+                try:
+                    exps, lot_now = m.expiries_and_lot(sym)
+                    exp = I.pick_trading_expiry(exps, C.INDICES[sym]["expiry"], now.date()) or exps[0]
+                    ch2 = chain if chain is not None else m.chain(sym, exp, spot, m.vix()["level"], m.candles(sym))
+                    pick, why = pick_strike(ch2, sym, cand["side"], spot, min(cand["room"], 2 * cand["risk"]), exp, now, cash(cfg),
+                                            {**cfg, "lot": lot_now}, ch2.attrs.get("source") == "live", m.vix()["level"], R36["max_spread"])
+                    cand["pick"] = {**pick, "moneyness": moneyness(pick["itm"])} if pick else {"error": why}
+                except Exception as e:
+                    cand["pick"] = {"error": str(e)[:120]}
+    except Exception as e:
+        setup_d = {"error": str(e)[:120]}
+    return {**out, "spot": spot, "bar": x["d1"]["ts"][i], "score": score, "dir": sdir, "mode": mode, "setup_d": setup_d,
             "parts": [{"key": k, "label": PART_LABELS[k], "ok": v} for k, v in parts.items()],
             "opening_range": [x["orh"], x["orl"]] if x["d1"]["m"][i] + 1 >= 570 else None,
             "cpr_width_pct": x["d5"]["cpr_w"], "zones": zones(x, spot, chain), "candidate": cand,
@@ -500,7 +732,7 @@ def cash(cfg, trs=None, open_=None) -> float:
     return cfg["capital"] + sum(t["pnl"] for t in trs) - sum(p["entry_prem"] * p["qty"] for p in open_)
 
 
-def pick_strike(ch, sym, side, spot, tgt, exp, now, cash_, cfg, live, vix=14.0):
+def pick_strike(ch, sym, side, spot, tgt, exp, now, cash_, cfg, live, vix=14.0, max_spread=None):
     """Choose the strike and quantity. sizing 'max' buys as many lots as the cash allows; strike 'best' compares
     2 ITM .. 2 OTM and keeps the one with the highest expected net profit (after fees and spread) if the index moves
     `tgt` points in the next 10 minutes - the same rule as research/scalp_spec.py. Returns (choice dict, None) or
@@ -523,8 +755,12 @@ def pick_strike(ch, sym, side, spot, tgt, exp, now, cash_, cfg, live, vix=14.0):
         ltp, ask, bid = (r.get(f"{tag}_{f}") for f in ("ltp", "ask", "bid"))
         if not ok(ltp):
             continue
-        if ok(ask) and ok(bid) and (float(ask) - float(bid)) / float(ask) > C.MAX_SPREAD_PCT:
-            why = f"{k:g} {opt} spread too wide"
+        lim = max_spread if (max_spread is not None and live) else C.MAX_SPREAD_PCT   # 0.5% applies to real quotes only
+        if ok(ask) and ok(bid) and (float(ask) - float(bid)) / float(ask) > lim:
+            why = f"{k:g} {opt} spread too wide (over {lim:.1%})"
+            continue
+        if max_spread is not None and live and not (ok(ask) and ok(bid)):
+            why = f"{k:g} {opt}: no live bid / ask to check the spread"
             continue
         buy = float(ask) if ok(ask) else round(float(ltp) * (1 + (slip_pct(float(ltp)) if live else 0)), 2)
         if cfg.get("sizing", "max") == "max":
@@ -552,14 +788,15 @@ def moneyness(itm):
     return "ATM" if itm == 0 else f"{abs(itm)} {'ITM' if itm > 0 else 'OTM'}"
 
 
-def _open(sym, x, i, pl, m, now, cfg) -> tuple[bool, str]:
+def _open(sym, x, i, pl, m, now, cfg, max_spread=None) -> tuple[bool, str]:
     exps, lot = m.expiries_and_lot(sym)
     exp = I.pick_trading_expiry(exps, C.INDICES[sym]["expiry"], now.date()) or exps[0]
     spot = pl["entry"]
     vix = m.vix()["level"]
     ch = m.chain(sym, exp, spot, vix, m.candles(sym))
     live = ch.attrs.get("source") == "live"
-    c_, why = pick_strike(ch, sym, pl["side"], spot, min(pl["room"], 2 * pl["risk"]), exp, now, cash(cfg), {**cfg, "lot": lot}, live, vix)
+    c_, why = pick_strike(ch, sym, pl["side"], spot, min(pl["room"], 2 * pl["risk"]), exp, now, cash(cfg), {**cfg, "lot": lot}, live, vix,
+                          max_spread)
     if c_ is None:
         return False, why
     pos = {"id": uuid.uuid4().hex[:8], "symbol": sym, "opened": now.isoformat(timespec="seconds"), "expiry": str(exp),
@@ -570,7 +807,7 @@ def _open(sym, x, i, pl, m, now, cfg) -> tuple[bool, str]:
            "entry_m": int(x["d1"]["m"][i]), "last_m": int(x["d1"]["m"][i]), "hi_fav": pl["entry"], "trail_on": False, **pl}
     _save_pos(pos)
     return True, (f"Scalp {pl['tag']} {sym} {c_['strike']:g}{c_['opt']} ({moneyness(c_['itm'])}) × {c_['lots']} lot(s) at ₹{c_['price']:.2f} "
-                  f"(stop {pos['stop']:.1f}, conf {pl['conf']:.0f})")
+                  f"(stop {pos['stop']:.1f}, " + ("all setup D checks passed)" if pl["tag"] == "D" else f"conf {pl['conf']:.0f})"))
 
 
 def _close(p, idx_px, why, m, now, spot=None) -> dict | None:
@@ -619,14 +856,16 @@ def tick(now=None, m=None) -> dict:
                 continue
             d1 = x["d1"]
             n = len(d1["c"])
-            # ---- open position: walk the completed 1-min bars since the last check
+            today = now.date().isoformat()
             mine = [p for p in open_ if p["symbol"] == sym]
+            F5 = five_d(m.candles(sym), d1, now.date()) if ("D" in cfg["setups"] or any(p["tag"] == "D" for p in mine)) else None
+            # ---- open position: walk the completed 1-min bars since the last check
             for p in mine:
                 res = None
                 for k in range(n):
                     if d1["m"][k] <= p["last_m"]:
                         continue
-                    res = exit_step(p, d1, k)
+                    res = exit_step_d(p, d1, F5, k) if p["tag"] == "D" else exit_step(p, d1, k)
                     p["last_m"] = int(d1["m"][k])
                     if res:
                         break
@@ -644,17 +883,36 @@ def tick(now=None, m=None) -> dict:
             # ---- new entry on the latest completed bar
             i = n - 1
             mi = int(d1["m"][i]) + 1
+            gov = governor(_today_trades(sym, now, trs_all), cfg["capital"])
+            blocked = gov["stopped"] or (gov["pause_until"] and now < datetime.fromisoformat(gov["pause_until"]))
+            ds = _day_state(today, sym)
+            if "D" in cfg["setups"]:
+                # setup D (round 36): acts only when this minute closes a 5-minute candle
+                _ensure_open_oi(sym, m, now, ds, float(d1["c"][i]))
+                _save_day_state(today, sym, ds)
+                k5 = F5["by_close"].get(int(d1["m"][i])) if F5 is not None else None
+                if k5 is not None and not blocked:
+                    oi = ds.get("oi_open") or {}
+                    sg = d_signal(F5, d1, k5, d_static(F5, d1, oi.get("walls")), oi.get("pcr"))
+                    if sg["ok"] and gov["setup_losses"].get("D", 0) < GOV["setup_losses"]:
+                        pl = plan_d(sg, sym, C.INDICES[sym]["lot"])
+                        ok, msg = _open(sym, x, i, pl, m, now, cfg, R36["max_spread"])
+                        (out["opened"] if ok else out["skipped"]).append({"symbol": sym, ("message" if ok else "why"): msg})
+                        if ok:
+                            continue
+                    elif sg["side"] and sg["checks"]["breakout"]:
+                        miss = [D_CHECKS[c] for c, v in sg["checks"].items() if not v]
+                        out["skipped"].append({"symbol": sym, "why": "setup D: " + ("; ".join(miss) or "lost twice today")})
+            if not ("A" in cfg["setups"] or "B" in cfg["setups"] or "C" in cfg["setups"]):
+                continue
             if mi < FIRST or mi > LAST_ENTRY:
                 continue
             score, sdir, _ = classify_at(x, i)
             mode = mode_of(score)
             if mode == "none":
                 continue
-            today = now.date().isoformat()
-            gov = governor(_today_trades(sym, now, trs_all), cfg["capital"])
-            if gov["stopped"] or (gov["pause_until"] and now < datetime.fromisoformat(gov["pause_until"])):
+            if blocked:
                 continue
-            ds = _day_state(today, sym)
             sig = find_signal(x, i, mode, sdir, ds["orb_done"], cfg["setups"])
             _save_day_state(today, sym, ds)
             if not sig:

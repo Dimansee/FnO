@@ -152,6 +152,11 @@ pk, why = SC.pick_strike(ch, "NIFTY", 1, 25000.0, 30.0, EXP, at, 20_000, {"sizin
 assert pk and pk["qty"] % 65 == 0 and pk["price"] * pk["qty"] <= 19_000 and pk["itm"] in SC.STRIKES_BEST, (pk, why)
 one, _ = SC.pick_strike(ch, "NIFTY", -1, 25000.0, 30.0, EXP, at, 20_000, {"sizing": "1lot", "strike": "itm1", "lot": 65}, False)
 assert one["itm"] == 1 and one["qty"] == 65 and one["strike"] == 25050 and one["opt"] == "PE", one
+wide = ch.copy(); wide["ce_bid"], wide["ce_ask"] = wide["ce_ltp"] * 0.995, wide["ce_ltp"] * 1.005    # ~1% spread
+no, why = SC.pick_strike(wide, "NIFTY", 1, 25000.0, 30.0, EXP, at, 20_000, {"sizing": "max", "strike": "best", "lot": 65}, True, 14.0, 0.005)
+assert no is None and "0.5%" in why, (no, why)                           # setup D: real quotes wider than 0.5% are skipped
+ok_, _ = SC.pick_strike(wide, "NIFTY", 1, 25000.0, 30.0, EXP, at, 20_000, {"sizing": "max", "strike": "best", "lot": 65}, True)
+assert ok_ is not None                                                   # A/B/C keep the 10% limit
 none, why = SC.pick_strike(ch, "NIFTY", 1, 25000.0, 30.0, EXP, at, 500, {"sizing": "max", "strike": "best", "lot": 65}, False)
 assert none is None and "costs" in why, why
 print(f"strike chooser OK: picked {pk['strike']:g}{pk['opt']} ({SC.moneyness(pk['itm'])}) x {pk['lots']} lots, expected ₹{pk['expected']:,.0f}")
@@ -176,7 +181,51 @@ assert s["on"] and s["syms"] == ["NIFTY", "BANKNIFTY"] and s["conf"] == 70 and s
 assert c.get("/api/scalp/levels?symbol=NIFTY").get_json()["zones"]["above"]
 assert SC.save_settings({"syms": ["SENSEX", "NIFTY"]})["syms"] == ["SENSEX", "NIFTY"] and "SENSEX" in c.get("/api/scalp").get_json()["state"]
 assert c.post("/api/scalp/reset").status_code == 200
+assert SC.save_settings({"setups": "abcd"})["setups"] == "ABCD" and SC.save_settings({"setups": "D"})["setups"] == "D"
 print("api OK")
+
+
+# ---------------------------------------------------------------- 2b. setup D (round 36) through the tick
+class OIMarket(FakeMarket):                                              # option chain with OI: puts heavier -> PCR > 1 (agrees with calls)
+    def chain(self, sym, exp, spot, vix, candles=None):
+        ch = M.theoretical_chain(sym, exp, spot, vix, None)
+        ch["ce_oi"], ch["pe_oi"] = 1_000_000.0, 1_400_000.0
+        ch.loc[ch["strike"] == ch["strike"][ch["strike"] > spot].min() + 300, "ce_oi"] = 5_000_000.0
+        return ch
+
+SC.reset()
+SC.save_settings({"on": True, "syms": ["NIFTY"], "capital": 20_000, "setups": "D"})
+om = OIMarket()
+d_open = d_closed = 0
+for minute in range(9 * 60 + 16, 15 * 60 + 21):
+    NOW[0] = datetime(TODAY.year, TODAY.month, TODAY.day, minute // 60, minute % 60, 5, tzinfo=IST)
+    r = SC.tick(NOW[0], om)
+    d_open += len(r.get("opened", []))
+    d_closed += len(r.get("closed", []))
+    assert not [s for s in r.get("skipped", []) if "error" in s["why"]], r
+dt = SC.trades()
+ds = SC._day_state(TODAY.isoformat(), "NIFTY")
+assert ds.get("oi_open") and ds["oi_open"]["pcr"] > 1 and "09:16" <= ds["oi_open"]["at"] <= "09:20" and ds["oi_open"]["walls"][0], ds
+assert d_open >= 1 and d_closed == d_open == len(dt) and all(t["tag"] == "D" for t in dt), (d_open, d_closed, dt[:1])
+assert not SC.positions()
+assert all(t["reason"] in ("Stop", "Closed through EMA 15 (5-min)", "Square-off 15:15") for t in dt), [t["reason"] for t in dt]
+for t in dt:                                                             # entries only on a 5-min close inside 09:20-15:00
+    mi = int(t["opened"][11:13]) * 60 + int(t["opened"][14:16])
+    assert (mi - 555) % 5 == 0 and 560 <= mi <= 901, t["opened"]
+st = SC.state("NIFTY", om, NOW[0], {**SC.settings()})
+assert st["setup_d"] and len(st["setup_d"]["checks"]) == 7 and st["setup_d"]["pcr"] == ds["oi_open"]["pcr"], st["setup_d"]
+# PCR disagreeing blocks every call entry
+class BearOI(OIMarket):
+    def chain(self, sym, exp, spot, vix, candles=None):
+        ch = super().chain(sym, exp, spot, vix, candles); ch["pe_oi"] = 500_000.0; return ch
+SC.reset(); store._cmd("DEL", SC.DAY.format(d=TODAY.isoformat(), s="NIFTY"))
+bm = BearOI()
+for minute in range(9 * 60 + 16, 15 * 60 + 21):
+    NOW[0] = datetime(TODAY.year, TODAY.month, TODAY.day, minute // 60, minute % 60, 5, tzinfo=IST)
+    SC.tick(NOW[0], bm)
+assert all(t["side"] < 0 for t in SC.trades()), [t["side"] for t in SC.trades()]
+SC.reset(); SC.save_settings({"on": False, "setups": "ABC"})
+print(f"setup D OK: {len(dt)} trades on the synthetic day, PCR read at the open, exits = stop / 5-min EMA 15 / 15:15")
 
 
 # ---------------------------------------------------------------- 3. parity with the backtest on real history
@@ -225,6 +274,57 @@ if os.path.exists(os.path.join(RD, "data", "NIFTY_1m_upstox.csv.gz")):
             assert abs(SC.cost_points(sym, dd.c[0], C.INDICES[sym]["lot"]) - R.cost_points(dd, sym)) < 1e-6
             ne += 1
         print(f"parity OK {sym}: {nc} bars of day type, {ns} setups + stops and {ne} exits identical to the backtest")
+
+    # setup D vs research/round36.py (PCR / OI walls are not in the 1-minute history, so those two checks are left out)
+    import round36 as R36  # noqa: E402
+    k36 = [q for q, g in enumerate(R36.GRID) if g["chart"] == "5m" and g["entry"] == "any" and g["strong"] and g["dir"] == 2
+           and g["exit"] == "ema15" and g["stop"] == "atr" and not g["tcap"]][0]
+    for sym in ("NIFTY", "BANKNIFTY", "SENSEX"):
+        a = R36.R34.m1(sym)
+        a = a[a.index >= a.index[-1] - pd.Timedelta(days=120)]
+        ch = R36.build(a, sym, pd.DataFrame())["5m"]
+        sig, sd = R36.signal(ch, R36.GRID[k36])
+        out = R36.sim(ch["o"], ch["h"], ch["l"], ch["c"], ch["mins"], ch["day"], sig, sd, ch["e9"], ch["e15"], 1, 1.5, 0, 560, 900, 915)
+        b5 = a.resample("5min", label="left", closed="left").agg({"open": "first", "high": "max", "low": "min", "close": "last"}).dropna()
+        days = sorted(set(a.index.date))[-30:]
+        nb = nsig = 0
+        cache = {}
+        for d in days:
+            t1 = a[a.index.date == d]
+            mm = np.array([t.hour * 60 + t.minute for t in t1.index])
+            d1 = dict(m=mm, o=t1.open.values, h=t1.high.values, l=t1.low.values, c=t1.close.values)
+            F = SC.five_d(b5[b5.index.date < d], d1, d)
+            cache[d] = (d1, F)
+            stt = SC.d_static(F, d1, None)
+            for k in range(F["k0"], len(F["c"])):
+                g = SC.d_signal(F, d1, k, stt, None)
+                app = g["side"] if all(v for c_, v in g["checks"].items() if c_ not in ("pcr", "room")) else 0
+                j = int(np.searchsorted(ch["ts_last"], pd.Timestamp(d) + pd.Timedelta(minutes=int(F["t"][k]) + 4)))
+                res = int(sig[j]) if 560 <= ch["mins"][j] + 1 <= 900 else 0
+                assert res == app, (sym, d, F["t"][k], res, g["checks"])
+                if res:
+                    rr = (ch["room_up"][j] if res > 0 else ch["room_dn"][j]) / ch["at"][j]
+                    ra = g["room"] / g["risk"] if g["room"] is not None else np.inf
+                    assert (np.isinf(rr) and np.isinf(ra)) or abs(rr - ra) < 1e-6 * max(1, rr), (sym, d, rr, ra)
+                    nsig += 1
+                nb += 1
+        nx = 0
+        for i, j, xs, s, sl, why in out:
+            ts = pd.Timestamp(ch["ts_last"][int(i)])
+            if ts.date() not in cache:
+                continue
+            d1, F = cache[ts.date()]
+            p = dict(side=int(s), stop=ch["c"][int(i)] - s * ch["at"][int(i)], hi_fav=ch["c"][int(i)])
+            k1 = int(np.where(d1["m"] == ts.hour * 60 + ts.minute)[0][0])
+            for kk in range(k1 + 1, len(d1["m"])):
+                res = SC.exit_step_d(p, d1, F, kk)
+                if res:
+                    break
+            tx = pd.Timestamp(ch["ts_last"][int(j)])
+            assert d1["m"][kk] <= tx.hour * 60 + tx.minute and (why == 0 or d1["m"][kk] == tx.hour * 60 + tx.minute), (sym, ts, tx, res)
+            assert abs(res[0] - xs) < 0.05 or why == 0, (sym, ts, res, xs)
+            nx += 1
+        print(f"parity OK setup D {sym}: {nb} five-minute bars, {nsig} signals and {nx} exits identical to round 36")
 else:
     print("parity skipped (no research/data)")
 print("ALL SCALP OK")
