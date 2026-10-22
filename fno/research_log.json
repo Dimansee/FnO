@@ -996,6 +996,22 @@
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
  "pending": [
   {
+   "id": "p-agents",
+   "area": "Index options",
+   "title": "Agent agreement: size up when an earlier rule already agrees",
+   "waiting_for": "A full test on top of conviction + AI judge",
+   "why": "Quick check 23 Oct: trades with an earlier rule on the same side that day averaged Rs 341 a trade; the first rule of the day averaged Rs 135. Sizing 1.33x / 0.67x on that raised net +20% (2023-26) but deepened the fall 14% and was worse in 2023. It may overlap with conviction and the AI judge.",
+   "collecting": "Research only (historic trades)",
+   "since": "2026-10-23",
+   "need": 1,
+   "unit": "research round",
+   "refs": [
+    "r33",
+    "r39"
+   ],
+   "next": "Test agreement sizing combined with conviction + judge, walk-forward; adopt only if the fall does not deepen."
+  },
+  {
    "id": "p-fib",
    "area": "Index options",
    "title": "Fibonacci 0.618 breakout: live paper record",
