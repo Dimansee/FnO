@@ -80,7 +80,7 @@ def _ts(s) -> float:
         return _t.time()
 
 
-MARKET_KEYS = ("IN", "CRYPTO", "US")
+MARKET_KEYS = ("IN", "CRYPTO", "US", "GOLD")
 
 
 def mode(market: str | None = None) -> str:
@@ -119,6 +119,11 @@ def _tod_utc(h: int) -> str:
     return "asia" if h < 7 else "europe" if h < 13 else "us" if h < 21 else "late"
 
 
+def _tod_gold(hhmm: str) -> str:
+    """Gold trade times are in London time: Asia before 08:00, London 08-13, overlap with New York 13-17, New York 17-22."""
+    return "asia" if hhmm < "08:00" else "london" if hhmm < "13:00" else "overlap" if hhmm < "17:00" else "newyork" if hhmm < "22:00" else "late"
+
+
 def _tod_us(hhmm: str) -> str:
     return "open" if hhmm < "10:30" else "midday" if hhmm < "14:30" else "close"
 
@@ -133,7 +138,7 @@ def tags_for(d: dict) -> list[str]:
         tags.append("side:" + ("long" if bull else "short"))
     t = d.get("time")
     if t:
-        tags.append("tod:" + (_tod_in(t) if m == "IN" else _tod_us(t) if m == "US" else _tod_utc(int(t[:2]))))
+        tags.append("tod:" + (_tod_in(t) if m == "IN" else _tod_us(t) if m == "US" else _tod_gold(t) if m == "GOLD" else _tod_utc(int(t[:2]))))
     if d.get("wd") is not None:
         tags.append("dow:" + ("mon", "tue", "wed", "thu", "fri", "sat", "sun")[int(d["wd"])])
     tr = d.get("trend")
@@ -322,7 +327,7 @@ def on_close_g(rec: dict):
     ctx = {**(rec.get("ctx") or {}), "market": rec["market"], "side": rec["side"], "wd": o.weekday(),
            "time": (rec.get("ctx") or {}).get("local_time") or o.strftime("%H:%M")}
     t = {"id": rec["id"], "market": rec["market"], "symbol": rec["symbol"], "strategy": f"custom:{rec['strategy_id']}", "side_label": rec["side"].upper(),
-         "opened": rec["opened"], "closed": rec["closed"], "R": rec.get("R"), "pnl": rec["pnl"], "ccy": "USD" if rec["market"] == "US" else "USDT",
+         "opened": rec["opened"], "closed": rec["closed"], "R": rec.get("R"), "pnl": rec["pnl"], "ccy": "USDT" if rec["market"] == "CRYPTO" else "USD",
          "reason": rec.get("reason") or "", "mfe_R": rec.get("mfe_R"), "mae_R": rec.get("mae_R"), "held_min": (c - o).total_seconds() / 60, "ctx": ctx}
     t["strategy_name"] = rec.get("strategy_name") or _strategy_name(t["strategy"])
     return _record(t, [])
@@ -847,7 +852,7 @@ def post_close_g(market: str, day: str | None = None, force: bool = False) -> di
     """Daily note for the crypto / US book: what the markets did, what the strategies did, and what was learned."""
     from . import markets as MK
     from . import gbook as G
-    day = day or (datetime.utcnow().date() if market == "CRYPTO" else C.now_ist().astimezone(MK.TZ["US"]).date()).isoformat()
+    day = day or (datetime.utcnow().date() if market == "CRYPTO" else C.now_ist().astimezone(MK.TZ["US"]).date()).isoformat()   # gold's day ends 17:00 New York too
     key = f"{market}:{day}"
     if not force and _hget("research", key):
         return {"skipped": "already done", "day": day}
@@ -873,6 +878,6 @@ def post_close_g(market: str, day: str | None = None, force: bool = False) -> di
               "trades": [{"symbol": t["symbol"], "pnl": t["pnl"], "R": t.get("R"), "reason": t.get("reason")} for t in trades], "insights": ins,
               "changes": [{"id": c["id"], "title": c["title"]} for c in new], "generated": datetime.utcnow().isoformat(timespec="seconds") + "Z"}
     _hset("research", key, report)
-    _index_add("research:idx", key, date.fromisoformat(day).toordinal() * 10 + (2 if market == "US" else 3))
+    _index_add("research:idx", key, date.fromisoformat(day).toordinal() * 10 + {"US": 2, "CRYPTO": 3, "GOLD": 4}.get(market, 3))
     _cache.pop("summary", None)
     return {"ok": True, "day": day, "changes": len(new)}

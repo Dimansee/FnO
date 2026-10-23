@@ -87,7 +87,7 @@ def _loop():
     last_ping = 0.0
     while True:
         t0 = time.time()
-        for m in ("CRYPTO", "US"):
+        for m in ("CRYPTO", "US", "GOLD"):
             try:
                 if _indian_hours() and AP.has_result(m):  # heavy re-test waits until the Indian session is over
                     continue

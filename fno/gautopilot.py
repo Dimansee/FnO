@@ -1,4 +1,4 @@
-"""Autopilot for the crypto and US paper books.
+"""Autopilot for the crypto, US and gold paper books.
 
 When a market has NO strategy of yours on "Auto paper-trade", these built-in rules trade instead. Your own Auto
 strategies always take priority: switch one on for a market and the autopilot steps aside there.
@@ -15,6 +15,10 @@ Live check (weekly): every candidate is re-backtested on its recent history, poo
 while that recent result is still positive (>= MIN_TRADES trades, avg >= MIN_AVG_R after costs, PF >= MIN_PF), and only on
 symbols where it has not been clearly losing (own avg >= SYMBOL_FLOOR_R, or too few trades to tell). If nothing passes,
 the market stays flat and the Markets tab says why.
+
+Gold (added 23 Oct 2026): the same slow trend family that held up on crypto and US, plus two session rules from
+the gold-session research (London breakout of the Asian range; the Asian-hours drift). Only XAUUSD is traded by the
+autopilot (PAXG is the same ounce, so trading both would double one bet); gold rules face the same weekly gate.
 """
 from __future__ import annotations
 
@@ -31,9 +35,11 @@ QUAL_TTL = 7 * 86400          # re-test every week
 RETRY_TTL = 3 * 3600          # a market whose test could not run (data feed down) is retried sooner
 MIN_TRADES, MIN_AVG_R, MIN_PF = 30, 0.03, 1.05
 SYMBOL_FLOOR_R, SYMBOL_MIN_N = -0.10, 6
-CHECK_DAYS = {("CRYPTO", "4h"): 365, ("CRYPTO", "1d"): 1095, ("US", "4h"): 720, ("US", "1h"): 720}
+CHECK_DAYS = {("CRYPTO", "4h"): 365, ("CRYPTO", "1d"): 1095, ("US", "4h"): 720, ("US", "1h"): 720,
+              ("GOLD", "1h"): 720, ("GOLD", "4h"): 720, ("GOLD", "1d"): 2555}   # gold is one symbol: longer windows so there are enough trades to judge
 SYMBOLS = {"CRYPTO": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT", "ADAUSDT", "AVAXUSDT", "LINKUSDT", "TONUSDT"],
-           "US": ["SPY", "QQQ", "IWM", "DIA", "AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "AMD", "JPM", "GLD"]}
+           "US": ["SPY", "QQQ", "IWM", "DIA", "AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "AMD", "JPM", "GLD"],
+           "GOLD": ["XAUUSD"]}
 
 
 def _c(l, op, r):
@@ -76,13 +82,40 @@ CANDIDATES = {
         {"id": "s_a10012", "name": "Keltner breakout, long (4h)", "timeframe": "4h", "direction": "long", **_KELTNER, "research": "+0.32R over 115 unseen trades",
          "about": "Buy when a 4-hour bar closes above the upper Keltner band (20-bar EMA + 2 x ATR). Stop 2 x ATR, trailing stop 3 x ATR. Longs only, whole shares."},
     ],
+    "GOLD": [
+        {"id": "s_a10021", "name": "Supertrend 10/3 (4h)", "timeframe": "4h", "direction": "both", **_SUPERTREND,
+         "research": "best family on crypto (+0.15R) and US; on gold it trades only if its own recent backtest passes",
+         "about": "Buy when a 4-hour bar (London clock: 00, 04, 08, 12, 16, 20) closes above the Supertrend line; short when one closes below. Stop 2 x ATR, exit on the opposite flip. Rides gold's trends."},
+        {"id": "s_a10022", "name": "Donchian 55 breakout, long (4h)", "timeframe": "4h", "direction": "long", **_donchian(55, 4.0),
+         "research": "+0.14R crypto / +0.40R US on unseen data; gold re-tested weekly",
+         "about": "Buy when a 4-hour bar closes above the highest high of the previous 55 bars (about two weeks of gold trading). Stop 2 x ATR, trailing stop 4 x ATR. Longs only."},
+        {"id": "s_a10023", "name": "Donchian 20 breakout, long (daily)", "timeframe": "1d", "direction": "long", **_donchian(20, 3.0),
+         "research": "+0.22R crypto on unseen data; gold judged on its last 7 years",
+         "about": "Buy when a COMEX day (ends 17:00 New York, 02:30-03:30 IST) closes above the highest high of the previous 20 days. Stop 2 x ATR, trailing stop 3 x ATR. Longs only."},
+        {"id": "s_a10024", "name": "Supertrend 10/3 (daily)", "timeframe": "1d", "direction": "both", **_SUPERTREND,
+         "research": "+0.33R crypto on unseen data, few trades; gold judged on its last 7 years",
+         "about": "Supertrend on daily gold bars: buy on an up-flip, short on a down-flip, stop 2 x ATR, exit on the opposite flip."},
+        {"id": "s_a10025", "name": "London breakout of the Asian range (1h)", "timeframe": "1h", "direction": "both",
+         "long": {"all": [_c(_P, "crosses_above", {"level": "asia_high"})]},
+         "short": {"all": [_c(_P, "crosses_below", {"level": "asia_low"})]},
+         "exit": {**_EX, "stop_atr": 1.5, "target_r": 2.0}, "hold": "intraday",
+         "filters": {"max_trades_day": 1, "session": "london", "end": "11:00"},
+         "research": "classic gold session setup; judged weekly on ~2 years of hourly XAUUSD",
+         "about": "Asia (00:00 UTC to London open) usually leaves a tight range. Between London open and 11:00 London (12:30-15:30 IST now, 13:30-16:30 IST in winter), buy the first hourly close above the Asian high, or short the first close below the Asian low. Stop 1.5 x ATR, target 2R, flat by 21:45 London. One trade a day."},
+        {"id": "s_a10026", "name": "Asian-hours drift, long (1h)", "timeframe": "1h", "direction": "long",
+         "long": {"all": [_c({"price": "hour"}, "le", {"value": 1})]},
+         "exit": {**_EX, "stop_atr": 2.0, "time_stop_bars": 7}, "hold": "intraday",
+         "filters": {"max_trades_day": 1, "session": "asia"},
+         "research": "studies find gold tends to rise in Asian hours and fall in Western hours; thin after costs, so it must pass the gate",
+         "about": "Buy at the start of the Asian session (00:00 UTC, 05:30 IST) and sell about 7 hours later, around London's open. Stop 2 x ATR. Tests the well-known tendency of gold to drift up while China and India trade."},
+    ],
 }
 
 
 def _spec(market: str, cand: dict, symbols: list[str]) -> dict:
     raw = {k: v for k, v in cand.items() if k not in ("research", "about")}
-    raw.update(name="Autopilot · " + cand["name"], market=market, symbols=symbols or SYMBOLS[market][:1], hold="swing",
-               filters={"max_trades_day": 3}, enabled=True, auto=True, version=1)
+    raw.update(name="Autopilot · " + cand["name"], market=market, symbols=symbols or SYMBOLS[market][:1], hold=cand.get("hold", "swing"),
+               filters={"max_trades_day": 3, **(cand.get("filters") or {})}, enabled=True, auto=True, version=1)
     spec = CU.validate(raw, existing_id=cand["id"])
     spec["autopilot"] = True
     return spec

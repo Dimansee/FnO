@@ -206,6 +206,8 @@ LEVELS = {
     "orb_high": "Opening range high (first 15 min)", "orb_low": "Opening range low (first 15 min)",
     "pivot": "Classic pivot (previous day)", "cam_h3": "Camarilla H3", "cam_h4": "Camarilla H4",
     "cam_l3": "Camarilla L3", "cam_l4": "Camarilla L4",
+    "asia_high": "Asian session high (00:00 UTC to London open)", "asia_low": "Asian session low (00:00 UTC to London open)",
+    "ny_or_high": "New York opening range high (08:30-09:00 New York)", "ny_or_low": "New York opening range low (08:30-09:00 New York)",
 }
 PRICES = ("open", "high", "low", "close", "volume", "hl2", "hlc3", "range_pct", "body_pct", "hour", "minute")
 OPS = {"gt": ">", "lt": "<", "ge": ">=", "le": "<=", "crosses_above": "crosses above", "crosses_below": "crosses below",
@@ -229,6 +231,8 @@ def _is_intraday(df: pd.DataFrame) -> bool:
 
 def level_series(df: pd.DataFrame, name: str) -> pd.Series:
     out = pd.Series(np.nan, index=df.index)
+    if name in ("asia_high", "asia_low", "ny_or_high", "ny_or_low"):
+        return _session_level(df, name)
     if not _is_intraday(df):                       # daily bars: "previous day" = previous bar
         h, l, c, o = df["high"], df["low"], df["close"], df["open"]
         if name == "pdh": return h.shift(1)
@@ -269,6 +273,31 @@ def level_series(df: pd.DataFrame, name: str) -> pd.Series:
     if name == "cam_l3": return base_c - r / 4
     if name == "cam_l4": return base_c - r / 2
     return out
+
+
+def _session_level(df: pd.DataFrame, name: str) -> pd.Series:
+    """Range of a world session, usable only once that session's window is over (no look-ahead), until the end of
+    the same UTC day (Asian range) / New York day (NY opening range). NaN on daily bars or a naive index."""
+    out = pd.Series(np.nan, index=df.index)
+    if not _is_intraday(df) or df.index.tz is None:
+        return out
+    from . import sessions as SS
+    hi = name.endswith("_high")
+    if name.startswith("asia"):
+        inside = pd.Series(SS.mask(df.index, "asia"), index=df.index)
+        day = pd.Series(df.index.tz_convert("UTC").date, index=df.index)
+    else:
+        loc = df.index.tz_convert(SS.NY)
+        m = loc.hour * 60 + loc.minute
+        inside = pd.Series((m >= 8 * 60 + 30) & (m < 9 * 60), index=df.index)
+        day = pd.Series(loc.date, index=df.index)
+    src = (df["high"] if hi else df["low"]).where(inside)
+    agg = src.groupby(day).max() if hi else src.groupby(day).min()
+    val = day.map(agg).astype(float)
+    # known only after the window: bars after the last bar inside the window on that day
+    last_in = pd.Series(np.where(inside, np.arange(len(df)), -1), index=df.index).groupby(day).transform("max")
+    after = np.arange(len(df)) > last_in.values
+    return val.where(after & (last_in.values >= 0))
 
 
 # ------------------------------------------------------------------ operand resolver

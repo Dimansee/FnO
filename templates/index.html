@@ -540,7 +540,7 @@ details summary{cursor:pointer;font-size:13px}
     <div class="bar">
       <button class="iconbtn" id="sideToggle" title="Collapse menu"><svg><use href="#i-menu"/></svg></button>
       <div class="brand"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="vertical-align:-5px;margin-right:6px"><path d="M2 17 L8 11 L12 14 L21 5" fill="none" stroke="#f2a93b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="5" r="2.4" fill="#f2a93b"/></svg>F&amp;O <span>Trainer</span></div>
-      <div class="segs" id="wsSwitch" role="tablist" aria-label="Market"><button class="seg" data-ws="IN">India F&amp;O</button><button class="seg" data-ws="CRYPTO">Crypto</button><button class="seg" data-ws="US">US</button></div>
+      <div class="segs" id="wsSwitch" role="tablist" aria-label="Market"><button class="seg" data-ws="IN">India F&amp;O</button><button class="seg" data-ws="CRYPTO">Crypto</button><button class="seg" data-ws="US">US</button><button class="seg" data-ws="GOLD">Gold</button></div>
       <select id="symbol" aria-label="Instrument"></select>
       <span id="srcPill" class="pill demo"><span class="dot"></span><span>…</span></span>
       <div class="spacer"></div>
@@ -974,7 +974,7 @@ function applyWS() {
     const ok = wsAllows(el.dataset.t); el.classList.toggle("hidden", !ok); if (ok) any = true;
   });
   close();
-  const mb = document.querySelector('#tabs button[data-t="markets"] .lb'); if (mb) mb.textContent = WS.mk === "CRYPTO" ? "Crypto dashboard" : "US dashboard";
+  const mb = document.querySelector('#tabs button[data-t="markets"] .lb'); if (mb) mb.textContent = (tabs[WS.mk] || "").replace("US stocks", "US") + " dashboard";
   ["#symbol", "#srcPill"].forEach(q => { const e = $(q); if (e) e.classList.toggle("hidden", WS.mk !== "IN"); });
   if (WS.mk !== "IN") { GX.mk = WS.mk; LX.mk = WS.mk; } else { LX.mk = "IN"; }
 }
@@ -3024,7 +3024,9 @@ pStart(); start().finally(pDone);
 const clone = o => JSON.parse(JSON.stringify(o));
 const fmtN = (v, d = 2) => v == null ? "–" : Number(v).toLocaleString("en-US", {minimumFractionDigits: d, maximumFractionDigits: d});
 const money = (v, cur) => v == null ? "–" : (cur === "INR" ? rs(v) : (v < 0 ? "-" : "") + fmtN(Math.abs(v), 2) + " " + cur);
-const tabs = {IN: "India F&O", CRYPTO: "Crypto", US: "US stocks"};
+const tabs = {IN: "India F&O", CRYPTO: "Crypto", US: "US stocks", GOLD: "Gold"};
+const LEAD = {CRYPTO: "BTCUSDT", US: "SPY", GOLD: "XAUUSD"};            // first symbol shown per market
+const UNIT = mk => mk === "CRYPTO" ? "Coin" : "Symbol";
 function miniLine(cv, vals, opt = {}) {
   if (!cv) return; const dpr = devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; cv.width = w * dpr; cv.height = h * dpr;
   const g = cv.getContext("2d"); g.scale(dpr, dpr); g.clearRect(0, 0, w, h);
@@ -3042,10 +3044,10 @@ const SX = {data: null, edit: null, bt: null, btFor: null, imp: null, busy: fals
 async function loadStrategies() { SX.data = await api("/api/strategies"); renderStrategies(); }
 function blankSpec() {
   const g = typeof WS !== "undefined" && WS.mk !== "IN";
-  return {name: "", about: "", market: g ? WS.mk : "IN", symbols: g ? [WS.mk === "CRYPTO" ? "BTCUSDT" : "SPY"] : ["NIFTY"], timeframe: g ? "1h" : "15m", direction: "both", hold: g ? "swing" : "intraday", enabled: false, auto: false, watch: false,
+  return {name: "", about: "", market: g ? WS.mk : "IN", symbols: g ? [LEAD[WS.mk] || "SPY"] : ["NIFTY"], timeframe: g ? "1h" : "15m", direction: "both", hold: g ? "swing" : "intraday", enabled: false, auto: false, watch: false,
     long: {all: [{l: {ind: "ema", n: 9}, op: "crosses_above", r: {ind: "ema", n: 21}}], any: []}, short: {all: [{l: {ind: "ema", n: 9}, op: "crosses_below", r: {ind: "ema", n: 21}}], any: []},
     exit: {stop_atr: 1.5, atr_n: 14, target_r: 2, trail_atr: null, breakeven_r: null, after_target_trail: null, time_stop_bars: null, exit_on_opposite: false},
-    filters: {start: "09:45", end: "14:15", max_trades_day: 2, vix_min: null, vix_max: null}};
+    filters: {start: g ? null : "09:45", end: g ? null : "14:15", max_trades_day: 2, vix_min: null, vix_max: null, session: null}};
 }
 function normSpec(sp) {
   const b = blankSpec(), o = {...b, ...clone(sp)};
@@ -3140,7 +3142,9 @@ function editorHtml() {
       <div><label>Not before</label><input type="time" data-p="filters.start" value="${nv(e.filters.start)}" data-k="strnull"></div>
       <div><label>Not after</label><input type="time" data-p="filters.end" value="${nv(e.filters.end)}" data-k="strnull"></div>
       <div><label>Max trades / day</label>${num("filters.max_trades_day", e.filters.max_trades_day, "2", "1")}</div>
-      ${e.market === "IN" ? `<div><label>India VIX at least</label>${num("filters.vix_min", e.filters.vix_min)}</div><div><label>India VIX at most</label>${num("filters.vix_max", e.filters.vix_max)}</div>` : ""}</div>
+      ${e.market === "IN" ? `<div><label>India VIX at least</label>${num("filters.vix_min", e.filters.vix_min)}</div><div><label>India VIX at most</label>${num("filters.vix_max", e.filters.vix_max)}</div>`
+        : `<div title="World trading sessions, daylight-saving aware: Asia = 00:00 UTC to London open; London 08:00-17:00 London; New York 08:00-17:00 New York; overlap = both open."><label>Only in session</label><select data-p="filters.session" data-k="strnull"><option value="">any time</option>${[["asia", "Asia"], ["london", "London"], ["newyork", "New York"], ["overlap", "London + NY overlap"]].map(([k, v]) => `<option value="${k}" ${(e.filters.session || "") === k ? "selected" : ""}>${v}</option>`).join("")}</select></div>`}</div>
+      ${e.market !== "IN" ? `<p class="muted" style="font-size:12.5px;margin:8px 0 0">Times are in ${{CRYPTO: "UTC (IST − 5:30)", US: "New York time", GOLD: "London time (gold is priced in London)"}[e.market]}.</p>` : ""}
       <p class="muted" style="font-size:12.5px;margin:10px 0 0">Signals are read when a bar closes; the trade starts at the next bar's open. If stop and target are both touched inside one bar, the stop is assumed to hit first.</p></div></div>
   <div id="sxErr" class="err hidden" style="margin-top:12px"></div>
   <div class="row" style="margin-top:14px"><button class="primary" id="sxSave">Save strategy</button><button id="sxTest">Save & backtest</button></div></div>`;
@@ -3244,7 +3248,7 @@ function renderLearning() {
     <div class="row"><button id="lxRun">Run after-close research now</button></div></div>
   <div class="card"><div class="row between wrap"><h3 style="margin:0">Autonomy · ${LX.mk ? tabs[LX.mk] : "all markets"}</h3><div class="segs">${Object.entries(modes).map(([k, v]) => `<button class="seg ${d.mode === k ? "on" : ""}" data-lmode="${k}">${v[0]}</button>`).join("")}</div></div>
     <p class="muted" style="margin:10px 0 0">${modes[d.mode][1]}</p>
-    <p class="muted" style="margin:6px 0 0;font-size:12.5px">${LX.mk ? `This switch only affects ${tabs[LX.mk]}.` : "Each market has its own switch (pick a market above); setting it here sets all three."} Now: ${["IN", "CRYPTO", "US"].map(k => `${tabs[k]} <b>${(modes[(d.modes || {})[k]] || [k])[0]}</b>`).join(" · ")}</p>
+    <p class="muted" style="margin:6px 0 0;font-size:12.5px">${LX.mk ? `This switch only affects ${tabs[LX.mk]}.` : "Each market has its own switch (pick a market above); setting it here sets all of them."} Now: ${["IN", "CRYPTO", "US", "GOLD"].map(k => `${tabs[k]} <b>${(modes[(d.modes || {})[k]] || [k])[0]}</b>`).join(" · ")}</p>
     <p class="muted" style="margin:6px 0 0;font-size:12.5px">Guard-rails: needs ${d.limits.min_signals_veto}+ signals and a very clear negative result (z ≤ −${d.limits.z_veto}) in both halves before skipping anything · at most ${d.limits.max_vetoes_per_strategy} skips per strategy · skips expire after ${d.limits.veto_days} days · the built-in Noise and Camarilla numbers are never changed automatically.</p></div>
   ${pend.length ? `<div class="card" style="margin-top:14px"><h3>Waiting for your approval</h3>${pend.map(c => `<div class="row between wrap pend"><div><b>${esc(c.title)}</b><div class="muted" style="font-size:13px">${esc(JSON.stringify(c.evidence || {}))}</div></div><button class="primary" data-lapply="${c.id}">Approve</button></div>`).join("")}</div>` : ""}
   <div class="grid g2" style="margin-top:14px">
@@ -3281,7 +3285,7 @@ async function loadGJournal() {
   const t = d.trades, net = t.reduce((a, x) => a + (x.pnl || 0), 0), wins = t.filter(x => x.pnl > 0).length;
   $("#gjBody").innerHTML = gHead("journal", "Every closed paper trade with why it opened and why it closed, grouped by day (Indian time), strategy, coin and exit reason.")
   + `<div class="grid g4">${kpiCard("Closed trades", t.length, `${d.open.length} still open`)}${kpiCard("Win rate", t.length ? Math.round(wins / t.length * 100) + "%" : "–", `${wins} winners`)}${kpiCard("Net result", money(net, cur), "after fees and slippage", cls(net))}${kpiCard("Average", t.length ? sgn(t.reduce((a, x) => a + (x.R || 0), 0) / t.length) + "R" : "–", "per trade, in risk units")}</div>
-  <div class="grid g2" style="margin-top:14px">${grpTable("By day", d.by_day, cur, "Day")}${grpTable("By strategy", d.by_strategy, cur, "Strategy")}${grpTable("By coin", d.by_symbol, cur, gmk() === "CRYPTO" ? "Coin" : "Symbol")}${grpTable("By exit reason", d.by_reason, cur, "Exit")}</div>
+  <div class="grid g2" style="margin-top:14px">${grpTable("By day", d.by_day, cur, "Day")}${grpTable("By strategy", d.by_strategy, cur, "Strategy")}${grpTable("By " + UNIT(gmk()).toLowerCase(), d.by_symbol, cur, UNIT(gmk()))}${grpTable("By exit reason", d.by_reason, cur, "Exit")}</div>
   <div class="card" style="margin-top:14px"><h3>Every trade</h3><div class="tablewrap" style="max-height:60vh"><table><tr><th>Closed (IST)</th><th>Symbol</th><th>Strategy</th><th>Side</th><th>Entry → exit</th><th>Best / worst</th><th>R</th><th>P&L</th><th>Reason</th></tr>${t.map(x => `<tr><td class="mono">${esc(new Date(x.closed).toLocaleString("en-IN", {day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", hour12: false}))}</td><td><b>${esc(x.symbol)}</b></td><td>${esc((x.strategy_name || "").replace("Autopilot · ", ""))}</td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${fmtN(x.entry, x.entry < 10 ? 4 : 2)} → ${fmtN(x.exit, x.exit < 10 ? 4 : 2)}</td><td class="mono">${sgn(x.mfe_R)} / ${sgn(x.mae_R)}R</td><td class="mono ${cls(x.R)}">${sgn(x.R)}</td><td class="mono ${cls(x.pnl)}">${fmtN(x.pnl)}</td><td>${esc(x.reason)}</td></tr>`).join("") || `<tr><td colspan="9" class="muted">No closed trades yet. The first ones appear here as soon as a rule exits a position.</td></tr>`}</table></div></div>`;
 }
 
@@ -3317,7 +3321,7 @@ async function loadGBacktest() {
   const prevR = $("#gbRule") && $("#gbRule").value, prevS = $("#gbSym") && $("#gbSym").value, prevD = $("#gbDays") && $("#gbDays").value;
   $("#gbHead").innerHTML = gHead("backtest", "Test any built-in rule or your own strategy on one coin's past prices, with the same engine, fees and slippage the paper account uses.") +
     `<div class="card"><div class="grid g4"><div><label>Rule</label><select id="gbRule">${opts.map(([k, v]) => `<option value="${k}" ${k === prevR ? "selected" : ""}>${esc(v)}</option>`).join("")}</select></div>
-    <div><label>${mk === "CRYPTO" ? "Coin" : "Symbol"}</label><select id="gbSym">${GB_RULES.symbols.map(x => `<option value="${x.id}" ${x.id === prevS ? "selected" : ""}>${esc(x.label)}</option>`).join("")}</select></div>
+    <div><label>${UNIT(mk)}</label><select id="gbSym">${GB_RULES.symbols.map(x => `<option value="${x.id}" ${x.id === prevS ? "selected" : ""}>${esc(x.label)}</option>`).join("")}</select></div>
     <div><label>Days of history</label><select id="gbDays">${[90, 180, 365, 730, 1095, 1460].map(n => `<option ${String(n) === (prevD || "730") ? "selected" : ""}>${n}</option>`).join("")}</select></div>
     <div style="display:flex;align-items:flex-end"><button class="primary" id="gbRun" ${GBT.busy ? "disabled" : ""}>${GBT.busy ? "Running…" : "Run backtest"}</button></div></div></div>`;
   gbRender();
@@ -3340,7 +3344,7 @@ document.addEventListener("click", async e => {
 });
 
 async function loadGResearch() {
-  const d = await api("/api/research/log"), mk = gmk(), want = mk === "CRYPTO" ? ["Crypto", "Crypto & US"] : ["US", "Crypto & US"];
+  const d = await api("/api/research/log"), mk = gmk(), want = {CRYPTO: ["Crypto", "Crypto & US"], US: ["US", "Crypto & US"], GOLD: ["Gold"]}[mk] || [];
   const items = (d.entries || []).filter(x => want.includes(x.area));
   const tag = x => ({"Adopted": "tup", "Partly adopted": "tup", "Watch-list": "twarn", "Not adopted": "tdown"}[x.decision] || "");
   $("#gsBody").innerHTML = gHead("research", "What was tested for this market, how, and what was decided. Every test uses the app's own engine and costs, and is judged on data the choice never saw.")
@@ -3353,22 +3357,23 @@ async function loadGResearch() {
 async function loadGContext() {
   const mk = gmk(), d = await api("/api/gbook/context?market=" + mk), b = d.breadth || {}, rg = d.regime, se = d.sentiment;
   const rows = d.rows || [];
-  $("#gcBody").innerHTML = gHead("market context", `Where each ${mk === "CRYPTO" ? "coin" : "symbol"} stands now: recent moves, trend and how much it swings. Updated every 10 minutes.`)
+  $("#gcBody").innerHTML = gHead("market context", `Where each ${UNIT(mk).toLowerCase()} stands now: recent moves, trend and how much it swings. Updated every 10 minutes.`)
   + `<div class="grid g4">${kpiCard("Leader trend", rg ? (rg.bull ? '<span class="up">Up</span>' : '<span class="down">Down</span>') : "–", rg ? `${esc(rg.symbol)} ${rg.vs_sma200 > 0 ? "+" : ""}${rg.vs_sma200}% vs its 200-day average` : "")}
     ${kpiCard("Above 200-day average", `${b.above_200d ?? "–"} / ${b.of ?? "–"}`, "long-term uptrends")}
     ${kpiCard("4h trend up", `${b.up_4h ?? "–"} / ${b.of ?? "–"}`, "Supertrend 10/3 on 4h bars")}
     ${kpiCard(se ? esc(se.name) : "Sentiment", se ? se.value : "–", se ? `${esc(se.label)} · a week ago ${se.week_ago}` : "not available right now")}</div>
-  <div class="card" style="margin-top:14px"><div class="tablewrap"><table><tr><th>${mk === "CRYPTO" ? "Coin" : "Symbol"}</th><th>Price</th><th>1 day</th><th>7 days</th><th>30 days</th><th>vs 200-day avg</th><th>4h trend</th><th>Daily swing (ATR)</th><th>Volume vs 30-day avg</th></tr>
+  <div class="card" style="margin-top:14px"><div class="tablewrap"><table><tr><th>${UNIT(mk)}</th><th>Price</th><th>1 day</th><th>7 days</th><th>30 days</th><th>vs 200-day avg</th><th>4h trend</th><th>Daily swing (ATR)</th><th>Volume vs 30-day avg</th></tr>
   ${rows.map(r => r.error ? `<tr><td><b>${esc(r.label)}</b></td><td colspan="8" class="muted">${esc(r.error)}</td></tr>` : `<tr><td><b>${esc(r.label)}</b> <span class="muted">${esc(r.symbol.replace("USDT", ""))}</span></td><td class="mono">${fmtN(r.price, r.price < 10 ? 4 : 2)}</td><td class="mono">${pct(r.d1)}</td><td class="mono">${pct(r.d7)}</td><td class="mono">${pct(r.d30)}</td><td class="mono">${pct(r.vs_sma200)}</td><td>${r.trend4h === 1 ? '<span class="up">▲ up</span>' : r.trend4h === -1 ? '<span class="down">▼ down</span>' : "–"}</td><td class="mono">${r.atr_pct}%</td><td class="mono">${r.vol_vs_30d == null ? "–" : r.vol_vs_30d + "×"}</td></tr>`).join("")}</table></div>
-  <p class="muted" style="font-size:12.5px;margin:10px 0 0">The trend rules buy when a coin breaks out with its trend and stay out of coins trending down; a big daily swing means wider stops and smaller positions. ${mk === "CRYPTO" ? "Fear & Greed from alternative.me." : "VIX from Yahoo Finance."}</p></div>`;
+  <p class="muted" style="font-size:12.5px;margin:10px 0 0">The trend rules buy when a coin breaks out with its trend and stay out of coins trending down; a big daily swing means wider stops and smaller positions. ${{CRYPTO: "Fear & Greed from alternative.me.", US: "VIX from Yahoo Finance.", GOLD: "Dollar index (DXY) from Yahoo Finance: gold usually rises when the dollar falls."}[mk]}</p></div>`;
 }
 
 /* ------------------------------ Trade terminal (Delta-style, paper) ------------------------------ */
 const TT = {sym: {}, tf: localStorage.getItem("tttf") || "5m", side: "long", type: "market", cur: localStorage.getItem("ttcur") || "USDT", pct: null,
             chart: null, ser: null, vol: null, pls: [], bars: [], last: null, desk: null, fx: 88, ws: null, wsKey: null, poll: null, deskT: null, tab: "pos", prevT: null, key: null, token: 0};
 const ttMk = () => (WS.mk === "IN" ? "CRYPTO" : WS.mk);
-const ttSym = () => TT.sym[ttMk()] || (ttMk() === "CRYPTO" ? "BTCUSDT" : "SPY");
-const ttQuote = () => (ttMk() === "CRYPTO" ? "USDT" : "USD");
+const ttSym = () => TT.sym[ttMk()] || LEAD[ttMk()] || "SPY";
+const ttQuote = () => (ttMk() === "CRYPTO" || ttSym() === "PAXGUSDT" ? "USDT" : "USD");
+const ttBinance = () => ttMk() === "CRYPTO" || ttSym() === "PAXGUSDT";     // symbols with Binance's live websocket
 const ttP = v => v == null || !isFinite(v) ? "–" : fmtN(v, v >= 1000 ? 2 : v >= 10 ? 3 : v >= 1 ? 4 : 6);
 function ttM(v, sign) {                                 // money in the chosen currency
   if (v == null || !isFinite(v)) return "–";
@@ -3407,7 +3412,7 @@ async function ttLoadChart() {
   const mk = ttMk(), sym = ttSym(), tf = TT.tf, tok = ++TT.token;
   let r; try { r = await api(`/api/gbook/chart?market=${mk}&symbol=${sym}&tf=${tf}`); } catch (e) { toast(e.message); return; }
   if (tok !== TT.token) return;
-  $("#ttSym").innerHTML = r.symbols.map(x => `<option value="${x.id}" ${x.id === sym ? "selected" : ""}>${esc(x.id.replace("USDT", mk === "CRYPTO" ? " / USDT" : ""))} · ${esc(x.label)}</option>`).join("");
+  $("#ttSym").innerHTML = r.symbols.map(x => `<option value="${x.id}" ${x.id === sym ? "selected" : ""}>${esc(x.id.endsWith("USDT") ? x.id.replace("USDT", " / USDT") : x.id)} · ${esc(x.label)}</option>`).join("");
   $("#ttTf").innerHTML = r.timeframes.map(t => `<button class="seg ${t === tf ? "on" : ""}" data-tttf="${t}">${t}</button>`).join("");
   TT.bars = r.candles || [];
   const px = TT.bars.length ? TT.bars[TT.bars.length - 1].close : 1, prec = px >= 1000 ? 2 : px >= 10 ? 3 : px >= 1 ? 4 : px >= 0.01 ? 5 : 8;
@@ -3440,7 +3445,7 @@ function ttHeaderPrice(px, tick) {
   if (px == null) return;
   const el = $("#ttPx"), prev = TT.lastShown; TT.lastShown = px;
   el.textContent = ttP(px); el.className = "px mono " + (prev == null ? "" : px > prev ? "up" : px < prev ? "down" : el.className.includes("up") ? "up" : el.className.includes("down") ? "down" : "");
-  $("#ttPxInr").textContent = ttMk() === "CRYPTO" || TT.cur === "INR" ? "≈ ₹" + (px * TT.fx).toLocaleString("en-IN", {maximumFractionDigits: px * TT.fx < 100 ? 2 : 0}) : "";
+  $("#ttPxInr").textContent = ttMk() !== "US" || TT.cur === "INR" ? "≈ ₹" + (px * TT.fx).toLocaleString("en-IN", {maximumFractionDigits: px * TT.fx < 100 ? 2 : 0}) : "";
   if (tick) {
     $("#ttChg").innerHTML = `<span class="${cls(tick.chg_pct)}">${tick.chg_pct > 0 ? "+" : ""}${(+tick.chg_pct).toFixed(2)}%</span>`;
     $("#ttHi").textContent = ttP(+tick.high); $("#ttLo").textContent = ttP(+tick.low);
@@ -3469,9 +3474,10 @@ function ttStartFeed() {
         ttHeaderPrice(t.price, t);
       } catch (e) {}
     };
-    run(); TT.poll = setInterval(run, mk === "CRYPTO" ? 4000 : 15000);
+    run(); TT.poll = setInterval(run, ttBinance() ? 4000 : 15000);
   };
-  if (mk !== "CRYPTO") { pollStart(MK_US_NOTE()); return; }
+  if (mk === "GOLD" && !ttBinance()) { pollStart("COMEX gold, ~10 min delayed · updating every 15 s"); return; }
+  if (!ttBinance()) { pollStart(MK_US_NOTE()); return; }
   api(`/api/gbook/ticker?market=${mk}&symbol=${sym}`).then(t => TT.wsKey === key && ttHeaderPrice(t.price, t)).catch(() => {});
   try {
     const s = sym.toLowerCase(), ws = new WebSocket(`wss://data-stream.binance.vision/stream?streams=${s}@kline_${TT.tf}/${s}@ticker`);
@@ -3530,7 +3536,7 @@ function ttRenderBottom(fast) {
 /* order panel */
 function ttUnits() {
   const q = ttQuote(), c = TT.cur === "INR" ? "₹" : q, coin = ttSym().replace("USDT", "");
-  const u = ttMk() === "CRYPTO" ? [["qty", coin], ["amount", `Value (${c})`], ["margin", `Margin (${c})`]] : [["qty", "Shares"], ["amount", `Value (${c})`]];
+  const u = ttMk() === "US" ? [["qty", "Shares"], ["amount", `Value (${c})`]] : [["qty", ttMk() === "GOLD" ? "Ounces" : coin], ["amount", `Value (${c})`], ["margin", `Margin (${c})`]];
   const cur = $("#ttUnit").value; $("#ttUnit").innerHTML = u.map(([k, v]) => `<option value="${k}" ${k === cur ? "selected" : ""}>${esc(v)}</option>`).join("");
 }
 function ttRef() { return TT.type !== "market" && +$("#ttPrice").value ? +$("#ttPrice").value : TT.last; }
@@ -3627,11 +3633,12 @@ document.addEventListener("click", async e => {
   catch (er) { toast(er.message, 6000); }
 });
 
-const GX = {mk: localStorage.getItem("gmk") || "CRYPTO", data: null, sym: {}, tf: localStorage.getItem("gxtf") || "5m", chart: null, ser: null, lines: [], pls: [], key: null};
+const GX = {mk: localStorage.getItem("gmk") || "CRYPTO", data: null, sym: {}, tf: localStorage.getItem("gxtf") || "5m", chart: null, ser: null, lines: [], pls: [], key: null, gold: null};
 async function loadMarkets(quiet) {
   if (WS.mk !== "IN") GX.mk = WS.mk;
-  const [d] = await Promise.all([api("/api/gbook?market=" + GX.mk), loadGxChart(quiet)]);
-  GX.data = d; renderMarkets();
+  const gold = GX.mk === "GOLD" ? api("/api/gold/sessions?symbol=" + (GX.sym.GOLD || "XAUUSD")).catch(e => ({error: e.message})) : null;
+  const [d, g] = await Promise.all([api("/api/gbook?market=" + GX.mk), gold, loadGxChart(quiet)]);
+  GX.data = d; GX.gold = g; renderMarkets();
 }
 const GX_TF = {"1m": "1 min", "5m": "5 min", "15m": "15 min", "1h": "1 hour", "4h": "4 hours", "1d": "1 day"};
 function gxMakeChart() {
@@ -3647,7 +3654,7 @@ function gxMakeChart() {
   });
 }
 async function loadGxChart(quiet) {
-  const mk = GX.mk, sym = GX.sym[mk] || (mk === "CRYPTO" ? "BTCUSDT" : "SPY"), tf = GX.tf;
+  const mk = GX.mk, sym = GX.sym[mk] || LEAD[mk] || "SPY", tf = GX.tf;
   gxMakeChart();
   const token = (GX.token = (GX.token || 0) + 1);       // a slower reply for an older coin / timeframe must never overwrite the newer one
   let r;
@@ -3684,7 +3691,7 @@ async function loadGxChart(quiet) {
   if (GX.key !== key) { GX.key = key; const n = bars.length; if (n > 160) GX.chart.timeScale().setVisibleLogicalRange({from: n - 150, to: n + 4}); else GX.chart.timeScale().fitContent(); }
   else if (scrolled) GX.chart.timeScale().setVisibleLogicalRange(scrolled);
   const ln = (r.lines || []).map((l, i) => `<span style="color:${pal[i % pal.length]}">━</span> ${esc(l.name)}`).join(" · ");
-  $("#gxChartNote").innerHTML = `${bars.length} candles from ${mk === "CRYPTO" ? "Binance (Bybit if Binance is down)" : "Yahoo Finance (delayed)"}; refreshes every 30 s with Auto on. ${ln ? "Lines: " + ln + ". " : (tf === "4h" || tf === "1d" ? "" : "The autopilot rules run on 4h and daily bars; switch to those to see their lines. ")}Arrows = this book's entries, dots = exits.`;
+  $("#gxChartNote").innerHTML = `${bars.length} candles from ${mk === "CRYPTO" || sym === "PAXGUSDT" ? "Binance (Bybit if Binance is down)" : mk === "GOLD" ? "Yahoo Finance COMEX gold futures (GC=F, about 10 min delayed)" : "Yahoo Finance (delayed)"}; refreshes every 30 s with Auto on. ${ln ? "Lines: " + ln + ". " : (tf === "4h" || tf === "1d" || (mk === "GOLD" && tf === "1h") ? "" : mk === "GOLD" ? "The gold autopilot rules run on 1h (session rules), 4h and daily bars; switch to those to see their lines. " : "The autopilot rules run on 4h and daily bars; switch to those to see their lines. ")}Arrows = this book's entries, dots = exits.`;
   $("#gxLegend").innerHTML = "";
 }
 $("#gxSym").onchange = () => { GX.sym[GX.mk] = $("#gxSym").value; GX.bars = []; loadGxChart(); };
@@ -3695,7 +3702,7 @@ function gxAutopilot(d) {
   let body;
   if (a.error) body = `Autopilot status unavailable: ${esc(a.error)}`;
   else if (!a.in_use) body = `Your own Auto strategies are trading this market (autopilot stands aside).`;
-  else if (!a.tested_at) body = `Autopilot is running its first backtest of ${GX.mk === "CRYPTO" ? "crypto" : "US"} rules; trading starts once a rule passes (a few minutes).`;
+  else if (!a.tested_at) body = `Autopilot is running its first backtest of ${(tabs[GX.mk] || "").replace(" stocks", "")} rules; trading starts once a rule passes (a few minutes).`;
   else if (!(a.passed || []).length) body = `Autopilot checked ${a.tested} researched rules on ${esc(a.tested_at.slice(0, 10))} and none is working on recent data (${esc(a.rules)}), so it is staying flat rather than trading a losing rule. It re-checks weekly.`;
   else body = `Autopilot is trading ${a.passed.length} of ${a.tested} researched rule${a.tested > 1 ? "s" : ""} (checked ${esc(a.tested_at.slice(0, 10))}):<br>` + a.passed.map(r => `• <b>${esc(r.name.replace("Autopilot · ", ""))}</b> on ${esc(r.symbol)} <span class="muted">— ${esc(r.why)}</span>`).join("<br>")
     + ((a.failed || []).length ? `<br><span class="muted">Paused (not working lately): ${a.failed.map(r => `${esc(r.name.replace("Autopilot · ", ""))} — ${esc(r.why)}`).join("; ")}</span>` : "");
@@ -3716,11 +3723,36 @@ function gxScanner(d) {
     : !r.rule ? `<tr><td><b>${esc(r.symbol)}</b></td><td colspan="4" class="muted">${esc(r.note)}</td></tr>`
     : `<tr><td><b>${esc(r.symbol)}</b></td><td>${esc(r.rule)}</td><td class="mono">${fmtN(r.price)}</td><td class="muted">${ago(r.last_signal)}</td><td>${r.in_position ? `<span class="${r.in_position === "long" ? "up" : "down"}">In a ${esc(r.in_position)} trade</span>` : esc((r.next || []).join(" · ") || "waiting")}</td></tr>`).join("")}</table></div></div>`;
 }
+const SESS_LBL = {asia: "Asia", london: "London", newyork: "New York", overlap: "Overlap", late: "Late New York (quiet)", closed: "Closed"};
+function gxGold(g) {
+  if (!g) return "";
+  if (g.error) return `<div class="card" style="margin-bottom:14px"><p class="muted" style="margin:0">Session board unavailable: ${esc(g.error)}</p></div>`;
+  const c = g.clock || {}, st = g.stats || {}, rows = st.rows || [], hrs = st.hours || [];
+  const mins = m => m >= 60 ? `${Math.floor(m / 60)} h ${m % 60} min` : `${m} min`;
+  const order = ["asia", "london", "overlap", "newyork"];
+  const win = (c.windows || []).sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+  const maxA = Math.max(1, ...hrs.map(h => h.activity || 0));
+  const strip = Array.from({length: 24}, (_, h) => { const x = hrs.find(y => y.ist_hour === h); const v = x ? x.activity / maxA : 0;
+    return `<div title="${String(h).padStart(2, "0")}:00 IST · ${x ? "$" + x.activity + " typical hourly range" : "closed / no data"}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><div style="width:100%;height:56px;display:flex;align-items:flex-end"><div style="width:100%;height:${Math.max(2, v * 56)}px;background:var(--accent, #f2a93b);opacity:${0.25 + 0.75 * v};border-radius:3px 3px 0 0"></div></div><span class="muted" style="font-size:10px">${h % 3 === 0 ? h : ""}</span></div>`; }).join("");
+  return `<div class="card" style="margin-bottom:14px">
+    <div class="row between wrap"><h3 style="margin:0">Gold sessions <span class="muted" style="font-weight:400;font-size:13px">— ${esc(c.now_ist || "")}</span></h3>
+      <span class="tag ${c.gold_open ? "tup" : "tdown"}">${c.gold_open ? "Open · " + esc(SESS_LBL[c.session_now] || c.session_now) : "Gold market closed"}</span></div>
+    <div class="grid g4" style="margin-top:12px">${win.map(w => `<div class="card kpi" style="${w.live ? "outline:2px solid var(--green)" : ""}"><div class="k">${esc(SESS_LBL[w.id])}${w.live ? ' <span class="up">● live</span>' : ""}</div><div class="v mono" style="font-size:18px">${esc(w.start_ist)}–${esc(w.end_ist)}</div><div class="d muted">IST today</div></div>`).join("")}</div>
+    <div class="grid g2" style="margin-top:12px">
+      <div><h4 style="margin:0 0 6px">Coming up</h4>${(c.next_events || []).map(e => `<div class="row between" style="padding:4px 0;border-bottom:1px solid var(--line)"><span title="${esc(e.why)}"><b>${esc(e.name)}</b> <span class="muted" style="font-size:12px">${esc(e.local)}</span></span><span class="mono">${esc(e.ist)} IST <span class="muted">· in ${mins(e.in_min)}</span></span></div>`).join("") || '<p class="muted">—</p>'}
+        <p class="muted" style="font-size:12px;margin:6px 0 0">${esc(c.dst_note || "")}</p></div>
+      <div><h4 style="margin:0 0 6px">When gold moves (typical hourly range, IST) <span class="muted" style="font-weight:400;font-size:12px">${st.days ? `last ${st.days} trading days` : ""}</span></h4><div style="display:flex;gap:2px">${strip}</div>
+        ${st.busiest_ist && st.busiest_ist.length ? `<p class="muted" style="font-size:12.5px;margin:6px 0 0">Busiest hours: ${st.busiest_ist.map(esc).join(", ")} IST.</p>` : ""}</div></div>
+    ${rows.length ? `<div class="tablewrap" style="margin-top:12px"><table><tr><th>Session</th><th>Avg range</th><th>Share of the day's range</th><th>Made the day's high</th><th>Made the day's low</th><th>Avg move</th><th>Up days</th></tr>
+      ${rows.map(r => `<tr><td><b>${esc(SESS_LBL[r.session])}</b></td><td class="mono">$${fmtN(r.avg_range)} <span class="muted">(${r.avg_range_pct}%)</span></td><td class="mono">${r.share_of_day}%</td><td class="mono">${r.made_day_high_pct}%</td><td class="mono">${r.made_day_low_pct}%</td><td class="mono ${cls(r.avg_move_pct)}">${r.avg_move_pct > 0 ? "+" : ""}${r.avg_move_pct}%${r.t_move != null && Math.abs(r.t_move) < 2 ? ' <span class="muted" title="not statistically clear">~</span>' : ""}</td><td class="mono">${r.up_pct}%</td></tr>`).join("")}</table></div>
+      <p class="muted" style="font-size:12px;margin:6px 0 0">From ${esc(st.source || "")} ${st.bar_minutes || ""}-minute bars, ${st.days} trading days. Sessions overlap, so shares add to more than 100%. "~" = within noise. Descriptive only: rules still have to pass their own backtest to trade.</p>` : `<p class="muted" style="margin:10px 0 0">${esc(st.error || "Session statistics are loading…")}</p>`}
+    <details style="margin-top:10px"><summary class="muted">What the sessions mean for gold</summary>${(g.notes || []).map(n => `<p style="margin:6px 0 0;font-size:13px">${esc(n)}</p>`).join("")}</details></div>`;
+}
 function renderMarkets() {
   const d = GX.data, el = $("#gxBody"); if (!d) return; const cur = d.currency, p = d.prefs || {}, st = d.stats || {};
-  $("#gxHead").innerHTML = `<div class="pagehead"><div><h2>${tabs[GX.mk]} dashboard</h2><p class="muted">Paper account in ${cur}, fully separate from India F&O: own money, rules, settings and learning. Your own ${tabs[GX.mk]} strategies set to Auto trade first; with none on Auto, the built-in autopilot trades only the rules that pass its weekly check. ${GX.mk === "CRYPTO" ? "Crypto runs around the clock." : "US stocks trade 7:00 pm – 1:30 am IST (9:30 am – 4:00 pm New York)."}</p></div>
+  $("#gxHead").innerHTML = `<div class="pagehead"><div><h2>${tabs[GX.mk]} dashboard</h2><p class="muted">Paper account in ${cur}, fully separate from India F&O: own money, rules, settings and learning. Your own ${tabs[GX.mk]} strategies set to Auto trade first; with none on Auto, the built-in autopilot trades only the rules that pass its weekly check. ${{CRYPTO: "Crypto runs around the clock.", US: "US stocks trade 7:00 pm – 1:30 am IST (9:30 am – 4:00 pm New York).", GOLD: "Gold trades nearly 24 hours on weekdays (Monday ~04:30 IST to Saturday ~03:30 IST, one-hour break daily). XAUUSD = COMEX gold futures price; PAXG = tokenised gold that also trades at weekends."}[GX.mk] || ""}</p></div>
 </div>`;
-  el.innerHTML = `${gxAutopilot(d)}${gxScanner(d)}${gxLab(d)}
+  el.innerHTML = `${GX.mk === "GOLD" ? gxGold(GX.gold) : ""}${gxAutopilot(d)}${gxScanner(d)}${gxLab(d)}
   <div class="grid g4">${kpiCard("Account value", money(d.equity, cur), `started with ${money(d.capital_start, cur)}`)}${kpiCard("Available", money(d.cash, cur), `${d.positions.length} open`)}${kpiCard("Realised", money(d.realised, cur), `${st.trades || 0} closed trades`, cls(d.realised))}${kpiCard("Open profit", money(d.unrealised, cur), "right now", cls(d.unrealised))}</div>
   <div class="card" style="margin-top:14px"><h3>Open positions</h3><div class="tablewrap"><table><tr><th>Symbol</th><th>Strategy</th><th>Side</th><th>Entry</th><th>Now</th><th>Stop</th><th>Target</th><th>R</th><th>P&L</th><th></th></tr>${d.positions.map(x => `<tr><td><b>${esc(x.symbol)}</b></td><td>${esc(x.strategy_name)}</td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${gpx(x.entry)}</td><td class="mono">${gpx(x.price)}</td><td class="mono">${gpx(x.stop)}</td><td class="mono">${x.target == null ? "–" : gpx(x.target)}</td><td class="mono ${cls(x.R_now)}">${sgn(x.R_now)}</td><td class="mono ${cls(x.unrealised)}">${fmtN(x.unrealised)}</td><td style="white-space:nowrap"><button data-gxe="${x.id}" data-sl="${x.stop}" data-tp="${x.target ?? ""}">Edit stop/target</button> <button data-gx="${x.id}">Close</button></td></tr>`).join("") || `<tr><td colspan="10" class="muted">No open positions right now. One opens when an active rule gives a signal, or when you place a manual trade on the Dashboard.</td></tr>`}</table></div></div>`;
 }

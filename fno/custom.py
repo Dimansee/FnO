@@ -9,7 +9,8 @@ A strategy is plain JSON (no code is ever executed):
    "short": {"all": [...],       "any": [...]},
    "exit":  {"stop_atr": 1.5, "atr_n": 14, "target_r": 2.0, "trail_atr": null, "breakeven_r": null,
              "time_stop_bars": null, "exit_on_opposite": false},
-   "filters": {"start": "09:30", "end": "14:30", "max_trades_day": 2, "vix_min": null, "vix_max": null},
+   "filters": {"start": "09:30", "end": "14:30", "max_trades_day": 2, "vix_min": null, "vix_max": null,
+               "session": null},          # asia | london | newyork | overlap (world sessions, DST-aware; see fno/sessions.py)
    "hold": "intraday" | "swing", "enabled": true, "auto": false}
 
   cond = {"l": operand, "op": "gt|lt|ge|le|crosses_above|crosses_below|rising|falling", "r": operand}
@@ -33,18 +34,23 @@ from . import config as C
 from . import ind as X
 from . import indicators as I
 
-MARKETS = ("IN", "CRYPTO", "US")
+MARKETS = ("IN", "CRYPTO", "US", "GOLD")
 TIMEFRAMES = {"5m": 5, "15m": 15, "30m": 30, "1h": 60, "4h": 240, "1d": 1440}
 MAX_CONDS, MAX_STRATEGIES = 8, 20
 DEFAULT_EXIT = {"stop_atr": 1.5, "atr_n": 14, "target_r": 2.0, "trail_atr": None, "breakeven_r": None,
                 "time_stop_bars": None, "exit_on_opposite": False, "after_target_trail": None}
-DEFAULT_FILTERS = {"start": None, "end": None, "max_trades_day": 2, "vix_min": None, "vix_max": None}
+DEFAULT_FILTERS = {"start": None, "end": None, "max_trades_day": 2, "vix_min": None, "vix_max": None, "session": None}
+SESSION_FILTERS = ("asia", "london", "newyork", "overlap")
 SESSION = {  # market -> (offset used when resampling so bars start on the session clock, square-off hh:mm, last entry hh:mm)
     "IN": {"offset": "15min", "square_off": (15, 15), "open": (9, 15), "close": (15, 30)},
     "US": {"offset": "30min", "square_off": (15, 50), "open": (9, 30), "close": (16, 0)},
     "CRYPTO": {"offset": "0min", "square_off": None, "open": None, "close": None},
+    # gold, London clock: intraday trades are flat at 21:45 London, before the 17:00 New York daily break
+    "GOLD": {"offset": "0min", "square_off": (21, 45), "open": None, "close": None},
 }
-COSTS_BPS = {"IN": (1.0, 0.0), "US": (2.0, 0.0), "CRYPTO": (3.0, 5.0)}   # (slippage per side, fee per side) in bps of price
+# (slippage per side, fee per side) in bps of price. Gold: 2 + 3 bps a side = about $4 an ounce round trip at $4,000,
+# above a typical XAUUSD spread (~$0.3) plus commission, and close to Binance's spot fee on PAXG.
+COSTS_BPS = {"IN": (1.0, 0.0), "US": (2.0, 0.0), "CRYPTO": (3.0, 5.0), "GOLD": (2.0, 3.0)}
 
 
 # ------------------------------------------------------------------ presets
@@ -77,6 +83,16 @@ PRESETS = [
      "long": {"all": [_c({"price": "close"}, "crosses_above", {"ind": "donchian", "n": 20, "out": "upper"})]},
      "short": {"all": [_c({"price": "close"}, "crosses_below", {"ind": "donchian", "n": 20, "out": "lower"})]},
      "exit": {**DEFAULT_EXIT, "stop_atr": 2.0, "target_r": None, "trail_atr": 3.0}, "filters": {**DEFAULT_FILTERS, "max_trades_day": 2}, "hold": "swing"},
+    {"name": "Gold: London breakout of the Asian range", "about": "Asia leaves a tight range; buy the first close above the Asian high (or short below the low) between London open and 11:00 London. One trade a day, flat by 21:45 London.",
+     "market": "GOLD", "symbols": ["XAUUSD"], "timeframe": "15m", "direction": "both",
+     "long": {"all": [_c({"price": "close"}, "crosses_above", {"level": "asia_high"})]},
+     "short": {"all": [_c({"price": "close"}, "crosses_below", {"level": "asia_low"})]},
+     "exit": {**DEFAULT_EXIT, "stop_atr": 1.5, "target_r": 2.0}, "filters": {**DEFAULT_FILTERS, "session": "london", "end": "11:00", "max_trades_day": 1}, "hold": "intraday"},
+    {"name": "Gold: New York opening-range breakout", "about": "After US data (08:30 New York) the first half hour sets a range; trade the break of it during the London + New York overlap, with volume.",
+     "market": "GOLD", "symbols": ["XAUUSD"], "timeframe": "5m", "direction": "both",
+     "long": {"all": [_c({"price": "close"}, "crosses_above", {"level": "ny_or_high"}), _c({"ind": "volratio", "n": 20}, "gt", {"value": 1.2})]},
+     "short": {"all": [_c({"price": "close"}, "crosses_below", {"level": "ny_or_low"}), _c({"ind": "volratio", "n": 20}, "gt", {"value": 1.2})]},
+     "exit": {**DEFAULT_EXIT, "stop_atr": 1.5, "target_r": 2.0}, "filters": {**DEFAULT_FILTERS, "session": "overlap", "max_trades_day": 1}, "hold": "intraday"},
 ]
 
 
@@ -161,7 +177,7 @@ def validate(raw: dict, existing_id: str | None = None) -> dict:
         raise ValueError("Give the strategy a name.")
     market = raw.get("market", "IN")
     if market not in MARKETS:
-        raise ValueError("Market must be IN, CRYPTO or US.")
+        raise ValueError("Market must be IN, CRYPTO, US or GOLD.")
     tf = raw.get("timeframe", "15m")
     if tf not in TIMEFRAMES:
         raise ValueError("Timeframe must be one of " + ", ".join(TIMEFRAMES))
@@ -196,7 +212,12 @@ def validate(raw: dict, existing_id: str | None = None) -> dict:
     fl = {**DEFAULT_FILTERS, **(raw.get("filters") or {})}
     filters = {"start": _hhmm(fl["start"], "Start time"), "end": _hhmm(fl["end"], "End time"),
                "max_trades_day": _num(fl["max_trades_day"], 1, 20, "Max trades per day", allow_none=False, integer=True),
-               "vix_min": _num(fl["vix_min"], 5, 90, "VIX minimum"), "vix_max": _num(fl["vix_max"], 5, 90, "VIX maximum")}
+               "vix_min": _num(fl["vix_min"], 5, 90, "VIX minimum"), "vix_max": _num(fl["vix_max"], 5, 90, "VIX maximum"),
+               "session": fl.get("session") or None}
+    if filters["session"] not in (None,) + SESSION_FILTERS:
+        raise ValueError("Session must be asia, london, newyork or overlap.")
+    if filters["session"] and market == "IN":
+        raise ValueError("World-session filters are for the crypto, US and gold books.")
     hold = raw.get("hold", "intraday" if market in ("IN",) else "swing")
     if hold not in ("intraday", "swing"):
         raise ValueError("Hold must be intraday or swing.")
@@ -267,6 +288,9 @@ def _side_series(df, side, cache):
 
 def _window(df, filters):
     ok = pd.Series(True, index=df.index)
+    if filters.get("session") and df.index.tz is not None:
+        from . import sessions as SS
+        ok &= pd.Series(SS.mask(df.index, filters["session"]), index=df.index)
     if filters.get("start") or filters.get("end"):
         t = pd.Series(df.index.hour * 60 + df.index.minute, index=df.index)
         bar = None

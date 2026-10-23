@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "g1",
+   "date": "2026-10-23",
+   "area": "Gold",
+   "title": "Gold book: sessions (Asia, London, overlap, New York) and which rules may trade gold",
+   "asked": "Add gold trading where it belongs, and research it by session (London, New York, ...).",
+   "period": "published research + live 59-day session table; full backtest pending data run",
+   "result": "Gold is not crypto: it is a 24-hour (weekday) commodity priced in London (LBMA auctions 10:30 and 15:00 London) and traded mostly as COMEX futures. So it has its own book (Gold tab), priced from COMEX gold futures (XAUUSD = GC=F) with PAX Gold (Binance, 24/7) as a second symbol. Published work and broker tick data agree on the session shape: Asia is the quiet session (hourly ranges roughly a quarter of the overlap's), London open and the LBMA auctions are where banks trade, and the London + New York overlap (about 18:30-22:30 IST in Indian winter) with US data at 08:30 New York is gold's busiest, most liquid window; volume fades after the COMEX floor close. One academic study finds a 'hat-shaped' day (gold drifting up in Asian hours and down in Western hours) that beat the market before costs but not after. The app now measures the session table live from recent bars.",
+   "summary": "Shipped: Gold book (own money, rules, settings, learning), world-session filter for any crypto/US/gold strategy, Asian-range and New York opening-range levels, a live session board in IST, two gold presets, and six gold autopilot candidates (4 slow trend rules from the crypto/US research, London breakout of the Asian range, Asian-hours drift). None trades until it passes the weekly gate on gold's own recent history. Full offline test (research/gold_sessions.py) is written and waiting for its data run.",
+   "decision": "Partly adopted"
+  },
+  {
    "id": "r39",
    "date": "2026-10-23",
    "area": "Index options",
@@ -1338,6 +1349,21 @@
     "r35"
    ],
    "next": "If against-CPR trades keep beating the rest by a wide margin over 60 more sessions, test a 1.25x size for them on top of conviction sizing."
+  },
+  {
+   "id": "p-gold-sessions",
+   "area": "Gold",
+   "title": "Gold session rules: full design/holdout backtest",
+   "waiting_for": "New data feed",
+   "why": "The research sandbox cannot reach Yahoo/Binance; research/gold_sessions.py needs gold_XAUUSD_* and PAXGUSDT files from the global-data workflow.",
+   "collecting": "COMEX gold 1h (2 years), 15m (59 days), daily (since 2010); PAXG 1h (since 2020)",
+   "since": "2026-10-23",
+   "need": 1,
+   "unit": "days",
+   "refs": [
+    "g1"
+   ],
+   "next": "Run fetch_global.py <dir> gold, then gold_sessions.py; keep only rules that pass design and holdout in the gold autopilot list."
   }
  ]
 }

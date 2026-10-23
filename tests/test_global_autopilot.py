@@ -144,7 +144,7 @@ assert GB.portfolio("CRYPTO")["lab"]["rules"] and GB.portfolio("US")["lab"] is N
 LN.set_mode("off", "CRYPTO")
 assert LN.mode("CRYPTO") == "off" and LN.mode("IN") != "off" and LN.mode("US") != "off"
 LN.set_mode("safe")
-assert LN.modes() == {"IN": "safe", "CRYPTO": "safe", "US": "safe"}
+assert LN.modes() == {"IN": "safe", "CRYPTO": "safe", "US": "safe", "GOLD": "safe"}
 base = {"timeframe": "1h", "direction": "long", "enabled": False, "hold": "swing", "long": {"all": [{"l": {"price": "close"}, "op": "gt", "r": {"value": 1}}]}, "exit": {"stop_atr": 1.0, "target_r": 1.5}}
 store.put("custom_strategies", [])
 for i in range(CU.MAX_STRATEGIES):

@@ -171,7 +171,7 @@ def catalog() -> list[dict]:
     out.append({"id": "trades_in", "name": "Paper trades - India F&O", "about": "Every closed paper trade: strategy, option legs, entry/exit premium, P&L and exit reason.", "symbols": [], "formats": ["csv", "json"],
                 "first": (tin[0]["closed"][:10] if tin else None), "last": (tin[-1]["closed"][:10] if tin else None), "days": len({t["closed"][:10] for t in tin}),
                 "last_update": tin[-1]["closed"] if tin else None, "stored": "This app (Redis)", "max_days": 3650, "needs_symbol": False})
-    for m, label in (("CRYPTO", "Crypto"), ("US", "US")):
+    for m, label in (("CRYPTO", "Crypto"), ("US", "US"), ("GOLD", "Gold")):
         tr = GB.trades(m)
         out.append({"id": f"trades_{m.lower()}", "name": f"Paper trades - {label}", "about": "Every closed trade with R multiple, fees, P&L and reason.", "symbols": [], "formats": ["csv", "json"],
                     "first": (tr[0]["closed"][:10] if tr else None), "last": (tr[-1]["closed"][:10] if tr else None), "days": len({t["closed"][:10] for t in tr}),
@@ -335,7 +335,7 @@ def build(dataset: str, symbol: str | None, start: str, end: str, fmt: str = "cs
                 rows.append({"id": t["id"], "symbol": t["symbol"], "mode": t.get("mode"), "strategy": plan.get("strategy") or ("manual" if t.get("mode") != "signal" else "noise"),
                              "opened": t["opened"], "closed": t["closed"], "lots": t.get("lots"), "legs": "; ".join(f"{l['side']} {l['strike']}{l['opt']}" for l in t.get("legs", [])),
                              "entry_prem": t.get("entry_prem"), "exit_prem": t.get("exit_prem"), "charges": t.get("charges"), "pnl": t.get("pnl"), "reason": t.get("reason")})
-    elif dataset in ("trades_crypto", "trades_us"):
+    elif dataset in ("trades_crypto", "trades_us", "trades_gold"):
         m = dataset.split("_")[1].upper()
         rows = [{k: _flat(t.get(k)) for k in ("id", "symbol", "side", "strategy_name", "opened", "closed", "qty", "entry", "exit", "leverage", "fees", "pnl", "R", "mfe_R", "mae_R", "reason")}
                 for t in GB.trades(m) if a.isoformat() <= t["closed"][:10] <= b.isoformat()]

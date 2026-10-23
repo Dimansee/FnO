@@ -1247,7 +1247,7 @@ def _custom_data(spec: dict, symbol: str, days: int):
         raise ValueError(f"{symbol} is not in the {spec['market']} list.")
     cal = int(days)
     df = MK.candles(spec["market"], symbol, spec["timeframe"], cal, ttl=1800)
-    return df, None, "Binance public data" if spec["market"] == "CRYPTO" else "Yahoo Finance"
+    return df, None, "Binance public data" if (spec["market"] == "CRYPTO" or symbol in MK.BINANCE_GOLD) else "Yahoo Finance (gold = COMEX GC=F)" if spec["market"] == "GOLD" else "Yahoo Finance"
 
 
 def custom_backtest(raw: dict, symbol: str | None, days: int, capital: float, risk_pct: float) -> dict:

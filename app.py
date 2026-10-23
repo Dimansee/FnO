@@ -24,6 +24,7 @@ from fno import custom as CU
 from fno import ind as XI
 from fno import learn as LN
 from fno import gbook as GB
+from fno import sessions as SS
 from fno import datahub as DH
 from fno import backup as BK
 from fno import markets as MK
@@ -207,7 +208,7 @@ def logout():
 
 def _ap_counts():
     out = {}
-    for m in ("CRYPTO", "US"):
+    for m in GB.MARKETS:
         q = store.get(f"g_ap_qual:{m}") or {}
         out[m] = {"tested": len(q.get("rows", [])), "passed": sum(1 for r in q.get("rows", []) if r["ok"]), "data_errors": q.get("data_errors"), "at": q.get("at")}
     return out
@@ -761,7 +762,9 @@ def on_denied(e):
 def _markets_meta():
     return {"IN": {"currency": "INR", "symbols": [{"id": s, "label": SV.M.instrument(s)["label"]} for s in SV.ALL_SYMBOLS], "timeframes": ["5m", "15m", "30m", "1h"]},
             "CRYPTO": {"currency": "USDT", "symbols": MK.catalog("CRYPTO"), "timeframes": ["5m", "15m", "30m", "1h", "4h", "1d"]},
-            "US": {"currency": "USD", "symbols": MK.catalog("US"), "timeframes": ["5m", "15m", "30m", "1h", "4h", "1d"]}}
+            "US": {"currency": "USD", "symbols": MK.catalog("US"), "timeframes": ["5m", "15m", "30m", "1h", "4h", "1d"]},
+            "GOLD": {"currency": "USD", "symbols": MK.catalog("GOLD"), "timeframes": ["5m", "15m", "30m", "1h", "4h", "1d"],
+                     "sessions": dict(SS.NAMES)}}
 
 
 @app.get("/api/strategies")
@@ -803,8 +806,8 @@ def strategies_improve():
 # ---------------------------------------------------------------------------
 def _mk():
     m = (request.args.get("market") or (request.get_json(silent=True) or {}).get("market") or "CRYPTO").upper()
-    if m not in ("CRYPTO", "US"):
-        raise ValueError("Market must be CRYPTO or US.")
+    if m not in GB.MARKETS:
+        raise ValueError("Market must be CRYPTO, US or GOLD.")
     return m
 
 
@@ -821,6 +824,16 @@ def gbook_get():
         except Exception:
             traceback.print_exc()
     return jsonify(SV.clean(GB.portfolio(m)))
+
+
+@app.get("/api/gold/sessions")
+def gold_sessions():
+    """Gold session board: what is open now (IST), next key events, and per-session range / direction from recent bars."""
+    from fno import gold as GLD
+    sym = request.args.get("symbol", "XAUUSD")
+    if not MK.valid_symbol("GOLD", sym):
+        raise ValueError("Unknown gold symbol.")
+    return jsonify(SV.clean(GLD.board(sym)))
 
 
 @app.get("/api/gbook/chart")
@@ -1027,13 +1040,13 @@ def data_shared():
 @app.get("/api/learn")
 def learn_get():
     m = request.args.get("market")
-    return jsonify(SV.clean(LN.summary(m if m in ("IN", "CRYPTO", "US") else None)))
+    return jsonify(SV.clean(LN.summary(m if m in LN.MARKET_KEYS else None)))
 
 
 @app.post("/api/learn/mode")
 def learn_mode():
     b = request.get_json(force=True) or {}
-    mk = b.get("market") if b.get("market") in ("IN", "CRYPTO", "US") else None
+    mk = b.get("market") if b.get("market") in LN.MARKET_KEYS else None
     LN.set_mode(b.get("mode", ""), mk)
     return jsonify({"ok": True, "mode": LN.mode(mk), "modes": LN.modes()})
 

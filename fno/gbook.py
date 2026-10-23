@@ -1,7 +1,7 @@
-"""Paper books for crypto (USDT) and US stocks / ETFs (USD).
+"""Paper books for crypto (USDT), US stocks / ETFs (USD) and gold (USD per ounce).
 
 Kept completely separate from the Indian options ledger: its own money, positions and trades, so nothing you do
-here can touch the F&O results. Trades come from your custom strategies (market = CRYPTO or US) and follow exactly
+here can touch the F&O results. Trades come from your custom strategies (market = CRYPTO, US or GOLD) and follow exactly
 the same bar-by-bar exit logic as the backtester (custom.step_pos), so what you saw in the backtest is what runs.
 
 A tick (every 5 minutes from GitHub Actions, and whenever the app is open) does, per market:
@@ -10,6 +10,7 @@ A tick (every 5 minutes from GitHub Actions, and whenever the app is open) does,
 Sizing: risk_pct of the market's equity per trade (default 1%), position value capped by max_leverage.
 Costs: the same slippage and fee assumptions the backtester uses (custom.COSTS_BPS).
 Crypto shorts are perpetual-style (no funding modelled). US shorts are allowed on paper with full margin.
+Gold is sized in ounces (fractions allowed, like a spot / CFD account) and opens new trades only while gold is open.
 """
 from __future__ import annotations
 
@@ -27,9 +28,10 @@ from . import ind as X
 from . import markets as MK
 from . import store
 
-DEFAULT_CAPITAL = {"CRYPTO": 10_000.0, "US": 10_000.0}
+DEFAULT_CAPITAL = {"CRYPTO": 10_000.0, "US": 10_000.0, "GOLD": 10_000.0}
+MARKETS = ("CRYPTO", "US", "GOLD")
 PREF_DEFAULTS = {"risk_pct": 1.0, "max_leverage": 1.0, "max_open": 4, "auto": True}
-MAX_LEVERAGE = {"CRYPTO": 5.0, "US": 2.0}
+MAX_LEVERAGE = {"CRYPTO": 5.0, "US": 2.0, "GOLD": 10.0}   # gold: MCX / spot margins are ~5-10%
 POS, TRD = "fno:g:pos:", "fno:g:trades:"
 
 
@@ -117,7 +119,7 @@ def _slip_fee(market):
 
 def _spec_map():
     from . import gautopilot as AP
-    out = {s["id"]: s for m in ("CRYPTO", "US") for s in AP.all_specs(m)}   # so autopilot positions keep their exit rules
+    out = {s["id"]: s for m in MARKETS for s in AP.all_specs(m)}   # so autopilot positions keep their exit rules
     out.update({s["id"]: s for s in CU.load_all(store)})
     return out
 
@@ -181,7 +183,7 @@ def open_position(market: str, spec: dict, symbol: str, side: int, price: float,
     if risk_per_unit <= 0:
         return False, "Zero risk distance"
     qty = (eq * pf["risk_pct"] / 100 * mult) / risk_per_unit
-    lev = pf["max_leverage"] if market == "CRYPTO" else min(pf["max_leverage"], MAX_LEVERAGE["US"])
+    lev = min(pf["max_leverage"], MAX_LEVERAGE[market])
     max_notional = eq * lev / max(pf["max_open"], 1) * 1.5
     if qty * entry > max_notional:
         qty = max_notional / entry
@@ -189,7 +191,7 @@ def open_position(market: str, spec: dict, symbol: str, side: int, price: float,
         qty = float(int(qty))                      # whole shares
     if qty <= 0:
         return False, "Position size rounds to zero for this account size."
-    margin = qty * entry / (lev if market == "CRYPTO" else (1 if side < 0 else lev))
+    margin = qty * entry / (1 if (market == "US" and side < 0) else lev)
     if margin > cash(market):
         return False, f"Not enough free cash: need {margin:,.2f}, have {cash(market):,.2f}."
     fees = qty * entry * fee / 1e4
@@ -382,7 +384,7 @@ def _evaluate(market: str, spec: dict, symbol: str, out: list):
     out.append({"opened" if ok else "skipped": msg})
 
 
-def tick(markets=("CRYPTO", "US"), manage_only=False) -> dict:
+def tick(markets=MARKETS, manage_only=False) -> dict:
     """Run once. Safe to call from several places; every step is idempotent per bar."""
     if not _TICK_LOCK.acquire(timeout=50):
         return {"skipped": "another tick is still running"}
@@ -406,15 +408,15 @@ def _tick(markets, manage_only) -> dict:
             filled = GO.process(market)
         except Exception as e:
             filled = [{"error": f"orders: {str(e)[:80]}"}]
-        if market == "US" and not MK.us_session_open() and not positions("US"):
-            out[market] = filled + [{"skipped": "US market closed"}]
+        if market in ("US", "GOLD") and not MK.session_open(market) and not positions(market):
+            out[market] = filled + [{"skipped": f"{'US market' if market == 'US' else 'Gold'} closed"}]
             continue
         for pos in positions(market):
             try:
                 _manage(market, pos, specs.get(pos["strategy_id"]), rows)
             except Exception as e:
                 rows.append({"error": f"manage {pos['symbol']}: {str(e)[:100]}"})
-        if not manage_only and prefs(market)["auto"] and (market == "CRYPTO" or MK.us_session_open()):
+        if not manage_only and prefs(market)["auto"] and MK.session_open(market):
             for spec in runners(market, specs)[0]:
                 for sym in spec["symbols"]:
                     if not MK.valid_symbol(market, sym):
@@ -446,6 +448,8 @@ def _after_close():
     loc = _local("US", now)
     if loc.weekday() < 5 and (loc.hour, loc.minute) >= (16, 20) and loc.hour < 19:
         done["US"] = LN.post_close_g("US", loc.date().isoformat())
+    if loc.weekday() < 5 and (loc.hour, loc.minute) >= (17, 5) and (loc.hour, loc.minute) < (17, 50):   # gold's daily break
+        done["GOLD"] = LN.post_close_g("GOLD", loc.date().isoformat())
     try:
         from . import datahub as DH
         saved = DH.daily_us()
@@ -457,7 +461,7 @@ def _after_close():
 
 
 # ------------------------------------------------------------------ scanner (what every coin / rule is waiting for)
-WATCH = {"CRYPTO": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT"], "US": ["SPY", "QQQ", "AAPL", "NVDA", "MSFT"]}
+WATCH = {"CRYPTO": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT"], "US": ["SPY", "QQQ", "AAPL", "NVDA", "MSFT"], "GOLD": ["XAUUSD", "PAXGUSDT"]}
 
 
 def _px(v: float) -> str:
@@ -541,7 +545,7 @@ def ticker(market: str, symbol: str) -> dict:
         raise ValueError(f"{symbol} is not in the {market} list")
 
     def load():
-        if market == "CRYPTO":
+        if market == "CRYPTO" or symbol in MK.BINANCE_GOLD:
             for host in MK.BINANCE[:2]:
                 try:
                     r = MK._s.get(f"{host}/api/v3/ticker/24hr", params={"symbol": symbol}, timeout=8)
@@ -552,7 +556,7 @@ def ticker(market: str, symbol: str) -> dict:
                 except Exception:
                     continue
         df = MK.candles(market, symbol, "1h", 3, ttl=60)
-        last = df.tail(24 if market == "CRYPTO" else 7)
+        last = df.tail(7 if market == "US" else 24)
         px = float(MK.last_price(market, symbol))
         return {"price": px, "chg_pct": round((px / float(last["open"].iloc[0]) - 1) * 100, 2), "high": float(last["high"].max()), "low": float(last["low"].min()),
                 "vol_quote": float((last["close"] * last["volume"]).sum())}
@@ -683,11 +687,18 @@ def context(market: str) -> dict:
         good = [r for r in rows if "error" not in r]
         out = {"market": market, "rows": rows, "at": _now().isoformat(timespec="minutes"),
                "breadth": {"above_200d": sum(1 for r in good if (r["vs_sma200"] or 0) > 0), "up_4h": sum(1 for r in good if r["trend4h"] == 1), "of": len(good)}}
-        lead = next((r for r in good if r["symbol"] == ("BTCUSDT" if market == "CRYPTO" else "SPY")), None)
+        lead = next((r for r in good if r["symbol"] == {"CRYPTO": "BTCUSDT", "US": "SPY", "GOLD": "XAUUSD"}[market]), None)
         if lead and lead["vs_sma200"] is not None:
             out["regime"] = {"symbol": lead["symbol"], "bull": lead["vs_sma200"] > 0, "vs_sma200": lead["vs_sma200"]}
         try:
-            if market == "CRYPTO":
+            if market == "GOLD":
+                import yfinance as yf
+                dx = yf.Ticker("DX-Y.NYB").history(period="10d", interval="1d")["Close"].dropna()
+                if len(dx):
+                    chg = (dx.iloc[-1] / dx.iloc[0] - 1) * 100
+                    out["sentiment"] = {"name": "US dollar index (gold usually moves the other way)", "value": round(float(dx.iloc[-1]), 2),
+                                        "label": "dollar rising" if chg > 0.5 else "dollar falling" if chg < -0.5 else "dollar flat", "week_ago": round(float(dx.iloc[0]), 2)}
+            elif market == "CRYPTO":
                 r = MK._s.get("https://api.alternative.me/fng/?limit=8", timeout=8).json()["data"]
                 out["sentiment"] = {"name": "Crypto Fear & Greed", "value": int(r[0]["value"]), "label": r[0]["value_classification"], "week_ago": int(r[-1]["value"])}
             else:

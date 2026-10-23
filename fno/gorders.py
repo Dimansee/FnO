@@ -25,7 +25,7 @@ from . import store
 ORD = "fno:g:orders:"
 HIST_KEEP = 300
 MM = 0.005
-MAX_LEV = {"CRYPTO": 25.0, "US": 2.0}
+MAX_LEV = {"CRYPTO": 25.0, "US": 2.0, "GOLD": 20.0}
 TYPES = ("market", "limit", "stop")
 
 
@@ -146,6 +146,8 @@ def _ticket(market: str, b: dict) -> dict:
         out["error"] = f"Not enough free balance: needs {margin + fees:,.2f} (margin + fee), {free:,.2f} available."
     if market == "US" and not MK.us_session_open(pad_before=0, pad_after=0):
         out["error"] = "US market is closed (opens 9:30 am New York = 7:00 pm IST). Limit and stop orders can still be placed and wait for the open."
+    if market == "GOLD" and sym not in MK.BINANCE_GOLD and not MK.gold_open(pad_after=0):
+        out["error"] = "Gold is closed (daily break 17:00-18:00 New York, or the weekend). PAXG trades 24/7; limit and stop orders can still be placed."
     return out
 
 
@@ -245,12 +247,13 @@ def process(market: str) -> list[dict]:
     out = []
     for o in open_orders(market):
         try:
-            df = MK.candles(market, o["symbol"], "1m" if market == "CRYPTO" else "5m", 1, ttl=20)
+            fast = market == "CRYPTO" or o["symbol"] in MK.BINANCE_GOLD
+            df = MK.candles(market, o["symbol"], "1m" if fast else "5m", 1, ttl=20)
         except Exception as e:
             out.append({"order": o["id"], "error": str(e)[:80]})
             continue
         since = datetime.fromisoformat(o.get("last_check") or o["created"])
-        mins = 1 if market == "CRYPTO" else 5
+        mins = 1 if fast else 5
         bars = df[df.index.tz_convert(timezone.utc) + timedelta(minutes=mins) > since]
         side, trig, fill = (1 if o["side"] == "long" else -1), float(o["trigger"]), None
         slip, _ = GB._slip_fee(market)
@@ -291,7 +294,7 @@ def close_part(market: str, pid: str, frac: float) -> dict:
     if frac >= 0.999 or (market == "US" and int(pos["qty"] * frac) == pos["qty"]):
         rec = GB.close_position(market, pid, px, "Closed by you")
         return {"ok": True, "message": f"Closed {pos['symbol']}: {rec['pnl']:+,.2f}"}
-    q = round(pos["qty"] * frac, 6) if market == "CRYPTO" else float(int(pos["qty"] * frac))
+    q = float(int(pos["qty"] * frac)) if market == "US" else round(pos["qty"] * frac, 6)
     if q <= 0:
         raise ValueError("That part rounds to zero.")
     part = {**pos, "id": secrets.token_hex(4), "qty": q, "margin": round(pos["margin"] * q / pos["qty"], 2), "fees_in": round(pos["fees_in"] * q / pos["qty"], 4)}

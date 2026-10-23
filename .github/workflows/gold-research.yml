@@ -1,0 +1,40 @@
+name: gold-research
+# Fetches gold history (COMEX GC=F from Yahoo, PAXG from Binance) and runs research/gold_sessions.py:
+# session table by year + the gold rule backtest (design / holdout). Results go to the research-data branch
+# (research/data/global/ for the data, research/results/gold_sessions_results.json for the output). On demand.
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: global-data
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research-data
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: app
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r app/requirements.txt
+      - run: python app/research/fetch_global.py research/data/global gold
+      - run: python app/research/gold_sessions.py research/data/global | tee gold_sessions.log
+      - name: commit data and results
+        run: |
+          mkdir -p research/results
+          cp app/research/gold_sessions_results.json research/results/
+          cp gold_sessions.log research/results/
+          git config user.name "fno-data-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/data/global research/results
+          git commit -m "gold history + session research $(date -u +%F) [skip ci]" || echo "nothing to commit"
+          git pull --rebase -q origin research-data || true
+          git push origin HEAD:research-data

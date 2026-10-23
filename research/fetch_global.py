@@ -4,7 +4,10 @@ Crypto: Binance spot klines from data.binance.vision monthly files (the same exc
         (plus 5m from Jan 2024 for BTC, ETH, SOL, BNB, XRP),
         Jan 2023 to the last full month, then the current month from the public API (falls back silently if blocked).
 US:     Yahoo Finance 1h (~730 days), 1d (max), 5m (~60 days).
+Gold:   COMEX gold futures (Yahoo GC=F) 1h (~730 days), 1d (max), 15m / 5m (~60 days) -> gold_XAUUSD_<iv>.csv.gz;
+        PAX Gold (Binance PAXGUSDT, tokenised gold) 1h from Jan 2020 -> crypto_PAXGUSDT_1h.csv.gz (longer intraday history).
 Writes gzip CSVs (ts in UTC, open, high, low, close, volume) to <out>/crypto_<SYM>_1h.csv.gz etc.
+Usage: python research/fetch_global.py <out_dir> [gold]     ("gold" = only the gold files, quick)
 Usage: python research/fetch_global.py <out_dir>
 """
 import io
@@ -114,6 +117,29 @@ def funding(sym):
     print("funding", sym, len(out))
 
 
+def gold():
+    import yfinance as yf
+    for iv, period in (("1h", "729d"), ("1d", "max"), ("15m", "59d"), ("5m", "59d")):
+        try:
+            df = yf.Ticker("GC=F").history(period=period, interval=iv, auto_adjust=False)
+        except Exception as e:
+            print("fail gold", iv, e)
+            continue
+        if df.empty:
+            print("empty gold", iv)
+            continue
+        df = df.rename(columns=str.lower)[["open", "high", "low", "close", "volume"]].dropna(subset=["close"])
+        df.index = (df.index.tz_localize("America/New_York") if df.index.tz is None else df.index).tz_convert("UTC")
+        df.index.name = "ts"
+        df.reset_index().to_csv(f"{OUT}/gold_XAUUSD_{iv}.csv.gz", index=False)
+        print("gold", iv, len(df), df.index[0], df.index[-1])
+    crypto("PAXGUSDT", "1h", date(2020, 1, 1))
+
+
+if len(sys.argv) > 2 and sys.argv[2] == "gold":
+    gold()
+    sys.exit(0)
+gold()
 for s in CRYPTO:
     try:
         crypto(s)
