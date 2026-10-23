@@ -1,0 +1,34 @@
+name: index-daily
+# Long daily history of Nifty, Bank Nifty and Sensex (Yahoo) into research-data (research/data/). On demand.
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: global-data
+  cancel-in-progress: false
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research-data
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: app
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas yfinance
+      - run: python app/research/fetch_index_daily.py research/data
+      - name: commit
+        run: |
+          git config user.name "fno-data-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/data/idx_daily_*.csv.gz
+          git commit -m "index daily history $(date -u +%F) [skip ci]" || echo "nothing to commit"
+          git pull --rebase -q origin research-data || true
+          git push origin HEAD:research-data
