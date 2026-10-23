@@ -544,7 +544,8 @@ def build_order(plan, chain: pd.DataFrame, spot, vix_level, lot, capital, step=N
     moneyness = "ATM" if otm_steps == 0 else (f"{otm_steps} OTM" if otm_steps > 0 else f"{-otm_steps} ITM")
     return {"type": "Debit spread" if use_spread else "Buy option", "legs": legs, "strike": float(buy["strike"]),
             "opt": opt, "moneyness": moneyness, "ltp": ltp, "entry_prem": round(entry, 2),
-            "sl_prem": round(sl, 2), "target_prem": round(tgt, 2), "lots": lots, "lot": lot, "qty": lots * lot,
+            "sl_prem": round(sl, 2), "target_prem": round(tgt, 2), "target_fixed": plan.get("rr") is not None,   # False: a 3R guide only, the rule trails
+            "lots": lots, "lot": lot, "qty": lots * lot,
             "risk_rs": round(risk_per_lot * lots, 0), "reward_rs": round((tgt - entry) * lot * lots, 0),
             "capital_used": round(cost_per_lot * lots, 0), "cost_per_lot": round(cost_per_lot, 0),
             "risk_per_lot": round(risk_per_lot, 0), "affordable": affordable, "note": note,
@@ -567,7 +568,7 @@ def strike_alternatives(plan, chain: pd.DataFrame, spot, vix_level, lot, capital
             continue
         if o["entry_prem"] <= 0:
             continue
-        out.append({k: o[k] for k in ("strike", "moneyness", "ltp", "entry_prem", "sl_prem", "target_prem",
+        out.append({k: o[k] for k in ("strike", "moneyness", "ltp", "entry_prem", "sl_prem", "target_prem", "target_fixed",
                                       "cost_per_lot", "risk_per_lot", "lots", "affordable", "delta", "type", "is_default")})
     return out
 

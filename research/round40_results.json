@@ -1,0 +1,1221 @@
+{
+ "variants": {
+  "V0 current exits": {
+   "1 ITM (rule strike)": {
+    "train": {
+     "n": 1791,
+     "net": 391621,
+     "pf": 1.25,
+     "win": 30.0,
+     "fall": -98287
+    },
+    "y2026": {
+     "n": 451,
+     "net": 113673,
+     "pf": 1.27,
+     "win": 32.8,
+     "fall": -50736
+    },
+    "years": {
+     "2023": 16176,
+     "2024": 227106,
+     "2025": 148339,
+     "2026": 113673
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 33309,
+     "NIFTY": 205355,
+     "SENSEX": 152957
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 830,
+     "NIFTY": 114941,
+     "SENSEX": -2098
+    },
+    "by_strategy_train": {
+     "Camarilla": 70770,
+     "Fibonacci 0.618": 153595,
+     "Noise band": 67867,
+     "Trend-day": 99389
+    },
+    "by_strategy_2026": {
+     "Camarilla": 42045,
+     "Fibonacci 0.618": 45566,
+     "Noise band": -246,
+     "Trend-day": 26308
+    },
+    "today": 4814
+   },
+   "1 OTM (small-account strike)": {
+    "train": {
+     "n": 1791,
+     "net": 362058,
+     "pf": 1.28,
+     "win": 30.0,
+     "fall": -75466
+    },
+    "y2026": {
+     "n": 451,
+     "net": 93520,
+     "pf": 1.25,
+     "win": 32.6,
+     "fall": -46804
+    },
+    "years": {
+     "2023": 24923,
+     "2024": 208687,
+     "2025": 128448,
+     "2026": 93520
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 26325,
+     "NIFTY": 180515,
+     "SENSEX": 155218
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -2450,
+     "NIFTY": 95372,
+     "SENSEX": 598
+    },
+    "by_strategy_train": {
+     "Camarilla": 62367,
+     "Fibonacci 0.618": 144905,
+     "Noise band": 63526,
+     "Trend-day": 91260
+    },
+    "by_strategy_2026": {
+     "Camarilla": 33259,
+     "Fibonacci 0.618": 39867,
+     "Noise band": -1329,
+     "Trend-day": 21723
+    },
+    "today": 4037
+   }
+  },
+  "V1 breakeven stop at +0.25R (covers option decay)": {
+   "1 ITM (rule strike)": {
+    "train": {
+     "n": 1793,
+     "net": 384200,
+     "pf": 1.26,
+     "win": 38.0,
+     "fall": -93239
+    },
+    "y2026": {
+     "n": 452,
+     "net": 18450,
+     "pf": 1.05,
+     "win": 38.1,
+     "fall": -59359
+    },
+    "years": {
+     "2023": 16545,
+     "2024": 209072,
+     "2025": 158583,
+     "2026": 18450
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 31080,
+     "NIFTY": 196334,
+     "SENSEX": 156786
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -6487,
+     "NIFTY": 62204,
+     "SENSEX": -37267
+    },
+    "by_strategy_train": {
+     "Camarilla": 65162,
+     "Fibonacci 0.618": 148561,
+     "Noise band": 71228,
+     "Trend-day": 99249
+    },
+    "by_strategy_2026": {
+     "Camarilla": 880,
+     "Fibonacci 0.618": -8006,
+     "Noise band": -223,
+     "Trend-day": 25799
+    },
+    "today": 7833
+   },
+   "1 OTM (small-account strike)": {
+    "train": {
+     "n": 1793,
+     "net": 354079,
+     "pf": 1.29,
+     "win": 38.0,
+     "fall": -72375
+    },
+    "y2026": {
+     "n": 452,
+     "net": 8659,
+     "pf": 1.02,
+     "win": 37.2,
+     "fall": -52965
+    },
+    "years": {
+     "2023": 22865,
+     "2024": 193489,
+     "2025": 137725,
+     "2026": 8659
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 25641,
+     "NIFTY": 170572,
+     "SENSEX": 157866
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -8997,
+     "NIFTY": 49797,
+     "SENSEX": -32141
+    },
+    "by_strategy_train": {
+     "Camarilla": 57143,
+     "Fibonacci 0.618": 140268,
+     "Noise band": 66054,
+     "Trend-day": 90614
+    },
+    "by_strategy_2026": {
+     "Camarilla": -2667,
+     "Fibonacci 0.618": -7909,
+     "Noise band": -1337,
+     "Trend-day": 20572
+    },
+    "today": 6492
+   }
+  },
+  "V2 breakeven later, at +1.5R": {
+   "1 ITM (rule strike)": {
+    "train": {
+     "n": 1787,
+     "net": 352191,
+     "pf": 1.21,
+     "win": 32.0,
+     "fall": -105165
+    },
+    "y2026": {
+     "n": 451,
+     "net": 127682,
+     "pf": 1.29,
+     "win": 36.1,
+     "fall": -54973
+    },
+    "years": {
+     "2023": 12921,
+     "2024": 205599,
+     "2025": 133671,
+     "2026": 127682
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 34615,
+     "NIFTY": 183040,
+     "SENSEX": 134536
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -920,
+     "NIFTY": 119569,
+     "SENSEX": 9033
+    },
+    "by_strategy_train": {
+     "Camarilla": 55849,
+     "Fibonacci 0.618": 125326,
+     "Noise band": 68952,
+     "Trend-day": 102064
+    },
+    "by_strategy_2026": {
+     "Camarilla": 40855,
+     "Fibonacci 0.618": 43630,
+     "Noise band": -246,
+     "Trend-day": 43443
+    },
+    "today": 4318
+   },
+   "1 OTM (small-account strike)": {
+    "train": {
+     "n": 1787,
+     "net": 331925,
+     "pf": 1.24,
+     "win": 32.0,
+     "fall": -82233
+    },
+    "y2026": {
+     "n": 451,
+     "net": 104244,
+     "pf": 1.27,
+     "win": 35.5,
+     "fall": -50816
+    },
+    "years": {
+     "2023": 23913,
+     "2024": 193216,
+     "2025": 114796,
+     "2026": 104244
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 26230,
+     "NIFTY": 165114,
+     "SENSEX": 140581
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -4495,
+     "NIFTY": 98394,
+     "SENSEX": 10345
+    },
+    "by_strategy_train": {
+     "Camarilla": 49748,
+     "Fibonacci 0.618": 124289,
+     "Noise band": 64778,
+     "Trend-day": 93110
+    },
+    "by_strategy_2026": {
+     "Camarilla": 31379,
+     "Fibonacci 0.618": 37966,
+     "Noise band": -1329,
+     "Trend-day": 36228
+    },
+    "today": 3658
+   }
+  },
+  "V3 lock +1R once +2R (all rules)": {
+   "1 ITM (rule strike)": {
+    "train": {
+     "n": 1792,
+     "net": 388703,
+     "pf": 1.26,
+     "win": 33.0,
+     "fall": -98103
+    },
+    "y2026": {
+     "n": 452,
+     "net": 107767,
+     "pf": 1.26,
+     "win": 35.6,
+     "fall": -61568
+    },
+    "years": {
+     "2023": 19380,
+     "2024": 216217,
+     "2025": 153106,
+     "2026": 107767
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 41718,
+     "NIFTY": 197843,
+     "SENSEX": 149142
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -5192,
+     "NIFTY": 109733,
+     "SENSEX": 3226
+    },
+    "by_strategy_train": {
+     "Camarilla": 79685,
+     "Fibonacci 0.618": 132871,
+     "Noise band": 78295,
+     "Trend-day": 97852
+    },
+    "by_strategy_2026": {
+     "Camarilla": 45047,
+     "Fibonacci 0.618": 36271,
+     "Noise band": -3737,
+     "Trend-day": 30186
+    },
+    "today": 5693
+   },
+   "1 OTM (small-account strike)": {
+    "train": {
+     "n": 1792,
+     "net": 357682,
+     "pf": 1.28,
+     "win": 33.1,
+     "fall": -76165
+    },
+    "y2026": {
+     "n": 452,
+     "net": 88480,
+     "pf": 1.24,
+     "win": 35.4,
+     "fall": -56470
+    },
+    "years": {
+     "2023": 26483,
+     "2024": 199284,
+     "2025": 131915,
+     "2026": 88480
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 35241,
+     "NIFTY": 170842,
+     "SENSEX": 151599
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -7608,
+     "NIFTY": 90580,
+     "SENSEX": 5508
+    },
+    "by_strategy_train": {
+     "Camarilla": 70407,
+     "Fibonacci 0.618": 125321,
+     "Noise band": 72274,
+     "Trend-day": 89680
+    },
+    "by_strategy_2026": {
+     "Camarilla": 35831,
+     "Fibonacci 0.618": 32065,
+     "Noise band": -4339,
+     "Trend-day": 24923
+    },
+    "today": 4468
+   }
+  },
+  "V4 lock +1R at +2R, +2R at +3R": {
+   "1 ITM (rule strike)": {
+    "train": {
+     "n": 1793,
+     "net": 327011,
+     "pf": 1.22,
+     "win": 33.0,
+     "fall": -117262
+    },
+    "y2026": {
+     "n": 453,
+     "net": 111280,
+     "pf": 1.27,
+     "win": 35.8,
+     "fall": -61568
+    },
+    "years": {
+     "2023": -5234,
+     "2024": 203864,
+     "2025": 128381,
+     "2026": 111280
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 36939,
+     "NIFTY": 167818,
+     "SENSEX": 122254
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -2486,
+     "NIFTY": 110802,
+     "SENSEX": 2964
+    },
+    "by_strategy_train": {
+     "Camarilla": 69631,
+     "Fibonacci 0.618": 98193,
+     "Noise band": 66316,
+     "Trend-day": 92871
+    },
+    "by_strategy_2026": {
+     "Camarilla": 47681,
+     "Fibonacci 0.618": 32251,
+     "Noise band": -1621,
+     "Trend-day": 32969
+    },
+    "today": 5693
+   },
+   "1 OTM (small-account strike)": {
+    "train": {
+     "n": 1793,
+     "net": 300947,
+     "pf": 1.24,
+     "win": 33.1,
+     "fall": -92551
+    },
+    "y2026": {
+     "n": 453,
+     "net": 90624,
+     "pf": 1.25,
+     "win": 35.5,
+     "fall": -56470
+    },
+    "years": {
+     "2023": 5135,
+     "2024": 187117,
+     "2025": 108695,
+     "2026": 90624
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 30616,
+     "NIFTY": 143481,
+     "SENSEX": 126850
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -5084,
+     "NIFTY": 90313,
+     "SENSEX": 5395
+    },
+    "by_strategy_train": {
+     "Camarilla": 60744,
+     "Fibonacci 0.618": 93605,
+     "Noise band": 60982,
+     "Trend-day": 85616
+    },
+    "by_strategy_2026": {
+     "Camarilla": 37362,
+     "Fibonacci 0.618": 28708,
+     "Noise band": -2664,
+     "Trend-day": 27218
+    },
+    "today": 4468
+   }
+  },
+  "V5 trail 1R behind best once +2R": {
+   "1 ITM (rule strike)": {
+    "train": {
+     "n": 1796,
+     "net": 289221,
+     "pf": 1.19,
+     "win": 33.1,
+     "fall": -118041
+    },
+    "y2026": {
+     "n": 454,
+     "net": 84742,
+     "pf": 1.2,
+     "win": 35.9,
+     "fall": -60079
+    },
+    "years": {
+     "2023": -14473,
+     "2024": 191097,
+     "2025": 112597,
+     "2026": 84742
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 33048,
+     "NIFTY": 166460,
+     "SENSEX": 89713
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -2315,
+     "NIFTY": 91413,
+     "SENSEX": -4356
+    },
+    "by_strategy_train": {
+     "Camarilla": 68399,
+     "Fibonacci 0.618": 80979,
+     "Noise band": 70837,
+     "Trend-day": 69006
+    },
+    "by_strategy_2026": {
+     "Camarilla": 34156,
+     "Fibonacci 0.618": 13703,
+     "Noise band": 6935,
+     "Trend-day": 29948
+    },
+    "today": 10701
+   },
+   "1 OTM (small-account strike)": {
+    "train": {
+     "n": 1796,
+     "net": 259577,
+     "pf": 1.2,
+     "win": 33.1,
+     "fall": -93778
+    },
+    "y2026": {
+     "n": 454,
+     "net": 66112,
+     "pf": 1.18,
+     "win": 35.7,
+     "fall": -55280
+    },
+    "years": {
+     "2023": -3708,
+     "2024": 172091,
+     "2025": 91194,
+     "2026": 66112
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 25973,
+     "NIFTY": 138156,
+     "SENSEX": 95448
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -5210,
+     "NIFTY": 72953,
+     "SENSEX": -1631
+    },
+    "by_strategy_train": {
+     "Camarilla": 57363,
+     "Fibonacci 0.618": 74445,
+     "Noise band": 63619,
+     "Trend-day": 64150
+    },
+    "by_strategy_2026": {
+     "Camarilla": 25539,
+     "Fibonacci 0.618": 11744,
+     "Noise band": 4755,
+     "Trend-day": 24074
+    },
+    "today": 8590
+   }
+  },
+  "V6 trail 1R behind best once +1.5R": {
+   "1 ITM (rule strike)": {
+    "train": {
+     "n": 1798,
+     "net": 301606,
+     "pf": 1.2,
+     "win": 37.5,
+     "fall": -95396
+    },
+    "y2026": {
+     "n": 455,
+     "net": 50506,
+     "pf": 1.12,
+     "win": 38.9,
+     "fall": -58595
+    },
+    "years": {
+     "2023": 6064,
+     "2024": 188802,
+     "2025": 106740,
+     "2026": 50506
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 44228,
+     "NIFTY": 147976,
+     "SENSEX": 109402
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -12869,
+     "NIFTY": 73884,
+     "SENSEX": -10509
+    },
+    "by_strategy_train": {
+     "Camarilla": 63990,
+     "Fibonacci 0.618": 80907,
+     "Noise band": 75003,
+     "Trend-day": 81706
+    },
+    "by_strategy_2026": {
+     "Camarilla": 15433,
+     "Fibonacci 0.618": -2980,
+     "Noise band": 8924,
+     "Trend-day": 29129
+    },
+    "today": 5495
+   },
+   "1 OTM (small-account strike)": {
+    "train": {
+     "n": 1798,
+     "net": 271392,
+     "pf": 1.22,
+     "win": 37.5,
+     "fall": -77392
+    },
+    "y2026": {
+     "n": 455,
+     "net": 36341,
+     "pf": 1.1,
+     "win": 38.5,
+     "fall": -53933
+    },
+    "years": {
+     "2023": 11923,
+     "2024": 171565,
+     "2025": 87904,
+     "2026": 36341
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 36773,
+     "NIFTY": 122243,
+     "SENSEX": 112376
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -14533,
+     "NIFTY": 58343,
+     "SENSEX": -7469
+    },
+    "by_strategy_train": {
+     "Camarilla": 54175,
+     "Fibonacci 0.618": 74691,
+     "Noise band": 67470,
+     "Trend-day": 75056
+    },
+    "by_strategy_2026": {
+     "Camarilla": 9238,
+     "Fibonacci 0.618": -2424,
+     "Noise band": 6465,
+     "Trend-day": 23062
+    },
+    "today": 4435
+   }
+  },
+  "V7 trail 1.5R behind best once +2.5R": {
+   "1 ITM (rule strike)": {
+    "train": {
+     "n": 1793,
+     "net": 389311,
+     "pf": 1.26,
+     "win": 31.8,
+     "fall": -103000
+    },
+    "y2026": {
+     "n": 451,
+     "net": 121257,
+     "pf": 1.29,
+     "win": 34.1,
+     "fall": -62921
+    },
+    "years": {
+     "2023": 13959,
+     "2024": 248477,
+     "2025": 126875,
+     "2026": 121257
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 51544,
+     "NIFTY": 195571,
+     "SENSEX": 142196
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 8900,
+     "NIFTY": 113985,
+     "SENSEX": -1628
+    },
+    "by_strategy_train": {
+     "Camarilla": 93818,
+     "Fibonacci 0.618": 130670,
+     "Noise band": 74736,
+     "Trend-day": 90087
+    },
+    "by_strategy_2026": {
+     "Camarilla": 59591,
+     "Fibonacci 0.618": 30589,
+     "Noise band": 1230,
+     "Trend-day": 29847
+    },
+    "today": 5356
+   },
+   "1 OTM (small-account strike)": {
+    "train": {
+     "n": 1793,
+     "net": 353858,
+     "pf": 1.27,
+     "win": 31.8,
+     "fall": -80455
+    },
+    "y2026": {
+     "n": 451,
+     "net": 99603,
+     "pf": 1.27,
+     "win": 33.9,
+     "fall": -57606
+    },
+    "years": {
+     "2023": 22050,
+     "2024": 224610,
+     "2025": 107198,
+     "2026": 99603
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 42457,
+     "NIFTY": 167038,
+     "SENSEX": 144363
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 4902,
+     "NIFTY": 93792,
+     "SENSEX": 909
+    },
+    "by_strategy_train": {
+     "Camarilla": 79642,
+     "Fibonacci 0.618": 121905,
+     "Noise band": 68954,
+     "Trend-day": 83357
+    },
+    "by_strategy_2026": {
+     "Camarilla": 48247,
+     "Fibonacci 0.618": 26868,
+     "Noise band": 80,
+     "Trend-day": 24408
+    },
+    "today": 4252
+   }
+  },
+  "V8 Noise target 2R (was 4R)": {
+   "1 ITM (rule strike)": {
+    "train": {
+     "n": 1791,
+     "net": 371513,
+     "pf": 1.24,
+     "win": 30.5,
+     "fall": -89425
+    },
+    "y2026": {
+     "n": 452,
+     "net": 108089,
+     "pf": 1.26,
+     "win": 32.7,
+     "fall": -51172
+    },
+    "years": {
+     "2023": 34008,
+     "2024": 193251,
+     "2025": 144254,
+     "2026": 108089
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 49206,
+     "NIFTY": 182819,
+     "SENSEX": 139488
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -8284,
+     "NIFTY": 114001,
+     "SENSEX": 2372
+    },
+    "by_strategy_train": {
+     "Camarilla": 70770,
+     "Fibonacci 0.618": 153595,
+     "Noise band": 47759,
+     "Trend-day": 99389
+    },
+    "by_strategy_2026": {
+     "Camarilla": 41403,
+     "Fibonacci 0.618": 45566,
+     "Noise band": -5188,
+     "Trend-day": 26308
+    },
+    "today": 4814
+   },
+   "1 OTM (small-account strike)": {
+    "train": {
+     "n": 1791,
+     "net": 340199,
+     "pf": 1.26,
+     "win": 30.5,
+     "fall": -68641
+    },
+    "y2026": {
+     "n": 452,
+     "net": 88617,
+     "pf": 1.24,
+     "win": 32.5,
+     "fall": -46804
+    },
+    "years": {
+     "2023": 39708,
+     "2024": 177994,
+     "2025": 122497,
+     "2026": 88617
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 39935,
+     "NIFTY": 158589,
+     "SENSEX": 141675
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -11021,
+     "NIFTY": 94773,
+     "SENSEX": 4865
+    },
+    "by_strategy_train": {
+     "Camarilla": 62367,
+     "Fibonacci 0.618": 144905,
+     "Noise band": 41667,
+     "Trend-day": 91260
+    },
+    "by_strategy_2026": {
+     "Camarilla": 32752,
+     "Fibonacci 0.618": 39867,
+     "Noise band": -5725,
+     "Trend-day": 21723
+    },
+    "today": 4037
+   }
+  },
+  "V9 Noise target 3R": {
+   "1 ITM (rule strike)": {
+    "train": {
+     "n": 1791,
+     "net": 376298,
+     "pf": 1.24,
+     "win": 30.0,
+     "fall": -100728
+    },
+    "y2026": {
+     "n": 451,
+     "net": 110762,
+     "pf": 1.26,
+     "win": 32.8,
+     "fall": -50736
+    },
+    "years": {
+     "2023": 20198,
+     "2024": 222371,
+     "2025": 133729,
+     "2026": 110762
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 27582,
+     "NIFTY": 199988,
+     "SENSEX": 148728
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -2984,
+     "NIFTY": 116408,
+     "SENSEX": -2662
+    },
+    "by_strategy_train": {
+     "Camarilla": 70770,
+     "Fibonacci 0.618": 153595,
+     "Noise band": 52544,
+     "Trend-day": 99389
+    },
+    "by_strategy_2026": {
+     "Camarilla": 42045,
+     "Fibonacci 0.618": 45566,
+     "Noise band": -3157,
+     "Trend-day": 26308
+    },
+    "today": 4814
+   },
+   "1 OTM (small-account strike)": {
+    "train": {
+     "n": 1791,
+     "net": 347306,
+     "pf": 1.27,
+     "win": 30.0,
+     "fall": -77953
+    },
+    "y2026": {
+     "n": 451,
+     "net": 90973,
+     "pf": 1.25,
+     "win": 32.6,
+     "fall": -46804
+    },
+    "years": {
+     "2023": 28376,
+     "2024": 203982,
+     "2025": 114948,
+     "2026": 90973
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 21004,
+     "NIFTY": 175228,
+     "SENSEX": 151074
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -5964,
+     "NIFTY": 96863,
+     "SENSEX": 74
+    },
+    "by_strategy_train": {
+     "Camarilla": 62367,
+     "Fibonacci 0.618": 144905,
+     "Noise band": 48774,
+     "Trend-day": 91260
+    },
+    "by_strategy_2026": {
+     "Camarilla": 33259,
+     "Fibonacci 0.618": 39867,
+     "Noise band": -3876,
+     "Trend-day": 21723
+    },
+    "today": 4037
+   }
+  },
+  "V10 Noise no target (trail only)": {
+   "1 ITM (rule strike)": {
+    "train": {
+     "n": 1791,
+     "net": 386891,
+     "pf": 1.25,
+     "win": 30.0,
+     "fall": -95814
+    },
+    "y2026": {
+     "n": 451,
+     "net": 111917,
+     "pf": 1.26,
+     "win": 32.8,
+     "fall": -50736
+    },
+    "years": {
+     "2023": 18649,
+     "2024": 221497,
+     "2025": 146745,
+     "2026": 111917
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 33816,
+     "NIFTY": 209229,
+     "SENSEX": 143846
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -1955,
+     "NIFTY": 114941,
+     "SENSEX": -1069
+    },
+    "by_strategy_train": {
+     "Camarilla": 70770,
+     "Fibonacci 0.618": 153595,
+     "Noise band": 63137,
+     "Trend-day": 99389
+    },
+    "by_strategy_2026": {
+     "Camarilla": 42045,
+     "Fibonacci 0.618": 45566,
+     "Noise band": -2002,
+     "Trend-day": 26308
+    },
+    "today": 4814
+   },
+   "1 OTM (small-account strike)": {
+    "train": {
+     "n": 1791,
+     "net": 357588,
+     "pf": 1.28,
+     "win": 30.0,
+     "fall": -73123
+    },
+    "y2026": {
+     "n": 451,
+     "net": 91842,
+     "pf": 1.25,
+     "win": 32.6,
+     "fall": -46804
+    },
+    "years": {
+     "2023": 27266,
+     "2024": 203418,
+     "2025": 126904,
+     "2026": 91842
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 26823,
+     "NIFTY": 184004,
+     "SENSEX": 146761
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -5028,
+     "NIFTY": 95372,
+     "SENSEX": 1498
+    },
+    "by_strategy_train": {
+     "Camarilla": 62367,
+     "Fibonacci 0.618": 144905,
+     "Noise band": 59056,
+     "Trend-day": 91260
+    },
+    "by_strategy_2026": {
+     "Camarilla": 33259,
+     "Fibonacci 0.618": 39867,
+     "Noise band": -3007,
+     "Trend-day": 21723
+    },
+    "today": 4037
+   }
+  },
+  "V11 Noise breakeven at +1R": {
+   "1 ITM (rule strike)": {
+    "train": {
+     "n": 1791,
+     "net": 386845,
+     "pf": 1.25,
+     "win": 29.3,
+     "fall": -103833
+    },
+    "y2026": {
+     "n": 451,
+     "net": 124543,
+     "pf": 1.3,
+     "win": 32.6,
+     "fall": -47623
+    },
+    "years": {
+     "2023": 6873,
+     "2024": 233618,
+     "2025": 146354,
+     "2026": 124543
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 33860,
+     "NIFTY": 208766,
+     "SENSEX": 144219
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 1809,
+     "NIFTY": 119360,
+     "SENSEX": 3374
+    },
+    "by_strategy_train": {
+     "Camarilla": 70770,
+     "Fibonacci 0.618": 153595,
+     "Noise band": 63091,
+     "Trend-day": 99389
+    },
+    "by_strategy_2026": {
+     "Camarilla": 42045,
+     "Fibonacci 0.618": 45566,
+     "Noise band": 10624,
+     "Trend-day": 26308
+    },
+    "today": 4814
+   },
+   "1 OTM (small-account strike)": {
+    "train": {
+     "n": 1791,
+     "net": 356989,
+     "pf": 1.28,
+     "win": 29.4,
+     "fall": -80717
+    },
+    "y2026": {
+     "n": 451,
+     "net": 103176,
+     "pf": 1.29,
+     "win": 32.4,
+     "fall": -43191
+    },
+    "years": {
+     "2023": 16130,
+     "2024": 214494,
+     "2025": 126365,
+     "2026": 103176
+    },
+    "by_sym_train": {
+     "BANKNIFTY": 26933,
+     "NIFTY": 183212,
+     "SENSEX": 146844
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -1465,
+     "NIFTY": 99105,
+     "SENSEX": 5536
+    },
+    "by_strategy_train": {
+     "Camarilla": 62367,
+     "Fibonacci 0.618": 144905,
+     "Noise band": 58457,
+     "Trend-day": 91260
+    },
+    "by_strategy_2026": {
+     "Camarilla": 33259,
+     "Fibonacci 0.618": 39867,
+     "Noise band": 8327,
+     "Trend-day": 21723
+    },
+    "today": 4037
+   }
+  }
+ },
+ "facts": {
+  "Camarilla": {
+   "n": 702,
+   "reach_1R": 38.0,
+   "reach_2R": 19.1,
+   "reach_4R": 5.1,
+   "reached_2R_but_lost": 26,
+   "be_stop_after_1R_pnl": -54651,
+   "be_stops": 126,
+   "median_mfe_R": 0.49,
+   "avg_exit_R_winners": 1.86
+  },
+  "Fibonacci 0.618": {
+   "n": 713,
+   "reach_1R": 39.3,
+   "reach_2R": 21.2,
+   "reach_4R": 7.9,
+   "reached_2R_but_lost": 25,
+   "be_stop_after_1R_pnl": -50037,
+   "be_stops": 122,
+   "median_mfe_R": 0.5,
+   "avg_exit_R_winners": 2.05
+  },
+  "Noise band": {
+   "n": 481,
+   "reach_1R": 38.9,
+   "reach_2R": 19.8,
+   "reach_4R": 0.2,
+   "reached_2R_but_lost": 9,
+   "be_stop_after_1R_pnl": 0,
+   "be_stops": 0,
+   "median_mfe_R": 0.69,
+   "avg_exit_R_winners": 1.53
+  },
+  "Trend-day": {
+   "n": 346,
+   "reach_1R": 49.4,
+   "reach_2R": 20.2,
+   "reach_4R": 2.9,
+   "reached_2R_but_lost": 7,
+   "be_stop_after_1R_pnl": -24611,
+   "be_stops": 64,
+   "median_mfe_R": 0.97,
+   "avg_exit_R_winners": 1.72
+  }
+ },
+ "today": [
+  {
+   "sym": "NIFTY",
+   "strategy": "Camarilla",
+   "side": "PUT",
+   "entry_time": "10:05",
+   "exit_time": "13:45",
+   "spot_in": 22560.7,
+   "spot_out": 22560.7,
+   "R": -0.0,
+   "mfe_R": 2.96,
+   "pnl": -562.0,
+   "reason": "Breakeven stop"
+  },
+  {
+   "sym": "NIFTY",
+   "strategy": "Fibonacci 0.618",
+   "side": "PUT",
+   "entry_time": "10:10",
+   "exit_time": "13:45",
+   "spot_in": 22523.0,
+   "spot_out": 22523.0,
+   "R": -0.0,
+   "mfe_R": 2.33,
+   "pnl": -609.0,
+   "reason": "Breakeven stop"
+  },
+  {
+   "sym": "NIFTY",
+   "strategy": "Trend-day",
+   "side": "PUT",
+   "entry_time": "10:45",
+   "exit_time": "13:40",
+   "spot_in": 22503.6,
+   "spot_out": 22503.6,
+   "R": -0.0,
+   "mfe_R": 1.1,
+   "pnl": -593.0,
+   "reason": "Breakeven stop"
+  },
+  {
+   "sym": "BANKNIFTY",
+   "strategy": "Camarilla",
+   "side": "PUT",
+   "entry_time": "09:55",
+   "exit_time": "15:15",
+   "spot_in": 54529.4,
+   "spot_out": 54106.2,
+   "R": 2.01,
+   "mfe_R": 2.79,
+   "pnl": 6826.0,
+   "reason": "Square-off"
+  },
+  {
+   "sym": "SENSEX",
+   "strategy": "Fibonacci 0.618",
+   "side": "PUT",
+   "entry_time": "10:20",
+   "exit_time": "10:45",
+   "spot_in": 72852.0,
+   "spot_out": 72852.0,
+   "R": -0.0,
+   "mfe_R": 1.83,
+   "pnl": -248.0,
+   "reason": "Breakeven stop"
+  }
+ ]
+}

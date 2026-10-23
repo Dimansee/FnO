@@ -1027,8 +1027,10 @@ def _push_safe(title, body, event_id, url="/"):
 def _push_signal(sym, ev, order, g):
     plan = ev["plan"]
     name = {"noise": "Noise-area", "camarilla": "Camarilla", "ai": "AI model", "trend": "Trend-day", "fib": "Fibonacci"}.get(plan.get("strategy"), plan.get("strategy"))
-    body = (f"{name}: {order.get('strike'):g} {plan.get('opt')} @ ₹{order.get('entry_prem')} (SL ₹{order.get('sl_prem')}, target ₹{order.get('target_prem')}) "
-            f"| index {plan.get('entry'):.0f} SL {plan.get('sl'):.0f} T {plan.get('target'):.0f} | score {ev.get('score')}")
+    tgt = f"target ₹{order.get('target_prem')}" if order.get("target_fixed", True) else "no fixed target, trails"
+    itgt = f"T {plan['target']:.0f}" if plan.get("target") is not None else "no T"
+    body = (f"{name}: {order.get('strike'):g} {plan.get('opt')} @ ₹{order.get('entry_prem')} (SL ₹{order.get('sl_prem')}, {tgt}) "
+            f"| index {plan.get('entry'):.0f} SL {plan.get('sl'):.0f} {itgt} | score {ev.get('score')}")
     return _push_safe(f"{sym} {ev.get('signal')}", body, f"reco:{sym}:{plan.get('strategy')}:{plan.get('signal_bar') or g['now'].strftime('%H:%M')}:{g['now'].date()}", "/#journal")
 
 

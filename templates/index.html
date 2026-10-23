@@ -904,6 +904,7 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const rs = v => v == null ? "–" : "₹" + Math.round(v).toLocaleString("en-IN");
 const n2 = v => v == null ? "–" : Number(v).toFixed(2);
+const tgtTxt = o => o.target_fixed === false ? `no fixed target, trails (3R guide ₹${n2(o.target_prem)})` : `target ₹${n2(o.target_prem)}`;
 const sgn = v => v == null ? "–" : (v >= 0 ? "+" : "") + Number(v).toFixed(2);
 const cls = v => v == null ? "" : v >= 0 ? "up" : "down";
 const big = v => v == null ? "–" : Math.abs(v) >= 1e5 ? (v/1e5).toFixed(1) + "L" : Math.round(v).toLocaleString("en-IN");
@@ -1434,7 +1435,7 @@ function renderState(d) {
   el.className = "state " + k;
   el.lastElementChild.textContent = {"WAIT": "Waiting for a setup"}[s] || s.charAt(0) + s.slice(1).toLowerCase();
   const o = d.order;
-  $("#hSub").textContent = o && d.signal.plan ? `${o.strike} ${o.opt} at ₹${n2(o.entry_prem)} · SL ₹${n2(o.sl_prem)} · target ₹${n2(o.target_prem)}` :
+  $("#hSub").textContent = o && d.signal.plan ? `${o.strike} ${o.opt} at ₹${n2(o.entry_prem)} · SL ₹${n2(o.sl_prem)} · ${tgtTxt(o)}` :
     {"WAIT": "Every checklist item has to turn green before an entry.", "NO NEW ENTRIES": "Entry window closed at 14:30. Manage open trades only.",
      "MARKET CLOSED": "Showing the last session.", "NO TRADE TODAY": "Today's conditions fail the rulebook.", "STOP FOR TODAY": "Daily risk limit reached."}[s] || "";
   const key = S.symbol + s;
@@ -1567,7 +1568,7 @@ function renderTicket(d) {
     <div class="legs" style="margin-top:10px">${o.legs.map(l => `<div class="leg"><span class="tag ${l.side.toLowerCase()}">${l.side}</span><span><b>${esc(d.label)} ${l.strike} ${l.opt}</b> <span class="muted">· ${new Date(d.expiry).toLocaleDateString("en-IN", {day: "2-digit", month: "short"})} expiry${l.side === "BUY" ? " · " + esc(o.moneyness) : ""}</span></span><span class="spacer"></span><span class="mono">₹${n2(l.price)}</span></div>`).join("")}</div>
     <div class="k4">
       ${kpi("LTP", "₹" + n2(o.ltp))}${kpi("Entry", "₹" + n2(o.entry_prem))}
-      ${kpi("Stop-loss (SL)", `<span class="down">₹${n2(o.sl_prem)}</span>`)}${kpi("Target (TP)", `<span class="up">₹${n2(o.target_prem)}</span>`)}
+      ${kpi("Stop-loss (SL)", `<span class="down">₹${n2(o.sl_prem)}</span>`)}${kpi(o.target_fixed === false ? "Target (none, trails)" : "Target (TP)", `<span class="up">${o.target_fixed === false ? "3R guide ₹" + n2(o.target_prem) : "₹" + n2(o.target_prem)}</span>`)}
     </div>
     <div class="entryhow"><b>How to enter:</b> buy within 1-2 minutes of the signal at about <b>₹${n2(o.ltp)}</b>. On real 1-minute prices, a minute's delay made no measurable difference to the same trades. Keep the stop where it is: in testing, moving it wider or tighter both earned less.</div>
     <div style="margin-top:10px">
@@ -1589,7 +1590,7 @@ function renderTicket(d) {
       <div class="tablewrap"><table class="alts"><tr><th>Strike</th><th>LTP</th><th>Δ</th><th>1 lot</th><th>SL</th><th>TP</th><th>Lots</th><th></th></tr>
       ${d.alternatives.map(a => `<tr data-pick="${a.strike}" class="${a.strike === o.strike ? "on" : ""} ${a.affordable && a.lots > 0 ? "" : "na"}">
         <td>${a.strike} <span class="muted">${esc(a.moneyness)}${rec && a.strike === rec.strike ? " ⭐" : ""}</span></td><td class="mono">${n2(a.ltp)}</td><td class="mono">${n2(a.delta)}</td>
-        <td class="mono">${rs(a.cost_per_lot)}</td><td class="mono down">${n2(a.sl_prem)}</td><td class="mono up">${n2(a.target_prem)}</td><td>${a.lots}</td>
+        <td class="mono">${rs(a.cost_per_lot)}</td><td class="mono down">${n2(a.sl_prem)}</td><td class="mono up">${a.target_fixed === false ? `<span class="muted" title="No fixed target: the rule trails; this is a 3R guide">~${n2(a.target_prem)}</span>` : n2(a.target_prem)}</td><td>${a.lots}</td>
         <td>${a.affordable && a.lots > 0 ? `<span class="badge ok">OK</span>` : `<span class="badge no">too costly</span>`}</td></tr>`).join("")}
       </table></div>
       ${S.pick ? `<button style="margin-top:8px" id="resetPick">↺ Back to recommended strike</button>` : ""}
@@ -1821,7 +1822,7 @@ async function refreshPane(i) {
       const cam = sg.camarilla && sg.camarilla.levels;
       if (cam && p.tf === 5) { add(cam.h4, "rgba(127,180,217,.8)", "H4", 3); add(cam.l4, "rgba(127,180,217,.8)", "L4", 3); }
     } else if (od && od.type === "Buy option" && od.strike === r.strike && od.opt === p.kind) {
-      add(od.entry_prem, "#8fa3b0", "Entry", 2); add(od.sl_prem, "#e2675a", "SL", 0); add(od.target_prem, "#3fbf8f", "TP", 0);
+      add(od.entry_prem, "#8fa3b0", "Entry", 2); add(od.sl_prem, "#e2675a", "SL", 0); add(od.target_prem, "#3fbf8f", od.target_fixed === false ? "3R guide" : "TP", 0);
       o.levels = [od.sl_prem, od.target_prem];
     }
   }
@@ -1995,7 +1996,7 @@ async function loadPortfolio() {
   $("#positions").innerHTML = d.positions.length ? d.positions.map(p => `
     <div class="leg" style="flex-wrap:wrap;gap:10px;padding:10px 12px">
       <div style="flex:2;min-width:200px"><b>${esc(p.symbol)}</b> ${p.legs.map(l => `<span class="tag ${l.side.toLowerCase()}">${l.side}</span> ${l.strike}${l.opt}`).join(" / ")}
-        <div class="muted" style="font-size:12px">exp ${p.expiry} · ${p.lots} lot(s) · ${p.mode} · opened ${p.opened.slice(11, 16)} · SL ₹${n2(p.sl_prem)} · target ₹${n2(p.target_prem)}${p.at_breakeven ? " · stop at breakeven" : ""}</div></div>
+        <div class="muted" style="font-size:12px">exp ${p.expiry} · ${p.lots} lot(s) · ${p.mode} · opened ${p.opened.slice(11, 16)} · SL ₹${n2(p.sl_prem)} · ${tgtTxt(p)}${p.at_breakeven ? " · stop at breakeven" : ""}</div></div>
       <div class="mono" style="flex:1">₹${n2(p.entry_prem)} → ₹${n2(p.current_prem)}<div class="muted" style="font-size:11px">${p.price_src === "live" ? "live broker price" : "formula price (no broker login)"}</div></div>
       <div class="mono ${cls(p.unrealised)}" style="flex:1;font-weight:700">${rs(p.unrealised)}</div>
       <button class="danger" data-exit="${p.id}">Exit</button>
@@ -2663,7 +2664,7 @@ async function loadJournal() {
   };
   const exW = (S.study && S.study.expected) || {}, winOf = r => r.strategy === "ai" ? (r.basis.p_win != null ? Math.round(r.basis.p_win * 100) + "%" : "–") : ((exW[r.strategy === "camarilla" ? "Camarilla" : "Noise band"] || {}).win_rate != null ? exW[r.strategy === "camarilla" ? "Camarilla" : "Noise band"].win_rate + "%" : "–");
   const recoRow = r => { const o = r.result; return `<tr><td class="mono">${esc(r.time.slice(0, 5))}<div class="muted" style="font-size:11px">candle ${esc(r.signal_bar)}</div></td><td>${r.symbol === "NIFTY" ? "Nifty" : "Bank Nifty"}</td><td>${{noise: "Noise band", camarilla: "Camarilla", ai: "AI model"}[r.strategy] || esc(r.strategy)}</td>
-    <td class="${r.opt === "CE" ? "up" : "down"}">${r.opt === "CE" ? "Buy CALL" : "Buy PUT"} ${r.option.strike}<div class="muted" style="font-size:11px">${esc(r.option.expiry)} · ${r.option.lots} lot(s)</div></td><td class="mono">₹${n2(r.option.entry_prem)} / <span class="down">₹${n2(r.option.sl_prem)}</span> / <span class="up">${r.option.target_prem == null ? "–" : "₹" + n2(r.option.target_prem)}</span></td>
+    <td class="${r.opt === "CE" ? "up" : "down"}">${r.opt === "CE" ? "Buy CALL" : "Buy PUT"} ${r.option.strike}<div class="muted" style="font-size:11px">${esc(r.option.expiry)} · ${r.option.lots} lot(s)</div></td><td class="mono">₹${n2(r.option.entry_prem)} / <span class="down">₹${n2(r.option.sl_prem)}</span> / <span class="up">${r.option.target_prem == null ? "–" : r.option.target_fixed === false ? "trails (3R ≈ ₹" + n2(r.option.target_prem) + ")" : "₹" + n2(r.option.target_prem)}</span></td>
     <td class="mono">${n2(r.index.entry)} / ${n2(r.index.sl)} / ${r.index.target == null ? "–" : n2(r.index.target)}</td>
     <td class="mono">${winOf(r)}</td>
     <td class="mono" style="font-size:12px">${r.basis.exp_r != null ? "expected " + sgn(r.basis.exp_r) + "R" : (r.basis.score != null ? "market score " + sgn(r.basis.score) : "–")}</td>

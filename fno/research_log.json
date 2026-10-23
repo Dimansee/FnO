@@ -1,7 +1,18 @@
 {
- "updated": "2026-10-23",
+ "updated": "2026-10-24",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
+  {
+   "id": "r40",
+   "date": "2026-10-24",
+   "area": "Index options",
+   "title": "Round 40: are the targets too high, and should open profit be locked in? (after 23 Oct)",
+   "asked": "On 23 Oct two Nifty PUTs were well in profit, then came back and exited at a loss; the three trades together peaked near Rs 14.8k and closed +Rs 2.8k. Are the targets too far away for one day, and can the exits keep more of the profit?",
+   "period": "5-minute index history 2 Jan 2023 - 23 Oct 2026, Nifty / Bank Nifty / Sensex, Autopilot rules, 1 lot, 1 ITM and 1 OTM strikes",
+   "result": "Targets: only the Noise rule has one (4R, about 120-200 Nifty points); it was hit by 1 of 481 trades, so its exits really come from the band/VWAP trail. Camarilla, Fibonacci and trend-day have no target; the 'target' shown for them was a 3R display guide. Lowering the Noise target to 2R or 3R lost money (2023-25 -15k to -20k, 2026 -3k to -6k). Profit locks: trailing 1R behind the best move once +2R would have made 23 Oct +10.7k instead of +4.8k but cost Rs 1.02 lakh over 2023-25 and Rs 29k in 2026; a breakeven stop at +0.25R (to cover option decay) cut 2026 from +114k to +18k; locking +1R at +2R, a later breakeven, step locks and a 1.5R trail were all equal or worse on 2023-25. Breakeven exits do cost money on the option (312 trades, -1.29 lakh) - but they are the price of keeping the trades that run (winners average +1.9R; about 20% of trades reach +2R). Only the Noise breakeven at +1R and a 1.5R trail after +2.5R were better in 2026 (+11k / +8k) while slightly worse on 2023-25 (-5k / -2k).",
+   "summary": "No exit change: the current exits beat every variant on 2023-25 at both strikes. The app now labels the guide value of the no-target rules as 'no fixed target, trails' so it is not read as a target. The two variants that did better on 2026 go on the watch-list for a forward check.",
+   "decision": "Not adopted"
+  },
   {
    "id": "g1",
    "date": "2026-10-23",
@@ -1364,6 +1375,21 @@
     "g1"
    ],
    "next": "After 90 days compare live R with the backtest; if gold turns down and longs keep stopping out, consider pausing longs below the 200-day average."
+  },
+  {
+   "id": "p-r40-exits",
+   "area": "Index options",
+   "title": "Noise breakeven at +1R / 1.5R trail after +2.5R",
+   "waiting_for": "More live trades",
+   "why": "Round 40: both better in 2026 (+11k / +8k on 1 lot) but slightly worse on 2023-25, so not adopted.",
+   "collecting": "Paper Autopilot trades (best move and exit per trade)",
+   "since": "2026-10-24",
+   "need": 60,
+   "unit": "sessions",
+   "refs": [
+    "r40"
+   ],
+   "next": "Re-run research/round40.py with 60 more sessions; adopt only if still ahead and 2023-25 is not worse."
   }
  ]
 }

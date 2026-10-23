@@ -128,6 +128,7 @@ def open_position(cash, symbol, legs, lots, lot, expiry, spot, source, order=Non
         "mode": "signal" if plan else "manual", "plan": plan, "delta": (order or {}).get("delta"),
         "sl_prem": (order or {}).get("sl_prem", round(entry * (1 - C.PREMIUM_HARD_SL), 2) if entry > 0 else -1e9),
         "target_prem": (order or {}).get("target_prem", round(entry * 1.6, 2) if entry > 0 else 1e9),
+        "target_fixed": (order or {}).get("target_fixed", True),
     }
     store.insert_position(pos)
     desc = ", ".join("%s %g%s" % (l["side"], l["strike"], l["opt"]) for l in legs)
