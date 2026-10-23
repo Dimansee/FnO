@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r41",
+   "date": "2026-10-24",
+   "area": "Index options",
+   "title": "Round 41: Target 1 / Target 2 / Target 3 - book part of the position at each target",
+   "asked": "Would booking profit in parts (T1, T2, T3) keep more of days like 23 Oct?",
+   "period": "5-minute index history 2 Jan 2023 - 23 Oct 2026, Nifty / Bank Nifty / Sensex, Autopilot rules, 3 lots, 1 ITM and 1 OTM",
+   "result": "Live stops, breakeven, trails and time stops kept; part of the lots sold at each target. 1 ITM, 3 lots, 2023-25 / 2026: current +13.44L / +3.84L; T1/T2/T3 = 1/2/3R thirds +5.83L / +1.06L; same + stop to entry after T1 +5.74L / +1.27L; 1R and 2R thirds, last third runs +6.68L / +1.41L; half at 1R +6.72L / +1.86L; 1.5R and 3R thirds +9.44L / +2.09L; half at 2R +10.14L / +2.20L; thirds at 2R and 4R +11.32L / +2.84L; 0.5/1/2R thirds +0.20L / +0.07L. Same order at 1 OTM. Every scheme also had a deeper worst fall. 23 Oct alone: 1/2/3R thirds +33.5k vs +14.9k.",
+   "summary": "Not adopted. Booking early caps the few big trend days that pay for all the small losses (winners average ~1.9R, ~20% of trades reach 2R); the earlier the targets, the worse. Same conclusion as round 26 (fixed T1/T2/T3).",
+   "decision": "Not adopted"
+  },
+  {
    "id": "r40",
    "date": "2026-10-24",
    "area": "Index options",
