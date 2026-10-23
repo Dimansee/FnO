@@ -712,12 +712,34 @@ details summary{cursor:pointer;font-size:13px}
 
   <!-- BACKTEST -->
   <section id="t-backtest" class="hidden">
-    <div class="card">
+    <div class="card" id="pbCard">
+      <div class="cardhead"><h3 style="margin:0">Portfolio backtest - all indices, one account</h3><span class="muted" style="font-size:12.5px">Nifty + Bank Nifty + Sensex from one capital, as Autopilot trades them</span></div>
+      <p class="muted" style="margin:6px 0 10px;font-size:13px">Choose the period, how lots are sized (compounding from your capital, fixed capital or a fixed number of lots), confidence sizing, the big-run skip and the exit / target style. A different exit is shown side by side with the current exits on the same settings. Full history runs take a few minutes; it runs on the server, so you can leave the page.</p>
+      <div class="formrow formgrid">
+        <div><label>From</label><input id="pbFrom" type="date" value="2023-01-02" min="2022-01-03" style="width:100%"></div>
+        <div><label>To</label><input id="pbTo" type="date" style="width:100%"></div>
+        <div><label>Indices</label><div class="chips" id="pbIdx"><label class="chip"><input type="checkbox" value="NIFTY" checked> Nifty</label><label class="chip"><input type="checkbox" value="BANKNIFTY" checked> Bank Nifty</label><label class="chip"><input type="checkbox" value="SENSEX" checked> Sensex</label></div></div>
+        <div><label>Starting capital (₹)</label><input id="pbCap" type="number" value="200000" min="10000" step="10000" style="width:100%"></div>
+        <div><label>Lots</label><select id="pbSize" style="width:100%"><option value="compound" selected>Compounding: risk % of the current account (Autopilot)</option><option value="fixed_risk">Risk % of the starting capital only (no compounding)</option><option value="fixed">Fixed number of lots</option></select></div>
+        <div id="pbRiskBox"><label>Risk per trade</label><select id="pbRisk" style="width:100%"><option value="0.5">0.5%</option><option value="1" selected>1% (the rule)</option><option value="1.5">1.5%</option><option value="2">2%</option><option value="3">3%</option></select></div>
+        <div id="pbLotsBox" class="hidden"><label>Lots per trade</label><input id="pbLots" type="number" value="3" min="1" max="500" style="width:100%"></div>
+        <div title="Never more than this many lots in one trade, however big the account grows (50 = about one exchange order; 0 = no cap)"><label>Max lots per trade</label><input id="pbMax" type="number" value="50" min="0" max="5000" style="width:100%"></div>
+        <div><label>Confidence sizing</label><select id="pbConf" style="width:100%"><option value="standard" selected>Standard 1.33x / 0.67x (live rule)</option><option value="strong">Strong 2x / 1x / 0.5x</option><option value="none">None</option></select></div>
+        <div><label>Strike</label><select id="pbOtm" style="width:100%"><option value="-1" selected>1 strike ITM (the rule)</option><option value="0">ATM</option><option value="1">1 strike OTM</option><option value="2">2 strikes OTM</option></select></div>
+        <div style="grid-column:span 2"><label>Exit / targets</label><select id="pbExit" style="width:100%"></select></div>
+        <div><label>&nbsp;</label><label class="tog"><input type="checkbox" id="pbRun2" checked> Skip trades against a big 3-day run</label></div>
+        <div><label>&nbsp;</label><label class="tog"><input type="checkbox" id="pbCmp" checked> Compare with current exits</label></div>
+        <div><label>&nbsp;</label><button class="primary" id="pbGo" style="width:100%">▶ Run portfolio backtest</button></div>
+      </div>
+    </div>
+    <div id="pbOut" style="margin-top:14px"></div>
+    <div class="card" style="margin-top:14px">
+      <h3 style="margin-top:0">Single index</h3>
       <p style="margin-top:0">Replays today's rules on the latest ~60 days of 5-minute data (the first 14 sessions are only used to measure the usual move). The studies that chose these rules, with dates and summaries, are in the <b>Research</b> tab.</p>
       <div class="formrow formgrid">
         <div><label>Instrument</label><select id="btSym" style="width:100%"></select></div>
         <div><label>Strategy</label><select id="btStrat" style="width:100%"><option value="autopilot" selected>Autopilot rules for this index</option><option value="both">Noise + Camarilla</option><option value="noise">Noise band only</option><option value="camarilla">Camarilla breakout only</option><option value="trend">Trend-day catcher only</option><option value="fib">Fibonacci 0.618 breakout only</option><option value="all">Both + trend-day catcher</option><option value="ai">AI model (experimental - no tested edge)</option></select></div>
-        <div><label>Period</label><select id="btDays" style="width:100%"><option value="30">Last 30 trading days</option><option value="60" selected>Last 60 days</option><option value="90">Last 90 days</option><option value="120">Last 120 days</option><option value="180">Last 180 days</option><option value="250">Last 1 year (250 days)</option><option value="500">Last 2 years (500 days)</option></select></div>
+        <div><label>Period</label><select id="btDays" style="width:100%"><option value="30">Last 30 trading days</option><option value="60" selected>Last 60 days</option><option value="90">Last 90 days</option><option value="120">Last 120 days</option><option value="180">Last 180 days</option><option value="250">Last 1 year (250 days)</option><option value="500">Last 2 years (500 days)</option><option value="750">Last 3 years (750 days)</option><option value="950">Since Jan 2023 (950 days)</option></select></div>
         <div><label>Band width</label><select id="btMult" style="width:100%"><option value="1.5">1.5× usual move</option><option value="1.75" selected>1.75× (the rule)</option><option value="2">2× usual move</option></select></div>
         <div><label>Capital (₹)</label><input id="btCap" type="number" value="200000" min="1000" step="5000" style="width:100%"></div>
         <div><label>Position size</label><select id="btSize" style="width:100%"><option value="risk" selected>Risk 1% per trade (the rule)</option><option value="one_lot">Always 1 lot (small accounts)</option></select></div>
@@ -1020,7 +1042,7 @@ async function load(quiet) {
     else if (S.tab === "journal") await loadJournal();
     else if (S.tab === "stocks") await loadStocks();
     else if (S.tab === "recs") await loadRecs();
-    else if (S.tab === "backtest") await loadStudy();
+    else if (S.tab === "backtest") { await pbInit(); const pj = localStorage.getItem("pbJob"); if (pj && !PB.last) pbWatch(pj); await loadStudy(); }
     else if (S.tab === "research") await loadResearch();
     else if (S.tab === "strategies") await loadStrategies();
     else if (S.tab === "learning") await loadLearning();
@@ -2261,6 +2283,85 @@ async function loadStudy(render) {
     <div class="tablewrap"><table>${head}${Object.entries(r.stocks).map(([s, b]) => row(s, b)).join("")}</table></div>
     <h4>Caveats</h4><ul>${r.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul></div>`;
 }
+/* ---------- portfolio backtest ---------- */
+const PB = {opts: null, poll: null, last: null};
+async function pbInit() {
+  if (PB.opts) return;
+  try {
+    PB.opts = await api("/api/backtest/portfolio/options");
+    $("#pbExit").innerHTML = Object.entries(PB.opts.exits).map(([k, v]) => `<option value="${k}">${esc(v)}</option>`).join("");
+    if (!$("#pbTo").value) $("#pbTo").value = new Date(Date.now() + 5.5 * 3600e3).toISOString().slice(0, 10);
+  } catch (e) {}
+}
+$("#pbSize").onchange = () => { const f = $("#pbSize").value === "fixed"; $("#pbLotsBox").classList.toggle("hidden", !f); $("#pbRiskBox").classList.toggle("hidden", f); };
+$("#pbGo").onclick = async () => {
+  const b = $("#pbGo");
+  const body = {start: $("#pbFrom").value, end: $("#pbTo").value, indices: [...document.querySelectorAll("#pbIdx input:checked")].map(x => x.value),
+    capital: +$("#pbCap").value, sizing: $("#pbSize").value, risk_pct: +$("#pbRisk").value, lots: +$("#pbLots").value, confidence: $("#pbConf").value,
+    otm: +$("#pbOtm").value, max_lots: +$("#pbMax").value, exit: $("#pbExit").value, big_run_skip: $("#pbRun2").checked, compare: $("#pbCmp").checked};
+  try {
+    b.disabled = true; b.textContent = "Starting…";
+    const {job} = await post("/api/backtest/portfolio", body);
+    localStorage.setItem("pbJob", job); pbWatch(job);
+  } catch (e) { toast(e.message, 7000); b.disabled = false; b.textContent = "▶ Run portfolio backtest"; }
+};
+function pbWatch(job) {
+  clearInterval(PB.poll);
+  const tick = async () => {
+    let j; try { j = await api("/api/backtest/portfolio/" + job); } catch (e) { clearInterval(PB.poll); localStorage.removeItem("pbJob"); $("#pbGo").disabled = false; $("#pbGo").textContent = "▶ Run portfolio backtest"; return; }
+    if (j.status === "done" || j.status === "error") {
+      clearInterval(PB.poll); $("#pbGo").disabled = false; $("#pbGo").textContent = "▶ Run portfolio backtest";
+      if (j.status === "error") { $("#pbOut").innerHTML = `<div class="card"><p class="down" style="margin:0">Backtest failed: ${esc(j.error)}</p></div>`; return; }
+      PB.last = j; pbRender(j); return;
+    }
+    $("#pbGo").disabled = true; $("#pbGo").textContent = "Running…";
+    $("#pbOut").innerHTML = `<div class="card muted">Running (${j.elapsed_s}s): ${esc(j.progress || "")}. A full 3-index history takes a few minutes.</div>`;
+  };
+  tick(); PB.poll = setInterval(tick, 4000);
+}
+const pbL = v => v == null ? "–" : (Math.abs(v) >= 1e7 ? (v / 1e7).toFixed(2) + " Cr" : Math.abs(v) >= 1e5 ? (v / 1e5).toFixed(2) + " L" : Math.round(v).toLocaleString("en-IN"));
+const pbRs = v => v == null ? "–" : `<span class="${cls(v)}">${v < 0 ? "−" : ""}₹${pbL(Math.abs(v))}</span>`;
+function pbGrp(title, rows, label) {
+  return `<div class="card"><h3>${title}</h3><div class="tablewrap" style="max-height:320px"><table><tr><th>${label}</th><th>Trades</th><th>Win</th><th>PF</th><th>Avg R</th><th>Net</th></tr>
+    ${(rows || []).map(x => `<tr><td>${esc(x.key)}</td><td class="mono">${x.trades}</td><td class="mono">${x.win_rate}%</td><td class="mono">${x.profit_factor ?? "–"}</td><td class="mono ${cls(x.avg_R)}">${sgn(x.avg_R)}</td><td class="mono">${pbRs(x.net)}</td></tr>`).join("")}</table></div></div>`;
+}
+function pbRender(j) {
+  const m = j.result.main, c = j.result.compare, p = j.params;
+  if (!m || !m.trades) { $("#pbOut").innerHTML = `<div class="card"><p class="muted" style="margin:0">No trades in this period with these settings.</p></div>`; return; }
+  const col = (x, k, f) => x ? f(x[k]) : "–";
+  const rows = [["Account at the end", "final", v => pbRs(v)], ["Net profit", "net", v => pbRs(v)], ["Multiple of capital", "multiple", v => v + "x"], ["Yearly growth (CAGR)", "cagr_pct", v => v + "%"],
+    ["Worst fall from a peak", "max_dd_pct", v => `<span class="down">${v}%</span>`], ["Worst fall (₹)", "max_dd_rs", v => pbRs(v)], ["Trades", "trades", v => v], ["Win rate", "win_rate", v => v + "%"],
+    ["Profit factor", "profit_factor", v => v ?? "–"], ["Avg R per trade", "avg_R", v => sgn(v)], ["Average win / loss", "avg_win", null], ["Most lots in one trade", "max_lots", v => v],
+    ["Losing months", "losing_months", null], ["Best / worst month", "best_month", null], ["Extra slippage from size (avg)", "avg_slip_extra_pct", v => v + "% a fill"]];
+  const cell = (x, r) => !x ? "–" : r[1] === "avg_win" ? `${pbRs(x.avg_win)} / ${pbRs(x.avg_loss)}` : r[1] === "losing_months" ? `${x.losing_months} of ${x.months}` : r[1] === "best_month" ? `${pbRs(x.best_month)} / ${pbRs(x.worst_month)}` : r[2](x[r[1]]);
+  const skip = Object.entries(m.skipped || {}).map(([k, v]) => `${v} × ${esc(k)}`).join(" · ");
+  $("#pbOut").innerHTML = `
+  <div class="grid g6">${kpi("Account at the end", pbRs(m.final), `from ₹${pbL(m.start_capital)} · ${m.multiple}x`)}${kpi("Yearly growth", m.cagr_pct + "%", `${esc(m.period[0])} → ${esc(m.period[1])}`, "muted")}
+    ${kpi("Worst fall", `<span class="down">${m.max_dd_pct}%</span>`, pbRs(m.max_dd_rs) + (m.max_dd_when ? " · " + esc(m.max_dd_when) : ""))}${kpi("Trades", m.trades, `${m.win_rate}% winners · PF ${m.profit_factor ?? "–"}`, "muted")}
+    ${kpi("Most lots", m.max_lots, `average ${m.avg_lots}`, "muted")}${kpi("Losing months", `${m.losing_months} / ${m.months}`, `worst ${pbL(m.worst_month)}`, "muted")}</div>
+  <div class="card" style="margin-top:14px"><h3>${c ? "Side by side (same settings)" : "Summary"}</h3><div class="tablewrap"><table><tr><th></th><th>${esc(m.label)}</th>${c ? `<th>${esc(c.label)}</th>` : ""}</tr>
+    ${rows.map(r => `<tr><td>${r[0]}</td><td class="mono">${cell(m, r)}</td>${c ? `<td class="mono">${cell(c, r)}</td>` : ""}</tr>`).join("")}</table></div>
+    <p class="muted" style="font-size:12px;margin:8px 0 0">Settings: ₹${pbL(p.capital)}, ${p.sizing === "fixed" ? p.lots + " lots per trade" : p.risk_pct + "% risk " + (p.sizing === "compound" ? "of the current account (compounding)" : "of the starting capital")}, ${p.max_lots ? "max " + p.max_lots + " lots, " : ""}confidence ${esc(p.confidence)}, big-run skip ${p.big_run_skip ? "on" : "off"}, ${p.otm < 0 ? "1 ITM" : p.otm ? p.otm + " OTM" : "ATM"}, ${esc(p.indices.join(" + "))}.${skip ? " Not taken: " + skip + "." : ""}</p></div>
+  <div class="card" style="margin-top:14px"><h3>Account value</h3><div id="pbChart" style="height:300px"></div><p class="muted" style="font-size:12px;margin:6px 0 0">${c ? "Blue = the chosen exit, orange = current exits." : ""} Option prices are modelled (formula corrected against real NSE prices; slightly optimistic), with extra slippage for size - treat big compounded totals as the optimistic side.</p></div>
+  <div class="card" style="margin-top:14px"><h3>Year by year</h3><div class="tablewrap"><table><tr><th>Year</th><th>Start</th><th>End</th><th>Net</th><th>Return</th><th>Worst fall</th><th>Trades</th><th>Win</th><th>Most lots</th>${c ? "<th>Current exits: return</th>" : ""}</tr>
+    ${m.years.map(y => { const cy = c && (c.years || []).find(z => z.year === y.year); return `<tr><td>${y.year}</td><td class="mono">₹${pbL(y.start)}</td><td class="mono">₹${pbL(y.end)}</td><td class="mono">${pbRs(y.net)}</td><td class="mono ${cls(y.ret_pct)}">${y.ret_pct}%</td><td class="mono down">${y.max_dd_pct}%</td><td class="mono">${y.trades}</td><td class="mono">${y.win_rate}%</td><td class="mono">${y.max_lots}</td>${c ? `<td class="mono ${cy ? cls(cy.ret_pct) : ""}">${cy ? cy.ret_pct + "%" : "–"}</td>` : ""}</tr>`; }).join("")}</table></div></div>
+  <div class="grid g2" style="margin-top:14px">${pbGrp("By index", m.by_index, "Index")}${pbGrp("By strategy", m.by_strategy, "Strategy")}${pbGrp("By exit reason", m.by_reason, "Exit")}${pbGrp("By confidence score", m.by_confidence, "Score")}</div>
+  <div class="card" style="margin-top:14px"><h3>Month by month</h3><div class="tablewrap" style="max-height:340px"><table><tr><th>Month</th><th>Trades</th><th>Win</th><th>Net</th><th>Account</th></tr>
+    ${m.months_table.map(x => `<tr><td>${x.month}</td><td class="mono">${x.trades}</td><td class="mono">${x.win_rate}%</td><td class="mono">${pbRs(x.net)}</td><td class="mono">₹${pbL(x.end)}</td></tr>`).join("")}</table></div></div>
+  <div class="card" style="margin-top:14px"><div class="cardhead"><h3 style="margin:0">Every trade</h3><button id="pbCsv">⬇ CSV</button></div><div class="tablewrap" style="max-height:55vh"><table>
+    <tr><th>Date</th><th>In</th><th>Out</th><th>Index</th><th>Strategy</th><th>Side</th><th>Score</th><th>Lots</th><th>R</th><th>Prem in</th><th>Prem out</th><th>P&L</th><th>Account</th><th style="text-align:left">Reason</th></tr>
+    ${(m.trades_list || []).slice().reverse().slice(0, 800).map(t => `<tr><td>${t.date}</td><td>${t.entry_time}</td><td>${t.exit_time}</td><td>${t.sym}</td><td>${esc(t.strategy)}</td><td class="${t.side === "CALL" ? "up" : "down"}">${t.side}</td><td class="mono">${t.score}</td><td class="mono">${t.lots}</td><td class="mono ${cls(t.R)}">${sgn(t.R)}</td><td class="mono">${n2(t.prem_in)}</td><td class="mono">${n2(t.prem_out)}</td><td class="mono">${pbRs(t.pnl)}</td><td class="mono">₹${pbL(t.equity)}</td><td style="text-align:left">${esc(t.reason)}</td></tr>`).join("")}</table></div>
+    <p class="muted" style="font-size:12px;margin:6px 0 0">Newest first; the CSV has every trade.</p></div>`;
+  $("#pbCsv").onclick = () => downloadCsv(`portfolio_backtest_${p.start}_${p.end}.csv`, m.trades_list, ["date", "entry_time", "exit_time", "sym", "strategy", "side", "score", "conf_mult", "lots", "spot_in", "spot_out", "R", "prem_in", "prem_out", "pnl", "equity", "reason", "slip_extra_pct"]);
+  if (window.LightweightCharts) {
+    const [ch, se] = lineChart($("#pbChart"));
+    const pts = x => x.curve.map(z => ({time: z.date, value: z.equity}));
+    se.setData(pts(m));
+    if (c && c.curve) ch.addLineSeries({color: "#f2a93b", lineWidth: 2}).setData(pts(c));
+    ch.timeScale().fitContent();
+  }
+}
+
 let btc, bts;
 $("#btRun").onclick = async () => {
   const b = $("#btRun"); b.disabled = true; b.textContent = +$("#btDays").value > 120 ? "Running… (up to a minute)" : "Running…";

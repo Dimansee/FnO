@@ -71,7 +71,7 @@ def _pnl_parts(prem, p_in, booked, rest, x_spot, x_ts, x_bar, exp, d, t_in, qty,
         pnl += (p_out - p_in) * q - I.charges(p_in, p_out, q, orders=1, exch_pct=exch_pct)
         wavg += frac * p_out
     pnl -= 20 * 1.18                                    # the single buy order
-    return pnl, wavg
+    return pnl, wavg, len(legs)
 
 
 def _reversal(kind, sign, spot, risk, c, ema9, best_r):
@@ -198,7 +198,7 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
     if strategy == "autopilot" and symbol in C.CONVICTION_SYMS and sizing != "one_lot" and conv_on:   # round 33 conviction sizing
         mtf = S.mtf_frames(candles)
         size_fn = lambda ts, sg: S.conviction_mult(S.mtf_score_at(mtf, ts + timedelta(minutes=C.CANDLE_MIN), sg))  # noqa: E731
-    run_skip = strategy == "autopilot" and _flag("big_run_skip")
+    run_skip = strategy == "autopilot" and (EXIT["big_run_skip"] if "big_run_skip" in EXIT else _flag("big_run_skip"))
     runs = {}
     for n, (d, day) in enumerate(frames):
         if n == 0 or len(day) < 60 or (trade_from and d < trade_from):
@@ -544,9 +544,9 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
         if reason is None:
             x_bar = idx[-1]
             reason, x_spot, x_ts = "Square-off", float(day["close"].iloc[-1]), idx[-1] + timedelta(minutes=5)
-        qty = lots * lot
+        qty, pieces = lots * lot, 1
         if booked:
-            pnl, p_out = _pnl_parts(prem, p_in, booked, rest, x_spot, x_ts, x_bar, exp, d, t_in, qty, exch_pct)
+            pnl, p_out, pieces = _pnl_parts(prem, p_in, booked, rest, x_spot, x_ts, x_bar, exp, d, t_in, qty, exch_pct)
             reason = f"{reason} after T{len(booked)}" if rest > 1e-9 else reason
         else:
             p_raw = prem(x_spot, x_ts, x_bar)
@@ -559,7 +559,7 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
             "spot_in": round(spot, 1), "spot_out": round(float(x_spot), 1), "R": round(sign * (x_spot - spot) / risk, 2),
             "prem_in": round(p_in, 2), "prem_out": round(p_out, 2), "lots": lots, "pnl": round(pnl, 0),
             "reason": reason, "equity": round(equity, 0), "strategy": "Noise band" if strat == "noise" else "Camarilla",
-            "risk_lot": round(risk_unit * lot, 0), "mfe_R": round(best_r, 2),
+            "risk_lot": round(risk_unit * lot, 0), "mfe_R": round(best_r, 2), "pieces": pieces,
         }
 
 
@@ -698,9 +698,9 @@ def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="ris
     if reason is None:
         x_bar = idx[-1]
         reason, x_spot, x_ts = "Square-off", float(day["close"].iloc[-1]), idx[-1] + timedelta(minutes=5)
-    qty = lots * lot
+    qty, pieces = lots * lot, 1
     if booked:
-        pnl, p_out = _pnl_parts(prem, p_in, booked, rest, x_spot, x_ts, x_bar, exp, d, t_in, qty, exch_pct)
+        pnl, p_out, pieces = _pnl_parts(prem, p_in, booked, rest, x_spot, x_ts, x_bar, exp, d, t_in, qty, exch_pct)
         reason = f"{reason} after T{len(booked)}" if rest > 1e-9 else reason
     else:
         p_out = PR.real_adjust(p_in / (1 + SLIP), prem(x_spot, x_ts, x_bar), (exp - d).days, (x_ts - t_in).total_seconds() / 3600) * (1 - SLIP)
@@ -710,5 +710,5 @@ def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="ris
         "side": "CALL" if opt == "CE" else "PUT", "type": "ATM option" if not otm else (f"{otm} OTM option" if otm > 0 else f"{-otm} ITM option"),
         "band": C.NOISE_MULT, "spot_in": round(spot, 1), "spot_out": round(float(x_spot), 1), "R": round(sign * (x_spot - spot) / risk, 2),
         "prem_in": round(p_in, 2), "prem_out": round(p_out, 2), "lots": lots, "pnl": round(pnl, 0),
-        "reason": reason, "equity": 0, "strategy": "Trend-day", "risk_lot": round(risk_unit * lot, 0), "mfe_R": round(best_r, 2),
+        "reason": reason, "equity": 0, "strategy": "Trend-day", "risk_lot": round(risk_unit * lot, 0), "mfe_R": round(best_r, 2), "pieces": pieces,
     }

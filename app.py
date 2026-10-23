@@ -482,6 +482,24 @@ def account_reset():
     return jsonify({"ok": True, "message": f"Demo account reset to ₹{cap:,.0f}."})
 
 
+@app.get("/api/backtest/portfolio/options")
+def backtest_portfolio_options():
+    from fno import portfolio_bt as PB
+    return jsonify(PB.options())
+
+
+@app.post("/api/backtest/portfolio")
+def backtest_portfolio():
+    from fno import portfolio_bt as PB
+    return jsonify({"job": PB.start(request.get_json(force=True) or {})})
+
+
+@app.get("/api/backtest/portfolio/<jid>")
+def backtest_portfolio_job(jid):
+    from fno import portfolio_bt as PB
+    return jsonify(SV.clean(PB.job(jid)))
+
+
 @app.post("/api/backtest")
 def backtest():
     b = request.get_json(force=True) or {}
@@ -493,7 +511,7 @@ def backtest():
     capital = float(b.get("capital", C.DEFAULT_CAPITAL))
     strategy = b.get("strategy") or "both"
     days = int(b.get("days") or 60)
-    if days not in (30, 60, 90, 120, 180, 250, 500):
+    if days not in (30, 60, 90, 120, 180, 250, 500, 750, 950):
         raise ValueError("Pick a backtest period from the list.")
     if sizing not in ("risk", "one_lot", "all_in") or otm not in (-1, 0, 1, 2) or not 1000 <= capital <= 1e9 \
             or strategy not in ("both", "noise", "camarilla", "ai", "trend", "all", "autopilot", "fib"):

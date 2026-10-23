@@ -1,0 +1,51 @@
+"""Offline test: portfolio backtest job (3 indices, compounding, exit comparison) on synthetic 5-minute data. Run: python tests/test_portfolio_bt.py"""
+import os, sys, time
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+import numpy as np, pandas as pd
+from fno import portfolio_bt as PB, market as D, config as C
+
+D.lot_size = lambda s: {"NIFTY": 65, "BANKNIFTY": 30, "SENSEX": 20}[s]
+
+
+def synth(start_px, seed):
+    r = np.random.default_rng(seed)
+    days = pd.bdate_range("2026-03-02", "2026-08-28")
+    idx = pd.DatetimeIndex([pd.Timestamp(d) + pd.Timedelta(minutes=9 * 60 + 15 + 5 * k) for d in days for k in range(75)]).tz_localize("Asia/Kolkata")
+    trend = np.repeat(r.choice([0.0006, -0.0006, 0.0], size=len(days)), 75)
+    px = start_px * np.cumprod(1 + trend + r.normal(0, 0.0012, len(idx)))
+    o = np.concatenate([[start_px], px[:-1]])
+    return pd.DataFrame({"open": o, "high": np.maximum(o, px) * 1.0008, "low": np.minimum(o, px) * 0.9992, "close": px, "volume": 1000.0}, index=idx)
+
+
+DATA = {"NIFTY": synth(22000, 1), "BANKNIFTY": synth(50000, 2), "SENSEX": synth(72000, 3)}
+VIX = pd.Series(14.0, index=DATA["NIFTY"].index)
+PB._history = lambda sym, start: (DATA[sym], VIX)
+
+assert PB.market_busy(pd.Timestamp("2026-10-21 11:00", tz="Asia/Kolkata")) and not PB.market_busy(pd.Timestamp("2026-10-24 11:00", tz="Asia/Kolkata"))
+for bad in ({"indices": ["FOO"]}, {"capital": 5}, {"start": "2026-08-01", "end": "2026-08-05"}, {"otm": 5}):
+    try:
+        PB._validate(bad); raise SystemExit(f"accepted {bad}")
+    except ValueError:
+        pass
+j = PB.start({"start": "2026-04-01", "end": "2026-08-28", "capital": 200000, "sizing": "compound", "confidence": "strong", "exit": "t123_253050",
+              "compare": True, "big_run_skip": True, "max_lots": 50, "_test": True})
+t0 = time.time()
+while PB.job(j)["status"] in ("queued", "running") and time.time() - t0 < 600:
+    time.sleep(2)
+r = PB.job(j)
+assert r["status"] == "done", r
+m, c = r["result"]["main"], r["result"]["compare"]
+assert c and c["label"].startswith("Current") and m["label"].startswith("Book 20%")
+for x in (m, c):
+    if x["trades"]:
+        assert x["years"] and x["months_table"] and x["curve"] and x["by_index"] and "max_dd_pct" in x, x.keys()
+        assert x["final"] == x["curve"][-1]["equity"] and x["max_lots"] <= 50
+print("portfolio job OK:", m["trades"], "trades, end", m["final"], "| current exits", c["trades"], "trades, end", c["final"])
+j2 = PB.start({"start": "2026-04-01", "end": "2026-08-28", "indices": ["NIFTY"], "sizing": "fixed", "lots": 2, "exit": "current", "_test": True})
+while PB.job(j2)["status"] in ("queued", "running"):
+    time.sleep(1)
+r2 = PB.job(j2)
+assert r2["status"] == "done" and r2["result"]["compare"] is None
+assert not r2["result"]["main"]["trades"] or set(t["lots"] for t in r2["result"]["main"]["trades_list"]) <= {1, 2}
+print("fixed lots OK")
+print("ALL PORTFOLIO BT OK")
