@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r42",
+   "date": "2026-10-24",
+   "area": "Index options",
+   "title": "Round 42: compounding from Rs 2 lakh, confidence-based lots, T1/T2/T3 with reversal exits, and 'the market must come back after a big run'",
+   "asked": "Start with Rs 2 lakh and compound; set lots (1-50) by confidence; book 20/30/50% at T1/T2/T3 but exit early when the market reverses; and after a 250-400 point run in 2-3 days the market must come back.",
+   "period": "Autopilot backtest trades Jan 2023 - 23 Oct 2026 (3 indices) + daily index closes since 2007 (Nifty/Bank Nifty) and 1997 (Sensex)",
+   "result": "Big runs: after a 3-day rally of >= 1.5 daily ATRs Nifty kept rising over the next 3 days (+0.21 ATR, t 4.6, back below only 41% of the time; half the run retraced within 5 days 38% vs 69% normally), in every era and index; falls showed no reliable bounce. Trades AGAINST a run of >= 2 ATRs lost on all 3 indices in 2023-25 (74 trades, -Rs 84k per lot, shuffle p < 0.001) and in 2026 (18, -Rs 14k); skipping them: 2023-25 +Rs 3.92L -> +4.76L, 2026 +1.14L -> +1.28L per lot (at 1 ATR the same trades made money, so the cut-off matters). Confidence: score 5-6 trades earned +Rs 379 a lot vs +94 (3-4) and +33 (0-2) in 2023-25; 2026 +407 / +300 / -383. Compounding from Rs 2L (1 ITM, stress impact): today's Autopilot sizing -> Rs 27.4L by Oct 2026 (x13.7, worst fall -33%); strong confidence 2x/1x/0.5x -> Rs 56.6L (x28, fall -45%); 2% risk -> Rs 2.35 Cr (fall -58%, up to 616 lots, unrealistic fills). One random year from Rs 2L (2,000 paths): today's sizing median Rs 3.06L, 1 in 10 below Rs 1.75L, losing year 19%, fall > 30% in 36%; + big-run skip median Rs 3.38L, losing year 14%, fall > 30% 30%; strong confidence median Rs 3.90L but fall > 30% in 58%. Reversal exits on top of T1/T2/T3 (10 lots, 2023-25 / 2026): current +46.8L / +13.3L; 20/30/50 at 1R/2R/3R +27.2L / +5.5L; + exit on 9-EMA cross +14.3L / +0.5L; + VWAP cross +27.2L / +4.5L; + half given back +22.6L / +2.5L; + strong opposite candle +14.6L / -0.1L; no targets, 9-EMA exit after +2R +32.2L / +8.4L.",
+   "summary": "Adopted (switchable, on by default): Autopilot skips trades against a 3-day run of >= 2 daily ATRs. Added as an opt-in setting: strong confidence sizing (2x / 1x / 0.5x on all indices) - more profit, much deeper falls. Not adopted: every T1/T2/T3 and reversal-exit rule (all lose a large part of the profit by cutting the trend days). Compounding is already how Autopilot sizes.",
+   "decision": "Partly adopted"
+  },
+  {
    "id": "r41",
    "date": "2026-10-24",
    "area": "Index options",

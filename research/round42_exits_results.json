@@ -1,0 +1,1150 @@
+{
+ "R0 current exits (10 lots)": {
+  "1 ITM (rule strike)": {
+   "train": {
+    "n": 1791,
+    "net": 4676969,
+    "pf": 1.31,
+    "win": 30.5,
+    "fall": -779409
+   },
+   "y2026": {
+    "n": 451,
+    "net": 1328309,
+    "pf": 1.32,
+    "win": 33.5,
+    "fall": -475092
+   },
+   "years": {
+    "2023": 403072,
+    "2024": 2546249,
+    "2025": 1727648,
+    "2026": 1328309
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 485946,
+    "NIFTY": 2403619,
+    "SENSEX": 1787404
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": 48225,
+    "NIFTY": 1236907,
+    "SENSEX": 43177
+   },
+   "by_strategy_train": {
+    "Camarilla": 946407,
+    "Fibonacci 0.618": 1781117,
+    "Noise band": 841750,
+    "Trend-day": 1107695
+   },
+   "by_strategy_2026": {
+    "Camarilla": 479928,
+    "Fibonacci 0.618": 513460,
+    "Noise band": 38721,
+    "Trend-day": 296200
+   },
+   "today": 50272,
+   "exit_reasons": {
+    "Square-off": 585,
+    "Time stop (45 min)": 474,
+    "Stop-loss (H3/L3)": 364,
+    "Breakeven stop": 312,
+    "Trailing exit (band/VWAP)": 280,
+    "Stop-loss (VWAP)": 114,
+    "Stop-loss (2 ATR)": 98,
+    "Target 4R": 15
+   }
+  },
+  "1 OTM (small-account strike)": {
+   "train": {
+    "n": 1791,
+    "net": 4381745,
+    "pf": 1.35,
+    "win": 30.8,
+    "fall": -634487
+   },
+   "y2026": {
+    "n": 451,
+    "net": 1126664,
+    "pf": 1.32,
+    "win": 33.7,
+    "fall": -435781
+   },
+   "years": {
+    "2023": 490648,
+    "2024": 2362284,
+    "2025": 1528813,
+    "2026": 1126664
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 416297,
+    "NIFTY": 2155300,
+    "SENSEX": 1810148
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": 15412,
+    "NIFTY": 1041202,
+    "SENSEX": 70050
+   },
+   "by_strategy_train": {
+    "Camarilla": 862587,
+    "Fibonacci 0.618": 1694306,
+    "Noise band": 798481,
+    "Trend-day": 1026371
+   },
+   "by_strategy_2026": {
+    "Camarilla": 392078,
+    "Fibonacci 0.618": 456364,
+    "Noise band": 27887,
+    "Trend-day": 250335
+   },
+   "today": 42491,
+   "exit_reasons": {
+    "Square-off": 585,
+    "Time stop (45 min)": 474,
+    "Stop-loss (H3/L3)": 364,
+    "Breakeven stop": 312,
+    "Trailing exit (band/VWAP)": 280,
+    "Stop-loss (VWAP)": 114,
+    "Stop-loss (2 ATR)": 98,
+    "Target 4R": 15
+   }
+  }
+ },
+ "R1 book 20/30/50% at 1R/2R/3R": {
+  "1 ITM (rule strike)": {
+   "train": {
+    "n": 1797,
+    "net": 2720036,
+    "pf": 1.2,
+    "win": 40.9,
+    "fall": -1026257
+   },
+   "y2026": {
+    "n": 454,
+    "net": 554489,
+    "pf": 1.15,
+    "win": 42.7,
+    "fall": -599364
+   },
+   "years": {
+    "2023": -207019,
+    "2024": 1811204,
+    "2025": 1115851,
+    "2026": 554489
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 234276,
+    "NIFTY": 1514870,
+    "SENSEX": 970890
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -61158,
+    "NIFTY": 706762,
+    "SENSEX": -91115
+   },
+   "by_strategy_train": {
+    "Camarilla": 603925,
+    "Fibonacci 0.618": 902891,
+    "Noise band": 471959,
+    "Trend-day": 741261
+   },
+   "by_strategy_2026": {
+    "Camarilla": 199925,
+    "Fibonacci 0.618": 53371,
+    "Noise band": 60641,
+    "Trend-day": 240552
+   },
+   "today": 98065,
+   "exit_reasons": {
+    "Time stop (45 min)": 474,
+    "Stop-loss (H3/L3)": 364,
+    "Breakeven stop after T1": 255,
+    "All targets booked": 224,
+    "Trailing exit (band/VWAP)": 202,
+    "Square-off after T2": 161,
+    "Square-off after T1": 135,
+    "Stop-loss (VWAP)": 114,
+    "Square-off": 102,
+    "Stop-loss (2 ATR)": 88
+   }
+  },
+  "1 OTM (small-account strike)": {
+   "train": {
+    "n": 1797,
+    "net": 2492288,
+    "pf": 1.21,
+    "win": 41.3,
+    "fall": -788587
+   },
+   "y2026": {
+    "n": 454,
+    "net": 399240,
+    "pf": 1.12,
+    "win": 42.5,
+    "fall": -554097
+   },
+   "years": {
+    "2023": -74070,
+    "2024": 1641160,
+    "2025": 925198,
+    "2026": 399240
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 179952,
+    "NIFTY": 1282261,
+    "SENSEX": 1030075
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -90140,
+    "NIFTY": 546941,
+    "SENSEX": -57561
+   },
+   "by_strategy_train": {
+    "Camarilla": 516552,
+    "Fibonacci 0.618": 841847,
+    "Noise band": 449188,
+    "Trend-day": 684701
+   },
+   "by_strategy_2026": {
+    "Camarilla": 123672,
+    "Fibonacci 0.618": 37912,
+    "Noise band": 43064,
+    "Trend-day": 194592
+   },
+   "today": 80877,
+   "exit_reasons": {
+    "Time stop (45 min)": 474,
+    "Stop-loss (H3/L3)": 364,
+    "Breakeven stop after T1": 255,
+    "All targets booked": 224,
+    "Trailing exit (band/VWAP)": 202,
+    "Square-off after T2": 161,
+    "Square-off after T1": 135,
+    "Stop-loss (VWAP)": 114,
+    "Square-off": 102,
+    "Stop-loss (2 ATR)": 88
+   }
+  }
+ },
+ "R2 R1 + exit rest on 5-min close across 9-EMA": {
+  "1 ITM (rule strike)": {
+   "train": {
+    "n": 1802,
+    "net": 1429067,
+    "pf": 1.1,
+    "win": 45.7,
+    "fall": -879960
+   },
+   "y2026": {
+    "n": 456,
+    "net": 53331,
+    "pf": 1.01,
+    "win": 49.3,
+    "fall": -659093
+   },
+   "years": {
+    "2023": -156402,
+    "2024": 869552,
+    "2025": 715917,
+    "2026": 53331
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 280580,
+    "NIFTY": 848346,
+    "SENSEX": 300141
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -187002,
+    "NIFTY": 413167,
+    "SENSEX": -172834
+   },
+   "by_strategy_train": {
+    "Camarilla": 273451,
+    "Fibonacci 0.618": 291198,
+    "Noise band": 226973,
+    "Trend-day": 637445
+   },
+   "by_strategy_2026": {
+    "Camarilla": -105001,
+    "Fibonacci 0.618": -146215,
+    "Noise band": 133739,
+    "Trend-day": 170808
+   },
+   "today": 119370,
+   "exit_reasons": {
+    "Reversal exit (ema9) after T1": 552,
+    "Time stop (45 min)": 474,
+    "Stop-loss (H3/L3)": 364,
+    "Trailing exit (band/VWAP)": 205,
+    "Reversal exit (ema9) after T2": 158,
+    "Stop-loss (VWAP)": 114,
+    "Square-off": 103,
+    "All targets booked": 101,
+    "Stop-loss (2 ATR)": 89,
+    "Breakeven stop after T1": 46
+   }
+  },
+  "1 OTM (small-account strike)": {
+   "train": {
+    "n": 1802,
+    "net": 1302701,
+    "pf": 1.11,
+    "win": 46.0,
+    "fall": -694549
+   },
+   "y2026": {
+    "n": 456,
+    "net": -42845,
+    "pf": 0.99,
+    "win": 49.3,
+    "fall": -627772
+   },
+   "years": {
+    "2023": -80400,
+    "2024": 816727,
+    "2025": 566374,
+    "2026": -42845
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 228596,
+    "NIFTY": 675485,
+    "SENSEX": 398620
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -206604,
+    "NIFTY": 301443,
+    "SENSEX": -137684
+   },
+   "by_strategy_train": {
+    "Camarilla": 226697,
+    "Fibonacci 0.618": 283126,
+    "Noise band": 216238,
+    "Trend-day": 576640
+   },
+   "by_strategy_2026": {
+    "Camarilla": -148194,
+    "Fibonacci 0.618": -126604,
+    "Noise band": 103862,
+    "Trend-day": 128091
+   },
+   "today": 97228,
+   "exit_reasons": {
+    "Reversal exit (ema9) after T1": 552,
+    "Time stop (45 min)": 474,
+    "Stop-loss (H3/L3)": 364,
+    "Trailing exit (band/VWAP)": 205,
+    "Reversal exit (ema9) after T2": 158,
+    "Stop-loss (VWAP)": 114,
+    "Square-off": 103,
+    "All targets booked": 101,
+    "Stop-loss (2 ATR)": 89,
+    "Breakeven stop after T1": 46
+   }
+  }
+ },
+ "R3 R1 + exit rest on 5-min close across VWAP": {
+  "1 ITM (rule strike)": {
+   "train": {
+    "n": 1797,
+    "net": 2721250,
+    "pf": 1.2,
+    "win": 42.5,
+    "fall": -976079
+   },
+   "y2026": {
+    "n": 454,
+    "net": 453478,
+    "pf": 1.12,
+    "win": 45.4,
+    "fall": -554258
+   },
+   "years": {
+    "2023": -273251,
+    "2024": 1939664,
+    "2025": 1054837,
+    "2026": 453478
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 182705,
+    "NIFTY": 1562629,
+    "SENSEX": 975916
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -118895,
+    "NIFTY": 675841,
+    "SENSEX": -103468
+   },
+   "by_strategy_train": {
+    "Camarilla": 538452,
+    "Fibonacci 0.618": 965977,
+    "Noise band": 501665,
+    "Trend-day": 715156
+   },
+   "by_strategy_2026": {
+    "Camarilla": 108917,
+    "Fibonacci 0.618": 20941,
+    "Noise band": 77701,
+    "Trend-day": 245919
+   },
+   "today": 83731,
+   "exit_reasons": {
+    "Time stop (45 min)": 474,
+    "Stop-loss (H3/L3)": 364,
+    "All targets booked": 213,
+    "Trailing exit (band/VWAP)": 202,
+    "Breakeven stop after T1": 176,
+    "Reversal exit (vwap) after T1": 149,
+    "Square-off after T2": 128,
+    "Square-off after T1": 122,
+    "Stop-loss (VWAP)": 114,
+    "Square-off": 102
+   }
+  },
+  "1 OTM (small-account strike)": {
+   "train": {
+    "n": 1797,
+    "net": 2475660,
+    "pf": 1.21,
+    "win": 42.8,
+    "fall": -753351
+   },
+   "y2026": {
+    "n": 454,
+    "net": 314606,
+    "pf": 1.1,
+    "win": 45.4,
+    "fall": -514573
+   },
+   "years": {
+    "2023": -152213,
+    "2024": 1751578,
+    "2025": 876295,
+    "2026": 314606
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 136590,
+    "NIFTY": 1311978,
+    "SENSEX": 1027092
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -140986,
+    "NIFTY": 524733,
+    "SENSEX": -69141
+   },
+   "by_strategy_train": {
+    "Camarilla": 454729,
+    "Fibonacci 0.618": 888419,
+    "Noise band": 468874,
+    "Trend-day": 663638
+   },
+   "by_strategy_2026": {
+    "Camarilla": 46874,
+    "Fibonacci 0.618": 10786,
+    "Noise band": 57942,
+    "Trend-day": 199004
+   },
+   "today": 68370,
+   "exit_reasons": {
+    "Time stop (45 min)": 474,
+    "Stop-loss (H3/L3)": 364,
+    "All targets booked": 213,
+    "Trailing exit (band/VWAP)": 202,
+    "Breakeven stop after T1": 176,
+    "Reversal exit (vwap) after T1": 149,
+    "Square-off after T2": 128,
+    "Square-off after T1": 122,
+    "Stop-loss (VWAP)": 114,
+    "Square-off": 102
+   }
+  }
+ },
+ "R4 R1 + exit rest when half the best move is given back": {
+  "1 ITM (rule strike)": {
+   "train": {
+    "n": 1806,
+    "net": 2261085,
+    "pf": 1.17,
+    "win": 46.0,
+    "fall": -823957
+   },
+   "y2026": {
+    "n": 454,
+    "net": 253689,
+    "pf": 1.07,
+    "win": 49.8,
+    "fall": -521168
+   },
+   "years": {
+    "2023": -26834,
+    "2024": 1448182,
+    "2025": 839737,
+    "2026": 253689
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 176622,
+    "NIFTY": 1382548,
+    "SENSEX": 701915
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -205479,
+    "NIFTY": 542244,
+    "SENSEX": -83076
+   },
+   "by_strategy_train": {
+    "Camarilla": 395087,
+    "Fibonacci 0.618": 546378,
+    "Noise band": 398305,
+    "Trend-day": 921315
+   },
+   "by_strategy_2026": {
+    "Camarilla": -108662,
+    "Fibonacci 0.618": -127932,
+    "Noise band": 208419,
+    "Trend-day": 281864
+   },
+   "today": 75626,
+   "exit_reasons": {
+    "Reversal exit (give50) after T1": 488,
+    "Time stop (45 min)": 474,
+    "Stop-loss (H3/L3)": 364,
+    "Trailing exit (band/VWAP)": 206,
+    "All targets booked": 155,
+    "Stop-loss (VWAP)": 114,
+    "Square-off": 103,
+    "Reversal exit (give50) after T2": 102,
+    "Stop-loss (2 ATR)": 88,
+    "Square-off after T2": 81
+   }
+  },
+  "1 OTM (small-account strike)": {
+   "train": {
+    "n": 1806,
+    "net": 2057527,
+    "pf": 1.18,
+    "win": 46.3,
+    "fall": -648265
+   },
+   "y2026": {
+    "n": 454,
+    "net": 146758,
+    "pf": 1.05,
+    "win": 49.8,
+    "fall": -483575
+   },
+   "years": {
+    "2023": 34708,
+    "2024": 1330208,
+    "2025": 692611,
+    "2026": 146758
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 145201,
+    "NIFTY": 1136899,
+    "SENSEX": 775427
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -218511,
+    "NIFTY": 418870,
+    "SENSEX": -53601
+   },
+   "by_strategy_train": {
+    "Camarilla": 333393,
+    "Fibonacci 0.618": 529413,
+    "Noise band": 370269,
+    "Trend-day": 824452
+   },
+   "by_strategy_2026": {
+    "Camarilla": -142241,
+    "Fibonacci 0.618": -109636,
+    "Noise band": 171792,
+    "Trend-day": 226843
+   },
+   "today": 61703,
+   "exit_reasons": {
+    "Reversal exit (give50) after T1": 488,
+    "Time stop (45 min)": 474,
+    "Stop-loss (H3/L3)": 364,
+    "Trailing exit (band/VWAP)": 206,
+    "All targets booked": 155,
+    "Stop-loss (VWAP)": 114,
+    "Square-off": 103,
+    "Reversal exit (give50) after T2": 102,
+    "Stop-loss (2 ATR)": 88,
+    "Square-off after T2": 81
+   }
+  }
+ },
+ "R5 R1 + exit rest on a strong opposite candle": {
+  "1 ITM (rule strike)": {
+   "train": {
+    "n": 1813,
+    "net": 1455018,
+    "pf": 1.11,
+    "win": 45.9,
+    "fall": -831691
+   },
+   "y2026": {
+    "n": 459,
+    "net": -10599,
+    "pf": 1.0,
+    "win": 49.0,
+    "fall": -717919
+   },
+   "years": {
+    "2023": -171645,
+    "2024": 1001786,
+    "2025": 624877,
+    "2026": -10599
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 270088,
+    "NIFTY": 760777,
+    "SENSEX": 424153
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -247042,
+    "NIFTY": 401590,
+    "SENSEX": -165147
+   },
+   "by_strategy_train": {
+    "Camarilla": 191565,
+    "Fibonacci 0.618": 394411,
+    "Noise band": 216216,
+    "Trend-day": 652826
+   },
+   "by_strategy_2026": {
+    "Camarilla": -198557,
+    "Fibonacci 0.618": -192760,
+    "Noise band": 246529,
+    "Trend-day": 134189
+   },
+   "today": 128434,
+   "exit_reasons": {
+    "Reversal exit (candle) after T1": 647,
+    "Time stop (45 min)": 475,
+    "Stop-loss (H3/L3)": 365,
+    "Trailing exit (band/VWAP)": 210,
+    "Reversal exit (candle) after T2": 134,
+    "Stop-loss (VWAP)": 114,
+    "Square-off": 103,
+    "Stop-loss (2 ATR)": 90,
+    "All targets booked": 64,
+    "Breakeven stop after T1": 33
+   }
+  },
+  "1 OTM (small-account strike)": {
+   "train": {
+    "n": 1813,
+    "net": 1311420,
+    "pf": 1.11,
+    "win": 46.2,
+    "fall": -653237
+   },
+   "y2026": {
+    "n": 459,
+    "net": -98140,
+    "pf": 0.97,
+    "win": 49.0,
+    "fall": -682194
+   },
+   "years": {
+    "2023": -88169,
+    "2024": 910070,
+    "2025": 489519,
+    "2026": -98140
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 215953,
+    "NIFTY": 588882,
+    "SENSEX": 506585
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -259467,
+    "NIFTY": 293772,
+    "SENSEX": -132445
+   },
+   "by_strategy_train": {
+    "Camarilla": 151051,
+    "Fibonacci 0.618": 378792,
+    "Noise band": 203617,
+    "Trend-day": 577960
+   },
+   "by_strategy_2026": {
+    "Camarilla": -228072,
+    "Fibonacci 0.618": -171616,
+    "Noise band": 203123,
+    "Trend-day": 98425
+   },
+   "today": 104062,
+   "exit_reasons": {
+    "Reversal exit (candle) after T1": 647,
+    "Time stop (45 min)": 475,
+    "Stop-loss (H3/L3)": 365,
+    "Trailing exit (band/VWAP)": 210,
+    "Reversal exit (candle) after T2": 134,
+    "Stop-loss (VWAP)": 114,
+    "Square-off": 103,
+    "Stop-loss (2 ATR)": 90,
+    "All targets booked": 64,
+    "Breakeven stop after T1": 33
+   }
+  }
+ },
+ "R6 no targets, exit on 9-EMA cross after +1R": {
+  "1 ITM (rule strike)": {
+   "train": {
+    "n": 1799,
+    "net": 2066979,
+    "pf": 1.15,
+    "win": 43.1,
+    "fall": -1016447
+   },
+   "y2026": {
+    "n": 455,
+    "net": 60511,
+    "pf": 1.02,
+    "win": 46.8,
+    "fall": -685445
+   },
+   "years": {
+    "2023": 35788,
+    "2024": 868202,
+    "2025": 1162989,
+    "2026": 60511
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 503493,
+    "NIFTY": 1095381,
+    "SENSEX": 468105
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -210864,
+    "NIFTY": 437521,
+    "SENSEX": -166146
+   },
+   "by_strategy_train": {
+    "Camarilla": 558523,
+    "Fibonacci 0.618": 382510,
+    "Noise band": 374443,
+    "Trend-day": 751503
+   },
+   "by_strategy_2026": {
+    "Camarilla": -100434,
+    "Fibonacci 0.618": -137452,
+    "Noise band": 86363,
+    "Trend-day": 212034
+   },
+   "today": 108529,
+   "exit_reasons": {
+    "Reversal exit (ema9)": 791,
+    "Time stop (45 min)": 474,
+    "Stop-loss (H3/L3)": 364,
+    "Trailing exit (band/VWAP)": 207,
+    "Square-off": 162,
+    "Stop-loss (VWAP)": 114,
+    "Stop-loss (2 ATR)": 89,
+    "Breakeven stop": 46,
+    "Target 4R": 7
+   }
+  },
+  "1 OTM (small-account strike)": {
+   "train": {
+    "n": 1799,
+    "net": 1915264,
+    "pf": 1.17,
+    "win": 43.4,
+    "fall": -803278
+   },
+   "y2026": {
+    "n": 455,
+    "net": -37411,
+    "pf": 0.99,
+    "win": 46.8,
+    "fall": -650526
+   },
+   "years": {
+    "2023": 102679,
+    "2024": 835381,
+    "2025": 977204,
+    "2026": -37411
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 439764,
+    "NIFTY": 912843,
+    "SENSEX": 562657
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -228209,
+    "NIFTY": 322560,
+    "SENSEX": -131762
+   },
+   "by_strategy_train": {
+    "Camarilla": 496236,
+    "Fibonacci 0.618": 383589,
+    "Noise band": 348565,
+    "Trend-day": 686874
+   },
+   "by_strategy_2026": {
+    "Camarilla": -144377,
+    "Fibonacci 0.618": -116972,
+    "Noise band": 63856,
+    "Trend-day": 160082
+   },
+   "today": 88403,
+   "exit_reasons": {
+    "Reversal exit (ema9)": 791,
+    "Time stop (45 min)": 474,
+    "Stop-loss (H3/L3)": 364,
+    "Trailing exit (band/VWAP)": 207,
+    "Square-off": 162,
+    "Stop-loss (VWAP)": 114,
+    "Stop-loss (2 ATR)": 89,
+    "Breakeven stop": 46,
+    "Target 4R": 7
+   }
+  }
+ },
+ "R7 no targets, exit on strong opposite candle after +1R": {
+  "1 ITM (rule strike)": {
+   "train": {
+    "n": 1811,
+    "net": 1728469,
+    "pf": 1.13,
+    "win": 44.1,
+    "fall": -900801
+   },
+   "y2026": {
+    "n": 459,
+    "net": -58351,
+    "pf": 0.98,
+    "win": 47.5,
+    "fall": -779785
+   },
+   "years": {
+    "2023": -186196,
+    "2024": 1115652,
+    "2025": 799013,
+    "2026": -58351
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 353766,
+    "NIFTY": 872385,
+    "SENSEX": 502318
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -257484,
+    "NIFTY": 368599,
+    "SENSEX": -169466
+   },
+   "by_strategy_train": {
+    "Camarilla": 266832,
+    "Fibonacci 0.618": 392996,
+    "Noise band": 294547,
+    "Trend-day": 774094
+   },
+   "by_strategy_2026": {
+    "Camarilla": -247457,
+    "Fibonacci 0.618": -222355,
+    "Noise band": 247074,
+    "Trend-day": 164387
+   },
+   "today": 122814,
+   "exit_reasons": {
+    "Reversal exit (candle)": 838,
+    "Time stop (45 min)": 475,
+    "Stop-loss (H3/L3)": 365,
+    "Trailing exit (band/VWAP)": 213,
+    "Square-off": 140,
+    "Stop-loss (VWAP)": 114,
+    "Stop-loss (2 ATR)": 89,
+    "Breakeven stop": 33,
+    "Target 4R": 3
+   }
+  },
+  "1 OTM (small-account strike)": {
+   "train": {
+    "n": 1811,
+    "net": 1573423,
+    "pf": 1.14,
+    "win": 44.5,
+    "fall": -707534
+   },
+   "y2026": {
+    "n": 459,
+    "net": -138239,
+    "pf": 0.96,
+    "win": 47.5,
+    "fall": -733994
+   },
+   "years": {
+    "2023": -91350,
+    "2024": 1014254,
+    "2025": 650519,
+    "2026": -138239
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 297589,
+    "NIFTY": 692364,
+    "SENSEX": 583470
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -267999,
+    "NIFTY": 267413,
+    "SENSEX": -137653
+   },
+   "by_strategy_train": {
+    "Camarilla": 227885,
+    "Fibonacci 0.618": 385899,
+    "Noise band": 271086,
+    "Trend-day": 688553
+   },
+   "by_strategy_2026": {
+    "Camarilla": -270318,
+    "Fibonacci 0.618": -195135,
+    "Noise band": 204908,
+    "Trend-day": 122306
+   },
+   "today": 99182,
+   "exit_reasons": {
+    "Reversal exit (candle)": 838,
+    "Time stop (45 min)": 475,
+    "Stop-loss (H3/L3)": 365,
+    "Trailing exit (band/VWAP)": 213,
+    "Square-off": 140,
+    "Stop-loss (VWAP)": 114,
+    "Stop-loss (2 ATR)": 89,
+    "Breakeven stop": 33,
+    "Target 4R": 3
+   }
+  }
+ },
+ "R8 no targets, exit on 9-EMA cross after +2R": {
+  "1 ITM (rule strike)": {
+   "train": {
+    "n": 1794,
+    "net": 3220500,
+    "pf": 1.22,
+    "win": 33.5,
+    "fall": -1164731
+   },
+   "y2026": {
+    "n": 452,
+    "net": 840414,
+    "pf": 1.21,
+    "win": 36.3,
+    "fall": -640062
+   },
+   "years": {
+    "2023": -17521,
+    "2024": 1570212,
+    "2025": 1667809,
+    "2026": 840414
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 561529,
+    "NIFTY": 1667690,
+    "SENSEX": 991281
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -158614,
+    "NIFTY": 917006,
+    "SENSEX": 82022
+   },
+   "by_strategy_train": {
+    "Camarilla": 860630,
+    "Fibonacci 0.618": 945454,
+    "Noise band": 722120,
+    "Trend-day": 692296
+   },
+   "by_strategy_2026": {
+    "Camarilla": 231479,
+    "Fibonacci 0.618": 218733,
+    "Noise band": 23345,
+    "Trend-day": 366857
+   },
+   "today": 132153,
+   "exit_reasons": {
+    "Time stop (45 min)": 474,
+    "Reversal exit (ema9)": 370,
+    "Stop-loss (H3/L3)": 364,
+    "Square-off": 306,
+    "Breakeven stop": 255,
+    "Trailing exit (band/VWAP)": 255,
+    "Stop-loss (VWAP)": 114,
+    "Stop-loss (2 ATR)": 99,
+    "Target 4R": 9
+   }
+  },
+  "1 OTM (small-account strike)": {
+   "train": {
+    "n": 1794,
+    "net": 2979222,
+    "pf": 1.24,
+    "win": 33.7,
+    "fall": -901724
+   },
+   "y2026": {
+    "n": 452,
+    "net": 647657,
+    "pf": 1.18,
+    "win": 36.3,
+    "fall": -589270
+   },
+   "years": {
+    "2023": 114133,
+    "2024": 1443892,
+    "2025": 1421197,
+    "2026": 647657
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 482904,
+    "NIFTY": 1434651,
+    "SENSEX": 1061667
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -183568,
+    "NIFTY": 728264,
+    "SENSEX": 102961
+   },
+   "by_strategy_train": {
+    "Camarilla": 758315,
+    "Fibonacci 0.618": 897215,
+    "Noise band": 671183,
+    "Trend-day": 652509
+   },
+   "by_strategy_2026": {
+    "Camarilla": 139739,
+    "Fibonacci 0.618": 190696,
+    "Noise band": 13527,
+    "Trend-day": 303695
+   },
+   "today": 109020,
+   "exit_reasons": {
+    "Time stop (45 min)": 474,
+    "Reversal exit (ema9)": 370,
+    "Stop-loss (H3/L3)": 364,
+    "Square-off": 306,
+    "Breakeven stop": 255,
+    "Trailing exit (band/VWAP)": 255,
+    "Stop-loss (VWAP)": 114,
+    "Stop-loss (2 ATR)": 99,
+    "Target 4R": 9
+   }
+  }
+ },
+ "R9 no targets, exit on strong opposite candle after +2R": {
+  "1 ITM (rule strike)": {
+   "train": {
+    "n": 1798,
+    "net": 2787385,
+    "pf": 1.19,
+    "win": 33.5,
+    "fall": -1041364
+   },
+   "y2026": {
+    "n": 456,
+    "net": 598133,
+    "pf": 1.15,
+    "win": 36.4,
+    "fall": -637732
+   },
+   "years": {
+    "2023": -101114,
+    "2024": 1691757,
+    "2025": 1196742,
+    "2026": 598133
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 450505,
+    "NIFTY": 1461923,
+    "SENSEX": 874957
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -202503,
+    "NIFTY": 795517,
+    "SENSEX": 5119
+   },
+   "by_strategy_train": {
+    "Camarilla": 687496,
+    "Fibonacci 0.618": 901475,
+    "Noise band": 525848,
+    "Trend-day": 672566
+   },
+   "by_strategy_2026": {
+    "Camarilla": 76999,
+    "Fibonacci 0.618": 54867,
+    "Noise band": 103297,
+    "Trend-day": 362970
+   },
+   "today": 103356,
+   "exit_reasons": {
+    "Time stop (45 min)": 475,
+    "Reversal exit (candle)": 397,
+    "Stop-loss (H3/L3)": 364,
+    "Square-off": 287,
+    "Trailing exit (band/VWAP)": 258,
+    "Breakeven stop": 255,
+    "Stop-loss (VWAP)": 114,
+    "Stop-loss (2 ATR)": 100,
+    "Target 4R": 4
+   }
+  },
+  "1 OTM (small-account strike)": {
+   "train": {
+    "n": 1798,
+    "net": 2539016,
+    "pf": 1.21,
+    "win": 33.6,
+    "fall": -800892
+   },
+   "y2026": {
+    "n": 456,
+    "net": 427176,
+    "pf": 1.12,
+    "win": 36.4,
+    "fall": -586786
+   },
+   "years": {
+    "2023": 34088,
+    "2024": 1517202,
+    "2025": 987726,
+    "2026": 427176
+   },
+   "by_sym_train": {
+    "BANKNIFTY": 373948,
+    "NIFTY": 1217853,
+    "SENSEX": 947215
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": -224240,
+    "NIFTY": 619427,
+    "SENSEX": 31989
+   },
+   "by_strategy_train": {
+    "Camarilla": 595101,
+    "Fibonacci 0.618": 841179,
+    "Noise band": 479567,
+    "Trend-day": 623169
+   },
+   "by_strategy_2026": {
+    "Camarilla": 3864,
+    "Fibonacci 0.618": 43770,
+    "Noise band": 79077,
+    "Trend-day": 300465
+   },
+   "today": 81858,
+   "exit_reasons": {
+    "Time stop (45 min)": 475,
+    "Reversal exit (candle)": 397,
+    "Stop-loss (H3/L3)": 364,
+    "Square-off": 287,
+    "Trailing exit (band/VWAP)": 258,
+    "Breakeven stop": 255,
+    "Stop-loss (VWAP)": 114,
+    "Stop-loss (2 ATR)": 100,
+    "Target 4R": 4
+   }
+  }
+ }
+}

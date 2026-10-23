@@ -1,0 +1,56 @@
+{
+ "C 1% risk, no confidence": {
+  "median_end": 282880,
+  "p10_end": 175152,
+  "p90_end": 482751,
+  "loss_year_pct": 21.1,
+  "dd_worse_30_pct": 36.8,
+  "dd_worse_50_pct": 2.9,
+  "median_dd_pct": -26.8
+ },
+ "D 1% risk + live confidence (today's Autopilot)": {
+  "median_end": 306362,
+  "p10_end": 175307,
+  "p90_end": 605735,
+  "loss_year_pct": 19.4,
+  "dd_worse_30_pct": 35.7,
+  "dd_worse_50_pct": 2.8,
+  "median_dd_pct": -26.8
+ },
+ "E 1% risk + strong confidence": {
+  "median_end": 389538,
+  "p10_end": 182595,
+  "p90_end": 1148478,
+  "loss_year_pct": 16.4,
+  "dd_worse_30_pct": 57.7,
+  "dd_worse_50_pct": 5.3,
+  "median_dd_pct": -31.5
+ },
+ "D + skip trades against a big run": {
+  "median_end": 337826,
+  "p10_end": 189070,
+  "p90_end": 667743,
+  "loss_year_pct": 13.8,
+  "dd_worse_30_pct": 29.6,
+  "dd_worse_50_pct": 1.7,
+  "median_dd_pct": -25.6
+ },
+ "E + skip trades against a big run": {
+  "median_end": 429354,
+  "p10_end": 190757,
+  "p90_end": 1271647,
+  "loss_year_pct": 12.8,
+  "dd_worse_30_pct": 53.7,
+  "dd_worse_50_pct": 3.2,
+  "median_dd_pct": -30.8
+ },
+ "F 2% risk + live confidence": {
+  "median_end": 493401,
+  "p10_end": 176016,
+  "p90_end": 1820563,
+  "loss_year_pct": 16.2,
+  "dd_worse_30_pct": 84.1,
+  "dd_worse_50_pct": 14.3,
+  "median_dd_pct": -38.1
+ }
+}
