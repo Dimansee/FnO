@@ -36,7 +36,10 @@ from . import pricing as PR
 #   partials:    T1/T2/T3 booking on top of the exits above, [(reach_R, fraction), ...]; the rest follows the normal exits
 #   be_after_t1: move the stop to entry once T1 is booked
 #   lots_x:      multiply the lot count (research: partial booking needs 2-3 lots)
-EXIT_DEFAULT = {"partials": (), "be_after_t1": False, "lots_x": 1, "be_r": None, "be_lock": 0.0, "lock_steps": (), "giveback": None, "noise_rr": None, "noise_be_r": None, "noise_be_lock": 0.0}
+#   rev_exit:    close the rest early on a reversal once the trade has been in profit by rev_after_R:
+#                "ema9" (5-min close back across its 9-EMA), "vwap" (5-min close back across VWAP), "give50" (half of the
+#                best open move given back), "candle" (a strong opposite 5-min candle: body >= 60% of range, range >= 0.5 ATR)
+EXIT_DEFAULT = {"rev_exit": None, "rev_after_R": 1.0, "partials": (), "be_after_t1": False, "lots_x": 1, "be_r": None, "be_lock": 0.0, "lock_steps": (), "giveback": None, "noise_rr": None, "noise_be_r": None, "noise_be_lock": 0.0}
 EXIT: dict = {}
 
 
@@ -69,6 +72,24 @@ def _pnl_parts(prem, p_in, booked, rest, x_spot, x_ts, x_bar, exp, d, t_in, qty,
         wavg += frac * p_out
     pnl -= 20 * 1.18                                    # the single buy order
     return pnl, wavg
+
+
+def _reversal(kind, sign, spot, risk, c, ema9, best_r):
+    """True when the chosen reversal signal fires on this finished 5-minute bar."""
+    if not kind or best_r < _ex("rev_after_R", 1.0):
+        return False
+    cl = float(c["close"])
+    if kind == "ema9":
+        return sign * (cl - ema9) < 0
+    if kind == "vwap":
+        return sign * (cl - float(c["vwap"])) < 0
+    if kind == "give50":
+        return sign * (cl - spot) / risk <= best_r * 0.5
+    if kind == "candle":
+        rng = float(c["high"] - c["low"])
+        body = sign * (cl - float(c["open"]))
+        return rng > 0 and body <= -0.6 * rng and rng >= 0.5 * float(c["atr"])
+    return False
 
 
 def _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock):
@@ -177,10 +198,14 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
     if strategy == "autopilot" and symbol in C.CONVICTION_SYMS and sizing != "one_lot" and conv_on:   # round 33 conviction sizing
         mtf = S.mtf_frames(candles)
         size_fn = lambda ts, sg: S.conviction_mult(S.mtf_score_at(mtf, ts + timedelta(minutes=C.CANDLE_MIN), sg))  # noqa: E731
+    run_skip = strategy == "autopilot" and _flag("big_run_skip")
+    runs = {}
     for n, (d, day) in enumerate(frames):
         if n == 0 or len(day) < 60 or (trade_from and d < trade_from):
             continue
         hist = pd.concat([g for _, g in frames[max(0, n - 15):n]])
+        if run_skip:
+            runs[d.isoformat()] = S.big_run(hist)
         sigma = S.noise_sigma(hist)
         if not sigma:
             continue
@@ -274,6 +299,10 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
             trades.append(t)
             busy_until = t["exit_time"]
     trades.sort(key=lambda t: (t["date"], t["entry_time"]))
+    if run_skip:                                       # round 42: no trade against a big 3-day run
+        n0 = len(trades)
+        trades = [t for t in trades if not S.against_big_run(runs.get(t["date"]), "CE" if t["side"] == "CALL" else "PE")]
+        skips["big_run"] = n0 - len(trades)
     live = None
     if strategy == "autopilot" and live_rules:
         alt = None
@@ -475,6 +504,8 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
         lots *= int(_ex("lots_x", 1))
         reason, x_spot, x_ts = None, None, None
         live_sl, reached, best_r, booked, rest = sl, False, 0.0, [], 1.0
+        rev = _ex("rev_exit", None)
+        ema9 = day["close"].ewm(span=9, adjust=False).mean() if rev == "ema9" else None
         be_r, be_lock = (_ex("be_r", C.CAM_BE_R), _ex("be_lock", 0.0)) if strat == "camarilla" else (_ex("noise_be_r", None), _ex("noise_be_lock", 0.0))
         for ts in idx[entry_i + 1:]:
             c = day.loc[ts]
@@ -492,6 +523,8 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
                     if rest <= 1e-9:
                         reason, x_spot = "All targets booked", booked[-1][1]
                 live_sl = _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock)
+                if reason is None and rev and _reversal(rev, sign, spot, risk, c, float(ema9.loc[ts]) if ema9 is not None else None, best_r):
+                    reason, x_spot = f"Reversal exit ({rev})", float(c["close"])
             if reason:
                 pass
             elif strat == "camarilla":
@@ -638,6 +671,8 @@ def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="ris
     lots *= int(_ex("lots_x", 1))
     live_sl, reason, x_spot, x_ts, x_bar, best_r = sl, None, None, None, None, 0.0
     booked, rest = [], 1.0
+    rev = _ex("rev_exit", None)
+    ema9 = day["close"].ewm(span=9, adjust=False).mean() if rev == "ema9" else None
     be_r, be_lock = _ex("be_r", C.TREND_BE_R), _ex("be_lock", 0.0)
     for ts in idx[entry_i + 1:]:
         c = day.loc[ts]
@@ -653,6 +688,8 @@ def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="ris
                 if rest <= 1e-9:
                     reason, x_spot = "All targets booked", booked[-1][1]
             live_sl = _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock)
+            if reason is None and rev and _reversal(rev, sign, spot, risk, c, float(ema9.loc[ts]) if ema9 is not None else None, best_r):
+                reason, x_spot = f"Reversal exit ({rev})", float(c["close"])
         if reason is None and end.time() >= C.SQUARE_OFF:
             reason, x_spot = "Square-off", float(c["close"])
         if reason:

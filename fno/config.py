@@ -198,7 +198,14 @@ CONVICTION_MIN_SCORE = 5
 CONVICTION_HIGH = 1.33
 CONVICTION_LOW = 0.67
 CONVICTION_STRATS = ("noise", "camarilla", "trend", "fib")
+# Round 42 "strong" confidence sizing (opt-in, Settings): all three indices, score 5-6 -> 2x risk, 3-4 -> 1x, 0-2 -> 0.5x.
+# Backtest from Rs 2 lakh: more profit (1-year median +95% vs +53%) but a fall of 30%+ in 58% of 1-year paths (vs 36%).
+STRONG_CONF = ((5, 2.0), (3, 1.0), (0, 0.5))
 AUTOPILOT_STRATEGIES = ["noise", "camarilla", "trend", "fib"]   # trend: round 23; fib: round 29 (paper autopilot)
+# Round 42: Autopilot skips a trade that bets AGAINST a big 3-day run (the 3-session close-to-close move before today is at
+# least 2 x the 14-day ATR, ~350-450 Nifty points now). Such trades lost in 2023-25 on all three indices (74 trades, -Rs 84k
+# per lot, shuffle p < 0.001) and in 2026 (18 trades, -Rs 14k). Daily data since 2007: big rallies tend to continue, not reverse.
+BIG_RUN_ATR = 2.0
 AUTOPILOT_RISK_PCT = 1.0            # lots = 1% of CURRENT equity / risk per lot (compounds as the account grows)
 AUTOPILOT_MAX_TRADE_RISK = 0.15     # a 1-lot floor is allowed only while one lot risks at most 15% of equity (round 20: 83% -> 46% of years dipping below half the account)
 AUTOPILOT_SMALL_ACCOUNT = 100_000   # below this equity the weekly loss cap is 15% (4% would block every trade after one loss)

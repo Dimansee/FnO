@@ -555,12 +555,21 @@ def place_signal(symbol, strike=None, auto=False, which=None):
             return False, why
         if mult < 1:
             pf = {**pf, "risk_pct": float(pf.get("risk_pct") or 1.0) * mult}
+        if pf.get("autopilot") and flag("big_run_skip") and ev["plan"].get("strategy") in ("noise", "camarilla", "trend", "fib"):
+            try:
+                run = S.big_run(S.session_frames(g["candles"], g["now"])[1])
+            except Exception:
+                run = None
+            if S.against_big_run(run, ev["plan"].get("opt")):
+                return False, (f"Skipped (round 42): this {('CALL' if ev['plan'].get('opt') == 'CE' else 'PUT')} bets against a "
+                               f"{'rally' if run['dir'] > 0 else 'fall'} of {abs(run['move3']):,.0f} points in 3 sessions "
+                               f"({run['k']:.1f}x the daily ATR). Such trades lost in every test period.")
     rp0 = float(pf.get("risk_pct") or 1.0)
     conv = _conviction(symbol, g, ev["plan"], pf)
     if conv:
         pf = {**pf, "risk_pct": rp0 * conv["mult"]}
         ev = {**ev, "plan": {**ev["plan"], "conviction": conv}}
-    jd = _ai_judge(symbol, g, ev["plan"], pf, which, m)
+    jd = None if pf.get("confidence") == "strong" else _ai_judge(symbol, g, ev["plan"], pf, which, m)   # strong mode was tested without the AI judge
     if jd:                                                          # round 39: on top of conviction, capped 0.5x - 1.6x
         lo, hi = AJ.meta()["clip"]
         jd["total_mult"] = round(min(max((conv["mult"] if conv else 1.0) * jd["mult"], lo), hi), 3)
@@ -625,6 +634,9 @@ def changes() -> list[dict]:
         removed = 0
     po = float(acct.get("capital_start") or 0) <= 0 and acct.get("capital_before")
     return [
+        {"id": "big_run_skip", "date": "2026-10-24", "title": "Skip trades against a big 3-day run (round 42)",
+         "what": f"Autopilot does not buy a CALL after a 3-session fall, or a PUT after a 3-session rally, of at least {C.BIG_RUN_ATR:g}x the daily ATR (~350-450 Nifty points). Those trades lost in 2023-25 on all three indices and in 2026.",
+         "before": "Every signal traded, whatever the last 3 days did.", "on": flag("big_run_skip"), "kind": "switch"},
         {"id": "ai_judge", "date": "2026-10-23", "title": "AI judge sizes Nifty signals (round 39)",
          "what": "A small AI model scores each Noise / Camarilla / trend / Fibonacci signal on Nifty from 64 market features of the signal candle. Autopilot risks 1.33x on the better half and 0.67x on the weaker half, on top of conviction sizing (total kept between 0.5x and 1.6x).",
          "before": "Only conviction sizing (1.33x / 0.67x by the 5-min / 15-min / 1-hour charts).", "on": flag("ai_judge"), "kind": "switch"},
@@ -653,7 +665,7 @@ def changes() -> list[dict]:
 
 
 def revert_change(cid: str, on: bool | None = None) -> str:
-    if cid in ("conviction", "limits_system_only", "small_otm", "ai_judge"):
+    if cid in ("conviction", "limits_system_only", "small_otm", "ai_judge", "big_run_skip"):
         set_flag(cid, bool(on))
         return ("Switched on again." if on else "Switched back to how it worked before.")
     if cid == "weekly_limit":
@@ -673,7 +685,8 @@ def revert_change(cid: str, on: bool | None = None) -> str:
 def _conviction(symbol, g, plan, pf) -> dict | None:
     """Round 33: Autopilot sizes Nifty / Sensex trades by the 5-min / 15-min / 1-hour agreement score (1.33x risk on 5-6 of 6,
     0.67x below). None when it does not apply or the score cannot be worked out (the trade then keeps its normal size)."""
-    if not pf.get("autopilot") or symbol not in C.CONVICTION_SYMS or (plan or {}).get("strategy") not in C.CONVICTION_STRATS or not flag("conviction"):
+    strong = pf.get("confidence") == "strong"
+    if not pf.get("autopilot") or (symbol not in C.CONVICTION_SYMS and not strong) or (plan or {}).get("strategy") not in C.CONVICTION_STRATS or not flag("conviction"):
         return None
     try:
         today, hist = S.session_frames(g["candles"], g["now"])
@@ -684,6 +697,8 @@ def _conviction(symbol, g, plan, pf) -> dict | None:
             c5.index = c5.index.tz_localize(None)
         side = 1 if plan.get("opt") == "CE" else -1
         sc = S.mtf_score_at(S.mtf_frames(c5), c5.index[-1] + pd.Timedelta(minutes=C.CANDLE_MIN), side)
+        if strong:                                                  # round 42 opt-in: 2x / 1x / 0.5x on every index
+            return {"score": int(sc), "mult": next(m for lo, m in C.STRONG_CONF if sc >= lo), "mode": "strong"}
         return {"score": int(sc), "mult": S.conviction_mult(sc)}
     except Exception:
         return None

@@ -603,6 +603,8 @@ def settings_post():
             cur["auto"] = bool(p["auto"])
         if "autopilot" in p:
             cur["autopilot"] = bool(p["autopilot"])
+        if p.get("confidence") in ("standard", "strong"):
+            cur["confidence"] = p["confidence"]
         if p.get("fills") in ("realistic", "ltp"):
             cur["fills"] = p["fills"]
         if "enforce_limits" in p:

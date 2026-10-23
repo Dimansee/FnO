@@ -837,6 +837,7 @@ details summary{cursor:pointer;font-size:13px}
       <div class="card" id="autoCard" style="border-left:3px solid var(--accent,#f2a93b)">
         <h3>🤖 Autopilot</h3>
         <label class="tog"><input type="checkbox" id="pfAutopilot"> Autopilot - the app decides everything itself and trades automatically</label>
+        <div style="margin-top:8px;max-width:520px"><label>Autopilot confidence sizing</label><select id="pfConf" style="width:100%"><option value="standard">Standard (tested rule): 1.33x / 0.67x on Nifty and Sensex</option><option value="strong">Strong (round 42): 2x / 1x / 0.5x on all indices - more profit, much deeper falls</option></select></div>
         <div class="row wrap" style="gap:10px;margin-top:10px;align-items:flex-end">
           <div><label>Weekly loss limit</label><select id="pfWeekly"><option value="auto">Tested rule: 4% of equity (15% below ₹1 lakh)</option><option value="custom">My own amount per week</option><option value="off">Off - never stop for the week</option></select></div>
           <div id="pfWeeklyRsBox"><label>Amount (₹)</label><input id="pfWeeklyRs" type="number" min="500" step="500" placeholder="e.g. 5000" style="width:130px"></div>
@@ -2696,7 +2697,7 @@ async function loadSettings() {
   $("#pfNoise").checked = (pf.strategies || []).includes("noise"); $("#pfCam").checked = (pf.strategies || []).includes("camarilla");
   $("#pfAI").checked = (pf.strategies || []).includes("ai"); $("#pfTrend").checked = (pf.strategies || []).includes("trend"); $("#pfFib").checked = (pf.strategies || []).includes("fib");
   $("#pfWeekly").value = pf.weekly_limit || "auto"; $("#pfWeeklyRs").value = pf.weekly_limit_rs || ""; weeklyUi();
-  $("#pfAutopilot").checked = !!pf.autopilot; $("#pfAuto").checked = !!pf.auto; $("#pfLimits").checked = !!pf.enforce_limits; $("#pfFills").value = pf.fills || "realistic";
+  $("#pfAutopilot").checked = !!pf.autopilot; $("#pfConf").value = pf.confidence || "standard"; $("#pfAuto").checked = !!pf.auto; $("#pfLimits").checked = !!pf.enforce_limits; $("#pfFills").value = pf.fills || "realistic";
   if (!PUSH_INIT) { PUSH_INIT = true; pushInit(); }
   $("#pfSyms").innerHTML = Object.keys(IDX_LABEL).map(x => `<label class="tog" style="margin-right:14px"><input type="checkbox" data-asym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${IDX_LABEL[x]}${x === "SENSEX" ? ' <span class="muted" style="font-size:11px">(Noise + trend-day + Fibonacci; real Sensex option prices recorded from 19 Oct 2026)</span>' : ""}</label>`).join("");
   $("#fiiIn").value = d.fii_manual ? d.fii_manual.value : "";
@@ -2743,7 +2744,7 @@ $("#pfSave").onclick = async () => {
   const strategies = [$("#pfNoise").checked && "noise", $("#pfCam").checked && "camarilla", $("#pfAI").checked && "ai", $("#pfTrend").checked && "trend", $("#pfFib").checked && "fib"].filter(Boolean);
   const auto_syms = [...document.querySelectorAll("[data-asym]")].filter(x => x.checked).map(x => x.dataset.asym);
   try {
-    await post("/api/settings", {prefs: {sizing: $("#pfSize").value, risk_pct: +$("#pfRisk").value, strategies, auto: $("#pfAuto").checked, autopilot: $("#pfAutopilot").checked, auto_syms, enforce_limits: $("#pfLimits").checked, fills: $("#pfFills").value, weekly_limit: $("#pfWeekly").value, weekly_limit_rs: +$("#pfWeeklyRs").value || 0}});
+    await post("/api/settings", {prefs: {sizing: $("#pfSize").value, risk_pct: +$("#pfRisk").value, strategies, auto: $("#pfAuto").checked, autopilot: $("#pfAutopilot").checked, confidence: $("#pfConf").value, auto_syms, enforce_limits: $("#pfLimits").checked, fills: $("#pfFills").value, weekly_limit: $("#pfWeekly").value, weekly_limit_rs: +$("#pfWeeklyRs").value || 0}});
     toast("Preferences saved"); loadSettings();
   } catch (e) { toast(e.message); }
 };

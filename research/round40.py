@@ -22,6 +22,8 @@ sys.path.insert(0, HERE); sys.path.insert(0, os.path.dirname(HERE))
 import numpy as np, pandas as pd
 import round25_harness as H
 from fno import backtest as B
+_f0 = B._flag
+B._flag = lambda n: False if n == "big_run_skip" else _f0(n)     # research runs measure the rules without the round 42 filter unless asked
 
 SYMS = ["NIFTY", "BANKNIFTY", "SENSEX"]
 V = {

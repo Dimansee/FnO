@@ -408,7 +408,7 @@ def _tick(markets, manage_only) -> dict:
             filled = GO.process(market)
         except Exception as e:
             filled = [{"error": f"orders: {str(e)[:80]}"}]
-        if market in ("US", "GOLD") and not MK.session_open(market) and not positions(market):
+        if market in ("US", "GOLD") and not MK.session_open(market, _now()) and not positions(market):
             out[market] = filled + [{"skipped": f"{'US market' if market == 'US' else 'Gold'} closed"}]
             continue
         for pos in positions(market):
@@ -416,7 +416,7 @@ def _tick(markets, manage_only) -> dict:
                 _manage(market, pos, specs.get(pos["strategy_id"]), rows)
             except Exception as e:
                 rows.append({"error": f"manage {pos['symbol']}: {str(e)[:100]}"})
-        if not manage_only and prefs(market)["auto"] and MK.session_open(market):
+        if not manage_only and prefs(market)["auto"] and MK.session_open(market, _now()):
             for spec in runners(market, specs)[0]:
                 for sym in spec["symbols"]:
                     if not MK.valid_symbol(market, sym):

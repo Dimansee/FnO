@@ -1,0 +1,2108 @@
+{
+ "confidence": {
+  "1 ITM": {
+   "train": {
+    "0-2 low": {
+     "n": 146,
+     "avg_pnl_lot": 33,
+     "avg_R": 0.158,
+     "win": 28.8
+    },
+    "3-4 mid": {
+     "n": 834,
+     "avg_pnl_lot": 94,
+     "avg_R": 0.137,
+     "win": 27.9
+    },
+    "5-6 high": {
+     "n": 811,
+     "avg_pnl_lot": 379,
+     "avg_R": 0.296,
+     "win": 32.4
+    }
+   },
+   "y2026": {
+    "0-2 low": {
+     "n": 61,
+     "avg_pnl_lot": -383,
+     "avg_R": -0.012,
+     "win": 23.0
+    },
+    "3-4 mid": {
+     "n": 205,
+     "avg_pnl_lot": 300,
+     "avg_R": 0.284,
+     "win": 35.6
+    },
+    "5-6 high": {
+     "n": 185,
+     "avg_pnl_lot": 407,
+     "avg_R": 0.345,
+     "win": 33.0
+    }
+   }
+  },
+  "1 OTM": {
+   "train": {
+    "0-2 low": {
+     "n": 146,
+     "avg_pnl_lot": 30,
+     "avg_R": 0.158,
+     "win": 29.5
+    },
+    "3-4 mid": {
+     "n": 834,
+     "avg_pnl_lot": 103,
+     "avg_R": 0.137,
+     "win": 27.8
+    },
+    "5-6 high": {
+     "n": 811,
+     "avg_pnl_lot": 334,
+     "avg_R": 0.296,
+     "win": 32.4
+    }
+   },
+   "y2026": {
+    "0-2 low": {
+     "n": 61,
+     "avg_pnl_lot": -350,
+     "avg_R": -0.012,
+     "win": 23.0
+    },
+    "3-4 mid": {
+     "n": 205,
+     "avg_pnl_lot": 250,
+     "avg_R": 0.284,
+     "win": 35.1
+    },
+    "5-6 high": {
+     "n": 185,
+     "avg_pnl_lot": 343,
+     "avg_R": 0.345,
+     "win": 33.0
+    }
+   }
+  }
+ },
+ "big_runs": {
+  "1 ITM": {
+   "train": {
+    "normal days": {
+     "n": 1381,
+     "avg_pnl_lot": 320,
+     "avg_R": 0.249,
+     "win": 31.0,
+     "net": 441937
+    },
+    "big run, trade WITH it": {
+     "n": 268,
+     "avg_pnl_lot": 74,
+     "avg_R": 0.179,
+     "win": 28.0,
+     "net": 20064
+    },
+    "big run, trade AGAINST it": {
+     "n": 137,
+     "avg_pnl_lot": -499,
+     "avg_R": -0.106,
+     "win": 24.1,
+     "net": -68457
+    }
+   },
+   "y2026": {
+    "normal days": {
+     "n": 359,
+     "avg_pnl_lot": 348,
+     "avg_R": 0.32,
+     "win": 34.0,
+     "net": 125198
+    },
+    "big run, trade WITH it": {
+     "n": 54,
+     "avg_pnl_lot": -125,
+     "avg_R": 0.016,
+     "win": 22.2,
+     "net": -6750
+    },
+    "big run, trade AGAINST it": {
+     "n": 38,
+     "avg_pnl_lot": -125,
+     "avg_R": 0.151,
+     "win": 36.8,
+     "net": -4775
+    }
+   }
+  },
+  "1 OTM": {
+   "train": {
+    "normal days": {
+     "n": 1381,
+     "avg_pnl_lot": 291,
+     "avg_R": 0.249,
+     "win": 30.9,
+     "net": 402506
+    },
+    "big run, trade WITH it": {
+     "n": 268,
+     "avg_pnl_lot": 74,
+     "avg_R": 0.179,
+     "win": 28.4,
+     "net": 19977
+    },
+    "big run, trade AGAINST it": {
+     "n": 137,
+     "avg_pnl_lot": -429,
+     "avg_R": -0.106,
+     "win": 24.1,
+     "net": -58871
+    }
+   },
+   "y2026": {
+    "normal days": {
+     "n": 359,
+     "avg_pnl_lot": 287,
+     "avg_R": 0.32,
+     "win": 33.4,
+     "net": 103160
+    },
+    "big run, trade WITH it": {
+     "n": 54,
+     "avg_pnl_lot": -72,
+     "avg_R": 0.016,
+     "win": 24.1,
+     "net": -3901
+    },
+    "big run, trade AGAINST it": {
+     "n": 38,
+     "avg_pnl_lot": -151,
+     "avg_R": 0.151,
+     "win": 36.8,
+     "net": -5739
+    }
+   }
+  }
+ },
+ "replays": {
+  "1 ITM k=0.03": {
+   "A fixed 1 lot, no compounding": {
+    "trades": 2146,
+    "final": 637391,
+    "multiple": 3.19,
+    "cagr_pct": 36.0,
+    "max_dd_pct": -38.1,
+    "worst_month": -41905,
+    "losing_months": 20,
+    "months": 46,
+    "avg_slip_extra_pct": 0.041,
+    "max_lots": 1,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 195076,
+      "ret_pct": -2.5,
+      "max_lots": 1
+     },
+     "2024": {
+      "start": 195076,
+      "end": 388023,
+      "ret_pct": 98.9,
+      "max_lots": 1
+     },
+     "2025": {
+      "start": 388023,
+      "end": 530733,
+      "ret_pct": 36.8,
+      "max_lots": 1
+     },
+     "2026": {
+      "start": 530733,
+      "end": 637391,
+      "ret_pct": 20.1,
+      "max_lots": 1
+     }
+    }
+   },
+   "B fixed 3 lots, no compounding": {
+    "trades": 1916,
+    "final": 1674788,
+    "multiple": 8.37,
+    "cagr_pct": 75.8,
+    "max_dd_pct": -31.3,
+    "worst_month": -110470,
+    "losing_months": 17,
+    "months": 46,
+    "avg_slip_extra_pct": 0.072,
+    "max_lots": 3,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 263320,
+      "ret_pct": 31.7,
+      "max_lots": 3
+     },
+     "2024": {
+      "start": 263320,
+      "end": 978259,
+      "ret_pct": 271.5,
+      "max_lots": 3
+     },
+     "2025": {
+      "start": 978259,
+      "end": 1304893,
+      "ret_pct": 33.4,
+      "max_lots": 3
+     },
+     "2026": {
+      "start": 1304893,
+      "end": 1674788,
+      "ret_pct": 28.3,
+      "max_lots": 3
+     }
+    }
+   },
+   "C compounding, 1% risk (no confidence)": {
+    "trades": 1934,
+    "final": 1177920,
+    "multiple": 5.89,
+    "cagr_pct": 60.1,
+    "max_dd_pct": -36.6,
+    "worst_month": -57078,
+    "losing_months": 22,
+    "months": 46,
+    "avg_slip_extra_pct": 0.052,
+    "max_lots": 18,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 202188,
+      "ret_pct": 1.1,
+      "max_lots": 5
+     },
+     "2024": {
+      "start": 202188,
+      "end": 365784,
+      "ret_pct": 80.9,
+      "max_lots": 5
+     },
+     "2025": {
+      "start": 365784,
+      "end": 461673,
+      "ret_pct": 26.2,
+      "max_lots": 7
+     },
+     "2026": {
+      "start": 461673,
+      "end": 1177920,
+      "ret_pct": 155.1,
+      "max_lots": 18
+     }
+    }
+   },
+   "D compounding, 1% risk + live confidence (1.33x / 0.67x)": {
+    "trades": 1921,
+    "final": 3115759,
+    "multiple": 15.58,
+    "cagr_pct": 107.3,
+    "max_dd_pct": -32.8,
+    "worst_month": -222884,
+    "losing_months": 17,
+    "months": 46,
+    "avg_slip_extra_pct": 0.074,
+    "max_lots": 59,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 256666,
+      "ret_pct": 28.3,
+      "max_lots": 8
+     },
+     "2024": {
+      "start": 256666,
+      "end": 721672,
+      "ret_pct": 181.2,
+      "max_lots": 12
+     },
+     "2025": {
+      "start": 721672,
+      "end": 1040044,
+      "ret_pct": 44.1,
+      "max_lots": 15
+     },
+     "2026": {
+      "start": 1040044,
+      "end": 3115759,
+      "ret_pct": 199.6,
+      "max_lots": 59
+     }
+    }
+   },
+   "E compounding, 1% risk + strong confidence (2x / 1x / 0.5x)": {
+    "trades": 1598,
+    "final": 10906936,
+    "multiple": 54.53,
+    "cagr_pct": 189.3,
+    "max_dd_pct": -39.7,
+    "worst_month": -693800,
+    "losing_months": 18,
+    "months": 46,
+    "avg_slip_extra_pct": 0.128,
+    "max_lots": 258,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 456706,
+      "ret_pct": 128.4,
+      "max_lots": 14
+     },
+     "2024": {
+      "start": 456706,
+      "end": 1277147,
+      "ret_pct": 179.6,
+      "max_lots": 24
+     },
+     "2025": {
+      "start": 1277147,
+      "end": 2575292,
+      "ret_pct": 101.6,
+      "max_lots": 56
+     },
+     "2026": {
+      "start": 2575292,
+      "end": 10906936,
+      "ret_pct": 323.5,
+      "max_lots": 258
+     }
+    }
+   },
+   "F compounding, 2% risk + live confidence": {
+    "trades": 1384,
+    "final": 44193088,
+    "multiple": 220.97,
+    "cagr_pct": 319.1,
+    "max_dd_pct": -45.9,
+    "worst_month": -1997432,
+    "losing_months": 18,
+    "months": 46,
+    "avg_slip_extra_pct": 0.233,
+    "max_lots": 1158,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 675946,
+      "ret_pct": 238.0,
+      "max_lots": 27
+     },
+     "2024": {
+      "start": 675946,
+      "end": 2869139,
+      "ret_pct": 324.5,
+      "max_lots": 80
+     },
+     "2025": {
+      "start": 2869139,
+      "end": 7315353,
+      "ret_pct": 155.0,
+      "max_lots": 194
+     },
+     "2026": {
+      "start": 7315353,
+      "end": 44193088,
+      "ret_pct": 504.1,
+      "max_lots": 1158
+     }
+    }
+   },
+   "G compounding, 3% risk + live confidence": {
+    "trades": 1123,
+    "final": 41524938,
+    "multiple": 207.62,
+    "cagr_pct": 312.6,
+    "max_dd_pct": -74.3,
+    "worst_month": -819401,
+    "losing_months": 20,
+    "months": 46,
+    "avg_slip_extra_pct": 0.225,
+    "max_lots": 959,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 332332,
+      "ret_pct": 66.2,
+      "max_lots": 20
+     },
+     "2024": {
+      "start": 332332,
+      "end": 2179769,
+      "ret_pct": 555.9,
+      "max_lots": 94
+     },
+     "2025": {
+      "start": 2179769,
+      "end": 1660964,
+      "ret_pct": -23.8,
+      "max_lots": 118
+     },
+     "2026": {
+      "start": 1660964,
+      "end": 41524938,
+      "ret_pct": 2400.1,
+      "max_lots": 959
+     }
+    }
+   },
+   "H 1% risk + live confidence, NO compounding (size from Rs 2L)": {
+    "trades": 2157,
+    "final": 671647,
+    "multiple": 3.36,
+    "cagr_pct": 37.9,
+    "max_dd_pct": -28.6,
+    "worst_month": -41312,
+    "losing_months": 21,
+    "months": 46,
+    "avg_slip_extra_pct": 0.042,
+    "max_lots": 5,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 238229,
+      "ret_pct": 19.1,
+      "max_lots": 5
+     },
+     "2024": {
+      "start": 238229,
+      "end": 426459,
+      "ret_pct": 79.0,
+      "max_lots": 3
+     },
+     "2025": {
+      "start": 426459,
+      "end": 564290,
+      "ret_pct": 32.3,
+      "max_lots": 2
+     },
+     "2026": {
+      "start": 564290,
+      "end": 671647,
+      "ret_pct": 19.0,
+      "max_lots": 5
+     }
+    }
+   },
+   "D1 = D, capped at one exchange order per trade": {
+    "trades": 1921,
+    "final": 3118257,
+    "multiple": 15.59,
+    "cagr_pct": 107.3,
+    "max_dd_pct": -32.8,
+    "worst_month": -222884,
+    "losing_months": 17,
+    "months": 46,
+    "avg_slip_extra_pct": 0.074,
+    "max_lots": 54,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 256666,
+      "ret_pct": 28.3,
+      "max_lots": 8
+     },
+     "2024": {
+      "start": 256666,
+      "end": 721672,
+      "ret_pct": 181.2,
+      "max_lots": 12
+     },
+     "2025": {
+      "start": 721672,
+      "end": 1040044,
+      "ret_pct": 44.1,
+      "max_lots": 15
+     },
+     "2026": {
+      "start": 1040044,
+      "end": 3118257,
+      "ret_pct": 199.8,
+      "max_lots": 54
+     }
+    }
+   },
+   "E1 = E, capped at one exchange order per trade": {
+    "trades": 1624,
+    "final": 8805687,
+    "multiple": 44.03,
+    "cagr_pct": 173.5,
+    "max_dd_pct": -39.7,
+    "worst_month": -539819,
+    "losing_months": 19,
+    "months": 46,
+    "avg_slip_extra_pct": 0.129,
+    "max_lots": 54,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 456706,
+      "ret_pct": 128.4,
+      "max_lots": 14
+     },
+     "2024": {
+      "start": 456706,
+      "end": 1277147,
+      "ret_pct": 179.6,
+      "max_lots": 24
+     },
+     "2025": {
+      "start": 1277147,
+      "end": 2577005,
+      "ret_pct": 101.8,
+      "max_lots": 50
+     },
+     "2026": {
+      "start": 2577005,
+      "end": 8805687,
+      "ret_pct": 241.7,
+      "max_lots": 54
+     }
+    }
+   },
+   "F1 = F (2% risk), capped at one exchange order": {
+    "trades": 1541,
+    "final": 15758240,
+    "multiple": 78.79,
+    "cagr_pct": 219.3,
+    "max_dd_pct": -43.0,
+    "worst_month": -1643351,
+    "losing_months": 16,
+    "months": 46,
+    "avg_slip_extra_pct": 0.216,
+    "max_lots": 54,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 675946,
+      "ret_pct": 238.0,
+      "max_lots": 27
+     },
+     "2024": {
+      "start": 675946,
+      "end": 2998838,
+      "ret_pct": 343.7,
+      "max_lots": 54
+     },
+     "2025": {
+      "start": 2998838,
+      "end": 7758855,
+      "ret_pct": 158.7,
+      "max_lots": 54
+     },
+     "2026": {
+      "start": 7758855,
+      "end": 15758240,
+      "ret_pct": 103.1,
+      "max_lots": 54
+     }
+    }
+   },
+   "D26 = D, starting Rs 2L on 1 Jan 2026 (unseen year only)": {
+    "trades": 403,
+    "final": 462585,
+    "multiple": 2.31,
+    "cagr_pct": 193.8,
+    "max_dd_pct": -17.8,
+    "worst_month": -25440,
+    "losing_months": 3,
+    "months": 10,
+    "avg_slip_extra_pct": 0.046,
+    "max_lots": 9,
+    "yearly": {
+     "2026": {
+      "start": 200000,
+      "end": 462585,
+      "ret_pct": 131.3,
+      "max_lots": 9
+     }
+    }
+   },
+   "E26 = E, starting Rs 2L on 1 Jan 2026": {
+    "trades": 337,
+    "final": 601515,
+    "multiple": 3.01,
+    "cagr_pct": 313.8,
+    "max_dd_pct": -21.9,
+    "worst_month": -31710,
+    "losing_months": 2,
+    "months": 10,
+    "avg_slip_extra_pct": 0.053,
+    "max_lots": 14,
+    "yearly": {
+     "2026": {
+      "start": 200000,
+      "end": 601515,
+      "ret_pct": 200.8,
+      "max_lots": 14
+     }
+    }
+   },
+   "C26 = C, starting Rs 2L on 1 Jan 2026": {
+    "trades": 393,
+    "final": 347579,
+    "multiple": 1.74,
+    "cagr_pct": 104.0,
+    "max_dd_pct": -16.3,
+    "worst_month": -23056,
+    "losing_months": 3,
+    "months": 10,
+    "avg_slip_extra_pct": 0.045,
+    "max_lots": 6,
+    "yearly": {
+     "2026": {
+      "start": 200000,
+      "end": 347579,
+      "ret_pct": 73.8,
+      "max_lots": 6
+     }
+    }
+   }
+  },
+  "1 ITM k=0.06": {
+   "A fixed 1 lot, no compounding": {
+    "trades": 2142,
+    "final": 613802,
+    "multiple": 3.07,
+    "cagr_pct": 34.7,
+    "max_dd_pct": -38.6,
+    "worst_month": -42426,
+    "losing_months": 21,
+    "months": 46,
+    "avg_slip_extra_pct": 0.082,
+    "max_lots": 1,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 193270,
+      "ret_pct": -3.4,
+      "max_lots": 1
+     },
+     "2024": {
+      "start": 193270,
+      "end": 379904,
+      "ret_pct": 96.6,
+      "max_lots": 1
+     },
+     "2025": {
+      "start": 379904,
+      "end": 514164,
+      "ret_pct": 35.3,
+      "max_lots": 1
+     },
+     "2026": {
+      "start": 514164,
+      "end": 613802,
+      "ret_pct": 19.4,
+      "max_lots": 1
+     }
+    }
+   },
+   "B fixed 3 lots, no compounding": {
+    "trades": 1882,
+    "final": 1469407,
+    "multiple": 7.35,
+    "cagr_pct": 69.8,
+    "max_dd_pct": -32.1,
+    "worst_month": -143308,
+    "losing_months": 18,
+    "months": 46,
+    "avg_slip_extra_pct": 0.144,
+    "max_lots": 3,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 249724,
+      "ret_pct": 24.9,
+      "max_lots": 3
+     },
+     "2024": {
+      "start": 249724,
+      "end": 793482,
+      "ret_pct": 217.7,
+      "max_lots": 3
+     },
+     "2025": {
+      "start": 793482,
+      "end": 1104912,
+      "ret_pct": 39.2,
+      "max_lots": 3
+     },
+     "2026": {
+      "start": 1104912,
+      "end": 1469407,
+      "ret_pct": 33.0,
+      "max_lots": 3
+     }
+    }
+   },
+   "C compounding, 1% risk (no confidence)": {
+    "trades": 1922,
+    "final": 1130441,
+    "multiple": 5.65,
+    "cagr_pct": 58.4,
+    "max_dd_pct": -36.9,
+    "worst_month": -54740,
+    "losing_months": 21,
+    "months": 46,
+    "avg_slip_extra_pct": 0.103,
+    "max_lots": 17,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 199568,
+      "ret_pct": -0.2,
+      "max_lots": 5
+     },
+     "2024": {
+      "start": 199568,
+      "end": 369665,
+      "ret_pct": 85.2,
+      "max_lots": 5
+     },
+     "2025": {
+      "start": 369665,
+      "end": 447443,
+      "ret_pct": 21.0,
+      "max_lots": 7
+     },
+     "2026": {
+      "start": 447443,
+      "end": 1130441,
+      "ret_pct": 152.6,
+      "max_lots": 17
+     }
+    }
+   },
+   "D compounding, 1% risk + live confidence (1.33x / 0.67x)": {
+    "trades": 1906,
+    "final": 2744070,
+    "multiple": 13.72,
+    "cagr_pct": 100.4,
+    "max_dd_pct": -32.7,
+    "worst_month": -216183,
+    "losing_months": 18,
+    "months": 46,
+    "avg_slip_extra_pct": 0.144,
+    "max_lots": 52,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 256549,
+      "ret_pct": 28.3,
+      "max_lots": 8
+     },
+     "2024": {
+      "start": 256549,
+      "end": 698235,
+      "ret_pct": 172.2,
+      "max_lots": 11
+     },
+     "2025": {
+      "start": 698235,
+      "end": 990650,
+      "ret_pct": 41.9,
+      "max_lots": 15
+     },
+     "2026": {
+      "start": 990650,
+      "end": 2744070,
+      "ret_pct": 177.0,
+      "max_lots": 52
+     }
+    }
+   },
+   "E compounding, 1% risk + strong confidence (2x / 1x / 0.5x)": {
+    "trades": 1608,
+    "final": 5656695,
+    "multiple": 28.28,
+    "cagr_pct": 143.2,
+    "max_dd_pct": -45.2,
+    "worst_month": -394621,
+    "losing_months": 19,
+    "months": 46,
+    "avg_slip_extra_pct": 0.21,
+    "max_lots": 138,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 436361,
+      "ret_pct": 118.2,
+      "max_lots": 14
+     },
+     "2024": {
+      "start": 436361,
+      "end": 820148,
+      "ret_pct": 88.0,
+      "max_lots": 21
+     },
+     "2025": {
+      "start": 820148,
+      "end": 1490150,
+      "ret_pct": 81.7,
+      "max_lots": 34
+     },
+     "2026": {
+      "start": 1490150,
+      "end": 5656695,
+      "ret_pct": 279.6,
+      "max_lots": 138
+     }
+    }
+   },
+   "F compounding, 2% risk + live confidence": {
+    "trades": 1334,
+    "final": 23481468,
+    "multiple": 117.41,
+    "cagr_pct": 255.0,
+    "max_dd_pct": -57.5,
+    "worst_month": -1203139,
+    "losing_months": 20,
+    "months": 46,
+    "avg_slip_extra_pct": 0.404,
+    "max_lots": 616,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 638659,
+      "ret_pct": 219.3,
+      "max_lots": 26
+     },
+     "2024": {
+      "start": 638659,
+      "end": 2117906,
+      "ret_pct": 231.6,
+      "max_lots": 74
+     },
+     "2025": {
+      "start": 2117906,
+      "end": 3953914,
+      "ret_pct": 86.7,
+      "max_lots": 137
+     },
+     "2026": {
+      "start": 3953914,
+      "end": 23481468,
+      "ret_pct": 493.9,
+      "max_lots": 616
+     }
+    }
+   },
+   "G compounding, 3% risk + live confidence": {
+    "trades": 1045,
+    "final": 3079067,
+    "multiple": 15.4,
+    "cagr_pct": 107.1,
+    "max_dd_pct": -76.7,
+    "worst_month": -700558,
+    "losing_months": 22,
+    "months": 46,
+    "avg_slip_extra_pct": 0.368,
+    "max_lots": 119,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 319965,
+      "ret_pct": 60.0,
+      "max_lots": 19
+     },
+     "2024": {
+      "start": 319965,
+      "end": 1778190,
+      "ret_pct": 455.7,
+      "max_lots": 83
+     },
+     "2025": {
+      "start": 1778190,
+      "end": 1215998,
+      "ret_pct": -31.6,
+      "max_lots": 93
+     },
+     "2026": {
+      "start": 1215998,
+      "end": 3079067,
+      "ret_pct": 153.2,
+      "max_lots": 119
+     }
+    }
+   },
+   "H 1% risk + live confidence, NO compounding (size from Rs 2L)": {
+    "trades": 2144,
+    "final": 639391,
+    "multiple": 3.2,
+    "cagr_pct": 36.1,
+    "max_dd_pct": -35.4,
+    "worst_month": -42343,
+    "losing_months": 21,
+    "months": 46,
+    "avg_slip_extra_pct": 0.083,
+    "max_lots": 5,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 215235,
+      "ret_pct": 7.6,
+      "max_lots": 5
+     },
+     "2024": {
+      "start": 215235,
+      "end": 406253,
+      "ret_pct": 88.7,
+      "max_lots": 3
+     },
+     "2025": {
+      "start": 406253,
+      "end": 539313,
+      "ret_pct": 32.8,
+      "max_lots": 2
+     },
+     "2026": {
+      "start": 539313,
+      "end": 639391,
+      "ret_pct": 18.6,
+      "max_lots": 5
+     }
+    }
+   },
+   "D1 = D, capped at one exchange order per trade": {
+    "trades": 1906,
+    "final": 2744070,
+    "multiple": 13.72,
+    "cagr_pct": 100.4,
+    "max_dd_pct": -32.7,
+    "worst_month": -216183,
+    "losing_months": 18,
+    "months": 46,
+    "avg_slip_extra_pct": 0.144,
+    "max_lots": 52,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 256549,
+      "ret_pct": 28.3,
+      "max_lots": 8
+     },
+     "2024": {
+      "start": 256549,
+      "end": 698235,
+      "ret_pct": 172.2,
+      "max_lots": 11
+     },
+     "2025": {
+      "start": 698235,
+      "end": 990650,
+      "ret_pct": 41.9,
+      "max_lots": 15
+     },
+     "2026": {
+      "start": 990650,
+      "end": 2744070,
+      "ret_pct": 177.0,
+      "max_lots": 52
+     }
+    }
+   },
+   "E1 = E, capped at one exchange order per trade": {
+    "trades": 1612,
+    "final": 5684728,
+    "multiple": 28.42,
+    "cagr_pct": 143.5,
+    "max_dd_pct": -45.2,
+    "worst_month": -339362,
+    "losing_months": 19,
+    "months": 46,
+    "avg_slip_extra_pct": 0.21,
+    "max_lots": 54,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 436361,
+      "ret_pct": 118.2,
+      "max_lots": 14
+     },
+     "2024": {
+      "start": 436361,
+      "end": 820148,
+      "ret_pct": 88.0,
+      "max_lots": 21
+     },
+     "2025": {
+      "start": 820148,
+      "end": 1490150,
+      "ret_pct": 81.7,
+      "max_lots": 34
+     },
+     "2026": {
+      "start": 1490150,
+      "end": 5684728,
+      "ret_pct": 281.5,
+      "max_lots": 54
+     }
+    }
+   },
+   "F1 = F (2% risk), capped at one exchange order": {
+    "trades": 1434,
+    "final": 12502908,
+    "multiple": 62.51,
+    "cagr_pct": 200.2,
+    "max_dd_pct": -46.3,
+    "worst_month": -1085564,
+    "losing_months": 21,
+    "months": 46,
+    "avg_slip_extra_pct": 0.399,
+    "max_lots": 54,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 638659,
+      "ret_pct": 219.3,
+      "max_lots": 26
+     },
+     "2024": {
+      "start": 638659,
+      "end": 2135908,
+      "ret_pct": 234.4,
+      "max_lots": 54
+     },
+     "2025": {
+      "start": 2135908,
+      "end": 5263081,
+      "ret_pct": 146.4,
+      "max_lots": 54
+     },
+     "2026": {
+      "start": 5263081,
+      "end": 12502908,
+      "ret_pct": 137.6,
+      "max_lots": 54
+     }
+    }
+   },
+   "D26 = D, starting Rs 2L on 1 Jan 2026 (unseen year only)": {
+    "trades": 394,
+    "final": 449331,
+    "multiple": 2.25,
+    "cagr_pct": 183.0,
+    "max_dd_pct": -17.3,
+    "worst_month": -24795,
+    "losing_months": 3,
+    "months": 10,
+    "avg_slip_extra_pct": 0.091,
+    "max_lots": 9,
+    "yearly": {
+     "2026": {
+      "start": 200000,
+      "end": 449331,
+      "ret_pct": 124.7,
+      "max_lots": 9
+     }
+    }
+   },
+   "E26 = E, starting Rs 2L on 1 Jan 2026": {
+    "trades": 331,
+    "final": 531453,
+    "multiple": 2.66,
+    "cagr_pct": 252.7,
+    "max_dd_pct": -26.3,
+    "worst_month": -28274,
+    "losing_months": 4,
+    "months": 10,
+    "avg_slip_extra_pct": 0.105,
+    "max_lots": 14,
+    "yearly": {
+     "2026": {
+      "start": 200000,
+      "end": 531453,
+      "ret_pct": 165.7,
+      "max_lots": 14
+     }
+    }
+   },
+   "C26 = C, starting Rs 2L on 1 Jan 2026": {
+    "trades": 387,
+    "final": 319915,
+    "multiple": 1.6,
+    "cagr_pct": 83.7,
+    "max_dd_pct": -17.3,
+    "worst_month": -23356,
+    "losing_months": 3,
+    "months": 10,
+    "avg_slip_extra_pct": 0.089,
+    "max_lots": 5,
+    "yearly": {
+     "2026": {
+      "start": 200000,
+      "end": 319915,
+      "ret_pct": 60.0,
+      "max_lots": 5
+     }
+    }
+   }
+  },
+  "1 OTM k=0.03": {
+   "A fixed 1 lot, no compounding": {
+    "trades": 2192,
+    "final": 601432,
+    "multiple": 3.01,
+    "cagr_pct": 33.9,
+    "max_dd_pct": -29.9,
+    "worst_month": -35302,
+    "losing_months": 21,
+    "months": 46,
+    "avg_slip_extra_pct": 0.041,
+    "max_lots": 1,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 207356,
+      "ret_pct": 3.7,
+      "max_lots": 1
+     },
+     "2024": {
+      "start": 207356,
+      "end": 393334,
+      "ret_pct": 89.7,
+      "max_lots": 1
+     },
+     "2025": {
+      "start": 393334,
+      "end": 513887,
+      "ret_pct": 30.6,
+      "max_lots": 1
+     },
+     "2026": {
+      "start": 513887,
+      "end": 601432,
+      "ret_pct": 17.0,
+      "max_lots": 1
+     }
+    }
+   },
+   "B fixed 3 lots, no compounding": {
+    "trades": 2076,
+    "final": 1654045,
+    "multiple": 8.27,
+    "cagr_pct": 75.2,
+    "max_dd_pct": -33.4,
+    "worst_month": -101922,
+    "losing_months": 19,
+    "months": 46,
+    "avg_slip_extra_pct": 0.071,
+    "max_lots": 3,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 315815,
+      "ret_pct": 57.9,
+      "max_lots": 3
+     },
+     "2024": {
+      "start": 315815,
+      "end": 952424,
+      "ret_pct": 201.6,
+      "max_lots": 3
+     },
+     "2025": {
+      "start": 952424,
+      "end": 1361937,
+      "ret_pct": 43.0,
+      "max_lots": 3
+     },
+     "2026": {
+      "start": 1361937,
+      "end": 1654045,
+      "ret_pct": 21.4,
+      "max_lots": 3
+     }
+    }
+   },
+   "C compounding, 1% risk (no confidence)": {
+    "trades": 1897,
+    "final": 2494515,
+    "multiple": 12.47,
+    "cagr_pct": 95.5,
+    "max_dd_pct": -33.0,
+    "worst_month": -161122,
+    "losing_months": 18,
+    "months": 46,
+    "avg_slip_extra_pct": 0.072,
+    "max_lots": 43,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 236793,
+      "ret_pct": 18.4,
+      "max_lots": 8
+     },
+     "2024": {
+      "start": 236793,
+      "end": 558519,
+      "ret_pct": 135.9,
+      "max_lots": 8
+     },
+     "2025": {
+      "start": 558519,
+      "end": 835266,
+      "ret_pct": 49.6,
+      "max_lots": 15
+     },
+     "2026": {
+      "start": 835266,
+      "end": 2494515,
+      "ret_pct": 198.6,
+      "max_lots": 43
+     }
+    }
+   },
+   "D compounding, 1% risk + live confidence (1.33x / 0.67x)": {
+    "trades": 1906,
+    "final": 3450146,
+    "multiple": 17.25,
+    "cagr_pct": 113.0,
+    "max_dd_pct": -30.7,
+    "worst_month": -236072,
+    "losing_months": 18,
+    "months": 46,
+    "avg_slip_extra_pct": 0.08,
+    "max_lots": 71,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 293085,
+      "ret_pct": 46.5,
+      "max_lots": 12
+     },
+     "2024": {
+      "start": 293085,
+      "end": 653975,
+      "ret_pct": 123.1,
+      "max_lots": 13
+     },
+     "2025": {
+      "start": 653975,
+      "end": 1051548,
+      "ret_pct": 60.8,
+      "max_lots": 18
+     },
+     "2026": {
+      "start": 1051548,
+      "end": 3450146,
+      "ret_pct": 228.1,
+      "max_lots": 71
+     }
+    }
+   },
+   "E compounding, 1% risk + strong confidence (2x / 1x / 0.5x)": {
+    "trades": 1594,
+    "final": 19825189,
+    "multiple": 99.13,
+    "cagr_pct": 238.8,
+    "max_dd_pct": -40.5,
+    "worst_month": -1200064,
+    "losing_months": 19,
+    "months": 46,
+    "avg_slip_extra_pct": 0.171,
+    "max_lots": 493,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 561499,
+      "ret_pct": 180.7,
+      "max_lots": 26
+     },
+     "2024": {
+      "start": 561499,
+      "end": 1957339,
+      "ret_pct": 248.6,
+      "max_lots": 51
+     },
+     "2025": {
+      "start": 1957339,
+      "end": 4237067,
+      "ret_pct": 116.5,
+      "max_lots": 106
+     },
+     "2026": {
+      "start": 4237067,
+      "end": 19825189,
+      "ret_pct": 367.9,
+      "max_lots": 493
+     }
+    }
+   },
+   "F compounding, 2% risk + live confidence": {
+    "trades": 1387,
+    "final": 84051856,
+    "multiple": 420.26,
+    "cagr_pct": 397.1,
+    "max_dd_pct": -41.8,
+    "worst_month": -4396332,
+    "losing_months": 19,
+    "months": 46,
+    "avg_slip_extra_pct": 0.297,
+    "max_lots": 2409,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 849110,
+      "ret_pct": 324.6,
+      "max_lots": 48
+     },
+     "2024": {
+      "start": 849110,
+      "end": 4247119,
+      "ret_pct": 400.2,
+      "max_lots": 152
+     },
+     "2025": {
+      "start": 4247119,
+      "end": 13768254,
+      "ret_pct": 224.2,
+      "max_lots": 450
+     },
+     "2026": {
+      "start": 13768254,
+      "end": 84051856,
+      "ret_pct": 510.5,
+      "max_lots": 2409
+     }
+    }
+   },
+   "G compounding, 3% risk + live confidence": {
+    "trades": 1176,
+    "final": 232261512,
+    "multiple": 1161.31,
+    "cagr_pct": 552.8,
+    "max_dd_pct": -53.7,
+    "worst_month": -9883834,
+    "losing_months": 19,
+    "months": 46,
+    "avg_slip_extra_pct": 0.404,
+    "max_lots": 2409,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 523853,
+      "ret_pct": 161.9,
+      "max_lots": 51
+     },
+     "2024": {
+      "start": 523853,
+      "end": 4163125,
+      "ret_pct": 694.7,
+      "max_lots": 220
+     },
+     "2025": {
+      "start": 4163125,
+      "end": 21480640,
+      "ret_pct": 416.0,
+      "max_lots": 1335
+     },
+     "2026": {
+      "start": 21480640,
+      "end": 232261512,
+      "ret_pct": 981.3,
+      "max_lots": 2409
+     }
+    }
+   },
+   "H 1% risk + live confidence, NO compounding (size from Rs 2L)": {
+    "trades": 2183,
+    "final": 683891,
+    "multiple": 3.42,
+    "cagr_pct": 38.6,
+    "max_dd_pct": -31.6,
+    "worst_month": -35942,
+    "losing_months": 20,
+    "months": 46,
+    "avg_slip_extra_pct": 0.043,
+    "max_lots": 7,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 252623,
+      "ret_pct": 26.3,
+      "max_lots": 7
+     },
+     "2024": {
+      "start": 252623,
+      "end": 434999,
+      "ret_pct": 72.2,
+      "max_lots": 4
+     },
+     "2025": {
+      "start": 434999,
+      "end": 568760,
+      "ret_pct": 30.7,
+      "max_lots": 3
+     },
+     "2026": {
+      "start": 568760,
+      "end": 683891,
+      "ret_pct": 20.2,
+      "max_lots": 6
+     }
+    }
+   },
+   "D1 = D, capped at one exchange order per trade": {
+    "trades": 1911,
+    "final": 3452752,
+    "multiple": 17.26,
+    "cagr_pct": 113.0,
+    "max_dd_pct": -30.7,
+    "worst_month": -236072,
+    "losing_months": 18,
+    "months": 46,
+    "avg_slip_extra_pct": 0.08,
+    "max_lots": 54,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 293085,
+      "ret_pct": 46.5,
+      "max_lots": 12
+     },
+     "2024": {
+      "start": 293085,
+      "end": 653975,
+      "ret_pct": 123.1,
+      "max_lots": 13
+     },
+     "2025": {
+      "start": 653975,
+      "end": 1051548,
+      "ret_pct": 60.8,
+      "max_lots": 18
+     },
+     "2026": {
+      "start": 1051548,
+      "end": 3452752,
+      "ret_pct": 228.3,
+      "max_lots": 54
+     }
+    }
+   },
+   "E1 = E, capped at one exchange order per trade": {
+    "trades": 1676,
+    "final": 11489455,
+    "multiple": 57.45,
+    "cagr_pct": 193.3,
+    "max_dd_pct": -36.5,
+    "worst_month": -938606,
+    "losing_months": 18,
+    "months": 46,
+    "avg_slip_extra_pct": 0.169,
+    "max_lots": 54,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 561499,
+      "ret_pct": 180.7,
+      "max_lots": 26
+     },
+     "2024": {
+      "start": 561499,
+      "end": 1957339,
+      "ret_pct": 248.6,
+      "max_lots": 51
+     },
+     "2025": {
+      "start": 1957339,
+      "end": 4558214,
+      "ret_pct": 132.9,
+      "max_lots": 54
+     },
+     "2026": {
+      "start": 4558214,
+      "end": 11489455,
+      "ret_pct": 152.1,
+      "max_lots": 54
+     }
+    }
+   },
+   "F1 = F (2% risk), capped at one exchange order": {
+    "trades": 1641,
+    "final": 15590282,
+    "multiple": 77.95,
+    "cagr_pct": 218.4,
+    "max_dd_pct": -39.1,
+    "worst_month": -1557201,
+    "losing_months": 17,
+    "months": 46,
+    "avg_slip_extra_pct": 0.245,
+    "max_lots": 54,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 849110,
+      "ret_pct": 324.6,
+      "max_lots": 48
+     },
+     "2024": {
+      "start": 849110,
+      "end": 5911311,
+      "ret_pct": 596.2,
+      "max_lots": 54
+     },
+     "2025": {
+      "start": 5911311,
+      "end": 10007185,
+      "ret_pct": 69.3,
+      "max_lots": 54
+     },
+     "2026": {
+      "start": 10007185,
+      "end": 15590282,
+      "ret_pct": 55.8,
+      "max_lots": 54
+     }
+    }
+   },
+   "D26 = D, starting Rs 2L on 1 Jan 2026 (unseen year only)": {
+    "trades": 401,
+    "final": 453230,
+    "multiple": 2.27,
+    "cagr_pct": 186.2,
+    "max_dd_pct": -18.8,
+    "worst_month": -28395,
+    "losing_months": 3,
+    "months": 10,
+    "avg_slip_extra_pct": 0.047,
+    "max_lots": 10,
+    "yearly": {
+     "2026": {
+      "start": 200000,
+      "end": 453230,
+      "ret_pct": 126.6,
+      "max_lots": 10
+     }
+    }
+   },
+   "E26 = E, starting Rs 2L on 1 Jan 2026": {
+    "trades": 336,
+    "final": 657589,
+    "multiple": 3.29,
+    "cagr_pct": 364.2,
+    "max_dd_pct": -25.6,
+    "worst_month": -32950,
+    "losing_months": 3,
+    "months": 10,
+    "avg_slip_extra_pct": 0.057,
+    "max_lots": 17,
+    "yearly": {
+     "2026": {
+      "start": 200000,
+      "end": 657589,
+      "ret_pct": 228.8,
+      "max_lots": 17
+     }
+    }
+   },
+   "C26 = C, starting Rs 2L on 1 Jan 2026": {
+    "trades": 398,
+    "final": 411835,
+    "multiple": 2.06,
+    "cagr_pct": 153.0,
+    "max_dd_pct": -18.9,
+    "worst_month": -24489,
+    "losing_months": 2,
+    "months": 10,
+    "avg_slip_extra_pct": 0.047,
+    "max_lots": 7,
+    "yearly": {
+     "2026": {
+      "start": 200000,
+      "end": 411835,
+      "ret_pct": 105.9,
+      "max_lots": 7
+     }
+    }
+   }
+  },
+  "1 OTM k=0.06": {
+   "A fixed 1 lot, no compounding": {
+    "trades": 2166,
+    "final": 542643,
+    "multiple": 2.71,
+    "cagr_pct": 30.3,
+    "max_dd_pct": -36.9,
+    "worst_month": -35723,
+    "losing_months": 22,
+    "months": 46,
+    "avg_slip_extra_pct": 0.082,
+    "max_lots": 1,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 191793,
+      "ret_pct": -4.1,
+      "max_lots": 1
+     },
+     "2024": {
+      "start": 191793,
+      "end": 344495,
+      "ret_pct": 79.6,
+      "max_lots": 1
+     },
+     "2025": {
+      "start": 344495,
+      "end": 461064,
+      "ret_pct": 33.8,
+      "max_lots": 1
+     },
+     "2026": {
+      "start": 461064,
+      "end": 542643,
+      "ret_pct": 17.7,
+      "max_lots": 1
+     }
+    }
+   },
+   "B fixed 3 lots, no compounding": {
+    "trades": 2020,
+    "final": 1418774,
+    "multiple": 7.09,
+    "cagr_pct": 68.2,
+    "max_dd_pct": -40.4,
+    "worst_month": -95598,
+    "losing_months": 18,
+    "months": 46,
+    "avg_slip_extra_pct": 0.142,
+    "max_lots": 3,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 278563,
+      "ret_pct": 39.3,
+      "max_lots": 3
+     },
+     "2024": {
+      "start": 278563,
+      "end": 891534,
+      "ret_pct": 220.0,
+      "max_lots": 3
+     },
+     "2025": {
+      "start": 891534,
+      "end": 1137478,
+      "ret_pct": 27.6,
+      "max_lots": 3
+     },
+     "2026": {
+      "start": 1137478,
+      "end": 1418774,
+      "ret_pct": 24.7,
+      "max_lots": 3
+     }
+    }
+   },
+   "C compounding, 1% risk (no confidence)": {
+    "trades": 1893,
+    "final": 2118910,
+    "multiple": 10.59,
+    "cagr_pct": 87.2,
+    "max_dd_pct": -33.8,
+    "worst_month": -161776,
+    "losing_months": 19,
+    "months": 46,
+    "avg_slip_extra_pct": 0.141,
+    "max_lots": 37,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 233799,
+      "ret_pct": 16.9,
+      "max_lots": 8
+     },
+     "2024": {
+      "start": 233799,
+      "end": 560751,
+      "ret_pct": 139.8,
+      "max_lots": 8
+     },
+     "2025": {
+      "start": 560751,
+      "end": 801282,
+      "ret_pct": 42.9,
+      "max_lots": 15
+     },
+     "2026": {
+      "start": 801282,
+      "end": 2118910,
+      "ret_pct": 164.4,
+      "max_lots": 37
+     }
+    }
+   },
+   "D compounding, 1% risk + live confidence (1.33x / 0.67x)": {
+    "trades": 1908,
+    "final": 2609257,
+    "multiple": 13.05,
+    "cagr_pct": 97.7,
+    "max_dd_pct": -33.1,
+    "worst_month": -184970,
+    "losing_months": 18,
+    "months": 46,
+    "avg_slip_extra_pct": 0.145,
+    "max_lots": 53,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 279804,
+      "ret_pct": 39.9,
+      "max_lots": 12
+     },
+     "2024": {
+      "start": 279804,
+      "end": 555376,
+      "ret_pct": 98.5,
+      "max_lots": 11
+     },
+     "2025": {
+      "start": 555376,
+      "end": 848199,
+      "ret_pct": 52.7,
+      "max_lots": 14
+     },
+     "2026": {
+      "start": 848199,
+      "end": 2609257,
+      "ret_pct": 207.6,
+      "max_lots": 53
+     }
+    }
+   },
+   "E compounding, 1% risk + strong confidence (2x / 1x / 0.5x)": {
+    "trades": 1591,
+    "final": 8884933,
+    "multiple": 44.42,
+    "cagr_pct": 174.2,
+    "max_dd_pct": -43.9,
+    "worst_month": -641018,
+    "losing_months": 19,
+    "months": 46,
+    "avg_slip_extra_pct": 0.264,
+    "max_lots": 232,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 506306,
+      "ret_pct": 153.2,
+      "max_lots": 25
+     },
+     "2024": {
+      "start": 506306,
+      "end": 1090837,
+      "ret_pct": 115.5,
+      "max_lots": 34
+     },
+     "2025": {
+      "start": 1090837,
+      "end": 2092579,
+      "ret_pct": 91.8,
+      "max_lots": 53
+     },
+     "2026": {
+      "start": 2092579,
+      "end": 8884933,
+      "ret_pct": 324.6,
+      "max_lots": 232
+     }
+    }
+   },
+   "F compounding, 2% risk + live confidence": {
+    "trades": 1342,
+    "final": 36307099,
+    "multiple": 181.54,
+    "cagr_pct": 297.8,
+    "max_dd_pct": -57.5,
+    "worst_month": -1798204,
+    "losing_months": 20,
+    "months": 46,
+    "avg_slip_extra_pct": 0.501,
+    "max_lots": 1035,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 795702,
+      "ret_pct": 297.9,
+      "max_lots": 46
+     },
+     "2024": {
+      "start": 795702,
+      "end": 2886125,
+      "ret_pct": 262.7,
+      "max_lots": 130
+     },
+     "2025": {
+      "start": 2886125,
+      "end": 6111941,
+      "ret_pct": 111.8,
+      "max_lots": 268
+     },
+     "2026": {
+      "start": 6111941,
+      "end": 36307099,
+      "ret_pct": 494.0,
+      "max_lots": 1035
+     }
+    }
+   },
+   "G compounding, 3% risk + live confidence": {
+    "trades": 1090,
+    "final": 30145396,
+    "multiple": 150.73,
+    "cagr_pct": 279.4,
+    "max_dd_pct": -59.1,
+    "worst_month": -2714739,
+    "losing_months": 20,
+    "months": 46,
+    "avg_slip_extra_pct": 0.592,
+    "max_lots": 2100,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 462888,
+      "ret_pct": 131.4,
+      "max_lots": 46
+     },
+     "2024": {
+      "start": 462888,
+      "end": 3222452,
+      "ret_pct": 596.2,
+      "max_lots": 171
+     },
+     "2025": {
+      "start": 3222452,
+      "end": 5197558,
+      "ret_pct": 61.3,
+      "max_lots": 350
+     },
+     "2026": {
+      "start": 5197558,
+      "end": 30145396,
+      "ret_pct": 480.0,
+      "max_lots": 2100
+     }
+    }
+   },
+   "H 1% risk + live confidence, NO compounding (size from Rs 2L)": {
+    "trades": 2179,
+    "final": 664580,
+    "multiple": 3.32,
+    "cagr_pct": 37.5,
+    "max_dd_pct": -32.2,
+    "worst_month": -36828,
+    "losing_months": 20,
+    "months": 46,
+    "avg_slip_extra_pct": 0.085,
+    "max_lots": 7,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 247346,
+      "ret_pct": 23.7,
+      "max_lots": 7
+     },
+     "2024": {
+      "start": 247346,
+      "end": 429439,
+      "ret_pct": 73.6,
+      "max_lots": 4
+     },
+     "2025": {
+      "start": 429439,
+      "end": 555782,
+      "ret_pct": 29.4,
+      "max_lots": 3
+     },
+     "2026": {
+      "start": 555782,
+      "end": 664580,
+      "ret_pct": 19.6,
+      "max_lots": 6
+     }
+    }
+   },
+   "D1 = D, capped at one exchange order per trade": {
+    "trades": 1908,
+    "final": 2609742,
+    "multiple": 13.05,
+    "cagr_pct": 97.8,
+    "max_dd_pct": -33.1,
+    "worst_month": -184970,
+    "losing_months": 18,
+    "months": 46,
+    "avg_slip_extra_pct": 0.145,
+    "max_lots": 53,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 279804,
+      "ret_pct": 39.9,
+      "max_lots": 12
+     },
+     "2024": {
+      "start": 279804,
+      "end": 555376,
+      "ret_pct": 98.5,
+      "max_lots": 11
+     },
+     "2025": {
+      "start": 555376,
+      "end": 848199,
+      "ret_pct": 52.7,
+      "max_lots": 14
+     },
+     "2026": {
+      "start": 848199,
+      "end": 2609742,
+      "ret_pct": 207.7,
+      "max_lots": 53
+     }
+    }
+   },
+   "E1 = E, capped at one exchange order per trade": {
+    "trades": 1613,
+    "final": 7330007,
+    "multiple": 36.65,
+    "cagr_pct": 160.5,
+    "max_dd_pct": -43.9,
+    "worst_month": -486749,
+    "losing_months": 20,
+    "months": 46,
+    "avg_slip_extra_pct": 0.264,
+    "max_lots": 54,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 506306,
+      "ret_pct": 153.2,
+      "max_lots": 25
+     },
+     "2024": {
+      "start": 506306,
+      "end": 1090837,
+      "ret_pct": 115.5,
+      "max_lots": 34
+     },
+     "2025": {
+      "start": 1090837,
+      "end": 2092579,
+      "ret_pct": 91.8,
+      "max_lots": 53
+     },
+     "2026": {
+      "start": 2092579,
+      "end": 7330007,
+      "ret_pct": 250.3,
+      "max_lots": 54
+     }
+    }
+   },
+   "F1 = F (2% risk), capped at one exchange order": {
+    "trades": 1506,
+    "final": 12050504,
+    "multiple": 60.25,
+    "cagr_pct": 197.3,
+    "max_dd_pct": -45.5,
+    "worst_month": -1386497,
+    "losing_months": 20,
+    "months": 46,
+    "avg_slip_extra_pct": 0.458,
+    "max_lots": 54,
+    "yearly": {
+     "2023": {
+      "start": 200000,
+      "end": 795702,
+      "ret_pct": 297.9,
+      "max_lots": 46
+     },
+     "2024": {
+      "start": 795702,
+      "end": 3010935,
+      "ret_pct": 278.4,
+      "max_lots": 54
+     },
+     "2025": {
+      "start": 3010935,
+      "end": 6436489,
+      "ret_pct": 113.8,
+      "max_lots": 54
+     },
+     "2026": {
+      "start": 6436489,
+      "end": 12050504,
+      "ret_pct": 87.2,
+      "max_lots": 54
+     }
+    }
+   },
+   "D26 = D, starting Rs 2L on 1 Jan 2026 (unseen year only)": {
+    "trades": 400,
+    "final": 448629,
+    "multiple": 2.24,
+    "cagr_pct": 182.4,
+    "max_dd_pct": -18.1,
+    "worst_month": -28305,
+    "losing_months": 2,
+    "months": 10,
+    "avg_slip_extra_pct": 0.093,
+    "max_lots": 9,
+    "yearly": {
+     "2026": {
+      "start": 200000,
+      "end": 448629,
+      "ret_pct": 124.3,
+      "max_lots": 9
+     }
+    }
+   },
+   "E26 = E, starting Rs 2L on 1 Jan 2026": {
+    "trades": 335,
+    "final": 637496,
+    "multiple": 3.19,
+    "cagr_pct": 348.4,
+    "max_dd_pct": -26.7,
+    "worst_month": -36124,
+    "losing_months": 2,
+    "months": 10,
+    "avg_slip_extra_pct": 0.114,
+    "max_lots": 16,
+    "yearly": {
+     "2026": {
+      "start": 200000,
+      "end": 637496,
+      "ret_pct": 218.7,
+      "max_lots": 16
+     }
+    }
+   },
+   "C26 = C, starting Rs 2L on 1 Jan 2026": {
+    "trades": 397,
+    "final": 410883,
+    "multiple": 2.05,
+    "cagr_pct": 152.3,
+    "max_dd_pct": -18.4,
+    "worst_month": -23375,
+    "losing_months": 2,
+    "months": 10,
+    "avg_slip_extra_pct": 0.094,
+    "max_lots": 7,
+    "yearly": {
+     "2026": {
+      "start": 200000,
+      "end": 410883,
+      "ret_pct": 105.4,
+      "max_lots": 7
+     }
+    }
+   }
+  }
+ }
+}

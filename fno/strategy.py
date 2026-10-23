@@ -53,6 +53,29 @@ def session_frames(candles: pd.DataFrame, now: datetime):
     return today, hist
 
 
+def big_run(hist: pd.DataFrame) -> dict | None:
+    """Round 42: the 3-session move before today and the 14-day ATR, from prior sessions' 5-minute bars.
+    {"move3", "atr", "k" (|move| in ATRs), "dir" (+1 up / -1 down)}; None without enough history."""
+    try:
+        d = hist.groupby(hist.index.date).agg({"high": "max", "low": "min", "close": "last"})
+        if len(d) < 15:
+            return None
+        pc = d["close"].shift(1)
+        tr = pd.concat([d["high"] - d["low"], (d["high"] - pc).abs(), (d["low"] - pc).abs()], axis=1).max(axis=1)
+        atr = float(tr.iloc[-14:].mean())
+        mv = float(d["close"].iloc[-1] - d["close"].iloc[-4])
+        return {"move3": round(mv, 1), "atr": round(atr, 1), "k": round(abs(mv) / atr, 2) if atr > 0 else 0.0, "dir": 1 if mv > 0 else -1}
+    except Exception:
+        return None
+
+
+def against_big_run(run: dict | None, opt: str) -> bool:
+    """True when a CALL follows a big 3-day fall or a PUT follows a big 3-day rally (>= BIG_RUN_ATR daily ATRs)."""
+    if not run or run["k"] < C.BIG_RUN_ATR:
+        return False
+    return (1 if opt == "CE" else -1) != run["dir"]
+
+
 def bias_factors(today, hist, vix, cstats, news, gcues, fii) -> list[dict]:
     f = []
     # 1 Global markets
