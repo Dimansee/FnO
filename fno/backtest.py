@@ -33,12 +33,42 @@ from . import pricing as PR
 #   giveback:    (start_R, give_R): once the best move is >= start_R, the stop trails the best move by give_R
 #   noise_rr:    Noise target in R (live 4.0; None = no target)
 #   noise_be_r / noise_be_lock: optional breakeven for Noise (live: none, it trails on the band / VWAP)
-EXIT_DEFAULT = {"be_r": None, "be_lock": 0.0, "lock_steps": (), "giveback": None, "noise_rr": None, "noise_be_r": None, "noise_be_lock": 0.0}
+#   partials:    T1/T2/T3 booking on top of the exits above, [(reach_R, fraction), ...]; the rest follows the normal exits
+#   be_after_t1: move the stop to entry once T1 is booked
+#   lots_x:      multiply the lot count (research: partial booking needs 2-3 lots)
+EXIT_DEFAULT = {"partials": (), "be_after_t1": False, "lots_x": 1, "be_r": None, "be_lock": 0.0, "lock_steps": (), "giveback": None, "noise_rr": None, "noise_be_r": None, "noise_be_lock": 0.0}
 EXIT: dict = {}
 
 
 def _ex(key, live):
     return EXIT[key] if key in EXIT else live
+
+
+def _book_partials(sign, spot, risk, c, end, ts, best_r, booked, live_sl):
+    """Book any T1/T2/T3 reached on this bar (stop already checked first). Returns (live_sl, remaining fraction)."""
+    parts = _ex("partials", ())
+    for j, (reach, frac) in enumerate(parts):
+        if j < len(booked) or best_r < reach:
+            continue
+        lvl = spot + sign * reach * risk
+        px = c["open"] if sign * (c["open"] - lvl) > 0 else lvl
+        booked.append((frac, float(px), end, ts))
+        if j == 0 and _ex("be_after_t1", False) and sign * (live_sl - spot) < 0:
+            live_sl = spot
+    return live_sl, 1.0 - sum(b[0] for b in booked)
+
+
+def _pnl_parts(prem, p_in, booked, rest, x_spot, x_ts, x_bar, exp, d, t_in, qty, exch_pct):
+    """Option P&L for a trade closed in pieces (booked partials + the rest at the final exit)."""
+    legs = list(booked) + ([(rest, float(x_spot), x_ts, x_bar)] if rest > 1e-9 else [])
+    pnl, wavg = 0.0, 0.0
+    for frac, sp, te, tb in legs:
+        p_out = PR.real_adjust(p_in / (1 + SLIP), prem(sp, te, tb), (exp - d).days, (te - t_in).total_seconds() / 3600) * (1 - SLIP)
+        q = qty * frac
+        pnl += (p_out - p_in) * q - I.charges(p_in, p_out, q, orders=1, exch_pct=exch_pct)
+        wavg += frac * p_out
+    pnl -= 20 * 1.18                                    # the single buy order
+    return pnl, wavg
 
 
 def _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock):
@@ -442,8 +472,9 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
             if lots == 0:
                 return ("skip", entry_i, "risk")   # 1 lot would risk more than 1.5% of capital
             lots = min(lots, int(capital // cost))
+        lots *= int(_ex("lots_x", 1))
         reason, x_spot, x_ts = None, None, None
-        live_sl, reached, best_r = sl, False, 0.0
+        live_sl, reached, best_r, booked, rest = sl, False, 0.0, [], 1.0
         be_r, be_lock = (_ex("be_r", C.CAM_BE_R), _ex("be_lock", 0.0)) if strat == "camarilla" else (_ex("noise_be_r", None), _ex("noise_be_lock", 0.0))
         for ts in idx[entry_i + 1:]:
             c = day.loc[ts]
@@ -456,6 +487,10 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
                 reason, x_spot = f"Target {_ex('noise_rr', C.RR_NOISE):g}R", (c["open"] if sign * (c["open"] - tgt) > 0 else tgt)
             else:
                 best_r = max(best_r, sign * (favour - spot) / risk)
+                if _ex("partials", ()):
+                    live_sl, rest = _book_partials(sign, spot, risk, c, end, ts, best_r, booked, live_sl)
+                    if rest <= 1e-9:
+                        reason, x_spot = "All targets booked", booked[-1][1]
                 live_sl = _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock)
             if reason:
                 pass
@@ -476,10 +511,14 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
         if reason is None:
             x_bar = idx[-1]
             reason, x_spot, x_ts = "Square-off", float(day["close"].iloc[-1]), idx[-1] + timedelta(minutes=5)
-        p_raw = prem(x_spot, x_ts, x_bar)
-        p_out = PR.real_adjust(p_in / (1 + SLIP), p_raw, (exp - d).days, (x_ts - t_in).total_seconds() / 3600) * (1 - SLIP)
         qty = lots * lot
-        pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty, exch_pct=exch_pct)
+        if booked:
+            pnl, p_out = _pnl_parts(prem, p_in, booked, rest, x_spot, x_ts, x_bar, exp, d, t_in, qty, exch_pct)
+            reason = f"{reason} after T{len(booked)}" if rest > 1e-9 else reason
+        else:
+            p_raw = prem(x_spot, x_ts, x_bar)
+            p_out = PR.real_adjust(p_in / (1 + SLIP), p_raw, (exp - d).days, (x_ts - t_in).total_seconds() / 3600) * (1 - SLIP)
+            pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty, exch_pct=exch_pct)
         equity += pnl
         return {
             "date": d.isoformat(), "entry_time": t_in.strftime("%H:%M"), "exit_time": x_ts.strftime("%H:%M"),
@@ -596,7 +635,9 @@ def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="ris
         if lots == 0:
             return ("skip", entry_i, "risk")
         lots = min(lots, int(capital // cost))
+    lots *= int(_ex("lots_x", 1))
     live_sl, reason, x_spot, x_ts, x_bar, best_r = sl, None, None, None, None, 0.0
+    booked, rest = [], 1.0
     be_r, be_lock = _ex("be_r", C.TREND_BE_R), _ex("be_lock", 0.0)
     for ts in idx[entry_i + 1:]:
         c = day.loc[ts]
@@ -607,6 +648,10 @@ def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="ris
             x_spot = c["open"] if sign * (c["open"] - live_sl) < 0 else live_sl
         else:
             best_r = max(best_r, sign * (favour - spot) / risk)
+            if _ex("partials", ()):
+                live_sl, rest = _book_partials(sign, spot, risk, c, end, ts, best_r, booked, live_sl)
+                if rest <= 1e-9:
+                    reason, x_spot = "All targets booked", booked[-1][1]
             live_sl = _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock)
         if reason is None and end.time() >= C.SQUARE_OFF:
             reason, x_spot = "Square-off", float(c["close"])
@@ -616,9 +661,13 @@ def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="ris
     if reason is None:
         x_bar = idx[-1]
         reason, x_spot, x_ts = "Square-off", float(day["close"].iloc[-1]), idx[-1] + timedelta(minutes=5)
-    p_out = PR.real_adjust(p_in / (1 + SLIP), prem(x_spot, x_ts, x_bar), (exp - d).days, (x_ts - t_in).total_seconds() / 3600) * (1 - SLIP)
     qty = lots * lot
-    pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty, exch_pct=exch_pct)
+    if booked:
+        pnl, p_out = _pnl_parts(prem, p_in, booked, rest, x_spot, x_ts, x_bar, exp, d, t_in, qty, exch_pct)
+        reason = f"{reason} after T{len(booked)}" if rest > 1e-9 else reason
+    else:
+        p_out = PR.real_adjust(p_in / (1 + SLIP), prem(x_spot, x_ts, x_bar), (exp - d).days, (x_ts - t_in).total_seconds() / 3600) * (1 - SLIP)
+        pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty, exch_pct=exch_pct)
     return {
         "date": d.isoformat(), "entry_time": t_in.strftime("%H:%M"), "exit_time": x_ts.strftime("%H:%M"),
         "side": "CALL" if opt == "CE" else "PUT", "type": "ATM option" if not otm else (f"{otm} OTM option" if otm > 0 else f"{-otm} ITM option"),
