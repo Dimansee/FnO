@@ -24,6 +24,38 @@ from . import config as C
 from . import indicators as I
 from . import market as D
 from . import pricing as PR
+
+# Exit profile (research round 40). Defaults reproduce the live rules exactly; research scripts override keys to test
+# profit-protection variants. R = index points / the trade's initial index risk.
+#   be_r:        favourable move (R) that moves the stop (Camarilla, Fib, trend); None = never
+#   be_lock:     where that stop goes, in R beyond entry (0 = exactly at entry)
+#   lock_steps:  extra ratchets [(reach_R, lock_R), ...] e.g. [(2, 1)] = once +2R, stop to +1R
+#   giveback:    (start_R, give_R): once the best move is >= start_R, the stop trails the best move by give_R
+#   noise_rr:    Noise target in R (live 4.0; None = no target)
+#   noise_be_r / noise_be_lock: optional breakeven for Noise (live: none, it trails on the band / VWAP)
+EXIT_DEFAULT = {"be_r": None, "be_lock": 0.0, "lock_steps": (), "giveback": None, "noise_rr": None, "noise_be_r": None, "noise_be_lock": 0.0}
+EXIT: dict = {}
+
+
+def _ex(key, live):
+    return EXIT[key] if key in EXIT else live
+
+
+def _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock):
+    """Move the stop for the best favourable move so far (in R). Never loosens it."""
+    cands = []
+    if be_r is not None and best_r >= be_r:
+        cands.append(spot + sign * be_lock * risk)
+    for reach, lock in _ex("lock_steps", ()):
+        if best_r >= reach:
+            cands.append(spot + sign * lock * risk)
+    gb = _ex("giveback", None)
+    if gb and best_r >= gb[0]:
+        cands.append(spot + sign * (best_r - gb[1]) * risk)
+    for c in cands:
+        if sign * (c - live_sl) > 0:
+            live_sl = c
+    return live_sl
 from . import strategy as S
 from . import ai as AI
 
@@ -386,7 +418,8 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
             sl, tgt = spot - sign * risk, None
         else:
             risk = min(max(C.STOP_ATR * a, a), 2.5 * a)
-            sl, tgt = spot - sign * risk, spot + sign * C.RR_NOISE * risk
+            rr = _ex("noise_rr", C.RR_NOISE)
+            sl, tgt = spot - sign * risk, (spot + sign * rr * risk if rr else None)
         t_in = ts_in + timedelta(minutes=C.CANDLE_MIN)
         k = round(spot / step) * step + sign * otm * step
 
@@ -410,19 +443,23 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
                 return ("skip", entry_i, "risk")   # 1 lot would risk more than 1.5% of capital
             lots = min(lots, int(capital // cost))
         reason, x_spot, x_ts = None, None, None
-        live_sl, reached = sl, False
+        live_sl, reached, best_r = sl, False, 0.0
+        be_r, be_lock = (_ex("be_r", C.CAM_BE_R), _ex("be_lock", 0.0)) if strat == "camarilla" else (_ex("noise_be_r", None), _ex("noise_be_lock", 0.0))
         for ts in idx[entry_i + 1:]:
             c = day.loc[ts]
             end = ts + timedelta(minutes=C.CANDLE_MIN)
             adverse, favour = (c["low"], c["high"]) if sign > 0 else (c["high"], c["low"])
             if sign * (adverse - live_sl) <= 0:
-                why = "Breakeven stop" if live_sl == spot else ("Stop-loss (2 ATR)" if strat == "noise" else "Stop-loss (H3/L3)")
+                why = ("Breakeven stop" if live_sl == spot else "Profit-lock stop") if sign * (live_sl - spot) >= 0 else ("Stop-loss (2 ATR)" if strat == "noise" else "Stop-loss (H3/L3)")
                 reason, x_spot = why, (c["open"] if sign * (c["open"] - live_sl) < 0 else live_sl)
             elif tgt is not None and sign * (favour - tgt) >= 0:
-                reason, x_spot = "Target 4R", (c["open"] if sign * (c["open"] - tgt) > 0 else tgt)
+                reason, x_spot = f"Target {_ex('noise_rr', C.RR_NOISE):g}R", (c["open"] if sign * (c["open"] - tgt) > 0 else tgt)
+            else:
+                best_r = max(best_r, sign * (favour - spot) / risk)
+                live_sl = _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock)
+            if reason:
+                pass
             elif strat == "camarilla":
-                if sign * (favour - (spot + sign * C.CAM_BE_R * risk)) >= 0 and sign * (live_sl - spot) < 0:
-                    live_sl = spot
                 if sign * (favour - (spot + sign * 0.5 * risk)) >= 0:
                     reached = True
                 if not reached and (end - t_in).total_seconds() / 60 >= C.CAM_TIME_STOP:
@@ -450,7 +487,7 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
             "spot_in": round(spot, 1), "spot_out": round(float(x_spot), 1), "R": round(sign * (x_spot - spot) / risk, 2),
             "prem_in": round(p_in, 2), "prem_out": round(p_out, 2), "lots": lots, "pnl": round(pnl, 0),
             "reason": reason, "equity": round(equity, 0), "strategy": "Noise band" if strat == "noise" else "Camarilla",
-            "risk_lot": round(risk_unit * lot, 0),
+            "risk_lot": round(risk_unit * lot, 0), "mfe_R": round(best_r, 2),
         }
 
 
@@ -559,16 +596,18 @@ def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="ris
         if lots == 0:
             return ("skip", entry_i, "risk")
         lots = min(lots, int(capital // cost))
-    live_sl, reason, x_spot, x_ts, x_bar = sl, None, None, None, None
+    live_sl, reason, x_spot, x_ts, x_bar, best_r = sl, None, None, None, None, 0.0
+    be_r, be_lock = _ex("be_r", C.TREND_BE_R), _ex("be_lock", 0.0)
     for ts in idx[entry_i + 1:]:
         c = day.loc[ts]
         end = ts + timedelta(minutes=C.CANDLE_MIN)
         adverse, favour = (c["low"], c["high"]) if sign > 0 else (c["high"], c["low"])
         if sign * (adverse - live_sl) <= 0:
-            reason = "Breakeven stop" if live_sl == spot else "Stop-loss (VWAP)"
+            reason = ("Breakeven stop" if live_sl == spot else "Profit-lock stop") if sign * (live_sl - spot) >= 0 else "Stop-loss (VWAP)"
             x_spot = c["open"] if sign * (c["open"] - live_sl) < 0 else live_sl
-        elif sign * (favour - (spot + sign * C.TREND_BE_R * risk)) >= 0 and sign * (live_sl - spot) < 0:
-            live_sl = spot
+        else:
+            best_r = max(best_r, sign * (favour - spot) / risk)
+            live_sl = _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock)
         if reason is None and end.time() >= C.SQUARE_OFF:
             reason, x_spot = "Square-off", float(c["close"])
         if reason:
@@ -585,5 +624,5 @@ def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="ris
         "side": "CALL" if opt == "CE" else "PUT", "type": "ATM option" if not otm else (f"{otm} OTM option" if otm > 0 else f"{-otm} ITM option"),
         "band": C.NOISE_MULT, "spot_in": round(spot, 1), "spot_out": round(float(x_spot), 1), "R": round(sign * (x_spot - spot) / risk, 2),
         "prem_in": round(p_in, 2), "prem_out": round(p_out, 2), "lots": lots, "pnl": round(pnl, 0),
-        "reason": reason, "equity": 0, "strategy": "Trend-day", "risk_lot": round(risk_unit * lot, 0),
+        "reason": reason, "equity": 0, "strategy": "Trend-day", "risk_lot": round(risk_unit * lot, 0), "mfe_R": round(best_r, 2),
     }

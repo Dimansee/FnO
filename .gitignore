@@ -3,3 +3,4 @@ __pycache__/
 .vercel/
 .env*
 research/work/
+research/data/
