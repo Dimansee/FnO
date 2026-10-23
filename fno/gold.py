@@ -108,9 +108,9 @@ def board(symbol: str = "XAUUSD") -> dict:
 # Background the panel shows under the numbers (research summary; full write-up in the Project docs).
 NOTES = [
     "Gold trades almost 24 hours on weekdays (Sunday 18:00 to Friday 17:00 New York, one-hour break daily). In IST that is roughly Monday 04:30 to Saturday 03:30.",
-    "Asia is the quiet session: smallest ranges, mostly sideways, often a range that London later breaks. Academic work also finds gold has tended to drift up in Asian hours and down later (the 'hat-shaped' day), but after trading costs that edge is thin.",
-    "London open (13:30 IST in Indian winter) and the LBMA auctions (16:00 and 20:30 IST in winter) are when the big banks trade.",
-    "The London + New York overlap (about 18:30-22:30 IST in winter) is gold's busiest, most liquid window; US data at 08:30 New York (19:00 IST in winter) moves gold the most.",
-    "After New York's afternoon gold goes quiet until Asia. Friday evenings and Fed days (14:00 New York) can whip.",
+    "Measured on COMEX gold, Jun 2024 - Oct 2026 (hourly): the busiest hours are 18:00-21:00 IST in British/US summer (the London + New York overlap, with US data at 08:30 New York). A typical hour there moves about $24, twice the ~$12 of the quietest Asian hours. There is a smaller bump around 06:00-07:00 IST when Shanghai opens.",
+    "London (avg $55 a session) and New York (avg $54) carry most of the day's range; New York makes the day's high on 54% of days. Asia averages $41: quieter per hour, but not dead.",
+    "No session has a reliable direction. Asia was slightly up on average (2023-25 on PAXG), the Western sessions slightly down in 2021 and 2026, but none is statistically clear and none survived trading costs as a rule.",
+    "Every session rule tested lost money after costs: London breakout of the Asian range, its fade, the Asian-hours drift, the New York opening-range breakout. Use the sessions to decide when to watch and how wide stops must be, not as signals.",
     "For an Indian resident, trading XAUUSD with overseas forex/CFD brokers is not allowed (RBI alert list). The real-money route is MCX gold (Gold, Gold Mini, Gold Petal) through a broker like Fyers, 09:00-23:30 IST (23:55 when the US is on winter time). This book is paper only.",
 ]

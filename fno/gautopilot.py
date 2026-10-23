@@ -16,9 +16,12 @@ while that recent result is still positive (>= MIN_TRADES trades, avg >= MIN_AVG
 symbols where it has not been clearly losing (own avg >= SYMBOL_FLOOR_R, or too few trades to tell). If nothing passes,
 the market stays flat and the Markets tab says why.
 
-Gold (added 23 Oct 2026): the same slow trend family that held up on crypto and US, plus two session rules from
-the gold-session research (London breakout of the Asian range; the Asian-hours drift). Only XAUUSD is traded by the
-autopilot (PAXG is the same ounce, so trading both would double one bet); gold rules face the same weekly gate.
+Gold (23 Oct 2026, research/gold_sessions.py on COMEX gold 1h 2024-26, daily 2010-26, PAXG 1h 2020-26): no rule
+passed the full design + holdout bar. Every session rule lost after costs (London breakout of the Asian range
+-0.29R / -0.02R, Asian-hours drift -0.09R / -0.11R, NY opening range, fades, overlap-only Supertrend). Supertrend
+4h / daily had no edge. Only the two long breakout rules below were positive in both halves, on few trades and in a
+strong gold bull market, so they are kept as candidates and still face the weekly gate. Only XAUUSD is traded by the
+autopilot (PAXG is the same ounce, so trading both would double one bet).
 """
 from __future__ import annotations
 
@@ -83,31 +86,12 @@ CANDIDATES = {
          "about": "Buy when a 4-hour bar closes above the upper Keltner band (20-bar EMA + 2 x ATR). Stop 2 x ATR, trailing stop 3 x ATR. Longs only, whole shares."},
     ],
     "GOLD": [
-        {"id": "s_a10021", "name": "Supertrend 10/3 (4h)", "timeframe": "4h", "direction": "both", **_SUPERTREND,
-         "research": "best family on crypto (+0.15R) and US; on gold it trades only if its own recent backtest passes",
-         "about": "Buy when a 4-hour bar (London clock: 00, 04, 08, 12, 16, 20) closes above the Supertrend line; short when one closes below. Stop 2 x ATR, exit on the opposite flip. Rides gold's trends."},
         {"id": "s_a10022", "name": "Donchian 55 breakout, long (4h)", "timeframe": "4h", "direction": "long", **_donchian(55, 4.0),
-         "research": "+0.14R crypto / +0.40R US on unseen data; gold re-tested weekly",
-         "about": "Buy when a 4-hour bar closes above the highest high of the previous 55 bars (about two weeks of gold trading). Stop 2 x ATR, trailing stop 4 x ATR. Longs only."},
+         "research": "gold 1h 2024-26: +0.23R over 29 earlier trades, +0.90R over 12 later ones; few trades, gold's bull run helps longs",
+         "about": "Buy when a 4-hour bar (London clock: 00, 04, 08, 12, 16, 20) closes above the highest high of the previous 55 bars (about two weeks of gold trading). Stop 2 x ATR, trailing stop 4 x ATR. Longs only."},
         {"id": "s_a10023", "name": "Donchian 20 breakout, long (daily)", "timeframe": "1d", "direction": "long", **_donchian(20, 3.0),
-         "research": "+0.22R crypto on unseen data; gold judged on its last 7 years",
+         "research": "gold daily 2010-26: +0.40R over 54 trades to 2021, +0.48R over 26 since 2022 (t 1.6 / 1.2)",
          "about": "Buy when a COMEX day (ends 17:00 New York, 02:30-03:30 IST) closes above the highest high of the previous 20 days. Stop 2 x ATR, trailing stop 3 x ATR. Longs only."},
-        {"id": "s_a10024", "name": "Supertrend 10/3 (daily)", "timeframe": "1d", "direction": "both", **_SUPERTREND,
-         "research": "+0.33R crypto on unseen data, few trades; gold judged on its last 7 years",
-         "about": "Supertrend on daily gold bars: buy on an up-flip, short on a down-flip, stop 2 x ATR, exit on the opposite flip."},
-        {"id": "s_a10025", "name": "London breakout of the Asian range (1h)", "timeframe": "1h", "direction": "both",
-         "long": {"all": [_c(_P, "crosses_above", {"level": "asia_high"})]},
-         "short": {"all": [_c(_P, "crosses_below", {"level": "asia_low"})]},
-         "exit": {**_EX, "stop_atr": 1.5, "target_r": 2.0}, "hold": "intraday",
-         "filters": {"max_trades_day": 1, "session": "london", "end": "11:00"},
-         "research": "classic gold session setup; judged weekly on ~2 years of hourly XAUUSD",
-         "about": "Asia (00:00 UTC to London open) usually leaves a tight range. Between London open and 11:00 London (12:30-15:30 IST now, 13:30-16:30 IST in winter), buy the first hourly close above the Asian high, or short the first close below the Asian low. Stop 1.5 x ATR, target 2R, flat by 21:45 London. One trade a day."},
-        {"id": "s_a10026", "name": "Asian-hours drift, long (1h)", "timeframe": "1h", "direction": "long",
-         "long": {"all": [_c({"price": "hour"}, "le", {"value": 1})]},
-         "exit": {**_EX, "stop_atr": 2.0, "time_stop_bars": 7}, "hold": "intraday",
-         "filters": {"max_trades_day": 1, "session": "asia"},
-         "research": "studies find gold tends to rise in Asian hours and fall in Western hours; thin after costs, so it must pass the gate",
-         "about": "Buy at the start of the Asian session (00:00 UTC, 05:30 IST) and sell about 7 hours later, around London's open. Stop 2 x ATR. Tests the well-known tendency of gold to drift up while China and India trade."},
     ],
 }
 

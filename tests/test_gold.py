@@ -104,18 +104,12 @@ assert all(SS.mask(pd.DatetimeIndex([x["entry_ts"] - timedelta(minutes=15)]), "l
 assert all(x["exit_ts"].tz_convert(LON).hour * 60 + x["exit_ts"].tz_convert(LON).minute <= 21 * 60 + 45 for x in t)
 print("filters / presets OK:", len(t), "London-breakout trades on the synthetic data")
 
-# 6. autopilot candidates: valid, only XAUUSD, the session rules keep their filters
+# 6. autopilot candidates: valid, only XAUUSD, only the two rules the research kept
 for s in AP.all_specs("GOLD"):
     assert s["market"] == "GOLD" and s["symbols"] == ["XAUUSD"] and s["autopilot"], s
-lb = next(s for s in AP.all_specs("GOLD") if s["id"] == "s_a10025")
-assert lb["filters"]["session"] == "london" and lb["filters"]["end"] == "11:00" and lb["hold"] == "intraday" and lb["filters"]["max_trades_day"] == 1
-ad = next(s for s in AP.all_specs("GOLD") if s["id"] == "s_a10026")
-assert ad["filters"]["session"] == "asia" and ad["exit"]["time_stop_bars"] == 7
-h1 = CU.resample(m15, "1h", "GOLD")
+assert {s["id"] for s in AP.all_specs("GOLD")} == {"s_a10022", "s_a10023"}
 h4 = CU.resample(m15, "4h", "GOLD")
 assert set(h4.index.tz_convert(LON).hour) <= {0, 4, 8, 12, 16, 20}
-dr = CU.simulate(ad, h1)
-assert dr and all(x["reason"] in ("Time stop", "Stop-loss", "Square-off") for x in dr)
 print("gold autopilot specs OK:", len(AP.all_specs("GOLD")), "rules")
 
 # 7. the book: qualify, trade, separate ledger
@@ -141,7 +135,7 @@ MK.completed = lambda df, tf, now=None, market="CRYPTO": real_completed(df, tf, 
 q = AP.qualify("GOLD", force=True)
 assert len(q["rows"]) == len(AP.CANDIDATES["GOLD"]) and all("XAUUSD" in r["per_symbol"] for r in q["rows"]), q["rows"]
 print("gold qualify:", [(r["name"][12:45], r["ok"]) for r in q["rows"]])
-store.put("g_ap_qual:GOLD", {**q, "ok": {"s_a10021": ["XAUUSD"]}})
+store.put("g_ap_qual:GOLD", {**q, "ok": {"s_a10022": ["XAUUSD"]}})
 import fno.custom as _cu
 orig = _cu.signals
 def sig(spec, df):
@@ -151,16 +145,16 @@ def sig(spec, df):
 _cu.signals = sig
 res = GB.tick(("GOLD",))
 pos = GB.positions("GOLD")
-assert len(pos) == 1 and pos[0]["symbol"] == "XAUUSD" and pos[0]["strategy_id"] == "s_a10021", (res, pos)
+assert len(pos) == 1 and pos[0]["symbol"] == "XAUUSD" and pos[0]["strategy_id"] == "s_a10022", (res, pos)
 assert pos[0]["qty"] != int(pos[0]["qty"]) or pos[0]["qty"] > 0        # ounces, fractions allowed
 assert not GB.positions("CRYPTO") and not GB.positions("US")
 _cu.signals = orig
 # weekend: manage only, no new entries
 clock[0] = datetime(2026, 10, 24, 15, 0, tzinfo=UTC)
-store.put("g_ap_qual:GOLD", {**q, "ok": {"s_a10022": ["XAUUSD"]}})
+store.put("g_ap_qual:GOLD", {**q, "ok": {"s_a10023": ["XAUUSD"]}})
 _cu.signals = sig
 GB.tick(("GOLD",))
-assert all(p["strategy_id"] != "s_a10022" for p in GB.positions("GOLD")), "opened a gold trade on Saturday"
+assert all(p["strategy_id"] != "s_a10023" for p in GB.positions("GOLD")), "opened a gold trade on Saturday"
 _cu.signals = orig
 r = GB.close_position("GOLD", pos[0]["id"], pos[0]["entry"] * 1.01, "test")
 assert r and r["market"] == "GOLD" and r["pnl"] > 0

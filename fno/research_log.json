@@ -8,9 +8,9 @@
    "area": "Gold",
    "title": "Gold book: sessions (Asia, London, overlap, New York) and which rules may trade gold",
    "asked": "Add gold trading where it belongs, and research it by session (London, New York, ...).",
-   "period": "published research + live 59-day session table; full backtest pending data run",
-   "result": "Gold is not crypto: it is a 24-hour (weekday) commodity priced in London (LBMA auctions 10:30 and 15:00 London) and traded mostly as COMEX futures. So it has its own book (Gold tab), priced from COMEX gold futures (XAUUSD = GC=F) with PAX Gold (Binance, 24/7) as a second symbol. Published work and broker tick data agree on the session shape: Asia is the quiet session (hourly ranges roughly a quarter of the overlap's), London open and the LBMA auctions are where banks trade, and the London + New York overlap (about 18:30-22:30 IST in Indian winter) with US data at 08:30 New York is gold's busiest, most liquid window; volume fades after the COMEX floor close. One academic study finds a 'hat-shaped' day (gold drifting up in Asian hours and down in Western hours) that beat the market before costs but not after. The app now measures the session table live from recent bars.",
-   "summary": "Shipped: Gold book (own money, rules, settings, learning), world-session filter for any crypto/US/gold strategy, Asian-range and New York opening-range levels, a live session board in IST, two gold presets, and six gold autopilot candidates (4 slow trend rules from the crypto/US research, London breakout of the Asian range, Asian-hours drift). None trades until it passes the weekly gate on gold's own recent history. Full offline test (research/gold_sessions.py) is written and waiting for its data run.",
+   "period": "COMEX gold 1h Jun 2024 - Oct 2026, 15m Aug-Oct 2026, daily 2010-2026; PAXG 1h Aug 2020 - Oct 2026",
+   "result": "Sessions (COMEX gold, 596 days): average range Asia $41, London $55, overlap $46, New York $54; New York makes the day's high on 54% of days, London 40%, Asia 23%. Busiest hours 18:00-21:00 IST (London + New York overlap, US data 08:30 New York), about $24 an hour vs ~$12 in quiet Asian hours; small bump at 06:00-07:00 IST when Shanghai opens. No session has a reliable direction: all average moves within noise (|t| < 1.8) and they flip sign by year. Rules (design / holdout, after costs): London breakout of the Asian range -0.29R (121) / -0.02R (61); Asian-hours drift -0.09R (355) / -0.11R (238); fade of the Asian range, 1R-target breakout, NY opening range, overlap-only Supertrend 1h and a Western-hours short all negative or flipped. Supertrend 4h -0.06 / +0.39R and daily +0.01 / +0.16R: no clear edge. Donchian 55 4h long +0.23R (29) / +0.90R (12) and Donchian 20 daily long +0.40R (54) / +0.48R (26): positive in both halves but few trades (below the 60-trade bar) and helped by gold's bull run.",
+   "summary": "Gold book live with session board (now with measured numbers), session filter and levels for your own strategies. Gold autopilot cut to the two long breakout rules (Donchian 55 4h, Donchian 20 daily), still behind the weekly gate; all session rules removed from the autopilot. The two session presets stay in the Strategy lab, labelled as tested and losing.",
    "decision": "Partly adopted"
   },
   {
@@ -1351,19 +1351,19 @@
    "next": "If against-CPR trades keep beating the rest by a wide margin over 60 more sessions, test a 1.25x size for them on top of conviction sizing."
   },
   {
-   "id": "p-gold-sessions",
+   "id": "p-gold-live",
    "area": "Gold",
-   "title": "Gold session rules: full design/holdout backtest",
-   "waiting_for": "New data feed",
-   "why": "The research sandbox cannot reach Yahoo/Binance; research/gold_sessions.py needs gold_XAUUSD_* and PAXGUSDT files from the global-data workflow.",
-   "collecting": "COMEX gold 1h (2 years), 15m (59 days), daily (since 2010); PAXG 1h (since 2020)",
+   "title": "Gold autopilot on paper (2 long breakout rules)",
+   "waiting_for": "More live trades",
+   "why": "Both kept rules were positive in design and holdout but on few trades in a gold bull market.",
+   "collecting": "Gold book paper trades",
    "since": "2026-10-23",
-   "need": 1,
+   "need": 90,
    "unit": "days",
    "refs": [
     "g1"
    ],
-   "next": "Run fetch_global.py <dir> gold, then gold_sessions.py; keep only rules that pass design and holdout in the gold autopilot list."
+   "next": "After 90 days compare live R with the backtest; if gold turns down and longs keep stopping out, consider pausing longs below the 200-day average."
   }
  ]
 }
