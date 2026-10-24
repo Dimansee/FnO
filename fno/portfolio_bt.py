@@ -273,6 +273,51 @@ def market_busy(now=None) -> bool:
     return n.weekday() < 5 and n.date() not in C.HOLIDAYS and (9 * 60 + 10) <= n.hour * 60 + n.minute <= (15 * 60 + 40)
 
 
+# ------------------------------------------------------------------ saved setups ("my strategies") + Pine Script
+SETUPS_KEY = "pbt_setups"
+
+
+def setups() -> list[dict]:
+    from . import store
+    return store.get(SETUPS_KEY) or []
+
+
+def save_setup(name: str, params: dict, result: dict | None = None) -> dict:
+    from . import store
+    name = str(name or "").strip()[:60]
+    if not name:
+        raise ValueError("Give the strategy a name.")
+    p = _validate(params)
+    p = {**p, "start": p["start"].isoformat(), "end": p["end"].isoformat()}
+    cur = [s for s in setups() if s["name"].lower() != name.lower()]
+    if len(cur) >= 30:
+        raise ValueError("Up to 30 saved strategies; delete one first.")
+    item = {"id": secrets.token_hex(4), "name": name, "params": p, "exit_label": EXITS[p["exit"]]["label"],
+            "saved": C.now_ist().isoformat(timespec="minutes"),
+            "result": {k: (result or {}).get(k) for k in ("final", "multiple", "cagr_pct", "max_dd_pct", "trades", "win_rate", "profit_factor")} if result else None}
+    store.put(SETUPS_KEY, cur + [item])
+    return item
+
+
+def delete_setup(sid: str) -> bool:
+    from . import store
+    cur = setups()
+    new = [s for s in cur if s["id"] != sid]
+    store.put(SETUPS_KEY, new)
+    return len(new) < len(cur)
+
+
+def pine_for(params: dict, index: str) -> dict:
+    from . import pine
+    p = _validate(params)
+    lot = None
+    try:
+        lot = D.lot_size(index)
+    except Exception:
+        pass
+    return pine.generate(p, index, EXITS[p["exit"]]["ov"], EXITS[p["exit"]]["label"], lot)
+
+
 def start(params: dict) -> str:
     p = _validate(params)
     if market_busy() and not params.get("_test"):

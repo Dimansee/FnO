@@ -494,6 +494,32 @@ def backtest_portfolio():
     return jsonify({"job": PB.start(request.get_json(force=True) or {})})
 
 
+@app.post("/api/backtest/pine")
+def backtest_pine():
+    from fno import portfolio_bt as PB
+    b = request.get_json(force=True) or {}
+    return jsonify(PB.pine_for(b.get("params") or {}, b.get("index") or "NIFTY"))
+
+
+@app.get("/api/backtest/setups")
+def backtest_setups():
+    from fno import portfolio_bt as PB
+    return jsonify({"items": PB.setups()})
+
+
+@app.post("/api/backtest/setups")
+def backtest_setups_save():
+    from fno import portfolio_bt as PB
+    b = request.get_json(force=True) or {}
+    return jsonify({"ok": True, "item": PB.save_setup(b.get("name"), b.get("params") or {}, b.get("result"))})
+
+
+@app.delete("/api/backtest/setups/<sid>")
+def backtest_setups_delete(sid):
+    from fno import portfolio_bt as PB
+    return jsonify({"ok": PB.delete_setup(sid)})
+
+
 @app.get("/api/backtest/portfolio/<jid>")
 def backtest_portfolio_job(jid):
     from fno import portfolio_bt as PB

@@ -731,7 +731,14 @@ details summary{cursor:pointer;font-size:13px}
         <div><label>&nbsp;</label><label class="tog"><input type="checkbox" id="pbCmp" checked> Compare with current exits</label></div>
         <div><label>&nbsp;</label><button class="primary" id="pbGo" style="width:100%">▶ Run portfolio backtest</button></div>
       </div>
+      <div class="row wrap" style="margin-top:10px;gap:8px">
+        <button id="pbSave">💾 Save as my strategy</button>
+        <button id="pbPine">📈 Pine Script for TradingView</button>
+        <span class="muted" style="font-size:12.5px">Saves these settings with a name, or turns them into a TradingView strategy you can run on a live chart.</span>
+      </div>
+      <div id="pbSetups" style="margin-top:12px"></div>
     </div>
+    <div id="pbPineBox" class="hidden" style="margin-top:14px"></div>
     <div id="pbOut" style="margin-top:14px"></div>
     <div class="card" style="margin-top:14px">
       <h3 style="margin-top:0">Single index</h3>
@@ -2292,13 +2299,74 @@ async function pbInit() {
     $("#pbExit").innerHTML = Object.entries(PB.opts.exits).map(([k, v]) => `<option value="${k}">${esc(v)}</option>`).join("");
     if (!$("#pbTo").value) $("#pbTo").value = new Date(Date.now() + 5.5 * 3600e3).toISOString().slice(0, 10);
   } catch (e) {}
+  pbSetups();
 }
+function pbParams() {
+  return {start: $("#pbFrom").value, end: $("#pbTo").value, indices: [...document.querySelectorAll("#pbIdx input:checked")].map(x => x.value),
+    capital: +$("#pbCap").value, sizing: $("#pbSize").value, risk_pct: +$("#pbRisk").value, lots: +$("#pbLots").value, confidence: $("#pbConf").value,
+    otm: +$("#pbOtm").value, max_lots: +$("#pbMax").value, exit: $("#pbExit").value, big_run_skip: $("#pbRun2").checked, compare: $("#pbCmp").checked};
+}
+function pbApply(p) {
+  const set = (id, v) => { if (v != null && $(id)) $(id).value = v; };
+  set("#pbFrom", p.start); set("#pbTo", p.end); set("#pbCap", p.capital); set("#pbSize", p.sizing); set("#pbRisk", String(p.risk_pct)); set("#pbLots", p.lots);
+  set("#pbConf", p.confidence); set("#pbOtm", String(p.otm)); set("#pbMax", p.max_lots); set("#pbExit", p.exit);
+  $("#pbRun2").checked = !!p.big_run_skip; $("#pbCmp").checked = p.compare !== false;
+  document.querySelectorAll("#pbIdx input").forEach(x => { x.checked = (p.indices || []).includes(x.value); });
+  $("#pbSize").onchange();
+}
+async function pbSetups() {
+  let d; try { d = await api("/api/backtest/setups"); } catch (e) { return; }
+  const items = d.items || [];
+  $("#pbSetups").innerHTML = items.length ? `<div class="tablewrap"><table><tr><th>My strategies</th><th>Lots / risk</th><th>Exit</th><th>Result when saved</th><th></th></tr>
+    ${items.slice().reverse().map(x => { const p = x.params, r = x.result; return `<tr><td><b>${esc(x.name)}</b><div class="muted" style="font-size:11.5px">saved ${esc(x.saved.replace("T", " "))}</div></td>
+      <td>${p.sizing === "fixed" ? p.lots + " lots" : p.risk_pct + "% " + (p.sizing === "compound" ? "compounding" : "of start")} · ${esc(p.confidence)}${p.max_lots ? " · max " + p.max_lots : ""}</td>
+      <td style="font-size:12.5px">${esc(x.exit_label)}</td>
+      <td class="mono">${r && r.final != null ? `₹${pbL(r.final)} (${r.multiple}x) · fall ${r.max_dd_pct}%` : "–"}</td>
+      <td style="white-space:nowrap"><button data-pbload="${x.id}">Load</button> <button data-pbpine="${x.id}">Pine</button> <button class="danger" data-pbdel="${x.id}">✕</button></td></tr>`; }).join("")}</table></div>`
+    : `<p class="muted" style="margin:0;font-size:12.5px">No saved strategies yet.</p>`;
+  PB.setups = items;
+}
+async function pbShowPine(params, title) {
+  const box = $("#pbPineBox"); box.classList.remove("hidden");
+  const idx = (params.indices && params.indices.length ? params.indices : ["NIFTY", "BANKNIFTY", "SENSEX"]);
+  box.innerHTML = `<div class="card muted">Building Pine Script…</div>`;
+  try {
+    const outs = await Promise.all(idx.map(i => post("/api/backtest/pine", {params, index: i})));
+    PB.pine = outs;
+    const tab = n => { const o = outs[n];
+      $("#pbPineCode").value = o.code; $("#pbPineHow").innerHTML = o.how_to.map(h => `<li>${esc(h)}</li>`).join("");
+      document.querySelectorAll("[data-pbtab]").forEach(b => b.classList.toggle("on", +b.dataset.pbtab === n)); PB.pineTab = n; };
+    box.innerHTML = `<div class="card"><div class="cardhead"><h3 style="margin:0">Pine Script${title ? " · " + esc(title) : ""}</h3><button class="ghost" id="pbPineClose">Close</button></div>
+      <p class="muted" style="margin:6px 0 10px;font-size:13px">One script per index (TradingView runs a strategy on one chart). Same rules, sizing, confidence, big-run skip and exits as your settings. TradingView trades the <b>index</b>, not the option: size = lots × lot size × option delta, so its P&L follows the option's move but not time decay - expect the app's option backtest to come out lower. Alerts fire on every entry and exit.</p>
+      <div class="segs" style="margin-bottom:8px">${outs.map((o, n) => `<button class="seg" data-pbtab="${n}">${esc(o.index)} · ${esc(o.tv_symbol)}</button>`).join("")}</div>
+      <textarea id="pbPineCode" readonly spellcheck="false" style="width:100%;height:340px;font-family:ui-monospace,monospace;font-size:12px"></textarea>
+      <div class="row wrap" style="margin-top:8px;gap:8px"><button class="primary" id="pbPineCopy">Copy</button><button id="pbPineDl">⬇ Download .pine</button></div>
+      <ol id="pbPineHow" class="muted" style="font-size:12.5px;margin:10px 0 0;padding-left:18px"></ol></div>`;
+    tab(0);
+    box.querySelectorAll("[data-pbtab]").forEach(b => b.onclick = () => tab(+b.dataset.pbtab));
+    $("#pbPineClose").onclick = () => box.classList.add("hidden");
+    $("#pbPineCopy").onclick = async () => { try { await navigator.clipboard.writeText($("#pbPineCode").value); toast("Copied - paste it into TradingView's Pine Editor"); } catch (e) { $("#pbPineCode").select(); toast("Select all and copy"); } };
+    $("#pbPineDl").onclick = () => { const o = PB.pine[PB.pineTab || 0]; const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([o.code], {type: "text/plain"})); a.download = o.filename; a.click(); };
+    box.scrollIntoView({behavior: "smooth", block: "start"});
+  } catch (e) { box.innerHTML = `<div class="card"><p class="down" style="margin:0">${esc(e.message)}</p></div>`; }
+}
+$("#pbSave").onclick = async () => {
+  const name = prompt("Name for this strategy (e.g. 'Strong confidence + big-run skip'):"); if (!name) return;
+  try { await post("/api/backtest/setups", {name, params: pbParams(), result: PB.last && PB.last.status === "done" ? PB.last.result.main : null}); toast("Saved"); pbSetups(); }
+  catch (e) { toast(e.message, 6000); }
+};
+$("#pbPine").onclick = () => pbShowPine(pbParams(), "current settings");
+$("#pbSetups").onclick = async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  const it = (PB.setups || []).find(x => x.id === (b.dataset.pbload || b.dataset.pbpine || b.dataset.pbdel)); if (!it) return;
+  if (b.dataset.pbload) { pbApply(it.params); toast(`Loaded "${it.name}" - press Run to backtest it`); }
+  else if (b.dataset.pbpine) pbShowPine(it.params, it.name);
+  else if (b.dataset.pbdel && confirm(`Delete "${it.name}"?`)) { await api("/api/backtest/setups/" + it.id, {method: "DELETE"}); pbSetups(); }
+};
 $("#pbSize").onchange = () => { const f = $("#pbSize").value === "fixed"; $("#pbLotsBox").classList.toggle("hidden", !f); $("#pbRiskBox").classList.toggle("hidden", f); };
 $("#pbGo").onclick = async () => {
   const b = $("#pbGo");
-  const body = {start: $("#pbFrom").value, end: $("#pbTo").value, indices: [...document.querySelectorAll("#pbIdx input:checked")].map(x => x.value),
-    capital: +$("#pbCap").value, sizing: $("#pbSize").value, risk_pct: +$("#pbRisk").value, lots: +$("#pbLots").value, confidence: $("#pbConf").value,
-    otm: +$("#pbOtm").value, max_lots: +$("#pbMax").value, exit: $("#pbExit").value, big_run_skip: $("#pbRun2").checked, compare: $("#pbCmp").checked};
+  const body = pbParams();
   try {
     b.disabled = true; b.textContent = "Starting…";
     const {job} = await post("/api/backtest/portfolio", body);

@@ -1,6 +1,10 @@
 """Offline test: portfolio backtest job (3 indices, compounding, exit comparison) on synthetic 5-minute data. Run: python tests/test_portfolio_bt.py"""
 import os, sys, time
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.dirname(__file__))
+import upstash_shim  # noqa: E402
+_url, _tok = upstash_shim.start(port=6441)
+os.environ.update(APP_PASSWORD="pw", SESSION_SECRET="s", CRON_SECRET="c", KV_REST_API_URL=_url, KV_REST_API_TOKEN=_tok)
 import numpy as np, pandas as pd
 from fno import portfolio_bt as PB, market as D, config as C
 
@@ -48,4 +52,31 @@ r2 = PB.job(j2)
 assert r2["status"] == "done" and r2["result"]["compare"] is None
 assert not r2["result"]["main"]["trades"] or set(t["lots"] for t in r2["result"]["main"]["trades_list"]) <= {1, 2}
 print("fixed lots OK")
+
+# saved strategies + Pine Script
+it = PB.save_setup("Strong + skip", {"confidence": "strong", "exit": "t123_ema9", "max_lots": 50}, {"final": 1, "multiple": 2})
+assert PB.setups()[0]["name"] == "Strong + skip" and PB.setups()[0]["params"]["exit"] == "t123_ema9"
+PB.save_setup("strong + SKIP", {"exit": "current"})                      # same name replaces
+assert len(PB.setups()) == 1 and PB.setups()[0]["params"]["exit"] == "current"
+for idx in ("NIFTY", "BANKNIFTY", "SENSEX"):
+    for ex in PB.EXITS:
+        o = PB.pine_for({"exit": ex, "confidence": "strong", "sizing": "fixed", "lots": 4, "otm": 1}, idx)
+        c = o["code"]
+        assert "{{" not in c and "//@version=5" in c and o["tv_symbol"] in c and "fixedLots = input.int(4" in c
+        assert c.count("strategy.entry(") == 1 and "process_orders_on_close=true" in c
+        # every block opener is followed by an indented line (cheap structure check)
+        lines = c.splitlines()
+        for n, ln in enumerate(lines[:-1]):
+            st = ln.strip()
+            if st.startswith("//") or not st:
+                continue
+            if (st.startswith(("if ", "for ", "else")) or st.endswith("=>")) and not st.startswith("else if") or st.startswith("else if"):
+                nxt = next(x for x in lines[n + 1:] if x.strip() and not x.strip().startswith("//"))
+                assert len(nxt) - len(nxt.lstrip()) > len(ln) - len(ln.lstrip()), (idx, ex, n, ln)
+c = PB.pine_for({"exit": "current"}, "BANKNIFTY")["code"]
+assert "useFib    = input.bool(false" in c and "useTrend  = input.bool(false" in c and "lotSize   = input.int(30" in c
+c = PB.pine_for({"exit": "t123_253050"}, "NIFTY")["code"]
+assert "t1P       = input.float(20.0" in c and "t3P       = input.float(50.0" in c
+assert PB.delete_setup(PB.setups()[0]["id"]) and PB.setups() == []
+print("setups + pine OK")
 print("ALL PORTFOLIO BT OK")
