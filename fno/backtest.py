@@ -41,6 +41,11 @@ from . import pricing as PR
 #                best open move given back), "candle" (a strong opposite 5-min candle: body >= 60% of range, range >= 0.5 ATR)
 EXIT_DEFAULT = {"rev_exit": None, "rev_after_R": 1.0, "partials": (), "be_after_t1": False, "lots_x": 1, "be_r": None, "be_lock": 0.0, "lock_steps": (), "giveback": None, "noise_rr": None, "noise_be_r": None, "noise_be_lock": 0.0}
 EXIT: dict = {}
+STOP_CHECK = None      # portfolio backtest: a callable that raises to stop a long run between trading days
+
+
+class Stopped(Exception):
+    """Raised by STOP_CHECK when the user pressed Stop."""
 
 
 def _ex(key, live):
@@ -201,6 +206,8 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
     run_skip = strategy == "autopilot" and (EXIT["big_run_skip"] if "big_run_skip" in EXIT else _flag("big_run_skip"))
     runs = {}
     for n, (d, day) in enumerate(frames):
+        if STOP_CHECK is not None and n % 20 == 0:
+            STOP_CHECK()
         if n == 0 or len(day) < 60 or (trade_from and d < trade_from):
             continue
         hist = pd.concat([g for _, g in frames[max(0, n - 15):n]])

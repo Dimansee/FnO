@@ -344,8 +344,28 @@ def _set(jid, **kw):
     _jobs[jid].update(kw)
 
 
+def stop(jid: str) -> dict:
+    """Ask a queued or running backtest to stop (it stops within a few seconds, at the next trading day it simulates)."""
+    j = _jobs.get(jid)
+    if not j:
+        raise ValueError("That backtest has expired.")
+    if j["status"] in ("queued", "running"):
+        j["cancel"] = True
+        j["progress"] = "stopping…"
+    return {"ok": True, "status": j["status"]}
+
+
+def _check(jid):
+    if _jobs.get(jid, {}).get("cancel"):
+        raise B.Stopped()
+
+
 def _run(jid, p):
     with _lock:
+        if _jobs[jid].get("cancel"):
+            _set(jid, status="stopped", progress="stopped before it started")
+            return
+        B.STOP_CHECK = lambda: _check(jid)
         try:
             _set(jid, status="running")
             runs = [p["exit"]] + (["current"] if p["compare"] else [])
@@ -356,6 +376,7 @@ def _run(jid, p):
                 c = c[(c.index.date >= p["start"] - timedelta(days=40)) & (c.index.date <= p["end"])]
                 sc = None
                 for e in runs:
+                    _check(jid)
                     _set(jid, progress=f"simulating {sym} · {EXITS[e]['label']}")
                     T = _trades(sym, c, v, p["otm"], EXITS[e]["ov"], p["big_run_skip"])
                     if T.empty:
@@ -365,6 +386,7 @@ def _run(jid, p):
                         continue
                     T["score"] = _scores(T, c)
                     trades[e].append(T)
+            _check(jid)
             _set(jid, progress="replaying the account")
             res = {}
             for e in runs:
@@ -380,6 +402,11 @@ def _run(jid, p):
                     sm["trades_list"] = taken.drop(columns=[c_ for c_ in ("skipped",) if c_ in taken]).tail(3000).to_dict("records")
                 res[e] = sm
             _set(jid, status="done", progress="done", result={"main": res[p["exit"]], "compare": res.get("current") if p["compare"] else None})
+        except B.Stopped:
+            _set(jid, status="stopped", progress="stopped by you")
         except Exception as ex:
             traceback.print_exc()
             _set(jid, status="error", error=str(ex)[:300])
+        finally:
+            B.STOP_CHECK = None
+            B.EXIT.clear()

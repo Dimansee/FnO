@@ -520,6 +520,12 @@ def backtest_setups_delete(sid):
     return jsonify({"ok": PB.delete_setup(sid)})
 
 
+@app.post("/api/backtest/portfolio/<jid>/stop")
+def backtest_portfolio_stop(jid):
+    from fno import portfolio_bt as PB
+    return jsonify(PB.stop(jid))
+
+
 @app.get("/api/backtest/portfolio/<jid>")
 def backtest_portfolio_job(jid):
     from fno import portfolio_bt as PB

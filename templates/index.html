@@ -729,7 +729,7 @@ details summary{cursor:pointer;font-size:13px}
         <div style="grid-column:span 2"><label>Exit / targets</label><select id="pbExit" style="width:100%"></select></div>
         <div><label>&nbsp;</label><label class="tog"><input type="checkbox" id="pbRun2" checked> Skip trades against a big 3-day run</label></div>
         <div><label>&nbsp;</label><label class="tog"><input type="checkbox" id="pbCmp" checked> Compare with current exits</label></div>
-        <div><label>&nbsp;</label><button class="primary" id="pbGo" style="width:100%">▶ Run portfolio backtest</button></div>
+        <div><label>&nbsp;</label><div style="display:flex;gap:6px"><button class="primary" id="pbGo" style="flex:1">▶ Run portfolio backtest</button><button class="danger hidden" id="pbStop" title="Stop this backtest">■ Stop</button></div></div>
       </div>
       <div class="row wrap" style="margin-top:10px;gap:8px">
         <button id="pbSave">💾 Save as my strategy</button>
@@ -751,7 +751,7 @@ details summary{cursor:pointer;font-size:13px}
         <div><label>Capital (₹)</label><input id="btCap" type="number" value="200000" min="1000" step="5000" style="width:100%"></div>
         <div><label>Position size</label><select id="btSize" style="width:100%"><option value="risk" selected>Risk 1% per trade (the rule)</option><option value="one_lot">Always 1 lot (small accounts)</option></select></div>
         <div><label>Strike</label><select id="btOtm" style="width:100%"><option value="-1" selected>1 strike ITM (the rule)</option><option value="0">ATM</option><option value="1">1 strike OTM (cheaper)</option><option value="2">2 strikes OTM (cheapest)</option></select></div>
-        <div><button class="primary" id="btRun" style="width:100%">▶ Run backtest</button></div>
+        <div style="display:flex;gap:6px"><button class="primary" id="btRun" style="flex:1">▶ Run backtest</button><button class="danger hidden" id="btStop" title="Stop this backtest">■ Stop</button></div>
       </div>
     </div>
     <div id="btOut" style="margin-top:14px"></div>
@@ -2373,16 +2373,23 @@ $("#pbGo").onclick = async () => {
     localStorage.setItem("pbJob", job); pbWatch(job);
   } catch (e) { toast(e.message, 7000); b.disabled = false; b.textContent = "▶ Run portfolio backtest"; }
 };
+$("#pbStop").onclick = async () => {
+  if (!PB.job) return;
+  $("#pbStop").disabled = true;
+  try { await post(`/api/backtest/portfolio/${PB.job}/stop`, {}); toast("Stopping…"); } catch (e) { toast(e.message); }
+  finally { $("#pbStop").disabled = false; }
+};
 function pbWatch(job) {
   clearInterval(PB.poll);
   const tick = async () => {
     let j; try { j = await api("/api/backtest/portfolio/" + job); } catch (e) { clearInterval(PB.poll); localStorage.removeItem("pbJob"); $("#pbGo").disabled = false; $("#pbGo").textContent = "▶ Run portfolio backtest"; return; }
-    if (j.status === "done" || j.status === "error") {
-      clearInterval(PB.poll); $("#pbGo").disabled = false; $("#pbGo").textContent = "▶ Run portfolio backtest";
+    if (j.status === "done" || j.status === "error" || j.status === "stopped") {
+      clearInterval(PB.poll); $("#pbGo").disabled = false; $("#pbGo").textContent = "▶ Run portfolio backtest"; $("#pbStop").classList.add("hidden"); localStorage.removeItem("pbJob");
+      if (j.status === "stopped") { $("#pbOut").innerHTML = `<div class="card"><p class="muted" style="margin:0">Backtest stopped after ${j.elapsed_s}s. Change the settings and run again whenever you like.</p></div>`; return; }
       if (j.status === "error") { $("#pbOut").innerHTML = `<div class="card"><p class="down" style="margin:0">Backtest failed: ${esc(j.error)}</p></div>`; return; }
       PB.last = j; pbRender(j); return;
     }
-    $("#pbGo").disabled = true; $("#pbGo").textContent = "Running…";
+    $("#pbGo").disabled = true; $("#pbGo").textContent = "Running…"; $("#pbStop").classList.remove("hidden"); PB.job = job;
     $("#pbOut").innerHTML = `<div class="card muted">Running (${j.elapsed_s}s): ${esc(j.progress || "")}. A full 3-index history takes a few minutes.</div>`;
   };
   tick(); PB.poll = setInterval(tick, 4000);
@@ -2433,8 +2440,9 @@ function pbRender(j) {
 let btc, bts;
 $("#btRun").onclick = async () => {
   const b = $("#btRun"); b.disabled = true; b.textContent = +$("#btDays").value > 120 ? "Running… (up to a minute)" : "Running…";
+  const ctl = new AbortController(); S.btAbort = ctl; $("#btStop").classList.remove("hidden");
   try {
-    const d = await post("/api/backtest", {symbol: $("#btSym").value, mult: +$("#btMult").value, capital: +$("#btCap").value, sizing: $("#btSize").value, otm: +$("#btOtm").value, strategy: $("#btStrat").value, days: +$("#btDays").value});
+    const d = await api("/api/backtest", {method: "POST", signal: ctl.signal, body: JSON.stringify({symbol: $("#btSym").value, mult: +$("#btMult").value, capital: +$("#btCap").value, sizing: $("#btSize").value, otm: +$("#btOtm").value, strategy: $("#btStrat").value, days: +$("#btDays").value})});
     S.btLast = d;
     if (d.error) throw new Error(d.error);
     const s = d.summary;
@@ -2472,9 +2480,10 @@ $("#btRun").onclick = async () => {
     if (window.LightweightCharts) { [btc, bts] = lineChart($("#btchart"));
     bts.setData(d.trades.map((t, i) => ({time: Math.floor(new Date(t.date + "T" + t.entry_time + ":00Z").getTime() / 1000) + i, value: t.equity})));
     btc.timeScale().fitContent(); }
-  } catch (e) { toast(e.message); }
-  finally { b.disabled = false; b.textContent = "▶ Run backtest"; }
+  } catch (e) { if (e.name === "AbortError") { $("#btOut").innerHTML = `<div class="card"><p class="muted" style="margin:0">Backtest stopped.</p></div>`; } else toast(e.message); }
+  finally { b.disabled = false; b.textContent = "▶ Run backtest"; $("#btStop").classList.add("hidden"); S.btAbort = null; }
 };
+$("#btStop").onclick = () => { if (S.btAbort) S.btAbort.abort(); };
 
 /* ---------- settings ---------- */
 function brokerCard(name, title, idLabel, st, steps) {

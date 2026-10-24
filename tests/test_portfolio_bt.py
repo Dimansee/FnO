@@ -79,4 +79,15 @@ c = PB.pine_for({"exit": "t123_253050"}, "NIFTY")["code"]
 assert "t1P       = input.float(20.0" in c and "t3P       = input.float(50.0" in c
 assert PB.delete_setup(PB.setups()[0]["id"]) and PB.setups() == []
 print("setups + pine OK")
+# Stop: a running job stops within seconds and leaves the engine clean
+j3 = PB.start({"start": "2026-03-10", "end": "2026-08-28", "exit": "t123", "compare": True, "_test": True})
+time.sleep(1.5)
+PB.stop(j3)
+t0 = time.time()
+while PB.job(j3)["status"] in ("queued", "running") and time.time() - t0 < 60:
+    time.sleep(0.5)
+assert PB.job(j3)["status"] == "stopped", PB.job(j3)
+from fno import backtest as B
+assert B.STOP_CHECK is None and not B.EXIT
+print("stop OK in", round(time.time() - t0, 1), "s")
 print("ALL PORTFOLIO BT OK")
