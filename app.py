@@ -501,6 +501,30 @@ def backtest_pine():
     return jsonify(PB.pine_for(b.get("params") or {}, b.get("index") or "NIFTY"))
 
 
+@app.get("/api/autopilot/rules")
+def autopilot_rules():
+    from fno import aprules
+    from fno import portfolio_bt as PB
+    return jsonify({**aprules.rulebook(), "baseline": PB.BASELINE})
+
+
+@app.get("/api/outcomes")
+def outcomes():
+    f = Path(__file__).parent / "fno" / "outcomes.json"
+    if not f.exists():
+        return jsonify({"rows": [], "error": "The outcomes study has not been run yet."})
+    return Response(f.read_text(encoding="utf-8"), mimetype="application/json")
+
+
+@app.get("/api/outcomes.pdf")
+def outcomes_pdf():
+    f = Path(__file__).parent / "fno" / "outcomes.pdf"
+    if not f.exists():
+        return jsonify({"error": "The outcomes PDF has not been made yet."}), 404
+    return Response(f.read_bytes(), mimetype="application/pdf",
+                    headers={"Content-Disposition": 'inline; filename="autopilot_outcomes.pdf"'})
+
+
 @app.get("/api/backtest/setups")
 def backtest_setups():
     from fno import portfolio_bt as PB

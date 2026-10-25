@@ -119,12 +119,18 @@ def _mult(conf, sym, score):
 
 
 def replay(T: pd.DataFrame, capital: float, sizing: str, risk_pct: float, lots_fixed: int, conf: str, gates: bool = True, max_lots: int = 0,
-           dd_half: bool = False) -> pd.DataFrame:
+           dd_half: bool = False, alt: pd.DataFrame | None = None) -> pd.DataFrame:
+    """alt: the same signals priced on the 1-OTM strike; used while equity is below SMALL_OTM_BELOW (live small-account rule)."""
     T = T.sort_values(["date", "entry_time"]).reset_index(drop=True)
+    alt_by = {}
+    if alt is not None and len(alt):
+        alt_by = {(a.sym, a.date, a.entry_time, a.strategy): a for a in alt.itertuples(index=False)}
     eq = peak = float(capital)
     open_pos, rows = [], []
     week, week_start, week_pnl, blocked = None, eq, 0.0, False
     for r in T.itertuples(index=False):
+        if alt_by and eq < C.SMALL_OTM_BELOW:
+            r = alt_by.get((r.sym, r.date, r.entry_time, r.strategy), r)
         s, lot = r.sym, int(r.lot)
         key_in, key_out = r.date + r.entry_time, r.date + r.exit_time
         open_pos = [p for p in open_pos if p[0] > key_in]
@@ -265,8 +271,9 @@ def _validate(p: dict) -> dict:
     if out["otm"] not in (-1, 0, 1, 2):
         raise ValueError("Strike must be 1 ITM, ATM, 1 OTM or 2 OTM.")
     out["exit"] = p.get("exit") if p.get("exit") in EXITS else "current"
-    out["compare"] = bool(p.get("compare", True)) and out["exit"] != "current"
+    out["compare"] = bool(p.get("compare", True))
     out["gates"] = bool(p.get("gates", True))
+    out["small_otm"] = bool(p.get("small_otm", True))
     out["dd_half"] = bool(p.get("dd_half", True))
     out["max_loss_lot"] = int(p.get("max_loss_lot") or 0)
     if not 0 <= out["max_loss_lot"] <= 100000:
@@ -370,6 +377,46 @@ def _check(jid):
         raise B.Stopped()
 
 
+# Today's Autopilot, as a backtest setting: what "Compare" runs next to the chosen settings (same period, indices, capital).
+BASELINE = {"sizing": "compound", "risk_pct": float(C.AUTOPILOT_RISK_PCT), "lots": 1, "confidence": "standard", "big_run_skip": True,
+            "dd_half": True, "otm": -C.STRIKE_ITM, "exit": "current", "max_lots": 50, "max_loss_lot": 0, "gates": True,
+            "small_otm": True}
+BASE_LABEL = "Current Autopilot rules"
+DIFF_LABELS = {"sizing": "lots", "risk_pct": "risk %", "lots": "fixed lots", "confidence": "confidence", "big_run_skip": "big-run skip",
+               "dd_half": "half risk in a drawdown", "otm": "strike", "exit": "exit", "max_lots": "max lots", "max_loss_lot": "max loss per lot",
+               "gates": "equity gates", "small_otm": "1 OTM below Rs 60k"}
+
+
+def baseline_of(p: dict) -> dict:
+    return {**p, **BASELINE, "compare": False}
+
+
+def differences(p: dict) -> list[str]:
+    """Plain list of what the chosen settings change compared with today's Autopilot."""
+    out = []
+    for k, v in BASELINE.items():
+        pv = p.get(k)
+        if k == "lots" and p.get("sizing") != "fixed":
+            continue
+        if k == "risk_pct" and p.get("sizing") == "fixed":
+            continue
+        if pv != v and not (isinstance(v, float) and pv is not None and abs(float(pv) - v) < 1e-9):
+            shown = EXITS[pv]["label"] if k == "exit" else CONF.get(pv, pv) if k == "confidence" else pv
+            out.append(f"{DIFF_LABELS[k]}: {shown}")
+    return out
+
+
+def _trade_key(q):
+    return (q["exit"], int(q["otm"]), bool(q["big_run_skip"]), int(q["max_loss_lot"] or 0))
+
+
+def _alt_key(q):
+    """Trades on the 1-OTM strike, needed when the small-account rule can switch strikes (rule strike 1 ITM, account can be < Rs 60k)."""
+    if q.get("small_otm") and int(q["otm"]) == -C.STRIKE_ITM and q["sizing"] != "fixed":
+        return (q["exit"], C.SMALL_OTM_STRIKES, bool(q["big_run_skip"]), int(q["max_loss_lot"] or 0))
+    return None
+
+
 def _run(jid, p):
     with _lock:
         if _jobs[jid].get("cancel"):
@@ -378,40 +425,53 @@ def _run(jid, p):
         B.STOP_CHECK = lambda: _check(jid)
         try:
             _set(jid, status="running")
-            runs = [p["exit"]] + (["current"] if p["compare"] else [])
-            trades = {e: [] for e in runs}
+            cfgs = {"main": p}
+            diffs = differences(p)
+            if p["compare"] and diffs:
+                cfgs["compare"] = baseline_of(p)
+            keys = {}
+            for nm, q in cfgs.items():
+                keys.setdefault(_trade_key(q), []).append(nm)
+                if _alt_key(q):
+                    keys.setdefault(_alt_key(q), []).append(nm + ":alt")
+            trades = {k: [] for k in keys}
             for sym in p["indices"]:
                 _set(jid, progress=f"loading {sym} history")
                 c, v = _history(sym, p["start"])
                 c = c[(c.index.date >= p["start"] - timedelta(days=40)) & (c.index.date <= p["end"])]
-                sc = None
-                for e in runs:
+                for k in keys:
                     _check(jid)
-                    _set(jid, progress=f"simulating {sym} · {EXITS[e]['label']}")
-                    T = _trades(sym, c, v, p["otm"], EXITS[e]["ov"], p["big_run_skip"], p["max_loss_lot"])
+                    ex, otm, brs, mll = k
+                    _set(jid, progress=f"simulating {sym} · {EXITS[ex]['label']}")
+                    T = _trades(sym, c, v, otm, EXITS[ex]["ov"], brs, mll)
                     if T.empty:
                         continue
                     T = T[(T.date >= p["start"].isoformat()) & (T.date <= p["end"].isoformat())]
                     if T.empty:
                         continue
                     T["score"] = _scores(T, c)
-                    trades[e].append(T)
+                    trades[k].append(T)
             _check(jid)
             _set(jid, progress="replaying the account")
             res = {}
-            for e in runs:
-                if not trades[e]:
-                    res[e] = {"trades": 0}
+            for nm, q in cfgs.items():
+                k = _trade_key(q)
+                if not trades[k]:
+                    res[nm] = {"trades": 0, "label": BASE_LABEL if nm == "compare" else "Your settings"}
                     continue
-                T = pd.concat(trades[e], ignore_index=True)
-                R = replay(T, p["capital"], p["sizing"], p["risk_pct"], p["lots"], p["confidence"], p["gates"], p["max_lots"], p["dd_half"] and p["sizing"] != "fixed")
-                sm = _summary(R, p["capital"])
-                sm["label"] = EXITS[e]["label"]
-                if e == p["exit"]:
+                T = pd.concat(trades[k], ignore_index=True)
+                ak = _alt_key(q)
+                A = pd.concat(trades[ak], ignore_index=True) if ak and trades.get(ak) else None
+                R = replay(T, q["capital"], q["sizing"], q["risk_pct"], q["lots"], q["confidence"], q["gates"], q["max_lots"],
+                           q["dd_half"] and q["sizing"] != "fixed", A)
+                sm = _summary(R, q["capital"])
+                sm["label"] = BASE_LABEL if nm == "compare" else ("Your settings" if diffs else BASE_LABEL)
+                if nm == "main":
+                    sm["changes"] = diffs
                     taken = R[R["skipped"].isna()] if "skipped" in R else R
                     sm["trades_list"] = taken.drop(columns=[c_ for c_ in ("skipped",) if c_ in taken]).tail(3000).to_dict("records")
-                res[e] = sm
-            _set(jid, status="done", progress="done", result={"main": res[p["exit"]], "compare": res.get("current") if p["compare"] else None})
+                res[nm] = sm
+            _set(jid, status="done", progress="done", result={"main": res["main"], "compare": res.get("compare"), "changes": diffs})
         except B.Stopped:
             _set(jid, status="stopped", progress="stopped by you")
         except Exception as ex:

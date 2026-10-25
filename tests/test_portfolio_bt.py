@@ -39,7 +39,8 @@ while PB.job(j)["status"] in ("queued", "running") and time.time() - t0 < 600:
 r = PB.job(j)
 assert r["status"] == "done", r
 m, c = r["result"]["main"], r["result"]["compare"]
-assert c and c["label"].startswith("Current") and m["label"].startswith("Book 20%")
+assert c and c["label"] == "Current Autopilot rules" and m["label"] == "Your settings"
+assert any(x.startswith("exit:") for x in r["result"]["changes"]) and any(x.startswith("confidence") for x in r["result"]["changes"])
 for x in (m, c):
     if x["trades"]:
         assert x["years"] and x["months_table"] and x["curve"] and x["by_index"] and "max_dd_pct" in x, x.keys()
@@ -49,9 +50,23 @@ j2 = PB.start({"start": "2026-04-01", "end": "2026-08-28", "indices": ["NIFTY"],
 while PB.job(j2)["status"] in ("queued", "running"):
     time.sleep(1)
 r2 = PB.job(j2)
-assert r2["status"] == "done" and r2["result"]["compare"] is None
+assert r2["status"] == "done" and r2["result"]["compare"]["label"] == "Current Autopilot rules"   # fixed lots differ from today's rules
 assert not r2["result"]["main"]["trades"] or set(t["lots"] for t in r2["result"]["main"]["trades_list"]) <= {1, 2}
 print("fixed lots OK")
+same = PB._validate({**PB.BASELINE, "start": "2026-04-01", "end": "2026-08-28"})
+assert PB.differences(same) == [], PB.differences(same)
+assert PB.differences({**same, "dd_half": False, "max_lots": 0}) == ["half risk in a drawdown: False", "max lots: 0"]
+j4 = PB.start({**PB.BASELINE, "start": "2026-04-01", "end": "2026-08-28", "capital": 30000, "indices": ["NIFTY"], "compare": True, "_test": True})
+while PB.job(j4)["status"] in ("queued", "running"):
+    time.sleep(1)
+r4 = PB.job(j4)
+assert r4["status"] == "done" and r4["result"]["compare"] is None and r4["result"]["main"]["label"] == "Current Autopilot rules", r4
+print("baseline compare OK")
+from fno import aprules
+rb = aprules.rulebook()
+assert len(rb["sections"]) >= 5 and all(len(r) == 2 for sec in rb["sections"] for r in sec["rows"])
+assert any("Bank Nifty" in r[0] for sec in rb["sections"] for r in sec["rows"])
+print("autopilot rulebook OK")
 
 # saved strategies + Pine Script
 it = PB.save_setup("Strong + skip", {"confidence": "strong", "exit": "t123_ema9", "max_lots": 50}, {"final": 1, "multiple": 2})

@@ -1,0 +1,7894 @@
+{
+"generated": "2026-10-25",
+"baseline": {
+"sizing": "compound",
+"risk_pct": 1.0,
+"lots": 1,
+"confidence": "standard",
+"big_run_skip": true,
+"dd_half": true,
+"otm": -1,
+"exit": "current",
+"max_lots": 50,
+"max_loss_lot": 0,
+"gates": true,
+"small_otm": true,
+"indices": [
+"NIFTY",
+"BANKNIFTY",
+"SENSEX"
+]
+},
+"periods": {
+"full": [
+"2023-01-02",
+"2026-10-23"
+],
+"y2026": [
+"2026-01-01",
+"2026-10-23"
+]
+},
+"capitals": [
+200000,
+20000
+],
+"notes": [
+"Same engine as the Backtest tab's portfolio backtest (option prices modelled from the index, charges, slippage that grows with order size, freeze-size order splits, weekly loss limit, cash check).",
+"Each row changes only what its 'Changes' column says; everything else is today's Autopilot.",
+"'2026 only' restarts the account on 1 Jan 2026 - an unseen year for most rules (they were picked on 2023-25).",
+"Compounded totals follow ONE historical path: a few big wins or losses early change the size of every later trade, so neighbouring settings (e.g. risk 1.5% vs 2%) can differ by a lot. Read the worst fall and the 2026 column alongside the final value; the Rs 20,000 rows are the most path-sensitive.",
+"The AI judge (Nifty sizing) is not modelled; nor are real bid-ask spreads beyond the slippage model.",
+"A result that looks better on one window is not proof: most ideas here were already tested and rejected in research rounds 40-44."
+],
+"rows": [
+{
+"group": "Baseline",
+"name": "Current Autopilot rules",
+"changes": [],
+"runs": {
+"200000_full": {
+"trades": 1921,
+"final": 3260111,
+"net": 3060111,
+"multiple": 16.3,
+"cagr_pct": 109.9,
+"max_dd_pct": -28.6,
+"max_dd_rs": -524609,
+"win_rate": 31.3,
+"profit_factor": 1.49,
+"avg_R": 0.263,
+"worst_trade": -36775,
+"best_trade": 268906,
+"max_lots": 50,
+"avg_lots": 4.1,
+"losing_months": 22,
+"months": 46,
+"worst_month": -232415,
+"best_month": 1134226,
+"skipped": {
+"weekly loss limit": 224,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 30.4,
+"2024": 193.3,
+"2025": 76.2,
+"2026": 141.8
+},
+"by_index": {
+"NIFTY": 2061813,
+"SENSEX": 1111506,
+"BANKNIFTY": -113221
+}
+},
+"200000_y2026": {
+"trades": 387,
+"final": 457190,
+"net": 257190,
+"multiple": 2.29,
+"cagr_pct": 189.6,
+"max_dd_pct": -19.1,
+"max_dd_rs": -71068,
+"win_rate": 34.9,
+"profit_factor": 1.64,
+"avg_R": 0.341,
+"worst_trade": -5084,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.3,
+"losing_months": 3,
+"months": 10,
+"worst_month": -33700,
+"best_month": 139630,
+"skipped": {
+"weekly loss limit": 33,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 128.6
+},
+"by_index": {
+"NIFTY": 184761,
+"SENSEX": 69125,
+"BANKNIFTY": 3306
+}
+},
+"20000_full": {
+"trades": 1475,
+"final": 494616,
+"net": 474616,
+"multiple": 24.73,
+"cagr_pct": 134.5,
+"max_dd_pct": -69.3,
+"max_dd_rs": -85765,
+"win_rate": 32.0,
+"profit_factor": 1.35,
+"avg_R": 0.26,
+"worst_trade": -6381,
+"best_trade": 33645,
+"max_lots": 11,
+"avg_lots": 1.1,
+"losing_months": 16,
+"months": 46,
+"worst_month": -41529,
+"best_month": 129081,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 347,
+"weekly loss limit": 252,
+"trend slot below Rs 40k": 55,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 30.2,
+"2024": 563.2,
+"2025": 40.9,
+"2026": 103.4
+},
+"by_index": {
+"NIFTY": 278116,
+"SENSEX": 196225,
+"BANKNIFTY": 295
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 94525,
+"net": 74525,
+"multiple": 4.73,
+"cagr_pct": 658.4,
+"max_dd_pct": -47.6,
+"max_dd_rs": -39695,
+"win_rate": 34.9,
+"profit_factor": 1.34,
+"avg_R": 0.284,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19404,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 372.6
+},
+"by_index": {
+"NIFTY": 58428,
+"BANKNIFTY": 10068,
+"SENSEX": 6038
+}
+}
+},
+"verdict": {
+"200000_full": "baseline",
+"200000_y2026": "baseline",
+"20000_full": "baseline",
+"20000_y2026": "baseline"
+}
+},
+{
+"group": "Exits & targets",
+"name": "Book a third at T1 1R / T2 2R / T3 3R",
+"changes": [
+"exit: Book a third at T1 1R / T2 2R / T3 3R"
+],
+"runs": {
+"200000_full": {
+"trades": 1851,
+"final": 434403,
+"net": 234403,
+"multiple": 2.17,
+"cagr_pct": 22.9,
+"max_dd_pct": -40.7,
+"max_dd_rs": -105905,
+"win_rate": 44.4,
+"profit_factor": 1.14,
+"avg_R": 0.213,
+"worst_trade": -6381,
+"best_trade": 11982,
+"max_lots": 9,
+"avg_lots": 1.2,
+"losing_months": 20,
+"months": 46,
+"worst_month": -23249,
+"best_month": 90871,
+"skipped": {
+"weekly loss limit": 185,
+"Fibonacci slot below Rs 2 lakh": 123
+},
+"years": {
+"2023": -16.8,
+"2024": 48.2,
+"2025": 26.3,
+"2026": 39.3
+},
+"by_index": {
+"NIFTY": 193753,
+"SENSEX": 75622,
+"BANKNIFTY": -34949
+}
+},
+"200000_y2026": {
+"trades": 370,
+"final": 239510,
+"net": 39510,
+"multiple": 1.2,
+"cagr_pct": 26.3,
+"max_dd_pct": -22.2,
+"max_dd_rs": -54478,
+"win_rate": 46.8,
+"profit_factor": 1.13,
+"avg_R": 0.266,
+"worst_trade": -4388,
+"best_trade": 7958,
+"max_lots": 4,
+"avg_lots": 1.0,
+"losing_months": 6,
+"months": 10,
+"worst_month": -16934,
+"best_month": 39270,
+"skipped": {
+"weekly loss limit": 44,
+"Fibonacci slot below Rs 2 lakh": 22
+},
+"years": {
+"2026": 19.8
+},
+"by_index": {
+"NIFTY": 50452,
+"SENSEX": 448,
+"BANKNIFTY": -11399
+}
+},
+"20000_full": {
+"trades": 1095,
+"final": 171953,
+"net": 151953,
+"multiple": 8.6,
+"cagr_pct": 77.4,
+"max_dd_pct": -81.8,
+"max_dd_rs": -41346,
+"win_rate": 44.6,
+"profit_factor": 1.18,
+"avg_R": 0.246,
+"worst_trade": -5567,
+"best_trade": 8506,
+"max_lots": 3,
+"avg_lots": 1.0,
+"losing_months": 22,
+"months": 46,
+"worst_month": -17532,
+"best_month": 41509,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 590,
+"weekly loss limit": 267,
+"trend slot below Rs 40k": 110,
+"not enough free cash": 59,
+"1 lot risks > 15% of the account": 38
+},
+"years": {
+"2023": -58.5,
+"2024": 948.2,
+"2025": 38.6,
+"2026": 42.5
+},
+"by_index": {
+"NIFTY": 104694,
+"BANKNIFTY": -27187,
+"SENSEX": 74442
+}
+},
+"20000_y2026": {
+"trades": 190,
+"final": 35763,
+"net": 15763,
+"multiple": 1.79,
+"cagr_pct": 113.4,
+"max_dd_pct": -66.7,
+"max_dd_rs": -35638,
+"win_rate": 43.2,
+"profit_factor": 1.11,
+"avg_R": 0.251,
+"worst_trade": -4184,
+"best_trade": 7475,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 4,
+"months": 10,
+"worst_month": -11410,
+"best_month": 18258,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 111,
+"trend slot below Rs 40k": 57,
+"weekly loss limit": 37,
+"not enough free cash": 36,
+"1 lot risks > 15% of the account": 5
+},
+"years": {
+"2026": 78.8
+},
+"by_index": {
+"NIFTY": 16643,
+"BANKNIFTY": 6197,
+"SENSEX": -7078
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "worse",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Exits & targets",
+"name": "Book 20% / 30% / 50% at 1R / 2R / 3R",
+"changes": [
+"exit: Book 20% / 30% / 50% at 1R / 2R / 3R"
+],
+"runs": {
+"200000_full": {
+"trades": 1907,
+"final": 620526,
+"net": 420526,
+"multiple": 3.1,
+"cagr_pct": 35.1,
+"max_dd_pct": -40.5,
+"max_dd_rs": -108026,
+"win_rate": 40.2,
+"profit_factor": 1.2,
+"avg_R": 0.214,
+"worst_trade": -7991,
+"best_trade": 17990,
+"max_lots": 13,
+"avg_lots": 1.5,
+"losing_months": 22,
+"months": 46,
+"worst_month": -55665,
+"best_month": 149685,
+"skipped": {
+"weekly loss limit": 169,
+"Fibonacci slot below Rs 2 lakh": 83
+},
+"years": {
+"2023": -15.3,
+"2024": 84.4,
+"2025": 35.6,
+"2026": 46.5
+},
+"by_index": {
+"NIFTY": 330488,
+"SENSEX": 136313,
+"BANKNIFTY": -46264
+}
+},
+"200000_y2026": {
+"trades": 375,
+"final": 267070,
+"net": 67070,
+"multiple": 1.34,
+"cagr_pct": 45.4,
+"max_dd_pct": -19.8,
+"max_dd_rs": -51445,
+"win_rate": 41.6,
+"profit_factor": 1.21,
+"avg_R": 0.279,
+"worst_trade": -4388,
+"best_trade": 9390,
+"max_lots": 6,
+"avg_lots": 1.1,
+"losing_months": 4,
+"months": 10,
+"worst_month": -18264,
+"best_month": 45425,
+"skipped": {
+"weekly loss limit": 43,
+"Fibonacci slot below Rs 2 lakh": 18
+},
+"years": {
+"2026": 33.5
+},
+"by_index": {
+"NIFTY": 64904,
+"SENSEX": 12897,
+"BANKNIFTY": -10731
+}
+},
+"20000_full": {
+"trades": 1099,
+"final": 184519,
+"net": 164519,
+"multiple": 9.23,
+"cagr_pct": 80.6,
+"max_dd_pct": -82.7,
+"max_dd_rs": -43943,
+"win_rate": 40.0,
+"profit_factor": 1.19,
+"avg_R": 0.232,
+"worst_trade": -4972,
+"best_trade": 9925,
+"max_lots": 4,
+"avg_lots": 1.0,
+"losing_months": 21,
+"months": 46,
+"worst_month": -12689,
+"best_month": 44761,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 586,
+"weekly loss limit": 287,
+"trend slot below Rs 40k": 106,
+"not enough free cash": 45,
+"1 lot risks > 15% of the account": 36
+},
+"years": {
+"2023": -57.6,
+"2024": 1081.2,
+"2025": 36.8,
+"2026": 34.7
+},
+"by_index": {
+"NIFTY": 93042,
+"BANKNIFTY": -7097,
+"SENSEX": 78561
+}
+},
+"20000_y2026": {
+"trades": 229,
+"final": 54282,
+"net": 34282,
+"multiple": 2.71,
+"cagr_pct": 264.4,
+"max_dd_pct": -54.8,
+"max_dd_rs": -33013,
+"win_rate": 40.2,
+"profit_factor": 1.2,
+"avg_R": 0.297,
+"worst_trade": -4288,
+"best_trade": 8858,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 5,
+"months": 10,
+"worst_month": -7751,
+"best_month": 20757,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 117,
+"weekly loss limit": 35,
+"not enough free cash": 29,
+"trend slot below Rs 40k": 22,
+"1 lot risks > 15% of the account": 4
+},
+"years": {
+"2026": 171.4
+},
+"by_index": {
+"NIFTY": 33110,
+"BANKNIFTY": 122,
+"SENSEX": 1047
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "worse",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Exits & targets",
+"name": "A third at 2R, a third at 4R, rest runs",
+"changes": [
+"exit: A third at 2R, a third at 4R, rest runs"
+],
+"runs": {
+"200000_full": {
+"trades": 1964,
+"final": 1280827,
+"net": 1080827,
+"multiple": 6.4,
+"cagr_pct": 63.8,
+"max_dd_pct": -32.6,
+"max_dd_rs": -224156,
+"win_rate": 34.3,
+"profit_factor": 1.31,
+"avg_R": 0.253,
+"worst_trade": -15925,
+"best_trade": 62788,
+"max_lots": 26,
+"avg_lots": 2.2,
+"losing_months": 23,
+"months": 46,
+"worst_month": -91985,
+"best_month": 396382,
+"skipped": {
+"weekly loss limit": 181,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 9.2,
+"2024": 141.7,
+"2025": 36.7,
+"2026": 77.5
+},
+"by_index": {
+"NIFTY": 797431,
+"SENSEX": 343870,
+"BANKNIFTY": -60456
+}
+},
+"200000_y2026": {
+"trades": 389,
+"final": 385671,
+"net": 185671,
+"multiple": 1.93,
+"cagr_pct": 132.7,
+"max_dd_pct": -17.3,
+"max_dd_rs": -54452,
+"win_rate": 37.5,
+"profit_factor": 1.5,
+"avg_R": 0.337,
+"worst_trade": -4388,
+"best_trade": 20891,
+"max_lots": 8,
+"avg_lots": 1.2,
+"losing_months": 4,
+"months": 10,
+"worst_month": -24549,
+"best_month": 112381,
+"skipped": {
+"weekly loss limit": 31,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 92.8
+},
+"by_index": {
+"NIFTY": 151059,
+"SENSEX": 31315,
+"BANKNIFTY": 3298
+}
+},
+"20000_full": {
+"trades": 1405,
+"final": 471504,
+"net": 451504,
+"multiple": 23.58,
+"cagr_pct": 131.5,
+"max_dd_pct": -84.3,
+"max_dd_rs": -68791,
+"win_rate": 35.7,
+"profit_factor": 1.37,
+"avg_R": 0.27,
+"worst_trade": -5567,
+"best_trade": 20891,
+"max_lots": 9,
+"avg_lots": 1.1,
+"losing_months": 18,
+"months": 46,
+"worst_month": -29420,
+"best_month": 141191,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 401,
+"weekly loss limit": 239,
+"trend slot below Rs 40k": 67,
+"not enough free cash": 22,
+"1 lot risks > 15% of the account": 16
+},
+"years": {
+"2023": -46.9,
+"2024": 1390.8,
+"2025": 52.2,
+"2026": 95.7
+},
+"by_index": {
+"NIFTY": 272067,
+"SENSEX": 178001,
+"BANKNIFTY": 1438
+}
+},
+"20000_y2026": {
+"trades": 253,
+"final": 74153,
+"net": 54153,
+"multiple": 3.71,
+"cagr_pct": 445.9,
+"max_dd_pct": -56.2,
+"max_dd_rs": -46098,
+"win_rate": 37.2,
+"profit_factor": 1.25,
+"avg_R": 0.283,
+"worst_trade": -4388,
+"best_trade": 11353,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 4,
+"months": 10,
+"worst_month": -14259,
+"best_month": 24721,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 118,
+"weekly loss limit": 25,
+"trend slot below Rs 40k": 18,
+"not enough free cash": 16,
+"1 lot risks > 15% of the account": 3
+},
+"years": {
+"2026": 270.8
+},
+"by_index": {
+"NIFTY": 44891,
+"BANKNIFTY": 3273,
+"SENSEX": 5998
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "worse",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Exits & targets",
+"name": "Half at 2R, half runs",
+"changes": [
+"exit: Half at 2R, half runs"
+],
+"runs": {
+"200000_full": {
+"trades": 1954,
+"final": 948357,
+"net": 748357,
+"multiple": 4.74,
+"cagr_pct": 51.2,
+"max_dd_pct": -28.9,
+"max_dd_rs": -162330,
+"win_rate": 34.2,
+"profit_factor": 1.26,
+"avg_R": 0.249,
+"worst_trade": -11983,
+"best_trade": 52726,
+"max_lots": 20,
+"avg_lots": 1.9,
+"losing_months": 23,
+"months": 46,
+"worst_month": -67256,
+"best_month": 265105,
+"skipped": {
+"weekly loss limit": 191,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 15.0,
+"2024": 86.4,
+"2025": 35.0,
+"2026": 63.9
+},
+"by_index": {
+"NIFTY": 573057,
+"SENSEX": 202988,
+"BANKNIFTY": -27675
+}
+},
+"200000_y2026": {
+"trades": 382,
+"final": 323004,
+"net": 123004,
+"multiple": 1.62,
+"cagr_pct": 85.6,
+"max_dd_pct": -17.6,
+"max_dd_rs": -51830,
+"win_rate": 38.0,
+"profit_factor": 1.34,
+"avg_R": 0.34,
+"worst_trade": -4388,
+"best_trade": 16196,
+"max_lots": 7,
+"avg_lots": 1.2,
+"losing_months": 4,
+"months": 10,
+"worst_month": -19367,
+"best_month": 68791,
+"skipped": {
+"weekly loss limit": 38,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 61.5
+},
+"by_index": {
+"NIFTY": 102655,
+"SENSEX": 28135,
+"BANKNIFTY": -7787
+}
+},
+"20000_full": {
+"trades": 1326,
+"final": 301323,
+"net": 281323,
+"multiple": 15.07,
+"cagr_pct": 105.8,
+"max_dd_pct": -77.4,
+"max_dd_rs": -49072,
+"win_rate": 35.6,
+"profit_factor": 1.25,
+"avg_R": 0.256,
+"worst_trade": -5567,
+"best_trade": 13703,
+"max_lots": 6,
+"avg_lots": 1.0,
+"losing_months": 16,
+"months": 46,
+"worst_month": -24374,
+"best_month": 60247,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 492,
+"weekly loss limit": 248,
+"trend slot below Rs 40k": 56,
+"not enough free cash": 22,
+"1 lot risks > 15% of the account": 6
+},
+"years": {
+"2023": -14.7,
+"2024": 779.7,
+"2025": 29.5,
+"2026": 55.0
+},
+"by_index": {
+"NIFTY": 168227,
+"BANKNIFTY": 1210,
+"SENSEX": 111884
+}
+},
+"20000_y2026": {
+"trades": 242,
+"final": 61286,
+"net": 41286,
+"multiple": 3.06,
+"cagr_pct": 326.5,
+"max_dd_pct": -55.8,
+"max_dd_rs": -38041,
+"win_rate": 37.6,
+"profit_factor": 1.21,
+"avg_R": 0.288,
+"worst_trade": -4288,
+"best_trade": 10422,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 4,
+"months": 10,
+"worst_month": -10114,
+"best_month": 23294,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 119,
+"weekly loss limit": 27,
+"trend slot below Rs 40k": 22,
+"not enough free cash": 21,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 206.4
+},
+"by_index": {
+"NIFTY": 38238,
+"BANKNIFTY": 487,
+"SENSEX": 2561
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "worse",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Exits & targets",
+"name": "20/30/50% at 1R/2R/3R + exit rest on 5-min close across 9-EMA",
+"changes": [
+"exit: 20/30/50% at 1R/2R/3R + exit rest on 5-min close across 9-EMA"
+],
+"runs": {
+"200000_full": {
+"trades": 1904,
+"final": 326457,
+"net": 126457,
+"multiple": 1.63,
+"cagr_pct": 13.9,
+"max_dd_pct": -35.0,
+"max_dd_rs": -91572,
+"win_rate": 46.3,
+"profit_factor": 1.08,
+"avg_R": 0.172,
+"worst_trade": -5567,
+"best_trade": 10394,
+"max_lots": 4,
+"avg_lots": 1.1,
+"losing_months": 22,
+"months": 46,
+"worst_month": -25749,
+"best_month": 39684,
+"skipped": {
+"weekly loss limit": 156,
+"Fibonacci slot below Rs 2 lakh": 106
+},
+"years": {
+"2023": -7.7,
+"2024": 30.6,
+"2025": 34.9,
+"2026": 0.4
+},
+"by_index": {
+"NIFTY": 106782,
+"SENSEX": 31511,
+"BANKNIFTY": -11824
+}
+},
+"200000_y2026": {
+"trades": 309,
+"final": 217961,
+"net": 17961,
+"multiple": 1.09,
+"cagr_pct": 11.8,
+"max_dd_pct": -25.6,
+"max_dd_rs": -58396,
+"win_rate": 50.5,
+"profit_factor": 1.07,
+"avg_R": 0.215,
+"worst_trade": -4388,
+"best_trade": 7016,
+"max_lots": 2,
+"avg_lots": 1.0,
+"losing_months": 4,
+"months": 10,
+"worst_month": -18380,
+"best_month": 31805,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 85,
+"weekly loss limit": 44
+},
+"years": {
+"2026": 9.0
+},
+"by_index": {
+"NIFTY": 34194,
+"SENSEX": 3086,
+"BANKNIFTY": -19314
+}
+},
+"20000_full": {
+"trades": 123,
+"final": 3268,
+"net": -16732,
+"multiple": 0.16,
+"cagr_pct": -87.8,
+"max_dd_pct": -90.1,
+"max_dd_rs": -29726,
+"win_rate": 39.0,
+"profit_factor": 0.75,
+"avg_R": 0.062,
+"worst_trade": -3152,
+"best_trade": 4396,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 9,
+"months": 11,
+"worst_month": -6306,
+"best_month": 4342,
+"skipped": {
+"1 lot risks > 15% of the account": 964,
+"Fibonacci slot below Rs 2 lakh": 679,
+"trend slot below Rs 40k": 322,
+"weekly loss limit": 54,
+"not enough free cash": 24
+},
+"years": {
+"2023": -83.7
+},
+"by_index": {
+"NIFTY": -4198,
+"BANKNIFTY": -11217,
+"SENSEX": -1323
+}
+},
+"20000_y2026": {
+"trades": 168,
+"final": 18623,
+"net": -1377,
+"multiple": 0.93,
+"cagr_pct": -8.8,
+"max_dd_pct": -61.4,
+"max_dd_rs": -23864,
+"win_rate": 48.2,
+"profit_factor": 0.99,
+"avg_R": 0.167,
+"worst_trade": -4184,
+"best_trade": 6216,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 6,
+"months": 10,
+"worst_month": -11307,
+"best_month": 11314,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 112,
+"trend slot below Rs 40k": 70,
+"weekly loss limit": 43,
+"not enough free cash": 38,
+"1 lot risks > 15% of the account": 7
+},
+"years": {
+"2026": -6.9
+},
+"by_index": {
+"NIFTY": 6844,
+"BANKNIFTY": -10151,
+"SENSEX": 1928
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "worse",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Exits & targets",
+"name": "20/30/50% at 1R/2R/3R + exit rest on 5-min close across VWAP",
+"changes": [
+"exit: 20/30/50% at 1R/2R/3R + exit rest on 5-min close across VWAP"
+],
+"runs": {
+"200000_full": {
+"trades": 1878,
+"final": 548397,
+"net": 348397,
+"multiple": 2.74,
+"cagr_pct": 30.7,
+"max_dd_pct": -41.6,
+"max_dd_rs": -105817,
+"win_rate": 42.1,
+"profit_factor": 1.19,
+"avg_R": 0.211,
+"worst_trade": -6545,
+"best_trade": 17990,
+"max_lots": 11,
+"avg_lots": 1.3,
+"losing_months": 20,
+"months": 46,
+"worst_month": -33321,
+"best_month": 132574,
+"skipped": {
+"weekly loss limit": 173,
+"Fibonacci slot below Rs 2 lakh": 108
+},
+"years": {
+"2023": -20.1,
+"2024": 72.0,
+"2025": 35.1,
+"2026": 47.6
+},
+"by_index": {
+"NIFTY": 279660,
+"SENSEX": 121516,
+"BANKNIFTY": -52758
+}
+},
+"200000_y2026": {
+"trades": 375,
+"final": 263383,
+"net": 63383,
+"multiple": 1.32,
+"cagr_pct": 42.8,
+"max_dd_pct": -20.1,
+"max_dd_rs": -51315,
+"win_rate": 44.5,
+"profit_factor": 1.2,
+"avg_R": 0.27,
+"worst_trade": -4388,
+"best_trade": 9390,
+"max_lots": 6,
+"avg_lots": 1.1,
+"losing_months": 4,
+"months": 10,
+"worst_month": -26124,
+"best_month": 44422,
+"skipped": {
+"weekly loss limit": 43,
+"Fibonacci slot below Rs 2 lakh": 18
+},
+"years": {
+"2026": 31.7
+},
+"by_index": {
+"NIFTY": 65098,
+"SENSEX": 12145,
+"BANKNIFTY": -13863
+}
+},
+"20000_full": {
+"trades": 279,
+"final": 20406,
+"net": 406,
+"multiple": 1.02,
+"cagr_pct": 0.5,
+"max_dd_pct": -85.6,
+"max_dd_rs": -31523,
+"win_rate": 38.4,
+"profit_factor": 1.0,
+"avg_R": 0.171,
+"worst_trade": -3852,
+"best_trade": 6250,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 12,
+"months": 24,
+"worst_month": -6948,
+"best_month": 8331,
+"skipped": {
+"1 lot risks > 15% of the account": 728,
+"Fibonacci slot below Rs 2 lakh": 662,
+"trend slot below Rs 40k": 322,
+"not enough free cash": 86,
+"weekly loss limit": 82
+},
+"years": {
+"2023": -59.1,
+"2024": -35.2,
+"2025": 29.6,
+"2026": 197.3
+},
+"by_index": {
+"NIFTY": 9094,
+"BANKNIFTY": -14672,
+"SENSEX": 5974
+}
+},
+"20000_y2026": {
+"trades": 217,
+"final": 39503,
+"net": 19503,
+"multiple": 1.98,
+"cagr_pct": 141.5,
+"max_dd_pct": -61.8,
+"max_dd_rs": -36264,
+"win_rate": 41.5,
+"profit_factor": 1.12,
+"avg_R": 0.242,
+"worst_trade": -4184,
+"best_trade": 8858,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 4,
+"months": 10,
+"worst_month": -11204,
+"best_month": 16441,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 119,
+"trend slot below Rs 40k": 35,
+"not enough free cash": 34,
+"weekly loss limit": 26,
+"1 lot risks > 15% of the account": 5
+},
+"years": {
+"2026": 97.5
+},
+"by_index": {
+"NIFTY": 24284,
+"BANKNIFTY": 1905,
+"SENSEX": -6684
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "worse",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Exits & targets",
+"name": "No targets; exit on 9-EMA cross once +2R",
+"changes": [
+"exit: No targets; exit on 9-EMA cross once +2R"
+],
+"runs": {
+"200000_full": {
+"trades": 1973,
+"final": 956287,
+"net": 756287,
+"multiple": 4.78,
+"cagr_pct": 51.5,
+"max_dd_pct": -34.8,
+"max_dd_rs": -154240,
+"win_rate": 34.1,
+"profit_factor": 1.28,
+"avg_R": 0.197,
+"worst_trade": -10573,
+"best_trade": 67305,
+"max_lots": 17,
+"avg_lots": 1.7,
+"losing_months": 24,
+"months": 46,
+"worst_month": -68545,
+"best_month": 327647,
+"skipped": {
+"weekly loss limit": 176,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 15.2,
+"2024": 46.2,
+"2025": 60.4,
+"2026": 77.0
+},
+"by_index": {
+"NIFTY": 544120,
+"SENSEX": 248179,
+"BANKNIFTY": -36011
+}
+},
+"200000_y2026": {
+"trades": 363,
+"final": 318988,
+"net": 118988,
+"multiple": 1.59,
+"cagr_pct": 83.1,
+"max_dd_pct": -17.5,
+"max_dd_rs": -45545,
+"win_rate": 38.3,
+"profit_factor": 1.34,
+"avg_R": 0.293,
+"worst_trade": -4388,
+"best_trade": 18455,
+"max_lots": 6,
+"avg_lots": 1.2,
+"losing_months": 4,
+"months": 10,
+"worst_month": -10852,
+"best_month": 78427,
+"skipped": {
+"weekly loss limit": 54,
+"Fibonacci slot below Rs 2 lakh": 17
+},
+"years": {
+"2026": 59.5
+},
+"by_index": {
+"NIFTY": 94944,
+"SENSEX": 40148,
+"BANKNIFTY": -16103
+}
+},
+"20000_full": {
+"trades": 1194,
+"final": 179508,
+"net": 159508,
+"multiple": 8.98,
+"cagr_pct": 79.4,
+"max_dd_pct": -85.6,
+"max_dd_rs": -54431,
+"win_rate": 34.4,
+"profit_factor": 1.16,
+"avg_R": 0.192,
+"worst_trade": -5567,
+"best_trade": 16805,
+"max_lots": 3,
+"avg_lots": 1.0,
+"losing_months": 21,
+"months": 46,
+"worst_month": -21968,
+"best_month": 46346,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 595,
+"weekly loss limit": 236,
+"trend slot below Rs 40k": 82,
+"not enough free cash": 32,
+"1 lot risks > 15% of the account": 15
+},
+"years": {
+"2023": -44.6,
+"2024": 420.7,
+"2025": 73.4,
+"2026": 79.5
+},
+"by_index": {
+"NIFTY": 99583,
+"BANKNIFTY": 8344,
+"SENSEX": 51581
+}
+},
+"20000_y2026": {
+"trades": 204,
+"final": 60961,
+"net": 40961,
+"multiple": 3.05,
+"cagr_pct": 323.6,
+"max_dd_pct": -64.9,
+"max_dd_rs": -31715,
+"win_rate": 37.7,
+"profit_factor": 1.26,
+"avg_R": 0.271,
+"worst_trade": -4288,
+"best_trade": 14889,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -9958,
+"best_month": 20724,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 115,
+"trend slot below Rs 40k": 45,
+"weekly loss limit": 35,
+"not enough free cash": 32,
+"1 lot risks > 15% of the account": 3
+},
+"years": {
+"2026": 204.8
+},
+"by_index": {
+"NIFTY": 33927,
+"BANKNIFTY": -2702,
+"SENSEX": 9740
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "worse",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Exits & targets",
+"name": "No targets; exit on a strong opposite candle once +2R",
+"changes": [
+"exit: No targets; exit on a strong opposite candle once +2R"
+],
+"runs": {
+"200000_full": {
+"trades": 1980,
+"final": 554408,
+"net": 354408,
+"multiple": 2.77,
+"cagr_pct": 31.1,
+"max_dd_pct": -36.0,
+"max_dd_rs": -146615,
+"win_rate": 34.0,
+"profit_factor": 1.16,
+"avg_R": 0.185,
+"worst_trade": -9986,
+"best_trade": 26549,
+"max_lots": 6,
+"avg_lots": 1.4,
+"losing_months": 22,
+"months": 46,
+"worst_month": -62406,
+"best_month": 125445,
+"skipped": {
+"weekly loss limit": 167,
+"Fibonacci slot below Rs 2 lakh": 15
+},
+"years": {
+"2023": -1.7,
+"2024": 84.9,
+"2025": 27.9,
+"2026": 19.2
+},
+"by_index": {
+"NIFTY": 266175,
+"SENSEX": 107733,
+"BANKNIFTY": -19490
+}
+},
+"200000_y2026": {
+"trades": 373,
+"final": 295830,
+"net": 95830,
+"multiple": 1.48,
+"cagr_pct": 66.0,
+"max_dd_pct": -17.3,
+"max_dd_rs": -45366,
+"win_rate": 38.3,
+"profit_factor": 1.27,
+"avg_R": 0.273,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 6,
+"avg_lots": 1.2,
+"losing_months": 4,
+"months": 10,
+"worst_month": -10054,
+"best_month": 54969,
+"skipped": {
+"weekly loss limit": 49,
+"Fibonacci slot below Rs 2 lakh": 16
+},
+"years": {
+"2026": 47.9
+},
+"by_index": {
+"NIFTY": 87638,
+"SENSEX": 24810,
+"BANKNIFTY": -16618
+}
+},
+"20000_full": {
+"trades": 1154,
+"final": 188243,
+"net": 168243,
+"multiple": 9.41,
+"cagr_pct": 81.6,
+"max_dd_pct": -77.4,
+"max_dd_rs": -52381,
+"win_rate": 34.8,
+"profit_factor": 1.18,
+"avg_R": 0.196,
+"worst_trade": -4972,
+"best_trade": 16805,
+"max_lots": 4,
+"avg_lots": 1.0,
+"losing_months": 18,
+"months": 46,
+"worst_month": -21726,
+"best_month": 49468,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 582,
+"weekly loss limit": 315,
+"trend slot below Rs 40k": 71,
+"not enough free cash": 32,
+"1 lot risks > 15% of the account": 8
+},
+"years": {
+"2023": -11.1,
+"2024": 429.7,
+"2025": 30.6,
+"2026": 53.0
+},
+"by_index": {
+"NIFTY": 105420,
+"BANKNIFTY": -2027,
+"SENSEX": 64845
+}
+},
+"20000_y2026": {
+"trades": 218,
+"final": 59609,
+"net": 39609,
+"multiple": 2.98,
+"cagr_pct": 311.4,
+"max_dd_pct": -68.8,
+"max_dd_rs": -37541,
+"win_rate": 38.5,
+"profit_factor": 1.23,
+"avg_R": 0.27,
+"worst_trade": -4288,
+"best_trade": 14889,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -9958,
+"best_month": 16763,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 113,
+"weekly loss limit": 40,
+"not enough free cash": 32,
+"trend slot below Rs 40k": 32,
+"1 lot risks > 15% of the account": 3
+},
+"years": {
+"2026": 198.0
+},
+"by_index": {
+"NIFTY": 28529,
+"BANKNIFTY": -3198,
+"SENSEX": 14281
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "worse",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Exits & targets",
+"name": "Lock +1R once +2R",
+"changes": [
+"exit: Lock +1R once +2R"
+],
+"runs": {
+"200000_full": {
+"trades": 1949,
+"final": 2723609,
+"net": 2523609,
+"multiple": 13.62,
+"cagr_pct": 100.1,
+"max_dd_pct": -26.9,
+"max_dd_rs": -424170,
+"win_rate": 34.3,
+"profit_factor": 1.45,
+"avg_R": 0.253,
+"worst_trade": -36529,
+"best_trade": 218550,
+"max_lots": 50,
+"avg_lots": 3.7,
+"losing_months": 23,
+"months": 46,
+"worst_month": -159669,
+"best_month": 942588,
+"skipped": {
+"weekly loss limit": 198,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 34.5,
+"2024": 174.0,
+"2025": 62.2,
+"2026": 127.9
+},
+"by_index": {
+"NIFTY": 1582584,
+"SENSEX": 1037999,
+"BANKNIFTY": -96955
+}
+},
+"200000_y2026": {
+"trades": 391,
+"final": 468261,
+"net": 268261,
+"multiple": 2.34,
+"cagr_pct": 198.6,
+"max_dd_pct": -17.0,
+"max_dd_rs": -60992,
+"win_rate": 37.9,
+"profit_factor": 1.68,
+"avg_R": 0.328,
+"worst_trade": -5182,
+"best_trade": 33645,
+"max_lots": 8,
+"avg_lots": 1.3,
+"losing_months": 4,
+"months": 10,
+"worst_month": -24205,
+"best_month": 156030,
+"skipped": {
+"weekly loss limit": 30,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 134.1
+},
+"by_index": {
+"NIFTY": 194986,
+"SENSEX": 75719,
+"BANKNIFTY": -2442
+}
+},
+"20000_full": {
+"trades": 1556,
+"final": 670786,
+"net": 650786,
+"multiple": 33.54,
+"cagr_pct": 154.2,
+"max_dd_pct": -68.7,
+"max_dd_rs": -101062,
+"win_rate": 35.4,
+"profit_factor": 1.42,
+"avg_R": 0.267,
+"worst_trade": -8129,
+"best_trade": 50478,
+"max_lots": 13,
+"avg_lots": 1.3,
+"losing_months": 17,
+"months": 46,
+"worst_month": -40341,
+"best_month": 204602,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 316,
+"weekly loss limit": 217,
+"trend slot below Rs 40k": 47,
+"not enough free cash": 15,
+"1 lot risks > 15% of the account": 1
+},
+"years": {
+"2023": 38.8,
+"2024": 543.6,
+"2025": 73.9,
+"2026": 115.9
+},
+"by_index": {
+"NIFTY": 393491,
+"SENSEX": 249697,
+"BANKNIFTY": 7615
+}
+},
+"20000_y2026": {
+"trades": 254,
+"final": 83229,
+"net": 63229,
+"multiple": 4.16,
+"cagr_pct": 533.9,
+"max_dd_pct": -46.8,
+"max_dd_rs": -34673,
+"win_rate": 37.8,
+"profit_factor": 1.29,
+"avg_R": 0.287,
+"worst_trade": -4388,
+"best_trade": 14889,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -14685,
+"best_month": 20745,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 120,
+"weekly loss limit": 24,
+"not enough free cash": 18,
+"trend slot below Rs 40k": 17,
+"1 lot risks > 15% of the account": 1
+},
+"years": {
+"2026": 316.1
+},
+"by_index": {
+"NIFTY": 56069,
+"BANKNIFTY": 2843,
+"SENSEX": 4321
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "better",
+"20000_full": "better",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Exits & targets",
+"name": "Trail 1.5R behind the best move once +2.5R",
+"changes": [
+"exit: Trail 1.5R behind the best move once +2.5R"
+],
+"runs": {
+"200000_full": {
+"trades": 1951,
+"final": 2068062,
+"net": 1868062,
+"multiple": 10.34,
+"cagr_pct": 86.0,
+"max_dd_pct": -27.7,
+"max_dd_rs": -332990,
+"win_rate": 32.9,
+"profit_factor": 1.39,
+"avg_R": 0.254,
+"worst_trade": -22471,
+"best_trade": 151367,
+"max_lots": 38,
+"avg_lots": 3.1,
+"losing_months": 24,
+"months": 46,
+"worst_month": -129609,
+"best_month": 781408,
+"skipped": {
+"weekly loss limit": 196,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 31.9,
+"2024": 170.0,
+"2025": 41.8,
+"2026": 104.7
+},
+"by_index": {
+"NIFTY": 1260875,
+"SENSEX": 640316,
+"BANKNIFTY": -33134
+}
+},
+"200000_y2026": {
+"trades": 385,
+"final": 484236,
+"net": 284236,
+"multiple": 2.42,
+"cagr_pct": 211.8,
+"max_dd_pct": -17.8,
+"max_dd_rs": -62416,
+"win_rate": 36.4,
+"profit_factor": 1.73,
+"avg_R": 0.338,
+"worst_trade": -5084,
+"best_trade": 33645,
+"max_lots": 8,
+"avg_lots": 1.3,
+"losing_months": 3,
+"months": 10,
+"worst_month": -29477,
+"best_month": 183038,
+"skipped": {
+"weekly loss limit": 36,
+"Fibonacci slot below Rs 2 lakh": 12
+},
+"years": {
+"2026": 142.1
+},
+"by_index": {
+"NIFTY": 188325,
+"SENSEX": 76504,
+"BANKNIFTY": 19406
+}
+},
+"20000_full": {
+"trades": 1495,
+"final": 581647,
+"net": 561647,
+"multiple": 29.08,
+"cagr_pct": 144.8,
+"max_dd_pct": -70.7,
+"max_dd_rs": -82531,
+"win_rate": 33.8,
+"profit_factor": 1.41,
+"avg_R": 0.26,
+"worst_trade": -6381,
+"best_trade": 37209,
+"max_lots": 10,
+"avg_lots": 1.2,
+"losing_months": 18,
+"months": 46,
+"worst_month": -33992,
+"best_month": 213033,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 379,
+"weekly loss limit": 211,
+"trend slot below Rs 40k": 47,
+"not enough free cash": 18,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 43.7,
+"2024": 489.5,
+"2025": 50.2,
+"2026": 128.6
+},
+"by_index": {
+"NIFTY": 345194,
+"SENSEX": 186314,
+"BANKNIFTY": 30154
+}
+},
+"20000_y2026": {
+"trades": 257,
+"final": 111569,
+"net": 91569,
+"multiple": 5.58,
+"cagr_pct": 841.5,
+"max_dd_pct": -45.4,
+"max_dd_rs": -39376,
+"win_rate": 37.0,
+"profit_factor": 1.41,
+"avg_R": 0.307,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -15123,
+"best_month": 39760,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 118,
+"weekly loss limit": 25,
+"trend slot below Rs 40k": 17,
+"not enough free cash": 15,
+"1 lot risks > 15% of the account": 1
+},
+"years": {
+"2026": 457.8
+},
+"by_index": {
+"NIFTY": 68422,
+"BANKNIFTY": 15867,
+"SENSEX": 7288
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "better",
+"20000_full": "better",
+"20000_y2026": "better"
+}
+},
+{
+"group": "Exits & targets",
+"name": "Trail 1R behind the best move once +2R",
+"changes": [
+"exit: Trail 1R behind the best move once +2R"
+],
+"runs": {
+"200000_full": {
+"trades": 1990,
+"final": 1093488,
+"net": 893488,
+"multiple": 5.47,
+"cagr_pct": 57.0,
+"max_dd_pct": -31.4,
+"max_dd_rs": -164691,
+"win_rate": 34.4,
+"profit_factor": 1.27,
+"avg_R": 0.214,
+"worst_trade": -13333,
+"best_trade": 85352,
+"max_lots": 23,
+"avg_lots": 2.1,
+"losing_months": 24,
+"months": 46,
+"worst_month": -72462,
+"best_month": 297940,
+"skipped": {
+"weekly loss limit": 163,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 11.6,
+"2024": 112.5,
+"2025": 37.4,
+"2026": 67.8
+},
+"by_index": {
+"NIFTY": 658088,
+"SENSEX": 287623,
+"BANKNIFTY": -52216
+}
+},
+"200000_y2026": {
+"trades": 383,
+"final": 373352,
+"net": 173352,
+"multiple": 1.87,
+"cagr_pct": 123.8,
+"max_dd_pct": -16.4,
+"max_dd_rs": -51473,
+"win_rate": 38.1,
+"profit_factor": 1.46,
+"avg_R": 0.295,
+"worst_trade": -4388,
+"best_trade": 28446,
+"max_lots": 7,
+"avg_lots": 1.3,
+"losing_months": 4,
+"months": 10,
+"worst_month": -15284,
+"best_month": 91767,
+"skipped": {
+"weekly loss limit": 44,
+"Fibonacci slot below Rs 2 lakh": 9
+},
+"years": {
+"2026": 86.7
+},
+"by_index": {
+"NIFTY": 137272,
+"SENSEX": 40572,
+"BANKNIFTY": -4496
+}
+},
+"20000_full": {
+"trades": 1492,
+"final": 470756,
+"net": 450756,
+"multiple": 23.54,
+"cagr_pct": 131.4,
+"max_dd_pct": -71.4,
+"max_dd_rs": -63384,
+"win_rate": 35.6,
+"profit_factor": 1.34,
+"avg_R": 0.243,
+"worst_trade": -5568,
+"best_trade": 31049,
+"max_lots": 9,
+"avg_lots": 1.1,
+"losing_months": 18,
+"months": 46,
+"worst_month": -23068,
+"best_month": 131370,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 380,
+"weekly loss limit": 210,
+"trend slot below Rs 40k": 57,
+"not enough free cash": 17,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 7.4,
+"2024": 672.9,
+"2025": 46.4,
+"2026": 93.6
+},
+"by_index": {
+"NIFTY": 289451,
+"SENSEX": 169262,
+"BANKNIFTY": -7945
+}
+},
+"20000_y2026": {
+"trades": 262,
+"final": 82970,
+"net": 62970,
+"multiple": 4.15,
+"cagr_pct": 531.4,
+"max_dd_pct": -45.7,
+"max_dd_rs": -37143,
+"win_rate": 37.8,
+"profit_factor": 1.27,
+"avg_R": 0.265,
+"worst_trade": -4388,
+"best_trade": 14205,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -10439,
+"best_month": 22299,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 119,
+"weekly loss limit": 26,
+"trend slot below Rs 40k": 15,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 1
+},
+"years": {
+"2026": 314.9
+},
+"by_index": {
+"NIFTY": 54662,
+"BANKNIFTY": -632,
+"SENSEX": 8943
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "less profit, shallower fall",
+"20000_full": "worse",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Exits & targets",
+"name": "Breakeven stop at +0.25R instead of entry",
+"changes": [
+"exit: Breakeven stop at +0.25R instead of entry"
+],
+"runs": {
+"200000_full": {
+"trades": 2020,
+"final": 1068644,
+"net": 868644,
+"multiple": 5.34,
+"cagr_pct": 56.1,
+"max_dd_pct": -28.6,
+"max_dd_rs": -290430,
+"win_rate": 38.1,
+"profit_factor": 1.24,
+"avg_R": 0.218,
+"worst_trade": -19995,
+"best_trade": 77306,
+"max_lots": 13,
+"avg_lots": 2.3,
+"losing_months": 24,
+"months": 46,
+"worst_month": -136367,
+"best_month": 308863,
+"skipped": {
+"weekly loss limit": 128,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 28.6,
+"2024": 147.9,
+"2025": 39.1,
+"2026": 20.6
+},
+"by_index": {
+"NIFTY": 550964,
+"SENSEX": 406667,
+"BANKNIFTY": -88995
+}
+},
+"200000_y2026": {
+"trades": 382,
+"final": 256983,
+"net": 56983,
+"multiple": 1.28,
+"cagr_pct": 38.4,
+"max_dd_pct": -25.4,
+"max_dd_rs": -74768,
+"win_rate": 38.5,
+"profit_factor": 1.17,
+"avg_R": 0.229,
+"worst_trade": -4388,
+"best_trade": 15557,
+"max_lots": 3,
+"avg_lots": 1.1,
+"losing_months": 3,
+"months": 10,
+"worst_month": -36393,
+"best_month": 30295,
+"skipped": {
+"weekly loss limit": 39,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 28.5
+},
+"by_index": {
+"NIFTY": 72912,
+"SENSEX": -13311,
+"BANKNIFTY": -2615
+}
+},
+"20000_full": {
+"trades": 1435,
+"final": 288752,
+"net": 268752,
+"multiple": 14.44,
+"cagr_pct": 103.4,
+"max_dd_pct": -69.7,
+"max_dd_rs": -80721,
+"win_rate": 38.8,
+"profit_factor": 1.23,
+"avg_R": 0.233,
+"worst_trade": -5567,
+"best_trade": 15557,
+"max_lots": 7,
+"avg_lots": 1.0,
+"losing_months": 17,
+"months": 46,
+"worst_month": -39181,
+"best_month": 68298,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 429,
+"weekly loss limit": 209,
+"trend slot below Rs 40k": 59,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 31.4,
+"2024": 454.5,
+"2025": 48.4,
+"2026": 33.5
+},
+"by_index": {
+"NIFTY": 191826,
+"BANKNIFTY": -14970,
+"SENSEX": 91908
+}
+},
+"20000_y2026": {
+"trades": 229,
+"final": 35714,
+"net": 15714,
+"multiple": 1.79,
+"cagr_pct": 113.0,
+"max_dd_pct": -63.4,
+"max_dd_rs": -45236,
+"win_rate": 36.2,
+"profit_factor": 1.09,
+"avg_R": 0.205,
+"worst_trade": -4388,
+"best_trade": 13236,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 4,
+"months": 10,
+"worst_month": -23514,
+"best_month": 20508,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 117,
+"trend slot below Rs 40k": 32,
+"weekly loss limit": 30,
+"not enough free cash": 23,
+"1 lot risks > 15% of the account": 3
+},
+"years": {
+"2026": 78.6
+},
+"by_index": {
+"NIFTY": 19543,
+"BANKNIFTY": 6229,
+"SENSEX": -10054
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "worse",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Exits & targets",
+"name": "Noise target 2R (instead of 4R)",
+"changes": [
+"exit: Noise target 2R (instead of 4R)"
+],
+"runs": {
+"200000_full": {
+"trades": 1920,
+"final": 2655252,
+"net": 2455252,
+"multiple": 13.28,
+"cagr_pct": 98.8,
+"max_dd_pct": -25.2,
+"max_dd_rs": -448661,
+"win_rate": 31.9,
+"profit_factor": 1.43,
+"avg_R": 0.258,
+"worst_trade": -32660,
+"best_trade": 218550,
+"max_lots": 50,
+"avg_lots": 3.7,
+"losing_months": 20,
+"months": 46,
+"worst_month": -209039,
+"best_month": 866262,
+"skipped": {
+"weekly loss limit": 226,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 44.0,
+"2024": 155.3,
+"2025": 61.1,
+"2026": 124.2
+},
+"by_index": {
+"NIFTY": 1601607,
+"SENSEX": 892443,
+"BANKNIFTY": -38793
+}
+},
+"200000_y2026": {
+"trades": 382,
+"final": 407053,
+"net": 207053,
+"multiple": 2.04,
+"cagr_pct": 149.4,
+"max_dd_pct": -19.0,
+"max_dd_rs": -69115,
+"win_rate": 34.8,
+"profit_factor": 1.53,
+"avg_R": 0.331,
+"worst_trade": -4946,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.3,
+"losing_months": 3,
+"months": 10,
+"worst_month": -32914,
+"best_month": 105021,
+"skipped": {
+"weekly loss limit": 39,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 103.5
+},
+"by_index": {
+"NIFTY": 164225,
+"SENSEX": 44994,
+"BANKNIFTY": -2164
+}
+},
+"20000_full": {
+"trades": 1518,
+"final": 457325,
+"net": 437325,
+"multiple": 22.87,
+"cagr_pct": 129.6,
+"max_dd_pct": -67.1,
+"max_dd_rs": -75533,
+"win_rate": 32.6,
+"profit_factor": 1.32,
+"avg_R": 0.249,
+"worst_trade": -5241,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.1,
+"losing_months": 15,
+"months": 46,
+"worst_month": -40642,
+"best_month": 134564,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 362,
+"weekly loss limit": 241,
+"trend slot below Rs 40k": 19,
+"not enough free cash": 10,
+"1 lot risks > 15% of the account": 1
+},
+"years": {
+"2023": 78.9,
+"2024": 397.6,
+"2025": 21.2,
+"2026": 112.0
+},
+"by_index": {
+"NIFTY": 248193,
+"SENSEX": 174300,
+"BANKNIFTY": 14839
+}
+},
+"20000_y2026": {
+"trades": 122,
+"final": 33298,
+"net": 13298,
+"multiple": 1.66,
+"cagr_pct": 94.4,
+"max_dd_pct": -53.4,
+"max_dd_rs": -22633,
+"win_rate": 32.8,
+"profit_factor": 1.15,
+"avg_R": 0.222,
+"worst_trade": -3852,
+"best_trade": 14889,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 5,
+"months": 9,
+"worst_month": -9028,
+"best_month": 15727,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 113,
+"trend slot below Rs 40k": 67,
+"1 lot risks > 15% of the account": 63,
+"weekly loss limit": 41,
+"not enough free cash": 28
+},
+"years": {
+"2026": 66.5
+},
+"by_index": {
+"NIFTY": 18507,
+"BANKNIFTY": -6022,
+"SENSEX": 814
+}
+}
+},
+"verdict": {
+"200000_full": "less profit, shallower fall",
+"200000_y2026": "worse",
+"20000_full": "less profit, shallower fall",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Exits & targets",
+"name": "Noise: stop to entry at +1R",
+"changes": [
+"exit: Noise: stop to entry at +1R"
+],
+"runs": {
+"200000_full": {
+"trades": 1954,
+"final": 3188388,
+"net": 2988388,
+"multiple": 15.94,
+"cagr_pct": 108.7,
+"max_dd_pct": -29.0,
+"max_dd_rs": -532398,
+"win_rate": 30.8,
+"profit_factor": 1.49,
+"avg_R": 0.259,
+"worst_trade": -36775,
+"best_trade": 252124,
+"max_lots": 50,
+"avg_lots": 4.0,
+"losing_months": 22,
+"months": 46,
+"worst_month": -249936,
+"best_month": 1103892,
+"skipped": {
+"weekly loss limit": 191,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 29.1,
+"2024": 195.8,
+"2025": 70.0,
+"2026": 145.5
+},
+"by_index": {
+"NIFTY": 2057285,
+"SENSEX": 1076078,
+"BANKNIFTY": -144987
+}
+},
+"200000_y2026": {
+"trades": 380,
+"final": 469282,
+"net": 269282,
+"multiple": 2.35,
+"cagr_pct": 199.5,
+"max_dd_pct": -19.0,
+"max_dd_rs": -73450,
+"win_rate": 34.7,
+"profit_factor": 1.69,
+"avg_R": 0.351,
+"worst_trade": -5241,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.3,
+"losing_months": 2,
+"months": 10,
+"worst_month": -35742,
+"best_month": 140825,
+"skipped": {
+"weekly loss limit": 40,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 134.6
+},
+"by_index": {
+"NIFTY": 188357,
+"SENSEX": 76585,
+"BANKNIFTY": 4344
+}
+},
+"20000_full": {
+"trades": 1399,
+"final": 481367,
+"net": 461367,
+"multiple": 24.07,
+"cagr_pct": 132.8,
+"max_dd_pct": -68.0,
+"max_dd_rs": -77541,
+"win_rate": 31.0,
+"profit_factor": 1.38,
+"avg_R": 0.261,
+"worst_trade": -5568,
+"best_trade": 33645,
+"max_lots": 10,
+"avg_lots": 1.1,
+"losing_months": 17,
+"months": 46,
+"worst_month": -37920,
+"best_month": 141071,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 427,
+"weekly loss limit": 240,
+"trend slot below Rs 40k": 62,
+"not enough free cash": 20,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 11.7,
+"2024": 591.4,
+"2025": 40.5,
+"2026": 121.6
+},
+"by_index": {
+"NIFTY": 301091,
+"SENSEX": 163651,
+"BANKNIFTY": -3368
+}
+},
+"20000_y2026": {
+"trades": 258,
+"final": 102805,
+"net": 82805,
+"multiple": 5.14,
+"cagr_pct": 746.2,
+"max_dd_pct": -43.2,
+"max_dd_rs": -39774,
+"win_rate": 34.1,
+"profit_factor": 1.38,
+"avg_R": 0.291,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 2,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -20912,
+"best_month": 28728,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 118,
+"weekly loss limit": 26,
+"trend slot below Rs 40k": 15,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 3
+},
+"years": {
+"2026": 414.0
+},
+"by_index": {
+"NIFTY": 64840,
+"BANKNIFTY": 10177,
+"SENSEX": 7798
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "better",
+"20000_full": "worse",
+"20000_y2026": "better"
+}
+},
+{
+"group": "Risk per trade",
+"name": "Risk 0.5% a trade",
+"changes": [
+"risk %: 0.5"
+],
+"runs": {
+"200000_full": {
+"trades": 2073,
+"final": 826183,
+"net": 626183,
+"multiple": 4.13,
+"cagr_pct": 45.8,
+"max_dd_pct": -32.5,
+"max_dd_rs": -97119,
+"win_rate": 31.2,
+"profit_factor": 1.31,
+"avg_R": 0.243,
+"worst_trade": -5567,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.2,
+"losing_months": 21,
+"months": 46,
+"worst_month": -47433,
+"best_month": 147415,
+"skipped": {
+"weekly loss limit": 72,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 4.8,
+"2024": 110.3,
+"2025": 35.6,
+"2026": 38.3
+},
+"by_index": {
+"NIFTY": 418310,
+"SENSEX": 201021,
+"BANKNIFTY": 6872
+}
+},
+"200000_y2026": {
+"trades": 389,
+"final": 337898,
+"net": 137898,
+"multiple": 1.69,
+"cagr_pct": 97.2,
+"max_dd_pct": -17.2,
+"max_dd_rs": -55943,
+"win_rate": 34.2,
+"profit_factor": 1.39,
+"avg_R": 0.325,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 4,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -24222,
+"best_month": 58242,
+"skipped": {
+"weekly loss limit": 31,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 68.9
+},
+"by_index": {
+"NIFTY": 120461,
+"SENSEX": 15864,
+"BANKNIFTY": 1576
+}
+},
+"20000_full": {
+"trades": 1451,
+"final": 358664,
+"net": 338664,
+"multiple": 17.93,
+"cagr_pct": 115.5,
+"max_dd_pct": -69.3,
+"max_dd_rs": -59031,
+"win_rate": 32.0,
+"profit_factor": 1.27,
+"avg_R": 0.256,
+"worst_trade": -4972,
+"best_trade": 16805,
+"max_lots": 4,
+"avg_lots": 1.0,
+"losing_months": 17,
+"months": 46,
+"worst_month": -29054,
+"best_month": 66564,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 406,
+"weekly loss limit": 217,
+"trend slot below Rs 40k": 55,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 30.2,
+"2024": 520.8,
+"2025": 37.9,
+"2026": 61.0
+},
+"by_index": {
+"NIFTY": 217685,
+"SENSEX": 122134,
+"BANKNIFTY": -1147
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 94525,
+"net": 74525,
+"multiple": 4.73,
+"cagr_pct": 658.4,
+"max_dd_pct": -47.6,
+"max_dd_rs": -39695,
+"win_rate": 34.9,
+"profit_factor": 1.34,
+"avg_R": 0.284,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19404,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 372.6
+},
+"by_index": {
+"NIFTY": 58428,
+"BANKNIFTY": 10068,
+"SENSEX": 6038
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "worse",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Risk per trade",
+"name": "Risk 0.75% a trade",
+"changes": [
+"risk %: 0.75"
+],
+"runs": {
+"200000_full": {
+"trades": 2041,
+"final": 1215530,
+"net": 1015530,
+"multiple": 6.08,
+"cagr_pct": 61.5,
+"max_dd_pct": -31.0,
+"max_dd_rs": -200058,
+"win_rate": 31.4,
+"profit_factor": 1.34,
+"avg_R": 0.249,
+"worst_trade": -12194,
+"best_trade": 84126,
+"max_lots": 21,
+"avg_lots": 1.8,
+"losing_months": 21,
+"months": 46,
+"worst_month": -105627,
+"best_month": 284859,
+"skipped": {
+"weekly loss limit": 104,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 10.3,
+"2024": 137.8,
+"2025": 40.5,
+"2026": 64.9
+},
+"by_index": {
+"NIFTY": 686460,
+"SENSEX": 366802,
+"BANKNIFTY": -37706
+}
+},
+"200000_y2026": {
+"trades": 388,
+"final": 359944,
+"net": 159944,
+"multiple": 1.8,
+"cagr_pct": 113.5,
+"max_dd_pct": -18.2,
+"max_dd_rs": -60882,
+"win_rate": 34.5,
+"profit_factor": 1.44,
+"avg_R": 0.331,
+"worst_trade": -4388,
+"best_trade": 21593,
+"max_lots": 6,
+"avg_lots": 1.1,
+"losing_months": 3,
+"months": 10,
+"worst_month": -29517,
+"best_month": 70793,
+"skipped": {
+"weekly loss limit": 32,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 80.0
+},
+"by_index": {
+"NIFTY": 126292,
+"SENSEX": 33349,
+"BANKNIFTY": 305
+}
+},
+"20000_full": {
+"trades": 1454,
+"final": 392877,
+"net": 372877,
+"multiple": 19.64,
+"cagr_pct": 120.6,
+"max_dd_pct": -69.3,
+"max_dd_rs": -67209,
+"win_rate": 32.1,
+"profit_factor": 1.3,
+"avg_R": 0.258,
+"worst_trade": -4972,
+"best_trade": 21593,
+"max_lots": 6,
+"avg_lots": 1.0,
+"losing_months": 17,
+"months": 46,
+"worst_month": -33825,
+"best_month": 82683,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 406,
+"weekly loss limit": 214,
+"trend slot below Rs 40k": 55,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 30.2,
+"2024": 520.8,
+"2025": 38.8,
+"2026": 75.1
+},
+"by_index": {
+"NIFTY": 220386,
+"SENSEX": 148170,
+"BANKNIFTY": 4328
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 94525,
+"net": 74525,
+"multiple": 4.73,
+"cagr_pct": 658.4,
+"max_dd_pct": -47.6,
+"max_dd_rs": -39695,
+"win_rate": 34.9,
+"profit_factor": 1.34,
+"avg_R": 0.284,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19404,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 372.6
+},
+"by_index": {
+"NIFTY": 58428,
+"BANKNIFTY": 10068,
+"SENSEX": 6038
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "worse",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Risk per trade",
+"name": "Risk 1.5% a trade",
+"changes": [
+"risk %: 1.5"
+],
+"runs": {
+"200000_full": {
+"trades": 1785,
+"final": 3915853,
+"net": 3715853,
+"multiple": 19.58,
+"cagr_pct": 120.6,
+"max_dd_pct": -36.2,
+"max_dd_rs": -964116,
+"win_rate": 31.3,
+"profit_factor": 1.48,
+"avg_R": 0.256,
+"worst_trade": -67625,
+"best_trade": 486861,
+"max_lots": 50,
+"avg_lots": 5.4,
+"losing_months": 23,
+"months": 46,
+"worst_month": -289496,
+"best_month": 1493530,
+"skipped": {
+"weekly loss limit": 360,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 56.8,
+"2024": 161.9,
+"2025": 35.7,
+"2026": 251.3
+},
+"by_index": {
+"NIFTY": 2865610,
+"SENSEX": 1338044,
+"BANKNIFTY": -487821
+}
+},
+"200000_y2026": {
+"trades": 349,
+"final": 477563,
+"net": 277563,
+"multiple": 2.39,
+"cagr_pct": 206.3,
+"max_dd_pct": -26.5,
+"max_dd_rs": -109423,
+"win_rate": 35.0,
+"profit_factor": 1.63,
+"avg_R": 0.319,
+"worst_trade": -8129,
+"best_trade": 50478,
+"max_lots": 7,
+"avg_lots": 1.6,
+"losing_months": 3,
+"months": 10,
+"worst_month": -33619,
+"best_month": 160473,
+"skipped": {
+"weekly loss limit": 67,
+"Fibonacci slot below Rs 2 lakh": 17
+},
+"years": {
+"2026": 138.8
+},
+"by_index": {
+"NIFTY": 225937,
+"SENSEX": 49159,
+"BANKNIFTY": 2468
+}
+},
+"20000_full": {
+"trades": 1501,
+"final": 1377910,
+"net": 1357910,
+"multiple": 68.9,
+"cagr_pct": 208.3,
+"max_dd_pct": -69.5,
+"max_dd_rs": -327990,
+"win_rate": 32.3,
+"profit_factor": 1.55,
+"avg_R": 0.27,
+"worst_trade": -22471,
+"best_trade": 168167,
+"max_lots": 21,
+"avg_lots": 2.1,
+"losing_months": 18,
+"months": 46,
+"worst_month": -103181,
+"best_month": 512927,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 307,
+"weekly loss limit": 268,
+"trend slot below Rs 40k": 53,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 29.7,
+"2024": 596.0,
+"2025": 128.2,
+"2026": 234.5
+},
+"by_index": {
+"NIFTY": 1002677,
+"SENSEX": 461503,
+"BANKNIFTY": -106266
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 94525,
+"net": 74525,
+"multiple": 4.73,
+"cagr_pct": 658.4,
+"max_dd_pct": -47.6,
+"max_dd_rs": -39695,
+"win_rate": 34.9,
+"profit_factor": 1.34,
+"avg_R": 0.284,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19404,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 372.6
+},
+"by_index": {
+"NIFTY": 58428,
+"BANKNIFTY": 10068,
+"SENSEX": 6038
+}
+}
+},
+"verdict": {
+"200000_full": "more profit, deeper fall",
+"200000_y2026": "more profit, deeper fall",
+"20000_full": "better",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Risk per trade",
+"name": "Risk 2% a trade",
+"changes": [
+"risk %: 2.0"
+],
+"runs": {
+"200000_full": {
+"trades": 1626,
+"final": 9245347,
+"net": 9045347,
+"multiple": 46.23,
+"cagr_pct": 177.3,
+"max_dd_pct": -35.1,
+"max_dd_rs": -2024475,
+"win_rate": 31.7,
+"profit_factor": 1.44,
+"avg_R": 0.286,
+"worst_trade": -229101,
+"best_trade": 838254,
+"max_lots": 50,
+"avg_lots": 14.6,
+"losing_months": 20,
+"months": 46,
+"worst_month": -872961,
+"best_month": 2828943,
+"skipped": {
+"weekly loss limit": 519,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 103.6,
+"2024": 276.2,
+"2025": 100.2,
+"2026": 201.5
+},
+"by_index": {
+"NIFTY": 7081035,
+"SENSEX": 3678029,
+"BANKNIFTY": -1713735
+}
+},
+"200000_y2026": {
+"trades": 310,
+"final": 1127845,
+"net": 927845,
+"multiple": 5.64,
+"cagr_pct": 839.7,
+"max_dd_pct": -30.9,
+"max_dd_rs": -232155,
+"win_rate": 38.1,
+"profit_factor": 2.02,
+"avg_R": 0.405,
+"worst_trade": -26118,
+"best_trade": 134562,
+"max_lots": 18,
+"avg_lots": 3.9,
+"losing_months": 2,
+"months": 10,
+"worst_month": -71614,
+"best_month": 567187,
+"skipped": {
+"weekly loss limit": 112,
+"Fibonacci slot below Rs 2 lakh": 11
+},
+"years": {
+"2026": 463.9
+},
+"by_index": {
+"NIFTY": 659127,
+"SENSEX": 328719,
+"BANKNIFTY": -60000
+}
+},
+"20000_full": {
+"trades": 1410,
+"final": 1891727,
+"net": 1871727,
+"multiple": 94.59,
+"cagr_pct": 235.4,
+"max_dd_pct": -68.0,
+"max_dd_rs": -409268,
+"win_rate": 32.5,
+"profit_factor": 1.6,
+"avg_R": 0.281,
+"worst_trade": -44013,
+"best_trade": 235338,
+"max_lots": 30,
+"avg_lots": 2.8,
+"losing_months": 18,
+"months": 46,
+"worst_month": -123562,
+"best_month": 966631,
+"skipped": {
+"weekly loss limit": 364,
+"Fibonacci slot below Rs 2 lakh": 306,
+"trend slot below Rs 40k": 53,
+"not enough free cash": 16,
+"1 lot risks > 15% of the account": 1
+},
+"years": {
+"2023": 17.9,
+"2024": 662.3,
+"2025": 152.4,
+"2026": 316.8
+},
+"by_index": {
+"NIFTY": 1162242,
+"SENSEX": 864680,
+"BANKNIFTY": -155180
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 94525,
+"net": 74525,
+"multiple": 4.73,
+"cagr_pct": 658.4,
+"max_dd_pct": -47.6,
+"max_dd_rs": -39695,
+"win_rate": 34.9,
+"profit_factor": 1.34,
+"avg_R": 0.284,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19404,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 372.6
+},
+"by_index": {
+"NIFTY": 58428,
+"BANKNIFTY": 10068,
+"SENSEX": 6038
+}
+}
+},
+"verdict": {
+"200000_full": "more profit, deeper fall",
+"200000_y2026": "more profit, deeper fall",
+"20000_full": "better",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Risk per trade",
+"name": "Risk 3% a trade",
+"changes": [
+"risk %: 3.0"
+],
+"runs": {
+"200000_full": {
+"trades": 1470,
+"final": 13396733,
+"net": 13196733,
+"multiple": 66.98,
+"cagr_pct": 206.0,
+"max_dd_pct": -43.4,
+"max_dd_rs": -3293828,
+"win_rate": 31.8,
+"profit_factor": 1.31,
+"avg_R": 0.312,
+"worst_trade": -238833,
+"best_trade": 838254,
+"max_lots": 50,
+"avg_lots": 31.9,
+"losing_months": 19,
+"months": 46,
+"worst_month": -1476681,
+"best_month": 3443415,
+"skipped": {
+"weekly loss limit": 658,
+"Fibonacci slot below Rs 2 lakh": 14,
+"not enough free cash": 8
+},
+"years": {
+"2023": 168.9,
+"2024": 569.6,
+"2025": 85.4,
+"2026": 100.7
+},
+"by_index": {
+"NIFTY": 11021290,
+"SENSEX": 7359296,
+"BANKNIFTY": -5183854
+}
+},
+"200000_y2026": {
+"trades": 270,
+"final": 3620973,
+"net": 3420973,
+"multiple": 18.1,
+"cagr_pct": 4272.7,
+"max_dd_pct": -36.7,
+"max_dd_rs": -721408,
+"win_rate": 38.9,
+"profit_factor": 2.37,
+"avg_R": 0.494,
+"worst_trade": -127455,
+"best_trade": 503612,
+"max_lots": 50,
+"avg_lots": 12.9,
+"losing_months": 2,
+"months": 10,
+"worst_month": -214878,
+"best_month": 2282722,
+"skipped": {
+"weekly loss limit": 150,
+"Fibonacci slot below Rs 2 lakh": 11,
+"not enough free cash": 2
+},
+"years": {
+"2026": 1710.5
+},
+"by_index": {
+"NIFTY": 2388987,
+"SENSEX": 1253121,
+"BANKNIFTY": -221136
+}
+},
+"20000_full": {
+"trades": 1311,
+"final": 5323101,
+"net": 5303101,
+"multiple": 266.16,
+"cagr_pct": 342.7,
+"max_dd_pct": -69.6,
+"max_dd_rs": -1502850,
+"win_rate": 33.0,
+"profit_factor": 1.74,
+"avg_R": 0.301,
+"worst_trade": -194765,
+"best_trade": 838254,
+"max_lots": 50,
+"avg_lots": 7.0,
+"losing_months": 18,
+"months": 46,
+"worst_month": -459707,
+"best_month": 2605592,
+"skipped": {
+"weekly loss limit": 482,
+"Fibonacci slot below Rs 2 lakh": 290,
+"trend slot below Rs 40k": 47,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 1
+},
+"years": {
+"2023": 34.1,
+"2024": 797.1,
+"2025": 172.3,
+"2026": 712.2
+},
+"by_index": {
+"NIFTY": 4039215,
+"SENSEX": 1765278,
+"BANKNIFTY": -501394
+}
+},
+"20000_y2026": {
+"trades": 258,
+"final": 81671,
+"net": 61671,
+"multiple": 4.08,
+"cagr_pct": 518.6,
+"max_dd_pct": -47.9,
+"max_dd_rs": -40989,
+"win_rate": 34.5,
+"profit_factor": 1.27,
+"avg_R": 0.27,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 2,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -20193,
+"best_month": 26576,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 119,
+"weekly loss limit": 27,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 308.4
+},
+"by_index": {
+"NIFTY": 52127,
+"BANKNIFTY": 4473,
+"SENSEX": 5079
+}
+}
+},
+"verdict": {
+"200000_full": "more profit, deeper fall",
+"200000_y2026": "more profit, deeper fall",
+"20000_full": "better",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Lot sizing",
+"name": "No compounding (1% of the starting capital)",
+"changes": [
+"lots: fixed_risk"
+],
+"runs": {
+"200000_full": {
+"trades": 2062,
+"final": 704076,
+"net": 504076,
+"multiple": 3.52,
+"cagr_pct": 39.7,
+"max_dd_pct": -31.4,
+"max_dd_rs": -96555,
+"win_rate": 31.0,
+"profit_factor": 1.27,
+"avg_R": 0.241,
+"worst_trade": -5567,
+"best_trade": 18423,
+"max_lots": 5,
+"avg_lots": 1.1,
+"losing_months": 21,
+"months": 46,
+"worst_month": -39149,
+"best_month": 106625,
+"skipped": {
+"weekly loss limit": 83,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 10.2,
+"2024": 100.4,
+"2025": 33.5,
+"2026": 19.4
+},
+"by_index": {
+"NIFTY": 335375,
+"SENSEX": 141146,
+"BANKNIFTY": 27573
+}
+},
+"200000_y2026": {
+"trades": 389,
+"final": 346428,
+"net": 146428,
+"multiple": 1.73,
+"cagr_pct": 103.7,
+"max_dd_pct": -17.3,
+"max_dd_rs": -58229,
+"win_rate": 34.4,
+"profit_factor": 1.41,
+"avg_R": 0.326,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 5,
+"avg_lots": 1.1,
+"losing_months": 3,
+"months": 10,
+"worst_month": -28615,
+"best_month": 57581,
+"skipped": {
+"weekly loss limit": 31,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 73.2
+},
+"by_index": {
+"NIFTY": 127494,
+"SENSEX": 17358,
+"BANKNIFTY": 1576
+}
+},
+"20000_full": {
+"trades": 1451,
+"final": 363576,
+"net": 343576,
+"multiple": 18.18,
+"cagr_pct": 116.3,
+"max_dd_pct": -69.3,
+"max_dd_rs": -59031,
+"win_rate": 32.0,
+"profit_factor": 1.28,
+"avg_R": 0.256,
+"worst_trade": -4972,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 17,
+"months": 46,
+"worst_month": -29054,
+"best_month": 66564,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 406,
+"weekly loss limit": 217,
+"trend slot below Rs 40k": 55,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 30.2,
+"2024": 520.8,
+"2025": 37.9,
+"2026": 63.2
+},
+"by_index": {
+"NIFTY": 221122,
+"SENSEX": 123609,
+"BANKNIFTY": -1147
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 94525,
+"net": 74525,
+"multiple": 4.73,
+"cagr_pct": 658.4,
+"max_dd_pct": -47.6,
+"max_dd_rs": -39695,
+"win_rate": 34.9,
+"profit_factor": 1.34,
+"avg_R": 0.284,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19404,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 372.6
+},
+"by_index": {
+"NIFTY": 58428,
+"BANKNIFTY": 10068,
+"SENSEX": 6038
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "worse",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Lot sizing",
+"name": "Fixed 1 lot",
+"changes": [
+"lots: fixed"
+],
+"runs": {
+"200000_full": {
+"trades": 2075,
+"final": 700731,
+"net": 500731,
+"multiple": 3.5,
+"cagr_pct": 39.5,
+"max_dd_pct": -33.6,
+"max_dd_rs": -99327,
+"win_rate": 31.0,
+"profit_factor": 1.28,
+"avg_R": 0.242,
+"worst_trade": -5567,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 19,
+"months": 46,
+"worst_month": -36036,
+"best_month": 107618,
+"skipped": {
+"weekly loss limit": 70,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 3.2,
+"2024": 112.2,
+"2025": 33.9,
+"2026": 19.5
+},
+"by_index": {
+"NIFTY": 326708,
+"SENSEX": 143709,
+"BANKNIFTY": 30328
+}
+},
+"200000_y2026": {
+"trades": 389,
+"final": 341318,
+"net": 141318,
+"multiple": 1.71,
+"cagr_pct": 99.8,
+"max_dd_pct": -16.2,
+"max_dd_rs": -53019,
+"win_rate": 34.2,
+"profit_factor": 1.41,
+"avg_R": 0.325,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -21298,
+"best_month": 58242,
+"skipped": {
+"weekly loss limit": 31,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 70.7
+},
+"by_index": {
+"NIFTY": 122405,
+"SENSEX": 17339,
+"BANKNIFTY": 1576
+}
+},
+"20000_full": {
+"trades": 1598,
+"final": 456153,
+"net": 436153,
+"multiple": 22.81,
+"cagr_pct": 129.5,
+"max_dd_pct": -64.3,
+"max_dd_rs": -69502,
+"win_rate": 32.0,
+"profit_factor": 1.31,
+"avg_R": 0.257,
+"worst_trade": -4972,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 15,
+"months": 46,
+"worst_month": -40157,
+"best_month": 66564,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 313,
+"weekly loss limit": 203,
+"not enough free cash": 20,
+"trend slot below Rs 40k": 16
+},
+"years": {
+"2023": 87.3,
+"2024": 382.3,
+"2025": 77.9,
+"2026": 41.9
+},
+"by_index": {
+"NIFTY": 259737,
+"SENSEX": 140474,
+"BANKNIFTY": 35955
+}
+},
+"20000_y2026": {
+"trades": 240,
+"final": 94306,
+"net": 74306,
+"multiple": 4.72,
+"cagr_pct": 656.1,
+"max_dd_pct": -49.4,
+"max_dd_rs": -41434,
+"win_rate": 35.0,
+"profit_factor": 1.35,
+"avg_R": 0.272,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -20376,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 113,
+"weekly loss limit": 38,
+"not enough free cash": 27,
+"trend slot below Rs 40k": 15
+},
+"years": {
+"2026": 371.5
+},
+"by_index": {
+"NIFTY": 71358,
+"BANKNIFTY": 1915,
+"SENSEX": 1039
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "less profit, shallower fall",
+"20000_full": "less profit, shallower fall",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Lot sizing",
+"name": "Fixed 3 lots",
+"changes": [
+"lots: fixed",
+"fixed lots: 3"
+],
+"runs": {
+"200000_full": {
+"trades": 1872,
+"final": 1751220,
+"net": 1551220,
+"multiple": 8.76,
+"cagr_pct": 78.0,
+"max_dd_pct": -30.5,
+"max_dd_rs": -227433,
+"win_rate": 31.7,
+"profit_factor": 1.32,
+"avg_R": 0.261,
+"worst_trade": -16753,
+"best_trade": 50478,
+"max_lots": 3,
+"avg_lots": 3.0,
+"losing_months": 16,
+"months": 46,
+"worst_month": -106178,
+"best_month": 342783,
+"skipped": {
+"weekly loss limit": 260,
+"Fibonacci slot below Rs 2 lakh": 18
+},
+"years": {
+"2023": 40.4,
+"2024": 277.1,
+"2025": 31.2,
+"2026": 26.0
+},
+"by_index": {
+"NIFTY": 1064249,
+"SENSEX": 496966,
+"BANKNIFTY": -10023
+}
+},
+"200000_y2026": {
+"trades": 339,
+"final": 757269,
+"net": 557269,
+"multiple": 3.79,
+"cagr_pct": 460.9,
+"max_dd_pct": -21.0,
+"max_dd_rs": -141955,
+"win_rate": 36.3,
+"profit_factor": 1.66,
+"avg_R": 0.394,
+"worst_trade": -12927,
+"best_trade": 50478,
+"max_lots": 3,
+"avg_lots": 3.0,
+"losing_months": 2,
+"months": 10,
+"worst_month": -60939,
+"best_month": 175698,
+"skipped": {
+"weekly loss limit": 85,
+"Fibonacci slot below Rs 2 lakh": 9
+},
+"years": {
+"2026": 278.6
+},
+"by_index": {
+"NIFTY": 429962,
+"SENSEX": 86235,
+"BANKNIFTY": 41069
+}
+},
+"20000_full": {
+"trades": 1605,
+"final": 1456342,
+"net": 1436342,
+"multiple": 72.82,
+"cagr_pct": 212.4,
+"max_dd_pct": -60.9,
+"max_dd_rs": -233461,
+"win_rate": 32.6,
+"profit_factor": 1.34,
+"avg_R": 0.276,
+"worst_trade": -15140,
+"best_trade": 50478,
+"max_lots": 3,
+"avg_lots": 3.0,
+"losing_months": 17,
+"months": 46,
+"worst_month": -109826,
+"best_month": 256322,
+"skipped": {
+"weekly loss limit": 388,
+"Fibonacci slot below Rs 2 lakh": 124,
+"not enough free cash": 25,
+"trend slot below Rs 40k": 8
+},
+"years": {
+"2023": 379.3,
+"2024": 573.0,
+"2025": 62.6,
+"2026": 38.9
+},
+"by_index": {
+"NIFTY": 897807,
+"SENSEX": 548257,
+"BANKNIFTY": -9748
+}
+},
+"20000_y2026": {
+"trades": 194,
+"final": 240226,
+"net": 220226,
+"multiple": 12.01,
+"cagr_pct": 2460.3,
+"max_dd_pct": -39.6,
+"max_dd_rs": -106323,
+"win_rate": 40.2,
+"profit_factor": 1.52,
+"avg_R": 0.345,
+"worst_trade": -11048,
+"best_trade": 50478,
+"max_lots": 3,
+"avg_lots": 2.7,
+"losing_months": 4,
+"months": 10,
+"worst_month": -27560,
+"best_month": 74130,
+"skipped": {
+"weekly loss limit": 165,
+"Fibonacci slot below Rs 2 lakh": 40,
+"not enough free cash": 21,
+"trend slot below Rs 40k": 13
+},
+"years": {
+"2026": 1101.1
+},
+"by_index": {
+"NIFTY": 197560,
+"SENSEX": 3729,
+"BANKNIFTY": 18936
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "better",
+"20000_full": "better",
+"20000_y2026": "better"
+}
+},
+{
+"group": "Lot sizing",
+"name": "Fixed 10 lots",
+"changes": [
+"lots: fixed",
+"fixed lots: 10"
+],
+"runs": {
+"200000_full": {
+"trades": 1749,
+"final": 4841178,
+"net": 4641178,
+"multiple": 24.21,
+"cagr_pct": 133.1,
+"max_dd_pct": -40.6,
+"max_dd_rs": -935585,
+"win_rate": 31.8,
+"profit_factor": 1.3,
+"avg_R": 0.28,
+"worst_trade": -56682,
+"best_trade": 168167,
+"max_lots": 10,
+"avg_lots": 9.9,
+"losing_months": 18,
+"months": 46,
+"worst_month": -460345,
+"best_month": 1185656,
+"skipped": {
+"weekly loss limit": 384,
+"Fibonacci slot below Rs 2 lakh": 14,
+"not enough free cash": 3
+},
+"years": {
+"2023": 230.0,
+"2024": 278.4,
+"2025": 45.0,
+"2026": 33.7
+},
+"by_index": {
+"NIFTY": 3157810,
+"SENSEX": 1753062,
+"BANKNIFTY": -269702
+}
+},
+"200000_y2026": {
+"trades": 253,
+"final": 1821114,
+"net": 1621114,
+"multiple": 9.11,
+"cagr_pct": 1683.9,
+"max_dd_pct": -31.1,
+"max_dd_rs": -348801,
+"win_rate": 39.5,
+"profit_factor": 1.83,
+"avg_R": 0.476,
+"worst_trade": -44013,
+"best_trade": 168167,
+"max_lots": 10,
+"avg_lots": 9.8,
+"losing_months": 3,
+"months": 10,
+"worst_month": -141098,
+"best_month": 622554,
+"skipped": {
+"weekly loss limit": 165,
+"Fibonacci slot below Rs 2 lakh": 9,
+"not enough free cash": 6
+},
+"years": {
+"2026": 810.6
+},
+"by_index": {
+"NIFTY": 1210373,
+"SENSEX": 230298,
+"BANKNIFTY": 180446
+}
+},
+"20000_full": {
+"trades": 136,
+"final": 5324,
+"net": -14676,
+"multiple": 0.27,
+"cagr_pct": -66.6,
+"max_dd_pct": -94.2,
+"max_dd_rs": -87113,
+"win_rate": 31.6,
+"profit_factor": 0.95,
+"avg_R": 0.267,
+"worst_trade": -16959,
+"best_trade": 31706,
+"max_lots": 10,
+"avg_lots": 2.9,
+"losing_months": 8,
+"months": 13,
+"worst_month": -43173,
+"best_month": 16581,
+"skipped": {
+"not enough free cash": 938,
+"Fibonacci slot below Rs 2 lakh": 660,
+"trend slot below Rs 40k": 282,
+"weekly loss limit": 134
+},
+"years": {
+"2023": -65.6,
+"2024": -22.6
+},
+"by_index": {
+"NIFTY": -38703,
+"BANKNIFTY": -5205,
+"SENSEX": 29233
+}
+},
+"20000_y2026": {
+"trades": 121,
+"final": 180770,
+"net": 160770,
+"multiple": 9.04,
+"cagr_pct": 1666.8,
+"max_dd_pct": -61.2,
+"max_dd_rs": -165161,
+"win_rate": 41.3,
+"profit_factor": 1.24,
+"avg_R": 0.398,
+"worst_trade": -33608,
+"best_trade": 134562,
+"max_lots": 10,
+"avg_lots": 5.8,
+"losing_months": 4,
+"months": 10,
+"worst_month": -69615,
+"best_month": 160268,
+"skipped": {
+"weekly loss limit": 213,
+"Fibonacci slot below Rs 2 lakh": 44,
+"not enough free cash": 42,
+"trend slot below Rs 40k": 13
+},
+"years": {
+"2026": 803.9
+},
+"by_index": {
+"NIFTY": 158636,
+"BANKNIFTY": 44733,
+"SENSEX": -42603
+}
+}
+},
+"verdict": {
+"200000_full": "more profit, deeper fall",
+"200000_y2026": "more profit, deeper fall",
+"20000_full": "worse",
+"20000_y2026": "more profit, deeper fall"
+}
+},
+{
+"group": "Confidence sizing",
+"name": "No confidence sizing (all 1x)",
+"changes": [
+"confidence: No confidence sizing"
+],
+"runs": {
+"200000_full": {
+"trades": 1930,
+"final": 850926,
+"net": 650926,
+"multiple": 4.25,
+"cagr_pct": 46.9,
+"max_dd_pct": -36.7,
+"max_dd_rs": -154811,
+"win_rate": 30.8,
+"profit_factor": 1.26,
+"avg_R": 0.234,
+"worst_trade": -8849,
+"best_trade": 54960,
+"max_lots": 15,
+"avg_lots": 1.6,
+"losing_months": 20,
+"months": 46,
+"worst_month": -70339,
+"best_month": 176476,
+"skipped": {
+"weekly loss limit": 207,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2023": -0.2,
+"2024": 89.0,
+"2025": 22.6,
+"2026": 84.0
+},
+"by_index": {
+"NIFTY": 448345,
+"SENSEX": 224173,
+"BANKNIFTY": -21587
+}
+},
+"200000_y2026": {
+"trades": 389,
+"final": 384693,
+"net": 184693,
+"multiple": 1.92,
+"cagr_pct": 131.9,
+"max_dd_pct": -19.5,
+"max_dd_rs": -69239,
+"win_rate": 34.7,
+"profit_factor": 1.47,
+"avg_R": 0.333,
+"worst_trade": -4388,
+"best_trade": 27473,
+"max_lots": 6,
+"avg_lots": 1.2,
+"losing_months": 3,
+"months": 10,
+"worst_month": -30575,
+"best_month": 83987,
+"skipped": {
+"weekly loss limit": 31,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 92.3
+},
+"by_index": {
+"NIFTY": 135352,
+"SENSEX": 44059,
+"BANKNIFTY": 5288
+}
+},
+"20000_full": {
+"trades": 1434,
+"final": 388730,
+"net": 368730,
+"multiple": 19.44,
+"cagr_pct": 119.9,
+"max_dd_pct": -69.3,
+"max_dd_rs": -70998,
+"win_rate": 32.1,
+"profit_factor": 1.29,
+"avg_R": 0.257,
+"worst_trade": -4972,
+"best_trade": 27473,
+"max_lots": 6,
+"avg_lots": 1.1,
+"losing_months": 17,
+"months": 46,
+"worst_month": -32809,
+"best_month": 83987,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 417,
+"weekly loss limit": 223,
+"trend slot below Rs 40k": 55,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 30.2,
+"2024": 520.8,
+"2025": 31.9,
+"2026": 82.3
+},
+"by_index": {
+"NIFTY": 219284,
+"SENSEX": 150975,
+"BANKNIFTY": -1515
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 94525,
+"net": 74525,
+"multiple": 4.73,
+"cagr_pct": 658.4,
+"max_dd_pct": -47.6,
+"max_dd_rs": -39695,
+"win_rate": 34.9,
+"profit_factor": 1.34,
+"avg_R": 0.284,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19404,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 372.6
+},
+"by_index": {
+"NIFTY": 58428,
+"BANKNIFTY": 10068,
+"SENSEX": 6038
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "worse",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Confidence sizing",
+"name": "Strong confidence (2x / 1x / 0.5x, all indices)",
+"changes": [
+"confidence: Strong: 2x / 1x / 0.5x on all indices"
+],
+"runs": {
+"200000_full": {
+"trades": 1769,
+"final": 6698657,
+"net": 6498657,
+"multiple": 33.49,
+"cagr_pct": 154.5,
+"max_dd_pct": -33.6,
+"max_dd_rs": -1356975,
+"win_rate": 31.9,
+"profit_factor": 1.5,
+"avg_R": 0.288,
+"worst_trade": -165723,
+"best_trade": 804819,
+"max_lots": 50,
+"avg_lots": 8.9,
+"losing_months": 21,
+"months": 46,
+"worst_month": -544629,
+"best_month": 2475809,
+"skipped": {
+"weekly loss limit": 376,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 69.6,
+"2024": 188.5,
+"2025": 117.7,
+"2026": 214.5
+},
+"by_index": {
+"NIFTY": 5168763,
+"SENSEX": 2554279,
+"BANKNIFTY": -1224373
+}
+},
+"200000_y2026": {
+"trades": 335,
+"final": 536709,
+"net": 336709,
+"multiple": 2.68,
+"cagr_pct": 257.5,
+"max_dd_pct": -23.3,
+"max_dd_rs": -98103,
+"win_rate": 36.4,
+"profit_factor": 1.7,
+"avg_R": 0.36,
+"worst_trade": -10018,
+"best_trade": 50478,
+"max_lots": 15,
+"avg_lots": 1.8,
+"losing_months": 3,
+"months": 10,
+"worst_month": -38293,
+"best_month": 201366,
+"skipped": {
+"weekly loss limit": 81,
+"Fibonacci slot below Rs 2 lakh": 17
+},
+"years": {
+"2026": 168.4
+},
+"by_index": {
+"NIFTY": 263042,
+"SENSEX": 87621,
+"BANKNIFTY": -13952
+}
+},
+"20000_full": {
+"trades": 1484,
+"final": 1396607,
+"net": 1376607,
+"multiple": 69.83,
+"cagr_pct": 209.4,
+"max_dd_pct": -69.5,
+"max_dd_rs": -285093,
+"win_rate": 32.2,
+"profit_factor": 1.57,
+"avg_R": 0.269,
+"worst_trade": -29121,
+"best_trade": 151367,
+"max_lots": 20,
+"avg_lots": 2.1,
+"losing_months": 19,
+"months": 46,
+"worst_month": -92808,
+"best_month": 584687,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 307,
+"weekly loss limit": 285,
+"trend slot below Rs 40k": 53,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 29.7,
+"2024": 591.7,
+"2025": 130.1,
+"2026": 238.2
+},
+"by_index": {
+"NIFTY": 988228,
+"SENSEX": 539097,
+"BANKNIFTY": -150706
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 94525,
+"net": 74525,
+"multiple": 4.73,
+"cagr_pct": 658.4,
+"max_dd_pct": -47.6,
+"max_dd_rs": -39695,
+"win_rate": 34.9,
+"profit_factor": 1.34,
+"avg_R": 0.284,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19404,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 372.6
+},
+"by_index": {
+"NIFTY": 58428,
+"BANKNIFTY": 10068,
+"SENSEX": 6038
+}
+}
+},
+"verdict": {
+"200000_full": "more profit, deeper fall",
+"200000_y2026": "more profit, deeper fall",
+"20000_full": "better",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Filters & brakes",
+"name": "Big-run skip OFF",
+"changes": [
+"big-run skip: False"
+],
+"runs": {
+"200000_full": {
+"trades": 2019,
+"final": 1872170,
+"net": 1672170,
+"multiple": 9.36,
+"cagr_pct": 81.1,
+"max_dd_pct": -41.2,
+"max_dd_rs": -274639,
+"win_rate": 30.7,
+"profit_factor": 1.4,
+"avg_R": 0.233,
+"worst_trade": -21584,
+"best_trade": 151367,
+"max_lots": 38,
+"avg_lots": 2.6,
+"losing_months": 22,
+"months": 46,
+"worst_month": -129480,
+"best_month": 634837,
+"skipped": {
+"weekly loss limit": 218,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 6.7,
+"2024": 155.8,
+"2025": 52.6,
+"2026": 124.9
+},
+"by_index": {
+"NIFTY": 1130509,
+"SENSEX": 630778,
+"BANKNIFTY": -89113
+}
+},
+"200000_y2026": {
+"trades": 394,
+"final": 454501,
+"net": 254501,
+"multiple": 2.27,
+"cagr_pct": 187.4,
+"max_dd_pct": -16.3,
+"max_dd_rs": -56362,
+"win_rate": 35.3,
+"profit_factor": 1.61,
+"avg_R": 0.339,
+"worst_trade": -5191,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.3,
+"losing_months": 2,
+"months": 10,
+"worst_month": -24794,
+"best_month": 154569,
+"skipped": {
+"weekly loss limit": 42,
+"Fibonacci slot below Rs 2 lakh": 15
+},
+"years": {
+"2026": 127.3
+},
+"by_index": {
+"NIFTY": 195904,
+"SENSEX": 64499,
+"BANKNIFTY": -5900
+}
+},
+"20000_full": {
+"trades": 1188,
+"final": 222789,
+"net": 202789,
+"multiple": 11.14,
+"cagr_pct": 89.9,
+"max_dd_pct": -72.7,
+"max_dd_rs": -72629,
+"win_rate": 31.8,
+"profit_factor": 1.2,
+"avg_R": 0.216,
+"worst_trade": -5191,
+"best_trade": 16805,
+"max_lots": 5,
+"avg_lots": 1.0,
+"losing_months": 22,
+"months": 46,
+"worst_month": -29054,
+"best_month": 67780,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 572,
+"weekly loss limit": 400,
+"trend slot below Rs 40k": 61,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": -1.5,
+"2024": 538.0,
+"2025": 3.0,
+"2026": 72.2
+},
+"by_index": {
+"NIFTY": 133835,
+"BANKNIFTY": 750,
+"SENSEX": 68216
+}
+},
+"20000_y2026": {
+"trades": 260,
+"final": 78855,
+"net": 58855,
+"multiple": 3.94,
+"cagr_pct": 491.1,
+"max_dd_pct": -55.1,
+"max_dd_rs": -40156,
+"win_rate": 35.0,
+"profit_factor": 1.26,
+"avg_R": 0.276,
+"worst_trade": -4972,
+"best_trade": 14889,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 4,
+"months": 10,
+"worst_month": -9393,
+"best_month": 26576,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 124,
+"weekly loss limit": 34,
+"not enough free cash": 15,
+"trend slot below Rs 40k": 14,
+"1 lot risks > 15% of the account": 4
+},
+"years": {
+"2026": 294.3
+},
+"by_index": {
+"NIFTY": 64054,
+"BANKNIFTY": -6456,
+"SENSEX": 1262
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "about the same",
+"20000_full": "worse",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Filters & brakes",
+"name": "Half risk in a drawdown OFF",
+"changes": [
+"half risk in a drawdown: False"
+],
+"runs": {
+"200000_full": {
+"trades": 1834,
+"final": 2976705,
+"net": 2776705,
+"multiple": 14.88,
+"cagr_pct": 104.9,
+"max_dd_pct": -30.3,
+"max_dd_rs": -536486,
+"win_rate": 31.8,
+"profit_factor": 1.45,
+"avg_R": 0.271,
+"worst_trade": -32660,
+"best_trade": 235338,
+"max_lots": 50,
+"avg_lots": 4.2,
+"losing_months": 17,
+"months": 46,
+"worst_month": -264894,
+"best_month": 1083600,
+"skipped": {
+"weekly loss limit": 311,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 34.4,
+"2024": 176.2,
+"2025": 38.5,
+"2026": 189.4
+},
+"by_index": {
+"NIFTY": 2033096,
+"SENSEX": 799646,
+"BANKNIFTY": -56043
+}
+},
+"200000_y2026": {
+"trades": 385,
+"final": 462565,
+"net": 262565,
+"multiple": 2.31,
+"cagr_pct": 194.0,
+"max_dd_pct": -20.9,
+"max_dd_rs": -77910,
+"win_rate": 35.1,
+"profit_factor": 1.64,
+"avg_R": 0.346,
+"worst_trade": -4946,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.4,
+"losing_months": 4,
+"months": 10,
+"worst_month": -36574,
+"best_month": 154660,
+"skipped": {
+"weekly loss limit": 35,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 131.3
+},
+"by_index": {
+"NIFTY": 198159,
+"SENSEX": 62414,
+"BANKNIFTY": 1991
+}
+},
+"20000_full": {
+"trades": 1472,
+"final": 512826,
+"net": 492826,
+"multiple": 25.64,
+"cagr_pct": 136.7,
+"max_dd_pct": -69.3,
+"max_dd_rs": -88536,
+"win_rate": 32.1,
+"profit_factor": 1.36,
+"avg_R": 0.263,
+"worst_trade": -6381,
+"best_trade": 33645,
+"max_lots": 10,
+"avg_lots": 1.2,
+"losing_months": 17,
+"months": 46,
+"worst_month": -43727,
+"best_month": 156968,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 347,
+"weekly loss limit": 255,
+"trend slot below Rs 40k": 55,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 30.2,
+"2024": 563.2,
+"2025": 39.9,
+"2026": 112.3
+},
+"by_index": {
+"NIFTY": 303507,
+"SENSEX": 190744,
+"BANKNIFTY": -1408
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 94525,
+"net": 74525,
+"multiple": 4.73,
+"cagr_pct": 658.4,
+"max_dd_pct": -47.6,
+"max_dd_rs": -39695,
+"win_rate": 34.9,
+"profit_factor": 1.34,
+"avg_R": 0.284,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19404,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 372.6
+},
+"by_index": {
+"NIFTY": 58428,
+"BANKNIFTY": 10068,
+"SENSEX": 6038
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "better",
+"20000_full": "better",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Filters & brakes",
+"name": "Equity gates OFF (trend & Fib from day one)",
+"changes": [
+"equity gates: False"
+],
+"runs": {
+"200000_full": {
+"trades": 1926,
+"final": 3257801,
+"net": 3057801,
+"multiple": 16.29,
+"cagr_pct": 109.9,
+"max_dd_pct": -28.6,
+"max_dd_rs": -525255,
+"win_rate": 31.4,
+"profit_factor": 1.49,
+"avg_R": 0.263,
+"worst_trade": -36775,
+"best_trade": 268906,
+"max_lots": 50,
+"avg_lots": 4.0,
+"losing_months": 22,
+"months": 46,
+"worst_month": -233060,
+"best_month": 1134226,
+"skipped": {
+"weekly loss limit": 224
+},
+"years": {
+"2023": 30.9,
+"2024": 191.5,
+"2025": 75.6,
+"2026": 143.1
+},
+"by_index": {
+"NIFTY": 2062637,
+"SENSEX": 1101460,
+"BANKNIFTY": -106307
+}
+},
+"200000_y2026": {
+"trades": 389,
+"final": 464323,
+"net": 264323,
+"multiple": 2.32,
+"cagr_pct": 195.4,
+"max_dd_pct": -19.0,
+"max_dd_rs": -72902,
+"win_rate": 34.7,
+"profit_factor": 1.64,
+"avg_R": 0.352,
+"worst_trade": -5241,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.3,
+"losing_months": 3,
+"months": 10,
+"worst_month": -35534,
+"best_month": 137983,
+"skipped": {
+"weekly loss limit": 44
+},
+"years": {
+"2026": 132.2
+},
+"by_index": {
+"NIFTY": 188060,
+"SENSEX": 71704,
+"BANKNIFTY": 4560
+}
+},
+"20000_full": {
+"trades": 1714,
+"final": 811024,
+"net": 791024,
+"multiple": 40.55,
+"cagr_pct": 167.4,
+"max_dd_pct": -70.7,
+"max_dd_rs": -126879,
+"win_rate": 32.0,
+"profit_factor": 1.44,
+"avg_R": 0.264,
+"worst_trade": -8870,
+"best_trade": 67305,
+"max_lots": 16,
+"avg_lots": 1.3,
+"losing_months": 17,
+"months": 46,
+"worst_month": -60384,
+"best_month": 260730,
+"skipped": {
+"weekly loss limit": 358,
+"not enough free cash": 74,
+"1 lot risks > 15% of the account": 4
+},
+"years": {
+"2023": 42.6,
+"2024": 691.0,
+"2025": 57.5,
+"2026": 128.3
+},
+"by_index": {
+"NIFTY": 515564,
+"SENSEX": 289590,
+"BANKNIFTY": -14111
+}
+},
+"20000_y2026": {
+"trades": 315,
+"final": 207214,
+"net": 187214,
+"multiple": 10.36,
+"cagr_pct": 1966.1,
+"max_dd_pct": -35.7,
+"max_dd_rs": -40056,
+"win_rate": 37.5,
+"profit_factor": 1.71,
+"avg_R": 0.448,
+"worst_trade": -4288,
+"best_trade": 16805,
+"max_lots": 4,
+"avg_lots": 1.0,
+"losing_months": 2,
+"months": 10,
+"worst_month": -17433,
+"best_month": 57433,
+"skipped": {
+"weekly loss limit": 105,
+"not enough free cash": 13
+},
+"years": {
+"2026": 936.1
+},
+"by_index": {
+"NIFTY": 134969,
+"SENSEX": 33503,
+"BANKNIFTY": 18741
+}
+}
+},
+"verdict": {
+"200000_full": "about the same",
+"200000_y2026": "better",
+"20000_full": "better",
+"20000_y2026": "better"
+}
+},
+{
+"group": "Filters & brakes",
+"name": "Small-account 1 OTM OFF (always 1 ITM)",
+"changes": [
+"1 OTM below Rs 60k: False"
+],
+"runs": {
+"200000_full": {
+"trades": 1921,
+"final": 3260111,
+"net": 3060111,
+"multiple": 16.3,
+"cagr_pct": 109.9,
+"max_dd_pct": -28.6,
+"max_dd_rs": -524609,
+"win_rate": 31.3,
+"profit_factor": 1.49,
+"avg_R": 0.263,
+"worst_trade": -36775,
+"best_trade": 268906,
+"max_lots": 50,
+"avg_lots": 4.1,
+"losing_months": 22,
+"months": 46,
+"worst_month": -232415,
+"best_month": 1134226,
+"skipped": {
+"weekly loss limit": 224,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 30.4,
+"2024": 193.3,
+"2025": 76.2,
+"2026": 141.8
+},
+"by_index": {
+"NIFTY": 2061813,
+"SENSEX": 1111506,
+"BANKNIFTY": -113221
+}
+},
+"200000_y2026": {
+"trades": 387,
+"final": 457190,
+"net": 257190,
+"multiple": 2.29,
+"cagr_pct": 189.6,
+"max_dd_pct": -19.1,
+"max_dd_rs": -71068,
+"win_rate": 34.9,
+"profit_factor": 1.64,
+"avg_R": 0.341,
+"worst_trade": -5084,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.3,
+"losing_months": 3,
+"months": 10,
+"worst_month": -33700,
+"best_month": 139630,
+"skipped": {
+"weekly loss limit": 33,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 128.6
+},
+"by_index": {
+"NIFTY": 184761,
+"SENSEX": 69125,
+"BANKNIFTY": 3306
+}
+},
+"20000_full": {
+"trades": 1475,
+"final": 494718,
+"net": 474718,
+"multiple": 24.74,
+"cagr_pct": 134.5,
+"max_dd_pct": -70.3,
+"max_dd_rs": -85764,
+"win_rate": 31.8,
+"profit_factor": 1.34,
+"avg_R": 0.26,
+"worst_trade": -6381,
+"best_trade": 33645,
+"max_lots": 11,
+"avg_lots": 1.1,
+"losing_months": 16,
+"months": 46,
+"worst_month": -41529,
+"best_month": 129081,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 344,
+"weekly loss limit": 257,
+"trend slot below Rs 40k": 45,
+"not enough free cash": 28,
+"1 lot risks > 15% of the account": 1
+},
+"years": {
+"2023": 39.9,
+"2024": 522.9,
+"2025": 39.6,
+"2026": 103.3
+},
+"by_index": {
+"NIFTY": 276569,
+"SENSEX": 187974,
+"BANKNIFTY": 10200
+}
+},
+"20000_y2026": {
+"trades": 123,
+"final": 60795,
+"net": 40795,
+"multiple": 3.04,
+"cagr_pct": 322.1,
+"max_dd_pct": -55.6,
+"max_dd_rs": -26609,
+"win_rate": 35.8,
+"profit_factor": 1.42,
+"avg_R": 0.323,
+"worst_trade": -4288,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 7,
+"worst_month": -9994,
+"best_month": 24103,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"1 lot risks > 15% of the account": 72,
+"trend slot below Rs 40k": 58,
+"not enough free cash": 34,
+"weekly loss limit": 30
+},
+"years": {
+"2026": 204.0
+},
+"by_index": {
+"NIFTY": 32489,
+"BANKNIFTY": -3968,
+"SENSEX": 12273
+}
+}
+},
+"verdict": {
+"200000_full": "about the same",
+"200000_y2026": "about the same",
+"20000_full": "about the same",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Strike",
+"name": "ATM strike",
+"changes": [
+"strike: 0"
+],
+"runs": {
+"200000_full": {
+"trades": 1930,
+"final": 3015728,
+"net": 2815728,
+"multiple": 15.08,
+"cagr_pct": 105.6,
+"max_dd_pct": -28.3,
+"max_dd_rs": -523111,
+"win_rate": 31.0,
+"profit_factor": 1.46,
+"avg_R": 0.259,
+"worst_trade": -36629,
+"best_trade": 269848,
+"max_lots": 50,
+"avg_lots": 4.2,
+"losing_months": 20,
+"months": 46,
+"worst_month": -245109,
+"best_month": 946270,
+"skipped": {
+"weekly loss limit": 215,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 37.8,
+"2024": 151.0,
+"2025": 83.2,
+"2026": 138.1
+},
+"by_index": {
+"NIFTY": 1913375,
+"SENSEX": 1056534,
+"BANKNIFTY": -154173
+}
+},
+"200000_y2026": {
+"trades": 385,
+"final": 442525,
+"net": 242525,
+"multiple": 2.21,
+"cagr_pct": 177.7,
+"max_dd_pct": -19.5,
+"max_dd_rs": -71496,
+"win_rate": 34.3,
+"profit_factor": 1.63,
+"avg_R": 0.336,
+"worst_trade": -5051,
+"best_trade": 31773,
+"max_lots": 9,
+"avg_lots": 1.4,
+"losing_months": 2,
+"months": 10,
+"worst_month": -32670,
+"best_month": 133614,
+"skipped": {
+"weekly loss limit": 35,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 121.3
+},
+"by_index": {
+"NIFTY": 169891,
+"SENSEX": 68827,
+"BANKNIFTY": 3808
+}
+},
+"20000_full": {
+"trades": 1404,
+"final": 438835,
+"net": 418835,
+"multiple": 21.94,
+"cagr_pct": 127.1,
+"max_dd_pct": -68.1,
+"max_dd_rs": -70239,
+"win_rate": 32.1,
+"profit_factor": 1.34,
+"avg_R": 0.26,
+"worst_trade": -5245,
+"best_trade": 31773,
+"max_lots": 9,
+"avg_lots": 1.1,
+"losing_months": 17,
+"months": 46,
+"worst_month": -33329,
+"best_month": 133614,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 469,
+"weekly loss limit": 206,
+"trend slot below Rs 40k": 46,
+"not enough free cash": 24,
+"1 lot risks > 15% of the account": 1
+},
+"years": {
+"2023": 40.0,
+"2024": 440.0,
+"2025": 28.5,
+"2026": 125.8
+},
+"by_index": {
+"NIFTY": 272636,
+"BANKNIFTY": -7520,
+"SENSEX": 153735
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 94844,
+"net": 74844,
+"multiple": 4.74,
+"cagr_pct": 661.7,
+"max_dd_pct": -46.2,
+"max_dd_rs": -40165,
+"win_rate": 34.5,
+"profit_factor": 1.34,
+"avg_R": 0.281,
+"worst_trade": -4322,
+"best_trade": 15868,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -18728,
+"best_month": 28847,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"not enough free cash": 13,
+"trend slot below Rs 40k": 13,
+"1 lot risks > 15% of the account": 3
+},
+"years": {
+"2026": 374.2
+},
+"by_index": {
+"NIFTY": 61608,
+"BANKNIFTY": 9262,
+"SENSEX": 3978
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "worse",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Strike",
+"name": "1 OTM always",
+"changes": [
+"strike: 1"
+],
+"runs": {
+"200000_full": {
+"trades": 1937,
+"final": 2691931,
+"net": 2491931,
+"multiple": 13.46,
+"cagr_pct": 99.5,
+"max_dd_pct": -27.3,
+"max_dd_rs": -425534,
+"win_rate": 31.1,
+"profit_factor": 1.48,
+"avg_R": 0.253,
+"worst_trade": -30792,
+"best_trade": 238401,
+"max_lots": 50,
+"avg_lots": 4.0,
+"losing_months": 22,
+"months": 46,
+"worst_month": -191249,
+"best_month": 952862,
+"skipped": {
+"weekly loss limit": 208,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 49.1,
+"2024": 94.6,
+"2025": 82.9,
+"2026": 153.7
+},
+"by_index": {
+"NIFTY": 1717625,
+"SENSEX": 889701,
+"BANKNIFTY": -115393
+}
+},
+"200000_y2026": {
+"trades": 385,
+"final": 458338,
+"net": 258338,
+"multiple": 2.29,
+"cagr_pct": 190.5,
+"max_dd_pct": -19.3,
+"max_dd_rs": -76814,
+"win_rate": 34.8,
+"profit_factor": 1.66,
+"avg_R": 0.347,
+"worst_trade": -5420,
+"best_trade": 44737,
+"max_lots": 11,
+"avg_lots": 1.5,
+"losing_months": 2,
+"months": 10,
+"worst_month": -38900,
+"best_month": 125539,
+"skipped": {
+"weekly loss limit": 39,
+"Fibonacci slot below Rs 2 lakh": 9
+},
+"years": {
+"2026": 129.2
+},
+"by_index": {
+"NIFTY": 185887,
+"SENSEX": 71233,
+"BANKNIFTY": 1214
+}
+},
+"20000_full": {
+"trades": 1425,
+"final": 465313,
+"net": 445313,
+"multiple": 23.27,
+"cagr_pct": 130.7,
+"max_dd_pct": -68.6,
+"max_dd_rs": -78059,
+"win_rate": 32.2,
+"profit_factor": 1.38,
+"avg_R": 0.256,
+"worst_trade": -5677,
+"best_trade": 44737,
+"max_lots": 11,
+"avg_lots": 1.2,
+"losing_months": 18,
+"months": 46,
+"worst_month": -38910,
+"best_month": 125121,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 454,
+"weekly loss limit": 196,
+"trend slot below Rs 40k": 54,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 32.3,
+"2024": 461.9,
+"2025": 41.4,
+"2026": 121.3
+},
+"by_index": {
+"NIFTY": 285560,
+"BANKNIFTY": -8949,
+"SENSEX": 168702
+}
+},
+"20000_y2026": {
+"trades": 263,
+"final": 85308,
+"net": 65308,
+"multiple": 4.27,
+"cagr_pct": 545.9,
+"max_dd_pct": -46.8,
+"max_dd_rs": -38325,
+"win_rate": 33.8,
+"profit_factor": 1.31,
+"avg_R": 0.269,
+"worst_trade": -4184,
+"best_trade": 14889,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -17004,
+"best_month": 26576,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 123,
+"weekly loss limit": 20,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 11,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 326.5
+},
+"by_index": {
+"NIFTY": 51108,
+"BANKNIFTY": 9881,
+"SENSEX": 4325
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "about the same",
+"20000_full": "worse",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Strike",
+"name": "2 OTM always",
+"changes": [
+"strike: 2"
+],
+"runs": {
+"200000_full": {
+"trades": 1929,
+"final": 4212358,
+"net": 4012358,
+"multiple": 21.06,
+"cagr_pct": 124.7,
+"max_dd_pct": -28.3,
+"max_dd_rs": -645638,
+"win_rate": 30.9,
+"profit_factor": 1.58,
+"avg_R": 0.253,
+"worst_trade": -47721,
+"best_trade": 402370,
+"max_lots": 50,
+"avg_lots": 6.0,
+"losing_months": 20,
+"months": 46,
+"worst_month": -291764,
+"best_month": 1570566,
+"skipped": {
+"weekly loss limit": 216,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 49.9,
+"2024": 124.8,
+"2025": 111.1,
+"2026": 196.1
+},
+"by_index": {
+"NIFTY": 2840064,
+"SENSEX": 1353432,
+"BANKNIFTY": -181131
+}
+},
+"200000_y2026": {
+"trades": 382,
+"final": 465280,
+"net": 265280,
+"multiple": 2.33,
+"cagr_pct": 196.2,
+"max_dd_pct": -19.4,
+"max_dd_rs": -77161,
+"win_rate": 35.1,
+"profit_factor": 1.67,
+"avg_R": 0.349,
+"worst_trade": -5676,
+"best_trade": 41688,
+"max_lots": 14,
+"avg_lots": 1.7,
+"losing_months": 3,
+"months": 10,
+"worst_month": -36330,
+"best_month": 133694,
+"skipped": {
+"weekly loss limit": 42,
+"Fibonacci slot below Rs 2 lakh": 9
+},
+"years": {
+"2026": 132.6
+},
+"by_index": {
+"NIFTY": 196696,
+"SENSEX": 68163,
+"BANKNIFTY": 419
+}
+},
+"20000_full": {
+"trades": 1412,
+"final": 451046,
+"net": 431046,
+"multiple": 22.55,
+"cagr_pct": 128.8,
+"max_dd_pct": -70.7,
+"max_dd_rs": -76464,
+"win_rate": 32.1,
+"profit_factor": 1.39,
+"avg_R": 0.246,
+"worst_trade": -5676,
+"best_trade": 41688,
+"max_lots": 14,
+"avg_lots": 1.2,
+"losing_months": 19,
+"months": 46,
+"worst_month": -35958,
+"best_month": 123508,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 513,
+"weekly loss limit": 153,
+"trend slot below Rs 40k": 59,
+"not enough free cash": 11,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 26.7,
+"2024": 454.6,
+"2025": 36.0,
+"2026": 136.0
+},
+"by_index": {
+"NIFTY": 283496,
+"BANKNIFTY": -6115,
+"SENSEX": 153678
+}
+},
+"20000_y2026": {
+"trades": 265,
+"final": 80889,
+"net": 60889,
+"multiple": 4.04,
+"cagr_pct": 503.2,
+"max_dd_pct": -47.2,
+"max_dd_rs": -36635,
+"win_rate": 34.0,
+"profit_factor": 1.3,
+"avg_R": 0.261,
+"worst_trade": -4000,
+"best_trade": 13872,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -15221,
+"best_month": 23289,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 124,
+"trend slot below Rs 40k": 17,
+"weekly loss limit": 15,
+"not enough free cash": 10,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 304.4
+},
+"by_index": {
+"NIFTY": 49287,
+"BANKNIFTY": 11430,
+"SENSEX": 173
+}
+}
+},
+"verdict": {
+"200000_full": "better",
+"200000_y2026": "better",
+"20000_full": "worse",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Lot cap",
+"name": "No lot cap",
+"changes": [
+"max lots: 0"
+],
+"runs": {
+"200000_full": {
+"trades": 1920,
+"final": 3259920,
+"net": 3059920,
+"multiple": 16.3,
+"cagr_pct": 109.9,
+"max_dd_pct": -28.6,
+"max_dd_rs": -524799,
+"win_rate": 31.4,
+"profit_factor": 1.49,
+"avg_R": 0.263,
+"worst_trade": -36775,
+"best_trade": 268906,
+"max_lots": 63,
+"avg_lots": 4.1,
+"losing_months": 22,
+"months": 46,
+"worst_month": -230822,
+"best_month": 1134226,
+"skipped": {
+"weekly loss limit": 225,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 30.4,
+"2024": 193.3,
+"2025": 76.2,
+"2026": 141.8
+},
+"by_index": {
+"NIFTY": 2053928,
+"SENSEX": 1109845,
+"BANKNIFTY": -103866
+}
+},
+"200000_y2026": {
+"trades": 387,
+"final": 457190,
+"net": 257190,
+"multiple": 2.29,
+"cagr_pct": 189.6,
+"max_dd_pct": -19.1,
+"max_dd_rs": -71068,
+"win_rate": 34.9,
+"profit_factor": 1.64,
+"avg_R": 0.341,
+"worst_trade": -5084,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.3,
+"losing_months": 3,
+"months": 10,
+"worst_month": -33700,
+"best_month": 139630,
+"skipped": {
+"weekly loss limit": 33,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 128.6
+},
+"by_index": {
+"NIFTY": 184761,
+"SENSEX": 69125,
+"BANKNIFTY": 3306
+}
+},
+"20000_full": {
+"trades": 1475,
+"final": 494616,
+"net": 474616,
+"multiple": 24.73,
+"cagr_pct": 134.5,
+"max_dd_pct": -69.3,
+"max_dd_rs": -85765,
+"win_rate": 32.0,
+"profit_factor": 1.35,
+"avg_R": 0.26,
+"worst_trade": -6381,
+"best_trade": 33645,
+"max_lots": 11,
+"avg_lots": 1.1,
+"losing_months": 16,
+"months": 46,
+"worst_month": -41529,
+"best_month": 129081,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 347,
+"weekly loss limit": 252,
+"trend slot below Rs 40k": 55,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 30.2,
+"2024": 563.2,
+"2025": 40.9,
+"2026": 103.4
+},
+"by_index": {
+"NIFTY": 278116,
+"SENSEX": 196225,
+"BANKNIFTY": 295
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 94525,
+"net": 74525,
+"multiple": 4.73,
+"cagr_pct": 658.4,
+"max_dd_pct": -47.6,
+"max_dd_rs": -39695,
+"win_rate": 34.9,
+"profit_factor": 1.34,
+"avg_R": 0.284,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19404,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 372.6
+},
+"by_index": {
+"NIFTY": 58428,
+"BANKNIFTY": 10068,
+"SENSEX": 6038
+}
+}
+},
+"verdict": {
+"200000_full": "about the same",
+"200000_y2026": "about the same",
+"20000_full": "about the same",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Lot cap",
+"name": "Max 20 lots",
+"changes": [
+"max lots: 20"
+],
+"runs": {
+"200000_full": {
+"trades": 1929,
+"final": 3209824,
+"net": 3009824,
+"multiple": 16.05,
+"cagr_pct": 109.0,
+"max_dd_pct": -28.6,
+"max_dd_rs": -531147,
+"win_rate": 31.3,
+"profit_factor": 1.48,
+"avg_R": 0.262,
+"worst_trade": -36775,
+"best_trade": 268906,
+"max_lots": 20,
+"avg_lots": 4.0,
+"losing_months": 22,
+"months": 46,
+"worst_month": -244066,
+"best_month": 1093570,
+"skipped": {
+"weekly loss limit": 216,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 30.4,
+"2024": 193.3,
+"2025": 76.2,
+"2026": 138.1
+},
+"by_index": {
+"NIFTY": 2066097,
+"SENSEX": 1088785,
+"BANKNIFTY": -145066
+}
+},
+"200000_y2026": {
+"trades": 387,
+"final": 457190,
+"net": 257190,
+"multiple": 2.29,
+"cagr_pct": 189.6,
+"max_dd_pct": -19.1,
+"max_dd_rs": -71068,
+"win_rate": 34.9,
+"profit_factor": 1.64,
+"avg_R": 0.341,
+"worst_trade": -5084,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.3,
+"losing_months": 3,
+"months": 10,
+"worst_month": -33700,
+"best_month": 139630,
+"skipped": {
+"weekly loss limit": 33,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 128.6
+},
+"by_index": {
+"NIFTY": 184761,
+"SENSEX": 69125,
+"BANKNIFTY": 3306
+}
+},
+"20000_full": {
+"trades": 1475,
+"final": 494616,
+"net": 474616,
+"multiple": 24.73,
+"cagr_pct": 134.5,
+"max_dd_pct": -69.3,
+"max_dd_rs": -85765,
+"win_rate": 32.0,
+"profit_factor": 1.35,
+"avg_R": 0.26,
+"worst_trade": -6381,
+"best_trade": 33645,
+"max_lots": 11,
+"avg_lots": 1.1,
+"losing_months": 16,
+"months": 46,
+"worst_month": -41529,
+"best_month": 129081,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 347,
+"weekly loss limit": 252,
+"trend slot below Rs 40k": 55,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 30.2,
+"2024": 563.2,
+"2025": 40.9,
+"2026": 103.4
+},
+"by_index": {
+"NIFTY": 278116,
+"SENSEX": 196225,
+"BANKNIFTY": 295
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 94525,
+"net": 74525,
+"multiple": 4.73,
+"cagr_pct": 658.4,
+"max_dd_pct": -47.6,
+"max_dd_rs": -39695,
+"win_rate": 34.9,
+"profit_factor": 1.34,
+"avg_R": 0.284,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19404,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 372.6
+},
+"by_index": {
+"NIFTY": 58428,
+"BANKNIFTY": 10068,
+"SENSEX": 6038
+}
+}
+},
+"verdict": {
+"200000_full": "about the same",
+"200000_y2026": "about the same",
+"20000_full": "about the same",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Lot cap",
+"name": "Max 100 lots",
+"changes": [
+"max lots: 100"
+],
+"runs": {
+"200000_full": {
+"trades": 1920,
+"final": 3259920,
+"net": 3059920,
+"multiple": 16.3,
+"cagr_pct": 109.9,
+"max_dd_pct": -28.6,
+"max_dd_rs": -524799,
+"win_rate": 31.4,
+"profit_factor": 1.49,
+"avg_R": 0.263,
+"worst_trade": -36775,
+"best_trade": 268906,
+"max_lots": 63,
+"avg_lots": 4.1,
+"losing_months": 22,
+"months": 46,
+"worst_month": -230822,
+"best_month": 1134226,
+"skipped": {
+"weekly loss limit": 225,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 30.4,
+"2024": 193.3,
+"2025": 76.2,
+"2026": 141.8
+},
+"by_index": {
+"NIFTY": 2053928,
+"SENSEX": 1109845,
+"BANKNIFTY": -103866
+}
+},
+"200000_y2026": {
+"trades": 387,
+"final": 457190,
+"net": 257190,
+"multiple": 2.29,
+"cagr_pct": 189.6,
+"max_dd_pct": -19.1,
+"max_dd_rs": -71068,
+"win_rate": 34.9,
+"profit_factor": 1.64,
+"avg_R": 0.341,
+"worst_trade": -5084,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.3,
+"losing_months": 3,
+"months": 10,
+"worst_month": -33700,
+"best_month": 139630,
+"skipped": {
+"weekly loss limit": 33,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 128.6
+},
+"by_index": {
+"NIFTY": 184761,
+"SENSEX": 69125,
+"BANKNIFTY": 3306
+}
+},
+"20000_full": {
+"trades": 1475,
+"final": 494616,
+"net": 474616,
+"multiple": 24.73,
+"cagr_pct": 134.5,
+"max_dd_pct": -69.3,
+"max_dd_rs": -85765,
+"win_rate": 32.0,
+"profit_factor": 1.35,
+"avg_R": 0.26,
+"worst_trade": -6381,
+"best_trade": 33645,
+"max_lots": 11,
+"avg_lots": 1.1,
+"losing_months": 16,
+"months": 46,
+"worst_month": -41529,
+"best_month": 129081,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 347,
+"weekly loss limit": 252,
+"trend slot below Rs 40k": 55,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 30.2,
+"2024": 563.2,
+"2025": 40.9,
+"2026": 103.4
+},
+"by_index": {
+"NIFTY": 278116,
+"SENSEX": 196225,
+"BANKNIFTY": 295
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 94525,
+"net": 74525,
+"multiple": 4.73,
+"cagr_pct": 658.4,
+"max_dd_pct": -47.6,
+"max_dd_rs": -39695,
+"win_rate": 34.9,
+"profit_factor": 1.34,
+"avg_R": 0.284,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19404,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 372.6
+},
+"by_index": {
+"NIFTY": 58428,
+"BANKNIFTY": 10068,
+"SENSEX": 6038
+}
+}
+},
+"verdict": {
+"200000_full": "about the same",
+"200000_y2026": "about the same",
+"20000_full": "about the same",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Lot cap",
+"name": "Max 200 lots",
+"changes": [
+"max lots: 200"
+],
+"runs": {
+"200000_full": {
+"trades": 1920,
+"final": 3259920,
+"net": 3059920,
+"multiple": 16.3,
+"cagr_pct": 109.9,
+"max_dd_pct": -28.6,
+"max_dd_rs": -524799,
+"win_rate": 31.4,
+"profit_factor": 1.49,
+"avg_R": 0.263,
+"worst_trade": -36775,
+"best_trade": 268906,
+"max_lots": 63,
+"avg_lots": 4.1,
+"losing_months": 22,
+"months": 46,
+"worst_month": -230822,
+"best_month": 1134226,
+"skipped": {
+"weekly loss limit": 225,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 30.4,
+"2024": 193.3,
+"2025": 76.2,
+"2026": 141.8
+},
+"by_index": {
+"NIFTY": 2053928,
+"SENSEX": 1109845,
+"BANKNIFTY": -103866
+}
+},
+"200000_y2026": {
+"trades": 387,
+"final": 457190,
+"net": 257190,
+"multiple": 2.29,
+"cagr_pct": 189.6,
+"max_dd_pct": -19.1,
+"max_dd_rs": -71068,
+"win_rate": 34.9,
+"profit_factor": 1.64,
+"avg_R": 0.341,
+"worst_trade": -5084,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.3,
+"losing_months": 3,
+"months": 10,
+"worst_month": -33700,
+"best_month": 139630,
+"skipped": {
+"weekly loss limit": 33,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 128.6
+},
+"by_index": {
+"NIFTY": 184761,
+"SENSEX": 69125,
+"BANKNIFTY": 3306
+}
+},
+"20000_full": {
+"trades": 1475,
+"final": 494616,
+"net": 474616,
+"multiple": 24.73,
+"cagr_pct": 134.5,
+"max_dd_pct": -69.3,
+"max_dd_rs": -85765,
+"win_rate": 32.0,
+"profit_factor": 1.35,
+"avg_R": 0.26,
+"worst_trade": -6381,
+"best_trade": 33645,
+"max_lots": 11,
+"avg_lots": 1.1,
+"losing_months": 16,
+"months": 46,
+"worst_month": -41529,
+"best_month": 129081,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 347,
+"weekly loss limit": 252,
+"trend slot below Rs 40k": 55,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 30.2,
+"2024": 563.2,
+"2025": 40.9,
+"2026": 103.4
+},
+"by_index": {
+"NIFTY": 278116,
+"SENSEX": 196225,
+"BANKNIFTY": 295
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 94525,
+"net": 74525,
+"multiple": 4.73,
+"cagr_pct": 658.4,
+"max_dd_pct": -47.6,
+"max_dd_rs": -39695,
+"win_rate": 34.9,
+"profit_factor": 1.34,
+"avg_R": 0.284,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19404,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 372.6
+},
+"by_index": {
+"NIFTY": 58428,
+"BANKNIFTY": 10068,
+"SENSEX": 6038
+}
+}
+},
+"verdict": {
+"200000_full": "about the same",
+"200000_y2026": "about the same",
+"20000_full": "about the same",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Loss cap per lot",
+"name": "Close at \u20b91,500 loss per lot",
+"changes": [
+"max loss per lot: 1500"
+],
+"runs": {
+"200000_full": {
+"trades": 1891,
+"final": 3224809,
+"net": 3024809,
+"multiple": 16.12,
+"cagr_pct": 109.5,
+"max_dd_pct": -32.9,
+"max_dd_rs": -735652,
+"win_rate": 29.0,
+"profit_factor": 1.35,
+"avg_R": 0.262,
+"worst_trade": -50542,
+"best_trade": 244735,
+"max_lots": 50,
+"avg_lots": 5.3,
+"losing_months": 23,
+"months": 46,
+"worst_month": -219163,
+"best_month": 1097453,
+"skipped": {
+"weekly loss limit": 271,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 28.9,
+"2024": 198.5,
+"2025": 111.5,
+"2026": 98.2
+},
+"by_index": {
+"NIFTY": 2222817,
+"SENSEX": 1506469,
+"BANKNIFTY": -704503
+}
+},
+"200000_y2026": {
+"trades": 380,
+"final": 439595,
+"net": 239595,
+"multiple": 2.2,
+"cagr_pct": 175.3,
+"max_dd_pct": -21.8,
+"max_dd_rs": -75844,
+"win_rate": 32.6,
+"profit_factor": 1.54,
+"avg_R": 0.325,
+"worst_trade": -5436,
+"best_trade": 27795,
+"max_lots": 8,
+"avg_lots": 1.5,
+"losing_months": 3,
+"months": 10,
+"worst_month": -28673,
+"best_month": 151474,
+"skipped": {
+"weekly loss limit": 46,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 119.8
+},
+"by_index": {
+"NIFTY": 162190,
+"SENSEX": 69433,
+"BANKNIFTY": 7977
+}
+},
+"20000_full": {
+"trades": 1500,
+"final": 428906,
+"net": 408906,
+"multiple": 21.45,
+"cagr_pct": 125.8,
+"max_dd_pct": -60.9,
+"max_dd_rs": -74267,
+"win_rate": 29.7,
+"profit_factor": 1.3,
+"avg_R": 0.239,
+"worst_trade": -5177,
+"best_trade": 25819,
+"max_lots": 8,
+"avg_lots": 1.1,
+"losing_months": 17,
+"months": 46,
+"worst_month": -32346,
+"best_month": 145836,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 436,
+"weekly loss limit": 217,
+"not enough free cash": 7,
+"trend slot below Rs 40k": 7
+},
+"years": {
+"2023": 102.0,
+"2024": 308.0,
+"2025": 18.3,
+"2026": 120.0
+},
+"by_index": {
+"NIFTY": 238776,
+"SENSEX": 147566,
+"BANKNIFTY": 22565
+}
+},
+"20000_y2026": {
+"trades": 257,
+"final": 72172,
+"net": 52172,
+"multiple": 3.61,
+"cagr_pct": 420.9,
+"max_dd_pct": -64.5,
+"max_dd_rs": -52465,
+"win_rate": 30.7,
+"profit_factor": 1.25,
+"avg_R": 0.248,
+"worst_trade": -2284,
+"best_trade": 14889,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 4,
+"months": 10,
+"worst_month": -15677,
+"best_month": 26976,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 125,
+"not enough free cash": 24,
+"trend slot below Rs 40k": 22,
+"weekly loss limit": 11
+},
+"years": {
+"2026": 260.9
+},
+"by_index": {
+"NIFTY": 54430,
+"BANKNIFTY": -6005,
+"SENSEX": 3756
+}
+}
+},
+"verdict": {
+"200000_full": "about the same",
+"200000_y2026": "worse",
+"20000_full": "less profit, shallower fall",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Loss cap per lot",
+"name": "Close at \u20b92,200 loss per lot",
+"changes": [
+"max loss per lot: 2200"
+],
+"runs": {
+"200000_full": {
+"trades": 1907,
+"final": 2891939,
+"net": 2691939,
+"multiple": 14.46,
+"cagr_pct": 103.5,
+"max_dd_pct": -27.4,
+"max_dd_rs": -482439,
+"win_rate": 30.9,
+"profit_factor": 1.42,
+"avg_R": 0.264,
+"worst_trade": -42738,
+"best_trade": 235338,
+"max_lots": 50,
+"avg_lots": 4.0,
+"losing_months": 22,
+"months": 46,
+"worst_month": -215907,
+"best_month": 956786,
+"skipped": {
+"weekly loss limit": 242,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 32.7,
+"2024": 174.4,
+"2025": 76.0,
+"2026": 125.7
+},
+"by_index": {
+"NIFTY": 2014915,
+"SENSEX": 1118727,
+"BANKNIFTY": -441705
+}
+},
+"200000_y2026": {
+"trades": 386,
+"final": 436576,
+"net": 236576,
+"multiple": 2.18,
+"cagr_pct": 173.9,
+"max_dd_pct": -19.6,
+"max_dd_rs": -72317,
+"win_rate": 34.2,
+"profit_factor": 1.59,
+"avg_R": 0.332,
+"worst_trade": -5247,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.3,
+"losing_months": 4,
+"months": 10,
+"worst_month": -30350,
+"best_month": 129600,
+"skipped": {
+"weekly loss limit": 35,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 118.3
+},
+"by_index": {
+"NIFTY": 187293,
+"SENSEX": 70219,
+"BANKNIFTY": -20929
+}
+},
+"20000_full": {
+"trades": 1573,
+"final": 643392,
+"net": 623392,
+"multiple": 32.17,
+"cagr_pct": 151.4,
+"max_dd_pct": -71.8,
+"max_dd_rs": -108626,
+"win_rate": 31.8,
+"profit_factor": 1.37,
+"avg_R": 0.269,
+"worst_trade": -8129,
+"best_trade": 50478,
+"max_lots": 14,
+"avg_lots": 1.3,
+"losing_months": 16,
+"months": 46,
+"worst_month": -51461,
+"best_month": 171722,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 314,
+"weekly loss limit": 232,
+"trend slot below Rs 40k": 25,
+"not enough free cash": 10
+},
+"years": {
+"2023": 43.8,
+"2024": 516.9,
+"2025": 95.3,
+"2026": 85.7
+},
+"by_index": {
+"NIFTY": 405117,
+"SENSEX": 233829,
+"BANKNIFTY": -15529
+}
+},
+"20000_y2026": {
+"trades": 250,
+"final": 65715,
+"net": 45715,
+"multiple": 3.29,
+"cagr_pct": 366.8,
+"max_dd_pct": -58.6,
+"max_dd_rs": -42926,
+"win_rate": 32.8,
+"profit_factor": 1.22,
+"avg_R": 0.254,
+"worst_trade": -2982,
+"best_trade": 14889,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 4,
+"months": 10,
+"worst_month": -14537,
+"best_month": 27204,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 119,
+"weekly loss limit": 26,
+"not enough free cash": 19,
+"trend slot below Rs 40k": 18,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 228.6
+},
+"by_index": {
+"NIFTY": 53247,
+"BANKNIFTY": -9755,
+"SENSEX": 2230
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "more profit, deeper fall",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Loss cap per lot",
+"name": "Close at \u20b93,000 loss per lot",
+"changes": [
+"max loss per lot: 3000"
+],
+"runs": {
+"200000_full": {
+"trades": 1920,
+"final": 2653443,
+"net": 2453443,
+"multiple": 13.27,
+"cagr_pct": 98.8,
+"max_dd_pct": -28.2,
+"max_dd_rs": -440108,
+"win_rate": 31.4,
+"profit_factor": 1.44,
+"avg_R": 0.262,
+"worst_trade": -31415,
+"best_trade": 218550,
+"max_lots": 50,
+"avg_lots": 3.6,
+"losing_months": 21,
+"months": 46,
+"worst_month": -202889,
+"best_month": 879476,
+"skipped": {
+"weekly loss limit": 225,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 31.1,
+"2024": 173.0,
+"2025": 63.9,
+"2026": 126.2
+},
+"by_index": {
+"NIFTY": 1681060,
+"SENSEX": 959800,
+"BANKNIFTY": -187405
+}
+},
+"200000_y2026": {
+"trades": 387,
+"final": 455964,
+"net": 255964,
+"multiple": 2.28,
+"cagr_pct": 188.6,
+"max_dd_pct": -19.1,
+"max_dd_rs": -71715,
+"win_rate": 34.9,
+"profit_factor": 1.63,
+"avg_R": 0.343,
+"worst_trade": -5084,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.3,
+"losing_months": 3,
+"months": 10,
+"worst_month": -34347,
+"best_month": 136734,
+"skipped": {
+"weekly loss limit": 33,
+"Fibonacci slot below Rs 2 lakh": 13
+},
+"years": {
+"2026": 128.0
+},
+"by_index": {
+"NIFTY": 184315,
+"SENSEX": 65239,
+"BANKNIFTY": 6413
+}
+},
+"20000_full": {
+"trades": 1584,
+"final": 664424,
+"net": 644424,
+"multiple": 33.22,
+"cagr_pct": 153.6,
+"max_dd_pct": -67.9,
+"max_dd_rs": -112350,
+"win_rate": 32.3,
+"profit_factor": 1.39,
+"avg_R": 0.269,
+"worst_trade": -8129,
+"best_trade": 50478,
+"max_lots": 14,
+"avg_lots": 1.3,
+"losing_months": 14,
+"months": 46,
+"worst_month": -53102,
+"best_month": 174329,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 312,
+"weekly loss limit": 227,
+"trend slot below Rs 40k": 18,
+"not enough free cash": 9
+},
+"years": {
+"2023": 74.6,
+"2024": 423.4,
+"2025": 89.2,
+"2026": 92.2
+},
+"by_index": {
+"NIFTY": 389657,
+"SENSEX": 229636,
+"BANKNIFTY": 25154
+}
+},
+"20000_y2026": {
+"trades": 256,
+"final": 96167,
+"net": 76167,
+"multiple": 4.81,
+"cagr_pct": 675.6,
+"max_dd_pct": -48.1,
+"max_dd_rs": -40141,
+"win_rate": 34.8,
+"profit_factor": 1.35,
+"avg_R": 0.283,
+"worst_trade": -3632,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19404,
+"best_month": 29217,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 32,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 380.8
+},
+"by_index": {
+"NIFTY": 59039,
+"BANKNIFTY": 11358,
+"SENSEX": 5781
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "about the same",
+"20000_full": "better",
+"20000_y2026": "better"
+}
+},
+{
+"group": "Indices",
+"name": "Nifty only",
+"changes": [
+"indices: NIFTY"
+],
+"runs": {
+"200000_full": {
+"trades": 971,
+"final": 1128818,
+"net": 928818,
+"multiple": 5.64,
+"cagr_pct": 58.4,
+"max_dd_pct": -23.4,
+"max_dd_rs": -114257,
+"win_rate": 30.6,
+"profit_factor": 1.65,
+"avg_R": 0.255,
+"worst_trade": -13502,
+"best_trade": 86806,
+"max_lots": 24,
+"avg_lots": 2.0,
+"losing_months": 17,
+"months": 46,
+"worst_month": -52276,
+"best_month": 263835,
+"skipped": {
+"weekly loss limit": 7,
+"Fibonacci slot below Rs 2 lakh": 3
+},
+"years": {
+"2023": 6.4,
+"2024": 78.1,
+"2025": 45.8,
+"2026": 104.4
+},
+"by_index": {
+"NIFTY": 928820
+}
+},
+"200000_y2026": {
+"trades": 183,
+"final": 341102,
+"net": 141102,
+"multiple": 1.71,
+"cagr_pct": 98.7,
+"max_dd_pct": -12.1,
+"max_dd_rs": -35004,
+"win_rate": 33.9,
+"profit_factor": 1.85,
+"avg_R": 0.39,
+"worst_trade": -3840,
+"best_trade": 24798,
+"max_lots": 7,
+"avg_lots": 1.2,
+"losing_months": 2,
+"months": 10,
+"worst_month": -16282,
+"best_month": 74679,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 11,
+"weekly loss limit": 1
+},
+"years": {
+"2026": 70.6
+},
+"by_index": {
+"NIFTY": 141102
+}
+},
+"20000_full": {
+"trades": 586,
+"final": 200385,
+"net": 180385,
+"multiple": 10.02,
+"cagr_pct": 84.5,
+"max_dd_pct": -45.7,
+"max_dd_rs": -37443,
+"win_rate": 30.9,
+"profit_factor": 1.39,
+"avg_R": 0.237,
+"worst_trade": -4503,
+"best_trade": 16805,
+"max_lots": 4,
+"avg_lots": 1.0,
+"losing_months": 18,
+"months": 46,
+"worst_month": -22827,
+"best_month": 27259,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 330,
+"trend slot below Rs 40k": 47,
+"weekly loss limit": 18
+},
+"years": {
+"2023": 6.6,
+"2024": 345.8,
+"2025": 45.0,
+"2026": 45.4
+},
+"by_index": {
+"NIFTY": 180386
+}
+},
+"20000_y2026": {
+"trades": 105,
+"final": 74382,
+"net": 54382,
+"multiple": 3.72,
+"cagr_pct": 441.5,
+"max_dd_pct": -44.2,
+"max_dd_rs": -18515,
+"win_rate": 34.3,
+"profit_factor": 1.8,
+"avg_R": 0.377,
+"worst_trade": -3384,
+"best_trade": 14889,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 2,
+"months": 10,
+"worst_month": -8392,
+"best_month": 21220,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 61,
+"trend slot below Rs 40k": 16,
+"1 lot risks > 15% of the account": 7,
+"weekly loss limit": 6
+},
+"years": {
+"2026": 271.9
+},
+"by_index": {
+"NIFTY": 54382
+}
+}
+},
+"verdict": {
+"200000_full": "less profit, shallower fall",
+"200000_y2026": "less profit, shallower fall",
+"20000_full": "less profit, shallower fall",
+"20000_y2026": "less profit, shallower fall"
+}
+},
+{
+"group": "Indices",
+"name": "Nifty + Sensex (no Bank Nifty)",
+"changes": [
+"indices: NIFTY, SENSEX"
+],
+"runs": {
+"200000_full": {
+"trades": 1585,
+"final": 2215332,
+"net": 2015332,
+"multiple": 11.08,
+"cagr_pct": 89.4,
+"max_dd_pct": -30.5,
+"max_dd_rs": -318252,
+"win_rate": 31.8,
+"profit_factor": 1.55,
+"avg_R": 0.264,
+"worst_trade": -24538,
+"best_trade": 168167,
+"max_lots": 43,
+"avg_lots": 3.1,
+"losing_months": 21,
+"months": 46,
+"worst_month": -149223,
+"best_month": 774259,
+"skipped": {
+"weekly loss limit": 125,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 13.0,
+"2024": 118.3,
+"2025": 95.4,
+"2026": 129.7
+},
+"by_index": {
+"NIFTY": 1339825,
+"SENSEX": 675500
+}
+},
+"200000_y2026": {
+"trades": 302,
+"final": 404073,
+"net": 204073,
+"multiple": 2.02,
+"cagr_pct": 147.1,
+"max_dd_pct": -17.8,
+"max_dd_rs": -59963,
+"win_rate": 35.1,
+"profit_factor": 1.7,
+"avg_R": 0.352,
+"worst_trade": -4392,
+"best_trade": 33645,
+"max_lots": 8,
+"avg_lots": 1.3,
+"losing_months": 2,
+"months": 10,
+"worst_month": -27002,
+"best_month": 116380,
+"skipped": {
+"weekly loss limit": 24,
+"Fibonacci slot below Rs 2 lakh": 17
+},
+"years": {
+"2026": 102.0
+},
+"by_index": {
+"NIFTY": 175983,
+"SENSEX": 28092
+}
+},
+"20000_full": {
+"trades": 253,
+"final": 37156,
+"net": 17156,
+"multiple": 1.86,
+"cagr_pct": 17.9,
+"max_dd_pct": -82.5,
+"max_dd_rs": -26499,
+"win_rate": 30.0,
+"profit_factor": 1.13,
+"avg_R": 0.196,
+"worst_trade": -2842,
+"best_trade": 14889,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 15,
+"months": 25,
+"worst_month": -10406,
+"best_month": 10692,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 681,
+"1 lot risks > 15% of the account": 414,
+"trend slot below Rs 40k": 320,
+"weekly loss limit": 32,
+"not enough free cash": 15
+},
+"years": {
+"2023": -56.0,
+"2024": -36.2,
+"2025": 24.3,
+"2026": 432.9
+},
+"by_index": {
+"NIFTY": 23968,
+"SENSEX": -6812
+}
+},
+"20000_y2026": {
+"trades": 181,
+"final": 74617,
+"net": 54617,
+"multiple": 3.73,
+"cagr_pct": 443.7,
+"max_dd_pct": -44.4,
+"max_dd_rs": -28822,
+"win_rate": 34.8,
+"profit_factor": 1.42,
+"avg_R": 0.301,
+"worst_trade": -3384,
+"best_trade": 14889,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -10440,
+"best_month": 26766,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 124,
+"trend slot below Rs 40k": 17,
+"weekly loss limit": 17,
+"not enough free cash": 3,
+"1 lot risks > 15% of the account": 1
+},
+"years": {
+"2026": 273.1
+},
+"by_index": {
+"NIFTY": 47813,
+"SENSEX": 6806
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "worse",
+"20000_y2026": "less profit, shallower fall"
+}
+},
+{
+"group": "Indices",
+"name": "Nifty + Bank Nifty (no Sensex)",
+"changes": [
+"indices: NIFTY, BANKNIFTY"
+],
+"runs": {
+"200000_full": {
+"trades": 1371,
+"final": 991997,
+"net": 791997,
+"multiple": 4.96,
+"cagr_pct": 53.1,
+"max_dd_pct": -21.9,
+"max_dd_rs": -148450,
+"win_rate": 30.5,
+"profit_factor": 1.37,
+"avg_R": 0.24,
+"worst_trade": -12860,
+"best_trade": 84126,
+"max_lots": 23,
+"avg_lots": 1.9,
+"losing_months": 20,
+"months": 46,
+"worst_month": -82856,
+"best_month": 210091,
+"skipped": {
+"weekly loss limit": 42,
+"Fibonacci slot below Rs 2 lakh": 3
+},
+"years": {
+"2023": 27.0,
+"2024": 86.1,
+"2025": 16.6,
+"2026": 80.0
+},
+"by_index": {
+"NIFTY": 862781,
+"BANKNIFTY": -70775
+}
+},
+"200000_y2026": {
+"trades": 265,
+"final": 382553,
+"net": 182553,
+"multiple": 1.91,
+"cagr_pct": 131.6,
+"max_dd_pct": -15.6,
+"max_dd_rs": -55805,
+"win_rate": 33.6,
+"profit_factor": 1.67,
+"avg_R": 0.342,
+"worst_trade": -4946,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.2,
+"losing_months": 2,
+"months": 10,
+"worst_month": -28079,
+"best_month": 67468,
+"skipped": {
+"weekly loss limit": 13,
+"Fibonacci slot below Rs 2 lakh": 7
+},
+"years": {
+"2026": 91.3
+},
+"by_index": {
+"NIFTY": 192498,
+"BANKNIFTY": -9948
+}
+},
+"20000_full": {
+"trades": 1010,
+"final": 223580,
+"net": 203580,
+"multiple": 11.18,
+"cagr_pct": 90.1,
+"max_dd_pct": -45.3,
+"max_dd_rs": -59846,
+"win_rate": 30.4,
+"profit_factor": 1.23,
+"avg_R": 0.22,
+"worst_trade": -5567,
+"best_trade": 16805,
+"max_lots": 5,
+"avg_lots": 1.0,
+"losing_months": 17,
+"months": 46,
+"worst_month": -23193,
+"best_month": 50013,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 284,
+"weekly loss limit": 107,
+"trend slot below Rs 40k": 11,
+"not enough free cash": 3,
+"1 lot risks > 15% of the account": 1
+},
+"years": {
+"2023": 88.2,
+"2024": 267.8,
+"2025": 6.1,
+"2026": 52.2
+},
+"by_index": {
+"NIFTY": 196715,
+"BANKNIFTY": 6866
+}
+},
+"20000_y2026": {
+"trades": 167,
+"final": 60864,
+"net": 40864,
+"multiple": 3.04,
+"cagr_pct": 322.7,
+"max_dd_pct": -52.3,
+"max_dd_rs": -27990,
+"win_rate": 32.3,
+"profit_factor": 1.28,
+"avg_R": 0.263,
+"worst_trade": -4288,
+"best_trade": 14889,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 2,
+"months": 10,
+"worst_month": -13382,
+"best_month": 13038,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 56,
+"weekly loss limit": 20,
+"not enough free cash": 16,
+"trend slot below Rs 40k": 15,
+"1 lot risks > 15% of the account": 11
+},
+"years": {
+"2026": 204.3
+},
+"by_index": {
+"NIFTY": 48179,
+"BANKNIFTY": -7318
+}
+}
+},
+"verdict": {
+"200000_full": "less profit, shallower fall",
+"200000_y2026": "less profit, shallower fall",
+"20000_full": "less profit, shallower fall",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Indices",
+"name": "Bank Nifty only",
+"changes": [
+"indices: BANKNIFTY"
+],
+"runs": {
+"200000_full": {
+"trades": 433,
+"final": 218005,
+"net": 18005,
+"multiple": 1.09,
+"cagr_pct": 2.3,
+"max_dd_pct": -25.6,
+"max_dd_rs": -71701,
+"win_rate": 29.1,
+"profit_factor": 1.04,
+"avg_R": 0.184,
+"worst_trade": -5567,
+"best_trade": 14747,
+"max_lots": 2,
+"avg_lots": 1.0,
+"losing_months": 23,
+"months": 45,
+"worst_month": -17447,
+"best_month": 28892,
+"skipped": {
+"weekly loss limit": 2
+},
+"years": {
+"2023": 16.6,
+"2024": 11.7,
+"2025": -15.6,
+"2026": -0.9
+},
+"by_index": {
+"BANKNIFTY": 18004
+}
+},
+"200000_y2026": {
+"trades": 89,
+"final": 198123,
+"net": -1877,
+"multiple": 0.99,
+"cagr_pct": -1.2,
+"max_dd_pct": -13.2,
+"max_dd_rs": -30077,
+"win_rate": 30.3,
+"profit_factor": 0.98,
+"avg_R": 0.104,
+"worst_trade": -4388,
+"best_trade": 13952,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 5,
+"months": 10,
+"worst_month": -13651,
+"best_month": 18425,
+"skipped": {
+"weekly loss limit": 1
+},
+"years": {
+"2026": -0.9
+},
+"by_index": {
+"BANKNIFTY": -1880
+}
+},
+"20000_full": {
+"trades": 429,
+"final": 36250,
+"net": 16250,
+"multiple": 1.81,
+"cagr_pct": 17.2,
+"max_dd_pct": -70.9,
+"max_dd_rs": -67610,
+"win_rate": 29.4,
+"profit_factor": 1.04,
+"avg_R": 0.192,
+"worst_trade": -5567,
+"best_trade": 13788,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 23,
+"months": 45,
+"worst_month": -17345,
+"best_month": 28233,
+"skipped": {
+"weekly loss limit": 4,
+"not enough free cash": 2
+},
+"years": {
+"2023": 142.3,
+"2024": 55.6,
+"2025": -49.1,
+"2026": -5.5
+},
+"by_index": {
+"BANKNIFTY": 16253
+}
+},
+"20000_y2026": {
+"trades": 60,
+"final": 18366,
+"net": -1634,
+"multiple": 0.92,
+"cagr_pct": -10.5,
+"max_dd_pct": -55.1,
+"max_dd_rs": -22528,
+"win_rate": 28.3,
+"profit_factor": 0.97,
+"avg_R": 0.139,
+"worst_trade": -4184,
+"best_trade": 12031,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 5,
+"months": 8,
+"worst_month": -8797,
+"best_month": 14809,
+"skipped": {
+"1 lot risks > 15% of the account": 15,
+"not enough free cash": 13,
+"weekly loss limit": 2
+},
+"years": {
+"2026": -8.2
+},
+"by_index": {
+"BANKNIFTY": -1632
+}
+}
+},
+"verdict": {
+"200000_full": "less profit, shallower fall",
+"200000_y2026": "less profit, shallower fall",
+"20000_full": "worse",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Indices",
+"name": "Sensex only",
+"changes": [
+"indices: SENSEX"
+],
+"runs": {
+"200000_full": {
+"trades": 629,
+"final": 333939,
+"net": 133939,
+"multiple": 1.67,
+"cagr_pct": 14.6,
+"max_dd_pct": -16.5,
+"max_dd_rs": -57716,
+"win_rate": 32.0,
+"profit_factor": 1.21,
+"avg_R": 0.227,
+"worst_trade": -5983,
+"best_trade": 23865,
+"max_lots": 7,
+"avg_lots": 1.3,
+"losing_months": 22,
+"months": 46,
+"worst_month": -24057,
+"best_month": 40899,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 95,
+"weekly loss limit": 10
+},
+"years": {
+"2023": -8.3,
+"2024": 21.0,
+"2025": 43.0,
+"2026": 5.2
+},
+"by_index": {
+"SENSEX": 133953
+}
+},
+"200000_y2026": {
+"trades": 86,
+"final": 189199,
+"net": -10801,
+"multiple": 0.95,
+"cagr_pct": -7.1,
+"max_dd_pct": -14.8,
+"max_dd_rs": -30475,
+"win_rate": 33.7,
+"profit_factor": 0.88,
+"avg_R": 0.14,
+"worst_trade": -3492,
+"best_trade": 9293,
+"max_lots": 4,
+"avg_lots": 1.2,
+"losing_months": 6,
+"months": 10,
+"worst_month": -9471,
+"best_month": 6533,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 61,
+"weekly loss limit": 1
+},
+"years": {
+"2026": -5.4
+},
+"by_index": {
+"SENSEX": -10798
+}
+},
+"20000_full": {
+"trades": 102,
+"final": 9640,
+"net": -10360,
+"multiple": 0.48,
+"cagr_pct": -17.8,
+"max_dd_pct": -67.1,
+"max_dd_rs": -16079,
+"win_rate": 35.3,
+"profit_factor": 0.82,
+"avg_R": 0.17,
+"worst_trade": -2658,
+"best_trade": 5061,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 15,
+"months": 30,
+"worst_month": -4902,
+"best_month": 3954,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 345,
+"trend slot below Rs 40k": 165,
+"1 lot risks > 15% of the account": 95,
+"not enough free cash": 15,
+"weekly loss limit": 12
+},
+"years": {
+"2023": -41.5,
+"2024": -29.1,
+"2025": 35.9,
+"2026": -14.4
+},
+"by_index": {
+"SENSEX": -10358
+}
+},
+"20000_y2026": {
+"trades": 32,
+"final": 10674,
+"net": -9326,
+"multiple": 0.53,
+"cagr_pct": -56.8,
+"max_dd_pct": -56.8,
+"max_dd_rs": -11725,
+"win_rate": 34.4,
+"profit_factor": 0.63,
+"avg_R": 0.096,
+"worst_trade": -2658,
+"best_trade": 3906,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 7,
+"months": 9,
+"worst_month": -3333,
+"best_month": 2308,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 64,
+"trend slot below Rs 40k": 39,
+"1 lot risks > 15% of the account": 10,
+"weekly loss limit": 2,
+"not enough free cash": 1
+},
+"years": {
+"2026": -46.6
+},
+"by_index": {
+"SENSEX": -9324
+}
+}
+},
+"verdict": {
+"200000_full": "less profit, shallower fall",
+"200000_y2026": "less profit, shallower fall",
+"20000_full": "less profit, shallower fall",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Combinations",
+"name": "Strong confidence + risk 1.5%",
+"changes": [
+"risk %: 1.5",
+"confidence: Strong: 2x / 1x / 0.5x on all indices"
+],
+"runs": {
+"200000_full": {
+"trades": 1607,
+"final": 11368078,
+"net": 11168078,
+"multiple": 56.84,
+"cagr_pct": 192.9,
+"max_dd_pct": -39.3,
+"max_dd_rs": -3011180,
+"win_rate": 32.1,
+"profit_factor": 1.35,
+"avg_R": 0.308,
+"worst_trade": -209412,
+"best_trade": 838254,
+"max_lots": 50,
+"avg_lots": 22.5,
+"losing_months": 19,
+"months": 46,
+"worst_month": -1151277,
+"best_month": 3394529,
+"skipped": {
+"weekly loss limit": 536,
+"Fibonacci slot below Rs 2 lakh": 5,
+"not enough free cash": 2
+},
+"years": {
+"2023": 156.5,
+"2024": 447.5,
+"2025": 79.8,
+"2026": 125.1
+},
+"by_index": {
+"NIFTY": 9737795,
+"SENSEX": 5440589,
+"BANKNIFTY": -4010317
+}
+},
+"200000_y2026": {
+"trades": 307,
+"final": 833784,
+"net": 633784,
+"multiple": 4.17,
+"cagr_pct": 535.4,
+"max_dd_pct": -30.7,
+"max_dd_rs": -158365,
+"win_rate": 37.1,
+"profit_factor": 1.9,
+"avg_R": 0.373,
+"worst_trade": -29121,
+"best_trade": 100942,
+"max_lots": 14,
+"avg_lots": 3.0,
+"losing_months": 4,
+"months": 10,
+"worst_month": -50735,
+"best_month": 456421,
+"skipped": {
+"weekly loss limit": 114,
+"Fibonacci slot below Rs 2 lakh": 11,
+"not enough free cash": 1
+},
+"years": {
+"2026": 316.9
+},
+"by_index": {
+"NIFTY": 433975,
+"SENSEX": 258105,
+"BANKNIFTY": -58286
+}
+},
+"20000_full": {
+"trades": 1404,
+"final": 2381887,
+"net": 2361887,
+"multiple": 119.09,
+"cagr_pct": 256.6,
+"max_dd_pct": -69.6,
+"max_dd_rs": -476575,
+"win_rate": 32.8,
+"profit_factor": 1.67,
+"avg_R": 0.291,
+"worst_trade": -84628,
+"best_trade": 302463,
+"max_lots": 42,
+"avg_lots": 3.2,
+"losing_months": 20,
+"months": 46,
+"worst_month": -156915,
+"best_month": 1329069,
+"skipped": {
+"weekly loss limit": 382,
+"Fibonacci slot below Rs 2 lakh": 288,
+"trend slot below Rs 40k": 54,
+"not enough free cash": 20,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 31.8,
+"2024": 764.3,
+"2025": 90.6,
+"2026": 448.4
+},
+"by_index": {
+"NIFTY": 1733131,
+"SENSEX": 1108553,
+"BANKNIFTY": -479778
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 93989,
+"net": 73989,
+"multiple": 4.7,
+"cagr_pct": 652.8,
+"max_dd_pct": -47.6,
+"max_dd_rs": -39929,
+"win_rate": 34.9,
+"profit_factor": 1.33,
+"avg_R": 0.284,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 2,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19940,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 369.9
+},
+"by_index": {
+"NIFTY": 57892,
+"BANKNIFTY": 10068,
+"SENSEX": 6038
+}
+}
+},
+"verdict": {
+"200000_full": "more profit, deeper fall",
+"200000_y2026": "more profit, deeper fall",
+"20000_full": "better",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Combinations",
+"name": "Strong confidence, no drawdown brake",
+"changes": [
+"confidence: Strong: 2x / 1x / 0.5x on all indices",
+"half risk in a drawdown: False"
+],
+"runs": {
+"200000_full": {
+"trades": 1545,
+"final": 5986856,
+"net": 5786856,
+"multiple": 29.93,
+"cagr_pct": 147.0,
+"max_dd_pct": -44.0,
+"max_dd_rs": -1367167,
+"win_rate": 32.8,
+"profit_factor": 1.45,
+"avg_R": 0.292,
+"worst_trade": -146895,
+"best_trade": 654285,
+"max_lots": 50,
+"avg_lots": 10.4,
+"losing_months": 20,
+"months": 46,
+"worst_month": -513645,
+"best_month": 2779180,
+"skipped": {
+"weekly loss limit": 600,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 134.0,
+"2024": 111.7,
+"2025": 71.9,
+"2026": 251.6
+},
+"by_index": {
+"NIFTY": 4931613,
+"SENSEX": 2109094,
+"BANKNIFTY": -1253845
+}
+},
+"200000_y2026": {
+"trades": 319,
+"final": 604266,
+"net": 404266,
+"multiple": 3.02,
+"cagr_pct": 316.6,
+"max_dd_pct": -26.1,
+"max_dd_rs": -109559,
+"win_rate": 37.0,
+"profit_factor": 1.79,
+"avg_R": 0.378,
+"worst_trade": -12663,
+"best_trade": 53995,
+"max_lots": 15,
+"avg_lots": 2.1,
+"losing_months": 3,
+"months": 10,
+"worst_month": -49813,
+"best_month": 278451,
+"skipped": {
+"weekly loss limit": 97,
+"Fibonacci slot below Rs 2 lakh": 17
+},
+"years": {
+"2026": 202.1
+},
+"by_index": {
+"NIFTY": 312887,
+"SENSEX": 109883,
+"BANKNIFTY": -18501
+}
+},
+"20000_full": {
+"trades": 1391,
+"final": 1334645,
+"net": 1314645,
+"multiple": 66.73,
+"cagr_pct": 205.7,
+"max_dd_pct": -70.0,
+"max_dd_rs": -276883,
+"win_rate": 32.9,
+"profit_factor": 1.55,
+"avg_R": 0.29,
+"worst_trade": -29121,
+"best_trade": 134562,
+"max_lots": 32,
+"avg_lots": 2.2,
+"losing_months": 17,
+"months": 46,
+"worst_month": -113666,
+"best_month": 642777,
+"skipped": {
+"weekly loss limit": 378,
+"Fibonacci slot below Rs 2 lakh": 307,
+"trend slot below Rs 40k": 53,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": 28.1,
+"2024": 598.8,
+"2025": 83.6,
+"2026": 306.0
+},
+"by_index": {
+"NIFTY": 947546,
+"SENSEX": 497415,
+"BANKNIFTY": -130300
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 93736,
+"net": 73736,
+"multiple": 4.69,
+"cagr_pct": 650.1,
+"max_dd_pct": -47.6,
+"max_dd_rs": -40181,
+"win_rate": 34.9,
+"profit_factor": 1.33,
+"avg_R": 0.284,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 2,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -20193,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 368.7
+},
+"by_index": {
+"NIFTY": 57892,
+"BANKNIFTY": 10068,
+"SENSEX": 5785
+}
+}
+},
+"verdict": {
+"200000_full": "more profit, deeper fall",
+"200000_y2026": "more profit, deeper fall",
+"20000_full": "better",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Combinations",
+"name": "Risk 2% + no lot cap",
+"changes": [
+"risk %: 2.0",
+"max lots: 0"
+],
+"runs": {
+"200000_full": {
+"trades": 1609,
+"final": 11745796,
+"net": 11545796,
+"multiple": 58.73,
+"cagr_pct": 195.5,
+"max_dd_pct": -35.3,
+"max_dd_rs": -2994013,
+"win_rate": 31.6,
+"profit_factor": 1.54,
+"avg_R": 0.284,
+"worst_trade": -273742,
+"best_trade": 1672353,
+"max_lots": 209,
+"avg_lots": 16.0,
+"losing_months": 20,
+"months": 46,
+"worst_month": -990276,
+"best_month": 5512028,
+"skipped": {
+"weekly loss limit": 536,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 103.6,
+"2024": 276.2,
+"2025": 91.9,
+"2026": 299.6
+},
+"by_index": {
+"NIFTY": 8400050,
+"SENSEX": 5574231,
+"BANKNIFTY": -2428506
+}
+},
+"200000_y2026": {
+"trades": 310,
+"final": 1127845,
+"net": 927845,
+"multiple": 5.64,
+"cagr_pct": 839.7,
+"max_dd_pct": -30.9,
+"max_dd_rs": -232155,
+"win_rate": 38.1,
+"profit_factor": 2.02,
+"avg_R": 0.405,
+"worst_trade": -26118,
+"best_trade": 134562,
+"max_lots": 18,
+"avg_lots": 3.9,
+"losing_months": 2,
+"months": 10,
+"worst_month": -71614,
+"best_month": 567187,
+"skipped": {
+"weekly loss limit": 112,
+"Fibonacci slot below Rs 2 lakh": 11
+},
+"years": {
+"2026": 463.9
+},
+"by_index": {
+"NIFTY": 659127,
+"SENSEX": 328719,
+"BANKNIFTY": -60000
+}
+},
+"20000_full": {
+"trades": 1410,
+"final": 1891727,
+"net": 1871727,
+"multiple": 94.59,
+"cagr_pct": 235.4,
+"max_dd_pct": -68.0,
+"max_dd_rs": -409268,
+"win_rate": 32.5,
+"profit_factor": 1.6,
+"avg_R": 0.281,
+"worst_trade": -44013,
+"best_trade": 235338,
+"max_lots": 30,
+"avg_lots": 2.8,
+"losing_months": 18,
+"months": 46,
+"worst_month": -123562,
+"best_month": 966631,
+"skipped": {
+"weekly loss limit": 364,
+"Fibonacci slot below Rs 2 lakh": 306,
+"trend slot below Rs 40k": 53,
+"not enough free cash": 16,
+"1 lot risks > 15% of the account": 1
+},
+"years": {
+"2023": 17.9,
+"2024": 662.3,
+"2025": 152.4,
+"2026": 316.8
+},
+"by_index": {
+"NIFTY": 1162242,
+"SENSEX": 864680,
+"BANKNIFTY": -155180
+}
+},
+"20000_y2026": {
+"trades": 255,
+"final": 94525,
+"net": 74525,
+"multiple": 4.73,
+"cagr_pct": 658.4,
+"max_dd_pct": -47.6,
+"max_dd_rs": -39695,
+"win_rate": 34.9,
+"profit_factor": 1.34,
+"avg_R": 0.284,
+"worst_trade": -4388,
+"best_trade": 16805,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19404,
+"best_month": 28162,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 116,
+"weekly loss limit": 33,
+"trend slot below Rs 40k": 14,
+"not enough free cash": 13,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2026": 372.6
+},
+"by_index": {
+"NIFTY": 58428,
+"BANKNIFTY": 10068,
+"SENSEX": 6038
+}
+}
+},
+"verdict": {
+"200000_full": "more profit, deeper fall",
+"200000_y2026": "more profit, deeper fall",
+"20000_full": "better",
+"20000_y2026": "about the same"
+}
+},
+{
+"group": "Combinations",
+"name": "All filters off (no big-run skip, no brake, no gates)",
+"changes": [
+"big-run skip: False",
+"half risk in a drawdown: False",
+"equity gates: False"
+],
+"runs": {
+"200000_full": {
+"trades": 1910,
+"final": 2745245,
+"net": 2545245,
+"multiple": 13.73,
+"cagr_pct": 100.5,
+"max_dd_pct": -33.0,
+"max_dd_rs": -415127,
+"win_rate": 31.5,
+"profit_factor": 1.43,
+"avg_R": 0.251,
+"worst_trade": -30604,
+"best_trade": 201759,
+"max_lots": 50,
+"avg_lots": 3.9,
+"losing_months": 18,
+"months": 46,
+"worst_month": -216183,
+"best_month": 1005567,
+"skipped": {
+"weekly loss limit": 332
+},
+"years": {
+"2023": 28.3,
+"2024": 172.2,
+"2025": 41.9,
+"2026": 177.1
+},
+"by_index": {
+"NIFTY": 1904829,
+"SENSEX": 747635,
+"BANKNIFTY": -107224
+}
+},
+"200000_y2026": {
+"trades": 409,
+"final": 459178,
+"net": 259178,
+"multiple": 2.3,
+"cagr_pct": 191.2,
+"max_dd_pct": -18.2,
+"max_dd_rs": -65425,
+"win_rate": 34.7,
+"profit_factor": 1.59,
+"avg_R": 0.34,
+"worst_trade": -5191,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.3,
+"losing_months": 3,
+"months": 10,
+"worst_month": -25580,
+"best_month": 154660,
+"skipped": {
+"weekly loss limit": 42
+},
+"years": {
+"2026": 129.6
+},
+"by_index": {
+"NIFTY": 212093,
+"SENSEX": 59747,
+"BANKNIFTY": -12663
+}
+},
+"20000_full": {
+"trades": 1680,
+"final": 648160,
+"net": 628160,
+"multiple": 32.41,
+"cagr_pct": 151.9,
+"max_dd_pct": -75.7,
+"max_dd_rs": -90330,
+"win_rate": 32.0,
+"profit_factor": 1.37,
+"avg_R": 0.255,
+"worst_trade": -6619,
+"best_trade": 50478,
+"max_lots": 12,
+"avg_lots": 1.2,
+"losing_months": 19,
+"months": 46,
+"worst_month": -39367,
+"best_month": 225659,
+"skipped": {
+"weekly loss limit": 461,
+"not enough free cash": 95,
+"1 lot risks > 15% of the account": 6
+},
+"years": {
+"2023": -1.8,
+"2024": 933.0,
+"2025": 43.5,
+"2026": 122.6
+},
+"by_index": {
+"NIFTY": 417778,
+"SENSEX": 239455,
+"BANKNIFTY": -29055
+}
+},
+"20000_y2026": {
+"trades": 333,
+"final": 181913,
+"net": 161913,
+"multiple": 9.1,
+"cagr_pct": 1645.4,
+"max_dd_pct": -49.4,
+"max_dd_rs": -62438,
+"win_rate": 37.5,
+"profit_factor": 1.54,
+"avg_R": 0.409,
+"worst_trade": -5191,
+"best_trade": 16805,
+"max_lots": 3,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -19870,
+"best_month": 60122,
+"skipped": {
+"weekly loss limit": 97,
+"not enough free cash": 20,
+"1 lot risks > 15% of the account": 1
+},
+"years": {
+"2026": 809.6
+},
+"by_index": {
+"NIFTY": 132403,
+"SENSEX": 28369,
+"BANKNIFTY": 1144
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "about the same",
+"20000_full": "more profit, deeper fall",
+"20000_y2026": "better"
+}
+},
+{
+"group": "Combinations",
+"name": "Today's rules before round 42-43 (no big-run skip, no brake)",
+"changes": [
+"big-run skip: False",
+"half risk in a drawdown: False"
+],
+"runs": {
+"200000_full": {
+"trades": 1906,
+"final": 2745268,
+"net": 2545268,
+"multiple": 13.73,
+"cagr_pct": 100.5,
+"max_dd_pct": -32.7,
+"max_dd_rs": -415127,
+"win_rate": 31.5,
+"profit_factor": 1.43,
+"avg_R": 0.251,
+"worst_trade": -30604,
+"best_trade": 201759,
+"max_lots": 50,
+"avg_lots": 3.9,
+"losing_months": 18,
+"months": 46,
+"worst_month": -216183,
+"best_month": 1005567,
+"skipped": {
+"weekly loss limit": 331,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 28.3,
+"2024": 172.2,
+"2025": 41.9,
+"2026": 177.1
+},
+"by_index": {
+"NIFTY": 1899611,
+"SENSEX": 752878,
+"BANKNIFTY": -107224
+}
+},
+"200000_y2026": {
+"trades": 394,
+"final": 449331,
+"net": 249331,
+"multiple": 2.25,
+"cagr_pct": 183.2,
+"max_dd_pct": -17.3,
+"max_dd_rs": -59594,
+"win_rate": 35.3,
+"profit_factor": 1.59,
+"avg_R": 0.339,
+"worst_trade": -5191,
+"best_trade": 33645,
+"max_lots": 9,
+"avg_lots": 1.3,
+"losing_months": 3,
+"months": 10,
+"worst_month": -24794,
+"best_month": 153149,
+"skipped": {
+"weekly loss limit": 42,
+"Fibonacci slot below Rs 2 lakh": 15
+},
+"years": {
+"2026": 124.7
+},
+"by_index": {
+"NIFTY": 197467,
+"SENSEX": 58924,
+"BANKNIFTY": -7059
+}
+},
+"20000_full": {
+"trades": 1188,
+"final": 223343,
+"net": 203343,
+"multiple": 11.17,
+"cagr_pct": 90.0,
+"max_dd_pct": -72.7,
+"max_dd_rs": -72629,
+"win_rate": 31.8,
+"profit_factor": 1.2,
+"avg_R": 0.216,
+"worst_trade": -5191,
+"best_trade": 16805,
+"max_lots": 5,
+"avg_lots": 1.0,
+"losing_months": 22,
+"months": 46,
+"worst_month": -29054,
+"best_month": 67780,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 572,
+"weekly loss limit": 400,
+"trend slot below Rs 40k": 61,
+"not enough free cash": 19,
+"1 lot risks > 15% of the account": 2
+},
+"years": {
+"2023": -1.5,
+"2024": 538.0,
+"2025": 3.0,
+"2026": 72.6
+},
+"by_index": {
+"NIFTY": 133835,
+"BANKNIFTY": 750,
+"SENSEX": 68769
+}
+},
+"20000_y2026": {
+"trades": 260,
+"final": 78855,
+"net": 58855,
+"multiple": 3.94,
+"cagr_pct": 491.1,
+"max_dd_pct": -55.1,
+"max_dd_rs": -40156,
+"win_rate": 35.0,
+"profit_factor": 1.26,
+"avg_R": 0.276,
+"worst_trade": -4972,
+"best_trade": 14889,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 4,
+"months": 10,
+"worst_month": -9393,
+"best_month": 26576,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 124,
+"weekly loss limit": 34,
+"not enough free cash": 15,
+"trend slot below Rs 40k": 14,
+"1 lot risks > 15% of the account": 4
+},
+"years": {
+"2026": 294.3
+},
+"by_index": {
+"NIFTY": 64054,
+"BANKNIFTY": -6456,
+"SENSEX": 1262
+}
+}
+},
+"verdict": {
+"200000_full": "worse",
+"200000_y2026": "worse",
+"20000_full": "worse",
+"20000_y2026": "worse"
+}
+},
+{
+"group": "Combinations",
+"name": "Strong confidence + lock +1R at +2R",
+"changes": [
+"confidence: Strong: 2x / 1x / 0.5x on all indices",
+"exit: Lock +1R once +2R"
+],
+"runs": {
+"200000_full": {
+"trades": 1795,
+"final": 6407656,
+"net": 6207656,
+"multiple": 32.04,
+"cagr_pct": 151.5,
+"max_dd_pct": -30.7,
+"max_dd_rs": -1265369,
+"win_rate": 34.3,
+"profit_factor": 1.5,
+"avg_R": 0.276,
+"worst_trade": -159286,
+"best_trade": 754655,
+"max_lots": 50,
+"avg_lots": 8.7,
+"losing_months": 21,
+"months": 46,
+"worst_month": -420763,
+"best_month": 2451117,
+"skipped": {
+"weekly loss limit": 352,
+"Fibonacci slot below Rs 2 lakh": 5
+},
+"years": {
+"2023": 76.3,
+"2024": 183.0,
+"2025": 102.5,
+"2026": 217.1
+},
+"by_index": {
+"NIFTY": 4509877,
+"SENSEX": 2840776,
+"BANKNIFTY": -1142998
+}
+},
+"200000_y2026": {
+"trades": 345,
+"final": 461641,
+"net": 261641,
+"multiple": 2.31,
+"cagr_pct": 195.5,
+"max_dd_pct": -23.4,
+"max_dd_rs": -84046,
+"win_rate": 38.0,
+"profit_factor": 1.63,
+"avg_R": 0.297,
+"worst_trade": -10573,
+"best_trade": 50478,
+"max_lots": 12,
+"avg_lots": 1.6,
+"losing_months": 4,
+"months": 10,
+"worst_month": -25853,
+"best_month": 172027,
+"skipped": {
+"weekly loss limit": 70,
+"Fibonacci slot below Rs 2 lakh": 19
+},
+"years": {
+"2026": 130.8
+},
+"by_index": {
+"NIFTY": 192763,
+"SENSEX": 77706,
+"BANKNIFTY": -8823
+}
+},
+"20000_full": {
+"trades": 1502,
+"final": 1156034,
+"net": 1136034,
+"multiple": 57.8,
+"cagr_pct": 194.3,
+"max_dd_pct": -68.8,
+"max_dd_rs": -203490,
+"win_rate": 35.5,
+"profit_factor": 1.52,
+"avg_R": 0.27,
+"worst_trade": -33538,
+"best_trade": 117754,
+"max_lots": 16,
+"avg_lots": 1.9,
+"losing_months": 20,
+"months": 46,
+"worst_month": -48020,
+"best_month": 478924,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 312,
+"weekly loss limit": 271,
+"trend slot below Rs 40k": 51,
+"not enough free cash": 15,
+"1 lot risks > 15% of the account": 1
+},
+"years": {
+"2023": 42.5,
+"2024": 564.5,
+"2025": 100.5,
+"2026": 204.4
+},
+"by_index": {
+"NIFTY": 747282,
+"SENSEX": 509025,
+"BANKNIFTY": -120265
+}
+},
+"20000_y2026": {
+"trades": 254,
+"final": 83229,
+"net": 63229,
+"multiple": 4.16,
+"cagr_pct": 533.9,
+"max_dd_pct": -46.8,
+"max_dd_rs": -34673,
+"win_rate": 37.8,
+"profit_factor": 1.29,
+"avg_R": 0.287,
+"worst_trade": -4388,
+"best_trade": 14889,
+"max_lots": 1,
+"avg_lots": 1.0,
+"losing_months": 3,
+"months": 10,
+"worst_month": -14685,
+"best_month": 20745,
+"skipped": {
+"Fibonacci slot below Rs 2 lakh": 120,
+"weekly loss limit": 24,
+"not enough free cash": 18,
+"trend slot below Rs 40k": 17,
+"1 lot risks > 15% of the account": 1
+},
+"years": {
+"2026": 316.1
+},
+"by_index": {
+"NIFTY": 56069,
+"BANKNIFTY": 2843,
+"SENSEX": 4321
+}
+}
+},
+"verdict": {
+"200000_full": "more profit, deeper fall",
+"200000_y2026": "about the same",
+"20000_full": "better",
+"20000_y2026": "worse"
+}
+}
+]
+}

@@ -524,6 +524,8 @@ details summary{cursor:pointer;font-size:13px}
       <button data-t="gbacktest"><svg class="ic"><use href="#i-backtest"/></svg><span class="lb">Backtest</span></button>
       <button data-t="research"><svg class="ic"><use href="#i-research"/></svg><span class="lb">Research</span></button>
       <button data-t="gresearch"><svg class="ic"><use href="#i-research"/></svg><span class="lb">Research</span></button>
+      <button data-t="aprules"><svg class="ic"><use href="#i-rules"/></svg><span class="lb">Autopilot rules</span><span class="newb">NEW</span></button>
+      <button data-t="outcomes"><svg class="ic"><use href="#i-backtest"/></svg><span class="lb">Outcomes</span><span class="newb">NEW</span></button>
       <button data-t="rules"><svg class="ic"><use href="#i-rules"/></svg><span class="lb">Options rulebook</span></button>
       <button data-t="grules"><svg class="ic"><use href="#i-rules"/></svg><span class="lb">Rulebook</span></button>
       <button data-t="stockrules"><svg class="ic"><use href="#i-stockrules"/></svg><span class="lb">Stock rulebook</span></button>
@@ -714,7 +716,7 @@ details summary{cursor:pointer;font-size:13px}
   <section id="t-backtest" class="hidden">
     <div class="card" id="pbCard">
       <div class="cardhead"><h3 style="margin:0">Portfolio backtest - all indices, one account</h3><span class="muted" style="font-size:12.5px">Nifty + Bank Nifty + Sensex from one capital, as Autopilot trades them</span></div>
-      <p class="muted" style="margin:6px 0 10px;font-size:13px">Choose the period, how lots are sized (compounding from your capital, fixed capital or a fixed number of lots), confidence sizing, the big-run skip and the exit / target style. A different exit is shown side by side with the current exits on the same settings. Full history runs take a few minutes; it runs on the server, so you can leave the page.</p>
+      <p class="muted" style="margin:6px 0 10px;font-size:13px">Choose the period, how lots are sized (compounding from your capital, fixed capital or a fixed number of lots), confidence sizing, the big-run skip and the exit / target style. With <b>Compare</b> on, your settings are run next to the <b>Current Autopilot rules</b> (today's full live rule set – see the Autopilot rules tab) on the same period, indices and capital. Full history runs take a few minutes; it runs on the server, so you can leave the page.</p>
       <div class="formrow formgrid">
         <div><label>From</label><input id="pbFrom" type="date" value="2023-01-02" min="2022-01-03" style="width:100%"></div>
         <div><label>To</label><input id="pbTo" type="date" style="width:100%"></div>
@@ -730,7 +732,8 @@ details summary{cursor:pointer;font-size:13px}
         <div style="grid-column:span 2"><label>Exit / targets</label><select id="pbExit" style="width:100%"></select></div>
         <div><label>&nbsp;</label><label class="tog"><input type="checkbox" id="pbRun2" checked> Skip trades against a big 3-day run</label></div>
         <div><label>&nbsp;</label><label class="tog"><input type="checkbox" id="pbDD" checked> Half risk when 15%+ below the peak</label></div>
-        <div><label>&nbsp;</label><label class="tog"><input type="checkbox" id="pbCmp" checked> Compare with current exits</label></div>
+        <div><label>&nbsp;</label><label class="tog"><input type="checkbox" id="pbCmp" checked> Compare with current Autopilot rules</label></div>
+        <div><label>&nbsp;</label><label class="tog" title="Live rule: while equity is below Rs 60k Autopilot buys 1 strike out of the money (only with the 1 ITM strike and risk-based sizing)"><input type="checkbox" id="pbSmall" checked> 1 OTM below ₹60k</label></div>
         <div><label>&nbsp;</label><div style="display:flex;gap:6px"><button class="primary" id="pbGo" style="flex:1">▶ Run portfolio backtest</button><button class="danger hidden" id="pbStop" title="Stop this backtest">■ Stop</button></div></div>
       </div>
       <div class="row wrap" style="margin-top:10px;gap:8px">
@@ -801,6 +804,8 @@ details summary{cursor:pointer;font-size:13px}
     <p class="muted" style="margin-top:0">Plain-language meanings of the words used across the app, with small examples. Type to search.</p>
     <input id="glQ" placeholder="Search a word, e.g. noise, VWAP, circuit" style="width:100%;margin:6px 0"></div><div id="glList"></div></section>
   <section id="t-stockrules" class="hidden"><div class="card rule" id="stockRulebook"></div></section>
+  <section id="t-aprules" class="hidden"><div class="card rule" id="apRules"></div></section>
+  <section id="t-outcomes" class="hidden"><div class="card" id="ocTop"></div><div class="card" id="ocTbl" style="margin-top:12px"></div></section>
   <section id="t-rules" class="hidden"><div class="card rule" id="rulebook"></div></section>
 
   <!-- SETTINGS -->
@@ -993,7 +998,7 @@ async function start() {
 }
 /* ---- market workspace: India F&O, Crypto or US. Each shows only its own tabs and data. ---- */
 const WS = {mk: localStorage.getItem("ws") || "IN"};
-const WS_IN = new Set(["signal", "chain", "portfolio", "scalp", "context", "stocks", "recs", "journal", "data", "backtest", "research", "rules", "stockrules", "settings"]);
+const WS_IN = new Set(["signal", "chain", "portfolio", "scalp", "context", "stocks", "recs", "journal", "data", "backtest", "research", "rules", "aprules", "outcomes", "stockrules", "settings"]);
 const WS_GLOBAL = new Set(["gtrade", "markets", "gportfolio", "gjournal", "grules", "gbacktest", "gresearch", "gcontext"]);
 const wsAllows = t => WS.mk === "IN" ? !WS_GLOBAL.has(t) : !WS_IN.has(t);
 function applyWS() {
@@ -1053,6 +1058,8 @@ async function load(quiet) {
     else if (S.tab === "recs") await loadRecs();
     else if (S.tab === "backtest") { await pbInit(); const pj = localStorage.getItem("pbJob"); if (pj && !PB.last) pbWatch(pj); await loadStudy(); }
     else if (S.tab === "research") await loadResearch();
+    else if (S.tab === "aprules") await loadApRules();
+    else if (S.tab === "outcomes") await loadOutcomes();
     else if (S.tab === "strategies") await loadStrategies();
     else if (S.tab === "learning") await loadLearning();
     else if (S.tab === "markets") await loadMarkets(quiet);
@@ -2306,13 +2313,13 @@ async function pbInit() {
 function pbParams() {
   return {start: $("#pbFrom").value, end: $("#pbTo").value, indices: [...document.querySelectorAll("#pbIdx input:checked")].map(x => x.value),
     capital: +$("#pbCap").value, sizing: $("#pbSize").value, risk_pct: +$("#pbRisk").value, lots: +$("#pbLots").value, confidence: $("#pbConf").value,
-    otm: +$("#pbOtm").value, max_lots: +$("#pbMax").value, max_loss_lot: +$("#pbMaxLoss").value, exit: $("#pbExit").value, big_run_skip: $("#pbRun2").checked, dd_half: $("#pbDD").checked, compare: $("#pbCmp").checked};
+    otm: +$("#pbOtm").value, max_lots: +$("#pbMax").value, max_loss_lot: +$("#pbMaxLoss").value, exit: $("#pbExit").value, big_run_skip: $("#pbRun2").checked, dd_half: $("#pbDD").checked, small_otm: $("#pbSmall").checked, compare: $("#pbCmp").checked};
 }
 function pbApply(p) {
   const set = (id, v) => { if (v != null && $(id)) $(id).value = v; };
   set("#pbFrom", p.start); set("#pbTo", p.end); set("#pbCap", p.capital); set("#pbSize", p.sizing); set("#pbRisk", String(p.risk_pct)); set("#pbLots", p.lots);
   set("#pbConf", p.confidence); set("#pbOtm", String(p.otm)); set("#pbMax", p.max_lots); set("#pbMaxLoss", p.max_loss_lot || 0); set("#pbExit", p.exit);
-  $("#pbRun2").checked = !!p.big_run_skip; $("#pbDD").checked = p.dd_half !== false; $("#pbCmp").checked = p.compare !== false;
+  $("#pbRun2").checked = !!p.big_run_skip; $("#pbDD").checked = p.dd_half !== false; $("#pbCmp").checked = p.compare !== false; $("#pbSmall").checked = p.small_otm !== false;
   document.querySelectorAll("#pbIdx input").forEach(x => { x.checked = (p.indices || []).includes(x.value); });
   $("#pbSize").onchange();
 }
@@ -2416,10 +2423,11 @@ function pbRender(j) {
   <div class="grid g6">${kpi("Account at the end", pbRs(m.final), `from ₹${pbL(m.start_capital)} · ${m.multiple}x`)}${kpi("Yearly growth", m.cagr_pct + "%", `${esc(m.period[0])} → ${esc(m.period[1])}`, "muted")}
     ${kpi("Worst fall", `<span class="down">${m.max_dd_pct}%</span>`, pbRs(m.max_dd_rs) + (m.max_dd_when ? " · " + esc(m.max_dd_when) : ""))}${kpi("Trades", m.trades, `${m.win_rate}% winners · PF ${m.profit_factor ?? "–"}`, "muted")}
     ${kpi("Most lots", m.max_lots, `average ${m.avg_lots}`, "muted")}${kpi("Losing months", `${m.losing_months} / ${m.months}`, `worst ${pbL(m.worst_month)}`, "muted")}</div>
-  <div class="card" style="margin-top:14px"><h3>${c ? "Side by side (same settings)" : "Summary"}</h3><div class="tablewrap"><table><tr><th></th><th>${esc(m.label)}</th>${c ? `<th>${esc(c.label)}</th>` : ""}</tr>
+  <div class="card" style="margin-top:14px"><h3>${c ? "Your settings vs current Autopilot rules" : "Summary"}</h3>
+    ${(j.result.changes || []).length ? `<p class="muted" style="font-size:13px;margin:0 0 8px">What your settings change from today's Autopilot: <b>${esc(j.result.changes.join(" · "))}</b>${c ? "" : " (tick Compare to see today's rules next to it)"}.</p>` : `<p class="muted" style="font-size:13px;margin:0 0 8px">These settings are exactly today's Autopilot rules.</p>`}<div class="tablewrap"><table><tr><th></th><th>${esc(m.label)}</th>${c ? `<th>${esc(c.label)}</th>` : ""}</tr>
     ${rows.map(r => `<tr><td>${r[0]}</td><td class="mono">${cell(m, r)}</td>${c ? `<td class="mono">${cell(c, r)}</td>` : ""}</tr>`).join("")}</table></div>
     <p class="muted" style="font-size:12px;margin:8px 0 0">Settings: ₹${pbL(p.capital)}, ${p.sizing === "fixed" ? p.lots + " lots per trade" : p.risk_pct + "% risk " + (p.sizing === "compound" ? "of the current account (compounding)" : "of the starting capital")}, ${p.max_lots ? "max " + p.max_lots + " lots, " : ""}${p.max_loss_lot ? "max loss ₹" + p.max_loss_lot + "/lot, " : ""}confidence ${esc(p.confidence)}, big-run skip ${p.big_run_skip ? "on" : "off"}, ${p.otm < 0 ? "1 ITM" : p.otm ? p.otm + " OTM" : "ATM"}, ${esc(p.indices.join(" + "))}.${skip ? " Not taken: " + skip + "." : ""}</p></div>
-  <div class="card" style="margin-top:14px"><h3>Account value</h3><div id="pbChart" style="height:300px"></div><p class="muted" style="font-size:12px;margin:6px 0 0">${c ? "Blue = the chosen exit, orange = current exits." : ""} Option prices are modelled (formula corrected against real NSE prices; slightly optimistic), with extra slippage for size - treat big compounded totals as the optimistic side.</p></div>
+  <div class="card" style="margin-top:14px"><h3>Account value</h3><div id="pbChart" style="height:300px"></div><p class="muted" style="font-size:12px;margin:6px 0 0">${c ? "Blue = your settings, orange = current Autopilot rules." : ""} Option prices are modelled (formula corrected against real NSE prices; slightly optimistic), with extra slippage for size - treat big compounded totals as the optimistic side.</p></div>
   <div class="card" style="margin-top:14px"><h3>Year by year</h3><div class="tablewrap"><table><tr><th>Year</th><th>Start</th><th>End</th><th>Net</th><th>Return</th><th>Worst fall</th><th>Trades</th><th>Win</th><th>Most lots</th>${c ? "<th>Current exits: return</th>" : ""}</tr>
     ${m.years.map(y => { const cy = c && (c.years || []).find(z => z.year === y.year); return `<tr><td>${y.year}</td><td class="mono">₹${pbL(y.start)}</td><td class="mono">₹${pbL(y.end)}</td><td class="mono">${pbRs(y.net)}</td><td class="mono ${cls(y.ret_pct)}">${y.ret_pct}%</td><td class="mono down">${y.max_dd_pct}%</td><td class="mono">${y.trades}</td><td class="mono">${y.win_rate}%</td><td class="mono">${y.max_lots}</td>${c ? `<td class="mono ${cy ? cls(cy.ret_pct) : ""}">${cy ? cy.ret_pct + "%" : "–"}</td>` : ""}</tr>`; }).join("")}</table></div></div>
   <div class="grid g2" style="margin-top:14px">${pbGrp("By index", m.by_index, "Index")}${pbGrp("By strategy", m.by_strategy, "Strategy")}${pbGrp("By exit reason", m.by_reason, "Exit")}${pbGrp("By confidence score", m.by_confidence, "Score")}</div>
@@ -3022,6 +3030,60 @@ function renderGlossary() {
     return f.length ? `<h4 style="margin:18px 0 8px">${esc(g)}</h4>` + f.map(([t, d, e]) => `<div class="card" style="margin-bottom:8px"><b>${esc(t)}</b><p style="margin:4px 0">${esc(d)}</p>${e ? `<p class="muted" style="margin:0"><i>Example:</i> ${esc(e)}</p>` : ""}</div>`).join("") : "";
   }).join("") || '<div class="muted">No term matches.</div>';
 }
+
+// ---------- Autopilot rules (written from config + live switches) ----------
+async function loadApRules() {
+  const j = await api("/api/autopilot/rules");
+  $("#apRules").innerHTML = `<h3 style="font-size:19px">Current Autopilot rules</h3>
+    <p class="muted">${esc(j.note)} This is also the <b>"Current Autopilot rules"</b> baseline that the portfolio backtest's Compare and the Outcomes tab measure every change against.</p>
+    ${j.sections.map(sec => `<h4 style="margin:16px 0 6px">${esc(sec.title)}</h4>
+      <div class="tablewrap"><table class="prose">${sec.rows.map(r => `<tr><td style="width:26%"><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td></tr>`).join("")}</table></div>`).join("")}
+    <h4 style="margin:16px 0 6px">Baseline used by backtests</h4>
+    <p class="muted mono" style="white-space:normal">${Object.entries(j.baseline).map(([k, v]) => esc(k + " = " + v)).join(" · ")}</p>`;
+}
+
+// ---------- Outcomes: every change vs today's rules ----------
+const OC = {data: null, cap: "200000", sort: null};
+const OCV = {"better": "var(--green)", "more profit, deeper fall": "var(--amber)", "less profit, shallower fall": "var(--blue, #0969da)", "worse": "var(--red)", "about the same": "var(--muted)", "baseline": "inherit"};
+function ocRs(x) { const a = Math.abs(x), s = a >= 1e7 ? (a / 1e7).toFixed(2) + " Cr" : a >= 1e5 ? (a / 1e5).toFixed(2) + " L" : a.toLocaleString("en-IN"); return (x < 0 ? "-" : "") + "₹" + s; }
+async function loadOutcomes() {
+  if (!OC.data) OC.data = await api("/api/outcomes");
+  const d = OC.data;
+  if (!d.rows || !d.rows.length) { $("#ocTop").innerHTML = `<p>${esc(d.error || "No outcomes yet.")}</p>`; $("#ocTbl").innerHTML = ""; return; }
+  $("#ocTop").innerHTML = `<h3 style="font-size:19px">Outcomes – every change vs today's Autopilot</h3>
+    <p class="muted">Study run ${esc(d.generated)} · Nifty + Bank Nifty + Sensex · full history ${esc(d.periods.full[0])} → ${esc(d.periods.full[1])}, and 2026 alone (account restarted 1 Jan 2026). Each row changes one thing; the yellow row is today's rules (see <a href="#aprules" onclick="go('aprules');return false">Autopilot rules</a>).</p>
+    <ul class="muted" style="margin:6px 0 10px 18px">${d.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <label>Starting capital <select id="ocCap">${d.capitals.map(c => `<option value="${c}" ${String(c) === OC.cap ? "selected" : ""}>${ocRs(c)}</option>`).join("")}</select></label>
+      <label>Show <select id="ocGrp"><option value="">all groups</option>${[...new Set(d.rows.map(r => r.group))].map(g => `<option>${esc(g)}</option>`).join("")}</select></label>
+      <a class="btn" href="/api/outcomes.pdf" target="_blank" rel="noopener">Open PDF</a>
+      <span class="muted">Click a column title to sort.</span></div>`;
+  $("#ocCap").onchange = e => { OC.cap = e.target.value; ocTable(); };
+  $("#ocGrp").onchange = () => ocTable();
+  ocTable();
+}
+function ocTable() {
+  const d = OC.data, cap = OC.cap, g = $("#ocGrp").value, base = d.rows[0];
+  const bf = base.runs[cap + "_full"], b6 = base.runs[cap + "_y2026"];
+  let rows = d.rows.map((r, i) => { const f = r.runs[cap + "_full"], y = r.runs[cap + "_y2026"];
+    return {i, r, f, y, df: i ? (f.final - bf.final) / Math.max(Math.abs(bf.net), 1) * 100 : 0, dy: i ? (y.final - b6.final) / Math.max(Math.abs(b6.net), 1) * 100 : 0}; });
+  if (g) rows = rows.filter(x => x.i === 0 || x.r.group === g);
+  const keys = {final: x => x.f.final, df: x => x.df, dd: x => x.f.max_dd_pct, win: x => x.f.win_rate, pf: x => x.f.profit_factor || 0, f6: x => x.y.final, dy: x => x.dy, dd6: x => x.y.max_dd_pct, lm: x => -x.f.losing_months};
+  if (OC.sort) { const [k, dir] = OC.sort; rows.sort((a, b) => a.i === 0 ? -1 : b.i === 0 ? 1 : dir * (keys[k](b) - keys[k](a))); }
+  const th = (k, t) => `<th style="cursor:pointer" data-k="${k}">${t}${OC.sort && OC.sort[0] === k ? (OC.sort[1] > 0 ? " ▼" : " ▲") : ""}</th>`;
+  const vc = v => `<span style="color:${OCV[v] || "inherit"};font-weight:600">${esc(v)}</span>`;
+  const pc = x => `<span class="${x > 0.5 ? "up" : x < -0.5 ? "down" : ""}">${x > 0 ? "+" : ""}${x.toFixed(0)}%</span>`;
+  $("#ocTbl").innerHTML = `<div class="tablewrap" style="max-height:75vh"><table class="prose" id="ocT"><tr><th>Group</th><th>Scenario (what changes)</th>
+    ${th("final", "Full: ends at")}${th("df", "vs current")}${th("dd", "Worst fall")}${th("win", "Win %")}${th("pf", "PF")}${th("lm", "Losing months")}
+    ${th("f6", "2026: ends at")}${th("dy", "vs current")}${th("dd6", "Worst fall")}<th>Verdict full</th><th>Verdict 2026</th></tr>
+    ${rows.map(x => `<tr style="${x.i === 0 ? "background:var(--gold-bg)" : ""}"><td class="muted">${esc(x.r.group)}</td>
+      <td><b>${esc(x.r.name)}</b>${x.r.changes.length ? `<div class="muted" style="font-size:12px">${esc(x.r.changes.join(" · "))}</div>` : ""}</td>
+      <td class="mono">${ocRs(x.f.final)}</td><td>${x.i ? pc(x.df) : "–"}</td><td class="mono">${x.f.max_dd_pct}%</td><td>${x.f.win_rate}</td><td>${x.f.profit_factor ?? "–"}</td><td>${x.f.losing_months}/${x.f.months}</td>
+      <td class="mono">${ocRs(x.y.final)}</td><td>${x.i ? pc(x.dy) : "–"}</td><td class="mono">${x.y.max_dd_pct}%</td>
+      <td>${vc(x.r.verdict[cap + "_full"])}</td><td>${vc(x.r.verdict[cap + "_y2026"])}</td></tr>`).join("")}</table></div>`;
+  $("#ocT").querySelectorAll("th[data-k]").forEach(h => h.onclick = () => { const k = h.dataset.k; OC.sort = OC.sort && OC.sort[0] === k ? [k, -OC.sort[1]] : [k, 1]; ocTable(); });
+}
+
 function renderRules() {
   const r = S.meta.rules, pct = v => Math.round(v * 100) + "%";
   $("#rulebook").innerHTML = `
