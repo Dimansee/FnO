@@ -80,10 +80,12 @@ def _history(sym: str, start: date):
     return c, (v["close"] if v is not None and len(v) else None)
 
 
-def _trades(sym, candles, vix, otm, ov, big_run):
+def _trades(sym, candles, vix, otm, ov, big_run, max_loss=0):
     B.EXIT.clear()
     B.EXIT.update(ov)
     B.EXIT["big_run_skip"] = bool(big_run)
+    if max_loss:
+        B.EXIT["max_loss_lot"] = float(max_loss)
     try:
         r = B.run(sym, capital=1e9, candles=candles, vix_intraday=vix, lot=D.lot_size(sym), sizing="one_lot",
                   strategy="autopilot", otm=otm, live_rules=False)
@@ -144,7 +146,7 @@ def replay(T: pd.DataFrame, capital: float, sizing: str, risk_pct: float, lots_f
             if sizing == "fixed":
                 lots = int(lots_fixed)
             else:
-                rl = max(float(r.risk_lot), 1.0)
+                rl = max(float(getattr(r, "risk_lot_capped", r.risk_lot) or r.risk_lot), 1.0)
                 lots = int(acct * risk_pct / 100 * m // rl)
                 if lots == 0:
                     if rl <= C.AUTOPILOT_MAX_TRADE_RISK * max(eq, 1):
@@ -266,6 +268,9 @@ def _validate(p: dict) -> dict:
     out["compare"] = bool(p.get("compare", True)) and out["exit"] != "current"
     out["gates"] = bool(p.get("gates", True))
     out["dd_half"] = bool(p.get("dd_half", True))
+    out["max_loss_lot"] = int(p.get("max_loss_lot") or 0)
+    if not 0 <= out["max_loss_lot"] <= 100000:
+        raise ValueError("Max loss per lot must be 0 (off) - Rs 1,00,000.")
     out["max_lots"] = int(p.get("max_lots") or 0)
     if not 0 <= out["max_lots"] <= 5000:
         raise ValueError("Max lots must be 0 (no cap) - 5000.")
@@ -383,7 +388,7 @@ def _run(jid, p):
                 for e in runs:
                     _check(jid)
                     _set(jid, progress=f"simulating {sym} · {EXITS[e]['label']}")
-                    T = _trades(sym, c, v, p["otm"], EXITS[e]["ov"], p["big_run_skip"])
+                    T = _trades(sym, c, v, p["otm"], EXITS[e]["ov"], p["big_run_skip"], p["max_loss_lot"])
                     if T.empty:
                         continue
                     T = T[(T.date >= p["start"].isoformat()) & (T.date <= p["end"].isoformat())]

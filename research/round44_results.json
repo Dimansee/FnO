@@ -1,0 +1,542 @@
+{
+ "current stop (no cap)": {
+  "per_lot_1ITM": {
+   "n": 2150,
+   "train": 475859,
+   "y2026": 127554,
+   "win": 31.1,
+   "avg_loss": -1241,
+   "worst": -5501,
+   "capped": 0,
+   "by_sym": {
+    "BANKNIFTY": 68430,
+    "NIFTY": 359100,
+    "SENSEX": 175883
+   },
+   "by_strategy": {
+    "Camarilla": 155828,
+    "Fibonacci 0.618": 212975,
+    "Noise band": 92995,
+    "Trend-day": 141615
+   }
+  },
+  "per_lot_1OTM": {
+   "n": 2150,
+   "train": 433265,
+   "y2026": 107155,
+   "win": 31.1,
+   "avg_loss": -1056,
+   "worst": -4884,
+   "capped": 0,
+   "by_sym": {
+    "BANKNIFTY": 54417,
+    "NIFTY": 307757,
+    "SENSEX": 178246
+   },
+   "by_strategy": {
+    "Camarilla": 132849,
+    "Fibonacci 0.618": 196752,
+    "Noise band": 83692,
+    "Trend-day": 127127
+   }
+  },
+  "account_200000": {
+   "final": 3260111,
+   "dd_pct": -28.6,
+   "trades": 1921,
+   "worst_trade": -36775,
+   "year_end": {
+    "2023": 260881,
+    "2024": 765068,
+    "2025": 1348317,
+    "2026": 3260111
+   }
+  },
+  "fixed1lot_200000": {
+   "final": 700731,
+   "dd_pct": -33.6,
+   "trades": 2075,
+   "worst_trade": -5567,
+   "year_end": {
+    "2023": 206418,
+    "2024": 438069,
+    "2025": 586599,
+    "2026": 700731
+   }
+  },
+  "account_200000_from_2026": {
+   "final": 457190,
+   "dd_pct": -19.1,
+   "trades": 387,
+   "worst_trade": -5084,
+   "year_end": {
+    "2026": 457190
+   }
+  },
+  "account_20000": {
+   "final": 494616,
+   "dd_pct": -69.3,
+   "trades": 1475,
+   "worst_trade": -6381,
+   "year_end": {
+    "2023": 26037,
+    "2024": 172665,
+    "2025": 243209,
+    "2026": 494616
+   }
+  },
+  "fixed1lot_20000": {
+   "final": 386033,
+   "dd_pct": -67.7,
+   "trades": 1544,
+   "worst_trade": -4972,
+   "year_end": {
+    "2023": 32873,
+    "2024": 173862,
+    "2025": 240198,
+    "2026": 386033
+   }
+  },
+  "account_20000_from_2026": {
+   "final": 94525,
+   "dd_pct": -47.6,
+   "trades": 255,
+   "worst_trade": -4388,
+   "year_end": {
+    "2026": 94525
+   }
+  }
+ },
+ "cap Rs 1,500 per lot": {
+  "per_lot_1ITM": {
+   "n": 2167,
+   "train": 440842,
+   "y2026": 104987,
+   "win": 28.6,
+   "avg_loss": -1130,
+   "worst": -3142,
+   "capped": 635,
+   "by_sym": {
+    "BANKNIFTY": 59724,
+    "NIFTY": 336723,
+    "SENSEX": 149382
+   },
+   "by_strategy": {
+    "Camarilla": 151676,
+    "Fibonacci 0.618": 188733,
+    "Noise band": 64902,
+    "Trend-day": 140518
+   }
+  },
+  "per_lot_1OTM": {
+   "n": 2162,
+   "train": 412777,
+   "y2026": 107216,
+   "win": 29.5,
+   "avg_loss": -987,
+   "worst": -3121,
+   "capped": 442,
+   "by_sym": {
+    "BANKNIFTY": 44777,
+    "NIFTY": 302386,
+    "SENSEX": 172830
+   },
+   "by_strategy": {
+    "Camarilla": 149040,
+    "Fibonacci 0.618": 168984,
+    "Noise band": 62700,
+    "Trend-day": 139269
+   }
+  },
+  "account_200000": {
+   "final": 3224809,
+   "dd_pct": -32.9,
+   "trades": 1891,
+   "worst_trade": -50542,
+   "year_end": {
+    "2023": 257741,
+    "2024": 769268,
+    "2025": 1626871,
+    "2026": 3224809
+   }
+  },
+  "fixed1lot_200000": {
+   "final": 655350,
+   "dd_pct": -26.3,
+   "trades": 2106,
+   "worst_trade": -3278,
+   "year_end": {
+    "2023": 231888,
+    "2024": 422689,
+    "2025": 563965,
+    "2026": 655350
+   }
+  },
+  "account_200000_from_2026": {
+   "final": 439595,
+   "dd_pct": -21.8,
+   "trades": 380,
+   "worst_trade": -5436,
+   "year_end": {
+    "2026": 439595
+   }
+  },
+  "account_20000": {
+   "final": 428906,
+   "dd_pct": -60.9,
+   "trades": 1500,
+   "worst_trade": -5177,
+   "year_end": {
+    "2023": 40395,
+    "2024": 164820,
+    "2025": 194915,
+    "2026": 428906
+   }
+  },
+  "fixed1lot_20000": {
+   "final": 348758,
+   "dd_pct": -60.9,
+   "trades": 1593,
+   "worst_trade": -3278,
+   "year_end": {
+    "2023": 40395,
+    "2024": 165313,
+    "2025": 232710,
+    "2026": 348758
+   }
+  },
+  "account_20000_from_2026": {
+   "final": 70924,
+   "dd_pct": -64.6,
+   "trades": 257,
+   "worst_trade": -2284,
+   "year_end": {
+    "2026": 70924
+   }
+  }
+ },
+ "cap Rs 2,200 per lot": {
+  "per_lot_1ITM": {
+   "n": 2154,
+   "train": 471347,
+   "y2026": 122513,
+   "win": 30.5,
+   "avg_loss": -1209,
+   "worst": -3703,
+   "capped": 237,
+   "by_sym": {
+    "BANKNIFTY": 65451,
+    "NIFTY": 364050,
+    "SENSEX": 164359
+   },
+   "by_strategy": {
+    "Camarilla": 171137,
+    "Fibonacci 0.618": 190512,
+    "Noise band": 79070,
+    "Trend-day": 153141
+   }
+  },
+  "per_lot_1OTM": {
+   "n": 2152,
+   "train": 448062,
+   "y2026": 95457,
+   "win": 30.8,
+   "avg_loss": -1038,
+   "worst": -3536,
+   "capped": 133,
+   "by_sym": {
+    "BANKNIFTY": 51458,
+    "NIFTY": 308122,
+    "SENSEX": 183939
+   },
+   "by_strategy": {
+    "Camarilla": 145627,
+    "Fibonacci 0.618": 201261,
+    "Noise band": 69829,
+    "Trend-day": 126802
+   }
+  },
+  "account_200000": {
+   "final": 2891939,
+   "dd_pct": -27.4,
+   "trades": 1907,
+   "worst_trade": -42738,
+   "year_end": {
+    "2023": 265342,
+    "2024": 728098,
+    "2025": 1281328,
+    "2026": 2891939
+   }
+  },
+  "fixed1lot_200000": {
+   "final": 691924,
+   "dd_pct": -32.3,
+   "trades": 2078,
+   "worst_trade": -3711,
+   "year_end": {
+    "2023": 209942,
+    "2024": 424452,
+    "2025": 582891,
+    "2026": 691924
+   }
+  },
+  "account_200000_from_2026": {
+   "final": 436576,
+   "dd_pct": -19.6,
+   "trades": 386,
+   "worst_trade": -5247,
+   "year_end": {
+    "2026": 436576
+   }
+  },
+  "account_20000": {
+   "final": 643392,
+   "dd_pct": -71.8,
+   "trades": 1573,
+   "worst_trade": -8129,
+   "year_end": {
+    "2023": 28759,
+    "2024": 177420,
+    "2025": 346471,
+    "2026": 643392
+   }
+  },
+  "fixed1lot_20000": {
+   "final": 464985,
+   "dd_pct": -71.8,
+   "trades": 1622,
+   "worst_trade": -3711,
+   "year_end": {
+    "2023": 28759,
+    "2024": 177044,
+    "2025": 345417,
+    "2026": 464985
+   }
+  },
+  "account_20000_from_2026": {
+   "final": 65715,
+   "dd_pct": -58.6,
+   "trades": 250,
+   "worst_trade": -2982,
+   "year_end": {
+    "2026": 65715
+   }
+  }
+ },
+ "cap Rs 3,000 per lot": {
+  "per_lot_1ITM": {
+   "n": 2150,
+   "train": 489625,
+   "y2026": 130368,
+   "win": 31.1,
+   "avg_loss": -1229,
+   "worst": -4296,
+   "capped": 57,
+   "by_sym": {
+    "BANKNIFTY": 84083,
+    "NIFTY": 362326,
+    "SENSEX": 173584
+   },
+   "by_strategy": {
+    "Camarilla": 169916,
+    "Fibonacci 0.618": 215553,
+    "Noise band": 94719,
+    "Trend-day": 139805
+   }
+  },
+  "per_lot_1OTM": {
+   "n": 2150,
+   "train": 438951,
+   "y2026": 108769,
+   "win": 31.1,
+   "avg_loss": -1051,
+   "worst": -3842,
+   "capped": 26,
+   "by_sym": {
+    "BANKNIFTY": 64299,
+    "NIFTY": 308864,
+    "SENSEX": 174557
+   },
+   "by_strategy": {
+    "Camarilla": 142008,
+    "Fibonacci 0.618": 196494,
+    "Noise band": 84415,
+    "Trend-day": 124803
+   }
+  },
+  "account_200000": {
+   "final": 2653443,
+   "dd_pct": -28.2,
+   "trades": 1920,
+   "worst_trade": -31415,
+   "year_end": {
+    "2023": 262205,
+    "2024": 715899,
+    "2025": 1173263,
+    "2026": 2653443
+   }
+  },
+  "fixed1lot_200000": {
+   "final": 724296,
+   "dd_pct": -33.1,
+   "trades": 2081,
+   "worst_trade": -4304,
+   "year_end": {
+    "2023": 207742,
+    "2024": 452608,
+    "2025": 607360,
+    "2026": 724296
+   }
+  },
+  "account_200000_from_2026": {
+   "final": 455964,
+   "dd_pct": -19.1,
+   "trades": 387,
+   "worst_trade": -5084,
+   "year_end": {
+    "2026": 455964
+   }
+  },
+  "account_20000": {
+   "final": 664424,
+   "dd_pct": -67.9,
+   "trades": 1584,
+   "worst_trade": -8129,
+   "year_end": {
+    "2023": 34919,
+    "2024": 182750,
+    "2025": 345775,
+    "2026": 664424
+   }
+  },
+  "fixed1lot_20000": {
+   "final": 476324,
+   "dd_pct": -67.9,
+   "trades": 1631,
+   "worst_trade": -4304,
+   "year_end": {
+    "2023": 34919,
+    "2024": 180519,
+    "2025": 344616,
+    "2026": 476324
+   }
+  },
+  "account_20000_from_2026": {
+   "final": 96167,
+   "dd_pct": -48.1,
+   "trades": 256,
+   "worst_trade": -3632,
+   "year_end": {
+    "2026": 96167
+   }
+  }
+ },
+ "skip trades risking > Rs 2,200 per lot": {
+  "per_lot_1ITM": {
+   "n": 1621,
+   "train": 263449,
+   "y2026": 138503,
+   "win": 29.9,
+   "avg_loss": -1087,
+   "worst": -2955,
+   "capped": 0,
+   "by_sym": {
+    "BANKNIFTY": 35833,
+    "NIFTY": 216638,
+    "SENSEX": 149481
+   },
+   "by_strategy": {
+    "Camarilla": 90365,
+    "Fibonacci 0.618": 150914,
+    "Noise band": 73736,
+    "Trend-day": 86937
+   }
+  },
+  "per_lot_1OTM": {
+   "n": 1857,
+   "train": 418864,
+   "y2026": 157185,
+   "win": 30.8,
+   "avg_loss": -947,
+   "worst": -3536,
+   "capped": 0,
+   "by_sym": {
+    "BANKNIFTY": 38654,
+    "NIFTY": 347543,
+    "SENSEX": 189852
+   },
+   "by_strategy": {
+    "Camarilla": 129288,
+    "Fibonacci 0.618": 253307,
+    "Noise band": 104040,
+    "Trend-day": 89414
+   }
+  },
+  "account_200000": {
+   "final": 1265273,
+   "dd_pct": -25.6,
+   "trades": 1461,
+   "worst_trade": -16270,
+   "year_end": {
+    "2023": 279948,
+    "2024": 580719,
+    "2025": 662288,
+    "2026": 1265273
+   }
+  },
+  "fixed1lot_200000": {
+   "final": 564026,
+   "dd_pct": -26.7,
+   "trades": 1562,
+   "worst_trade": -2963,
+   "year_end": {
+    "2023": 205843,
+    "2024": 385240,
+    "2025": 432370,
+    "2026": 564026
+   }
+  },
+  "account_200000_from_2026": {
+   "final": 374030,
+   "dd_pct": -20.0,
+   "trades": 283,
+   "worst_trade": -4392,
+   "year_end": {
+    "2026": 374030
+   }
+  },
+  "account_20000": {
+   "final": 384030,
+   "dd_pct": -60.0,
+   "trades": 1050,
+   "worst_trade": -4392,
+   "year_end": {
+    "2023": 29944,
+    "2024": 145949,
+    "2025": 189649,
+    "2026": 384030
+   }
+  },
+  "fixed1lot_20000": {
+   "final": 270171,
+   "dd_pct": -60.0,
+   "trades": 1046,
+   "worst_trade": -2943,
+   "year_end": {
+    "2023": 29944,
+    "2024": 143231,
+    "2025": 181459,
+    "2026": 270171
+   }
+  },
+  "account_20000_from_2026": {
+   "final": 28400,
+   "dd_pct": -51.9,
+   "trades": 142,
+   "worst_trade": -2843,
+   "year_end": {
+    "2026": 28400
+   }
+  }
+ }
+}

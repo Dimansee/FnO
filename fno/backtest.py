@@ -36,6 +36,8 @@ from . import pricing as PR
 #   partials:    T1/T2/T3 booking on top of the exits above, [(reach_R, fraction), ...]; the rest follows the normal exits
 #   be_after_t1: move the stop to entry once T1 is booked
 #   lots_x:      multiply the lot count (research: partial booking needs 2-3 lots)
+#   max_loss_lot: rupee cap on the loss per lot (round 44): the stop is pulled in to the index level where the option has
+#                lost this much; ("skip_over", x) instead skips trades whose normal stop would lose more than x per lot
 #   rev_exit:    close the rest early on a reversal once the trade has been in profit by rev_after_R:
 #                "ema9" (5-min close back across its 9-EMA), "vwap" (5-min close back across VWAP), "give50" (half of the
 #                best open move given back), "candle" (a strong opposite 5-min candle: body >= 60% of range, range >= 0.5 ATR)
@@ -95,6 +97,27 @@ def _reversal(kind, sign, spot, risk, c, ema9, best_r):
         body = sign * (cl - float(c["open"]))
         return rng > 0 and body <= -0.6 * rng and rng >= 0.5 * float(c["atr"])
     return False
+
+
+def _cap_stop(sign, spot, sl, p_in, lot, prem_at):
+    """Round 44: index stop where the option has lost max_loss_lot rupees per lot (never wider than the rule's stop).
+    Returns (stop, capped?, skip?)."""
+    cap = _ex("max_loss_lot", None)
+    if not cap:
+        return sl, False, False
+    if isinstance(cap, (tuple, list)):
+        return sl, False, (p_in - prem_at(sl)) * lot > float(cap[1])
+    want = p_in - float(cap) / lot                   # option price at which the loss per lot equals the cap
+    if prem_at(sl) >= want:
+        return sl, False, False                      # the rule's stop already loses less than the cap
+    lo, hi = 0.0, abs(spot - sl)                     # bisection on the index distance
+    for _ in range(40):
+        mid = (lo + hi) / 2
+        if prem_at(spot - sign * mid) >= want:
+            lo = mid
+        else:
+            hi = mid
+    return spot - sign * lo, True, False
 
 
 def _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock):
@@ -186,7 +209,7 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
     frames = [(d, g) for d, g in df.groupby(df.index.date)]
     trade_from = frames[-days][0] if days and days < len(frames) else None
     trades, equity = [], capital
-    skips = {"risk": 0, "cash": 0}
+    skips = {"risk": 0, "cash": 0, "loss_cap": 0}
     if strategy == "ai":
         return _run_ai(symbol, meta, candles, vix_intraday, vix_daily, lot, capital, sizing, otm, days, risk_pct, frames,
                        trade_from, source, skips)
@@ -510,7 +533,10 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
             lots = min(lots, int(capital // cost))
         lots *= int(_ex("lots_x", 1))
         reason, x_spot, x_ts = None, None, None
-        live_sl, reached, best_r, booked, rest = sl, False, 0.0, [], 1.0
+        sl_c, capped, skip_c = _cap_stop(sign, spot, sl, p_in, lot, lambda x: prem(x, t_in, ts_in))
+        if skip_c:
+            return ("skip", entry_i, "loss_cap")
+        live_sl, reached, best_r, booked, rest = sl_c, False, 0.0, [], 1.0
         rev = _ex("rev_exit", None)
         ema9 = day["close"].ewm(span=9, adjust=False).mean() if rev == "ema9" else None
         be_r, be_lock = (_ex("be_r", C.CAM_BE_R), _ex("be_lock", 0.0)) if strat == "camarilla" else (_ex("noise_be_r", None), _ex("noise_be_lock", 0.0))
@@ -519,7 +545,7 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
             end = ts + timedelta(minutes=C.CANDLE_MIN)
             adverse, favour = (c["low"], c["high"]) if sign > 0 else (c["high"], c["low"])
             if sign * (adverse - live_sl) <= 0:
-                why = ("Breakeven stop" if live_sl == spot else "Profit-lock stop") if sign * (live_sl - spot) >= 0 else ("Stop-loss (2 ATR)" if strat == "noise" else "Stop-loss (H3/L3)")
+                why = ("Breakeven stop" if live_sl == spot else "Profit-lock stop") if sign * (live_sl - spot) >= 0 else ("Rs loss cap" if capped and live_sl == sl_c else "Stop-loss (2 ATR)" if strat == "noise" else "Stop-loss (H3/L3)")
                 reason, x_spot = why, (c["open"] if sign * (c["open"] - live_sl) < 0 else live_sl)
             elif tgt is not None and sign * (favour - tgt) >= 0:
                 reason, x_spot = f"Target {_ex('noise_rr', C.RR_NOISE):g}R", (c["open"] if sign * (c["open"] - tgt) > 0 else tgt)
@@ -567,6 +593,7 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
             "prem_in": round(p_in, 2), "prem_out": round(p_out, 2), "lots": lots, "pnl": round(pnl, 0),
             "reason": reason, "equity": round(equity, 0), "strategy": "Noise band" if strat == "noise" else "Camarilla",
             "risk_lot": round(risk_unit * lot, 0), "mfe_R": round(best_r, 2), "pieces": pieces,
+            "risk_lot_capped": round(min(risk_unit * lot, float(_ex("max_loss_lot", 0) or 1e12) if not isinstance(_ex("max_loss_lot", 0), (tuple, list)) else 1e12), 0),
         }
 
 
@@ -676,7 +703,10 @@ def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="ris
             return ("skip", entry_i, "risk")
         lots = min(lots, int(capital // cost))
     lots *= int(_ex("lots_x", 1))
-    live_sl, reason, x_spot, x_ts, x_bar, best_r = sl, None, None, None, None, 0.0
+    sl_c, capped, skip_c = _cap_stop(sign, spot, sl, p_in, lot, lambda x: prem(x, t_in, ts_in))
+    if skip_c:
+        return ("skip", entry_i, "loss_cap")
+    live_sl, reason, x_spot, x_ts, x_bar, best_r = sl_c, None, None, None, None, 0.0
     booked, rest = [], 1.0
     rev = _ex("rev_exit", None)
     ema9 = day["close"].ewm(span=9, adjust=False).mean() if rev == "ema9" else None
@@ -686,7 +716,7 @@ def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="ris
         end = ts + timedelta(minutes=C.CANDLE_MIN)
         adverse, favour = (c["low"], c["high"]) if sign > 0 else (c["high"], c["low"])
         if sign * (adverse - live_sl) <= 0:
-            reason = ("Breakeven stop" if live_sl == spot else "Profit-lock stop") if sign * (live_sl - spot) >= 0 else "Stop-loss (VWAP)"
+            reason = ("Breakeven stop" if live_sl == spot else "Profit-lock stop") if sign * (live_sl - spot) >= 0 else ("Rs loss cap" if capped and live_sl == sl_c else "Stop-loss (VWAP)")
             x_spot = c["open"] if sign * (c["open"] - live_sl) < 0 else live_sl
         else:
             best_r = max(best_r, sign * (favour - spot) / risk)
@@ -718,4 +748,5 @@ def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="ris
         "band": C.NOISE_MULT, "spot_in": round(spot, 1), "spot_out": round(float(x_spot), 1), "R": round(sign * (x_spot - spot) / risk, 2),
         "prem_in": round(p_in, 2), "prem_out": round(p_out, 2), "lots": lots, "pnl": round(pnl, 0),
         "reason": reason, "equity": 0, "strategy": "Trend-day", "risk_lot": round(risk_unit * lot, 0), "mfe_R": round(best_r, 2), "pieces": pieces,
+        "risk_lot_capped": round(min(risk_unit * lot, float(_ex("max_loss_lot", 0) or 1e12) if not isinstance(_ex("max_loss_lot", 0), (tuple, list)) else 1e12), 0),
     }
