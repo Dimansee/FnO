@@ -61,6 +61,8 @@ def generate(p: dict, index: str, exit_ov: dict, exit_label: str, lot: int | Non
         "TREND_EQ": str(int(C.TREND_MIN_EQUITY)), "FIB_EQ": str(int(C.FIB_MIN_EQUITY)),
         "BUDGET": budget, "EXIT_LABEL": exit_label.replace('"', "'"), "DATE": date.today().isoformat(),
         "OTM": {-1: "1 strike ITM", 0: "ATM", 1: "1 strike OTM", 2: "2 strikes OTM"}.get(int(p.get("otm", -1)), "1 strike ITM"),
+        "STEP": str({"NIFTY": 50, "BANKNIFTY": 100, "SENSEX": 100}[index]), "OTMN": str(int(p.get("otm", -1))),
+        "EXPIRY": "monthly expiry" if index == "BANKNIFTY" else "nearest weekly expiry",
         "DELTA": _f({-1: 0.6, 0: 0.5, 1: 0.4, 2: 0.3}.get(int(p.get("otm", -1)), 0.55)),
     }
     code = TEMPLATE
@@ -130,9 +132,12 @@ beAfterT1 = input.bool({{BE_T1}}, "Stop to entry after T1", group=grpX)
 revExit   = input.string("{{REV}}", "Reversal exit", options=["none", "ema9", "vwap", "give50", "candle"], group=grpX)
 revAfterR = input.float({{REV_R}}, "...only once the trade has been in profit by (R)", group=grpX)
 showLv    = input.bool(true, "Show bands / levels", group="Display")
+showTrade = input.bool(true, "Show trade boxes (option, entry, SL, targets)", group="Display")
+strikeStep = input.int({{STEP}}, "Strike step", group="Option")
+otmSteps  = input.int({{OTMN}}, "Strike: -1 = 1 ITM, 0 = ATM, 1 = 1 OTM", minval=-3, maxval=3, group="Option")
 
 if timeframe.period != "5"
-    runtime.error("Use a 5-minute chart (the rules are built on 5-minute candles).")
+    runtime.error("Switch the chart to 5 minutes (timeframe button at the top: choose 5m). The rules are built on 5-minute candles.")
 
 // ------------------------------------------------------------------ clock and session state
 tz = "Asia/Kolkata"
@@ -295,6 +300,61 @@ var float[] bestA = array.from(0.0, 0.0, 0.0, 0.0)
 var float[] qtyA = array.from(0.0, 0.0, 0.0, 0.0)
 var int[] inEnd = array.from(0, 0, 0, 0)
 var bool[] halfR = array.from(false, false, false, false)
+var line[] lnE = array.from(line(na), line(na), line(na), line(na))
+var line[] lnS = array.from(line(na), line(na), line(na), line(na))
+var line[] lnT = array.new_line(12)
+var bool[] marks = array.from(false, false)        // [entry on this bar, exit on this bar]
+array.set(marks, 0, false)
+array.set(marks, 1, false)
+
+// draw / extend / finish the lines of a slot
+drawTrade(int s, int sd, float riskPts, int lots, string nm) =>
+    e = close
+    stp = e - sd * riskPts
+    k0 = math.round(e / strikeStep) * strikeStep + sd * otmSteps * strikeStep
+    opt = sd > 0 ? "CE" : "PE"
+    pSL = optDelta * riskPts
+    float tgt = s == 0 and noiseRR > 0 ? e + sd * noiseRR * riskPts : na
+    txt = nm + ": BUY {{INDEX}} " + str.tostring(k0, "#") + " " + opt + " ({{EXPIRY}})\n" + str.tostring(lots) + " lot" + (lots > 1 ? "s" : "") + " · index entry " + str.tostring(e, "#.#") + "\nSL: index " + str.tostring(stp, "#.#") + " (option ≈ premium − ₹" + str.tostring(pSL, "#") + ")"
+    if s == 0
+        txt += "\nTarget: index " + (na(tgt) ? "none" : str.tostring(tgt, "#.#")) + "\nTrail: exit when a :15/:45 candle closes back inside the band / across VWAP"
+    else
+        txt += "\nStop to entry at " + str.tostring(e + sd * beR * riskPts, "#.#") + " (+" + str.tostring(beR) + "R)" + (s == 1 or s == 3 ? "\nTime stop: out after 45 min if not +0.5R" : "") + "\nNo fixed target - holds to 15:15"
+    for j = 0 to 2
+        tr0 = j == 0 ? t1R : j == 1 ? t2R : t3R
+        if tr0 > 0
+            txt += "\nT" + str.tostring(j + 1) + ": index " + str.tostring(e + sd * tr0 * riskPts, "#.#")
+            array.set(lnT, s * 3 + j, line.new(bar_index, e + sd * tr0 * riskPts, bar_index + 1, e + sd * tr0 * riskPts, color=color.new(color.green, 20), style=line.style_dashed))
+    if not na(tgt) and t1R <= 0
+        array.set(lnT, s * 3, line.new(bar_index, tgt, bar_index + 1, tgt, color=color.new(color.green, 0), width=2))
+    array.set(lnE, s, line.new(bar_index, e, bar_index + 1, e, color=color.new(color.gray, 0), style=line.style_dotted))
+    array.set(lnS, s, line.new(bar_index, stp, bar_index + 1, stp, color=color.new(color.red, 0), width=2))
+    label.new(bar_index, sd > 0 ? low : high, txt, style=sd > 0 ? label.style_label_up : label.style_label_down, color=sd > 0 ? color.new(color.green, 10) : color.new(color.red, 10), textcolor=color.white, size=size.small)
+    true
+
+extendTrade(int s, float sl) =>
+    le = array.get(lnE, s)
+    if not na(le)
+        line.set_x2(le, bar_index)
+        ls = array.get(lnS, s)
+        line.set_x2(ls, bar_index)
+        line.set_y1(ls, sl)
+        line.set_y2(ls, sl)
+        for j = 0 to 2
+            lt = array.get(lnT, s * 3 + j)
+            if not na(lt)
+                line.set_x2(lt, bar_index)
+    true
+
+finishTrade(int s, string why) =>
+    if not na(array.get(lnE, s))
+        sd = array.get(sideA, s)
+        label.new(bar_index, sd > 0 ? high : low, "EXIT " + array.get(ids, s) + ": " + why + "\nindex " + str.tostring(close, "#.#"), style=sd > 0 ? label.style_label_down : label.style_label_up, color=color.new(color.gray, 10), textcolor=color.white, size=size.tiny)
+    array.set(lnE, s, line(na))
+    array.set(lnS, s, line(na))
+    for j = 0 to 2
+        array.set(lnT, s * 3 + j, line(na))
+    true
 if newDay
     for s = 0 to 3
         array.set(doneToday, s, false)
@@ -334,6 +394,9 @@ placeExits(int s, float qOpen) =>
 
 closeSlot(int s, string why) =>
     strategy.close(array.get(ids, s), comment=why)
+    if showTrade
+        finishTrade(s, why)
+    array.set(marks, 1, true)
     array.set(isOpen, s, false)
     alert("{{INDEX}} " + array.get(ids, s) + " exit: " + why + " at " + str.tostring(close), alert.freq_once_per_bar_close)
     true
@@ -350,7 +413,7 @@ lotsFor(int sd, float riskPts) =>
     lots
 
 // 1 = entered, 0 = skipped (signal used up), -1 = size rounds to zero (keep looking, as the app does)
-tryEnter(int s, int sd, float riskPts, string label) =>
+tryEnter(int s, int sd, float riskPts, string nm) =>
     bool ok = true
     netSide = strategy.position_size > 0 ? 1 : strategy.position_size < 0 ? -1 : 0
     if netSide != 0 and netSide != sd
@@ -370,9 +433,12 @@ tryEnter(int s, int sd, float riskPts, string label) =>
         array.set(qtyA, s, q)
         array.set(inEnd, s, endMod)
         array.set(halfR, s, false)
-        strategy.entry(id, sd > 0 ? strategy.long : strategy.short, qty=q, comment=label + " " + str.tostring(lots) + " lot" + (lots > 1 ? "s" : ""))
+        strategy.entry(id, sd > 0 ? strategy.long : strategy.short, qty=q, comment=nm + " " + str.tostring(lots) + " lot" + (lots > 1 ? "s" : ""))
         placeExits(s, q)
-        alert("{{INDEX}} " + label + (sd > 0 ? " BUY CALL" : " BUY PUT") + " at " + str.tostring(close) + ", stop " + str.tostring(close - sd * riskPts) + ", " + str.tostring(lots) + " lots", alert.freq_once_per_bar_close)
+        if showTrade
+            drawTrade(s, sd, riskPts, lots, nm)
+        array.set(marks, 0, true)
+        alert("{{INDEX}} " + nm + (sd > 0 ? " BUY CALL" : " BUY PUT") + " at " + str.tostring(close) + ", stop " + str.tostring(close - sd * riskPts) + ", " + str.tostring(lots) + " lots", alert.freq_once_per_bar_close)
     ok and lots > 0 ? 1 : ok ? -1 : 0
 
 ema9 = ta.ema(close, 9)
@@ -384,6 +450,9 @@ for s = 0 to 3
         q = openQty(id)
         if q <= 0
             array.set(isOpen, s, false)
+            if showTrade
+                finishTrade(s, "stop / target hit")
+            array.set(marks, 1, true)
         else if endMod > array.get(inEnd, s)
             sd = array.get(sideA, s)
             e = array.get(entA, s)
@@ -407,6 +476,8 @@ for s = 0 to 3
             if sl != array.get(slA, s)
                 array.set(slA, s, sl)
                 placeExits(s, q)
+            if showTrade
+                extendTrade(s, sl)
             if best >= 0.5
                 array.set(halfR, s, true)
             string why = na
@@ -479,6 +550,7 @@ plot(showLv and useCam ? camH4 : na, "Camarilla H4", color.new(color.green, 50),
 plot(showLv and useCam ? camL4 : na, "Camarilla L4", color.new(color.red, 50), style=plot.style_stepline)
 plot(showLv and useFib ? fibH4 : na, "Fib +0.618", color.new(color.lime, 60), style=plot.style_stepline)
 plot(showLv and useFib ? fibL4 : na, "Fib -0.618", color.new(color.maroon, 60), style=plot.style_stepline)
+bgcolor(showTrade and array.get(marks, 0) ? color.new(color.blue, 80) : showTrade and array.get(marks, 1) ? color.new(color.gray, 85) : na, title="Entry / exit bars")
 var table info = table.new(position.top_right, 2, 6, bgcolor=color.new(color.black, 20), border_width=1)
 if barstate.islast
     runTxt = na(runMove) or na(runATR) ? "-" : str.tostring(runMove, "#") + " pts (" + str.tostring(math.abs(runMove) / runATR, "#.0") + "x ATR)"
