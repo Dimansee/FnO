@@ -182,6 +182,15 @@ def equity(acct, trades) -> float:
     return float(acct["capital_start"]) + sum(h["pnl"] for h in trades)
 
 
+def peak_equity(acct, trades) -> float:
+    """Highest realised account value so far (trades in closing order)."""
+    eq = pk = float(acct["capital_start"])
+    for h in sorted(trades, key=lambda x: x.get("closed") or ""):
+        eq += h["pnl"]
+        pk = max(pk, eq)
+    return pk
+
+
 def base(acct, trades) -> float:
     """The capital the risk limits and fixed sizing are measured on: the starting capital, or - when it is set to 0 to trade
     only the profit already made - the current equity (never 0, so a 2% limit is never 'any loss')."""

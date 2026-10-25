@@ -1,0 +1,623 @@
+{
+ "baseline": {
+  "per_lot": {
+   "train": 475859,
+   "y2026": 127554,
+   "n": 2150,
+   "by_sym_train": {
+    "BANKNIFTY": 53407,
+    "NIFTY": 247878,
+    "SENSEX": 174574
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": 15023,
+    "NIFTY": 111222,
+    "SENSEX": 1309
+   },
+   "years": {
+    "2023": 35543,
+    "2024": 274356,
+    "2025": 165960,
+    "2026": 127554
+   }
+  },
+  "account": {
+   "final": 2976705,
+   "dd": -30.3,
+   "trades": 1834
+  },
+  "from_2L_2023_25": {
+   "final": 1028688,
+   "dd": -30.3,
+   "trades": 1459
+  },
+  "from_2L_2026": {
+   "final": 462565,
+   "dd": -20.9,
+   "trades": 385
+  }
+ },
+ "filters": {
+  "bank: drop Bank Nifty": {
+   "per_lot": {
+    "train": 422452,
+    "y2026": 112531,
+    "n": 1715,
+    "by_sym_train": {
+     "NIFTY": 247878,
+     "SENSEX": 174574
+    },
+    "by_sym_2026": {
+     "NIFTY": 111222,
+     "SENSEX": 1309
+    },
+    "years": {
+     "2023": -4783,
+     "2024": 233229,
+     "2025": 194006,
+     "2026": 112531
+    }
+   },
+   "account": {
+    "final": 1750521,
+    "dd": -38.1,
+    "trades": 1542
+   },
+   "removed": 435,
+   "shuffle_p": 0.2013,
+   "both_better": false
+  },
+  "bank: Bank Nifty Camarilla only": {
+   "per_lot": {
+    "train": 493218,
+    "y2026": 110270,
+    "n": 2028,
+    "by_sym_train": {
+     "BANKNIFTY": 70766,
+     "NIFTY": 247878,
+     "SENSEX": 174574
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -2261,
+     "NIFTY": 111222,
+     "SENSEX": 1309
+    },
+    "years": {
+     "2023": 47046,
+     "2024": 273820,
+     "2025": 172352,
+     "2026": 110270
+    }
+   },
+   "account": {
+    "final": 2962225,
+    "dd": -33.6,
+    "trades": 1756
+   },
+   "removed": 122,
+   "shuffle_p": 0.0587,
+   "both_better": false
+  },
+  "bank: Bank Nifty Noise only": {
+   "per_lot": {
+    "train": 405093,
+    "y2026": 129815,
+    "n": 1837,
+    "by_sym_train": {
+     "BANKNIFTY": -17359,
+     "NIFTY": 247878,
+     "SENSEX": 174574
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 17284,
+     "NIFTY": 111222,
+     "SENSEX": 1309
+    },
+    "years": {
+     "2023": -16286,
+     "2024": 233765,
+     "2025": 187614,
+     "2026": 129815
+    }
+   },
+   "account": {
+    "final": 1744989,
+    "dd": -35.5,
+    "trades": 1621
+   },
+   "removed": 313,
+   "shuffle_p": 0.522,
+   "both_better": false
+  },
+  "time: no entries after 13:30": {
+   "per_lot": {
+    "train": 443019,
+    "y2026": 112955,
+    "n": 2049,
+    "by_sym_train": {
+     "BANKNIFTY": 54140,
+     "NIFTY": 221845,
+     "SENSEX": 167034
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 14356,
+     "NIFTY": 107840,
+     "SENSEX": -9241
+    },
+    "years": {
+     "2023": 19536,
+     "2024": 261479,
+     "2025": 162004,
+     "2026": 112955
+    }
+   },
+   "account": {
+    "final": 2276346,
+    "dd": -40.0,
+    "trades": 1764
+   },
+   "removed": 101,
+   "shuffle_p": 0.6723,
+   "both_better": false
+  },
+  "time: no entries after 12:30": {
+   "per_lot": {
+    "train": 390924,
+    "y2026": 107742,
+    "n": 1894,
+    "by_sym_train": {
+     "BANKNIFTY": 39540,
+     "NIFTY": 182043,
+     "SENSEX": 169341
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 17242,
+     "NIFTY": 100102,
+     "SENSEX": -9602
+    },
+    "years": {
+     "2023": -4500,
+     "2024": 221109,
+     "2025": 174315,
+     "2026": 107742
+    }
+   },
+   "account": {
+    "final": 1686523,
+    "dd": -46.0,
+    "trades": 1667
+   },
+   "removed": 256,
+   "shuffle_p": 0.7425,
+   "both_better": false
+  },
+  "time: no entries before 09:30": {
+   "per_lot": {
+    "train": 430123,
+    "y2026": 101627,
+    "n": 2042,
+    "by_sym_train": {
+     "BANKNIFTY": 42293,
+     "NIFTY": 215590,
+     "SENSEX": 172240
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 19935,
+     "NIFTY": 82558,
+     "SENSEX": -866
+    },
+    "years": {
+     "2023": 36660,
+     "2024": 240181,
+     "2025": 153282,
+     "2026": 101627
+    }
+   },
+   "account": {
+    "final": 2436745,
+    "dd": -28.9,
+    "trades": 1754
+   },
+   "removed": 108,
+   "shuffle_p": 0.8067,
+   "both_better": false
+  },
+  "gap: skip |gap| > 0.8%": {
+   "per_lot": {
+    "train": 410811,
+    "y2026": 139946,
+    "n": 2075,
+    "by_sym_train": {
+     "BANKNIFTY": 26058,
+     "NIFTY": 226079,
+     "SENSEX": 158674
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 14844,
+     "NIFTY": 114570,
+     "SENSEX": 10532
+    },
+    "years": {
+     "2023": 27689,
+     "2024": 270282,
+     "2025": 112840,
+     "2026": 139946
+    }
+   },
+   "account": {
+    "final": 2670580,
+    "dd": -32.5,
+    "trades": 1775
+   },
+   "removed": 75,
+   "shuffle_p": 0.9835,
+   "both_better": false
+  },
+  "gap: only trade the gap's direction": {
+   "per_lot": {
+    "train": 335310,
+    "y2026": 91043,
+    "n": 1759,
+    "by_sym_train": {
+     "BANKNIFTY": 47751,
+     "NIFTY": 167067,
+     "SENSEX": 120492
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 9763,
+     "NIFTY": 86473,
+     "SENSEX": -5193
+    },
+    "years": {
+     "2023": 33193,
+     "2024": 132759,
+     "2025": 169358,
+     "2026": 91043
+    }
+   },
+   "account": {
+    "final": 1292459,
+    "dd": -30.5,
+    "trades": 1577
+   },
+   "removed": 391,
+   "shuffle_p": 0.8195,
+   "both_better": false
+  },
+  "vix: skip VIX < 12": {
+   "per_lot": {
+    "train": 393607,
+    "y2026": 164743,
+    "n": 1684,
+    "by_sym_train": {
+     "BANKNIFTY": 25695,
+     "NIFTY": 223015,
+     "SENSEX": 144897
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 33472,
+     "NIFTY": 114979,
+     "SENSEX": 16292
+    },
+    "years": {
+     "2023": 17838,
+     "2024": 272302,
+     "2025": 103467,
+     "2026": 164743
+    }
+   },
+   "account": {
+    "final": 2662228,
+    "dd": -39.7,
+    "trades": 1487
+   },
+   "removed": 466,
+   "shuffle_p": 0.358,
+   "both_better": false
+  },
+  "vix: skip VIX > 16": {
+   "per_lot": {
+    "train": 457949,
+    "y2026": 95142,
+    "n": 1865,
+    "by_sym_train": {
+     "BANKNIFTY": 77365,
+     "NIFTY": 227248,
+     "SENSEX": 153336
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 536,
+     "NIFTY": 89665,
+     "SENSEX": 4941
+    },
+    "years": {
+     "2023": 47308,
+     "2024": 223300,
+     "2025": 187341,
+     "2026": 95142
+    }
+   },
+   "account": {
+    "final": 1731472,
+    "dd": -31.9,
+    "trades": 1585
+   },
+   "removed": 285,
+   "shuffle_p": 0.1975,
+   "both_better": false
+  },
+  "weekday: skip Mondays": {
+   "per_lot": {
+    "train": 343185,
+    "y2026": 170907,
+    "n": 1708,
+    "by_sym_train": {
+     "BANKNIFTY": 46670,
+     "NIFTY": 172096,
+     "SENSEX": 124419
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 29239,
+     "NIFTY": 122252,
+     "SENSEX": 19416
+    },
+    "years": {
+     "2023": 22341,
+     "2024": 246288,
+     "2025": 74556,
+     "2026": 170907
+    }
+   },
+   "account": {
+    "final": 1822920,
+    "dd": -35.1,
+    "trades": 1537
+   },
+   "removed": 442,
+   "shuffle_p": 0.7352,
+   "both_better": false
+  },
+  "weekday: skip Fridays": {
+   "per_lot": {
+    "train": 153034,
+    "y2026": 77149,
+    "n": 1668,
+    "by_sym_train": {
+     "BANKNIFTY": -10882,
+     "NIFTY": 117323,
+     "SENSEX": 46593
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 7075,
+     "NIFTY": 77786,
+     "SENSEX": -7712
+    },
+    "years": {
+     "2023": -7850,
+     "2024": 39378,
+     "2025": 121506,
+     "2026": 77149
+    }
+   },
+   "account": {
+    "final": 506399,
+    "dd": -36.8,
+    "trades": 1510
+   },
+   "removed": 482,
+   "shuffle_p": 1.0,
+   "both_better": false
+  },
+  "stack: at most 2 same-side open": {
+   "per_lot": {
+    "train": 343686,
+    "y2026": 117145,
+    "n": 1548,
+    "by_sym_train": {
+     "BANKNIFTY": 94463,
+     "NIFTY": 145960,
+     "SENSEX": 103263
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 31453,
+     "NIFTY": 91436,
+     "SENSEX": -5744
+    },
+    "years": {
+     "2023": 34134,
+     "2024": 223682,
+     "2025": 85870,
+     "2026": 117145
+    }
+   },
+   "account": {
+    "final": 1504825,
+    "dd": -23.9,
+    "trades": 1440
+   },
+   "removed": 602,
+   "shuffle_p": 0.478,
+   "both_better": false
+  },
+  "stack: at most 1 same-side open": {
+   "per_lot": {
+    "train": 278985,
+    "y2026": 93554,
+    "n": 1122,
+    "by_sym_train": {
+     "BANKNIFTY": 56007,
+     "NIFTY": 127164,
+     "SENSEX": 95814
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 15697,
+     "NIFTY": 88569,
+     "SENSEX": -10712
+    },
+    "years": {
+     "2023": -7685,
+     "2024": 173816,
+     "2025": 112854,
+     "2026": 93554
+    }
+   },
+   "account": {
+    "final": 840642,
+    "dd": -18.4,
+    "trades": 1020
+   },
+   "removed": 1028,
+   "shuffle_p": 0.3045,
+   "both_better": false
+  },
+  "daystop: none after 2 losers": {
+   "per_lot": {
+    "train": 462205,
+    "y2026": 140823,
+    "n": 1954,
+    "by_sym_train": {
+     "BANKNIFTY": 45012,
+     "NIFTY": 237623,
+     "SENSEX": 179570
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 27295,
+     "NIFTY": 111264,
+     "SENSEX": 2264
+    },
+    "years": {
+     "2023": 41805,
+     "2024": 249218,
+     "2025": 171182,
+     "2026": 140823
+    }
+   },
+   "account": {
+    "final": 2784035,
+    "dd": -39.3,
+    "trades": 1742
+   },
+   "removed": 196,
+   "shuffle_p": 0.2172,
+   "both_better": false
+  },
+  "score: skip 0-2": {
+   "per_lot": {
+    "train": 459138,
+    "y2026": 142659,
+    "n": 1965,
+    "by_sym_train": {
+     "BANKNIFTY": 56370,
+     "NIFTY": 232840,
+     "SENSEX": 169928
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 11313,
+     "NIFTY": 115932,
+     "SENSEX": 15414
+    },
+    "years": {
+     "2023": 56690,
+     "2024": 250789,
+     "2025": 151659,
+     "2026": 142659
+    }
+   },
+   "account": {
+    "final": 2598290,
+    "dd": -30.7,
+    "trades": 1698
+   },
+   "removed": 185,
+   "shuffle_p": 0.2858,
+   "both_better": false
+  }
+ },
+ "sizing": {
+  "daystop: none after the day is down 1.5% (account)": {
+   "account": {
+    "final": 2946766,
+    "dd": -35.0,
+    "trades": 1799
+   },
+   "from_2L_2023_25": {
+    "final": 1033039,
+    "dd": -35.0,
+    "trades": 1436
+   },
+   "from_2L_2026": {
+    "final": 450719,
+    "dd": -21.8,
+    "trades": 368
+   }
+  },
+  "stack (account): at most 2 same-side": {
+   "account": {
+    "final": 664728,
+    "dd": -23.7,
+    "trades": 1304
+   },
+   "from_2L_2023_25": {
+    "final": 420699,
+    "dd": -21.8,
+    "trades": 1027
+   },
+   "from_2L_2026": {
+    "final": 263714,
+    "dd": -16.3,
+    "trades": 255
+   }
+  },
+  "ddsize: half risk while > 15% below peak": {
+   "account": {
+    "final": 3260111,
+    "dd": -28.6,
+    "trades": 1921
+   },
+   "from_2L_2023_25": {
+    "final": 1348317,
+    "dd": -28.6,
+    "trades": 1525
+   },
+   "from_2L_2026": {
+    "final": 457190,
+    "dd": -19.1,
+    "trades": 387
+   }
+  },
+  "ddsize: 1.25x risk while > 15% below peak": {
+   "account": {
+    "final": 3276236,
+    "dd": -32.4,
+    "trades": 1800
+   },
+   "from_2L_2023_25": {
+    "final": 1110072,
+    "dd": -32.4,
+    "trades": 1427
+   },
+   "from_2L_2026": {
+    "final": 465076,
+    "dd": -21.0,
+    "trades": 384
+   }
+  },
+  "vixsize: risk x 14/VIX (0.6-1.4x)": {
+   "account": {
+    "final": 3191327,
+    "dd": -29.6,
+    "trades": 1808
+   },
+   "from_2L_2023_25": {
+    "final": 1087214,
+    "dd": -29.6,
+    "trades": 1429
+   },
+   "from_2L_2026": {
+    "final": 453673,
+    "dd": -23.2,
+    "trades": 371
+   }
+  }
+ }
+}

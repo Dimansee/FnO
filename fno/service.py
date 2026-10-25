@@ -575,6 +575,14 @@ def place_signal(symbol, strike=None, auto=False, which=None):
         jd["total_mult"] = round(min(max((conv["mult"] if conv else 1.0) * jd["mult"], lo), hi), 3)
         pf = {**pf, "risk_pct": rp0 * jd["total_mult"]}
         ev = {**ev, "plan": {**ev["plan"], "ai_judge": jd}}
+    if pf.get("autopilot") and flag("dd_half"):                      # round 43: half risk while deep below the peak
+        try:
+            eq_now, pk = P.equity(acct, tr), P.peak_equity(acct, tr)
+            if pk > 0 and eq_now < (1 - C.DD_HALF_AT) * pk:
+                pf = {**pf, "risk_pct": float(pf.get("risk_pct") or 1.0) * 0.5}
+                ev = {**ev, "plan": {**ev["plan"], "dd_half": {"equity": round(eq_now), "peak": round(pk)}}}
+        except Exception:
+            pass
     if strike is None:
         strike = _small_account_strike(ev["plan"], g["chain"], g["spot"], pf, P.equity(acct, tr))
         if strike is not None:
@@ -634,6 +642,9 @@ def changes() -> list[dict]:
         removed = 0
     po = float(acct.get("capital_start") or 0) <= 0 and acct.get("capital_before")
     return [
+        {"id": "dd_half", "date": "2026-10-25", "title": "Half risk in a deep drawdown (round 43)",
+         "what": f"While the account is more than {C.DD_HALF_AT:.0%} below its highest value, Autopilot risks half as much per trade until it recovers. Same typical year, fewer deep falls.",
+         "before": "Full risk whatever the drawdown.", "on": flag("dd_half"), "kind": "switch"},
         {"id": "big_run_skip", "date": "2026-10-24", "title": "Skip trades against a big 3-day run (round 42)",
          "what": f"Autopilot does not buy a CALL after a 3-session fall, or a PUT after a 3-session rally, of at least {C.BIG_RUN_ATR:g}x the daily ATR (~350-450 Nifty points). Those trades lost in 2023-25 on all three indices and in 2026.",
          "before": "Every signal traded, whatever the last 3 days did.", "on": flag("big_run_skip"), "kind": "switch"},
@@ -665,7 +676,7 @@ def changes() -> list[dict]:
 
 
 def revert_change(cid: str, on: bool | None = None) -> str:
-    if cid in ("conviction", "limits_system_only", "small_otm", "ai_judge", "big_run_skip"):
+    if cid in ("conviction", "limits_system_only", "small_otm", "ai_judge", "big_run_skip", "dd_half"):
         set_flag(cid, bool(on))
         return ("Switched on again." if on else "Switched back to how it worked before.")
     if cid == "weekly_limit":

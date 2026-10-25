@@ -116,9 +116,10 @@ def _mult(conf, sym, score):
     return 1.0
 
 
-def replay(T: pd.DataFrame, capital: float, sizing: str, risk_pct: float, lots_fixed: int, conf: str, gates: bool = True, max_lots: int = 0) -> pd.DataFrame:
+def replay(T: pd.DataFrame, capital: float, sizing: str, risk_pct: float, lots_fixed: int, conf: str, gates: bool = True, max_lots: int = 0,
+           dd_half: bool = False) -> pd.DataFrame:
     T = T.sort_values(["date", "entry_time"]).reset_index(drop=True)
-    eq = float(capital)
+    eq = peak = float(capital)
     open_pos, rows = [], []
     week, week_start, week_pnl, blocked = None, eq, 0.0, False
     for r in T.itertuples(index=False):
@@ -137,6 +138,8 @@ def replay(T: pd.DataFrame, capital: float, sizing: str, risk_pct: float, lots_f
         elif gates and str(r.strategy).startswith("Fib") and eq < C.FIB_MIN_EQUITY:
             why = "Fibonacci slot below Rs 2 lakh"
         lots, m = 0, _mult(conf, s, int(r.score))
+        if dd_half and eq < (1 - C.DD_HALF_AT) * peak:
+            m *= 0.5
         if why is None:
             if sizing == "fixed":
                 lots = int(lots_fixed)
@@ -165,6 +168,7 @@ def replay(T: pd.DataFrame, capital: float, sizing: str, risk_pct: float, lots_f
         orders = (1 + int(getattr(r, "pieces", 1) or 1)) * math.ceil(qty / FREEZE[s])
         pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty, orders=orders, exch_pct=I.exch_rate(s))
         eq += pnl
+        peak = max(peak, eq)
         week_pnl += pnl
         cap = 0.04 if week_start >= C.AUTOPILOT_SMALL_ACCOUNT else C.AUTOPILOT_WEEKLY_SMALL
         if week_pnl <= -cap * week_start:
@@ -261,6 +265,7 @@ def _validate(p: dict) -> dict:
     out["exit"] = p.get("exit") if p.get("exit") in EXITS else "current"
     out["compare"] = bool(p.get("compare", True)) and out["exit"] != "current"
     out["gates"] = bool(p.get("gates", True))
+    out["dd_half"] = bool(p.get("dd_half", True))
     out["max_lots"] = int(p.get("max_lots") or 0)
     if not 0 <= out["max_lots"] <= 5000:
         raise ValueError("Max lots must be 0 (no cap) - 5000.")
@@ -394,7 +399,7 @@ def _run(jid, p):
                     res[e] = {"trades": 0}
                     continue
                 T = pd.concat(trades[e], ignore_index=True)
-                R = replay(T, p["capital"], p["sizing"], p["risk_pct"], p["lots"], p["confidence"], p["gates"], p["max_lots"])
+                R = replay(T, p["capital"], p["sizing"], p["risk_pct"], p["lots"], p["confidence"], p["gates"], p["max_lots"], p["dd_half"] and p["sizing"] != "fixed")
                 sm = _summary(R, p["capital"])
                 sm["label"] = EXITS[e]["label"]
                 if e == p["exit"]:

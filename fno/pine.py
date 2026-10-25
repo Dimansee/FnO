@@ -47,7 +47,7 @@ def generate(p: dict, index: str, exit_ov: dict, exit_label: str, lot: int | Non
         "INDEX": index, "TV_SYM": tv_sym, "LOT": str(lot), "CAPITAL": str(int(p.get("capital", 200000))),
         "SIZING": p.get("sizing", "compound"), "RISK": _f(p.get("risk_pct", 1.0)), "FIXED_LOTS": str(int(p.get("lots", 1))),
         "MAX_LOTS": str(int(p.get("max_lots", 0) or 0)), "CONF": conf, "CONF_IDX": _b(index in C.CONVICTION_SYMS),
-        "BIGRUN": _b(p.get("big_run_skip", True)), "BIGRUN_ATR": _f(C.BIG_RUN_ATR), "GATES": _b(p.get("gates", True)),
+        "BIGRUN": _b(p.get("big_run_skip", True)), "DD_HALF": _b(p.get("dd_half", True)), "BIGRUN_ATR": _f(C.BIG_RUN_ATR), "GATES": _b(p.get("gates", True)),
         "USE_NOISE": _b("noise" in strats), "USE_CAM": _b("camarilla" in strats), "USE_TREND": _b("trend" in strats), "USE_FIB": _b("fib" in strats),
         "NOISE_MULT": _f(C.NOISE_MULT), "NOISE_RR": _f(exit_ov["noise_rr"] if "noise_rr" in exit_ov else C.RR_NOISE),
         "NOISE_BE": _f(exit_ov.get("noise_be_r"), 0), "BE_R": _f(exit_ov["be_r"] if exit_ov.get("be_r") is not None else 1.0),
@@ -109,6 +109,7 @@ gates     = input.bool({{GATES}}, "Autopilot gates (trend from Rs {{TREND_EQ}}, 
 bigRunOn  = input.bool({{BIGRUN}}, "Skip trades against a big 3-day run", group=grpR)
 bigRunK   = input.float({{BIGRUN_ATR}}, "Big run = 3-day move of at least (daily ATRs)", group=grpR)
 weeklyOn  = input.bool(true, "Weekly loss limit (4%, 15% below Rs 1 lakh)", group=grpR)
+ddHalf    = input.bool({{DD_HALF}}, "Half risk while 15%+ below the account's peak", group=grpR)
 vixSym    = input.symbol("NSE:INDIAVIX", "India VIX symbol", group=grpR)
 noiseMult = input.float({{NOISE_MULT}}, "Noise band width (x usual move)", group=grpR)
 grpX = "Exits"
@@ -280,6 +281,8 @@ confMult(int sc) =>
 
 // ------------------------------------------------------------------ account guards
 realEq = strategy.initial_capital + strategy.netprofit
+var float peakEq = strategy.initial_capital
+peakEq := math.max(peakEq, realEq)
 var float weekStart = strategy.initial_capital
 var bool weekBlocked = false
 if newWeek
@@ -404,7 +407,7 @@ closeSlot(int s, string why) =>
 lotsFor(int sd, float riskPts) =>
     rl = optDelta * riskPts * lotSize
     base = sizing == "compound" ? realEq : strategy.initial_capital
-    m = confMult(sd > 0 ? scoreUp : scoreDn)
+    m = confMult(sd > 0 ? scoreUp : scoreDn) * (ddHalf and realEq < 0.85 * peakEq ? 0.5 : 1.0)
     int lots = sizing == "fixed" ? fixedLots : int(math.floor(base * riskPct / 100 * m / rl))
     if lots == 0 and sizing != "fixed"
         lots := rl <= 0.15 * realEq ? 1 : 0

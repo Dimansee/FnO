@@ -728,6 +728,7 @@ details summary{cursor:pointer;font-size:13px}
         <div><label>Strike</label><select id="pbOtm" style="width:100%"><option value="-1" selected>1 strike ITM (the rule)</option><option value="0">ATM</option><option value="1">1 strike OTM</option><option value="2">2 strikes OTM</option></select></div>
         <div style="grid-column:span 2"><label>Exit / targets</label><select id="pbExit" style="width:100%"></select></div>
         <div><label>&nbsp;</label><label class="tog"><input type="checkbox" id="pbRun2" checked> Skip trades against a big 3-day run</label></div>
+        <div><label>&nbsp;</label><label class="tog"><input type="checkbox" id="pbDD" checked> Half risk when 15%+ below the peak</label></div>
         <div><label>&nbsp;</label><label class="tog"><input type="checkbox" id="pbCmp" checked> Compare with current exits</label></div>
         <div><label>&nbsp;</label><div style="display:flex;gap:6px"><button class="primary" id="pbGo" style="flex:1">▶ Run portfolio backtest</button><button class="danger hidden" id="pbStop" title="Stop this backtest">■ Stop</button></div></div>
       </div>
@@ -2304,13 +2305,13 @@ async function pbInit() {
 function pbParams() {
   return {start: $("#pbFrom").value, end: $("#pbTo").value, indices: [...document.querySelectorAll("#pbIdx input:checked")].map(x => x.value),
     capital: +$("#pbCap").value, sizing: $("#pbSize").value, risk_pct: +$("#pbRisk").value, lots: +$("#pbLots").value, confidence: $("#pbConf").value,
-    otm: +$("#pbOtm").value, max_lots: +$("#pbMax").value, exit: $("#pbExit").value, big_run_skip: $("#pbRun2").checked, compare: $("#pbCmp").checked};
+    otm: +$("#pbOtm").value, max_lots: +$("#pbMax").value, exit: $("#pbExit").value, big_run_skip: $("#pbRun2").checked, dd_half: $("#pbDD").checked, compare: $("#pbCmp").checked};
 }
 function pbApply(p) {
   const set = (id, v) => { if (v != null && $(id)) $(id).value = v; };
   set("#pbFrom", p.start); set("#pbTo", p.end); set("#pbCap", p.capital); set("#pbSize", p.sizing); set("#pbRisk", String(p.risk_pct)); set("#pbLots", p.lots);
   set("#pbConf", p.confidence); set("#pbOtm", String(p.otm)); set("#pbMax", p.max_lots); set("#pbExit", p.exit);
-  $("#pbRun2").checked = !!p.big_run_skip; $("#pbCmp").checked = p.compare !== false;
+  $("#pbRun2").checked = !!p.big_run_skip; $("#pbDD").checked = p.dd_half !== false; $("#pbCmp").checked = p.compare !== false;
   document.querySelectorAll("#pbIdx input").forEach(x => { x.checked = (p.indices || []).includes(x.value); });
   $("#pbSize").onchange();
 }

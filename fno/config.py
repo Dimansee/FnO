@@ -206,6 +206,10 @@ AUTOPILOT_STRATEGIES = ["noise", "camarilla", "trend", "fib"]   # trend: round 2
 # least 2 x the 14-day ATR, ~350-450 Nifty points now). Such trades lost in 2023-25 on all three indices (74 trades, -Rs 84k
 # per lot, shuffle p < 0.001) and in 2026 (18 trades, -Rs 14k). Daily data since 2007: big rallies tend to continue, not reverse.
 BIG_RUN_ATR = 2.0
+# Round 43: while the account is more than DD_HALF_AT below its highest realised value, Autopilot halves the risk per
+# trade. Full history from Rs 2L: Rs 32.6L vs 29.8L, worst fall -28.6% vs -30.3%; 1-year paths: same median, a 30%+ fall
+# in 22.5% vs 26.9%. Pure risk control - it never adds size.
+DD_HALF_AT = 0.15
 AUTOPILOT_RISK_PCT = 1.0            # lots = 1% of CURRENT equity / risk per lot (compounds as the account grows)
 AUTOPILOT_MAX_TRADE_RISK = 0.15     # a 1-lot floor is allowed only while one lot risks at most 15% of equity (round 20: 83% -> 46% of years dipping below half the account)
 AUTOPILOT_SMALL_ACCOUNT = 100_000   # below this equity the weekly loss cap is 15% (4% would block every trade after one loss)

@@ -23,3 +23,10 @@ print("big run OK:", run)
 assert [next(m for lo, m in C.STRONG_CONF if sc >= lo) for sc in range(7)] == [0.5, 0.5, 0.5, 1.0, 1.0, 2.0, 2.0]
 print("strong confidence OK")
 print("ALL ROUND 42 OK")
+
+# round 43: peak equity for the drawdown half-risk rule
+from fno import paper as P  # noqa: E402
+tr = [{"pnl": 50000, "closed": "2026-01-02"}, {"pnl": -60000, "closed": "2026-01-05"}, {"pnl": 5000, "closed": "2026-01-06"}]
+assert P.peak_equity({"capital_start": 200000}, tr) == 250000 and P.equity({"capital_start": 200000}, tr) == 195000
+assert 195000 < (1 - C.DD_HALF_AT) * 250000          # 22% below the peak -> half risk
+print("dd half OK")

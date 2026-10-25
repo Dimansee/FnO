@@ -1,0 +1,20 @@
+{
+ "base": {
+  "median": 352587,
+  "p10": 194320,
+  "loss_year_pct": 11.3,
+  "fall30_pct": 26.9
+ },
+ "ddsize half": {
+  "median": 354450,
+  "p10": 194498,
+  "loss_year_pct": 11.4,
+  "fall30_pct": 22.5
+ },
+ "vixsize": {
+  "median": 349684,
+  "p10": 193039,
+  "loss_year_pct": 12.0,
+  "fall30_pct": 31.5
+ }
+}
