@@ -61,7 +61,7 @@ def generate(p: dict, index: str, exit_ov: dict, exit_label: str, lot: int | Non
         "TREND_EQ": str(int(C.TREND_MIN_EQUITY)), "FIB_EQ": str(int(C.FIB_MIN_EQUITY)),
         "BUDGET": budget, "EXIT_LABEL": exit_label.replace('"', "'"), "DATE": date.today().isoformat(),
         "OTM": {-1: "1 strike ITM", 0: "ATM", 1: "1 strike OTM", 2: "2 strikes OTM"}.get(int(p.get("otm", -1)), "1 strike ITM"),
-        "STEP": str({"NIFTY": 50, "BANKNIFTY": 100, "SENSEX": 100}[index]), "OTMN": str(int(p.get("otm", -1))),
+        "TICK": tv_sym.split(":")[-1], "STEP": str({"NIFTY": 50, "BANKNIFTY": 100, "SENSEX": 100}[index]), "OTMN": str(int(p.get("otm", -1))),
         "EXPIRY": "monthly expiry" if index == "BANKNIFTY" else "nearest weekly expiry",
         "DELTA": _f({-1: 0.6, 0: 0.5, 1: 0.4, 2: 0.3}.get(int(p.get("otm", -1)), 0.55)),
     }
@@ -71,6 +71,7 @@ def generate(p: dict, index: str, exit_ov: dict, exit_label: str, lot: int | Non
     assert "{{" not in code, "unfilled placeholder"
     return {"index": index, "tv_symbol": tv_sym, "filename": f"fno_{index.lower()}_{p.get('exit', 'current')}.pine", "code": code,
             "how_to": [f"Open TradingView, chart {tv_sym} on the 5-minute timeframe.",
+                       "Use the INDEX chart, not an option chart: the script reads the index and says which option to buy. Long = BUY CALL, Short = BUY PUT (never selling).",
                        "Pine Editor (bottom panel) -> delete what is there -> paste this script -> Save -> Add to chart.",
                        "Strategy Tester (bottom panel) shows the trades and results; Settings (gear icon) lets you change every input.",
                        "For live signals: Alerts -> Create alert -> Condition: this strategy -> 'alert() function calls only'."]}
@@ -83,6 +84,8 @@ TEMPLATE = r'''// FnO Trainer - {{INDEX}} Autopilot rules as a TradingView strat
 // limit and the chosen exits.
 // APPROXIMATIONS: TradingView trades the index, not the option. Size = lots x lot size x option delta ({{OTM}}), so P&L
 // follows the option's move but not time decay / IV / option taxes - expect the app's option backtest to be lower.
+// "Long" in TradingView's trade list = BUY a CALL, "Short" = BUY a PUT (the PUT gains when the index falls). Nothing is
+// ever sold; a PUT is shown as a short index position only because TradingView trades the index here.
 // One netted position per chart: a signal opposite to an open trade is skipped. Paper/learning use only - not advice.
 //@version=5
 strategy("FnO Trainer · {{INDEX}} · Autopilot", overlay=true, initial_capital={{CAPITAL}}, currency=currency.INR,
@@ -416,8 +419,11 @@ lotsFor(int sd, float riskPts) =>
     lots
 
 // 1 = entered, 0 = skipped (signal used up), -1 = size rounds to zero (keep looking, as the app does)
+// The rules use index points (ATR, bands, pivots): on an option or any other chart they are meaningless, so nothing trades there.
+okChart = syminfo.ticker == "{{TICK}}" or str.startswith(syminfo.ticker, "{{TICK}}1!") or str.startswith(syminfo.ticker, "{{TICK}}2!")
+
 tryEnter(int s, int sd, float riskPts, string nm) =>
-    bool ok = true
+    bool ok = okChart
     netSide = strategy.position_size > 0 ? 1 : strategy.position_size < 0 ? -1 : 0
     if netSide != 0 and netSide != sd
         ok := false
@@ -436,7 +442,7 @@ tryEnter(int s, int sd, float riskPts, string nm) =>
         array.set(qtyA, s, q)
         array.set(inEnd, s, endMod)
         array.set(halfR, s, false)
-        strategy.entry(id, sd > 0 ? strategy.long : strategy.short, qty=q, comment=nm + " " + str.tostring(lots) + " lot" + (lots > 1 ? "s" : ""))
+        strategy.entry(id, sd > 0 ? strategy.long : strategy.short, qty=q, comment=(sd > 0 ? "BUY CALL " : "BUY PUT ") + nm + " " + str.tostring(lots) + " lot" + (lots > 1 ? "s" : ""))
         placeExits(s, q)
         if showTrade
             drawTrade(s, sd, riskPts, lots, nm)
@@ -555,6 +561,9 @@ plot(showLv and useFib ? fibH4 : na, "Fib +0.618", color.new(color.lime, 60), st
 plot(showLv and useFib ? fibL4 : na, "Fib -0.618", color.new(color.maroon, 60), style=plot.style_stepline)
 bgcolor(showTrade and array.get(marks, 0) ? color.new(color.blue, 80) : showTrade and array.get(marks, 1) ? color.new(color.gray, 85) : na, title="Entry / exit bars")
 var table info = table.new(position.top_right, 2, 6, bgcolor=color.new(color.black, 20), border_width=1)
+var table warn = table.new(position.middle_center, 1, 1, bgcolor=color.new(color.red, 10))
+if barstate.islast and not okChart
+    table.cell(warn, 0, 0, "Wrong chart: " + syminfo.ticker + "\nPut this script on the {{TV_SYM}} INDEX chart (5 min), not on an option.\nIt reads the index and tells you which option to BUY.\nNo trades are taken on this chart.", text_color=color.white, text_size=size.large)
 if barstate.islast
     runTxt = na(runMove) or na(runATR) ? "-" : str.tostring(runMove, "#") + " pts (" + str.tostring(math.abs(runMove) / runATR, "#.0") + "x ATR)"
     table.cell(info, 0, 0, "FnO Trainer · {{INDEX}}", text_color=color.white)
