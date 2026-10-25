@@ -3043,7 +3043,7 @@ async function loadApRules() {
 }
 
 // ---------- Outcomes: every change vs today's rules ----------
-const OC = {data: null, cap: "200000", sort: null};
+const OC = {data: null, cap: "200000", sort: null, view: "single", pairs: null, psort: ["final", 1]};
 const OCV = {"better": "var(--green)", "more profit, deeper fall": "var(--amber)", "less profit, shallower fall": "var(--blue, #0969da)", "worse": "var(--red)", "about the same": "var(--muted)", "baseline": "inherit"};
 function ocRs(x) { const a = Math.abs(x), s = a >= 1e7 ? (a / 1e7).toFixed(2) + " Cr" : a >= 1e5 ? (a / 1e5).toFixed(2) + " L" : a.toLocaleString("en-IN"); return (x < 0 ? "-" : "") + "₹" + s; }
 async function loadOutcomes() {
@@ -3056,11 +3056,46 @@ async function loadOutcomes() {
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
       <label>Starting capital <select id="ocCap">${d.capitals.map(c => `<option value="${c}" ${String(c) === OC.cap ? "selected" : ""}>${ocRs(c)}</option>`).join("")}</select></label>
       <label>Show <select id="ocGrp"><option value="">all groups</option>${[...new Set(d.rows.map(r => r.group))].map(g => `<option>${esc(g)}</option>`).join("")}</select></label>
+      <label>View <select id="ocView"><option value="single" ${OC.view === "single" ? "selected" : ""}>One change at a time</option><option value="pairs" ${OC.view === "pairs" ? "selected" : ""}>Two changes together (pairs)</option></select></label>
       <a class="btn" href="/api/outcomes.pdf" target="_blank" rel="noopener">Open PDF</a>
       <span class="muted">Click a column title to sort.</span></div>`;
-  $("#ocCap").onchange = e => { OC.cap = e.target.value; ocTable(); };
-  $("#ocGrp").onchange = () => ocTable();
-  ocTable();
+  $("#ocCap").onchange = e => { OC.cap = e.target.value; ocShow(); };
+  $("#ocGrp").onchange = () => ocShow();
+  $("#ocView").onchange = e => { OC.view = e.target.value; ocShow(); };
+  ocShow();
+}
+async function ocShow() {
+  $("#ocGrp").parentElement.style.display = OC.view === "single" ? "" : "none";
+  if (OC.view === "single") return ocTable();
+  if (!OC.pairs) { $("#ocTbl").innerHTML = `<p class="muted">Loading pairs…</p>`; OC.pairs = await api("/api/outcomes/pairs"); }
+  ocPairs();
+}
+function ocPairs() {
+  const d = OC.pairs, cap = OC.cap, kf = cap + "_full", k6 = cap + "_y2026";
+  if (!d.pairs || !d.pairs.length) { $("#ocTbl").innerHTML = `<p>${esc(d.error || "No pairs yet.")}</p>`; return; }
+  const bf = d.baseline[kf], b6 = d.baseline[k6], S1 = Object.fromEntries(d.singles.map(x => [x.name, x.runs]));
+  const fac = $("#ocPF") ? $("#ocPF").value : "", q = $("#ocPQ") ? $("#ocPQ").value.toLowerCase() : "";
+  let rows = d.pairs.map(r => { const f = r.runs[kf], y = r.runs[k6], best = Math.max(S1[r.a][kf].final, S1[r.b][kf].final);
+    return {r, f, y, df: (f.final - bf.final) / Math.max(Math.abs(bf.net), 1) * 100, dy: (y.final - b6.final) / Math.max(Math.abs(b6.net), 1) * 100,
+      add: f.final > best * 1.02 ? "yes" : f.final < best * 0.98 ? "no" : "same", sa: S1[r.a][kf].final, sb: S1[r.b][kf].final}; });
+  if (fac) rows = rows.filter(x => x.r.f1 === fac || x.r.f2 === fac);
+  if (q) rows = rows.filter(x => (x.r.a + " " + x.r.b).toLowerCase().includes(q));
+  const keys = {final: x => x.f.final, dd: x => x.f.max_dd_pct, f6: x => x.y.final, dd6: x => x.y.max_dd_pct, win: x => x.f.win_rate};
+  const [sk, sd] = OC.psort; rows.sort((a, b) => sd * (keys[sk](b) - keys[sk](a)));
+  const better = rows.filter(x => x.df > 2 && x.f.max_dd_pct >= bf.max_dd_pct - 2).length;
+  const th = (k, t) => `<th style="cursor:pointer" data-k="${k}">${t}${sk === k ? (sd > 0 ? " ▼" : " ▲") : ""}</th>`;
+  const pc = x => `<span class="${x > 0.5 ? "up" : x < -0.5 ? "down" : ""}">${x > 0 ? "+" : ""}${x.toFixed(0)}%</span>`;
+  $("#ocTbl").innerHTML = `<p class="muted" style="margin:0 0 8px">${d.pairs.length} pairs of changes (${d.singles.length} single changes in ${Object.keys(d.factors).length} groups, paired across groups). Today's rules: <b>${ocRs(bf.final)}</b> (worst fall ${bf.max_dd_pct}%), 2026 <b>${ocRs(b6.final)}</b>. Showing ${rows.length}; ${better} earn 2%+ more without a deeper fall (full history). <b>Adds up?</b> = does the pair beat the better of its two single changes.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px"><label>Involving <select id="ocPF"><option value="">any group</option>${Object.keys(d.factors).map(f => `<option ${f === fac ? "selected" : ""}>${esc(f)}</option>`).join("")}</select></label>
+      <label>Search <input id="ocPQ" value="${esc(q)}" placeholder="e.g. strong" style="width:160px"></label></div>
+    <div class="tablewrap" style="max-height:75vh"><table class="prose" id="ocPT"><tr><th>Change A</th><th>Change B</th>${th("final", "Full: ends at")}<th>vs current</th><th>A alone</th><th>B alone</th><th>Adds up?</th>${th("dd", "Worst fall")}${th("win", "Win %")}${th("f6", "2026: ends at")}<th>vs current</th>${th("dd6", "Worst fall")}</tr>
+    ${rows.map(x => `<tr><td><span class="muted" style="font-size:11px">${esc(x.r.f1)}</span><br><b>${esc(x.r.a)}</b></td><td><span class="muted" style="font-size:11px">${esc(x.r.f2)}</span><br><b>${esc(x.r.b)}</b></td>
+      <td class="mono">${ocRs(x.f.final)}</td><td>${pc(x.df)}</td><td class="mono muted">${ocRs(x.sa)}</td><td class="mono muted">${ocRs(x.sb)}</td>
+      <td style="font-weight:600;color:${x.add === "yes" ? "var(--green)" : x.add === "no" ? "var(--red)" : "var(--muted)"}">${x.add}</td>
+      <td class="mono">${x.f.max_dd_pct}%</td><td>${x.f.win_rate}</td><td class="mono">${ocRs(x.y.final)}</td><td>${pc(x.dy)}</td><td class="mono">${x.y.max_dd_pct}%</td></tr>`).join("")}</table></div>`;
+  $("#ocPF").onchange = () => ocPairs();
+  $("#ocPQ").oninput = () => { clearTimeout(OC.t); OC.t = setTimeout(() => { ocPairs(); $("#ocPQ").focus(); const v = $("#ocPQ"); v.setSelectionRange(v.value.length, v.value.length); }, 300); };
+  $("#ocPT").querySelectorAll("th[data-k]").forEach(h => h.onclick = () => { const k = h.dataset.k; OC.psort = OC.psort[0] === k ? [k, -OC.psort[1]] : [k, 1]; ocPairs(); });
 }
 function ocTable() {
   const d = OC.data, cap = OC.cap, g = $("#ocGrp").value, base = d.rows[0];

@@ -30,7 +30,7 @@ def pct(x):
     return f"{x:+.0f}%"
 
 
-def build(out, path):
+def build(out, path, pairs=None):
     ss = getSampleStyleSheet()
     H1 = ParagraphStyle("h1", parent=ss["Title"], fontName=BOLD, fontSize=18, spaceAfter=6)
     H2 = ParagraphStyle("h2", parent=ss["Heading2"], fontName=BOLD, fontSize=13, spaceBefore=8, spaceAfter=4)
@@ -91,5 +91,41 @@ def build(out, path):
                                ("LINEBELOW", (0, 1), (-1, -1), 0.25, colors.HexColor("#d0d7de")),
                                ("TOPPADDING", (0, 0), (-1, -1), 1.2), ("BOTTOMPADDING", (0, 0), (-1, -1), 1.2)] + styles))
         st.append(t)
+    if pairs:
+        _pairs(st, pairs, P, SM, SMB, H2)
     doc.build(st)
     return path
+
+
+def adds_up(row, singles, key):
+    v = row["runs"][key]["final"]
+    best = max(singles[row["a"]][key]["final"], singles[row["b"]][key]["final"])
+    return "yes" if v > best * 1.02 else "no" if v < best * 0.98 else "same"
+
+
+def _pairs(st, pr, P, SM, SMB, H2):
+    singles = {x["name"]: x["runs"] for x in pr["singles"]}
+    for cap in pr["capitals"]:
+        kf, k6 = f"{cap}_full", f"{cap}_y2026"
+        bf, b6 = pr["baseline"][kf], pr["baseline"][k6]
+        st.append(PageBreak())
+        st.append(Paragraph(f"Pairs of changes - starting capital {rs(cap)}", H2))
+        st.append(Paragraph(f"{len(pr['pairs'])} pairs, best full-history result first. Today's rules: {rs(bf['final'])} (worst fall {bf['max_dd_pct']}%); "
+                            f"2026 {rs(b6['final'])} ({b6['max_dd_pct']}%). 'Adds up?' = does the pair beat the better of its two single changes "
+                            f"(full history)? " + " ".join(pr["notes"][2:]), P))
+        hdr = ["#", "Change A", "Change B", "Full: ends at", "vs current", "A alone", "B alone", "Worst fall", "2026: ends at", "vs current", "Worst fall", "Adds up?"]
+        data = [[Paragraph(h, SMB) for h in hdr]]
+        rows = sorted(pr["pairs"], key=lambda r: -r["runs"][kf]["final"])
+        for i, r in enumerate(rows, 1):
+            f, y = r["runs"][kf], r["runs"][k6]
+            au = adds_up(r, singles, kf)
+            data.append([str(i), Paragraph(r["a"], SM), Paragraph(r["b"], SM), rs(f["final"]), pct((f["final"] - bf["final"]) / max(abs(bf["net"]), 1) * 100),
+                         rs(singles[r["a"]][kf]["final"]), rs(singles[r["b"]][kf]["final"]), f"{f['max_dd_pct']}%", rs(y["final"]),
+                         pct((y["final"] - b6["final"]) / max(abs(b6["net"]), 1) * 100), f"{y['max_dd_pct']}%",
+                         Paragraph(f'<font color="{ {"yes": "#1a7f37", "no": "#cf222e"}.get(au, "#57606a") }">{au}</font>', SM)])
+        t = Table(data, colWidths=[8 * mm, 46 * mm, 46 * mm, 22 * mm, 16 * mm, 21 * mm, 21 * mm, 16 * mm, 22 * mm, 16 * mm, 16 * mm, 16 * mm], repeatRows=1)
+        t.setStyle(TableStyle([("FONTNAME", (0, 0), (-1, -1), FONT), ("FONTSIZE", (0, 0), (-1, -1), 6.8), ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                               ("ALIGN", (3, 1), (10, -1), "RIGHT"), ("LINEBELOW", (0, 0), (-1, 0), 0.8, colors.black),
+                               ("LINEBELOW", (0, 1), (-1, -1), 0.25, colors.HexColor("#d0d7de")),
+                               ("TOPPADDING", (0, 0), (-1, -1), 1), ("BOTTOMPADDING", (0, 0), (-1, -1), 1)]))
+        st.append(t)

@@ -516,6 +516,14 @@ def outcomes():
     return Response(f.read_text(encoding="utf-8"), mimetype="application/json")
 
 
+@app.get("/api/outcomes/pairs")
+def outcomes_pairs():
+    f = Path(__file__).parent / "fno" / "outcomes_pairs.json"
+    if not f.exists():
+        return jsonify({"pairs": [], "error": "The pairs study has not been run yet."})
+    return Response(f.read_text(encoding="utf-8"), mimetype="application/json")
+
+
 @app.get("/api/outcomes.pdf")
 def outcomes_pdf():
     f = Path(__file__).parent / "fno" / "outcomes.pdf"

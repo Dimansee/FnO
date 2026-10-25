@@ -165,5 +165,6 @@ if __name__ == "__main__":
     else:
         out = main()
     import outcomes_pdf
-    outcomes_pdf.build(out, OUT_PDF)
+    pf = os.path.join(ROOT, "fno", "outcomes_pairs.json")
+    outcomes_pdf.build(out, OUT_PDF, json.load(open(pf)) if os.path.exists(pf) else None)
     print("wrote", OUT_PDF)
