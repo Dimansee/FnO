@@ -78,29 +78,29 @@ def account(market: str) -> dict:
 def reset(market: str, capital: float):
     if not 100 <= capital <= 1e9:
         raise ValueError("Starting capital must be between 100 and 1,000,000,000.")
-    store._cmd("DEL", POS + market)
-    store._cmd("DEL", TRD + market)
-    store._cmd("DEL", "fno:g:orders:" + market)
+    store.hdrop(POS + market)
+    store.hdrop(TRD + market)
+    store.hdrop("fno:g:orders:" + market)
     store.put(f"g_ordhist:{market}", [])
     store.put(f"g_account:{market}", {"capital_start": float(capital), "created": datetime.now(timezone.utc).isoformat(timespec="seconds")})
 
 
 def positions(market: str) -> list[dict]:
-    raw = store._cmd("HVALS", POS + market) or []
+    raw = store.hvals(POS + market)
     return sorted((json.loads(x) for x in raw), key=lambda p: p["opened"])
 
 
 def trades(market: str) -> list[dict]:
-    raw = store._cmd("HVALS", TRD + market) or []
+    raw = store.hvals(TRD + market)
     return sorted((json.loads(x) for x in raw), key=lambda p: p["closed"])
 
 
 def _save_pos(p):
-    store._cmd("HSET", POS + p["market"], p["id"], _dump(p))
+    store.hset(POS + p["market"], p["id"], _dump(p))
 
 
 def _take_pos(market, pid):
-    v = store._cmd("EVAL", store._TAKE, 1, POS + market, pid)
+    v = store.htake(POS + market, pid)
     return json.loads(v) if v else None
 
 
@@ -261,7 +261,7 @@ def close_position(market: str, pid: str, px: float, reason: str) -> dict | None
     R = (side * (exit_fill - pos["entry"]) - pos["fees_in"] / pos["qty"] - pos["qty"] * exit_fill * fee / 1e4 / pos["qty"]) / st["risk"]
     rec = {**pos, "closed": _now().isoformat(timespec="seconds"), "exit": round(exit_fill, 6), "gross_pnl": round(gross, 4), "fees": round(fees, 4), "pnl": round(gross - fees, 4),
            "R": round(R, 3), "mfe_R": round(st["mfe"], 2), "mae_R": round(st["mae"], 2), "reason": reason}
-    store._cmd("HSET", TRD + market, rec["id"], _dump(rec))
+    store.hset(TRD + market, rec["id"], _dump(rec))
     if not rec.get("manual"):                  # the learning engine studies the rules, not your own manual trades
         try:
             from . import learn as LN

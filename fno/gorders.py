@@ -205,7 +205,7 @@ def place(market: str, b: dict) -> dict:
         _log(market, {**_order_rec(t), "status": "filled", "fill_price": pos["entry"], "filled": pos["opened"], "pos_id": pos["id"]})
         return {"ok": True, "filled": True, "position": pos["id"], "message": _msg(t, pos["entry"], "Filled")}
     o = {**_order_rec(t), "status": "open", "last_check": _now().isoformat(timespec="seconds")}
-    store._cmd("HSET", ORD + market, o["id"], json.dumps(o, default=str))
+    store.hset(ORD + market, o["id"], json.dumps(o, default=str))
     return {"ok": True, "filled": False, "order": o["id"], "message": _msg(t, t["trigger"], "Order placed")}
 
 
@@ -219,7 +219,7 @@ def _msg(t, px, head):
 
 
 def open_orders(market: str) -> list[dict]:
-    raw = store._cmd("HVALS", ORD + market) or []
+    raw = store.hvals(ORD + market)
     return sorted((json.loads(x) for x in raw), key=lambda o: o["created"], reverse=True)
 
 
@@ -234,7 +234,7 @@ def _log(market: str, o: dict):
 
 
 def cancel(market: str, oid: str, why: str = "Cancelled by you") -> dict:
-    v = store._cmd("EVAL", store._TAKE, 1, ORD + market, oid)
+    v = store.htake(ORD + market, oid)
     if not v:
         raise ValueError("Order not found (already filled or cancelled?).")
     o = json.loads(v)
@@ -267,9 +267,9 @@ def process(market: str) -> list[dict]:
                 break
         if fill is None:
             o["last_check"] = (bars.index[-1].tz_convert(timezone.utc) if len(bars) else since).isoformat()
-            store._cmd("HSET", ORD + market, o["id"], json.dumps(o, default=str))
+            store.hset(ORD + market, o["id"], json.dumps(o, default=str))
             continue
-        v = store._cmd("EVAL", store._TAKE, 1, ORD + market, o["id"])       # take it first so two ticks never fill it twice
+        v = store.htake(ORD + market, o["id"])       # take it first so two ticks never fill it twice
         if not v:
             continue
         t = {**o, "_side": side}

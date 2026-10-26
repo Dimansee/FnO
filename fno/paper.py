@@ -74,7 +74,7 @@ def remove_trades(kinds) -> dict:
     for t in store.trades():
         if origin(t) in kinds:
             store._cmd("HSET", REMOVED, t["id"], store._dump(t))
-            store._cmd("HDEL", store.TRADES, t["id"])
+            store._cmd("HDEL", store.TRADES, t["id"]); store._hset_mem(store.TRADES, t["id"], None)
             moved += 1; pnl += float(t.get("pnl") or 0)
     return {"removed": moved, "pnl_removed": round(pnl, 2)}
 
@@ -83,7 +83,7 @@ def restore_removed() -> dict:
     import json as _j
     n = 0
     for t in _removed():
-        store._cmd("HSET", store.TRADES, t["id"], store._dump(t))
+        store._cmd("HSET", store.TRADES, t["id"], store._dump(t)); store._hset_mem(store.TRADES, t["id"], store._dump(t))
         store._cmd("HDEL", REMOVED, t["id"]); n += 1
     return {"restored": n}
 

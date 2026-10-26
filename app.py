@@ -501,6 +501,12 @@ def backtest_pine():
     return jsonify(PB.pine_for(b.get("params") or {}, b.get("index") or "NIFTY"))
 
 
+@app.get("/api/debug/redis")
+def debug_redis():
+    """Upstash commands sent by this process since it started (what uses the free-tier quota)."""
+    return jsonify(store.usage())
+
+
 @app.get("/api/autopilot/rules")
 def autopilot_rules():
     from fno import aprules
