@@ -70,10 +70,12 @@ def generate(p: dict, index: str, exit_ov: dict, exit_label: str, lot: int | Non
         code = code.replace("{{" + k + "}}", v)
     assert "{{" not in code, "unfilled placeholder"
     return {"index": index, "tv_symbol": tv_sym, "filename": f"fno_{index.lower()}_{p.get('exit', 'current')}.pine", "code": code,
-            "how_to": [f"Open TradingView, chart {tv_sym} on the 5-minute timeframe.",
+            "how_to": [f"Open TradingView, chart {tv_sym} (the index itself, not an option) on the 5-minute timeframe.",
                        "Use the INDEX chart, not an option chart: the script reads the index and says which option to buy. Long = BUY CALL, Short = BUY PUT (never selling).",
                        "Pine Editor (bottom panel) -> delete what is there -> paste this script -> Save -> Add to chart.",
                        "Strategy Tester (bottom panel) shows the trades and results; Settings (gear icon) lets you change every input.",
+                       "Clean chart: the script starts in 'Clean' view - small tags (hover one for the full trade card) and the current trade in the panel at the bottom right. Settings -> Display switches to 'Detailed'.",
+                       "Remove TradingView's own trade arrows: Settings -> Style -> untick 'Trades on chart' (the script's tags already show every trade).",
                        "For live signals: Alerts -> Create alert -> Condition: this strategy -> 'alert() function calls only'."]}
 
 
@@ -135,8 +137,15 @@ t3P       = input.float({{T3P}}, "book %", group=grpX, inline="t3")
 beAfterT1 = input.bool({{BE_T1}}, "Stop to entry after T1", group=grpX)
 revExit   = input.string("{{REV}}", "Reversal exit", options=["none", "ema9", "vwap", "give50", "candle"], group=grpX)
 revAfterR = input.float({{REV_R}}, "...only once the trade has been in profit by (R)", group=grpX)
-showLv    = input.bool(true, "Show bands / levels", group="Display")
-showTrade = input.bool(true, "Show trade boxes (option, entry, SL, targets)", group="Display")
+viewMode  = input.string("Clean", "View", options=["Clean", "Detailed"], group="Display",
+     tooltip="Clean: small tags (hover a tag for the full trade card), only the Noise band and VWAP, recent days only. Detailed: every card, level and highlight.")
+recentDays = input.int(5, "Draw trades for the last (days, 0 = all)", minval=0, group="Display")
+showLv    = input.bool(true, "Show Noise band / VWAP", group="Display")
+showLv2   = input.bool(false, "Show Camarilla / Fibonacci levels", group="Display")
+showTrade = input.bool(true, "Show trades on the chart", group="Display")
+showPanel = input.bool(true, "Show the info panel (with the current trade)", group="Display")
+clean     = viewMode == "Clean"
+recentOk  = recentDays == 0 or time >= timenow - recentDays * 86400000
 strikeStep = input.int({{STEP}}, "Strike step", group="Option")
 otmSteps  = input.int({{OTMN}}, "Strike: -1 = 1 ITM, 0 = ATM, 1 = 1 OTM", minval=-3, maxval=3, group="Option")
 
@@ -309,6 +318,7 @@ var bool[] halfR = array.from(false, false, false, false)
 var line[] lnE = array.from(line(na), line(na), line(na), line(na))
 var line[] lnS = array.from(line(na), line(na), line(na), line(na))
 var line[] lnT = array.new_line(12)
+var string[] lastA = array.from("No trade yet")
 var bool[] marks = array.from(false, false)        // [entry on this bar, exit on this bar]
 array.set(marks, 0, false)
 array.set(marks, 1, false)
@@ -335,7 +345,12 @@ drawTrade(int s, int sd, float riskPts, int lots, string nm) =>
         array.set(lnT, s * 3, line.new(bar_index, tgt, bar_index + 1, tgt, color=color.new(color.green, 0), width=2))
     array.set(lnE, s, line.new(bar_index, e, bar_index + 1, e, color=color.new(color.gray, 0), style=line.style_dotted))
     array.set(lnS, s, line.new(bar_index, stp, bar_index + 1, stp, color=color.new(color.red, 0), width=2))
-    label.new(bar_index, sd > 0 ? low : high, txt, style=sd > 0 ? label.style_label_up : label.style_label_down, color=sd > 0 ? color.new(color.green, 10) : color.new(color.red, 10), textcolor=color.white, size=size.small)
+    tag = (sd > 0 ? "▲ CALL " : "▼ PUT ") + str.tostring(k0, "#") + " ×" + str.tostring(lots)
+    if clean
+        label.new(bar_index, sd > 0 ? low : high, tag, style=sd > 0 ? label.style_label_up : label.style_label_down, color=sd > 0 ? color.new(color.green, 10) : color.new(color.red, 10), textcolor=color.white, size=size.tiny, tooltip=txt)
+    else
+        label.new(bar_index, sd > 0 ? low : high, txt, style=sd > 0 ? label.style_label_up : label.style_label_down, color=sd > 0 ? color.new(color.green, 10) : color.new(color.red, 10), textcolor=color.white, size=size.small)
+    array.set(lastA, 0, (sd > 0 ? "OPEN: BUY CALL " : "OPEN: BUY PUT ") + str.tostring(k0, "#") + " × " + str.tostring(lots) + " lot" + (lots > 1 ? "s" : "") + "\nindex entry " + str.tostring(e, "#.#") + " · SL " + str.tostring(stp, "#.#") + (na(tgt) ? "" : " · target " + str.tostring(tgt, "#.#")))
     true
 
 extendTrade(int s, float sl) =>
@@ -355,7 +370,12 @@ extendTrade(int s, float sl) =>
 finishTrade(int s, string why) =>
     if not na(array.get(lnE, s))
         sd = array.get(sideA, s)
-        label.new(bar_index, sd > 0 ? high : low, "EXIT " + array.get(ids, s) + ": " + why + "\nindex " + str.tostring(close, "#.#"), style=sd > 0 ? label.style_label_down : label.style_label_up, color=color.new(color.gray, 10), textcolor=color.white, size=size.tiny)
+        full = "EXIT " + array.get(ids, s) + ": " + why + "\nindex " + str.tostring(close, "#.#")
+        if clean
+            label.new(bar_index, sd > 0 ? high : low, "✕", style=sd > 0 ? label.style_label_down : label.style_label_up, color=color.new(color.gray, 20), textcolor=color.white, size=size.tiny, tooltip=full)
+        else
+            label.new(bar_index, sd > 0 ? high : low, full, style=sd > 0 ? label.style_label_down : label.style_label_up, color=color.new(color.gray, 10), textcolor=color.white, size=size.tiny)
+        array.set(lastA, 0, "Closed: " + why + " at index " + str.tostring(close, "#.#"))
     array.set(lnE, s, line(na))
     array.set(lnS, s, line(na))
     for j = 0 to 2
@@ -393,13 +413,13 @@ placeExits(int s, float qOpen) =>
             used += pq
             if used > filled + q * 0.001
                 lim = e + sd * array.get(tR, j) * r
-                strategy.exit(id + "_T" + str.tostring(j + 1), id, qty=pq, limit=(na(tgt) ? lim : (sd > 0 ? math.min(lim, tgt) : math.max(lim, tgt))), stop=sl, comment=id + " T" + str.tostring(j + 1) + "/SL")
+                strategy.exit(id + "_T" + str.tostring(j + 1), id, qty=pq, limit=(na(tgt) ? lim : (sd > 0 ? math.min(lim, tgt) : math.max(lim, tgt))), stop=sl, comment=clean ? "" : id + " T" + str.tostring(j + 1) + "/SL")
     if q - used > q * 0.001
-        strategy.exit(id + "_R", id, qty=q - used, limit=tgt, stop=sl, comment=id + " exit")
+        strategy.exit(id + "_R", id, qty=q - used, limit=tgt, stop=sl, comment=clean ? "" : id + " exit")
     true
 
 closeSlot(int s, string why) =>
-    strategy.close(array.get(ids, s), comment=why)
+    strategy.close(array.get(ids, s), comment=clean ? "" : why)
     if showTrade
         finishTrade(s, why)
     array.set(marks, 1, true)
@@ -442,9 +462,9 @@ tryEnter(int s, int sd, float riskPts, string nm) =>
         array.set(qtyA, s, q)
         array.set(inEnd, s, endMod)
         array.set(halfR, s, false)
-        strategy.entry(id, sd > 0 ? strategy.long : strategy.short, qty=q, comment=(sd > 0 ? "BUY CALL " : "BUY PUT ") + nm + " " + str.tostring(lots) + " lot" + (lots > 1 ? "s" : ""))
+        strategy.entry(id, sd > 0 ? strategy.long : strategy.short, qty=q, comment=clean ? (sd > 0 ? "CALL" : "PUT") : (sd > 0 ? "BUY CALL " : "BUY PUT ") + nm + " " + str.tostring(lots) + " lot" + (lots > 1 ? "s" : ""))
         placeExits(s, q)
-        if showTrade
+        if showTrade and recentOk
             drawTrade(s, sd, riskPts, lots, nm)
         array.set(marks, 0, true)
         alert("{{INDEX}} " + nm + (sd > 0 ? " BUY CALL" : " BUY PUT") + " at " + str.tostring(close) + ", stop " + str.tostring(close - sd * riskPts) + ", " + str.tostring(lots) + " lots", alert.freq_once_per_bar_close)
@@ -555,16 +575,16 @@ if canTrade and useFib and not array.get(doneToday, 3) and (not gates or realEq 
 plot(showLv ? bandUp : na, "Noise band up", color.new(color.orange, 30), style=plot.style_linebr)
 plot(showLv ? bandLo : na, "Noise band low", color.new(color.orange, 30), style=plot.style_linebr)
 plot(showLv ? vw : na, "VWAP (TWAP)", color.new(color.aqua, 40), style=plot.style_linebr)
-plot(showLv and useCam ? camH4 : na, "Camarilla H4", color.new(color.green, 50), style=plot.style_stepline)
-plot(showLv and useCam ? camL4 : na, "Camarilla L4", color.new(color.red, 50), style=plot.style_stepline)
-plot(showLv and useFib ? fibH4 : na, "Fib +0.618", color.new(color.lime, 60), style=plot.style_stepline)
-plot(showLv and useFib ? fibL4 : na, "Fib -0.618", color.new(color.maroon, 60), style=plot.style_stepline)
-bgcolor(showTrade and array.get(marks, 0) ? color.new(color.blue, 80) : showTrade and array.get(marks, 1) ? color.new(color.gray, 85) : na, title="Entry / exit bars")
-var table info = table.new(position.top_right, 2, 6, bgcolor=color.new(color.black, 20), border_width=1)
+plot((showLv2 or not clean) and useCam ? camH4 : na, "Camarilla H4", color.new(color.green, 50), style=plot.style_stepline)
+plot((showLv2 or not clean) and useCam ? camL4 : na, "Camarilla L4", color.new(color.red, 50), style=plot.style_stepline)
+plot((showLv2 or not clean) and useFib ? fibH4 : na, "Fib +0.618", color.new(color.lime, 60), style=plot.style_stepline)
+plot((showLv2 or not clean) and useFib ? fibL4 : na, "Fib -0.618", color.new(color.maroon, 60), style=plot.style_stepline)
+bgcolor(showTrade and not clean and array.get(marks, 0) ? color.new(color.blue, 80) : showTrade and not clean and array.get(marks, 1) ? color.new(color.gray, 85) : na, title="Entry / exit bars")
+var table info = table.new(clean ? position.bottom_right : position.top_right, 2, 7, bgcolor=color.new(color.black, 25), border_width=1)
 var table warn = table.new(position.middle_center, 1, 1, bgcolor=color.new(color.red, 10))
 if barstate.islast and not okChart
     table.cell(warn, 0, 0, "Wrong chart: " + syminfo.ticker + "\nPut this script on the {{TV_SYM}} INDEX chart (5 min), not on an option.\nIt reads the index and tells you which option to BUY.\nNo trades are taken on this chart.", text_color=color.white, text_size=size.large)
-if barstate.islast
+if barstate.islast and showPanel
     runTxt = na(runMove) or na(runATR) ? "-" : str.tostring(runMove, "#") + " pts (" + str.tostring(math.abs(runMove) / runATR, "#.0") + "x ATR)"
     table.cell(info, 0, 0, "FnO Trainer · {{INDEX}}", text_color=color.white)
     table.cell(info, 1, 0, "{{EXIT_LABEL}}", text_color=color.silver, text_size=size.small)
@@ -578,4 +598,6 @@ if barstate.islast
     table.cell(info, 1, 4, weekBlocked ? "hit - no new trades" : "ok", text_color=weekBlocked ? color.red : color.lime)
     table.cell(info, 0, 5, "Account (realised)", text_color=color.silver)
     table.cell(info, 1, 5, str.tostring(realEq, "#,###"), text_color=color.white)
+    table.cell(info, 0, 6, "Trade", text_color=color.silver)
+    table.cell(info, 1, 6, array.get(lastA, 0), text_color=str.startswith(array.get(lastA, 0), "OPEN") ? color.yellow : color.white, text_halign=text.align_left)
 '''
