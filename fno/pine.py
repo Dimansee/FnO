@@ -47,7 +47,7 @@ def generate(p: dict, index: str, exit_ov: dict, exit_label: str, lot: int | Non
         "INDEX": index, "TV_SYM": tv_sym, "LOT": str(lot), "CAPITAL": str(int(p.get("capital", 200000))),
         "SIZING": p.get("sizing", "compound"), "RISK": _f(p.get("risk_pct", 1.0)), "FIXED_LOTS": str(int(p.get("lots", 1))),
         "MAX_LOTS": str(int(p.get("max_lots", 0) or 0)), "CONF": conf, "CONF_IDX": _b(index in C.CONVICTION_SYMS),
-        "BIGRUN": _b(p.get("big_run_skip", True)), "DD_HALF": _b(p.get("dd_half", True)), "BIGRUN_ATR": _f(C.BIG_RUN_ATR), "GATES": _b(p.get("gates", True)),
+        "BIGRUN": _b(p.get("big_run_skip", True)), "MAX_LOSS": _f(p.get("max_loss_lot") or 0, 0), "SMALL_OTM": _b(p.get("small_otm", True)), "DD_HALF": _b(p.get("dd_half", True)), "BIGRUN_ATR": _f(C.BIG_RUN_ATR), "GATES": _b(p.get("gates", True)),
         "USE_NOISE": _b("noise" in strats), "USE_CAM": _b("camarilla" in strats), "USE_TREND": _b("trend" in strats), "USE_FIB": _b("fib" in strats),
         "NOISE_MULT": _f(C.NOISE_MULT), "NOISE_RR": _f(exit_ov["noise_rr"] if "noise_rr" in exit_ov else C.RR_NOISE),
         "NOISE_BE": _f(exit_ov.get("noise_be_r"), 0), "BE_R": _f(exit_ov["be_r"] if exit_ov.get("be_r") is not None else 1.0),
@@ -135,6 +135,7 @@ t2P       = input.float({{T2P}}, "book %", group=grpX, inline="t2")
 t3R       = input.float({{T3R}}, "T3 at (R)", group=grpX, inline="t3")
 t3P       = input.float({{T3P}}, "book %", group=grpX, inline="t3")
 beAfterT1 = input.bool({{BE_T1}}, "Stop to entry after T1", group=grpX)
+maxLossLot = input.float({{MAX_LOSS}}, "Max loss per lot (Rs, 0 = off): stop moves closer if the rule's stop would lose more", minval=0, group=grpX)
 revExit   = input.string("{{REV}}", "Reversal exit", options=["none", "ema9", "vwap", "give50", "candle"], group=grpX)
 revAfterR = input.float({{REV_R}}, "...only once the trade has been in profit by (R)", group=grpX)
 viewMode  = input.string("Clean", "View", options=["Clean", "Detailed"], group="Display",
@@ -148,6 +149,7 @@ clean     = viewMode == "Clean"
 recentOk  = recentDays == 0 or time >= timenow - recentDays * 86400000
 strikeStep = input.int({{STEP}}, "Strike step", group="Option")
 otmSteps  = input.int({{OTMN}}, "Strike: -1 = 1 ITM, 0 = ATM, 1 = 1 OTM", minval=-3, maxval=3, group="Option")
+smallOtm  = input.bool({{SMALL_OTM}}, "Small account: 1 OTM while the account is below Rs 60,000 (when the strike is 1 ITM)", group="Option")
 
 if timeframe.period != "5"
     runtime.error("Switch the chart to 5 minutes (timeframe button at the top: choose 5m). The rules are built on 5-minute candles.")
@@ -327,7 +329,8 @@ array.set(marks, 1, false)
 drawTrade(int s, int sd, float riskPts, int lots, string nm) =>
     e = close
     stp = e - sd * riskPts
-    k0 = math.round(e / strikeStep) * strikeStep + sd * otmSteps * strikeStep
+    stepsNow = smallOtm and otmSteps == -1 and realEq < 60000 ? 1 : otmSteps
+    k0 = math.round(e / strikeStep) * strikeStep + sd * stepsNow * strikeStep
     opt = sd > 0 ? "CE" : "PE"
     pSL = optDelta * riskPts
     float tgt = s == 0 and noiseRR > 0 ? e + sd * noiseRR * riskPts : na
@@ -442,7 +445,8 @@ lotsFor(int sd, float riskPts) =>
 // The rules use index points (ATR, bands, pivots): on an option or any other chart they are meaningless, so nothing trades there.
 okChart = syminfo.ticker == "{{TICK}}" or str.startswith(syminfo.ticker, "{{TICK}}1!") or str.startswith(syminfo.ticker, "{{TICK}}2!")
 
-tryEnter(int s, int sd, float riskPts, string nm) =>
+tryEnter(int s, int sd, float riskPts0, string nm) =>
+    riskPts = maxLossLot > 0 ? math.min(riskPts0, maxLossLot / (optDelta * lotSize)) : riskPts0
     bool ok = okChart
     netSide = strategy.position_size > 0 ? 1 : strategy.position_size < 0 ? -1 : 0
     if netSide != 0 and netSide != sd

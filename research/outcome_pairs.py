@@ -99,12 +99,12 @@ def main():
     rows = []
     for n, (f1, l1, c1, f2, l2, c2) in enumerate(pairs, 1):
         m = metrics({**c1, **c2})
-        rows.append({"f1": f1, "a": l1, "f2": f2, "b": l2, "runs": m})
+        rows.append({"f1": f1, "a": l1, "f2": f2, "b": l2, "ch": {**c1, **c2}, "runs": m})
         if n % 25 == 0:
             r = m["200000_full"]
             print(f"[{n}/{len(pairs)}] {l1} + {l2}: 2L {r['final']:,} dd {r['max_dd_pct']}", flush=True)
     out = {"generated": C.today_ist().isoformat(), "periods": O.PERIODS, "capitals": O.CAPS, "factors": {f: [l for l, _ in o] for f, o in F.items()},
-           "baseline": base, "singles": [{"factor": f, "name": lab, "runs": S[lab]} for f, lab, _ in singles], "pairs": rows,
+           "baseline": base, "singles": [{"factor": f, "name": lab, "ch": ch, "runs": S[lab]} for f, lab, ch in singles], "pairs": rows,
            "notes": ["Each pair changes two settings at once; everything else is today's Autopilot.",
                      "'Adds up?' compares the pair with the better of its two single changes: 'yes' = the pair earns more than either alone, "
                      "'no' = one of the singles alone was better.",
@@ -117,5 +117,7 @@ def main():
 if __name__ == "__main__":
     main()
     import outcomes_pdf
-    outcomes_pdf.build(json.load(open(O.OUT_JSON)), O.OUT_PDF, json.load(open(OUT)))
+    import gzip
+    gf = os.path.join(ROOT, "fno", "outcomes_grid.json.gz")
+    outcomes_pdf.build(json.load(open(O.OUT_JSON)), O.OUT_PDF, json.load(open(OUT)), json.load(gzip.open(gf, "rt")) if os.path.exists(gf) else None)
     print("wrote", O.OUT_PDF)

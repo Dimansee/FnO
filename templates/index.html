@@ -805,7 +805,7 @@ details summary{cursor:pointer;font-size:13px}
     <input id="glQ" placeholder="Search a word, e.g. noise, VWAP, circuit" style="width:100%;margin:6px 0"></div><div id="glList"></div></section>
   <section id="t-stockrules" class="hidden"><div class="card rule" id="stockRulebook"></div></section>
   <section id="t-aprules" class="hidden"><div class="card rule" id="apRules"></div></section>
-  <section id="t-outcomes" class="hidden"><div class="card" id="ocTop"></div><div class="card" id="ocTbl" style="margin-top:12px"></div></section>
+  <section id="t-outcomes" class="hidden"><div class="card" id="ocTop"></div><div id="ocPineBox" class="hidden" style="margin-top:12px"></div><div class="card" id="ocTbl" style="margin-top:12px"></div></section>
   <section id="t-rules" class="hidden"><div class="card rule" id="rulebook"></div></section>
 
   <!-- SETTINGS -->
@@ -3056,7 +3056,7 @@ async function loadOutcomes() {
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
       <label>Starting capital <select id="ocCap">${d.capitals.map(c => `<option value="${c}" ${String(c) === OC.cap ? "selected" : ""}>${ocRs(c)}</option>`).join("")}</select></label>
       <label>Show <select id="ocGrp"><option value="">all groups</option>${[...new Set(d.rows.map(r => r.group))].map(g => `<option>${esc(g)}</option>`).join("")}</select></label>
-      <label>View <select id="ocView"><option value="single" ${OC.view === "single" ? "selected" : ""}>One change at a time</option><option value="pairs" ${OC.view === "pairs" ? "selected" : ""}>Two changes together (pairs)</option></select></label>
+      <label>View <select id="ocView"><option value="single" ${OC.view === "single" ? "selected" : ""}>One change at a time</option><option value="pairs" ${OC.view === "pairs" ? "selected" : ""}>Two changes together (pairs)</option><option value="grid" ${OC.view === "grid" ? "selected" : ""}>Every combination (builder)</option></select></label>
       <a class="btn" href="/api/outcomes.pdf" target="_blank" rel="noopener">Open PDF</a>
       <span class="muted">Click a column title to sort.</span></div>`;
   $("#ocCap").onchange = e => { OC.cap = e.target.value; ocShow(); };
@@ -3067,10 +3067,12 @@ async function loadOutcomes() {
 async function ocShow() {
   $("#ocGrp").parentElement.style.display = OC.view === "single" ? "" : "none";
   if (OC.view === "single") return ocTable();
+  if (OC.view === "grid") return ocGrid();
   if (!OC.pairs) { $("#ocTbl").innerHTML = `<p class="muted">Loading pairs…</p>`; OC.pairs = await api("/api/outcomes/pairs"); }
   ocPairs();
 }
 function ocPairs() {
+  OC.pineReq = [];
   const d = OC.pairs, cap = OC.cap, kf = cap + "_full", k6 = cap + "_y2026";
   if (!d.pairs || !d.pairs.length) { $("#ocTbl").innerHTML = `<p>${esc(d.error || "No pairs yet.")}</p>`; return; }
   const bf = d.baseline[kf], b6 = d.baseline[k6], S1 = Object.fromEntries(d.singles.map(x => [x.name, x.runs]));
@@ -3088,16 +3090,18 @@ function ocPairs() {
   $("#ocTbl").innerHTML = `<p class="muted" style="margin:0 0 8px">${d.pairs.length} pairs of changes (${d.singles.length} single changes in ${Object.keys(d.factors).length} groups, paired across groups). Today's rules: <b>${ocRs(bf.final)}</b> (worst fall ${bf.max_dd_pct}%), 2026 <b>${ocRs(b6.final)}</b>. Showing ${rows.length}; ${better} earn 2%+ more without a deeper fall (full history). <b>Adds up?</b> = does the pair beat the better of its two single changes.</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px"><label>Involving <select id="ocPF"><option value="">any group</option>${Object.keys(d.factors).map(f => `<option ${f === fac ? "selected" : ""}>${esc(f)}</option>`).join("")}</select></label>
       <label>Search <input id="ocPQ" value="${esc(q)}" placeholder="e.g. strong" style="width:160px"></label></div>
-    <div class="tablewrap" style="max-height:75vh"><table class="prose" id="ocPT"><tr><th>Change A</th><th>Change B</th>${th("final", "Full: ends at")}<th>vs current</th><th>A alone</th><th>B alone</th><th>Adds up?</th>${th("dd", "Worst fall")}${th("win", "Win %")}${th("f6", "2026: ends at")}<th>vs current</th>${th("dd6", "Worst fall")}</tr>
+    <div class="tablewrap" style="max-height:75vh"><table class="prose" id="ocPT"><tr><th>Change A</th><th>Change B</th>${th("final", "Full: ends at")}<th>vs current</th><th>A alone</th><th>B alone</th><th>Adds up?</th>${th("dd", "Worst fall")}${th("win", "Win %")}${th("f6", "2026: ends at")}<th>vs current</th>${th("dd6", "Worst fall")}<th></th></tr>
     ${rows.map(x => `<tr><td><span class="muted" style="font-size:11px">${esc(x.r.f1)}</span><br><b>${esc(x.r.a)}</b></td><td><span class="muted" style="font-size:11px">${esc(x.r.f2)}</span><br><b>${esc(x.r.b)}</b></td>
       <td class="mono">${ocRs(x.f.final)}</td><td>${pc(x.df)}</td><td class="mono muted">${ocRs(x.sa)}</td><td class="mono muted">${ocRs(x.sb)}</td>
       <td style="font-weight:600;color:${x.add === "yes" ? "var(--green)" : x.add === "no" ? "var(--red)" : "var(--muted)"}">${x.add}</td>
-      <td class="mono">${x.f.max_dd_pct}%</td><td>${x.f.win_rate}</td><td class="mono">${ocRs(x.y.final)}</td><td>${pc(x.dy)}</td><td class="mono">${x.y.max_dd_pct}%</td></tr>`).join("")}</table></div>`;
+      <td class="mono">${x.f.max_dd_pct}%</td><td>${x.f.win_rate}</td><td class="mono">${ocRs(x.y.final)}</td><td>${pc(x.dy)}</td><td class="mono">${x.y.max_dd_pct}%</td><td>${ocPineBtn({changes: x.r.ch || {}}, x.r.a + " + " + x.r.b)}</td></tr>`).join("")}</table></div>`;
+  ocPineWire();
   $("#ocPF").onchange = () => ocPairs();
   $("#ocPQ").oninput = () => { clearTimeout(OC.t); OC.t = setTimeout(() => { ocPairs(); $("#ocPQ").focus(); const v = $("#ocPQ"); v.setSelectionRange(v.value.length, v.value.length); }, 300); };
   $("#ocPT").querySelectorAll("th[data-k]").forEach(h => h.onclick = () => { const k = h.dataset.k; OC.psort = OC.psort[0] === k ? [k, -OC.psort[1]] : [k, 1]; ocPairs(); });
 }
 function ocTable() {
+  OC.pineReq = [];
   const d = OC.data, cap = OC.cap, g = $("#ocGrp").value, base = d.rows[0];
   const bf = base.runs[cap + "_full"], b6 = base.runs[cap + "_y2026"];
   let rows = d.rows.map((r, i) => { const f = r.runs[cap + "_full"], y = r.runs[cap + "_y2026"];
@@ -3110,13 +3114,76 @@ function ocTable() {
   const pc = x => `<span class="${x > 0.5 ? "up" : x < -0.5 ? "down" : ""}">${x > 0 ? "+" : ""}${x.toFixed(0)}%</span>`;
   $("#ocTbl").innerHTML = `<div class="tablewrap" style="max-height:75vh"><table class="prose" id="ocT"><tr><th>Group</th><th>Scenario (what changes)</th>
     ${th("final", "Full: ends at")}${th("df", "vs current")}${th("dd", "Worst fall")}${th("win", "Win %")}${th("pf", "PF")}${th("lm", "Losing months")}
-    ${th("f6", "2026: ends at")}${th("dy", "vs current")}${th("dd6", "Worst fall")}<th>Verdict full</th><th>Verdict 2026</th></tr>
+    ${th("f6", "2026: ends at")}${th("dy", "vs current")}${th("dd6", "Worst fall")}<th>Verdict full</th><th>Verdict 2026</th><th></th></tr>
     ${rows.map(x => `<tr style="${x.i === 0 ? "background:var(--gold-bg)" : ""}"><td class="muted">${esc(x.r.group)}</td>
       <td><b>${esc(x.r.name)}</b>${x.r.changes.length ? `<div class="muted" style="font-size:12px">${esc(x.r.changes.join(" · "))}</div>` : ""}</td>
       <td class="mono">${ocRs(x.f.final)}</td><td>${x.i ? pc(x.df) : "–"}</td><td class="mono">${x.f.max_dd_pct}%</td><td>${x.f.win_rate}</td><td>${x.f.profit_factor ?? "–"}</td><td>${x.f.losing_months}/${x.f.months}</td>
       <td class="mono">${ocRs(x.y.final)}</td><td>${x.i ? pc(x.dy) : "–"}</td><td class="mono">${x.y.max_dd_pct}%</td>
-      <td>${vc(x.r.verdict[cap + "_full"])}</td><td>${vc(x.r.verdict[cap + "_y2026"])}</td></tr>`).join("")}</table></div>`;
+      <td>${vc(x.r.verdict[cap + "_full"])}</td><td>${vc(x.r.verdict[cap + "_y2026"])}</td><td>${ocPineBtn({changes: x.r.ch || {}}, x.r.name)}</td></tr>`).join("")}</table></div>`;
+  ocPineWire();
   $("#ocT").querySelectorAll("th[data-k]").forEach(h => h.onclick = () => { const k = h.dataset.k; OC.sort = OC.sort && OC.sort[0] === k ? [k, -OC.sort[1]] : [k, 1]; ocTable(); });
+}
+
+// ---------- Outcomes: Pine Script for any row ----------
+OC.pineReq = [];
+function ocPineBtn(body, title) { OC.pineReq.push([body, title]); return `<button class="ghost" style="padding:3px 9px;font-size:12px" data-ocpine="${OC.pineReq.length - 1}" title="Pine Script for TradingView with these exact settings">Pine</button>`; }
+function ocPineWire() { document.querySelectorAll("[data-ocpine]").forEach(b => b.onclick = () => { const [body, title] = OC.pineReq[+b.dataset.ocpine]; ocPine(body, title); }); }
+async function ocPine(body, title) {
+  const box = $("#ocPineBox"); box.classList.remove("hidden"); box.innerHTML = `<div class="card muted">Building Pine Script…</div>`;
+  box.scrollIntoView({behavior: "smooth", block: "start"});
+  try {
+    const r = await post("/api/outcomes/pine", {...body, capital: +OC.cap});
+    const outs = r.scripts; OC.pine = outs;
+    const tab = n => { $("#ocPineCode").value = outs[n].code; $("#ocPineHow").innerHTML = outs[n].how_to.map(h => `<li>${esc(h)}</li>`).join("");
+      box.querySelectorAll("[data-octab]").forEach(b => b.classList.toggle("on", +b.dataset.octab === n)); OC.pineTab = n; };
+    box.innerHTML = `<div class="card"><div class="cardhead"><h3 style="margin:0">Pine Script · ${esc(title || "today's rules")}</h3><button class="ghost" id="ocPineClose">Close</button></div>
+      <p class="muted" style="margin:6px 0 10px;font-size:13px">Exactly these settings (starting capital ${ocRs(+OC.cap)}). One script per index - put it on the <b>index</b> chart (${outs.map(o => esc(o.tv_symbol)).join(", ")}), 5-minute timeframe, not on an option. It shows which option to buy, the stop, the target and the exit.</p>
+      <div class="segs" style="margin-bottom:8px">${outs.map((o, n) => `<button class="seg" data-octab="${n}">${esc(o.index)} · ${esc(o.tv_symbol)}</button>`).join("")}</div>
+      <textarea id="ocPineCode" readonly spellcheck="false" style="width:100%;height:300px;font-family:ui-monospace,monospace;font-size:12px"></textarea>
+      <div class="row wrap" style="margin-top:8px;gap:8px"><button class="primary" id="ocPineCopy">Copy</button><button id="ocPineDl">⬇ Download .pine</button></div>
+      <ol id="ocPineHow" class="muted" style="font-size:12.5px;margin:10px 0 0;padding-left:18px"></ol></div>`;
+    tab(0);
+    box.querySelectorAll("[data-octab]").forEach(b => b.onclick = () => tab(+b.dataset.octab));
+    $("#ocPineClose").onclick = () => box.classList.add("hidden");
+    $("#ocPineCopy").onclick = async () => { try { await navigator.clipboard.writeText($("#ocPineCode").value); toast("Copied - paste it into TradingView's Pine Editor"); } catch (e) { $("#ocPineCode").select(); toast("Select all and copy"); } };
+    $("#ocPineDl").onclick = () => { const o = OC.pine[OC.pineTab || 0]; const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([o.code], {type: "text/plain"})); a.download = o.filename; a.click(); };
+  } catch (e) { box.innerHTML = `<div class="card"><p class="down" style="margin:0">${esc(e.message)}</p></div>`; }
+}
+
+// ---------- Outcomes: every combination (builder) ----------
+OC.g = {filters: {}, period: "full", sort: "final", desc: true, both: false, maxdd: ""};
+async function ocGrid() {
+  if (!OC.gmeta) { $("#ocTbl").innerHTML = `<p class="muted">Loading combinations…</p>`; OC.gmeta = await api("/api/outcomes/grid/meta"); }
+  const m = OC.gmeta, G = OC.g;
+  if (!m.ok) { $("#ocTbl").innerHTML = `<p>${esc(m.error)}</p>`; return; }
+  const run = OC.cap + "_" + (G.period === "full" ? "full" : "y2026"), other = OC.cap + "_" + (G.period === "full" ? "y2026" : "full");
+  const res = await post("/api/outcomes/grid/query", {filters: G.filters, run, sort: G.sort, desc: G.desc, both_better: G.both, max_dd: G.maxdd, limit: 100});
+  OC.pineReq = [];
+  const b = res.baseline.runs[run], bo = res.baseline.runs[other];
+  const pc = x => `<span class="${x > 0.5 ? "up" : x < -0.5 ? "down" : ""}">${x > 0 ? "+" : ""}${x.toFixed(0)}%</span>`;
+  const dlt = (v, bb) => (v - bb) / Math.max(Math.abs(bb - +OC.cap), 1) * 100;
+  const sel = (i, f) => `<label style="font-size:12.5px">${esc(f.name)}<br><select data-gf="${i}" style="min-width:120px"><option value="">any</option>${f.options.map((o, j) => `<option value="${j}" ${String(G.filters[i] ?? "") === String(j) ? "selected" : ""}>${esc(o)}${j === 0 ? " (now)" : ""}</option>`).join("")}</select></label>`;
+  const th = (k, t) => `<th style="cursor:pointer" data-gs="${k}">${t}${G.sort === k ? (G.desc ? " ▼" : " ▲") : ""}</th>`;
+  $("#ocTbl").innerHTML = `<p class="muted" style="margin:0 0 8px">${m.count.toLocaleString("en-IN")} combinations of ${m.factors.length} settings (${esc(m.factors.map(f => f.name).join(", "))}). Pick a value for any setting to narrow the list, or leave "any" to search across it. Today's rules here: <b>${ocRs(b.final)}</b>, worst fall ${b.max_dd_pct}%.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:10px">${m.factors.map((f, i) => sel(i, f)).join("")}</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+      <label>Period <select id="ocGP"><option value="full" ${G.period === "full" ? "selected" : ""}>Full history</option><option value="y2026" ${G.period !== "full" ? "selected" : ""}>2026 only</option></select></label>
+      <label>Worst fall no deeper than <input id="ocGD" value="${esc(G.maxdd)}" placeholder="e.g. 30" style="width:60px">%</label>
+      <label class="tog"><input type="checkbox" id="ocGB" ${G.both ? "checked" : ""}> Beats today's rules in both periods</label>
+      <button class="ghost" id="ocGR">Reset to today's rules</button></div>
+    <p style="margin:0 0 8px"><b>${res.total.toLocaleString("en-IN")}</b> match · showing the top ${Math.min(100, res.total)}</p>
+    <div class="tablewrap" style="max-height:72vh"><table class="prose"><tr><th>#</th><th>Settings (what differs from today)</th>${th("final", (G.period === "full" ? "Full" : "2026") + ": ends at")}<th>vs today</th>${th("max_dd_pct", "Worst fall")}${th("win_rate", "Win %")}${th("profit_factor", "PF")}${th("trades", "Trades")}<th>${G.period === "full" ? "2026" : "Full"}: ends at</th><th>Worst fall</th><th></th></tr>
+    ${res.rows.map((r, n) => { const x = r.runs[run], o = r.runs[other]; const isBase = !r.changes.length;
+      return `<tr style="${isBase ? "background:var(--gold-bg)" : ""}"><td class="muted">${n + 1}</td><td>${isBase ? "<b>Today's Autopilot rules</b>" : r.changes.map(c => `<span style="display:inline-block;margin:1px 6px 1px 0">${esc(c)}</span>`).join("·&nbsp;")}</td>
+        <td class="mono">${ocRs(x.final)}</td><td>${isBase ? "–" : pc(dlt(x.final, b.final))}</td><td class="mono">${x.max_dd_pct}%</td><td>${x.win_rate}</td><td>${x.profit_factor ?? "–"}</td><td>${x.trades}</td>
+        <td class="mono">${ocRs(o.final)} <span style="font-size:11px">${isBase ? "" : pc(dlt(o.final, bo.final))}</span></td><td class="mono">${o.max_dd_pct}%</td><td>${ocPineBtn({idx: r.idx}, isBase ? "today's rules" : r.changes.join(", "))}</td></tr>`; }).join("")}</table></div>`;
+  ocPineWire();
+  document.querySelectorAll("[data-gf]").forEach(e => e.onchange = () => { const v = e.value; if (v === "") delete G.filters[e.dataset.gf]; else G.filters[e.dataset.gf] = +v; ocGrid(); });
+  document.querySelectorAll("[data-gs]").forEach(h => h.onclick = () => { const k = h.dataset.gs; if (G.sort === k) G.desc = !G.desc; else { G.sort = k; G.desc = k !== "max_dd_pct" ? true : true; } ocGrid(); });
+  $("#ocGP").onchange = e => { G.period = e.target.value; ocGrid(); };
+  $("#ocGB").onchange = e => { G.both = e.target.checked; ocGrid(); };
+  $("#ocGD").onchange = e => { G.maxdd = e.target.value.trim(); ocGrid(); };
+  $("#ocGR").onclick = () => { G.filters = Object.fromEntries(m.factors.map((f, i) => [i, 0])); ocGrid(); };
 }
 
 function renderRules() {

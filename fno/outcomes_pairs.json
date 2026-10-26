@@ -153,6 +153,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5
 }
 },
 {
@@ -199,6 +202,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5
 }
 },
 {
@@ -245,6 +251,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0
 }
 },
 {
@@ -291,6 +300,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk"
 }
 },
 {
@@ -337,6 +349,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1
 }
 },
 {
@@ -383,6 +399,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3
 }
 },
 {
@@ -429,6 +449,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none"
 }
 },
 {
@@ -475,6 +498,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong"
 }
 },
 {
@@ -521,6 +547,9 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false
 }
 },
 {
@@ -567,6 +596,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false
 }
 },
 {
@@ -613,6 +645,9 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"gates": false
 }
 },
 {
@@ -659,6 +694,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 0
 }
 },
 {
@@ -705,6 +743,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 1
 }
 },
 {
@@ -751,6 +792,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 2
 }
 },
 {
@@ -797,6 +841,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "lock_2r"
 }
 },
 {
@@ -843,6 +890,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "trail_25"
 }
 },
 {
@@ -889,6 +939,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "trail_2"
 }
 },
 {
@@ -935,6 +988,9 @@
 "losing_months": 5,
 "months": 9
 }
+},
+"ch": {
+"exit": "noise_t2"
 }
 },
 {
@@ -981,6 +1037,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "noise_be"
 }
 },
 {
@@ -1027,6 +1086,9 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "half_2r"
 }
 },
 {
@@ -1073,6 +1135,9 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "t123"
 }
 },
 {
@@ -1119,6 +1184,9 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"max_loss_lot": 2200
 }
 },
 {
@@ -1165,6 +1233,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"max_loss_lot": 3000
 }
 },
 {
@@ -1211,6 +1282,12 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -1257,6 +1334,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -1303,6 +1386,11 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -1349,6 +1437,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"max_lots": 20
 }
 },
 {
@@ -1395,6 +1486,9 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"max_lots": 0
 }
 }
 ],
@@ -1445,6 +1539,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"confidence": "none"
 }
 },
 {
@@ -1493,6 +1591,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"confidence": "strong"
 }
 },
 {
@@ -1541,6 +1643,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"big_run_skip": false
 }
 },
 {
@@ -1589,6 +1695,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"dd_half": false
 }
 },
 {
@@ -1637,6 +1747,10 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"gates": false
 }
 },
 {
@@ -1685,6 +1799,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"otm": 0
 }
 },
 {
@@ -1733,6 +1851,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"otm": 1
 }
 },
 {
@@ -1781,6 +1903,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"otm": 2
 }
 },
 {
@@ -1829,6 +1955,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"exit": "lock_2r"
 }
 },
 {
@@ -1877,6 +2007,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"exit": "trail_25"
 }
 },
 {
@@ -1925,6 +2059,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"exit": "trail_2"
 }
 },
 {
@@ -1973,6 +2111,10 @@
 "losing_months": 5,
 "months": 9
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"exit": "noise_t2"
 }
 },
 {
@@ -2021,6 +2163,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"exit": "noise_be"
 }
 },
 {
@@ -2069,6 +2215,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"exit": "half_2r"
 }
 },
 {
@@ -2117,6 +2267,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"exit": "t123"
 }
 },
 {
@@ -2165,6 +2319,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"max_loss_lot": 2200
 }
 },
 {
@@ -2213,6 +2371,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"max_loss_lot": 3000
 }
 },
 {
@@ -2261,6 +2423,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -2309,6 +2478,13 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -2357,6 +2533,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -2405,6 +2587,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"max_lots": 20
 }
 },
 {
@@ -2453,6 +2639,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 0.5,
+"max_lots": 0
 }
 },
 {
@@ -2501,6 +2691,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"confidence": "none"
 }
 },
 {
@@ -2549,6 +2743,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"confidence": "strong"
 }
 },
 {
@@ -2597,6 +2795,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"big_run_skip": false
 }
 },
 {
@@ -2645,6 +2847,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"dd_half": false
 }
 },
 {
@@ -2693,6 +2899,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"gates": false
 }
 },
 {
@@ -2741,6 +2951,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"otm": 0
 }
 },
 {
@@ -2789,6 +3003,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"otm": 1
 }
 },
 {
@@ -2837,6 +3055,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"otm": 2
 }
 },
 {
@@ -2885,6 +3107,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"exit": "lock_2r"
 }
 },
 {
@@ -2933,6 +3159,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"exit": "trail_25"
 }
 },
 {
@@ -2981,6 +3211,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"exit": "trail_2"
 }
 },
 {
@@ -3029,6 +3263,10 @@
 "losing_months": 5,
 "months": 9
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"exit": "noise_t2"
 }
 },
 {
@@ -3077,6 +3315,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"exit": "noise_be"
 }
 },
 {
@@ -3125,6 +3367,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"exit": "half_2r"
 }
 },
 {
@@ -3173,6 +3419,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"exit": "t123"
 }
 },
 {
@@ -3221,6 +3471,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"max_loss_lot": 2200
 }
 },
 {
@@ -3269,6 +3523,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"max_loss_lot": 3000
 }
 },
 {
@@ -3317,6 +3575,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -3365,6 +3630,13 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -3413,6 +3685,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -3461,6 +3739,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"max_lots": 20
 }
 },
 {
@@ -3509,6 +3791,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 1.5,
+"max_lots": 0
 }
 },
 {
@@ -3557,6 +3843,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"confidence": "none"
 }
 },
 {
@@ -3605,6 +3895,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"confidence": "strong"
 }
 },
 {
@@ -3653,6 +3947,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"big_run_skip": false
 }
 },
 {
@@ -3701,6 +3999,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"dd_half": false
 }
 },
 {
@@ -3749,6 +4051,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"gates": false
 }
 },
 {
@@ -3797,6 +4103,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"otm": 0
 }
 },
 {
@@ -3845,6 +4155,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"otm": 1
 }
 },
 {
@@ -3893,6 +4207,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"otm": 2
 }
 },
 {
@@ -3941,6 +4259,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"exit": "lock_2r"
 }
 },
 {
@@ -3989,6 +4311,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"exit": "trail_25"
 }
 },
 {
@@ -4037,6 +4363,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"exit": "trail_2"
 }
 },
 {
@@ -4085,6 +4415,10 @@
 "losing_months": 5,
 "months": 9
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"exit": "noise_t2"
 }
 },
 {
@@ -4133,6 +4467,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"exit": "noise_be"
 }
 },
 {
@@ -4181,6 +4519,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"exit": "half_2r"
 }
 },
 {
@@ -4229,6 +4571,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"exit": "t123"
 }
 },
 {
@@ -4277,6 +4623,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"max_loss_lot": 2200
 }
 },
 {
@@ -4325,6 +4675,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"max_loss_lot": 3000
 }
 },
 {
@@ -4373,6 +4727,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -4421,6 +4782,13 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -4469,6 +4837,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -4517,6 +4891,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"max_lots": 20
 }
 },
 {
@@ -4565,6 +4943,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"risk_pct": 2.0,
+"max_lots": 0
 }
 },
 {
@@ -4613,6 +4995,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"big_run_skip": false
 }
 },
 {
@@ -4661,6 +5047,10 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"gates": false
 }
 },
 {
@@ -4709,6 +5099,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"otm": 0
 }
 },
 {
@@ -4757,6 +5151,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"otm": 1
 }
 },
 {
@@ -4805,6 +5203,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"otm": 2
 }
 },
 {
@@ -4853,6 +5255,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"exit": "lock_2r"
 }
 },
 {
@@ -4901,6 +5307,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"exit": "trail_25"
 }
 },
 {
@@ -4949,6 +5359,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"exit": "trail_2"
 }
 },
 {
@@ -4997,6 +5411,10 @@
 "losing_months": 5,
 "months": 9
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"exit": "noise_t2"
 }
 },
 {
@@ -5045,6 +5463,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"exit": "noise_be"
 }
 },
 {
@@ -5093,6 +5515,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"exit": "half_2r"
 }
 },
 {
@@ -5141,6 +5567,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"exit": "t123"
 }
 },
 {
@@ -5189,6 +5619,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"max_loss_lot": 2200
 }
 },
 {
@@ -5237,6 +5671,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"max_loss_lot": 3000
 }
 },
 {
@@ -5285,6 +5723,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -5333,6 +5778,13 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -5381,6 +5833,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -5429,6 +5887,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"max_lots": 20
 }
 },
 {
@@ -5477,6 +5939,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed_risk",
+"max_lots": 0
 }
 },
 {
@@ -5525,6 +5991,11 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"big_run_skip": false
 }
 },
 {
@@ -5573,6 +6044,11 @@
 "losing_months": 1,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"gates": false
 }
 },
 {
@@ -5621,6 +6097,11 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"otm": 0
 }
 },
 {
@@ -5669,6 +6150,11 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"otm": 1
 }
 },
 {
@@ -5717,6 +6203,11 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"otm": 2
 }
 },
 {
@@ -5765,6 +6256,11 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"exit": "lock_2r"
 }
 },
 {
@@ -5813,6 +6309,11 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"exit": "trail_25"
 }
 },
 {
@@ -5861,6 +6362,11 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"exit": "trail_2"
 }
 },
 {
@@ -5909,6 +6415,11 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"exit": "noise_t2"
 }
 },
 {
@@ -5957,6 +6468,11 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"exit": "noise_be"
 }
 },
 {
@@ -6005,6 +6521,11 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"exit": "half_2r"
 }
 },
 {
@@ -6053,6 +6574,11 @@
 "losing_months": 5,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"exit": "t123"
 }
 },
 {
@@ -6101,6 +6627,11 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"max_loss_lot": 2200
 }
 },
 {
@@ -6149,6 +6680,11 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"max_loss_lot": 3000
 }
 },
 {
@@ -6197,6 +6733,14 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -6245,6 +6789,14 @@
 "losing_months": 3,
 "months": 3
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -6293,6 +6845,13 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -6341,6 +6900,11 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"max_lots": 20
 }
 },
 {
@@ -6389,6 +6953,11 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1,
+"max_lots": 0
 }
 },
 {
@@ -6437,6 +7006,11 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"big_run_skip": false
 }
 },
 {
@@ -6485,6 +7059,11 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"gates": false
 }
 },
 {
@@ -6533,6 +7112,11 @@
 "losing_months": 5,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"otm": 0
 }
 },
 {
@@ -6581,6 +7165,11 @@
 "losing_months": 5,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"otm": 1
 }
 },
 {
@@ -6629,6 +7218,11 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"otm": 2
 }
 },
 {
@@ -6677,6 +7271,11 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"exit": "lock_2r"
 }
 },
 {
@@ -6725,6 +7324,11 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"exit": "trail_25"
 }
 },
 {
@@ -6773,6 +7377,11 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"exit": "trail_2"
 }
 },
 {
@@ -6821,6 +7430,11 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"exit": "noise_t2"
 }
 },
 {
@@ -6869,6 +7483,11 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"exit": "noise_be"
 }
 },
 {
@@ -6917,6 +7536,11 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"exit": "half_2r"
 }
 },
 {
@@ -6965,6 +7589,11 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"exit": "t123"
 }
 },
 {
@@ -7013,6 +7642,11 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"max_loss_lot": 2200
 }
 },
 {
@@ -7061,6 +7695,11 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"max_loss_lot": 3000
 }
 },
 {
@@ -7109,6 +7748,14 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -7157,6 +7804,14 @@
 "losing_months": 3,
 "months": 3
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -7205,6 +7860,13 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -7253,6 +7915,11 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"max_lots": 20
 }
 },
 {
@@ -7301,6 +7968,11 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3,
+"max_lots": 0
 }
 },
 {
@@ -7349,6 +8021,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"big_run_skip": false
 }
 },
 {
@@ -7397,6 +8073,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"dd_half": false
 }
 },
 {
@@ -7445,6 +8125,10 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"gates": false
 }
 },
 {
@@ -7493,6 +8177,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"otm": 0
 }
 },
 {
@@ -7541,6 +8229,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"otm": 1
 }
 },
 {
@@ -7589,6 +8281,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"otm": 2
 }
 },
 {
@@ -7637,6 +8333,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"exit": "lock_2r"
 }
 },
 {
@@ -7685,6 +8385,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"exit": "trail_25"
 }
 },
 {
@@ -7733,6 +8437,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"exit": "trail_2"
 }
 },
 {
@@ -7781,6 +8489,10 @@
 "losing_months": 5,
 "months": 9
 }
+},
+"ch": {
+"confidence": "none",
+"exit": "noise_t2"
 }
 },
 {
@@ -7829,6 +8541,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"exit": "noise_be"
 }
 },
 {
@@ -7877,6 +8593,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"exit": "half_2r"
 }
 },
 {
@@ -7925,6 +8645,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"exit": "t123"
 }
 },
 {
@@ -7973,6 +8697,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"max_loss_lot": 2200
 }
 },
 {
@@ -8021,6 +8749,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"max_loss_lot": 3000
 }
 },
 {
@@ -8069,6 +8801,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -8117,6 +8856,13 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -8165,6 +8911,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -8213,6 +8965,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"max_lots": 20
 }
 },
 {
@@ -8261,6 +9017,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "none",
+"max_lots": 0
 }
 },
 {
@@ -8309,6 +9069,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"big_run_skip": false
 }
 },
 {
@@ -8357,6 +9121,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"dd_half": false
 }
 },
 {
@@ -8405,6 +9173,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"gates": false
 }
 },
 {
@@ -8453,6 +9225,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"otm": 0
 }
 },
 {
@@ -8501,6 +9277,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"otm": 1
 }
 },
 {
@@ -8549,6 +9329,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"otm": 2
 }
 },
 {
@@ -8597,6 +9381,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"exit": "lock_2r"
 }
 },
 {
@@ -8645,6 +9433,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"exit": "trail_25"
 }
 },
 {
@@ -8693,6 +9485,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"exit": "trail_2"
 }
 },
 {
@@ -8741,6 +9537,10 @@
 "losing_months": 5,
 "months": 9
 }
+},
+"ch": {
+"confidence": "strong",
+"exit": "noise_t2"
 }
 },
 {
@@ -8789,6 +9589,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"exit": "noise_be"
 }
 },
 {
@@ -8837,6 +9641,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"exit": "half_2r"
 }
 },
 {
@@ -8885,6 +9693,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"exit": "t123"
 }
 },
 {
@@ -8933,6 +9745,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"max_loss_lot": 2200
 }
 },
 {
@@ -8981,6 +9797,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"max_loss_lot": 3000
 }
 },
 {
@@ -9029,6 +9849,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -9077,6 +9904,13 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -9125,6 +9959,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -9173,6 +10013,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"max_lots": 20
 }
 },
 {
@@ -9221,6 +10065,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"confidence": "strong",
+"max_lots": 0
 }
 },
 {
@@ -9269,6 +10117,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"dd_half": false
 }
 },
 {
@@ -9317,6 +10169,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"gates": false
 }
 },
 {
@@ -9365,6 +10221,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"otm": 0
 }
 },
 {
@@ -9413,6 +10273,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"otm": 1
 }
 },
 {
@@ -9461,6 +10325,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"otm": 2
 }
 },
 {
@@ -9509,6 +10377,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"exit": "lock_2r"
 }
 },
 {
@@ -9557,6 +10429,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"exit": "trail_25"
 }
 },
 {
@@ -9605,6 +10481,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"exit": "trail_2"
 }
 },
 {
@@ -9653,6 +10533,10 @@
 "losing_months": 5,
 "months": 9
 }
+},
+"ch": {
+"big_run_skip": false,
+"exit": "noise_t2"
 }
 },
 {
@@ -9701,6 +10585,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"exit": "noise_be"
 }
 },
 {
@@ -9749,6 +10637,10 @@
 "losing_months": 5,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"exit": "half_2r"
 }
 },
 {
@@ -9797,6 +10689,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"exit": "t123"
 }
 },
 {
@@ -9845,6 +10741,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"max_loss_lot": 2200
 }
 },
 {
@@ -9893,6 +10793,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"max_loss_lot": 3000
 }
 },
 {
@@ -9941,6 +10845,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -9989,6 +10900,13 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -10037,6 +10955,12 @@
 "losing_months": 1,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -10085,6 +11009,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"max_lots": 20
 }
 },
 {
@@ -10133,6 +11061,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"big_run_skip": false,
+"max_lots": 0
 }
 },
 {
@@ -10181,6 +11113,10 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"gates": false
 }
 },
 {
@@ -10229,6 +11165,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"otm": 0
 }
 },
 {
@@ -10277,6 +11217,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"otm": 1
 }
 },
 {
@@ -10325,6 +11269,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"otm": 2
 }
 },
 {
@@ -10373,6 +11321,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"exit": "lock_2r"
 }
 },
 {
@@ -10421,6 +11373,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"exit": "trail_25"
 }
 },
 {
@@ -10469,6 +11425,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"exit": "trail_2"
 }
 },
 {
@@ -10517,6 +11477,10 @@
 "losing_months": 5,
 "months": 9
 }
+},
+"ch": {
+"dd_half": false,
+"exit": "noise_t2"
 }
 },
 {
@@ -10565,6 +11529,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"exit": "noise_be"
 }
 },
 {
@@ -10613,6 +11581,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"exit": "half_2r"
 }
 },
 {
@@ -10661,6 +11633,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"exit": "t123"
 }
 },
 {
@@ -10709,6 +11685,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"max_loss_lot": 2200
 }
 },
 {
@@ -10757,6 +11737,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"max_loss_lot": 3000
 }
 },
 {
@@ -10805,6 +11789,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -10853,6 +11844,13 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -10901,6 +11899,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -10949,6 +11953,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"max_lots": 20
 }
 },
 {
@@ -10997,6 +12005,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"dd_half": false,
+"max_lots": 0
 }
 },
 {
@@ -11045,6 +12057,10 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"otm": 0
 }
 },
 {
@@ -11093,6 +12109,10 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"otm": 1
 }
 },
 {
@@ -11141,6 +12161,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"otm": 2
 }
 },
 {
@@ -11189,6 +12213,10 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"exit": "lock_2r"
 }
 },
 {
@@ -11237,6 +12265,10 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"exit": "trail_25"
 }
 },
 {
@@ -11285,6 +12317,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"exit": "trail_2"
 }
 },
 {
@@ -11333,6 +12369,10 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"exit": "noise_t2"
 }
 },
 {
@@ -11381,6 +12421,10 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"exit": "noise_be"
 }
 },
 {
@@ -11429,6 +12473,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"exit": "half_2r"
 }
 },
 {
@@ -11477,6 +12525,10 @@
 "losing_months": 5,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"exit": "t123"
 }
 },
 {
@@ -11525,6 +12577,10 @@
 "losing_months": 1,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"max_loss_lot": 2200
 }
 },
 {
@@ -11573,6 +12629,10 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"max_loss_lot": 3000
 }
 },
 {
@@ -11621,6 +12681,13 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -11669,6 +12736,13 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -11717,6 +12791,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -11765,6 +12845,10 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"max_lots": 20
 }
 },
 {
@@ -11813,6 +12897,10 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"gates": false,
+"max_lots": 0
 }
 },
 {
@@ -11861,6 +12949,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 0,
+"exit": "lock_2r"
 }
 },
 {
@@ -11909,6 +13001,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 0,
+"exit": "trail_25"
 }
 },
 {
@@ -11957,6 +13053,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 0,
+"exit": "trail_2"
 }
 },
 {
@@ -12005,6 +13105,10 @@
 "losing_months": 5,
 "months": 8
 }
+},
+"ch": {
+"otm": 0,
+"exit": "noise_t2"
 }
 },
 {
@@ -12053,6 +13157,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 0,
+"exit": "noise_be"
 }
 },
 {
@@ -12101,6 +13209,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 0,
+"exit": "half_2r"
 }
 },
 {
@@ -12149,6 +13261,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"otm": 0,
+"exit": "t123"
 }
 },
 {
@@ -12197,6 +13313,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"otm": 0,
+"max_loss_lot": 2200
 }
 },
 {
@@ -12245,6 +13365,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 0,
+"max_loss_lot": 3000
 }
 },
 {
@@ -12293,6 +13417,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 0,
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -12341,6 +13472,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 0,
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -12389,6 +13527,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"otm": 0,
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -12437,6 +13581,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 0,
+"max_lots": 20
 }
 },
 {
@@ -12485,6 +13633,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 0,
+"max_lots": 0
 }
 },
 {
@@ -12533,6 +13685,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 1,
+"exit": "lock_2r"
 }
 },
 {
@@ -12581,6 +13737,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 1,
+"exit": "trail_25"
 }
 },
 {
@@ -12629,6 +13789,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 1,
+"exit": "trail_2"
 }
 },
 {
@@ -12677,6 +13841,10 @@
 "losing_months": 5,
 "months": 9
 }
+},
+"ch": {
+"otm": 1,
+"exit": "noise_t2"
 }
 },
 {
@@ -12725,6 +13893,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 1,
+"exit": "noise_be"
 }
 },
 {
@@ -12773,6 +13945,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"otm": 1,
+"exit": "half_2r"
 }
 },
 {
@@ -12821,6 +13997,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"otm": 1,
+"exit": "t123"
 }
 },
 {
@@ -12869,6 +14049,10 @@
 "losing_months": 5,
 "months": 10
 }
+},
+"ch": {
+"otm": 1,
+"max_loss_lot": 2200
 }
 },
 {
@@ -12917,6 +14101,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 1,
+"max_loss_lot": 3000
 }
 },
 {
@@ -12965,6 +14153,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 1,
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -13013,6 +14208,13 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"otm": 1,
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -13061,6 +14263,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"otm": 1,
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -13109,6 +14317,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 1,
+"max_lots": 20
 }
 },
 {
@@ -13157,6 +14369,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 1,
+"max_lots": 0
 }
 },
 {
@@ -13205,6 +14421,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 2,
+"exit": "lock_2r"
 }
 },
 {
@@ -13253,6 +14473,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 2,
+"exit": "trail_25"
 }
 },
 {
@@ -13301,6 +14525,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 2,
+"exit": "trail_2"
 }
 },
 {
@@ -13349,6 +14577,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"otm": 2,
+"exit": "noise_t2"
 }
 },
 {
@@ -13397,6 +14629,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 2,
+"exit": "noise_be"
 }
 },
 {
@@ -13445,6 +14681,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"otm": 2,
+"exit": "half_2r"
 }
 },
 {
@@ -13493,6 +14733,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"otm": 2,
+"exit": "t123"
 }
 },
 {
@@ -13541,6 +14785,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"otm": 2,
+"max_loss_lot": 2200
 }
 },
 {
@@ -13589,6 +14837,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 2,
+"max_loss_lot": 3000
 }
 },
 {
@@ -13637,6 +14889,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 2,
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -13685,6 +14944,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 2,
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -13733,6 +14999,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"otm": 2,
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -13781,6 +15053,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 2,
+"max_lots": 20
 }
 },
 {
@@ -13829,6 +15105,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"otm": 2,
+"max_lots": 0
 }
 },
 {
@@ -13877,6 +15157,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "lock_2r",
+"max_loss_lot": 2200
 }
 },
 {
@@ -13925,6 +15209,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "lock_2r",
+"max_loss_lot": 3000
 }
 },
 {
@@ -13973,6 +15261,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "lock_2r",
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -14021,6 +15316,13 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"exit": "lock_2r",
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -14069,6 +15371,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"exit": "lock_2r",
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -14117,6 +15425,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "lock_2r",
+"max_lots": 20
 }
 },
 {
@@ -14165,6 +15477,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "lock_2r",
+"max_lots": 0
 }
 },
 {
@@ -14213,6 +15529,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "trail_25",
+"max_loss_lot": 2200
 }
 },
 {
@@ -14261,6 +15581,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "trail_25",
+"max_loss_lot": 3000
 }
 },
 {
@@ -14309,6 +15633,13 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "trail_25",
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -14357,6 +15688,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "trail_25",
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -14405,6 +15743,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"exit": "trail_25",
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -14453,6 +15797,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "trail_25",
+"max_lots": 20
 }
 },
 {
@@ -14501,6 +15849,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "trail_25",
+"max_lots": 0
 }
 },
 {
@@ -14549,6 +15901,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "trail_2",
+"max_loss_lot": 2200
 }
 },
 {
@@ -14597,6 +15953,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "trail_2",
+"max_loss_lot": 3000
 }
 },
 {
@@ -14645,6 +16005,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "trail_2",
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -14693,6 +16060,13 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "trail_2",
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -14741,6 +16115,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"exit": "trail_2",
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -14789,6 +16169,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "trail_2",
+"max_lots": 20
 }
 },
 {
@@ -14837,6 +16221,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "trail_2",
+"max_lots": 0
 }
 },
 {
@@ -14885,6 +16273,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "noise_t2",
+"max_loss_lot": 2200
 }
 },
 {
@@ -14933,6 +16325,10 @@
 "losing_months": 5,
 "months": 9
 }
+},
+"ch": {
+"exit": "noise_t2",
+"max_loss_lot": 3000
 }
 },
 {
@@ -14981,6 +16377,13 @@
 "losing_months": 4,
 "months": 9
 }
+},
+"ch": {
+"exit": "noise_t2",
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -15029,6 +16432,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "noise_t2",
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -15077,6 +16487,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"exit": "noise_t2",
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -15125,6 +16541,10 @@
 "losing_months": 5,
 "months": 9
 }
+},
+"ch": {
+"exit": "noise_t2",
+"max_lots": 20
 }
 },
 {
@@ -15173,6 +16593,10 @@
 "losing_months": 5,
 "months": 9
 }
+},
+"ch": {
+"exit": "noise_t2",
+"max_lots": 0
 }
 },
 {
@@ -15221,6 +16645,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "noise_be",
+"max_loss_lot": 2200
 }
 },
 {
@@ -15269,6 +16697,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "noise_be",
+"max_loss_lot": 3000
 }
 },
 {
@@ -15317,6 +16749,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "noise_be",
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -15365,6 +16804,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "noise_be",
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -15413,6 +16859,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"exit": "noise_be",
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -15461,6 +16913,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "noise_be",
+"max_lots": 20
 }
 },
 {
@@ -15509,6 +16965,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "noise_be",
+"max_lots": 0
 }
 },
 {
@@ -15557,6 +17017,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "half_2r",
+"max_loss_lot": 2200
 }
 },
 {
@@ -15605,6 +17069,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "half_2r",
+"max_loss_lot": 3000
 }
 },
 {
@@ -15653,6 +17121,13 @@
 "losing_months": 5,
 "months": 10
 }
+},
+"ch": {
+"exit": "half_2r",
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -15701,6 +17176,13 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "half_2r",
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -15749,6 +17231,12 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"exit": "half_2r",
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -15797,6 +17285,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "half_2r",
+"max_lots": 20
 }
 },
 {
@@ -15845,6 +17337,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "half_2r",
+"max_lots": 0
 }
 },
 {
@@ -15893,6 +17389,10 @@
 "losing_months": 5,
 "months": 10
 }
+},
+"ch": {
+"exit": "t123",
+"max_loss_lot": 2200
 }
 },
 {
@@ -15941,6 +17441,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "t123",
+"max_loss_lot": 3000
 }
 },
 {
@@ -15989,6 +17493,13 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "t123",
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -16037,6 +17548,13 @@
 "losing_months": 5,
 "months": 10
 }
+},
+"ch": {
+"exit": "t123",
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -16085,6 +17603,12 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "t123",
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -16133,6 +17657,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "t123",
+"max_lots": 20
 }
 },
 {
@@ -16181,6 +17709,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"exit": "t123",
+"max_lots": 0
 }
 },
 {
@@ -16229,6 +17761,13 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"max_loss_lot": 2200,
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -16277,6 +17816,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"max_loss_lot": 2200,
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -16325,6 +17871,12 @@
 "losing_months": 4,
 "months": 9
 }
+},
+"ch": {
+"max_loss_lot": 2200,
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -16373,6 +17925,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"max_loss_lot": 2200,
+"max_lots": 20
 }
 },
 {
@@ -16421,6 +17977,10 @@
 "losing_months": 4,
 "months": 10
 }
+},
+"ch": {
+"max_loss_lot": 2200,
+"max_lots": 0
 }
 },
 {
@@ -16469,6 +18029,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"max_loss_lot": 3000,
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -16517,6 +18084,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"max_loss_lot": 3000,
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -16565,6 +18139,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"max_loss_lot": 3000,
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -16613,6 +18193,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"max_loss_lot": 3000,
+"max_lots": 20
 }
 },
 {
@@ -16661,6 +18245,10 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"max_loss_lot": 3000,
+"max_lots": 0
 }
 },
 {
@@ -16709,6 +18297,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"indices": [
+"NIFTY",
+"SENSEX"
+],
+"max_lots": 20
 }
 },
 {
@@ -16757,6 +18352,13 @@
 "losing_months": 3,
 "months": 10
 }
+},
+"ch": {
+"indices": [
+"NIFTY",
+"SENSEX"
+],
+"max_lots": 0
 }
 },
 {
@@ -16805,6 +18407,13 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+],
+"max_lots": 20
 }
 },
 {
@@ -16853,6 +18462,13 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+],
+"max_lots": 0
 }
 },
 {
@@ -16901,6 +18517,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"indices": [
+"NIFTY"
+],
+"max_lots": 20
 }
 },
 {
@@ -16949,6 +18571,12 @@
 "losing_months": 2,
 "months": 10
 }
+},
+"ch": {
+"indices": [
+"NIFTY"
+],
+"max_lots": 0
 }
 }
 ],

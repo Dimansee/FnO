@@ -193,7 +193,8 @@
 "200000_y2026": "baseline",
 "20000_full": "baseline",
 "20000_y2026": "baseline"
-}
+},
+"ch": {}
 },
 {
 "group": "Exits & targets",
@@ -348,6 +349,9 @@
 "200000_y2026": "worse",
 "20000_full": "worse",
 "20000_y2026": "worse"
+},
+"ch": {
+"exit": "t123"
 }
 },
 {
@@ -503,6 +507,9 @@
 "200000_y2026": "worse",
 "20000_full": "worse",
 "20000_y2026": "worse"
+},
+"ch": {
+"exit": "t123_253050"
 }
 },
 {
@@ -658,6 +665,9 @@
 "200000_y2026": "worse",
 "20000_full": "worse",
 "20000_y2026": "worse"
+},
+"ch": {
+"exit": "t2_t4"
 }
 },
 {
@@ -813,6 +823,9 @@
 "200000_y2026": "worse",
 "20000_full": "worse",
 "20000_y2026": "worse"
+},
+"ch": {
+"exit": "half_2r"
 }
 },
 {
@@ -965,6 +978,9 @@
 "200000_y2026": "worse",
 "20000_full": "worse",
 "20000_y2026": "worse"
+},
+"ch": {
+"exit": "t123_ema9"
 }
 },
 {
@@ -1120,6 +1136,9 @@
 "200000_y2026": "worse",
 "20000_full": "worse",
 "20000_y2026": "worse"
+},
+"ch": {
+"exit": "t123_vwap"
 }
 },
 {
@@ -1275,6 +1294,9 @@
 "200000_y2026": "worse",
 "20000_full": "worse",
 "20000_y2026": "worse"
+},
+"ch": {
+"exit": "ema9_2r"
 }
 },
 {
@@ -1430,6 +1452,9 @@
 "200000_y2026": "worse",
 "20000_full": "worse",
 "20000_y2026": "worse"
+},
+"ch": {
+"exit": "candle_2r"
 }
 },
 {
@@ -1585,6 +1610,9 @@
 "200000_y2026": "better",
 "20000_full": "better",
 "20000_y2026": "worse"
+},
+"ch": {
+"exit": "lock_2r"
 }
 },
 {
@@ -1740,6 +1768,9 @@
 "200000_y2026": "better",
 "20000_full": "better",
 "20000_y2026": "better"
+},
+"ch": {
+"exit": "trail_25"
 }
 },
 {
@@ -1895,6 +1926,9 @@
 "200000_y2026": "less profit, shallower fall",
 "20000_full": "worse",
 "20000_y2026": "worse"
+},
+"ch": {
+"exit": "trail_2"
 }
 },
 {
@@ -2050,6 +2084,9 @@
 "200000_y2026": "worse",
 "20000_full": "worse",
 "20000_y2026": "worse"
+},
+"ch": {
+"exit": "be_025"
 }
 },
 {
@@ -2205,6 +2242,9 @@
 "200000_y2026": "worse",
 "20000_full": "less profit, shallower fall",
 "20000_y2026": "worse"
+},
+"ch": {
+"exit": "noise_t2"
 }
 },
 {
@@ -2360,6 +2400,9 @@
 "200000_y2026": "better",
 "20000_full": "worse",
 "20000_y2026": "better"
+},
+"ch": {
+"exit": "noise_be"
 }
 },
 {
@@ -2515,6 +2558,9 @@
 "200000_y2026": "worse",
 "20000_full": "worse",
 "20000_y2026": "about the same"
+},
+"ch": {
+"risk_pct": 0.5
 }
 },
 {
@@ -2670,6 +2716,9 @@
 "200000_y2026": "worse",
 "20000_full": "worse",
 "20000_y2026": "about the same"
+},
+"ch": {
+"risk_pct": 0.75
 }
 },
 {
@@ -2825,6 +2874,9 @@
 "200000_y2026": "more profit, deeper fall",
 "20000_full": "better",
 "20000_y2026": "about the same"
+},
+"ch": {
+"risk_pct": 1.5
 }
 },
 {
@@ -2980,6 +3032,9 @@
 "200000_y2026": "more profit, deeper fall",
 "20000_full": "better",
 "20000_y2026": "about the same"
+},
+"ch": {
+"risk_pct": 2.0
 }
 },
 {
@@ -3137,6 +3192,9 @@
 "200000_y2026": "more profit, deeper fall",
 "20000_full": "better",
 "20000_y2026": "worse"
+},
+"ch": {
+"risk_pct": 3.0
 }
 },
 {
@@ -3292,6 +3350,9 @@
 "200000_y2026": "worse",
 "20000_full": "worse",
 "20000_y2026": "about the same"
+},
+"ch": {
+"sizing": "fixed_risk"
 }
 },
 {
@@ -3445,6 +3506,10 @@
 "200000_y2026": "less profit, shallower fall",
 "20000_full": "less profit, shallower fall",
 "20000_y2026": "about the same"
+},
+"ch": {
+"sizing": "fixed",
+"lots": 1
 }
 },
 {
@@ -3599,6 +3664,10 @@
 "200000_y2026": "better",
 "20000_full": "better",
 "20000_y2026": "better"
+},
+"ch": {
+"sizing": "fixed",
+"lots": 3
 }
 },
 {
@@ -3753,6 +3822,10 @@
 "200000_y2026": "more profit, deeper fall",
 "20000_full": "worse",
 "20000_y2026": "more profit, deeper fall"
+},
+"ch": {
+"sizing": "fixed",
+"lots": 10
 }
 },
 {
@@ -3908,6 +3981,9 @@
 "200000_y2026": "worse",
 "20000_full": "worse",
 "20000_y2026": "about the same"
+},
+"ch": {
+"confidence": "none"
 }
 },
 {
@@ -4063,6 +4139,9 @@
 "200000_y2026": "more profit, deeper fall",
 "20000_full": "better",
 "20000_y2026": "about the same"
+},
+"ch": {
+"confidence": "strong"
 }
 },
 {
@@ -4218,6 +4297,9 @@
 "200000_y2026": "about the same",
 "20000_full": "worse",
 "20000_y2026": "worse"
+},
+"ch": {
+"big_run_skip": false
 }
 },
 {
@@ -4373,6 +4455,9 @@
 "200000_y2026": "better",
 "20000_full": "better",
 "20000_y2026": "about the same"
+},
+"ch": {
+"dd_half": false
 }
 },
 {
@@ -4521,6 +4606,9 @@
 "200000_y2026": "better",
 "20000_full": "better",
 "20000_y2026": "better"
+},
+"ch": {
+"gates": false
 }
 },
 {
@@ -4676,6 +4764,9 @@
 "200000_y2026": "about the same",
 "20000_full": "about the same",
 "20000_y2026": "worse"
+},
+"ch": {
+"small_otm": false
 }
 },
 {
@@ -4831,6 +4922,9 @@
 "200000_y2026": "worse",
 "20000_full": "worse",
 "20000_y2026": "about the same"
+},
+"ch": {
+"otm": 0
 }
 },
 {
@@ -4986,6 +5080,9 @@
 "200000_y2026": "about the same",
 "20000_full": "worse",
 "20000_y2026": "worse"
+},
+"ch": {
+"otm": 1
 }
 },
 {
@@ -5141,6 +5238,9 @@
 "200000_y2026": "better",
 "20000_full": "worse",
 "20000_y2026": "worse"
+},
+"ch": {
+"otm": 2
 }
 },
 {
@@ -5296,6 +5396,9 @@
 "200000_y2026": "about the same",
 "20000_full": "about the same",
 "20000_y2026": "about the same"
+},
+"ch": {
+"max_lots": 0
 }
 },
 {
@@ -5451,6 +5554,9 @@
 "200000_y2026": "about the same",
 "20000_full": "about the same",
 "20000_y2026": "about the same"
+},
+"ch": {
+"max_lots": 20
 }
 },
 {
@@ -5606,6 +5712,9 @@
 "200000_y2026": "about the same",
 "20000_full": "about the same",
 "20000_y2026": "about the same"
+},
+"ch": {
+"max_lots": 100
 }
 },
 {
@@ -5761,6 +5870,9 @@
 "200000_y2026": "about the same",
 "20000_full": "about the same",
 "20000_y2026": "about the same"
+},
+"ch": {
+"max_lots": 200
 }
 },
 {
@@ -5914,6 +6026,9 @@
 "200000_y2026": "worse",
 "20000_full": "less profit, shallower fall",
 "20000_y2026": "worse"
+},
+"ch": {
+"max_loss_lot": 1500
 }
 },
 {
@@ -6068,6 +6183,9 @@
 "200000_y2026": "worse",
 "20000_full": "more profit, deeper fall",
 "20000_y2026": "worse"
+},
+"ch": {
+"max_loss_lot": 2200
 }
 },
 {
@@ -6222,6 +6340,9 @@
 "200000_y2026": "about the same",
 "20000_full": "better",
 "20000_y2026": "better"
+},
+"ch": {
+"max_loss_lot": 3000
 }
 },
 {
@@ -6366,6 +6487,11 @@
 "200000_y2026": "less profit, shallower fall",
 "20000_full": "less profit, shallower fall",
 "20000_y2026": "less profit, shallower fall"
+},
+"ch": {
+"indices": [
+"NIFTY"
+]
 }
 },
 {
@@ -6517,6 +6643,12 @@
 "200000_y2026": "worse",
 "20000_full": "worse",
 "20000_y2026": "less profit, shallower fall"
+},
+"ch": {
+"indices": [
+"NIFTY",
+"SENSEX"
+]
 }
 },
 {
@@ -6668,6 +6800,12 @@
 "200000_y2026": "less profit, shallower fall",
 "20000_full": "less profit, shallower fall",
 "20000_y2026": "worse"
+},
+"ch": {
+"indices": [
+"NIFTY",
+"BANKNIFTY"
+]
 }
 },
 {
@@ -6808,6 +6946,11 @@
 "200000_y2026": "less profit, shallower fall",
 "20000_full": "worse",
 "20000_y2026": "worse"
+},
+"ch": {
+"indices": [
+"BANKNIFTY"
+]
 }
 },
 {
@@ -6955,6 +7098,11 @@
 "200000_y2026": "less profit, shallower fall",
 "20000_full": "less profit, shallower fall",
 "20000_y2026": "worse"
+},
+"ch": {
+"indices": [
+"SENSEX"
+]
 }
 },
 {
@@ -7113,6 +7261,10 @@
 "200000_y2026": "more profit, deeper fall",
 "20000_full": "better",
 "20000_y2026": "about the same"
+},
+"ch": {
+"confidence": "strong",
+"risk_pct": 1.5
 }
 },
 {
@@ -7269,6 +7421,10 @@
 "200000_y2026": "more profit, deeper fall",
 "20000_full": "better",
 "20000_y2026": "about the same"
+},
+"ch": {
+"confidence": "strong",
+"dd_half": false
 }
 },
 {
@@ -7425,6 +7581,10 @@
 "200000_y2026": "more profit, deeper fall",
 "20000_full": "better",
 "20000_y2026": "about the same"
+},
+"ch": {
+"risk_pct": 2.0,
+"max_lots": 0
 }
 },
 {
@@ -7576,6 +7736,11 @@
 "200000_y2026": "about the same",
 "20000_full": "more profit, deeper fall",
 "20000_y2026": "better"
+},
+"ch": {
+"big_run_skip": false,
+"dd_half": false,
+"gates": false
 }
 },
 {
@@ -7732,6 +7897,10 @@
 "200000_y2026": "worse",
 "20000_full": "worse",
 "20000_y2026": "worse"
+},
+"ch": {
+"big_run_skip": false,
+"dd_half": false
 }
 },
 {
@@ -7888,6 +8057,10 @@
 "200000_y2026": "about the same",
 "20000_full": "better",
 "20000_y2026": "worse"
+},
+"ch": {
+"confidence": "strong",
+"exit": "lock_2r"
 }
 }
 ]

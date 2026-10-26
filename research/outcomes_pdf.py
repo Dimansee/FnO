@@ -30,7 +30,7 @@ def pct(x):
     return f"{x:+.0f}%"
 
 
-def build(out, path, pairs=None):
+def build(out, path, pairs=None, grid=None):
     ss = getSampleStyleSheet()
     H1 = ParagraphStyle("h1", parent=ss["Title"], fontName=BOLD, fontSize=18, spaceAfter=6)
     H2 = ParagraphStyle("h2", parent=ss["Heading2"], fontName=BOLD, fontSize=13, spaceBefore=8, spaceAfter=4)
@@ -93,6 +93,8 @@ def build(out, path, pairs=None):
         st.append(t)
     if pairs:
         _pairs(st, pairs, P, SM, SMB, H2)
+    if grid:
+        _grid(st, grid, P, SM, SMB, H2)
     doc.build(st)
     return path
 
@@ -129,3 +131,43 @@ def _pairs(st, pr, P, SM, SMB, H2):
                                ("LINEBELOW", (0, 1), (-1, -1), 0.25, colors.HexColor("#d0d7de")),
                                ("TOPPADDING", (0, 0), (-1, -1), 1), ("BOTTOMPADDING", (0, 0), (-1, -1), 1)]))
         st.append(t)
+
+
+def _grid(st, g, P, SM, SMB, H2):
+    nf, NM = len(g["factors"]), 5
+    runs = g["runs"]
+
+    def val(r, run, m):
+        return r[nf + runs.index(run) * NM + m]
+
+    def changes(r):
+        return ", ".join(f"{g['factors'][j]['name']}: {g['factors'][j]['options'][r[j]]}" for j in range(nf) if r[j]) or "Today's Autopilot rules"
+
+    base = g["baseline"]
+    for cap in (200000, 20000):
+        kf, k6 = f"{cap}_full", f"{cap}_y2026"
+        bf, bdd, b6 = val(base, kf, 0), val(base, kf, 1), val(base, k6, 0)
+        both = [r for r in g["rows"] if val(r, kf, 0) > bf and val(r, k6, 0) > b6]
+        safe = [r for r in both if val(r, kf, 1) >= bdd - 5]
+        lists = [
+            (f"Beat today's rules in both periods with a worst fall no deeper than {bdd - 5:.0f}% - best full-history result first", sorted(safe, key=lambda r: -val(r, kf, 0))[:30]),
+            ("Most money (any worst fall) - for reference: these carry deep falls", sorted(g["rows"], key=lambda r: -val(r, kf, 0))[:12]),
+            ("Shallowest worst fall among combinations that beat today's rules in both periods", sorted(both, key=lambda r: -val(r, kf, 1))[:12]),
+        ]
+        st.append(PageBreak())
+        st.append(Paragraph(f"Every combination ({len(g['rows']):,}) - starting capital {rs(cap)}", H2))
+        st.append(Paragraph(f"Today's rules: {rs(bf)} (worst fall {bdd}%), 2026 {rs(b6)}. {len(both):,} combinations beat today's rules in both periods; "
+                            f"{len(safe):,} of them without a fall more than 5 points deeper. The full list with filters and a Pine Script for every row "
+                            f"is in the app: Outcomes -> Every combination. " + g["notes"][2], P))
+        for title, rows in lists:
+            st.append(Paragraph(title, SMB))
+            data = [[Paragraph(h, SMB) for h in ("#", "Settings that differ from today", "Full: ends at", "Worst fall", "Win %", "2026: ends at", "Worst fall")]]
+            for i, r in enumerate(rows, 1):
+                data.append([str(i), Paragraph(changes(r), SM), rs(val(r, kf, 0)), f"{val(r, kf, 1)}%", f"{val(r, kf, 2)}", rs(val(r, k6, 0)), f"{val(r, k6, 1)}%"])
+            t = Table(data, colWidths=[8 * mm, 150 * mm, 24 * mm, 18 * mm, 14 * mm, 24 * mm, 18 * mm], repeatRows=1)
+            t.setStyle(TableStyle([("FONTNAME", (0, 0), (-1, -1), FONT), ("FONTSIZE", (0, 0), (-1, -1), 6.8), ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                                   ("ALIGN", (2, 1), (-1, -1), "RIGHT"), ("LINEBELOW", (0, 0), (-1, 0), 0.8, colors.black),
+                                   ("LINEBELOW", (0, 1), (-1, -1), 0.25, colors.HexColor("#d0d7de")),
+                                   ("TOPPADDING", (0, 0), (-1, -1), 1), ("BOTTOMPADDING", (0, 0), (-1, -1), 1)]))
+            st.append(t)
+            st.append(Spacer(1, 6))

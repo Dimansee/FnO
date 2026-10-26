@@ -130,7 +130,7 @@ def verdict(row, base):
 def main():
     res = []
     for i, s_ in enumerate(SCEN):
-        row = {"group": s_["group"], "name": s_["name"], "changes": PB.differences({**B0, **s_["ch"]}) or [], "runs": {}}
+        row = {"group": s_["group"], "name": s_["name"], "ch": s_["ch"], "changes": PB.differences({**B0, **s_["ch"]}) or [], "runs": {}}
         if s_["ch"].get("indices"):
             row["changes"] = row["changes"] + ["indices: " + ", ".join(s_["ch"]["indices"])]
         for cap in CAPS:
@@ -166,5 +166,8 @@ if __name__ == "__main__":
         out = main()
     import outcomes_pdf
     pf = os.path.join(ROOT, "fno", "outcomes_pairs.json")
-    outcomes_pdf.build(out, OUT_PDF, json.load(open(pf)) if os.path.exists(pf) else None)
+    gf = os.path.join(ROOT, "fno", "outcomes_grid.json.gz")
+    import gzip
+    grid = json.load(gzip.open(gf, "rt")) if os.path.exists(gf) else None
+    outcomes_pdf.build(out, OUT_PDF, json.load(open(pf)) if os.path.exists(pf) else None, grid)
     print("wrote", OUT_PDF)

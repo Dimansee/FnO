@@ -530,6 +530,35 @@ def outcomes_pairs():
     return Response(f.read_text(encoding="utf-8"), mimetype="application/json")
 
 
+@app.get("/api/outcomes/grid/meta")
+def outcomes_grid_meta():
+    from fno import outgrid
+    return jsonify(outgrid.meta())
+
+
+@app.post("/api/outcomes/grid/query")
+def outcomes_grid_query():
+    from fno import outgrid
+    b = request.get_json(force=True) or {}
+    return jsonify(outgrid.query(b.get("filters"), b.get("run") or "200000_full", b.get("sort") or "final", bool(b.get("desc", True)),
+                                 int(b.get("limit") or 100), float(b["max_dd"]) if b.get("max_dd") not in (None, "") else None,
+                                 bool(b.get("both_better")), int(b.get("offset") or 0)))
+
+
+@app.post("/api/outcomes/pine")
+def outcomes_pine():
+    """Pine Script for any outcome row: a combination (idx) or a plain parameter change set (changes)."""
+    from fno import outgrid
+    from fno import portfolio_bt as PB
+    b = request.get_json(force=True) or {}
+    if b.get("idx") is not None:
+        p = outgrid.params(b["idx"])
+    else:
+        p = {**PB.BASELINE, "indices": ["NIFTY", "BANKNIFTY", "SENSEX"], **(b.get("changes") or {})}
+    p["capital"] = float(b.get("capital") or 200000)
+    return jsonify({"params": p, "scripts": [PB.pine_for(p, i) for i in (p.get("indices") or ["NIFTY"])]})
+
+
 @app.get("/api/outcomes.pdf")
 def outcomes_pdf():
     f = Path(__file__).parent / "fno" / "outcomes.pdf"
