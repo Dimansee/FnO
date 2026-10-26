@@ -93,3 +93,22 @@ except B.RateLimited:
     pass
 assert B.fyers_cooldown_left() > 30
 print("fyers pacing OK")
+
+# Fyers: a new client (every page / tick) must not re-fetch the expiry list before each chain call
+mode["fy"] = 200; B._fy["until"] = 0
+ccalls = []
+def fy_chain_get(url, params=None, timeout=None):
+    ccalls.append((url.rsplit("/", 1)[-1], dict(params or {})))
+    class J:
+        status_code = 200
+        text = ""
+        def json(self):
+            return {"s": "ok", "data": {"expiryData": [{"date": "27-10-2026", "expiry": "1761559200"}],
+                                        "optionsChain": [{"option_type": "CE", "strike_price": 22600, "ltp": 170, "symbol": "X"}]}}
+    return J()
+from datetime import date as _d  # noqa: E402
+for _ in range(3):
+    f2 = B.Fyers("APP", "TOK"); f2.s.get = fy_chain_get
+    f2.chain("NSE:NIFTY50-INDEX", _d(2026, 10, 27))
+assert len(ccalls) == 4, ccalls        # 1 expiry list + 3 chains (was 2 calls per chain)
+print("fyers chain calls OK")

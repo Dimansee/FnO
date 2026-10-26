@@ -119,7 +119,8 @@ def broker_chain(m, sym, n_exp=2):
         return None
     out = []
     for e in [x for x in exps if x >= C.today_ist()][:n_exp]:
-        ch = m.br.chain(m.key(sym), e)
+        from . import market as _M                           # same cache as the tick / pages: no second chain call for the same minute
+        ch = _M.cached(f"ch:{m.br.name}:{sym}:{e}", 15, lambda: m.br.chain(m.key(sym), e))
         if ch is None or ch.empty:
             continue
         rows = [[r.get(k) for k in FIELDS] for r in ch.to_dict("records")]

@@ -276,7 +276,8 @@ def fyers_refresh(app_id, secret, refresh_token, pin) -> str:
     return j["access_token"]
 
 
-_fy = {"last": 0.0, "until": 0.0}
+_fy = {"last": 0.0, "until": 0.0, "no_greeks_until": 0.0}
+_FY_EXP: dict = {}          # option-chain key -> {expiry date: Fyers expiry timestamp}; refreshed by expiries() (cached 1 h upstream)
 FYERS_GAP = 0.12            # Fyers allows ~10 calls a second; stay under it
 FYERS_COOLDOWN = 60
 
@@ -291,7 +292,7 @@ class Fyers:
     def __init__(self, app_id, token):
         self.s = requests.Session()
         self.s.headers.update({"Authorization": f"{app_id}:{token}", "version": "3"})
-        self._exp_ts: dict[str, dict[date, str]] = {}
+        self._exp_ts = _FY_EXP                      # shared by every client: each page / tick makes a new client
 
     def _get(self, path, params=None):
         with _ux_lock:
@@ -337,15 +338,18 @@ class Fyers:
         return out
 
     def _raw_chain(self, key, ts="", strikecount=12, greeks=True):
+        if greeks and _tm.time() < _fy["no_greeks_until"]:
+            greeks = False                                   # greeks were refused a moment ago: don't spend two calls every time
         p = {"symbol": key, "strikecount": strikecount, "timestamp": ts}
         if greeks:
             p["greeks"] = 1
         try:
             return self._get("/options-chain-v3", p).get("data") or {}
-        except AuthExpired:
+        except (AuthExpired, RateLimited):
             raise
         except BrokerError:
             if greeks:
+                _fy["no_greeks_until"] = _tm.time() + 1800
                 return self._raw_chain(key, ts, strikecount, greeks=False)
             raise
 
