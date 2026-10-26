@@ -60,7 +60,7 @@ def origin_summary() -> dict:
 
 def _removed() -> list[dict]:
     import json as _j
-    return [_j.loads(v) for v in (store._cmd("HVALS", REMOVED) or [])]
+    return [_j.loads(v) for v in store.hvals(REMOVED)]
 
 
 def remove_trades(kinds) -> dict:
@@ -73,7 +73,7 @@ def remove_trades(kinds) -> dict:
     moved, pnl = 0, 0.0
     for t in store.trades():
         if origin(t) in kinds:
-            store._cmd("HSET", REMOVED, t["id"], store._dump(t))
+            store.hset(REMOVED, t["id"], store._dump(t))
             store._cmd("HDEL", store.TRADES, t["id"]); store._hset_mem(store.TRADES, t["id"], None)
             moved += 1; pnl += float(t.get("pnl") or 0)
     return {"removed": moved, "pnl_removed": round(pnl, 2)}
@@ -84,14 +84,14 @@ def restore_removed() -> dict:
     n = 0
     for t in _removed():
         store._cmd("HSET", store.TRADES, t["id"], store._dump(t)); store._hset_mem(store.TRADES, t["id"], store._dump(t))
-        store._cmd("HDEL", REMOVED, t["id"]); n += 1
+        store._cmd("HDEL", REMOVED, t["id"]); store._hset_mem(REMOVED, t["id"], None); n += 1
     return {"restored": n}
 
 
 def reset(capital: float):
     store.clear_positions()
     store.clear_trades()
-    store._cmd("DEL", REMOVED)
+    store.hdrop(REMOVED)
     store.put("account", {"capital_start": float(capital), "created": C.now_ist().isoformat(timespec="seconds")})
 
 

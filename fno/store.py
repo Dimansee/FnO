@@ -222,10 +222,53 @@ def htake(key, field):
     return v
 
 
+def hupdate(key, field, raw):
+    """Update a field only if it still exists (atomic in Redis)."""
+    with _lock:
+        r = _cmd("EVAL", _UPDATE_IF_EXISTS, 1, key, field, raw)
+        _hset_mem(key, field, None if r == -1 else raw)
+    return r
+
+
 def hdrop(key):
     with _lock:
         _cmd("DEL", key)
         _mem[("h", key)] = (time.time(), {})
+
+
+# ---------------- "heartbeat" values written often, read rarely ----------------
+_lazy: dict = {}           # key -> (value, last time written to Redis)
+
+
+def put_lazy(key, value, every=300):
+    """A settings value that changes every minute (last tick time): kept in memory at once, written to Redis at most
+    every `every` seconds (so a restart loses at most that much)."""
+    raw = _dump(value)
+    with _lock:
+        _mem[("s", key)] = (time.time(), raw)
+        last = _lazy.get(key, (None, 0))[1]
+        if time.time() - last >= every:
+            _cmd("HSET", SETTINGS, key, raw)
+            _lazy[key] = (raw, time.time())
+
+
+def set_raw_lazy(key, value: str, ex: int, every=300):
+    with _lock:
+        _mem[("r", key)] = (time.time(), value)
+        last = _lazy.get(key, (None, 0))[1]
+        if time.time() - last >= every:
+            _cmd("SET", key, value, "EX", ex)
+            _lazy[key] = (value, time.time())
+
+
+def get_raw(key):
+    with _lock:
+        hit = _mem.get(("r", key))
+        if hit:
+            return hit[1]
+        v = _cmd("GET", key)
+        _mem[("r", key)] = (time.time(), v)
+        return v
 
 
 def forget():

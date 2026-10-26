@@ -85,7 +85,21 @@ def global_cues() -> dict:
     import yfinance as yf
     out, notes = {}, []
     tickers = {**C.GLOBAL_TICKERS, **C.MACRO_TICKERS}
+    try:                                       # one batched download for all markets (was 12 separate requests, ~10 s)
+        df = yf.download(list(tickers.values()), period="7d", interval="1d", group_by="ticker", progress=False, threads=True, auto_adjust=False)
+        for name, t in tickers.items():
+            try:
+                h = df[t]["Close"].dropna()
+                if len(h) >= 2:
+                    out[name] = {"last": float(h.iloc[-1]), "chg_pct": float((h.iloc[-1] / h.iloc[-2] - 1) * 100),
+                                 "date": h.index[-1].date().isoformat()}
+            except Exception:
+                pass
+    except Exception:
+        pass
     for name, t in tickers.items():
+        if name in out:
+            continue
         try:
             h = yf.Ticker(t).history(period="7d", interval="1d")["Close"].dropna()
             if len(h) >= 2:

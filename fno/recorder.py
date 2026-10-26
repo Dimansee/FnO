@@ -141,6 +141,10 @@ def _clean(v):
     return None if v is None else (round(v, 2) if isinstance(v, float) else v)
 
 
+_REC_READY: set = set()
+_REC_STATUS: dict = {}
+
+
 def snapshot(now=None, market=None, force=False):
     """Take one snapshot of every recorded symbol (if it's time). Returns a short summary."""
     now = now or C.now_ist()
@@ -153,6 +157,7 @@ def snapshot(now=None, market=None, force=False):
     day = now.date().isoformat()
     key = f"fno:rec:{day}"
     saved, errs, src_used, nse_down = 0, [], set(), False
+    _batch: list = []
     for sym in SYMS:
         chains, src = None, None
         if market is not None and market.live:
@@ -171,19 +176,24 @@ def snapshot(now=None, market=None, force=False):
             if not rows:
                 continue
             snap = {"t": now.strftime("%H:%M"), "sym": sym, "src": src, "spot": spot, "exp": exp, "rows": rows}
-            store._cmd("RPUSH", key, json.dumps(snap, separators=(",", ":")))
+            _batch.append(json.dumps(snap, separators=(",", ":")))
             saved += 1
             src_used.add(src)
-    if saved:
+    if _batch:
+        store._cmd("RPUSH", key, *_batch)          # one command for all of this snapshot's chains (was one per chain)
+    if saved and day not in _REC_READY:
         store._cmd("EXPIRE", key, C.RECORD_KEEP_DAYS * 86400)
         store._cmd("SADD", "fno:rec:days", day)
+        _REC_READY.add(day)
     st = {"last_try": now.isoformat(timespec="seconds"), "saved": saved, "src": sorted(src_used), "errors": errs[:4]}
     if saved:
         st["last_ok"] = st["last_try"]
-    prev = status_raw()
-    if not saved and prev.get("last_ok"):
-        st["last_ok"] = prev["last_ok"]
+    if not saved:
+        prev = _REC_STATUS or status_raw()
+        if prev.get("last_ok"):
+            st["last_ok"] = prev["last_ok"]
     store._cmd("SET", "fno:rec:status", json.dumps(st))
+    _REC_STATUS.clear(); _REC_STATUS.update(st)
     return st
 
 

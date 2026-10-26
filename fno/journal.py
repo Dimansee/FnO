@@ -31,15 +31,31 @@ def _key(day):
     return f"fno:jr:{day}"
 
 
+_seen: dict = {}            # (day, field) -> raw value found or written by this process (single writer: stays true)
+_days_ready: set = set()    # days whose expiry + index entry were already set today
+
+
 def _get(day, field):
-    v = store._cmd("HGET", _key(day), field)
+    k = (day, field)
+    if k in _seen:
+        v = _seen[k]
+    else:
+        v = store._cmd("HGET", _key(day), field)
+        if v:                                    # only remember fields that exist (a missing one may be written soon)
+            if len(_seen) > 2000:
+                _seen.clear()
+            _seen[k] = v
     return json.loads(v) if v else None
 
 
 def _put(day, field, value):
-    store._cmd("HSET", _key(day), field, json.dumps(value, default=str, separators=(",", ":")))
-    store._cmd("EXPIRE", _key(day), KEEP_DAYS * 86400)
-    store._cmd("SADD", "fno:jr:days", day)
+    raw = json.dumps(value, default=str, separators=(",", ":"))
+    store._cmd("HSET", _key(day), field, raw)
+    _seen[(day, field)] = raw
+    if day not in _days_ready:                   # expiry and the day index only need setting once per day
+        store._cmd("EXPIRE", _key(day), KEEP_DAYS * 86400)
+        store._cmd("SADD", "fno:jr:days", day)
+        _days_ready.add(day)
 
 
 # ---------------------------------------------------------------- context at the open

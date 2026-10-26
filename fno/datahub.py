@@ -69,6 +69,8 @@ def _store_days(key: str, df: pd.DataFrame, cutoff: date) -> int:
             args += [d.isoformat(), json.dumps(_rows(g), separators=(",", ":"))]
     for i in range(0, len(args), 40):
         store._cmd("HSET", key, *args[i:i + 40])
+    from . import market as M
+    M._cache.pop("data:catalog", None)
     return len(args) // 2
 
 
@@ -146,6 +148,12 @@ def _meta(ds: str) -> dict:
 
 
 def catalog() -> list[dict]:
+    """Coverage of every dataset (about 20 database reads): kept 2 minutes in memory; saving data clears it."""
+    from . import market as M
+    return M.cached("data:catalog", 120, _catalog)
+
+
+def _catalog() -> list[dict]:
     from . import gbook as GB
     from . import learn as LN
     from . import markets as MK
@@ -234,7 +242,7 @@ def archive() -> dict:
         raise RuntimeError("; ".join(errs))
     base = {"repo": REPO, "branch": ARCHIVE_BRANCH, "path": ARCHIVE_PATH}
     try:
-        got = M.cached("data:archive", 3600, load)
+        got = M.cached_soft("data:archive", 3600, load, fail_ttl=600)
     except Exception as e:
         return {"ok": False, "error": str(e)[:120], "days": [], **base}
     return {"ok": True, "days": got["days"], "stale": got["stale"], **base,

@@ -61,9 +61,14 @@ def catalog(market: str) -> list[dict]:
 
 
 # ------------------------------------------------------------------ crypto
+_BN = {"down_until": 0.0}
+
+
 def _binance(symbol: str, interval: str, start_ms: int, end_ms: int) -> pd.DataFrame:
     rows, last_err = [], None
-    for host in BINANCE:
+    if _t.time() < _BN["down_until"]:                 # all Binance hosts failed a moment ago: don't try three hosts again per symbol
+        raise RuntimeError("Binance unreachable (recently failed; using Bybit)")
+    for host in list(BINANCE):
         rows, cur = [], start_ms
         try:
             while cur < end_ms:
@@ -79,11 +84,14 @@ def _binance(symbol: str, interval: str, start_ms: int, end_ms: int) -> pd.DataF
                     break
                 cur = nxt
             if rows:
+                if host != BINANCE[0]:                # remember the host that works: try it first next time
+                    BINANCE.remove(host); BINANCE.insert(0, host)
                 return _frame(rows)
         except Exception as e:
             last_err = e
             continue
     if last_err:
+        _BN["down_until"] = _t.time() + 300
         raise RuntimeError(f"Binance unreachable: {last_err}")
     return pd.DataFrame(columns=["open", "high", "low", "close", "volume"])
 

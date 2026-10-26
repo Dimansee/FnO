@@ -50,19 +50,17 @@ _cache: dict = {}
 
 # ------------------------------------------------------------------ small redis helpers
 def _hget(key, field):
-    v = store._cmd("HGET", K_LEARN + key, field)
+    hit = store._fresh(("h", K_LEARN + key))             # whole hash already in memory: no database read
+    v = hit[1].get(field) if hit else store._cmd("HGET", K_LEARN + key, field)
     return json.loads(v) if v else None
 
 
 def _hset(key, field, val):
-    store._cmd("HSET", K_LEARN + key, field, json.dumps(val, default=str, separators=(",", ":")))
+    store.hset(K_LEARN + key, field, json.dumps(val, default=str, separators=(",", ":")))
 
 
 def _hgetall(key) -> dict:
-    raw = store._cmd("HGETALL", K_LEARN + key) or []
-    if isinstance(raw, dict):
-        return {k: json.loads(v) for k, v in raw.items()}
-    return {raw[i]: json.loads(raw[i + 1]) for i in range(0, len(raw), 2)}
+    return {k: json.loads(v) for k, v in store._hash(K_LEARN + key).items()}
 
 
 def _index_add(idx, member, score):
@@ -172,6 +170,8 @@ def _bump(sets: str, market: str, strategy: str, tags: list[str], R: float):
         o["r"] = (o["r"] + [round(R, 3)])[-R_KEEP:]
         args += [f, json.dumps(o, separators=(",", ":"))]
     store._cmd("HSET", K_LEARN + "st", *args)
+    for i in range(0, len(args), 2):
+        store._hset_mem(K_LEARN + "st", args[i], args[i + 1])
 
 
 def _stat(sets, market, strategy, tag="all") -> dict | None:
@@ -275,7 +275,7 @@ def _record(t: dict, extra_tags: list[str]):
     if n > KEEP_LESSONS:
         old = store._cmd("ZRANGE", K_LEARN + "lessons:idx", 0, n - KEEP_LESSONS - 1) or []
         for oid in old:
-            store._cmd("HDEL", K_LEARN + "lessons", oid)
+            store._cmd("HDEL", K_LEARN + "lessons", oid); store._hset_mem(K_LEARN + "lessons", oid, None)
             store._cmd("ZREM", K_LEARN + "lessons:idx", oid)
     _cache.pop("summary", None)
     try:

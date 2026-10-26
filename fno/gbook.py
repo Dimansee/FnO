@@ -397,7 +397,7 @@ def tick(markets=MARKETS, manage_only=False) -> dict:
 def _tick(markets, manage_only) -> dict:
     out: dict = {}
     try:
-        store.put("g_last_tick", datetime.now(timezone.utc).isoformat(timespec="seconds"))
+        store.put_lazy("g_last_tick", datetime.now(timezone.utc).isoformat(timespec="seconds"))
     except Exception:
         pass
     specs = _spec_map()

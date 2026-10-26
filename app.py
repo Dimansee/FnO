@@ -907,7 +907,7 @@ _last_gtick = {"t": 0.0}
 @app.get("/api/gbook")
 def gbook_get():
     m = _mk()
-    if time.time() - _last_gtick["t"] > 60:                  # the page being open keeps the books fresh between the 5-minute scheduler calls
+    if time.time() - _last_gtick["t"] > 60 and not _runner.recent():   # the background loop already ticks every minute; only tick here if it is not running
         _last_gtick["t"] = time.time()
         try:
             GB.tick((m,))
@@ -1060,6 +1060,9 @@ def gbook_exit():
 def tick_global():
     if not C.CRON_SECRET or not hmac.compare_digest(request.headers.get("x-cron-secret", ""), C.CRON_SECRET):
         return jsonify({"error": "forbidden"}), 403
+    _runner.start()
+    if _runner.recent():                       # the call still wakes the host; the in-process loop has just done the work
+        return jsonify({"skipped": "background loop ticked in the last 90 s"})
     return jsonify(SV.clean(GB.tick()))
 
 # ---------------------------------------------------------------------------

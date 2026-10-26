@@ -2,7 +2,7 @@ name: global-tick
 # Backup only: the app now runs the crypto and US books itself every minute on Render (fno/runner.py) plus a QStash call every 10 min. GitHub runs this far less often than every 5 minutes.
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/30 * * * *"   # backup only: QStash and the in-process loop do the real work
   workflow_dispatch:
 jobs:
   tick:

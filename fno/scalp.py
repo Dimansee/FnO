@@ -115,27 +115,27 @@ def save_settings(new: dict) -> dict:
 
 
 def positions() -> list[dict]:
-    raw = store._cmd("HVALS", POS) or []
+    raw = store.hvals(POS)
     return sorted((json.loads(x) for x in raw), key=lambda p: p["opened"])
 
 
 def trades() -> list[dict]:
-    raw = store._cmd("HVALS", TRADES) or []
+    raw = store.hvals(TRADES)
     return sorted((json.loads(x) for x in raw), key=lambda t: t["closed"])
 
 
 def _save_pos(p):
-    store._cmd("HSET", POS, p["id"], store._dump(p))
+    store.hset(POS, p["id"], store._dump(p))
 
 
 def _take_pos(pid):
-    v = store._cmd("EVAL", store._TAKE, 1, POS, pid)
+    v = store.htake(POS, pid)
     return json.loads(v) if v else None
 
 
 def reset():
-    store._cmd("DEL", POS)
-    store._cmd("DEL", TRADES)
+    store.hdrop(POS)
+    store.hdrop(TRADES)
 
 
 def _day_state(d, sym) -> dict:
@@ -833,7 +833,7 @@ def _close(p, idx_px, why, m, now, spot=None) -> dict | None:
            "charges": round(chg, 2), "pnl": round(gross - chg, 2), "reason": why, "entry_spot": p["entry"],
            "exit_spot": round(float(idx_px), 2), "pts": round(p["side"] * (idx_px - p["entry"]), 2), "risk": p["risk"],
            "conf": p["conf"], "price_src": "live" if lg.get("src", "demo") != "demo" else "formula"}
-    store._cmd("HSET", TRADES, rec["id"], store._dump(rec))
+    store.hset(TRADES, rec["id"], store._dump(rec))
     return rec
 
 
@@ -877,7 +877,7 @@ def tick(now=None, m=None) -> dict:
                         out["closed"].append(rec)
                         trs_all.append(rec)
                 else:
-                    store._cmd("EVAL", store._UPDATE_IF_EXISTS, 1, POS, p["id"], store._dump(p))
+                    store.hupdate(POS, p["id"], store._dump(p))
             if not cfg["on"] or sym not in cfg["syms"] or any(p["symbol"] == sym for p in positions()):
                 continue
             # ---- new entry on the latest completed bar

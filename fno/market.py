@@ -39,7 +39,24 @@ def cached(key, ttl, fn):
             return hit[1]
         val = fn()
         _cache[key] = (_t.time(), val)
+        if len(_cache) > 1500:                 # long-running server: drop entries untouched for 6 h so memory stays flat
+            cut = _t.time() - 6 * 3600
+            for k in [k for k, v in list(_cache.items()) if v[0] < cut]:
+                _cache.pop(k, None)
         return val
+
+
+def cached_soft(key, ttl, fn, fail_ttl=300):
+    """Like cached(), but a failure is remembered too (re-raised for fail_ttl seconds) so a dead source isn't retried on
+    every page load."""
+    hit = _cache.get("!" + key)
+    if hit and _t.time() - hit[0] < fail_ttl:
+        raise hit[1]
+    try:
+        return cached(key, ttl, fn)
+    except Exception as e:
+        _cache["!" + key] = (_t.time(), e)
+        raise
 
 
 def stale(key, max_age=1800):
@@ -450,7 +467,8 @@ class Market:
                     by_broker.setdefault(src, set()).add(lg["key"])
         for name, keys in by_broker.items():
             try:
-                q = self.clients[name].quotes(sorted(keys))
+                ks = sorted(keys)                    # the page refresh and the minute tick ask for the same legs: reuse for 10 s
+                q = cached(f"q:{name}:{hash(tuple(ks))}", 10, lambda: self.clients[name].quotes(ks))
                 prices.update({k: v["ltp"] for k, v in q.items() if v.get("ltp") is not None})
                 self.ba.update({k: (v.get("bid"), v.get("ask")) for k, v in q.items()})
             except Exception as e:

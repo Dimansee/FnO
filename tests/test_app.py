@@ -296,7 +296,7 @@ store.clear_positions(); store.clear_trades()
 from fno import journal as JR  # noqa: E402
 store.clear_positions(); store.clear_trades()
 assert j(c.post("/api/settings", json={"prefs": {"sizing": "risk", "risk_pct": 2, "strategies": ["noise", "camarilla", "ai"], "auto": False}}))["ok"]
-store._cmd("DEL", JR._key("2026-10-01"))
+store._cmd("DEL", JR._key("2026-10-01")); JR._seen.clear(); JR._days_ready.clear()   # deleted behind the app's back: drop its memory too
 NOW[0] = datetime(2026, 10, 1, 9, 17, tzinfo=C.IST); CANDLES.clear(); M._cache.clear()
 tk = j(c.post("/api/tick", headers={"x-cron-secret": "c"}))
 assert tk["journal"].get("ctx:NIFTY") == "written" and tk["journal"].get("ctx:BANKNIFTY") == "written", tk["journal"]

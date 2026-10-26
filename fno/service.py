@@ -2,6 +2,8 @@
 function returns plain JSON-safe dicts for the API."""
 from __future__ import annotations
 
+import copy
+
 import math
 from datetime import date, datetime, time, timedelta
 
@@ -49,7 +51,7 @@ def clean(o):
 # ---------------------------------------------------------------------------
 def gcues():
     try:
-        return M.cached("gcues", 600, X.global_cues)
+        return M.cached_soft("gcues", 600, X.global_cues, fail_ttl=300)
     except Exception:
         return {"markets": {}, "avg_equity_chg": None, "notes": ["Global data unavailable"]}
 
@@ -58,7 +60,7 @@ def news(symbol):
     meta = M.instrument(symbol)
     q = None if meta["kind"] == "index" else symbol
     try:
-        return M.cached(f"news:{q}", 300, lambda: X.fetch_news(q))
+        return M.cached_soft(f"news:{q}", 300, lambda: X.fetch_news(q), fail_ttl=300)
     except Exception:
         return {"items": [], "score": 0, "events": [], "notes": ["News unavailable"]}
 
@@ -431,7 +433,7 @@ def health(m, candles, now) -> list[dict]:
             hrs = (cut - now).total_seconds() / 3600
             out.append({"label": "Broker", "state": "ok" if hrs > 3 else "warn", "text": f"{m.br.name.title()} login runs out in {hrs:.0f}h (about 03:30)"})
     try:
-        lt = store._cmd("GET", "fno:last_tick")
+        lt = store.get_raw("fno:last_tick")
         if lt:
             t = datetime.fromisoformat(lt)
             ago = (now - t).total_seconds() / 60
@@ -538,7 +540,7 @@ def place_signal(symbol, strike=None, auto=False, which=None):
                        f"Autopilot adds the Fibonacci breakout once equity reaches ₹{C.FIB_MIN_EQUITY:,.0f}.")
     if which is None and _trend_only(pf, symbol):
         return False, "Only the own-slot rules trade this instrument."
-    ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, news(symbol), gcues(), fii(), g["now"], guard, traded, strats)
+    ev = _evaluate_once(symbol, g, cstats, guard, traded, strats)
     if which in C.SLOTS:
         tv = ev.get(which) or {}
         ev = {**ev, "plan": tv.get("plan"), "signal": tv.get("signal", "WAIT")}
@@ -598,6 +600,26 @@ def place_signal(symbol, strike=None, auto=False, which=None):
     legs = [{**lg, "src": src} for lg in order["legs"]]
     return P.open_position(cash, symbol, legs, order["lots"], g["lot"], g["trade_exp"], g["spot"], m.source,
                            clean(order), clean({**ev["plan"], "auto": auto, "ctx": _entry_ctx(g)}))
+
+
+_EV_MEMO: dict = {}
+
+
+def _evaluate_once(symbol, g, cstats, guard, traded, strats):
+    """S.evaluate computes every rule at once (main, trend-day, Fibonacci). The tick asks for each slot separately within the
+    same second on the same candles, so the result is reused while the inputs are identical (was: 3 evaluations a minute
+    per index). Any change - a new candle, a trade placed (traded/guard change) - gives a fresh evaluation."""
+    import json as _json
+    key = (symbol, id(g["candles"]), len(g["candles"]), g["now"].strftime("%Y%m%d%H%M"), round(float(g["vix"].get("level") or 0), 2),
+           _json.dumps(guard, sort_keys=True, default=str), _json.dumps(traded, sort_keys=True, default=str), tuple(strats or ()))
+    hit = _EV_MEMO.get(key)
+    if hit and _time.time() - hit[0] < 30:
+        return copy.deepcopy(hit[1])
+    ev = S.evaluate(symbol, g["candles"], g["vix"], cstats, news(symbol), gcues(), fii(), g["now"], guard, traded, strats)
+    if len(_EV_MEMO) > 30:
+        _EV_MEMO.clear()
+    _EV_MEMO[key] = (_time.time(), copy.deepcopy(ev))
+    return ev
 
 
 def _small_account_strike(plan, chain, spot, pf, equity):
@@ -883,6 +905,15 @@ def backtest(symbol, mult, capital, sizing="risk", otm=-1, strategy="both", days
                   "research": BT.research_summary()})
 
 
+_MEMO: dict = {}
+import time as _time
+
+
+def _memo(key, data):
+    _MEMO[key] = (_time.time(), data)
+    return data
+
+
 STOCKS_URL = "https://raw.githubusercontent.com/Dimansee/FnO/research-data/research/data/stock_picks.json"
 
 
@@ -892,10 +923,13 @@ def stock_picks(force=False) -> dict:
     import requests as _rq
     key = "fno:stocks:cache"
     if not force:
+        hit = _MEMO.get(key)
+        if hit and _time.time() - hit[0] < (120 if hit[1].get("error") else 600):   # memory first: no database read per page load
+            return hit[1]
         try:
             raw = store._cmd("GET", key)
             if raw:
-                return clean(_json.loads(raw))
+                return _memo(key, clean(_json.loads(raw)))
         except Exception:
             pass
     try:
@@ -903,12 +937,12 @@ def stock_picks(force=False) -> dict:
         r.raise_for_status()
         data = clean(_json.loads(r.text))                 # the scan can write NaN (not valid JSON): read it with the stdlib parser, turn NaN into null
     except Exception as e:
-        return {"error": f"Stock picks unavailable: {str(e)[:100]}", "today": [], "history": []}
+        return _memo(key, {"error": f"Stock picks unavailable: {str(e)[:100]}", "today": [], "history": []})
     try:
         store._cmd("SET", key, _json.dumps(data), "EX", 1200)
     except Exception:
         pass
-    return data
+    return _memo(key, data)
 
 
 MARKET_URL = "https://raw.githubusercontent.com/Dimansee/FnO/stock-data/stock_market.json"
@@ -922,10 +956,13 @@ def stock_market(force=False) -> dict:
     import requests as _rq
     key = "fno:stocks:market"
     if not force:
+        hit = _MEMO.get(key)
+        if hit and _time.time() - hit[0] < (120 if hit[1].get("error") else 600):   # memory first: no database read per page load
+            return hit[1]
         try:
             raw = store._cmd("GET", key)
             if raw:
-                return clean(_json.loads(raw))
+                return _memo(key, clean(_json.loads(raw)))
         except Exception:
             pass
     try:
@@ -933,12 +970,12 @@ def stock_market(force=False) -> dict:
         r.raise_for_status()
         data = clean(_json.loads(r.text))
     except Exception as e:
-        return {"error": f"Market view unavailable: {str(e)[:100]}", "stocks": [], "industries": []}
+        return _memo(key, {"error": f"Market view unavailable: {str(e)[:100]}", "stocks": [], "industries": []})
     try:
         store._cmd("SET", key, _json.dumps(data, separators=(",", ":")), "EX", 1800)
     except Exception:
         pass
-    return data
+    return _memo(key, data)
 
 
 def stock_series(sym: str) -> dict:
@@ -1098,7 +1135,7 @@ def tick():
                 return {"post_close": {"error": str(e)[:160]}}
         return {"skipped": "outside market hours"}
     try:
-        store._cmd("SET", "fno:last_tick", now.isoformat(timespec="seconds"), "EX", 86400 * 4)
+        store.set_raw_lazy("fno:last_tick", now.isoformat(timespec="seconds"), 86400 * 4)
     except Exception:
         pass
     closed = manage_positions()

@@ -62,9 +62,14 @@ def _indian_hours() -> bool:
     return n.weekday() < 5 and (8 * 60 + 55) <= n.hour * 60 + n.minute <= (15 * 60 + 40)
 
 
+def recent(seconds=90) -> bool:
+    """True when this loop ticked the books within the last `seconds` (other callers then skip their own tick)."""
+    return time.time() - float(state.get("last_tick_ts") or 0) < seconds
+
+
 def _ping():
     host = C.PRODUCTION_HOST
-    if not host:
+    if not host or C.QSTASH_TOKEN:             # QStash already calls the app every 1-10 min around the clock: no self-ping needed
         return
     try:
         requests.get(f"https://{host}/api/health", timeout=20)
@@ -98,6 +103,7 @@ def _loop():
         try:
             GB.tick()
             state["ticks"] += 1
+            state["last_tick_ts"] = time.time()
             state["last_tick"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         except Exception as e:
             state["last_error"] = f"tick: {str(e)[:100]}"
