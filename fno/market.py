@@ -22,15 +22,30 @@ IST = "Asia/Kolkata"
 # tiny in-process TTL cache (survives between requests on a warm instance)
 # ---------------------------------------------------------------------------
 _cache: dict = {}
+import threading as _th
+_klocks: dict = {}
+_klock = _th.Lock()
 
 
 def cached(key, ttl, fn):
     hit = _cache.get(key)
     if hit and _t.time() - hit[0] < ttl:
         return hit[1]
-    val = fn()
-    _cache[key] = (_t.time(), val)
-    return val
+    with _klock:
+        lk = _klocks.setdefault(key, _th.Lock())
+    with lk:                                   # one fetch per key at a time: other threads wait and reuse it
+        hit = _cache.get(key)
+        if hit and _t.time() - hit[0] < ttl:
+            return hit[1]
+        val = fn()
+        _cache[key] = (_t.time(), val)
+        return val
+
+
+def stale(key, max_age=1800):
+    """The last value fetched for a key, even past its TTL (used when the source fails), or None."""
+    hit = _cache.get(key)
+    return hit[1] if hit and _t.time() - hit[0] < max_age else None
 
 
 def instrument(symbol: str) -> dict:
@@ -249,6 +264,11 @@ class Market:
         if isinstance(e, B.AuthExpired):
             self.errors.append(str(e))
             self.br = None
+        elif isinstance(e, B.RateLimited):
+            msg = (f"Upstox is limiting requests right now - showing the last fetched data (or Yahoo) and retrying in about "
+                   f"{max(1, round(B.upstox_cooldown_left() / 60))} min. Nothing to do on your side.")
+            if msg not in self.errors:
+                self.errors.append(msg)
         else:
             self.errors.append(f"{what} via {self.br.name.title() if self.br else 'broker'} failed: {e}")
 
@@ -260,12 +280,16 @@ class Market:
 
     def candles(self, symbol) -> pd.DataFrame:
         if self.br:
+            ck = f"c:{self.br.name}:{symbol}"
             try:
-                df = cached(f"c:{self.br.name}:{symbol}", 25, lambda: self.br.candles(self.key(symbol)))
+                df = cached(ck, 25, lambda: self.br.candles(self.key(symbol)))
                 if not df.empty:
                     return self._fill_gaps(df, symbol)
             except Exception as e:
                 self._fail("Candles", e)
+                old = stale(ck)
+                if old is not None and not old.empty:
+                    return self._fill_gaps(old, symbol)
         # 30 days: the noise band needs the last 14 sessions
         return cached(f"c:yahoo:{symbol}", 45, lambda: yahoo_candles(instrument(symbol)["yahoo"], period="30d"))
 
@@ -300,6 +324,9 @@ class Market:
                     return df
             except Exception as e:
                 self._fail("1-minute candles", e)
+                old = stale(f"c1:{self.br.name}:{symbol}", 600)
+                if old is not None and not old.empty:
+                    return old
         try:
             df = cached(f"c1:yahoo:{symbol}", 45, lambda: yahoo_candles(instrument(symbol)["yahoo"], period="1d", interval="1m"))
             return df if df is not None else pd.DataFrame()

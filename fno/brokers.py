@@ -27,6 +27,10 @@ class BrokerError(RuntimeError):
     pass
 
 
+class RateLimited(BrokerError):
+    """The broker (Upstox sits behind Cloudflare) said 'too many requests'. Calls pause until the cooldown ends."""
+
+
 class AuthExpired(BrokerError):
     pass
 
@@ -85,6 +89,18 @@ def _num(v):
 # Upstox
 # =============================================================================
 UPSTOX = "https://api.upstox.com"
+# Request pacing (26 Oct 2026: Cloudflare error 1015 "you are being rate limited" on candles). At most ~6 calls a second from
+# this server, and after a 429 no Upstox calls at all for UPSTOX_COOLDOWN seconds (each retry during a ban extends it).
+import threading as _th
+import time as _tm
+_ux_lock = _th.Lock()
+_ux = {"last": 0.0, "until": 0.0}
+UPSTOX_GAP = 0.17
+UPSTOX_COOLDOWN = 180
+
+
+def upstox_cooldown_left() -> int:
+    return max(0, int(_ux["until"] - _tm.time()))
 
 
 def upstox_login_url(api_key, redirect_uri, state):
@@ -102,6 +118,10 @@ def upstox_exchange(code, api_key, api_secret, redirect_uri) -> str:
     return r.json()["access_token"]
 
 
+_hist: dict = {}       # (instrument key, last finished day, days) -> (fetched at, rows)
+HIST_TTL = 6 * 3600
+
+
 class Upstox:
     name = "upstox"
 
@@ -110,7 +130,18 @@ class Upstox:
         self.s.headers.update({"Authorization": f"Bearer {token}", "Accept": "application/json"})
 
     def _get(self, path, params=None):
+        with _ux_lock:
+            left = _ux["until"] - _tm.time()
+            if left > 0:
+                raise RateLimited(f"Upstox asked us to slow down - pausing Upstox calls for {int(left) + 1}s")
+            wait = _ux["last"] + UPSTOX_GAP - _tm.time()
+            if wait > 0:
+                _tm.sleep(wait)
+            _ux["last"] = _tm.time()
         r = self.s.get(UPSTOX + path, params=params, timeout=15)
+        if r.status_code == 429 or (r.status_code == 403 and "1015" in r.text[:400]):
+            _ux["until"] = _tm.time() + UPSTOX_COOLDOWN
+            raise RateLimited(f"Upstox asked us to slow down (too many requests) - pausing Upstox calls for {UPSTOX_COOLDOWN // 60} min")
         if r.status_code == 401:
             raise AuthExpired("Upstox session expired - log in again in Settings.")
         if r.status_code >= 400:
@@ -166,13 +197,23 @@ class Upstox:
         rows = []
         to_d = C.today_ist() - timedelta(days=1)
         fr_d = to_d - timedelta(days=days + 6)
-        # Upstox rejects some 5-minute ranges that span two months, so ask month by month
-        a = fr_d
-        while a <= to_d:
-            b = min(date(a.year + (a.month == 12), a.month % 12 + 1, 1) - timedelta(days=1), to_d)
-            past = self._get(f"/v3/historical-candle/{enc}/minutes/5/{b}/{a}") or {}
-            rows += past.get("candles", [])
-            a = b + timedelta(days=1)
+        # Finished sessions don't change: fetch them once and keep them (was: re-fetched every 25 s per symbol -> rate limited)
+        hk = (key, to_d, days)
+        hit = _hist.get(hk)
+        if hit and _tm.time() - hit[0] < HIST_TTL:
+            rows += hit[1]
+        else:
+            past_rows = []
+            # Upstox rejects some 5-minute ranges that span two months, so ask month by month
+            a = fr_d
+            while a <= to_d:
+                b = min(date(a.year + (a.month == 12), a.month % 12 + 1, 1) - timedelta(days=1), to_d)
+                past = self._get(f"/v3/historical-candle/{enc}/minutes/5/{b}/{a}") or {}
+                past_rows += past.get("candles", [])
+                a = b + timedelta(days=1)
+            if past_rows:
+                _hist[hk] = (_tm.time(), past_rows)
+            rows += past_rows
         today = self._get(f"/v3/historical-candle/intraday/{enc}/minutes/5") or {}
         rows += today.get("candles", [])
         if not rows:
