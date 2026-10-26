@@ -50,3 +50,22 @@ out = m.candles("NIFTY")
 assert out is df and len(m.errors) == 1 and "limiting requests" in m.errors[0] and "429" not in m.errors[0], m.errors
 print("stale fallback + friendly message OK:", m.errors[0])
 print("ALL RATE LIMIT OK")
+
+# leg price when the leg's broker gives no quote: live chain LTP, not the formula (26 Oct: Rs 116 shown vs ~170 real)
+import pandas as pd  # noqa: E402
+class FakeBr:
+    name = "fyers"
+    def quotes(self, keys):
+        raise B.RateLimited("slow down")
+m2 = M.Market.__new__(M.Market); m2.errors = []; m2.ba = {}; m2.br = FakeBr(); m2.clients = {"fyers": m2.br}
+ch = pd.DataFrame([{"strike": 22600.0, "ce_ltp": 170.5, "pe_ltp": 60.0, "ce_bid": 170.0, "ce_ask": 171.0, "pe_bid": 59.5, "pe_ask": 60.5}]); ch.attrs["source"] = "live"
+m2.chain = lambda *a, **k: ch
+pos = [{"id": "x", "symbol": "NIFTY", "expiry": "2026-10-27", "legs": [{"key": "NSE:NIFTY26O2722600CE", "src": "fyers", "strike": 22600, "opt": "CE", "side": "BUY"}]}]
+pr = m2.leg_prices(pos, {"NIFTY": 22650.0}, 15.0)
+assert pr["NSE:NIFTY26O2722600CE"] == 170.5 and pos[0]["legs"][0]["price_src"] == "chain", (pr, pos)
+f = m2.exit_fills(pos, pr)
+assert f["NSE:NIFTY26O2722600CE"] == 170.0, f
+m2.chain = lambda *a, **k: (_ for _ in ()).throw(RuntimeError("down"))
+pr = m2.leg_prices(pos, {"NIFTY": 22650.0}, 15.0)
+assert pos[0]["legs"][0]["price_src"] == "formula"
+print("leg price fallback OK")

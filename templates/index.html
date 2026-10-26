@@ -2036,7 +2036,7 @@ async function loadPortfolio() {
     <div class="leg" style="flex-wrap:wrap;gap:10px;padding:10px 12px">
       <div style="flex:2;min-width:200px"><b>${esc(p.symbol)}</b> ${p.legs.map(l => `<span class="tag ${l.side.toLowerCase()}">${l.side}</span> ${l.strike}${l.opt}`).join(" / ")}
         <div class="muted" style="font-size:12px">exp ${p.expiry} · ${p.lots} lot(s) · ${p.mode} · opened ${p.opened.slice(11, 16)} · SL ₹${n2(p.sl_prem)} · ${tgtTxt(p)}${p.at_breakeven ? " · stop at breakeven" : ""}</div></div>
-      <div class="mono" style="flex:1">₹${n2(p.entry_prem)} → ₹${n2(p.current_prem)}<div class="muted" style="font-size:11px">${p.price_src === "live" ? "live broker price" : "formula price (no broker login)"}</div></div>
+      <div class="mono" style="flex:1">₹${n2(p.entry_prem)} → ₹${n2(p.current_prem)}<div class="muted" style="font-size:11px">${p.price_src === "live" ? "live broker price" : p.price_src === "chain" ? "live option-chain price" : `<span class="down">estimate only - broker price unavailable right now</span>`}</div></div>
       <div class="mono ${cls(p.unrealised)}" style="flex:1;font-weight:700">${rs(p.unrealised)}</div>
       <button class="danger" data-exit="${p.id}">Exit</button>
     </div>`).join("") : `<div class="empty">No open positions.</div>`;

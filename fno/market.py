@@ -433,10 +433,11 @@ class Market:
                     continue
                 bid, ask = self.ba.get(k, (None, None))
                 s = slip_pct(ltp)
+                tol = max(0.15 * ltp, 2.0)                   # a quote far from the last trade is stale / thin: use the spread estimate
                 if lg["side"] == "BUY":
-                    fill = min(ltp, bid) if bid and bid >= 0.5 * ltp else ltp * (1 - s)
+                    fill = min(ltp, bid) if bid and bid >= ltp - tol else ltp * (1 - s)
                 else:
-                    fill = max(ltp, ask) if ask and ask <= 1.5 * ltp else ltp * (1 + s)
+                    fill = max(ltp, ask) if ask and ask <= ltp + tol else ltp * (1 + s)
                 out[k] = round(max(fill, 0.05), 2)
         return out
 
@@ -444,6 +445,9 @@ class Market:
         """Current price of each leg. Live broker LTP when the leg came from the
         connected broker; otherwise a Black-Scholes estimate."""
         prices, by_broker = {}, {}
+        for p in positions:
+            for lg in p["legs"]:
+                lg.pop("price_src", None)                    # worked out afresh on every call
         if self.br:                                          # legs opened on theoretical prices: switch them to the live contract
             for p in positions:
                 for lg in p["legs"]:
@@ -473,6 +477,27 @@ class Market:
                 self.ba.update({k: (v.get("bid"), v.get("ask")) for k, v in q.items()})
             except Exception as e:
                 self.errors.append(f"Live option prices via {name.title()} failed: {e}")
+        # 26 Oct 2026: a leg whose own broker gave no price (rate limit, session ended, key from the other broker) was priced
+        # by the formula but still shown as "live broker price" (Rs 116 vs a real ~Rs 170). Next best: the LTP of the same
+        # strike in the connected broker's live option chain; the formula is the last resort and is labelled as such.
+        for p in positions:
+            sp = spots.get(p["symbol"])
+            for lg in p["legs"]:
+                if lg["key"] in prices or not self.br:
+                    continue
+                try:
+                    ch = self.chain(p["symbol"], date.fromisoformat(p["expiry"]), sp, vix_level)
+                    if ch is not None and not ch.empty and ch.attrs.get("source") == "live":
+                        row = ch[ch["strike"] == float(lg["strike"])]
+                        col = f"{lg['opt'].lower()}_ltp"
+                        v = float(row.iloc[0][col]) if len(row) and col in row and row.iloc[0][col] == row.iloc[0][col] else None
+                        if v and v > 0:
+                            prices[lg["key"]] = v
+                            lg["price_src"] = "chain"
+                            b, a = row.iloc[0].get(f"{lg['opt'].lower()}_bid"), row.iloc[0].get(f"{lg['opt'].lower()}_ask")
+                            self.ba[lg["key"]] = (b if b == b else None, a if a == a else None)
+                except Exception as e:
+                    self.errors.append(f"Option chain price for {p['symbol']} {lg['strike']:g}{lg['opt']} failed: {e}")
         for p in positions:
             sp = spots.get(p["symbol"])
             for lg in p["legs"]:
