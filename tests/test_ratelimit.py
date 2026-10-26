@@ -69,3 +69,27 @@ m2.chain = lambda *a, **k: (_ for _ in ()).throw(RuntimeError("down"))
 pr = m2.leg_prices(pos, {"NIFTY": 22650.0}, 15.0)
 assert pos[0]["legs"][0]["price_src"] == "formula"
 print("leg price fallback OK")
+
+# Fyers: past sessions cached, only today's bars re-fetched; a rate-limit reply pauses Fyers calls
+fcalls = []
+def fy_get(url, params=None, timeout=None):
+    fcalls.append(params)
+    if mode.get("fy") == 429:
+        return R(429, text="Too many requests")
+    class J:
+        status_code = 200
+        text = ""
+        def json(self):
+            return {"s": "ok", "candles": [[1761536100, 1, 2, 0.5, 1.5, 10]]}
+    return J()
+B.FYERS_GAP = 0
+fy = B.Fyers("APP", "TOK"); fy.s.get = fy_get
+fy.candles("NSE:NIFTY50-INDEX"); n1 = len(fcalls); fy.candles("NSE:NIFTY50-INDEX")
+assert n1 == 2 and len(fcalls) == 3 and fcalls[-1]["range_from"] == fcalls[-1]["range_to"], fcalls
+mode["fy"] = 429
+try:
+    fy.candles1("NSE:NIFTY50-INDEX"); raise SystemExit("no error")
+except B.RateLimited:
+    pass
+assert B.fyers_cooldown_left() > 30
+print("fyers pacing OK")

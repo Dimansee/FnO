@@ -276,6 +276,15 @@ def fyers_refresh(app_id, secret, refresh_token, pin) -> str:
     return j["access_token"]
 
 
+_fy = {"last": 0.0, "until": 0.0}
+FYERS_GAP = 0.12            # Fyers allows ~10 calls a second; stay under it
+FYERS_COOLDOWN = 60
+
+
+def fyers_cooldown_left() -> int:
+    return max(0, int(_fy["until"] - _tm.time()))
+
+
 class Fyers:
     name = "fyers"
 
@@ -285,12 +294,26 @@ class Fyers:
         self._exp_ts: dict[str, dict[date, str]] = {}
 
     def _get(self, path, params=None):
+        with _ux_lock:
+            left = _fy["until"] - _tm.time()
+            if left > 0:
+                raise RateLimited(f"Fyers asked us to slow down - pausing Fyers calls for {int(left) + 1}s")
+            wait = _fy["last"] + FYERS_GAP - _tm.time()
+            if wait > 0:
+                _tm.sleep(wait)
+            _fy["last"] = _tm.time()
         r = self.s.get(FYERS_DATA + path, params=params, timeout=15)
         try:
             j = r.json()
         except Exception:
+            if r.status_code == 429:
+                _fy["until"] = _tm.time() + FYERS_COOLDOWN
+                raise RateLimited("Fyers asked us to slow down (too many requests) - pausing Fyers calls for 1 min")
             raise BrokerError(f"Fyers {r.status_code}: {r.text[:160]}")
         msg = str(j.get("message", "")).lower()
+        if r.status_code == 429 or j.get("code") == 429 or "request limit" in msg or "rate limit" in msg or "too many" in msg:
+            _fy["until"] = _tm.time() + FYERS_COOLDOWN
+            raise RateLimited("Fyers asked us to slow down (too many requests) - pausing Fyers calls for 1 min")
         if r.status_code == 401 or j.get("code") in (-8, -15, -16, -17) or (j.get("s") != "ok" and "token" in msg):
             raise AuthExpired("Fyers session expired - log in again in Settings.")
         if j.get("s") not in ("ok", None):
@@ -375,11 +398,22 @@ class Fyers:
         return df.reset_index(drop=True)
 
     def candles(self, key, days=24):
+        """Finished sessions are fetched once and kept (6 h); only today's bars are fetched on each refresh."""
         to_d = C.today_ist()
         fr_d = to_d - timedelta(days=days + 4)
-        j = self._get("/history", {"symbol": key, "resolution": "5", "date_format": "1",
-                                   "range_from": fr_d.isoformat(), "range_to": to_d.isoformat(), "cont_flag": "1"})
-        rows = j.get("candles") or []
+        hk = ("fy", key, to_d, days)
+        hit = _hist.get(hk)
+        if hit and _tm.time() - hit[0] < HIST_TTL:
+            past = hit[1]
+        else:
+            jp = self._get("/history", {"symbol": key, "resolution": "5", "date_format": "1",
+                                        "range_from": fr_d.isoformat(), "range_to": (to_d - timedelta(days=1)).isoformat(), "cont_flag": "1"})
+            past = jp.get("candles") or []
+            if past:
+                _hist[hk] = (_tm.time(), past)
+        jt = self._get("/history", {"symbol": key, "resolution": "5", "date_format": "1",
+                                    "range_from": to_d.isoformat(), "range_to": to_d.isoformat(), "cont_flag": "1"})
+        rows = list(past) + (jt.get("candles") or [])
         if not rows:
             return pd.DataFrame()
         df = pd.DataFrame([r[:6] for r in rows], columns=["ts", "open", "high", "low", "close", "volume"])

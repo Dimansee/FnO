@@ -282,8 +282,10 @@ class Market:
             self.errors.append(str(e))
             self.br = None
         elif isinstance(e, B.RateLimited):
-            msg = (f"Upstox is limiting requests right now - showing the last fetched data (or Yahoo) and retrying in about "
-                   f"{max(1, round(B.upstox_cooldown_left() / 60))} min. Nothing to do on your side.")
+            nm = self.br.name.title() if self.br else "The broker"
+            left = B.upstox_cooldown_left() if nm == "Upstox" else B.fyers_cooldown_left()
+            msg = (f"{nm} is limiting requests right now - showing the last fetched data (or Yahoo) and retrying in about "
+                   f"{max(1, round(left / 60))} min. Nothing to do on your side.")
             if msg not in self.errors:
                 self.errors.append(msg)
         else:
@@ -304,7 +306,7 @@ class Market:
                     return self._fill_gaps(df, symbol)
             except Exception as e:
                 self._fail("Candles", e)
-                old = stale(ck)
+                old = stale(ck, 120)                  # bridge a short broker hiccup only; after 2 min use Yahoo (moving, if delayed)
                 if old is not None and not old.empty:
                     return self._fill_gaps(old, symbol)
         # 30 days: the noise band needs the last 14 sessions
