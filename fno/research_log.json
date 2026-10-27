@@ -1,7 +1,84 @@
 {
- "updated": "2026-10-25",
+ "updated": "2026-10-28",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
+  {
+   "id": "r51",
+   "date": "2026-10-28",
+   "area": "Index options",
+   "title": "Round 51: ICT / SMC concepts as filters on Autopilot, and 'displacement' as a size signal",
+   "asked": "Do FVG, order blocks, supply/demand, premium/discount, killzones, SMT divergence, equal highs/lows or displacement improve today's Autopilot trades?",
+   "period": "Autopilot backtest trades with today's rules (big-run skip), Nifty / Bank Nifty / Sensex, Jan 2023 - Oct 2026; Rs 2 lakh compounding account; 1,000 one-year bootstrap paths",
+   "result": "Baseline per lot 2023-25 / 2026 +4.76L / +1.28L, account Rs 29.8L (fall -30.3%). 12 filters, none passed (both periods better AND shuffle p < 0.05). Near misses: skip if an opposite open FVG is within 1 ATR ahead 4.84L / 1.45L, account 31.5L, p 0.15; skip if equal highs/lows within 1 ATR ahead 4.85L / 1.38L, p 0.16. Keep-only filters (inside FVG, at an order block, premium/discount, killzones, SMT, EQH/EQL) removed 85-90% of trades and most of the profit. Displacement (a >= 1 ATR body candle our way in the last 3 five-minute bars): trades with it averaged Rs 700 / 379 / 962 in 2024 / 2025 / 2026 vs Rs 196 / 227 / -15 without (2023 the exception, Rs 40 vs 79); higher on every index and every rule; block bootstrap of the gap +Rs 386 a trade (90% range 116-666, p 0.007). Sizing 1.5x with displacement / 0.75x without: account Rs 62.6L (fall -29.2%), 2026 alone Rs 6.34L vs 4.63L, bootstrap median Rs 4.05L vs 3.53L, loss-year 10.7% vs 11.3%, but 30%+ fall chance 30.1% vs 26.9%. As a filter it fails (2023-25 3.64L).",
+   "summary": "Liquidity / SMC filters do not improve Autopilot. The one lead is displacement, which is a momentum-continuation marker (not a liquidity idea) and fits the academic breakout / intraday-momentum evidence. It was one of ~12 features tested, so p 0.007 is borderline after correction: put on the watch-list as a 1.5x / 0.75x size tilt to be checked on forward paper trades (pending p-displacement). Scripts research/round51_smc_filters.py, round51b_sizing.py.",
+   "decision": "Watch-list"
+  },
+  {
+   "id": "r50",
+   "date": "2026-10-28",
+   "area": "Index options",
+   "title": "Round 50: the full ICT / SMC toolkit as mechanical rules (FVG, IFVG, order blocks, breaker, supply/demand, 2022 model, Silver Bullet, Judas, OTE, CISD, SMT)",
+   "asked": "Do the liquidity concepts taught on YouTube / Instagram - order blocks, supply and demand, sweeps, EQH/EQL, buy-side / sell-side liquidity, FVG and the rest - make money on Indian indices?",
+   "period": "5-minute Nifty / Bank Nifty / Sensex, 3 Jan 2023 - 9 Oct 2026; 1-ITM option, calibrated premiums, 0.5% slippage per fill, full charges, 1 lot",
+   "result": "13 setups x 32 variants (targets 1.5R / 2R / 3R / next liquidity pool; 15-min trend filter; premium/discount; killzones 09:15-10:45 + 13:30-15:00) x 3 indices = 1,248 runs. 48 net positive (3.8%), 17 positive in both 2023-24 and 2025-26 (1.4%). Every setup lost on average; gross edge per setup -0.05R to +0.04R. Base variant (2R, no filters, 3 indices): FVG 4,336 trades -6.5L; order block 3,156 -7.0L; OB at 50% -6.0L; supply/demand 1,296 -2.9L; breaker 1,998 -3.6L; ICT 2022 model 639 -1.3L; Silver Bullet 3,416 -6.9L; Judas 1,361 -3.6L; OTE 3,836 -9.1L; CISD 2,711 -8.7L; IFVG 4,502 -11.6L; SMT 3,798 -8.4L. The 15-min trend filter halved losses (mostly fewer trades); premium/discount and killzones lowered R; the liquidity-pool target was the worst target. Best on 2023-24, judged on 2025-26: 7 of 39 stayed positive; together -11.5L. Only lead: Nifty breaker block with the 15-min trend, 3R: +95k on 381 trades, positive every year (+0.14R, about 2 standard errors) - weak after 1,248 tries.",
+   "summary": "Not adopted. A limit fill that also hits the stop in the same bar is counted as a full loss (a first run that dropped those trades made order blocks and FVGs look profitable). The Nifty breaker setup goes on the watch-list (pending p-smc-watch). Script research/round50_smc.py.",
+   "decision": "Not adopted"
+  },
+  {
+   "id": "r49",
+   "date": "2026-10-28",
+   "area": "Index options",
+   "title": "Round 49: liquidity sweeps, HH/HL structure, BOS / CHoCH, consolidation boxes and POC as filters, exits and add-ons on Autopilot",
+   "asked": "Can anything from the liquidity / reel tests (rounds 46-48) improve today's Autopilot rules?",
+   "period": "Autopilot backtest trades with today's rules (big-run skip), Nifty / Bank Nifty / Sensex, Jan 2023 - Oct 2026; Rs 2 lakh compounding account",
+   "result": "Baseline per lot 2023-25 / 2026 +4.76L / +1.28L, account Rs 29.8L (-30.3%). 14 filters, none passed: keep only after a sweep our way 0.09L / 0.39L; skip after a sweep against 2.67L / 0.73L; skip if a pool is < 0.5 ATR ahead 4.03L / 1.16L; keep only HH/HL agreeing 3.88L / 0.39L (p 0.005 in 2023-25 but collapses in 2026); BOS our way 2.72L / 1.44L; manipulation then breakout 0.24L / 0.14L; today's POC side 4.03L / 1.31L. Near misses: skip after a 5-min CHoCH against 4.65L / 1.40L, account 31.4L (-28.9%), p 0.17; skip inside a tight 30-min box 4.80L / 1.41L, p 0.20, account 27.7L. Exit at the next liquidity pool: 3.52L / 1.11L. Add-ons: PDH/PDL sweep + CHoCH (55 trades, +30k / -12k) -> account 22.1L; 60-min box breakout in trend (1,033 trades, -38k / -24k) -> 20.4L.",
+   "summary": "Not adopted. Liquidity filters remove winners, booking at liquidity pools cuts the big runs that carry the system, and the add-on setups lower the account. CHoCH-against and inside-a-box skips are watch items (pending p-smc-watch). Script research/round49.py.",
+   "decision": "Not adopted"
+  },
+  {
+   "id": "r48",
+   "date": "2026-10-28",
+   "area": "Index options",
+   "title": "Round 48: put-call parity 'guaranteed profit' (reel) - box-spread arbitrage on real option candles",
+   "asked": "A reel says any deviation from put-call parity is a risk-free profit. Does it exist on Nifty / Bank Nifty options after costs?",
+   "period": "Recorded 5-minute Nifty / Bank Nifty option candles, 22 May - 16 Oct 2026 (bars where all 4 legs traded)",
+   "result": "Two strikes of the same expiry (spot and dividends drop out); costs at the 1 Apr 2026 STT rates (0.15% on premium sold and on exercise), exchange, GST, stamp, Rs 20 a leg and slippage. On a snapshot 16-17% of boxes look profitable (Nifty median gap 1.7 pts vs cost 5.0; Bank Nifty 4.6 vs 11.7). The gap in one bar has ~0 correlation with the next bar (0.00-0.07); trading at the next bar: positive only 14-16% of the time, mean -Rs 292 a lot (Nifty, 18,657 cases) and -Rs 346 (Bank Nifty, 10,998). The index moves a median 16 / 52 points per 5-min bar, so last-traded prices of the 4 legs are not simultaneous.",
+   "summary": "Not adopted. Parity holds within costs; market makers and HFT enforce it in milliseconds, and the gaps a retail trader sees are stale prints. Legging risk and locked margin make it worse. Script research/round48_pcp_arb.py (needs the research-data branch).",
+   "decision": "Not adopted"
+  },
+  {
+   "id": "r47",
+   "date": "2026-10-28",
+   "area": "Index options",
+   "title": "Round 47: reel setup - trend, consolidation, volume-profile POC, manipulation below the box, breakout",
+   "asked": "Bullish trend (HH, HL), consolidation, fixed-range volume profile POC, wait for a manipulation below the box, then buy the breakout / POC retest. Does it work?",
+   "period": "10 large-cap stocks with real volume (5-min, Jan 2023 - Oct 2026, cash intraday, 0.09% round trip) and Nifty / Bank Nifty options (time-at-price POC)",
+   "result": "96 variants per market (30 / 60-min box, two tightness levels, trend filter on/off, reclaim / breakout / POC-retest entry, 1.5-3R) plus a plain-breakout control. Stocks: 0 of 96 profitable after costs (stops ~0.22% of price, so costs ~0.4R a trade). POC retest: small gross edge that faded (+0.12R 2023-24, +0.035R 2025-26), -0.35R after costs. The manipulation step made it worse: breakout after a sweep +0.018R vs plain breakout +0.038R (stocks); Nifty -0.01R vs +0.18R. HH/HL trend filter helped slightly. Nifty options: the reel's versions lost; best was the control (60-min box breakout in trend, 3R) +49.6k on 503 trades, weak. Bank Nifty 3 of 96 positive.",
+   "summary": "Not adopted. The selling point of the reel (wait for the manipulation) does worse than a simple breakout. Script research/round47_amd_poc.py (needs the research-data branch).",
+   "decision": "Not adopted"
+  },
+  {
+   "id": "r46",
+   "date": "2026-10-28",
+   "area": "Index options",
+   "title": "Round 46: liquidity trading - swing highs/lows, liquidity sweep, BOS, CHoCH",
+   "asked": "Can we trade on the basis of liquidity: swing highs and lows, break of structure, liquidity sweeps?",
+   "period": "5-minute Nifty / Bank Nifty, 3 Jan 2023 - 9 Oct 2026; 1-ITM option, calibrated premiums, 0.5% slippage, full charges, Rs 2L, 1% risk",
+   "result": "800 variants: sweep reversal (pools PDH/PDL + opening range, swings, all, equal highs/lows; with or without CHoCH; 15-min trend none / with / against; 1.5R / 2R / 3R / opposite pool; full day or morning) and BOS + pullback-sweep continuation. 86 profitable, only 14 in both halves (7-53 trades each). Edge over a random-direction twin +0.006R (none). Average net per setting: sweep reversal -1.20L, BOS continuation -1.65L. CHoCH confirmation cut losses (mostly fewer trades); PDH/PDL + opening range were the best pools (+0.13R vs +0.035R random), equal highs/lows the worst (-0.16R). Best: Bank Nifty key pools + CHoCH, 3R: +20k on 22 trades, almost all in 2023.",
+   "summary": "Not adopted. No measurable edge over random entries; option costs and decay turn it into losses. SEBI context: 91% of individual F&O traders lost money in FY25. Script research/round46_liquidity.py (needs the research-data branch).",
+   "decision": "Not adopted"
+  },
+  {
+   "id": "rliq",
+   "date": "2026-10-28",
+   "area": "Index options",
+   "title": "Liquidity / SMC / ICT: what the evidence says (deep research across YouTube, Instagram, blogs, papers + rounds 46-51)",
+   "asked": "Many people say liquidity is the key to trading. Research it in every way possible - order blocks, supply and demand, sweeps, EQL, buy-side / sell-side liquidity, FVG and more.",
+   "period": "Sources to Oct 2026; backtests Jan 2023 - Oct 2026",
+   "result": "Real part: stop orders do cluster just beyond round numbers and obvious levels (NY Fed order-book studies), but the effects are small and short-lived, and when a level breaks price tends to CONTINUE, the opposite of 'sweep then reverse'. Independent tests: FVGs and order blocks are revisited about as often as random zones; mechanised tests with costs show profit factors 0.80-1.08. ICT has no audited track record; Indian SMC courses publish none; SEBI has acted against course sellers for cherry-picked results. India: prop/algo firms hold ~48% of index-option premium turnover, SL-M orders for index options were removed in 2021, and the Jane Street order was about moving the index against an options book, not stop hunting. Our own 2,000+ variants (rounds 46-51): no edge stand-alone, none as Autopilot filters; one lead (displacement as a size tilt).",
+   "summary": "Most of the toolkit renames older ideas (Wyckoff springs, Turtle Soup, supply/demand zones). Codable parts were all tested and failed after costs. Full report: research/liquidity_smc_ict_report.md.",
+   "decision": "Information"
+  },
   {
    "id": "r44",
    "date": "2026-10-25",
@@ -1061,6 +1138,38 @@
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
  "pending": [
+  {
+   "id": "p-displacement",
+   "area": "Index options",
+   "title": "Displacement candle before entry: size up 1.5x (0.75x without)?",
+   "waiting_for": "More live trades",
+   "why": "Round 51: Autopilot trades with a >= 1 ATR body candle their way in the last 3 five-minute bars earned far more per trade in 2024, 2025 and 2026 on every index and rule (p 0.007, borderline after ~12 tests). The 1.5x / 0.75x tilt raised the bootstrap median 3.53L -> 4.05L but the 30%+ fall chance 26.9% -> 30.1%.",
+   "collecting": "Paper Autopilot trades (displacement yes / no at entry)",
+   "since": "2026-10-28",
+   "need": 120,
+   "unit": "sessions",
+   "refs": [
+    "r51"
+   ],
+   "next": "After ~100 forward displacement trades: adopt the tilt as a switch only if the per-trade gap holds on at least 2 of the 3 indices."
+  },
+  {
+   "id": "p-smc-watch",
+   "area": "Index options",
+   "title": "SMC watch items: CHoCH-against skip, inside-box skip, opposite-FVG / equal-high skip, Nifty breaker",
+   "waiting_for": "More live trades",
+   "why": "Rounds 49-51: each improved both periods slightly or held up out of sample, but none passed the shuffle test (p 0.15-0.20) and the breaker setup is the best of 1,248 tries.",
+   "collecting": "Paper Autopilot trades and index candles",
+   "since": "2026-10-28",
+   "need": 120,
+   "unit": "sessions",
+   "refs": [
+    "r49",
+    "r50",
+    "r51"
+   ],
+   "next": "Re-run research/round49.py, round50_smc.py and round51_smc_filters.py with the new sessions; adopt nothing unless p < 0.05 on the combined data."
+  },
   {
    "id": "p-agents",
    "area": "Index options",

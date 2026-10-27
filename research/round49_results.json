@@ -1,0 +1,595 @@
+{
+ "baseline": {
+  "per_lot": {
+   "train": 475859,
+   "y2026": 127554,
+   "n": 2150,
+   "by_sym_train": {
+    "BANKNIFTY": 53407,
+    "NIFTY": 247878,
+    "SENSEX": 174574
+   },
+   "by_sym_2026": {
+    "BANKNIFTY": 15023,
+    "NIFTY": 111222,
+    "SENSEX": 1309
+   },
+   "years": {
+    "2023": 35543,
+    "2024": 274356,
+    "2025": 165960,
+    "2026": 127554
+   }
+  },
+  "account": {
+   "final": 2976705,
+   "dd": -30.3,
+   "trades": 1834
+  }
+ },
+ "filters": {
+  "liq: keep only after a sweep in our favour (last 30 min)": {
+   "removed": 1951,
+   "per_lot": {
+    "train": 9228,
+    "y2026": 39038,
+    "n": 199,
+    "by_sym_train": {
+     "BANKNIFTY": 4346,
+     "NIFTY": -1959,
+     "SENSEX": 6841
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 5595,
+     "NIFTY": 15952,
+     "SENSEX": 17491
+    },
+    "years": {
+     "2023": 12987,
+     "2024": 17487,
+     "2025": -21246,
+     "2026": 39038
+    }
+   },
+   "account": {
+    "final": 268128,
+    "dd": -21.1,
+    "trades": 185
+   },
+   "shuffle_p": 0.831,
+   "both_better": false
+  },
+  "liq: skip after a sweep against us (last 30 min)": {
+   "removed": 720,
+   "per_lot": {
+    "train": 266844,
+    "y2026": 73109,
+    "n": 1430,
+    "by_sym_train": {
+     "BANKNIFTY": 51326,
+     "NIFTY": 112999,
+     "SENSEX": 102519
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -11032,
+     "NIFTY": 77759,
+     "SENSEX": 6382
+    },
+    "years": {
+     "2023": 15851,
+     "2024": 90697,
+     "2025": 160296,
+     "2026": 73109
+    }
+   },
+   "account": {
+    "final": 949503,
+    "dd": -30.0,
+    "trades": 1313
+   },
+   "shuffle_p": 0.827,
+   "both_better": false
+  },
+  "liq: skip if a pool is < 0.5 ATR ahead": {
+   "removed": 155,
+   "per_lot": {
+    "train": 402537,
+    "y2026": 116469,
+    "n": 1995,
+    "by_sym_train": {
+     "BANKNIFTY": 24990,
+     "NIFTY": 212116,
+     "SENSEX": 165431
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 14702,
+     "NIFTY": 88025,
+     "SENSEX": 13742
+    },
+    "years": {
+     "2023": 48066,
+     "2024": 231907,
+     "2025": 122564,
+     "2026": 116469
+    }
+   },
+   "account": {
+    "final": 1883247,
+    "dd": -31.8,
+    "trades": 1741
+   },
+   "shuffle_p": 0.8898,
+   "both_better": false
+  },
+  "liq: skip if a pool is < 1 ATR ahead": {
+   "removed": 362,
+   "per_lot": {
+    "train": 360611,
+    "y2026": 125412,
+    "n": 1788,
+    "by_sym_train": {
+     "BANKNIFTY": 30406,
+     "NIFTY": 158350,
+     "SENSEX": 171855
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 4281,
+     "NIFTY": 97868,
+     "SENSEX": 23263
+    },
+    "years": {
+     "2023": 36982,
+     "2024": 216002,
+     "2025": 107627,
+     "2026": 125412
+    }
+   },
+   "account": {
+    "final": 1605374,
+    "dd": -38.8,
+    "trades": 1651
+   },
+   "shuffle_p": 0.7963,
+   "both_better": false
+  },
+  "structure: keep only HH/HL agreeing": {
+   "removed": 1159,
+   "per_lot": {
+    "train": 388184,
+    "y2026": 38863,
+    "n": 991,
+    "by_sym_train": {
+     "BANKNIFTY": 7337,
+     "NIFTY": 223584,
+     "SENSEX": 157263
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 21897,
+     "NIFTY": 5510,
+     "SENSEX": 11456
+    },
+    "years": {
+     "2023": 13799,
+     "2024": 193867,
+     "2025": 180518,
+     "2026": 38863
+    }
+   },
+   "account": {
+    "final": 962747,
+    "dd": -28.9,
+    "trades": 904
+   },
+   "shuffle_p": 0.0053,
+   "both_better": false
+  },
+  "structure: skip when HH/HL is against": {
+   "removed": 270,
+   "per_lot": {
+    "train": 452604,
+    "y2026": 51370,
+    "n": 1880,
+    "by_sym_train": {
+     "BANKNIFTY": 30233,
+     "NIFTY": 237798,
+     "SENSEX": 184573
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -4420,
+     "NIFTY": 78199,
+     "SENSEX": -22409
+    },
+    "years": {
+     "2023": 26448,
+     "2024": 282237,
+     "2025": 143919,
+     "2026": 51370
+    }
+   },
+   "account": {
+    "final": 1540026,
+    "dd": -35.0,
+    "trades": 1662
+   },
+   "shuffle_p": 0.1893,
+   "both_better": false
+  },
+  "BOS: keep only after a BOS our way (last 60 min)": {
+   "removed": 367,
+   "per_lot": {
+    "train": 271978,
+    "y2026": 143864,
+    "n": 1783,
+    "by_sym_train": {
+     "BANKNIFTY": 43739,
+     "NIFTY": 118225,
+     "SENSEX": 110014
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 32927,
+     "NIFTY": 92461,
+     "SENSEX": 18476
+    },
+    "years": {
+     "2023": 61202,
+     "2024": 151898,
+     "2025": 58878,
+     "2026": 143864
+    }
+   },
+   "account": {
+    "final": 1086521,
+    "dd": -34.3,
+    "trades": 1611
+   },
+   "shuffle_p": 0.9945,
+   "both_better": false
+  },
+  "CHoCH: skip after a CHoCH against (last 30 min)": {
+   "removed": 221,
+   "per_lot": {
+    "train": 464603,
+    "y2026": 140143,
+    "n": 1929,
+    "by_sym_train": {
+     "BANKNIFTY": 62446,
+     "NIFTY": 227820,
+     "SENSEX": 174337
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 6618,
+     "NIFTY": 118557,
+     "SENSEX": 14968
+    },
+    "years": {
+     "2023": 35154,
+     "2024": 248115,
+     "2025": 181334,
+     "2026": 140143
+    }
+   },
+   "account": {
+    "final": 3141930,
+    "dd": -28.9,
+    "trades": 1705
+   },
+   "shuffle_p": 0.1742,
+   "both_better": false
+  },
+  "box: skip entries inside a 30-min consolidation": {
+   "removed": 72,
+   "per_lot": {
+    "train": 479952,
+    "y2026": 141360,
+    "n": 2078,
+    "by_sym_train": {
+     "BANKNIFTY": 57565,
+     "NIFTY": 245289,
+     "SENSEX": 177098
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 19106,
+     "NIFTY": 117342,
+     "SENSEX": 4912
+    },
+    "years": {
+     "2023": 47603,
+     "2024": 280804,
+     "2025": 151545,
+     "2026": 141360
+    }
+   },
+   "account": {
+    "final": 2771573,
+    "dd": -30.7,
+    "trades": 1797
+   },
+   "shuffle_p": 0.203,
+   "both_better": true
+  },
+  "box: keep only after a box breakout our way (last 60 min)": {
+   "removed": 1693,
+   "per_lot": {
+    "train": 163575,
+    "y2026": 87166,
+    "n": 457,
+    "by_sym_train": {
+     "BANKNIFTY": 19570,
+     "NIFTY": 77286,
+     "SENSEX": 66719
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 7155,
+     "NIFTY": 49607,
+     "SENSEX": 30404
+    },
+    "years": {
+     "2023": 36649,
+     "2024": 128924,
+     "2025": -1998,
+     "2026": 87166
+    }
+   },
+   "account": {
+    "final": 582658,
+    "dd": -24.1,
+    "trades": 450
+   },
+   "shuffle_p": 0.131,
+   "both_better": false
+  },
+  "manipulation: keep only after sweep-then-breakout": {
+   "removed": 2045,
+   "per_lot": {
+    "train": 24045,
+    "y2026": 14133,
+    "n": 105,
+    "by_sym_train": {
+     "BANKNIFTY": 11038,
+     "NIFTY": 18894,
+     "SENSEX": -5887
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 112,
+     "NIFTY": 668,
+     "SENSEX": 13353
+    },
+    "years": {
+     "2023": 6097,
+     "2024": 20797,
+     "2025": -2849,
+     "2026": 14133
+    }
+   },
+   "account": {
+    "final": 240813,
+    "dd": -4.9,
+    "trades": 100
+   },
+   "shuffle_p": 0.4462,
+   "both_better": false
+  },
+  "POC: keep only on our side of today's POC": {
+   "removed": 310,
+   "per_lot": {
+    "train": 403402,
+    "y2026": 130709,
+    "n": 1840,
+    "by_sym_train": {
+     "BANKNIFTY": 51073,
+     "NIFTY": 193685,
+     "SENSEX": 158644
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 4278,
+     "NIFTY": 96218,
+     "SENSEX": 30213
+    },
+    "years": {
+     "2023": 50897,
+     "2024": 233611,
+     "2025": 118894,
+     "2026": 130709
+    }
+   },
+   "account": {
+    "final": 1820609,
+    "dd": -30.9,
+    "trades": 1646
+   },
+   "shuffle_p": 0.5867,
+   "both_better": false
+  },
+  "POC: keep only on our side of yesterday's POC": {
+   "removed": 170,
+   "per_lot": {
+    "train": 443077,
+    "y2026": 93496,
+    "n": 1980,
+    "by_sym_train": {
+     "BANKNIFTY": 44713,
+     "NIFTY": 224562,
+     "SENSEX": 173802
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 1940,
+     "NIFTY": 85181,
+     "SENSEX": 6375
+    },
+    "years": {
+     "2023": 34312,
+     "2024": 253010,
+     "2025": 155755,
+     "2026": 93496
+    }
+   },
+   "account": {
+    "final": 2308890,
+    "dd": -28.7,
+    "trades": 1700
+   },
+   "shuffle_p": 0.4993,
+   "both_better": false
+  },
+  "combo: structure not against + no sweep against": {
+   "removed": 874,
+   "per_lot": {
+    "train": 251812,
+    "y2026": 26434,
+    "n": 1276,
+    "by_sym_train": {
+     "BANKNIFTY": 31173,
+     "NIFTY": 102076,
+     "SENSEX": 118563
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -15995,
+     "NIFTY": 60353,
+     "SENSEX": -17924
+    },
+    "years": {
+     "2023": -1487,
+     "2024": 116534,
+     "2025": 136765,
+     "2026": 26434
+    }
+   },
+   "account": {
+    "final": 569194,
+    "dd": -23.2,
+    "trades": 1143
+   },
+   "shuffle_p": 0.7,
+   "both_better": false
+  }
+ },
+ "exit": {
+  "book at next liquidity pool": {
+   "trades_changed": 283,
+   "per_lot": {
+    "train": 352219,
+    "y2026": 111235,
+    "n": 2150,
+    "by_sym_train": {
+     "BANKNIFTY": 21247,
+     "NIFTY": 203945,
+     "SENSEX": 127026
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -29413,
+     "NIFTY": 127848,
+     "SENSEX": 12800
+    },
+    "years": {
+     "2023": -5955,
+     "2024": 248606,
+     "2025": 109568,
+     "2026": 111235
+    }
+   },
+   "account": {
+    "final": 2976705,
+    "dd": -30.3,
+    "trades": 1834
+   }
+  }
+ },
+ "addons": {
+  "Box breakout in trend": {
+   "alone_per_lot": {
+    "train": -38357,
+    "y2026": -24466,
+    "n": 1033,
+    "by_sym_train": {
+     "BANKNIFTY": -104286,
+     "NIFTY": 65929
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -27290,
+     "NIFTY": 2823
+    },
+    "years": {
+     "2023": -14590,
+     "2024": 17795,
+     "2025": -41562,
+     "2026": -24466
+    }
+   },
+   "with_autopilot_per_lot": {
+    "train": 437501,
+    "y2026": 103087,
+    "n": 3183,
+    "by_sym_train": {
+     "BANKNIFTY": -50879,
+     "NIFTY": 313807,
+     "SENSEX": 174574
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -12267,
+     "NIFTY": 114045,
+     "SENSEX": 1309
+    },
+    "years": {
+     "2023": 20952,
+     "2024": 292151,
+     "2025": 124397,
+     "2026": 103087
+    }
+   },
+   "account": {
+    "final": 2040901,
+    "dd": -35.3,
+    "trades": 2561
+   },
+   "daily_corr": 0.272
+  },
+  "Liquidity sweep + CHoCH": {
+   "alone_per_lot": {
+    "train": 30528,
+    "y2026": -11944,
+    "n": 55,
+    "by_sym_train": {
+     "BANKNIFTY": 33105,
+     "NIFTY": -2577
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": -3800,
+     "NIFTY": -8143
+    },
+    "years": {
+     "2023": 32843,
+     "2024": -8901,
+     "2025": 6586,
+     "2026": -11944
+    }
+   },
+   "with_autopilot_per_lot": {
+    "train": 506387,
+    "y2026": 115609,
+    "n": 2205,
+    "by_sym_train": {
+     "BANKNIFTY": 86512,
+     "NIFTY": 245300,
+     "SENSEX": 174574
+    },
+    "by_sym_2026": {
+     "BANKNIFTY": 11222,
+     "NIFTY": 103078,
+     "SENSEX": 1309
+    },
+    "years": {
+     "2023": 68386,
+     "2024": 265454,
+     "2025": 172546,
+     "2026": 115609
+    }
+   },
+   "account": {
+    "final": 2207417,
+    "dd": -31.1,
+    "trades": 1872
+   },
+   "daily_corr": 0.032
+  }
+ }
+}
