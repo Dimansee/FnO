@@ -47,9 +47,36 @@ def enabled() -> bool:
     return bool(URL)
 
 
+def _params(url: str) -> dict:
+    """Split a postgres URL by hand so a password containing '@', ':' or '/' (common in Supabase passwords) still works.
+    The LAST '@' separates the password from the host; %-escapes are decoded."""
+    from urllib.parse import unquote
+    if "://" not in url:
+        return {"conninfo": url}
+    rest = url.split("://", 1)[1]
+    userinfo, sep, hostpart = rest.rpartition("@")
+    if not sep:
+        return {"conninfo": url}
+    user, _, pw = userinfo.partition(":")
+    hostport, _, tail = hostpart.partition("/")
+    db, _, query = tail.partition("?")
+    host, port = (hostport.rsplit(":", 1) + ["5432"])[:2] if ":" in hostport else (hostport, "5432")
+    kw = {"user": unquote(user), "password": unquote(pw), "host": host, "port": int(port or 5432), "dbname": unquote(db) or "postgres"}
+    for q in filter(None, query.split("&")):
+        if "=" in q:
+            k_, v_ = q.split("=", 1)
+            kw[k_] = unquote(v_)
+    kw.setdefault("sslmode", "require" if "supabase" in host else "prefer")
+    return kw
+
+
 def _connect():
     global _conn
-    c = psycopg.connect(URL, autocommit=True, connect_timeout=10, prepare_threshold=None)
+    kw = _params(URL)
+    if "conninfo" in kw:
+        c = psycopg.connect(kw["conninfo"], autocommit=True, connect_timeout=10, prepare_threshold=None)
+    else:
+        c = psycopg.connect(autocommit=True, connect_timeout=10, prepare_threshold=None, **kw)
     with c.cursor() as cur:
         cur.execute(DDL)
     _conn = c
