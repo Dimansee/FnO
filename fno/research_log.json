@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r54",
+   "date": "2026-10-28",
+   "area": "Index options",
+   "title": "Round 54: agent agreement and displacement sizing on top of conviction + the AI judge (closes p-agents)",
+   "asked": "Does sizing up when an earlier rule already agrees (agent agreement) still help once conviction and the AI judge are applied - and does displacement?",
+   "period": "Autopilot backtest trades with today's rules, Nifty / Bank Nifty / Sensex, Jan 2024 - Oct 2026 (the judge learns from 2023); Rs 2L account, 2026 restart, 1,000 one-year bootstrap paths",
+   "result": "The AI judge was rebuilt walk-forward like round 39 (quarterly retrain on earlier trades only; the live model is trained to 9 Oct 2026, so it cannot be used on past trades). On today's Nifty trades its top half averaged Rs 672 vs -Rs 69 for the bottom half (653 rated trades). Overlap: judge vs displacement correlation 0.09; displacement still splits both judge halves (top half Rs 932 vs 442; bottom half Rs 427 vs -376); agreement does not (top half: with agreement Rs 530 vs 776 without). Rs 2L account, 2024-26 / 2026 alone / bootstrap median, loss-year, 30%+ fall: conviction only 11.5L (-31.3%) / 4.63L / 3.96L, 8.0%, 24.3%; live (conviction + judge) 22.9L (-30.6%) / 4.65L / 4.19L, 7.8%, 22.5%; live + agreement 23.6L (-22.8%) / 3.76L / 4.08L, 6.8%, 19.2%; live + displacement 48.0L (-26.1%) / 5.61L / 4.93L, 6.9%, 21.9%; live + displacement + agreement 38.6L (-23.5%) / 4.97L / 4.66L, 6.3%, 19.2%; live + all three 42.1L (-23.6%) / 4.92L / 4.79L, 6.4%, 19.3%. All totals capped at 0.5x-1.6x like the live size.",
+   "summary": "Agreement is not adopted: on top of conviction + judge it lowers 2026 (3.76L vs 4.65L) and the median year; it only makes falls shallower by trading smaller, and it pulls against the judge's top-rated trades. Displacement is the one add-on that improves every measure on top of today's live sizing (more profit, shallower fall, better 2026, better median year, fewer losing years) and is independent of the judge. It stays on the watch-list only because it was found on this same history: forward paper tagging before any live switch (p-displacement). Script research/round54.py.",
+   "decision": "Watch-list"
+  },
+  {
    "id": "r53",
    "date": "2026-10-28",
    "area": "Index options",
@@ -1163,18 +1174,19 @@
   {
    "id": "p-displacement",
    "area": "Index options",
-   "title": "Displacement candle before entry: size up (1.5x with / 0.75x without), alone or with agreement",
+   "title": "Displacement candle before entry: size 1.5x with / 0.75x without, on top of conviction + AI judge",
    "waiting_for": "More live trades",
-   "why": "Rounds 51 + 53: Autopilot trades whose last 5-min candle had a body >= 1 ATR their way averaged about 4x the others in 2023-24, 2025 and 2026, inside every rule and independent of conviction / agreement / CPR. Tilts chosen on 2023-24 also beat the baseline on 2025-26. Displacement + agreement had the lowest loss-year (8.6% vs 11.3%) and 30%+ fall (26.3% vs 26.9%) chance in the bootstrap.",
+   "why": "Rounds 51, 53, 54: Autopilot trades whose last 5-min candle had a body >= 1 ATR their way averaged about 4x the others in 2023-24, 2025 and 2026, inside every rule, independent of conviction, agreement, CPR side and the AI judge. On top of today's live sizing (conviction + judge) it gave 2024-26 Rs 48.0L vs 22.9L from Rs 2L, a shallower fall (-26.1% vs -30.6%), 2026 5.61L vs 4.65L and a better bootstrap median year (4.93L vs 4.19L). Found on the same 2023-26 history, so it needs forward proof.",
    "collecting": "Paper Autopilot trades (displacement yes / no at entry)",
    "since": "2026-10-28",
    "need": 120,
    "unit": "sessions",
    "refs": [
     "r51",
-    "r53"
+    "r53",
+    "r54"
    ],
-   "next": "Tag every paper trade (last-candle and 3-candle versions). After ~100 forward displacement trades: switch the tilt on only if the per-trade gap holds on at least 2 of the 3 indices."
+   "next": "Tag every paper trade (last-candle version). After ~100 forward displacement trades: switch the tilt on only if the per-trade gap holds on at least 2 of the 3 indices. Agreement was dropped in round 54."
   },
   {
    "id": "p-smc-watch",
@@ -1192,22 +1204,6 @@
     "r51"
    ],
    "next": "Re-run research/round49.py, round50_smc.py and round51_smc_filters.py with the new sessions; adopt nothing unless p < 0.05 on the combined data."
-  },
-  {
-   "id": "p-agents",
-   "area": "Index options",
-   "title": "Agent agreement: size up when an earlier rule already agrees",
-   "waiting_for": "A full test on top of conviction + AI judge",
-   "why": "Quick check 23 Oct: trades with an earlier rule on the same side that day averaged Rs 341 a trade; the first rule of the day averaged Rs 135. Sizing 1.33x / 0.67x on that raised net +20% (2023-26) but deepened the fall 14% and was worse in 2023. It may overlap with conviction and the AI judge.",
-   "collecting": "Research only (historic trades)",
-   "since": "2026-10-23",
-   "need": 1,
-   "unit": "research round",
-   "refs": [
-    "r33",
-    "r39"
-   ],
-   "next": "Test agreement sizing combined with conviction + judge, walk-forward; adopt only if the fall does not deepen."
   },
   {
    "id": "p-fib",

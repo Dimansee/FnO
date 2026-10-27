@@ -1,0 +1,173 @@
+{
+ "rated": 653,
+ "judge_halves": [
+  672,
+  -69
+ ],
+ "overlap": {
+  "judge top / disp": [
+   932,
+   181,
+   442,
+   205
+  ],
+  "judge top / agree": [
+   530,
+   164,
+   776,
+   222
+  ],
+  "judge bottom / disp": [
+   427,
+   102,
+   -376,
+   165
+  ],
+  "judge bottom / agree": [
+   48,
+   97,
+   -136,
+   170
+  ]
+ },
+ "variants": {
+  "conviction only": {
+   "2024-26": {
+    "final": 1149634,
+    "dd": -31.3,
+    "trades": 1407
+   },
+   "2024-25": {
+    "final": 467448,
+    "dd": -31.3,
+    "trades": 1019
+   },
+   "2026": {
+    "final": 462565,
+    "dd": -20.9,
+    "trades": 385
+   },
+   "boot": {
+    "median": 395507,
+    "p10": 215566,
+    "loss_year_pct": 8.0,
+    "fall30_pct": 24.3
+   }
+  },
+  "live (conviction + judge)": {
+   "2024-26": {
+    "final": 2285760,
+    "dd": -30.6,
+    "trades": 1385
+   },
+   "2024-25": {
+    "final": 762349,
+    "dd": -30.6,
+    "trades": 1004
+   },
+   "2026": {
+    "final": 464750,
+    "dd": -20.9,
+    "trades": 390
+   },
+   "boot": {
+    "median": 418806,
+    "p10": 214089,
+    "loss_year_pct": 7.8,
+    "fall30_pct": 22.5
+   }
+  },
+  "live + agreement": {
+   "2024-26": {
+    "final": 2355140,
+    "dd": -22.8,
+    "trades": 1455
+   },
+   "2024-25": {
+    "final": 1028754,
+    "dd": -22.8,
+    "trades": 1062
+   },
+   "2026": {
+    "final": 375674,
+    "dd": -19.7,
+    "trades": 376
+   },
+   "boot": {
+    "median": 407909,
+    "p10": 221982,
+    "loss_year_pct": 6.8,
+    "fall30_pct": 19.2
+   }
+  },
+  "live + displacement": {
+   "2024-26": {
+    "final": 4800792,
+    "dd": -26.1,
+    "trades": 1316
+   },
+   "2024-25": {
+    "final": 1211008,
+    "dd": -26.1,
+    "trades": 945
+   },
+   "2026": {
+    "final": 560979,
+    "dd": -21.6,
+    "trades": 381
+   },
+   "boot": {
+    "median": 492912,
+    "p10": 226151,
+    "loss_year_pct": 6.9,
+    "fall30_pct": 21.9
+   }
+  },
+  "live + displacement + agreement": {
+   "2024-26": {
+    "final": 3864817,
+    "dd": -23.5,
+    "trades": 1403
+   },
+   "2024-25": {
+    "final": 1196186,
+    "dd": -23.5,
+    "trades": 1010
+   },
+   "2026": {
+    "final": 497233,
+    "dd": -20.2,
+    "trades": 389
+   },
+   "boot": {
+    "median": 466232,
+    "p10": 230405,
+    "loss_year_pct": 6.3,
+    "fall30_pct": 19.2
+   }
+  },
+  "live + all three": {
+   "2024-26": {
+    "final": 4213791,
+    "dd": -23.6,
+    "trades": 1388
+   },
+   "2024-25": {
+    "final": 1280824,
+    "dd": -23.6,
+    "trades": 1001
+   },
+   "2026": {
+    "final": 492488,
+    "dd": -20.2,
+    "trades": 388
+   },
+   "boot": {
+    "median": 478698,
+    "p10": 230583,
+    "loss_year_pct": 6.4,
+    "fall30_pct": 19.3
+   }
+  }
+ }
+}
