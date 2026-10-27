@@ -1,4 +1,8 @@
-"""Storage on Upstash Redis (free tier) through its REST API - no driver needed.
+"""Storage: Supabase Postgres (DATABASE_URL, fno/pgkv.py) or Upstash Redis through its REST API.
+
+Since 28 Oct 2026 the app uses Supabase when DATABASE_URL is set (Upstash's free 500k-requests-a-month cap was hit and
+stopped trades and the journal). Upstash stays as the fallback and as the source for the one-time copy
+(migrate_from_upstash). Every caller keeps using the Redis-style commands below; pgkv.py runs them on Postgres.
 
 Layout (all keys prefixed "fno:"):
   fno:settings   hash  name -> JSON   (account, broker keys/tokens, preferences)
@@ -17,6 +21,7 @@ import time
 import requests
 
 from . import config as C
+from . import pgkv
 
 SETTINGS, POSITIONS, TRADES = "fno:settings", "fno:positions", "fno:trades"
 _s = requests.Session()
@@ -60,10 +65,29 @@ def _fresh(k):
     return hit if hit and time.time() - hit[0] < CACHE_TTL else None
 
 
+def backend() -> str:
+    return "supabase" if pgkv.enabled() else ("upstash" if C.REDIS_URL and C.REDIS_TOKEN else "none")
+
+
 def _cmd(*args):
     _count(args)
+    if pgkv.enabled():
+        try:
+            if args[0] == "EVAL" and args[1] == _UPDATE_IF_EXISTS:
+                return pgkv.update_if_exists(str(args[3]), str(args[4]), str(args[5]))
+            if args[0] == "EVAL" and args[1] == _TAKE:
+                return pgkv.take(str(args[3]), str(args[4]))
+            return pgkv.execute(*args)
+        except RuntimeError:
+            raise
+        except Exception as e:
+            raise RuntimeError(f"Database error: {type(e).__name__}: {str(e)[:200]}")
+    return _upstash(*args)
+
+
+def _upstash(*args):
     if not C.REDIS_URL or not C.REDIS_TOKEN:
-        raise RuntimeError("Database not connected - add Upstash Redis to the Vercel project.")
+        raise RuntimeError("Database not connected - add DATABASE_URL (Supabase) in the Render environment.")
     r = _s.post(C.REDIS_URL, data=json.dumps([str(a) for a in args]),
                 headers={"Authorization": f"Bearer {C.REDIS_TOKEN}"}, timeout=10)
     try:
@@ -282,3 +306,52 @@ def ping() -> bool:
         return _cmd("PING") in ("PONG", True)
     except Exception:
         return False
+
+
+# ---------------- one-time copy Upstash -> Supabase ----------------
+def migrate_from_upstash() -> dict:
+    """Copy every fno:* key from Upstash into Postgres, keeping anything Postgres already has (new data wins).
+    Costs one SCAN pass plus about two Upstash commands per key, so it fits easily in a fresh monthly quota."""
+    if not pgkv.enabled():
+        return {"ok": False, "error": "DATABASE_URL is not set"}
+    if not (C.REDIS_URL and C.REDIS_TOKEN):
+        return {"ok": False, "error": "Upstash credentials are not set"}
+    T = pgkv.TABLE
+    keys, cur = [], "0"
+    while True:
+        cur, batch = _upstash("SCAN", cur, "MATCH", "*", "COUNT", 1000)
+        keys += batch or []
+        if str(cur) == "0":
+            break
+    done = {"keys": 0, "rows": 0, "skipped_existing": 0, "types": {}}
+    for k in sorted(set(keys)):
+        typ = _upstash("TYPE", k)
+        ttl = _upstash("TTL", k)
+        exp_sql, exp_p = ("now() + make_interval(secs => %s)", (int(ttl),)) if isinstance(ttl, int) and ttl > 0 else ("null", ())
+        rows = []
+        if typ == "hash":
+            flat = _upstash("HGETALL", k) or []
+            pairs = flat.items() if isinstance(flat, dict) else zip(flat[::2], flat[1::2])
+            rows = [(f, v, "h", None) for f, v in pairs]
+        elif typ == "string":
+            rows = [("", _upstash("GET", k), "s", None)]
+        elif typ == "set":
+            rows = [(m, "", "S", None) for m in (_upstash("SMEMBERS", k) or [])]
+        elif typ == "zset":
+            flat = _upstash("ZRANGE", k, 0, -1, "WITHSCORES") or []
+            if flat and isinstance(flat[0], list):
+                flat = [y for pair in flat for y in pair]
+            rows = [(m, None, "z", float(sc)) for m, sc in zip(flat[::2], flat[1::2])]
+        elif typ == "list":
+            rows = [(f"{i:012d}", v, "l", None) for i, v in enumerate(_upstash("LRANGE", k, 0, -1) or [])]
+        else:
+            continue
+        done["types"][typ] = done["types"].get(typ, 0) + 1
+        done["keys"] += 1
+        for f, v, kind, sc in rows:
+            n = pgkv._q(f"insert into {T} (k, f, v, kind, score, exp) values (%s, %s, %s, %s, %s, {exp_sql}) on conflict (k, f) do nothing",
+                        (k, f, v, kind, sc) + exp_p, "count")
+            done["rows"] += n
+            done["skipped_existing"] += 0 if n else 1
+    forget()
+    return {"ok": True, **done}

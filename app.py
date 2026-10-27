@@ -218,7 +218,7 @@ def _ap_counts():
 def health():
     from fno import runner as RN
     out = {"ok": True, "db": store.ping(), "time_ist": C.now_ist().isoformat(timespec="seconds"),
-           "configured": bool(C.APP_PASSWORD and C.SESSION_SECRET and C.REDIS_URL),
+           "configured": bool(C.APP_PASSWORD and C.SESSION_SECRET and (C.DATABASE_URL or C.REDIS_URL)),
            "scheduler_connected": bool(C.QSTASH_TOKEN), "global_runner": {**RN.state, "enabled": RN.enabled(), "autopilot_pairs": _ap_counts()}}
     if request.args.get("deep") == "1":  # data-source reachability only (counts, no data)
         from fno import market as M
@@ -503,8 +503,26 @@ def backtest_pine():
 
 @app.get("/api/debug/redis")
 def debug_redis():
-    """Upstash commands sent by this process since it started (what uses the free-tier quota)."""
-    return jsonify(store.usage())
+    """Database commands sent by this process since it started, and which database is in use."""
+    out = store.usage()
+    out["backend"] = store.backend()
+    if out["backend"] == "supabase":
+        try:
+            from fno import pgkv
+            out["supabase_table_mb"] = round(pgkv.size_bytes() / 1e6, 2)
+        except Exception as e:
+            out["supabase_error"] = str(e)[:200]
+    return jsonify(out)
+
+
+@app.post("/api/db/migrate-from-upstash")
+def db_migrate_from_upstash():
+    """One-time copy of the old Upstash data into Supabase (keeps anything Supabase already has). Run after Upstash's
+    monthly quota resets on the 1st; until then Upstash rejects every command."""
+    try:
+        return jsonify(store.migrate_from_upstash())
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)[:300]}), 502
 
 
 @app.get("/api/autopilot/rules")

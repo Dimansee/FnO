@@ -25,6 +25,7 @@ def today_ist():
 # Upstash Redis (added via Vercel Storage / Marketplace - either name set works)
 REDIS_URL = os.environ.get("KV_REST_API_URL") or os.environ.get("UPSTASH_REDIS_REST_URL", "")
 REDIS_TOKEN = os.environ.get("KV_REST_API_TOKEN") or os.environ.get("UPSTASH_REDIS_REST_TOKEN", "")
+DATABASE_URL = os.environ.get("DATABASE_URL", "")          # Supabase Postgres (session pooler); used instead of Upstash when set
 # Upstash QStash - calls /api/tick every minute in market hours
 QSTASH_URL = (os.environ.get("QSTASH_URL") or "https://qstash.upstash.io").rstrip("/")
 QSTASH_TOKEN = os.environ.get("QSTASH_TOKEN", "")
