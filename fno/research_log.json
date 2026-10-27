@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r52",
+   "date": "2026-10-28",
+   "area": "Crypto & US",
+   "title": "Round 52: liquidity / SMC / ICT concepts on crypto and gold (sweeps, Asia-range raid, FVG, order blocks, breaker, Silver Bullet, SMT ...)",
+   "asked": "What if we run the liquidity concepts on gold and crypto, which trade 24 hours with sessions?",
+   "period": "Crypto 5-min BTC ETH SOL BNB XRP (Jan 2024 - Oct 2026), crypto 1-hour 10 coins (Jan 2023 - Oct 2026), XAUUSD 1-hour (Jun 2024 - Oct 2026), PAXG 1-hour (Aug 2020 - Oct 2026)",
+   "result": "16 setups (round 50's toolkit plus liquidity sweep, sweep + CHoCH, Asia-range raid in London, Silver Bullet in New York time, BTC/ETH SMT, and the opposite bet: trade the breakout of a pool) x 16 variants (1.5R / 2R / 3R / pool target, 200-bar EMA trend filter, London + New York killzones) = 4,128 runs, max hold 24h, costs 16 bps (crypto) / 10 bps (gold). Net R per trade averaged -0.81 on crypto 5-min (costs are 0.3-1.6R because 5-min stops are tight; 12 of 1,280 variants positive), -0.17 on crypto 1-hour (267 of 2,400 positive, 105 in both halves) and -0.39 on gold (27 of 448). Gross R was about zero everywhere (-0.27 to +0.23). Best on the first half, judged on the second: 25 of 255 positive, average -0.40R. The crypto-1h winners were FVG / breaker + trend filter + 3R (e.g. BTC breaker +0.20R on 151 trades), but a control that enters in the trend direction at a RANDOM bar of the same day with the same stop and 3R target did better: FVG -0.14R worse than random trend entries on average (10 of 10 coins worse), breaker no better. The trend filter (with the 200-bar EMA) helped every group; killzones did not; pool breakouts did no better than sweeps.",
+   "summary": "Not adopted. Liquidity / SMC concepts give no edge on crypto or gold either; the only positive pockets are plain trend-following (random entries in the 200-EMA direction with a 3R target were positive on most coins), which the crypto book's own trend rules already cover. Silver Bullet cannot be tested on 1-hour bars. Scripts research/round52_crypto_gold_smc.py and round52b_trend_control.py (data: research-data branch, research/data/global).",
+   "decision": "Not adopted"
+  },
+  {
    "id": "r51",
    "date": "2026-10-28",
    "area": "Index options",
