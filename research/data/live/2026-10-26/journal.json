@@ -1,0 +1,286 @@
+{
+ "ai": {
+  "BANKNIFTY": [],
+  "NIFTY": []
+ },
+ "context": {
+  "BANKNIFTY": {
+   "atr_5m": 83.9968214118228,
+   "calendar": null,
+   "camarilla": {
+    "h3": 55111.35249999999,
+    "h4": 55297.005,
+    "l3": 54740.0475,
+    "l4": 54554.395,
+    "pivot": 54839.833333333336
+   },
+   "cpr": {
+    "bc": 54796.899999999994,
+    "tc": 54882.76666666668,
+    "width_pct": 0.156
+   },
+   "expiries": [
+    "2026-10-27",
+    "2026-11-23",
+    "2026-12-29"
+   ],
+   "expiry": "2026-11-23",
+   "fii": {
+    "date": "23-Oct-2026",
+    "dii": 3235.36,
+    "fii": 887.65,
+    "source": "NSE"
+   },
+   "gap_pct": -1.16,
+   "global": {
+    "avg_equity_chg": -0.43,
+    "notes": []
+   },
+   "lot": 30,
+   "noise_band_at": {
+    "09:45": [
+     54550.7,
+     55341.0
+    ],
+    "10:15": [
+     54578.6,
+     55313.1
+    ],
+    "11:15": [
+     54454.2,
+     55437.6
+    ],
+    "12:15": [
+     54398.9,
+     55492.9
+    ],
+    "13:15": [
+     54352.6,
+     55539.3
+    ],
+    "14:15": [
+     54348.3,
+     55543.6
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 54965.75,
+   "pcr_prev_close": 1.25,
+   "pivot": 54839.833333333336,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY",
+     "BANKNIFTY",
+     "SENSEX"
+    ],
+    "risk_pct": 1.0,
+    "sizing": "compound",
+    "strategies": [
+     "noise",
+     "camarilla",
+     "trend",
+     "fib"
+    ]
+   },
+   "prev_close": 54925.7,
+   "prev_high": 55134.45,
+   "prev_low": 54459.35,
+   "symbol": "BANKNIFTY",
+   "time": "09:16",
+   "vix": {
+    "chg_pct": 2.609727164887321,
+    "level": 17.3
+   }
+  },
+  "NIFTY": {
+   "atr_5m": null,
+   "calendar": null,
+   "camarilla": {
+    "h3": 22714.19375,
+    "h4": 22828.3875,
+    "l3": 22485.80625,
+    "l4": 22371.6125,
+    "pivot": 22586.416666666668
+   },
+   "cpr": {
+    "bc": 22579.625,
+    "tc": 22593.208333333336,
+    "width_pct": 0.06
+   },
+   "expiries": [
+    "2026-10-27",
+    "2026-11-03",
+    "2026-11-09"
+   ],
+   "expiry": "2026-11-03",
+   "fii": {
+    "date": "23-Oct-2026",
+    "dii": 3235.36,
+    "fii": 887.65,
+    "source": "NSE"
+   },
+   "gap_pct": -0.53,
+   "global": {
+    "avg_equity_chg": -0.43,
+    "notes": []
+   },
+   "lot": 65,
+   "noise_band_at": {
+    "09:45": [
+     22357.5,
+     22723.2
+    ],
+    "10:15": [
+     22303.6,
+     22777.4
+    ],
+    "11:15": [
+     22284.3,
+     22796.8
+    ],
+    "12:15": [
+     22210.3,
+     22871.2
+    ],
+    "13:15": [
+     22151.3,
+     22930.5
+    ],
+    "14:15": [
+     22147.0,
+     22934.9
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 22480.05,
+   "pcr_prev_close": 1.05,
+   "pivot": 22586.416666666668,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY",
+     "BANKNIFTY",
+     "SENSEX"
+    ],
+    "risk_pct": 1.0,
+    "sizing": "compound",
+    "strategies": [
+     "noise",
+     "camarilla",
+     "trend",
+     "fib"
+    ]
+   },
+   "prev_close": 22600.0,
+   "prev_high": 22787.25,
+   "prev_low": 22372.0,
+   "symbol": "NIFTY",
+   "time": "09:16",
+   "vix": {
+    "chg_pct": 2.609727164887321,
+    "level": 17.3
+   }
+  }
+ },
+ "date": "2026-10-26",
+ "paper_trades": [
+  {
+   "charges": 101.73,
+   "closed": "2026-10-26T14:06:48+05:30",
+   "delta": null,
+   "entry_prem": 153.0,
+   "exit_prem": 183.55,
+   "expiry": "2026-10-27",
+   "gross_pnl": 3971.5,
+   "hi": 22672.65,
+   "id": "270d1cc6",
+   "legs": [
+    {
+     "key": "NSE:NIFTY26OCT22600CE",
+     "opt": "CE",
+     "price": 153.0,
+     "price_src": "chain",
+     "side": "BUY",
+     "src": "fyers",
+     "strike": 22600.0
+    }
+   ],
+   "lo": 22615.75,
+   "lot": 65,
+   "lots": 2,
+   "margin": 19890.0,
+   "mode": "manual",
+   "opened": "2026-10-26T13:13:41+05:30",
+   "plan": null,
+   "pnl": 3869.77,
+   "qty": 130,
+   "reason": "Manual exit",
+   "sl_prem": 107.1,
+   "source": "LIVE \u00b7 Fyers",
+   "spot_at_entry": 22620.8,
+   "spot_exit": 22666.5,
+   "symbol": "NIFTY",
+   "target_fixed": true,
+   "target_prem": 244.8
+  },
+  {
+   "charges": 88.77,
+   "closed": "2026-10-26T15:15:01+05:30",
+   "delta": null,
+   "entry_prem": 140.5,
+   "exit_ltp": 135.8,
+   "exit_prem": 134.4,
+   "expiry": "2026-10-27",
+   "gross_pnl": -793.0,
+   "hi": 22715.7,
+   "id": "95624aea",
+   "legs": [
+    {
+     "key": "NSE_FO|51340",
+     "opt": "CE",
+     "price": 140.5,
+     "side": "BUY",
+     "src": "upstox",
+     "strike": 22700.0
+    }
+   ],
+   "lo": 22689.75,
+   "lot": 65,
+   "lots": 2,
+   "margin": 18265.0,
+   "mode": "manual",
+   "opened": "2026-10-26T14:48:36+05:30",
+   "plan": null,
+   "pnl": -881.77,
+   "qty": 130,
+   "reason": "Square-off 15:15",
+   "sl_prem": 98.35,
+   "source": "LIVE \u00b7 Upstox",
+   "spot_at_entry": 22709.5,
+   "spot_exit": 22709.55,
+   "symbol": "NIFTY",
+   "target_fixed": true,
+   "target_prem": 224.8
+  }
+ ],
+ "recommendations": [],
+ "settled": {
+  "at": "2026-10-26T15:16:04+05:30",
+  "lesson": null,
+  "recos": 0
+ },
+ "summary": {
+  "by_outcome": {
+   "square-off": 0,
+   "stop": 0,
+   "target": 0
+  },
+  "by_strategy": {},
+  "paper_pnl": 2988.0,
+  "paper_trades": 2,
+  "recommendations": 0,
+  "settled": 0,
+  "sum_R": null
+ }
+}
