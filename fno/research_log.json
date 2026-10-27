@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r53",
+   "date": "2026-10-28",
+   "area": "Index options",
+   "title": "Round 53: retest of the displacement lead - definition, overlap with conviction / agreement / CPR, walk-forward, Rs 20k, crypto and gold books",
+   "asked": "Which existing rules need to be retested against the displacement finding, and does it hold up?",
+   "period": "Autopilot backtest trades with today's rules (big-run skip), Nifty / Bank Nifty / Sensex, Jan 2023 - Oct 2026; Rs 2L and Rs 20k accounts; crypto / gold autopilot rules (Jan 2023 / 2000 - Oct 2026)",
+   "result": "Definition (avg Rs a trade with / without, 2023-24 | 2025 | 2026): last bar only, body >= 1 ATR our way (29% of trades) 560/143 | 590/167 | 765/144 - the most consistent; round 51's 3-bar version 470/93 | 367/234 | 910/-99; 0.75 ATR or 5 bars flips sign in 2025. Overlap: almost uncorrelated with conviction score (-0.04), agreement (-0.15) and CPR side (0.11); the gap holds inside score >= 5 (591 vs 238) and < 5 (461 vs -59), with and without agreement, and inside every rule (Camarilla 435/12, Fibonacci 567/16, Noise 344/113, Trend-day 1,040/233). Walk-forward (each period from Rs 2L): baseline 2025-26 Rs 8.64L (-22.1%); every tilt chosen on 2023-24 also beat it on 2025-26: 1.5x/0.75x Rs 16.5L (-24.1%), 1.25x/0.75x Rs 11.0L (-21.4%), 2x/1x Rs 35.8L (-32.0%). Together (Rs 2L, full / 2026 / bootstrap median, loss-year, 30%+ fall): baseline 29.8L (-30.3%) / 4.63L / 3.53L, 11.3%, 26.9%; displacement 1.5/0.75 67.9L (-28.3%) / 7.33L / 4.09L, 10.6%, 29.1%; displacement + agreement 61.2L (-26.8%) / 6.33L / 4.19L, 8.6%, 26.3%; all three (+ CPR-against 1.25x) 64.4L (-24.7%) / 6.46L / 4.42L, 8.0%, 26.0%. Agreement or CPR-against alone add nothing. Rs 20k: no change while the account is at the 1-lot floor (2026 Rs 60.8k both); helps only after it grows (full 10.5L vs 5.1L). Crypto autopilot rules: with displacement +0.235R vs +0.083R a trade (1,576 / 738 trades, p 0.07), better in all 4 rules overall but only 2 of 4 in the second half; gold the opposite (97 / 93 trades, noisy).",
+   "summary": "Displacement survives every retest on the index book: it is not a copy of conviction, agreement or CPR sizing, it works inside every rule, and tilts chosen on 2023-24 also won on 2025-26. The simpler 'last candle >= 1 ATR our way' is the most stable definition. Still the same 2023-26 history that found it, so the next step is a switch (off by default) plus forward paper tagging, with displacement + agreement as the combined candidate (lowest loss-year and 30%+ fall chance). Not for crypto / gold yet. Scripts research/round53.py, round53b_global.py.",
+   "decision": "Watch-list"
+  },
+  {
    "id": "r52",
    "date": "2026-10-28",
    "area": "Crypto & US",
@@ -1152,17 +1163,18 @@
   {
    "id": "p-displacement",
    "area": "Index options",
-   "title": "Displacement candle before entry: size up 1.5x (0.75x without)?",
+   "title": "Displacement candle before entry: size up (1.5x with / 0.75x without), alone or with agreement",
    "waiting_for": "More live trades",
-   "why": "Round 51: Autopilot trades with a >= 1 ATR body candle their way in the last 3 five-minute bars earned far more per trade in 2024, 2025 and 2026 on every index and rule (p 0.007, borderline after ~12 tests). The 1.5x / 0.75x tilt raised the bootstrap median 3.53L -> 4.05L but the 30%+ fall chance 26.9% -> 30.1%.",
+   "why": "Rounds 51 + 53: Autopilot trades whose last 5-min candle had a body >= 1 ATR their way averaged about 4x the others in 2023-24, 2025 and 2026, inside every rule and independent of conviction / agreement / CPR. Tilts chosen on 2023-24 also beat the baseline on 2025-26. Displacement + agreement had the lowest loss-year (8.6% vs 11.3%) and 30%+ fall (26.3% vs 26.9%) chance in the bootstrap.",
    "collecting": "Paper Autopilot trades (displacement yes / no at entry)",
    "since": "2026-10-28",
    "need": 120,
    "unit": "sessions",
    "refs": [
-    "r51"
+    "r51",
+    "r53"
    ],
-   "next": "After ~100 forward displacement trades: adopt the tilt as a switch only if the per-trade gap holds on at least 2 of the 3 indices."
+   "next": "Tag every paper trade (last-candle and 3-candle versions). After ~100 forward displacement trades: switch the tilt on only if the per-trade gap holds on at least 2 of the 3 indices."
   },
   {
    "id": "p-smc-watch",

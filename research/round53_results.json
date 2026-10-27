@@ -1,0 +1,804 @@
+{
+ "A_definition": {
+  "d_0.75_1": {
+   "share_pct": 45.3,
+   "2023-24": {
+    "n_with": 526,
+    "avg_with": 482.0,
+    "n_without": 634,
+    "avg_without": 89.0
+   },
+   "2025": {
+    "n_with": 263,
+    "avg_with": 525.0,
+    "n_without": 294,
+    "avg_without": 95.0
+   },
+   "2026": {
+    "n_with": 185,
+    "avg_with": 575.0,
+    "n_without": 248,
+    "avg_without": 85.0
+   }
+  },
+  "d_0.75_2": {
+   "share_pct": 57.5,
+   "2023-24": {
+    "n_with": 671,
+    "avg_with": 428.0,
+    "n_without": 489,
+    "avg_without": 47.0
+   },
+   "2025": {
+    "n_with": 326,
+    "avg_with": 533.0,
+    "n_without": 231,
+    "avg_without": -34.0
+   },
+   "2026": {
+    "n_with": 240,
+    "avg_with": 634.0,
+    "n_without": 193,
+    "avg_without": -128.0
+   }
+  },
+  "d_0.75_3": {
+   "share_pct": 66.8,
+   "2023-24": {
+    "n_with": 769,
+    "avg_with": 343.0,
+    "n_without": 391,
+    "avg_without": 117.0
+   },
+   "2025": {
+    "n_with": 391,
+    "avg_with": 422.0,
+    "n_without": 166,
+    "avg_without": 6.0
+   },
+   "2026": {
+    "n_with": 277,
+    "avg_with": 655.0,
+    "n_without": 156,
+    "avg_without": -346.0
+   }
+  },
+  "d_0.75_5": {
+   "share_pct": 77.3,
+   "2023-24": {
+    "n_with": 900,
+    "avg_with": 330.0,
+    "n_without": 260,
+    "avg_without": 51.0
+   },
+   "2025": {
+    "n_with": 431,
+    "avg_with": 280.0,
+    "n_without": 126,
+    "avg_without": 360.0
+   },
+   "2026": {
+    "n_with": 330,
+    "avg_with": 498.0,
+    "n_without": 103,
+    "avg_without": -356.0
+   }
+  },
+  "d_1.0_1": {
+   "share_pct": 28.9,
+   "2023-24": {
+    "n_with": 345,
+    "avg_with": 560.0,
+    "n_without": 815,
+    "avg_without": 143.0
+   },
+   "2025": {
+    "n_with": 172,
+    "avg_with": 590.0,
+    "n_without": 385,
+    "avg_without": 167.0
+   },
+   "2026": {
+    "n_with": 105,
+    "avg_with": 765.0,
+    "n_without": 328,
+    "avg_without": 144.0
+   }
+  },
+  "d_1.0_2": {
+   "share_pct": 37.5,
+   "2023-24": {
+    "n_with": 453,
+    "avg_with": 592.0,
+    "n_without": 707,
+    "avg_without": 59.0
+   },
+   "2025": {
+    "n_with": 214,
+    "avg_with": 467.0,
+    "n_without": 343,
+    "avg_without": 193.0
+   },
+   "2026": {
+    "n_with": 140,
+    "avg_with": 826.0,
+    "n_without": 293,
+    "avg_without": 41.0
+   }
+  },
+  "d_1.0_3": {
+   "share_pct": 45.3,
+   "2023-24": {
+    "n_with": 536,
+    "avg_with": 470.0,
+    "n_without": 624,
+    "avg_without": 93.0
+   },
+   "2025": {
+    "n_with": 268,
+    "avg_with": 367.0,
+    "n_without": 289,
+    "avg_without": 234.0
+   },
+   "2026": {
+    "n_with": 169,
+    "avg_with": 910.0,
+    "n_without": 264,
+    "avg_without": -99.0
+   }
+  },
+  "d_1.0_5": {
+   "share_pct": 55.9,
+   "2023-24": {
+    "n_with": 656,
+    "avg_with": 427.0,
+    "n_without": 504,
+    "avg_without": 59.0
+   },
+   "2025": {
+    "n_with": 328,
+    "avg_with": 144.0,
+    "n_without": 229,
+    "avg_without": 519.0
+   },
+   "2026": {
+    "n_with": 217,
+    "avg_with": 651.0,
+    "n_without": 216,
+    "avg_without": -63.0
+   }
+  },
+  "d_1.25_1": {
+   "share_pct": 18.7,
+   "2023-24": {
+    "n_with": 230,
+    "avg_with": 736.0,
+    "n_without": 930,
+    "avg_without": 151.0
+   },
+   "2025": {
+    "n_with": 111,
+    "avg_with": 478.0,
+    "n_without": 446,
+    "avg_without": 253.0
+   },
+   "2026": {
+    "n_with": 62,
+    "avg_with": 1150.0,
+    "n_without": 371,
+    "avg_without": 152.0
+   }
+  },
+  "d_1.25_2": {
+   "share_pct": 25.1,
+   "2023-24": {
+    "n_with": 311,
+    "avg_with": 642.0,
+    "n_without": 849,
+    "avg_without": 130.0
+   },
+   "2025": {
+    "n_with": 144,
+    "avg_with": 216.0,
+    "n_without": 413,
+    "avg_without": 327.0
+   },
+   "2026": {
+    "n_with": 84,
+    "avg_with": 936.0,
+    "n_without": 349,
+    "avg_without": 140.0
+   }
+  },
+  "d_1.25_3": {
+   "share_pct": 31.1,
+   "2023-24": {
+    "n_with": 375,
+    "avg_with": 493.0,
+    "n_without": 785,
+    "avg_without": 159.0
+   },
+   "2025": {
+    "n_with": 185,
+    "avg_with": 289.0,
+    "n_without": 372,
+    "avg_without": 302.0
+   },
+   "2026": {
+    "n_with": 108,
+    "avg_with": 1357.0,
+    "n_without": 325,
+    "avg_without": -58.0
+   }
+  },
+  "d_1.25_5": {
+   "share_pct": 39.0,
+   "2023-24": {
+    "n_with": 470,
+    "avg_with": 434.0,
+    "n_without": 690,
+    "avg_without": 154.0
+   },
+   "2025": {
+    "n_with": 235,
+    "avg_with": -38.0,
+    "n_without": 322,
+    "avg_without": 543.0
+   },
+   "2026": {
+    "n_with": 133,
+    "avg_with": 1120.0,
+    "n_without": 300,
+    "avg_without": -72.0
+   }
+  },
+  "d_1.5_1": {
+   "share_pct": 11.8,
+   "2023-24": {
+    "n_with": 160,
+    "avg_with": 645.0,
+    "n_without": 1000,
+    "avg_without": 207.0
+   },
+   "2025": {
+    "n_with": 67,
+    "avg_with": 235.0,
+    "n_without": 490,
+    "avg_without": 307.0
+   },
+   "2026": {
+    "n_with": 27,
+    "avg_with": 1085.0,
+    "n_without": 406,
+    "avg_without": 242.0
+   }
+  },
+  "d_1.5_2": {
+   "share_pct": 16.1,
+   "2023-24": {
+    "n_with": 210,
+    "avg_with": 433.0,
+    "n_without": 950,
+    "avg_without": 231.0
+   },
+   "2025": {
+    "n_with": 91,
+    "avg_with": 110.0,
+    "n_without": 466,
+    "avg_without": 335.0
+   },
+   "2026": {
+    "n_with": 45,
+    "avg_with": 624.0,
+    "n_without": 388,
+    "avg_without": 256.0
+   }
+  },
+  "d_1.5_3": {
+   "share_pct": 20.6,
+   "2023-24": {
+    "n_with": 257,
+    "avg_with": 385.0,
+    "n_without": 903,
+    "avg_without": 234.0
+   },
+   "2025": {
+    "n_with": 121,
+    "avg_with": 144.0,
+    "n_without": 436,
+    "avg_without": 341.0
+   },
+   "2026": {
+    "n_with": 65,
+    "avg_with": 1468.0,
+    "n_without": 368,
+    "avg_without": 87.0
+   }
+  },
+  "d_1.5_5": {
+   "share_pct": 26.8,
+   "2023-24": {
+    "n_with": 329,
+    "avg_with": 375.0,
+    "n_without": 831,
+    "avg_without": 224.0
+   },
+   "2025": {
+    "n_with": 156,
+    "avg_with": -91.0,
+    "n_without": 401,
+    "avg_without": 449.0
+   },
+   "2026": {
+    "n_with": 92,
+    "avg_with": 1161.0,
+    "n_without": 341,
+    "avg_without": 61.0
+   }
+  }
+ },
+ "B_overlap": {
+  "score>=5": {
+   "all": {
+    "n_with": 426,
+    "avg_with": 591.0,
+    "n_without": 567,
+    "avg_without": 238.0
+   },
+   "2026": {
+    "n_with": 79,
+    "avg_with": 1111.0,
+    "n_without": 106,
+    "avg_without": -116.0
+   }
+  },
+  "score<5": {
+   "all": {
+    "n_with": 547,
+    "avg_with": 461.0,
+    "n_without": 610,
+    "avg_without": -59.0
+   },
+   "2026": {
+    "n_with": 90,
+    "avg_with": 733.0,
+    "n_without": 158,
+    "avg_without": -88.0
+   }
+  },
+  "agree": {
+   "all": {
+    "n_with": 216,
+    "avg_with": 696.0,
+    "n_without": 423,
+    "avg_without": 144.0
+   },
+   "2026": {
+    "n_with": 31,
+    "avg_with": 2030.0,
+    "n_without": 88,
+    "avg_without": -326.0
+   }
+  },
+  "no agree": {
+   "all": {
+    "n_with": 757,
+    "avg_with": 467.0,
+    "n_without": 754,
+    "avg_without": 51.0
+   },
+   "2026": {
+    "n_with": 138,
+    "avg_with": 658.0,
+    "n_without": 176,
+    "avg_without": 14.0
+   }
+  },
+  "CPR against": {
+   "all": {
+    "n_with": 177,
+    "avg_with": 881.0,
+    "n_without": 127,
+    "avg_without": 411.0
+   },
+   "2026": {
+    "n_with": 18,
+    "avg_with": -4.0,
+    "n_without": 28,
+    "avg_without": 1101.0
+   }
+  },
+  "CPR with/inside": {
+   "all": {
+    "n_with": 796,
+    "avg_with": 437.0,
+    "n_without": 1050,
+    "avg_without": 45.0
+   },
+   "2026": {
+    "n_with": 151,
+    "avg_with": 1019.0,
+    "n_without": 236,
+    "avg_without": -242.0
+   }
+  },
+  "rule Camarilla": {
+   "all": {
+    "n_with": 349,
+    "avg_with": 435.0,
+    "n_without": 319,
+    "avg_without": 12.0
+   },
+   "2026": {
+    "n_with": 54,
+    "avg_with": 648.0,
+    "n_without": 77,
+    "avg_without": 232.0
+   }
+  },
+  "rule Fibonacci 0.618": {
+   "all": {
+    "n_with": 366,
+    "avg_with": 567.0,
+    "n_without": 326,
+    "avg_without": 16.0
+   },
+   "2026": {
+    "n_with": 68,
+    "avg_with": 1153.0,
+    "n_without": 60,
+    "avg_without": -447.0
+   }
+  },
+  "rule Noise band": {
+   "all": {
+    "n_with": 178,
+    "avg_with": 344.0,
+    "n_without": 281,
+    "avg_without": 113.0
+   },
+   "2026": {
+    "n_with": 30,
+    "avg_with": 293.0,
+    "n_without": 67,
+    "avg_without": -135.0
+   }
+  },
+  "rule Trend-day": {
+   "all": {
+    "n_with": 80,
+    "avg_with": 1040.0,
+    "n_without": 251,
+    "avg_without": 233.0
+   },
+   "2026": {
+    "n_with": 17,
+    "avg_with": 1856.0,
+    "n_without": 60,
+    "avg_without": -137.0
+   }
+  }
+ },
+ "C_walkforward": {
+  "baseline": {
+   "train": {
+    "final": 742572,
+    "dd": -29.8,
+    "trades": 990
+   },
+   "test": {
+    "final": 864012,
+    "dd": -22.1,
+    "trades": 896
+   }
+  },
+  "grid": [
+   {
+    "up": 1.25,
+    "down": 1.0,
+    "train": {
+     "final": 788011,
+     "dd": -28.6,
+     "trades": 955
+    },
+    "test": {
+     "final": 1141839,
+     "dd": -28.2,
+     "trades": 847
+    }
+   },
+   {
+    "up": 1.25,
+    "down": 0.75,
+    "train": {
+     "final": 906113,
+     "dd": -25.1,
+     "trades": 1009
+    },
+    "test": {
+     "final": 1096586,
+     "dd": -21.4,
+     "trades": 881
+    }
+   },
+   {
+    "up": 1.25,
+    "down": 0.5,
+    "train": {
+     "final": 814780,
+     "dd": -30.4,
+     "trades": 1023
+    },
+    "test": {
+     "final": 1236230,
+     "dd": -22.1,
+     "trades": 910
+    }
+   },
+   {
+    "up": 1.5,
+    "down": 1.0,
+    "train": {
+     "final": 1042178,
+     "dd": -28.3,
+     "trades": 934
+    },
+    "test": {
+     "final": 1764755,
+     "dd": -26.5,
+     "trades": 810
+    }
+   },
+   {
+    "up": 1.5,
+    "down": 0.75,
+    "train": {
+     "final": 948931,
+     "dd": -28.3,
+     "trades": 962
+    },
+    "test": {
+     "final": 1645160,
+     "dd": -24.1,
+     "trades": 841
+    }
+   },
+   {
+    "up": 1.5,
+    "down": 0.5,
+    "train": {
+     "final": 835482,
+     "dd": -29.3,
+     "trades": 989
+    },
+    "test": {
+     "final": 1628715,
+     "dd": -25.7,
+     "trades": 865
+    }
+   },
+   {
+    "up": 2.0,
+    "down": 1.0,
+    "train": {
+     "final": 2772481,
+     "dd": -37.0,
+     "trades": 857
+    },
+    "test": {
+     "final": 3581519,
+     "dd": -32.0,
+     "trades": 745
+    }
+   },
+   {
+    "up": 2.0,
+    "down": 0.75,
+    "train": {
+     "final": 2101893,
+     "dd": -28.4,
+     "trades": 904
+    },
+    "test": {
+     "final": 3695974,
+     "dd": -28.8,
+     "trades": 774
+    }
+   },
+   {
+    "up": 2.0,
+    "down": 0.5,
+    "train": {
+     "final": 1763760,
+     "dd": -30.2,
+     "trades": 925
+    },
+    "test": {
+     "final": 3254547,
+     "dd": -29.1,
+     "trades": 803
+    }
+   }
+  ],
+  "chosen_on_train_return_per_fall": {
+   "up": 2.0,
+   "down": 1.0,
+   "train": {
+    "final": 2772481,
+    "dd": -37.0,
+    "trades": 857
+   },
+   "test": {
+    "final": 3581519,
+    "dd": -32.0,
+    "trades": 745
+   }
+  }
+ },
+ "D_combined": {
+  "baseline": {
+   "full": {
+    "final": 2976705,
+    "dd": -30.3,
+    "trades": 1834
+   },
+   "2026": {
+    "final": 462565,
+    "dd": -20.9,
+    "trades": 385
+   },
+   "boot": {
+    "median": 352587,
+    "p10": 194320,
+    "loss_year_pct": 11.3,
+    "fall30_pct": 26.9
+   }
+  },
+  "displacement 1.5/0.75": {
+   "full": {
+    "final": 6790538,
+    "dd": -28.3,
+    "trades": 1760
+   },
+   "2026": {
+    "final": 733289,
+    "dd": -24.7,
+    "trades": 383
+   },
+   "boot": {
+    "median": 409385,
+    "p10": 197763,
+    "loss_year_pct": 10.6,
+    "fall30_pct": 29.1
+   }
+  },
+  "agreement 1.33/0.67": {
+   "full": {
+    "final": 2739841,
+    "dd": -33.9,
+    "trades": 1925
+   },
+   "2026": {
+    "final": 415438,
+    "dd": -20.3,
+    "trades": 374
+   },
+   "boot": {
+    "median": 362046,
+    "p10": 198957,
+    "loss_year_pct": 10.2,
+    "fall30_pct": 26.8
+   }
+  },
+  "CPR-against 1.25": {
+   "full": {
+    "final": 2416322,
+    "dd": -31.0,
+    "trades": 1809
+   },
+   "2026": {
+    "final": 462584,
+    "dd": -21.1,
+    "trades": 382
+   },
+   "boot": {
+    "median": 360906,
+    "p10": 196468,
+    "loss_year_pct": 11.0,
+    "fall30_pct": 29.1
+   }
+  },
+  "displacement + agreement": {
+   "full": {
+    "final": 6118929,
+    "dd": -26.8,
+    "trades": 1869
+   },
+   "2026": {
+    "final": 633319,
+    "dd": -20.8,
+    "trades": 387
+   },
+   "boot": {
+    "median": 418968,
+    "p10": 211511,
+    "loss_year_pct": 8.6,
+    "fall30_pct": 26.3
+   }
+  },
+  "displacement + CPR-against": {
+   "full": {
+    "final": 8633761,
+    "dd": -28.2,
+    "trades": 1732
+   },
+   "2026": {
+    "final": 737315,
+    "dd": -24.2,
+    "trades": 379
+   },
+   "boot": {
+    "median": 435305,
+    "p10": 197142,
+    "loss_year_pct": 10.5,
+    "fall30_pct": 30.3
+   }
+  },
+  "all three": {
+   "full": {
+    "final": 6436325,
+    "dd": -24.7,
+    "trades": 1829
+   },
+   "2026": {
+    "final": 646430,
+    "dd": -21.1,
+    "trades": 388
+   },
+   "boot": {
+    "median": 442406,
+    "p10": 212800,
+    "loss_year_pct": 8.0,
+    "fall30_pct": 26.0
+   }
+  }
+ },
+ "E_20k": {
+  "baseline": {
+   "full": {
+    "final": 513437,
+    "dd": -70.3,
+    "trades": 1472
+   },
+   "2026": {
+    "final": 60795,
+    "dd": -55.6,
+    "trades": 123
+   },
+   "boot": {
+    "median": 46730,
+    "p10": 6756,
+    "loss_year_pct": 93.9,
+    "fall30_pct": 96.2
+   }
+  },
+  "displacement 1.5/0.75": {
+   "full": {
+    "final": 1046277,
+    "dd": -70.3,
+    "trades": 1445
+   },
+   "2026": {
+    "final": 60795,
+    "dd": -55.6,
+    "trades": 123
+   },
+   "boot": {
+    "median": 46730,
+    "p10": 6756,
+    "loss_year_pct": 93.9,
+    "fall30_pct": 96.2
+   }
+  }
+ }
+}

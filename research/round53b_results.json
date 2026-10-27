@@ -1,0 +1,144 @@
+{
+ "CRYPTO | Donchian 20 breakout, long (daily)": {
+  "all": {
+   "n_with": 189,
+   "R_with": 0.263,
+   "n_without": 64,
+   "R_without": -0.063
+  },
+  "first half": {
+   "n_with": 113,
+   "R_with": 0.308,
+   "n_without": 33,
+   "R_without": -0.081
+  },
+  "second half": {
+   "n_with": 76,
+   "R_with": 0.197,
+   "n_without": 31,
+   "R_without": -0.043
+  }
+ },
+ "CRYPTO | Donchian 55 breakout, long (4h)": {
+  "all": {
+   "n_with": 575,
+   "R_with": 0.132,
+   "n_without": 166,
+   "R_without": 0.075
+  },
+  "first half": {
+   "n_with": 316,
+   "R_with": 0.199,
+   "n_without": 78,
+   "R_without": 0.007
+  },
+  "second half": {
+   "n_with": 259,
+   "R_with": 0.05,
+   "n_without": 88,
+   "R_without": 0.136
+  }
+ },
+ "CRYPTO | Supertrend 10/3 (4h)": {
+  "all": {
+   "n_with": 706,
+   "R_with": 0.227,
+   "n_without": 422,
+   "R_without": 0.093
+  },
+  "first half": {
+   "n_with": 356,
+   "R_with": 0.341,
+   "n_without": 188,
+   "R_without": 0.113
+  },
+  "second half": {
+   "n_with": 350,
+   "R_with": 0.111,
+   "n_without": 234,
+   "R_without": 0.076
+  }
+ },
+ "CRYPTO | Supertrend 10/3 (daily)": {
+  "all": {
+   "n_with": 106,
+   "R_with": 0.791,
+   "n_without": 86,
+   "R_without": 0.159
+  },
+  "first half": {
+   "n_with": 61,
+   "R_with": 1.253,
+   "n_without": 39,
+   "R_without": 0.064
+  },
+  "second half": {
+   "n_with": 45,
+   "R_with": 0.164,
+   "n_without": 47,
+   "R_without": 0.238
+  }
+ },
+ "GOLD | Donchian 20 breakout, long (daily)": {
+  "all": {
+   "n_with": 70,
+   "R_with": 0.291,
+   "n_without": 75,
+   "R_without": 0.563
+  },
+  "first half": {
+   "n_with": 35,
+   "R_with": 0.003,
+   "n_without": 46,
+   "R_without": 0.84
+  },
+  "second half": {
+   "n_with": 35,
+   "R_with": 0.579,
+   "n_without": 29,
+   "R_without": 0.124
+  }
+ },
+ "GOLD | Donchian 55 breakout, long (4h)": {
+  "all": {
+   "n_with": 27,
+   "R_with": -0.393,
+   "n_without": 18,
+   "R_without": 1.264
+  },
+  "first half": {
+   "n_with": 19,
+   "R_with": -0.582,
+   "n_without": 10,
+   "R_without": -0.269
+  },
+  "second half": {
+   "n_with": 8,
+   "R_with": 0.057,
+   "n_without": 8,
+   "R_without": 3.18
+  }
+ },
+ "CRYPTO pooled": {
+  "R_with": 0.235,
+  "n_with": 1576,
+  "R_without": 0.083,
+  "n_without": 738,
+  "diff_ci90": [
+   -0.014,
+   0.334
+  ],
+  "p_le_0": 0.0668
+ },
+ "GOLD pooled": {
+  "R_with": 0.1,
+  "n_with": 97,
+  "R_without": 0.699,
+  "n_without": 93,
+  "diff_ci90": [
+   -1.073,
+   -0.132
+  ],
+  "p_le_0": 0.9825
+ }
+}
