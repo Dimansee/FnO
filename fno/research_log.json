@@ -1317,9 +1317,9 @@
    "area": "India + Crypto",
    "title": "Combinations of the 7 scalping strategies (each entry + 0-3 confirming indicators), 1 / 2 / 5 / 15 min",
    "asked": "Is there any combination that works? Each round-62 entry was taken only when 0-3 of 8 confirmations agreed (MA ribbon, MACD sign, Supertrend, RMI > 50, EMA 9 > 21, regression slope, RSI > 50, 1-hour EMA 50 trend): 4,743 combinations on Nifty / Bank Nifty / Sensex 1-15 min, 10 Nifty stocks and 5 coins 5-15 min. Ranked on trades before Apr 2025 only, judged on Apr 2025 - Oct 2026. Survivors re-priced as ATM options (app pricing with time decay, real charges, 0.1% / 0.25% slippage per fill, Rs 2,000 risk per trade).",
-   "result": "1, 2-min index charts, all stock combinations and all crypto combinations: nothing holds (crypto 5m 0 of 683 positive in both periods even at 0.08% costs; stocks 0 of 1,509). Index 5 and 15 min: one family works - RMI + Supertrend. On 15 min with MACD and RMI agreeing: 693 trades 2023-26, about 9 Nifty points a trade before costs (t = 2.4), holds about 2.8 hours; as ATM options with time decay and charges +Rs 169 a trade at 0.25% slippage = +Rs 1.17L at Rs 2,000 risk, positive every year (2023 +8k, 2024 +61k, 2025 +10k, 2026 +39k), Nifty +93k and Sensex +48k but Bank Nifty -24k. Without the filters (plain RMI + Supertrend 15 min) +Rs 1.59L but 2023 and 2025 negative. 5 min with ribbon + MACD + 1-hour trend: +Rs 65k, 2025 negative. Through futures every version loses. These are short trend trades (1.5-3 hours), not scalps.",
-   "decision": "Watch-list: paper forward test proposed; live rules unchanged",
-   "summary": "No scalping combination works on 1-2 min, stocks or crypto. A 15-min RMI + Supertrend trend entry confirmed by MACD and RMI is the one combination that held on new data and as priced options (+Rs 169 a trade); Bank Nifty is the weak index.",
+   "result": "1, 2-min index charts, all stock combinations and all crypto combinations: nothing holds (crypto 5m 0 of 683 positive in both periods even at 0.08% costs; stocks 0 of 1,509). Index 5 and 15 min: one family works - RMI + Supertrend. On 15 min with MACD and RMI agreeing: 693 trades 2023-26, about 9 Nifty points a trade before costs (t = 2.4), holds about 2.8 hours; as ATM options with time decay and charges +Rs 169 a trade at 0.25% slippage = +Rs 1.17L at Rs 2,000 risk, positive every year (2023 +8k, 2024 +61k, 2025 +10k, 2026 +39k), Nifty +93k and Sensex +48k but Bank Nifty -24k. Without the filters (plain RMI + Supertrend 15 min) +Rs 1.59L but 2023 and 2025 negative. 5 min with ribbon + MACD + 1-hour trend: +Rs 65k, 2025 negative. Through futures every version loses. These are short trend trades (1.5-3 hours), not scalps. Round 63b, added to today's Autopilot in the Outcomes-tab replay (Rs 2L, compounding, all live gates): 2023 - Oct 2026 final Rs 30.0L vs Rs 33.4L without it (its own trades made +Rs 2.78L but took cash and slots, so 78 more Autopilot trades were skipped or cut and 2024 fell from +193% to +152%); 2026 alone Rs 5.30L vs Rs 4.69L with a deeper fall (-20.4% vs -19.1%). Rs 20k: full period +1%, 2026 higher but worst fall -64% vs -48%.",
+   "decision": "Not adopted (round 63b: lowers the Autopilot's profit)",
+   "summary": "A 15-min RMI + Supertrend entry with MACD + RMI agreeing makes money on its own, but added to today's Autopilot it lowers the full-period profit (Rs 30.0L vs 33.4L from Rs 2L), so it is not used.",
    "period": "Jan 2023 - Oct 2026 (crypto from Jan 2024)"
   }
  ],
@@ -1716,13 +1716,6 @@
     "r40"
    ],
    "next": "Re-run research/round40.py with 60 more sessions; adopt only if still ahead and 2023-25 is not worse."
-  },
-  {
-   "id": "p-rmi15",
-   "area": "Index options",
-   "title": "RMI + Supertrend 15-min with MACD + RMI agreeing (Nifty, Sensex) as a paper forward test",
-   "waiting_for": "Your decision to start a paper forward test",
-   "why": "Round 63: the only scalping combination that held on 2025-26 and as priced ATM options: +Rs 169 a trade at Rs 2,000 risk, every year 2023-26 positive. Bank Nifty lost, so Nifty and Sensex only. Needs live paper fills before any money."
   }
  ],
  "crypto_rounds": [
@@ -2489,7 +2482,7 @@
    "ids": [
     "r63"
    ],
-   "takeaway": "Nothing works on 1-2 min. RMI + Supertrend on 15 min with MACD + RMI agreeing held up on 2025-26 and as real-priced ATM options: +Rs 1.17L over 693 trades at Rs 2,000 risk, every year positive; Bank Nifty negative."
+   "takeaway": "Nothing works on 1-2 min. RMI + Supertrend 15 min (MACD + RMI agreeing) is profitable alone, but added to today's Autopilot it lowers the 2023-26 result (Rs 30.0L vs 33.4L from Rs 2L): not adopted."
   }
  ],
  "india_status": {
