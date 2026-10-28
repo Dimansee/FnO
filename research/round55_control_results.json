@@ -1,0 +1,68 @@
+{
+ "swing-break k5 m3, EMA200, next-level target": {
+  "real_design": {
+   "n": 1242,
+   "avg": 0.014,
+   "win": 36.5,
+   "pf": 1.02,
+   "tot": 17.4,
+   "t": 0.32
+  },
+  "real_holdout": {
+   "n": 972,
+   "avg": 0.106,
+   "win": 38.7,
+   "pf": 1.17,
+   "tot": 102.8,
+   "t": 2.1
+  },
+  "random_design_avg": -0.029,
+  "random_holdout_avg": 0.007,
+  "random_holdout_p_real_better": 1.0,
+  "random_design_p_real_better": 0.9
+ },
+ "swing-bounce k5 m3 rejection, EMA200, 1R": {
+  "real_design": {
+   "n": 1296,
+   "avg": -0.067,
+   "win": 49.4,
+   "pf": 0.87,
+   "tot": -86.3,
+   "t": -2.45
+  },
+  "real_holdout": {
+   "n": 1031,
+   "avg": -0.013,
+   "win": 52.6,
+   "pf": 0.97,
+   "tot": -13.6,
+   "t": -0.43
+  },
+  "random_design_avg": -0.051,
+  "random_holdout_avg": -0.046,
+  "random_holdout_p_real_better": 0.93,
+  "random_design_p_real_better": 0.37
+ },
+ "swing-bounce k5 m3 rejection, EMA200, 2R": {
+  "real_design": {
+   "n": 1084,
+   "avg": -0.079,
+   "win": 35.1,
+   "pf": 0.88,
+   "tot": -86.1,
+   "t": -2.0
+  },
+  "real_holdout": {
+   "n": 839,
+   "avg": -0.003,
+   "win": 37.5,
+   "pf": 0.99,
+   "tot": -2.8,
+   "t": -0.07
+  },
+  "random_design_avg": -0.039,
+  "random_holdout_avg": -0.012,
+  "random_holdout_p_real_better": 0.63,
+  "random_design_p_real_better": 0.1
+ }
+}
