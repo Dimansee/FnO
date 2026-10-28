@@ -1266,6 +1266,28 @@
    "decision": "Watch-list",
    "summary": "Not used to size or filter crypto trades; too unstable between halves. Tagged for forward checking only.",
    "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r59",
+   "date": "2026-10-28",
+   "area": "Crypto",
+   "title": "Order blocks, fair value gaps and volume (smart-money zones) on 15m / 1h / 4h",
+   "asked": "Buy / sell with a limit order when price returns to a fair value gap (3-candle imbalance) or an order block (last opposite candle before a strong move), optionally only when the move had 1.5x or 2x average volume, a quiet pull-back, a strong body, the EMA 200 trend; exits 2R, 3R or a 4 ATR trailing stop. 864 versions on 11 coins, then the 1h / 4h ones again with realistic fills (the limit fills only if price trades 0.1 ATR through it, not just touches it) and realistic limit-order costs (10 bps).",
+   "result": "15m and 1h lose in every form (1h with strict fills: median -0.24R a trade, the 10 best early versions -0.13R later). 4h with strict fills: median -0.12R on recent data; the 10 best early versions +0.09R later. Assuming a limit fills on a mere touch adds about +0.1R a trade, so much of the apparent zone edge is fill optimism. The 2x volume filter helped fair value gaps: the cleanest version (4h FVG + 2x volume, EMA 200 trend, 4 ATR trail) made +0.14R / +0.16R (791 / 597 trades), but only 2023 and 2026 were positive (2024 -0.11R, 2025 -0.01R) and only 6 of 11 coins. Order blocks were worse; the best (quiet pull-back) had under 90 trades a period and lived on 2023 alone.",
+   "decision": "Not adopted",
+   "summary": "Order blocks and fair value gaps do not give a reliable edge after costs and realistic fills; volume helps a little on 4h but results flip year to year.",
+   "period": "Jan 2023 - Oct 2026 (15m from Jan 2024)"
+  },
+  {
+   "id": "r60",
+   "date": "2026-10-28",
+   "area": "Crypto",
+   "title": "All 26 chart patterns from the cheat sheet, on 5m / 15m / 1h / 4h / daily - and drawn on the chart",
+   "asked": "Which classic patterns (flags, pennants, channels, megaphone, triangles, double / triple tops and bottoms, head and shoulders, diamond, cup and handle, Livermore cylinder, wedges, Gartley, Cypher) work, on which timeframe? Same detector that now draws them on the Crypto / US chart. Variants: zigzag 2 / 3 ATR, EMA 200 filter, measured-move / 2R / 3 ATR trailing exit; 16 bps costs; each version compared with random entries using the same stop and target.",
+   "result": "5m and 15m: all 26 lose (-0.1 to -0.5R a trade) and are no better than random entries. 1h: about break-even. 4h: the 10 best early versions made +0.13R a trade later (9/10 positive) vs +0.04R for random entries. Best that held up on 4h with the EMA 200 filter: diamond (3 ATR trail) +0.22R on 97 later trades, rising wedge (trail) +0.19R / 82 (8 of 11 coins), Livermore cylinder +0.22R / 38, double bottom +0.20R / 40, symmetrical triangle +0.14R / 192 (random +0.10R). Inverse head and shoulders on 1h +0.15R / 139. Head and shoulders failed on new data (-0.45R); Gartley / Cypher appear a few times a year and lost.",
+   "decision": "Shown on the chart as information; nothing traded",
+   "summary": "Patterns only work on 4h (and maybe daily), and the edge over random is small (about +0.1R a trade). The 4h breakouts with the EMA 200 trend are on the watch-list; live rules unchanged.",
+   "period": "Jan 2023 - Oct 2026 (5m/15m from Jan 2024)"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -1777,6 +1799,26 @@
    ],
    "project_round": 58,
    "takeaway": "Loses after fees on 5m-1h; the suggested 15m + 4h version took Rs 20,000 to about Rs 8,800. Its 0.5% stops make fees a third of every trade's risk."
+  },
+  {
+   "n": 12,
+   "date": "2026-10-28",
+   "topic": "Order blocks, fair value gaps and volume",
+   "ids": [
+    "r59"
+   ],
+   "project_round": 59,
+   "takeaway": "Lose on 15m / 1h. On 4h, realistic fills turn most of the edge negative; FVG + 2x volume is positive overall but only in 2 of 4 years."
+  },
+  {
+   "n": 13,
+   "date": "2026-10-28",
+   "topic": "All 26 chart patterns, every timeframe (now drawn on the chart)",
+   "ids": [
+    "r60"
+   ],
+   "project_round": 60,
+   "takeaway": "5m / 15m lose on every pattern; 4h is the only timeframe with an edge over random (+0.13R vs +0.04R). Head and shoulders and harmonics fail."
   }
  ],
  "crypto_status": {
@@ -1795,16 +1837,18 @@
   "watch": [
    "Symmetrical-triangle breakout 4h with the trend, 4 ATR trailing stop (round 10)",
    "Displacement candle as a filter (round 7)",
-   "4h multi-touch level breakout with the trend (round 8)"
+   "4h multi-touch level breakout with the trend (round 8)",
+   "4h pattern breakouts with the EMA 200 trend: diamond, rising wedge, Livermore, double bottom (round 13)"
   ],
   "rejected": [
    "Fast rules on 5m / 15m (fees decide)",
    "Pivots, Camarilla, round numbers, support/resistance bounces",
    "Candlestick patterns, mean reversion, coin rotation, funding fades",
-   "Smart-money / ICT setups",
    "Session-only trading",
    "Fixed targets, partial exits and break-even moves on the trend rules",
-   "EMA 20/50 + RSI pullback"
+   "EMA 20/50 + RSI pullback",
+   "Smart-money / ICT setups, order blocks and fair value gaps (rounds 6, 12)",
+   "Chart patterns on 5m / 15m / 1h, head and shoulders, harmonic patterns (round 13)"
   ]
  },
  "india_rounds": [
@@ -2359,5 +2403,1378 @@
  ],
  "india_status": {
   "note": "Adopted rounds changed the live India Autopilot. Watch-list rounds wait for more live data - see Pending research below."
+ },
+ "pattern_stats": {
+  "round": 60,
+  "summary": "Tested all 26 patterns on 11 coins, 2023 to Oct 2026, with 16 bps costs and against random entries with the same stop and target. 5m and 15m: every pattern loses (-0.1 to -0.5R a trade) and is no better than random - fees decide. 1h: about break-even. 4h is the timeframe where patterns work at all: choosing the best 10 versions on 2023 - Mar 2025 gave +0.13R a trade afterwards (9 of 10 positive) versus +0.04R for random entries. Daily looks similar but has too few patterns to trust. Harmonic patterns (Gartley, Cypher) are rare and lost; head and shoulders failed on new data.",
+  "patterns": {
+   "bull_flag": {
+    "by_tf": {
+     "5m": {
+      "n": 5449,
+      "avg": -0.29,
+      "win": 34,
+      "design": -0.275,
+      "holdout": -0.305,
+      "control": -0.35,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "2433 trades before Apr 2025: -0.28R; 3016 after: -0.30R; random entries with the same stop/target: -0.35R"
+     },
+     "15m": {
+      "n": 1659,
+      "avg": -0.14,
+      "win": 35,
+      "design": -0.097,
+      "holdout": -0.177,
+      "control": -0.15,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "746 trades before Apr 2025: -0.10R; 913 after: -0.18R; random entries with the same stop/target: -0.15R"
+     },
+     "1h": {
+      "n": 1175,
+      "avg": -0.02,
+      "win": 36,
+      "design": -0.063,
+      "holdout": 0.032,
+      "control": -0.11,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "685 trades before Apr 2025: -0.06R; 490 after: +0.03R; random entries with the same stop/target: -0.11R"
+     },
+     "4h": {
+      "n": 309,
+      "avg": 0.14,
+      "win": 43,
+      "design": 0.232,
+      "holdout": 0.004,
+      "control": -0.05,
+      "verdict": "edge",
+      "verdict_label": "beat random",
+      "why": "181 trades before Apr 2025: +0.23R; 128 after: +0.00R; random entries with the same stop/target: -0.05R"
+     },
+     "1d": {
+      "n": 59,
+      "avg": 0.47,
+      "win": 56,
+      "design": 0.807,
+      "holdout": -0.136,
+      "control": 0.09,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "38 trades before Apr 2025: +0.81R; 21 after: -0.14R; random entries with the same stop/target: +0.09R"
+     }
+    },
+    "best": "4h, EMA 200 trend filter, measured-move target: +0.12R on 54 later trades (random +0.11R), 6/11 coins positive"
+   },
+   "bear_flag": {
+    "by_tf": {
+     "5m": {
+      "n": 4983,
+      "avg": -0.29,
+      "win": 34,
+      "design": -0.254,
+      "holdout": -0.318,
+      "control": -0.34,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "2170 trades before Apr 2025: -0.25R; 2813 after: -0.32R; random entries with the same stop/target: -0.34R"
+     },
+     "15m": {
+      "n": 1477,
+      "avg": -0.1,
+      "win": 35,
+      "design": -0.031,
+      "holdout": -0.156,
+      "control": -0.16,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "622 trades before Apr 2025: -0.03R; 855 after: -0.16R; random entries with the same stop/target: -0.16R"
+     },
+     "1h": {
+      "n": 1035,
+      "avg": 0.01,
+      "win": 39,
+      "design": 0.076,
+      "holdout": -0.066,
+      "control": -0.01,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "573 trades before Apr 2025: +0.08R; 462 after: -0.07R; random entries with the same stop/target: -0.01R"
+     },
+     "4h": {
+      "n": 276,
+      "avg": -0.12,
+      "win": 38,
+      "design": -0.105,
+      "holdout": -0.138,
+      "control": 0.04,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "150 trades before Apr 2025: -0.10R; 126 after: -0.14R; random entries with the same stop/target: +0.04R"
+     },
+     "1d": {
+      "n": 39,
+      "avg": -0.05,
+      "win": 49,
+      "design": 0.004,
+      "holdout": -0.104,
+      "control": 0.01,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "18 trades before Apr 2025: +0.00R; 21 after: -0.10R; random entries with the same stop/target: +0.01R"
+     }
+    },
+    "best": "Best early version (1h, measured-move target) did not hold up later: -0.07R"
+   },
+   "bull_pennant": {
+    "by_tf": {
+     "5m": {
+      "n": 614,
+      "avg": -0.35,
+      "win": 24,
+      "design": -0.363,
+      "holdout": -0.344,
+      "control": -0.35,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "266 trades before Apr 2025: -0.36R; 348 after: -0.34R; random entries with the same stop/target: -0.35R"
+     },
+     "15m": {
+      "n": 230,
+      "avg": -0.4,
+      "win": 20,
+      "design": -0.424,
+      "holdout": -0.376,
+      "control": -0.17,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "108 trades before Apr 2025: -0.42R; 122 after: -0.38R; random entries with the same stop/target: -0.17R"
+     },
+     "1h": {
+      "n": 143,
+      "avg": -0.32,
+      "win": 21,
+      "design": -0.334,
+      "holdout": -0.31,
+      "control": 0.03,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "87 trades before Apr 2025: -0.33R; 56 after: -0.31R; random entries with the same stop/target: +0.03R"
+     },
+     "4h": {
+      "n": 25,
+      "avg": 0.2,
+      "win": 36,
+      "design": 0.381,
+      "holdout": -0.084,
+      "control": 0.15,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "15 trades before Apr 2025: +0.38R; 10 after: -0.08R; random entries with the same stop/target: +0.15R"
+     }
+    },
+    "best": "Best early version (1h, 2R target) did not hold up later: -0.15R"
+   },
+   "bear_pennant": {
+    "by_tf": {
+     "5m": {
+      "n": 463,
+      "avg": -0.25,
+      "win": 26,
+      "design": -0.04,
+      "holdout": -0.395,
+      "control": -0.38,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "190 trades before Apr 2025: -0.04R; 273 after: -0.40R; random entries with the same stop/target: -0.38R"
+     },
+     "15m": {
+      "n": 188,
+      "avg": 0.22,
+      "win": 29,
+      "design": 0.612,
+      "holdout": -0.007,
+      "control": -0.21,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "69 trades before Apr 2025: +0.61R; 119 after: -0.01R; random entries with the same stop/target: -0.21R"
+     },
+     "1h": {
+      "n": 128,
+      "avg": 0.02,
+      "win": 29,
+      "design": 0.055,
+      "holdout": -0.019,
+      "control": -0.03,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "67 trades before Apr 2025: +0.06R; 61 after: -0.02R; random entries with the same stop/target: -0.03R"
+     },
+     "4h": {
+      "n": 33,
+      "avg": 0.09,
+      "win": 45,
+      "design": -0.033,
+      "holdout": 0.288,
+      "control": -0.11,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "20 trades before Apr 2025: -0.03R; 13 after: +0.29R; random entries with the same stop/target: -0.11R"
+     }
+    },
+    "best": "Best early version (1h, 2R target) did not hold up later: -0.19R"
+   },
+   "channel_up": {
+    "by_tf": {
+     "5m": {
+      "n": 8404,
+      "avg": -0.51,
+      "win": 41,
+      "design": -0.407,
+      "holdout": -0.586,
+      "control": -0.55,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "3686 trades before Apr 2025: -0.41R; 4718 after: -0.59R; random entries with the same stop/target: -0.55R"
+     },
+     "15m": {
+      "n": 2673,
+      "avg": -0.26,
+      "win": 41,
+      "design": -0.185,
+      "holdout": -0.312,
+      "control": -0.27,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "1192 trades before Apr 2025: -0.18R; 1481 after: -0.31R; random entries with the same stop/target: -0.27R"
+     },
+     "1h": {
+      "n": 1800,
+      "avg": -0.16,
+      "win": 40,
+      "design": -0.203,
+      "holdout": -0.09,
+      "control": -0.14,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "1093 trades before Apr 2025: -0.20R; 707 after: -0.09R; random entries with the same stop/target: -0.14R"
+     },
+     "4h": {
+      "n": 478,
+      "avg": -0.13,
+      "win": 40,
+      "design": -0.087,
+      "holdout": -0.185,
+      "control": -0.08,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "273 trades before Apr 2025: -0.09R; 205 after: -0.18R; random entries with the same stop/target: -0.08R"
+     },
+     "1d": {
+      "n": 86,
+      "avg": -0.02,
+      "win": 45,
+      "design": -0.196,
+      "holdout": 0.374,
+      "control": -0.0,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "60 trades before Apr 2025: -0.20R; 26 after: +0.37R; random entries with the same stop/target: -0.00R"
+     }
+    },
+    "best": "4h, EMA 200 trend filter, 2R target: +0.10R on 96 later trades (random +0.06R), 7/11 coins positive"
+   },
+   "channel_down": {
+    "by_tf": {
+     "5m": {
+      "n": 8174,
+      "avg": -0.47,
+      "win": 41,
+      "design": -0.395,
+      "holdout": -0.522,
+      "control": -0.54,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "3593 trades before Apr 2025: -0.40R; 4581 after: -0.52R; random entries with the same stop/target: -0.54R"
+     },
+     "15m": {
+      "n": 2536,
+      "avg": -0.27,
+      "win": 40,
+      "design": -0.242,
+      "holdout": -0.286,
+      "control": -0.26,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "1099 trades before Apr 2025: -0.24R; 1437 after: -0.29R; random entries with the same stop/target: -0.26R"
+     },
+     "1h": {
+      "n": 1731,
+      "avg": -0.13,
+      "win": 41,
+      "design": -0.069,
+      "holdout": -0.209,
+      "control": -0.12,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "1005 trades before Apr 2025: -0.07R; 726 after: -0.21R; random entries with the same stop/target: -0.12R"
+     },
+     "4h": {
+      "n": 426,
+      "avg": -0.04,
+      "win": 40,
+      "design": 0.02,
+      "holdout": -0.104,
+      "control": -0.06,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "233 trades before Apr 2025: +0.02R; 193 after: -0.10R; random entries with the same stop/target: -0.06R"
+     },
+     "1d": {
+      "n": 76,
+      "avg": 0.34,
+      "win": 55,
+      "design": 0.339,
+      "holdout": 0.337,
+      "control": 0.06,
+      "verdict": "edge",
+      "verdict_label": "beat random",
+      "why": "40 trades before Apr 2025: +0.34R; 36 after: +0.34R; random entries with the same stop/target: +0.06R"
+     }
+    },
+    "best": "1d, measured-move target: +0.34R on 36 later trades (random +0.06R), 6/11 coins positive"
+   },
+   "rect": {
+    "by_tf": {
+     "5m": {
+      "n": 2559,
+      "avg": -0.25,
+      "win": 53,
+      "design": -0.22,
+      "holdout": -0.275,
+      "control": -0.28,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "1132 trades before Apr 2025: -0.22R; 1427 after: -0.28R; random entries with the same stop/target: -0.28R"
+     },
+     "15m": {
+      "n": 760,
+      "avg": -0.15,
+      "win": 52,
+      "design": -0.12,
+      "holdout": -0.176,
+      "control": -0.15,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "352 trades before Apr 2025: -0.12R; 408 after: -0.18R; random entries with the same stop/target: -0.15R"
+     },
+     "1h": {
+      "n": 566,
+      "avg": -0.0,
+      "win": 56,
+      "design": 0.009,
+      "holdout": -0.015,
+      "control": -0.09,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "335 trades before Apr 2025: +0.01R; 231 after: -0.01R; random entries with the same stop/target: -0.09R"
+     },
+     "4h": {
+      "n": 132,
+      "avg": -0.03,
+      "win": 52,
+      "design": -0.011,
+      "holdout": -0.058,
+      "control": 0,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "87 trades before Apr 2025: -0.01R; 45 after: -0.06R; random entries with the same stop/target: +0.00R"
+     },
+     "1d": {
+      "n": 22,
+      "avg": -0.38,
+      "win": 23,
+      "design": -0.044,
+      "holdout": -0.608,
+      "control": -0.08,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "9 trades before Apr 2025: -0.04R; 13 after: -0.61R; random entries with the same stop/target: -0.08R"
+     }
+    },
+    "best": "Best early version (4h, 2R target) did not hold up later: -0.02R"
+   },
+   "megaphone": {
+    "by_tf": {
+     "5m": {
+      "n": 3466,
+      "avg": -0.12,
+      "win": 57,
+      "design": -0.065,
+      "holdout": -0.166,
+      "control": -0.18,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "1501 trades before Apr 2025: -0.07R; 1965 after: -0.17R; random entries with the same stop/target: -0.18R"
+     },
+     "15m": {
+      "n": 1112,
+      "avg": -0.02,
+      "win": 58,
+      "design": 0.022,
+      "holdout": -0.057,
+      "control": -0.1,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "486 trades before Apr 2025: +0.02R; 626 after: -0.06R; random entries with the same stop/target: -0.10R"
+     },
+     "1h": {
+      "n": 770,
+      "avg": -0.01,
+      "win": 54,
+      "design": 0.022,
+      "holdout": -0.052,
+      "control": -0.08,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "434 trades before Apr 2025: +0.02R; 336 after: -0.05R; random entries with the same stop/target: -0.08R"
+     },
+     "4h": {
+      "n": 172,
+      "avg": 0.04,
+      "win": 52,
+      "design": 0.109,
+      "holdout": -0.056,
+      "control": 0.01,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "96 trades before Apr 2025: +0.11R; 76 after: -0.06R; random entries with the same stop/target: +0.01R"
+     },
+     "1d": {
+      "n": 22,
+      "avg": 0.24,
+      "win": 64,
+      "design": 0.184,
+      "holdout": 0.315,
+      "control": 0.05,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "12 trades before Apr 2025: +0.18R; 10 after: +0.32R; random entries with the same stop/target: +0.05R"
+     }
+    },
+    "best": "4h, EMA 200 trend filter, 3 ATR trailing stop: +0.00R on 80 later trades (random -0.01R), 4/11 coins positive"
+   },
+   "sym_tri": {
+    "by_tf": {
+     "5m": {
+      "n": 10958,
+      "avg": -0.41,
+      "win": 29,
+      "design": -0.346,
+      "holdout": -0.467,
+      "control": -0.47,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "4800 trades before Apr 2025: -0.35R; 6158 after: -0.47R; random entries with the same stop/target: -0.47R"
+     },
+     "15m": {
+      "n": 3549,
+      "avg": -0.26,
+      "win": 28,
+      "design": -0.24,
+      "holdout": -0.27,
+      "control": -0.22,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "1572 trades before Apr 2025: -0.24R; 1977 after: -0.27R; random entries with the same stop/target: -0.22R"
+     },
+     "1h": {
+      "n": 2536,
+      "avg": -0.08,
+      "win": 31,
+      "design": -0.125,
+      "holdout": -0.022,
+      "control": -0.06,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "1508 trades before Apr 2025: -0.12R; 1028 after: -0.02R; random entries with the same stop/target: -0.06R"
+     },
+     "4h": {
+      "n": 738,
+      "avg": 0.02,
+      "win": 33,
+      "design": 0.091,
+      "holdout": -0.07,
+      "control": -0.05,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "413 trades before Apr 2025: +0.09R; 325 after: -0.07R; random entries with the same stop/target: -0.05R"
+     },
+     "1d": {
+      "n": 125,
+      "avg": 0.11,
+      "win": 43,
+      "design": 0.183,
+      "holdout": 0.039,
+      "control": -0.04,
+      "verdict": "edge",
+      "verdict_label": "beat random",
+      "why": "65 trades before Apr 2025: +0.18R; 60 after: +0.04R; random entries with the same stop/target: -0.04R"
+     }
+    },
+    "best": "4h, EMA 200 trend filter, measured-move target: +0.14R on 192 later trades (random +0.10R), 5/11 coins positive"
+   },
+   "asc_tri": {
+    "by_tf": {
+     "5m": {
+      "n": 4329,
+      "avg": -0.28,
+      "win": 39,
+      "design": -0.228,
+      "holdout": -0.329,
+      "control": -0.31,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "1945 trades before Apr 2025: -0.23R; 2384 after: -0.33R; random entries with the same stop/target: -0.31R"
+     },
+     "15m": {
+      "n": 1471,
+      "avg": -0.08,
+      "win": 40,
+      "design": -0.146,
+      "holdout": -0.033,
+      "control": -0.15,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "668 trades before Apr 2025: -0.15R; 803 after: -0.03R; random entries with the same stop/target: -0.15R"
+     },
+     "1h": {
+      "n": 975,
+      "avg": 0.0,
+      "win": 43,
+      "design": -0.004,
+      "holdout": 0.013,
+      "control": -0.06,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "566 trades before Apr 2025: -0.00R; 409 after: +0.01R; random entries with the same stop/target: -0.06R"
+     },
+     "4h": {
+      "n": 236,
+      "avg": 0.15,
+      "win": 49,
+      "design": 0.106,
+      "holdout": 0.239,
+      "control": -0.03,
+      "verdict": "edge",
+      "verdict_label": "beat random",
+      "why": "151 trades before Apr 2025: +0.11R; 85 after: +0.24R; random entries with the same stop/target: -0.03R"
+     },
+     "1d": {
+      "n": 36,
+      "avg": 0.22,
+      "win": 53,
+      "design": 0.462,
+      "holdout": -0.074,
+      "control": 0.14,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "20 trades before Apr 2025: +0.46R; 16 after: -0.07R; random entries with the same stop/target: +0.14R"
+     }
+    },
+    "best": "4h, EMA 200 trend filter, 2R target: +0.17R on 43 later trades (random +0.06R), 5/10 coins positive"
+   },
+   "desc_tri": {
+    "by_tf": {
+     "5m": {
+      "n": 4011,
+      "avg": -0.25,
+      "win": 40,
+      "design": -0.177,
+      "holdout": -0.312,
+      "control": -0.29,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "1772 trades before Apr 2025: -0.18R; 2239 after: -0.31R; random entries with the same stop/target: -0.29R"
+     },
+     "15m": {
+      "n": 1304,
+      "avg": -0.13,
+      "win": 40,
+      "design": -0.105,
+      "holdout": -0.151,
+      "control": -0.15,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "546 trades before Apr 2025: -0.10R; 758 after: -0.15R; random entries with the same stop/target: -0.15R"
+     },
+     "1h": {
+      "n": 904,
+      "avg": -0.0,
+      "win": 44,
+      "design": -0.064,
+      "holdout": 0.09,
+      "control": -0.0,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "542 trades before Apr 2025: -0.06R; 362 after: +0.09R; random entries with the same stop/target: -0.00R"
+     },
+     "4h": {
+      "n": 235,
+      "avg": -0.05,
+      "win": 46,
+      "design": -0.085,
+      "holdout": -0.015,
+      "control": -0.02,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "120 trades before Apr 2025: -0.09R; 115 after: -0.01R; random entries with the same stop/target: -0.02R"
+     },
+     "1d": {
+      "n": 39,
+      "avg": -0.04,
+      "win": 51,
+      "design": -0.002,
+      "holdout": -0.106,
+      "control": -0.01,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "26 trades before Apr 2025: -0.00R; 13 after: -0.11R; random entries with the same stop/target: -0.01R"
+     }
+    },
+    "best": "Best early version (4h, 2R target) did not hold up later: -0.16R"
+   },
+   "double_top": {
+    "by_tf": {
+     "5m": {
+      "n": 4799,
+      "avg": -0.3,
+      "win": 53,
+      "design": -0.236,
+      "holdout": -0.35,
+      "control": -0.31,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "2068 trades before Apr 2025: -0.24R; 2731 after: -0.35R; random entries with the same stop/target: -0.31R"
+     },
+     "15m": {
+      "n": 1513,
+      "avg": -0.12,
+      "win": 57,
+      "design": -0.11,
+      "holdout": -0.134,
+      "control": -0.15,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "652 trades before Apr 2025: -0.11R; 861 after: -0.13R; random entries with the same stop/target: -0.15R"
+     },
+     "1h": {
+      "n": 951,
+      "avg": -0.09,
+      "win": 55,
+      "design": -0.153,
+      "holdout": 0.001,
+      "control": -0.08,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "544 trades before Apr 2025: -0.15R; 407 after: +0.00R; random entries with the same stop/target: -0.08R"
+     },
+     "4h": {
+      "n": 228,
+      "avg": -0.05,
+      "win": 52,
+      "design": -0.03,
+      "holdout": -0.073,
+      "control": -0.01,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "118 trades before Apr 2025: -0.03R; 110 after: -0.07R; random entries with the same stop/target: -0.01R"
+     },
+     "1d": {
+      "n": 44,
+      "avg": -0.09,
+      "win": 48,
+      "design": -0.328,
+      "holdout": 0.249,
+      "control": -0.11,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "26 trades before Apr 2025: -0.33R; 18 after: +0.25R; random entries with the same stop/target: -0.11R"
+     }
+    },
+    "best": "4h, 2R target: +0.03R on 38 later trades (random -0.08R), 4/10 coins positive"
+   },
+   "double_bottom": {
+    "by_tf": {
+     "5m": {
+      "n": 4484,
+      "avg": -0.32,
+      "win": 52,
+      "design": -0.28,
+      "holdout": -0.344,
+      "control": -0.32,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "1944 trades before Apr 2025: -0.28R; 2540 after: -0.34R; random entries with the same stop/target: -0.32R"
+     },
+     "15m": {
+      "n": 1365,
+      "avg": -0.18,
+      "win": 53,
+      "design": -0.228,
+      "holdout": -0.139,
+      "control": -0.17,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "613 trades before Apr 2025: -0.23R; 752 after: -0.14R; random entries with the same stop/target: -0.17R"
+     },
+     "1h": {
+      "n": 876,
+      "avg": -0.09,
+      "win": 54,
+      "design": -0.091,
+      "holdout": -0.079,
+      "control": -0.11,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "497 trades before Apr 2025: -0.09R; 379 after: -0.08R; random entries with the same stop/target: -0.11R"
+     },
+     "4h": {
+      "n": 197,
+      "avg": -0.07,
+      "win": 53,
+      "design": -0.014,
+      "holdout": -0.177,
+      "control": -0.02,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "131 trades before Apr 2025: -0.01R; 66 after: -0.18R; random entries with the same stop/target: -0.02R"
+     },
+     "1d": {
+      "n": 42,
+      "avg": 0.01,
+      "win": 48,
+      "design": 0.028,
+      "holdout": 0.0,
+      "control": 0.0,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "19 trades before Apr 2025: +0.03R; 23 after: +0.00R; random entries with the same stop/target: +0.00R"
+     }
+    },
+    "best": "4h, EMA 200 trend filter, 2R target: +0.20R on 40 later trades (random -0.12R), 4/10 coins positive"
+   },
+   "triple_top": {
+    "by_tf": {
+     "5m": {
+      "n": 1183,
+      "avg": -0.24,
+      "win": 53,
+      "design": -0.159,
+      "holdout": -0.293,
+      "control": -0.24,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "505 trades before Apr 2025: -0.16R; 678 after: -0.29R; random entries with the same stop/target: -0.24R"
+     },
+     "15m": {
+      "n": 361,
+      "avg": -0.08,
+      "win": 56,
+      "design": -0.024,
+      "holdout": -0.123,
+      "control": -0.14,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "158 trades before Apr 2025: -0.02R; 203 after: -0.12R; random entries with the same stop/target: -0.14R"
+     },
+     "1h": {
+      "n": 232,
+      "avg": 0.01,
+      "win": 56,
+      "design": -0.139,
+      "holdout": 0.155,
+      "control": -0.01,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "114 trades before Apr 2025: -0.14R; 118 after: +0.15R; random entries with the same stop/target: -0.01R"
+     },
+     "4h": {
+      "n": 54,
+      "avg": 0.14,
+      "win": 65,
+      "design": 0.228,
+      "holdout": 0.054,
+      "control": -0.1,
+      "verdict": "edge",
+      "verdict_label": "beat random",
+      "why": "28 trades before Apr 2025: +0.23R; 26 after: +0.05R; random entries with the same stop/target: -0.10R"
+     }
+    },
+    "best": "Best early version (1h, 3 ATR trailing stop) did not hold up later: -0.06R"
+   },
+   "triple_bottom": {
+    "by_tf": {
+     "5m": {
+      "n": 1028,
+      "avg": -0.23,
+      "win": 53,
+      "design": -0.22,
+      "holdout": -0.235,
+      "control": -0.24,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "463 trades before Apr 2025: -0.22R; 565 after: -0.23R; random entries with the same stop/target: -0.24R"
+     },
+     "15m": {
+      "n": 311,
+      "avg": -0.09,
+      "win": 55,
+      "design": -0.082,
+      "holdout": -0.101,
+      "control": -0.14,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "132 trades before Apr 2025: -0.08R; 179 after: -0.10R; random entries with the same stop/target: -0.14R"
+     },
+     "1h": {
+      "n": 198,
+      "avg": -0.16,
+      "win": 49,
+      "design": -0.07,
+      "holdout": -0.277,
+      "control": -0.1,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "115 trades before Apr 2025: -0.07R; 83 after: -0.28R; random entries with the same stop/target: -0.10R"
+     },
+     "4h": {
+      "n": 51,
+      "avg": 0.3,
+      "win": 71,
+      "design": 0.223,
+      "holdout": 0.481,
+      "control": 0.07,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "35 trades before Apr 2025: +0.22R; 16 after: +0.48R; random entries with the same stop/target: +0.07R"
+     }
+    },
+    "best": "Best early version (1h, measured-move target) did not hold up later: -0.12R"
+   },
+   "hs": {
+    "by_tf": {
+     "5m": {
+      "n": 2661,
+      "avg": -0.34,
+      "win": 38,
+      "design": -0.279,
+      "holdout": -0.394,
+      "control": -0.37,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "1148 trades before Apr 2025: -0.28R; 1513 after: -0.39R; random entries with the same stop/target: -0.37R"
+     },
+     "15m": {
+      "n": 812,
+      "avg": -0.19,
+      "win": 37,
+      "design": -0.24,
+      "holdout": -0.15,
+      "control": -0.16,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "360 trades before Apr 2025: -0.24R; 452 after: -0.15R; random entries with the same stop/target: -0.16R"
+     },
+     "1h": {
+      "n": 518,
+      "avg": -0.09,
+      "win": 38,
+      "design": -0.032,
+      "holdout": -0.166,
+      "control": -0.03,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "309 trades before Apr 2025: -0.03R; 209 after: -0.17R; random entries with the same stop/target: -0.03R"
+     },
+     "4h": {
+      "n": 145,
+      "avg": -0.21,
+      "win": 36,
+      "design": -0.169,
+      "holdout": -0.267,
+      "control": -0.04,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "82 trades before Apr 2025: -0.17R; 63 after: -0.27R; random entries with the same stop/target: -0.04R"
+     }
+    },
+    "best": "Best early version (4h, measured-move target) did not hold up later: -0.45R"
+   },
+   "ihs": {
+    "by_tf": {
+     "5m": {
+      "n": 2700,
+      "avg": -0.35,
+      "win": 37,
+      "design": -0.288,
+      "holdout": -0.4,
+      "control": -0.38,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "1206 trades before Apr 2025: -0.29R; 1494 after: -0.40R; random entries with the same stop/target: -0.38R"
+     },
+     "15m": {
+      "n": 814,
+      "avg": -0.18,
+      "win": 38,
+      "design": -0.24,
+      "holdout": -0.129,
+      "control": -0.19,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "388 trades before Apr 2025: -0.24R; 426 after: -0.13R; random entries with the same stop/target: -0.19R"
+     },
+     "1h": {
+      "n": 571,
+      "avg": 0.02,
+      "win": 41,
+      "design": -0.021,
+      "holdout": 0.076,
+      "control": -0.07,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "334 trades before Apr 2025: -0.02R; 237 after: +0.08R; random entries with the same stop/target: -0.07R"
+     },
+     "4h": {
+      "n": 148,
+      "avg": -0.16,
+      "win": 34,
+      "design": 0.017,
+      "holdout": -0.376,
+      "control": 0.0,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "83 trades before Apr 2025: +0.02R; 65 after: -0.38R; random entries with the same stop/target: +0.00R"
+     }
+    },
+    "best": "1h, 2R target: +0.15R on 139 later trades (random -0.05R), 7/11 coins positive"
+   },
+   "diamond": {
+    "by_tf": {
+     "5m": {
+      "n": 6113,
+      "avg": -0.42,
+      "win": 28,
+      "design": -0.363,
+      "holdout": -0.458,
+      "control": -0.47,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "2620 trades before Apr 2025: -0.36R; 3493 after: -0.46R; random entries with the same stop/target: -0.47R"
+     },
+     "15m": {
+      "n": 1962,
+      "avg": -0.24,
+      "win": 27,
+      "design": -0.257,
+      "holdout": -0.225,
+      "control": -0.23,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "862 trades before Apr 2025: -0.26R; 1100 after: -0.23R; random entries with the same stop/target: -0.23R"
+     },
+     "1h": {
+      "n": 1392,
+      "avg": -0.01,
+      "win": 32,
+      "design": -0.087,
+      "holdout": 0.113,
+      "control": -0.11,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "841 trades before Apr 2025: -0.09R; 551 after: +0.11R; random entries with the same stop/target: -0.11R"
+     },
+     "4h": {
+      "n": 378,
+      "avg": 0.13,
+      "win": 40,
+      "design": 0.278,
+      "holdout": -0.067,
+      "control": -0.0,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "219 trades before Apr 2025: +0.28R; 159 after: -0.07R; random entries with the same stop/target: -0.00R"
+     },
+     "1d": {
+      "n": 71,
+      "avg": 0.1,
+      "win": 45,
+      "design": 0.253,
+      "holdout": -0.098,
+      "control": 0.01,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "41 trades before Apr 2025: +0.25R; 30 after: -0.10R; random entries with the same stop/target: +0.01R"
+     }
+    },
+    "best": "4h, EMA 200 trend filter, 3 ATR trailing stop: +0.22R on 97 later trades (random -0.03R), 5/11 coins positive"
+   },
+   "cup_handle": {
+    "by_tf": {
+     "5m": {
+      "n": 509,
+      "avg": -0.25,
+      "win": 41,
+      "design": -0.269,
+      "holdout": -0.225,
+      "control": -0.37,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "236 trades before Apr 2025: -0.27R; 273 after: -0.23R; random entries with the same stop/target: -0.37R"
+     },
+     "15m": {
+      "n": 129,
+      "avg": -0.13,
+      "win": 40,
+      "design": -0.226,
+      "holdout": -0.032,
+      "control": -0.22,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "63 trades before Apr 2025: -0.23R; 66 after: -0.03R; random entries with the same stop/target: -0.22R"
+     },
+     "1h": {
+      "n": 83,
+      "avg": 0.09,
+      "win": 46,
+      "design": 0.154,
+      "holdout": 0.021,
+      "control": -0.07,
+      "verdict": "edge",
+      "verdict_label": "beat random",
+      "why": "44 trades before Apr 2025: +0.15R; 39 after: +0.02R; random entries with the same stop/target: -0.07R"
+     }
+    },
+    "best": "1h, measured-move target: +0.02R on 39 later trades (random -0.07R), 5/11 coins positive"
+   },
+   "inv_cup_handle": {
+    "by_tf": {
+     "5m": {
+      "n": 496,
+      "avg": -0.25,
+      "win": 41,
+      "design": -0.211,
+      "holdout": -0.279,
+      "control": -0.31,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "214 trades before Apr 2025: -0.21R; 282 after: -0.28R; random entries with the same stop/target: -0.31R"
+     },
+     "15m": {
+      "n": 131,
+      "avg": -0.12,
+      "win": 40,
+      "design": -0.13,
+      "holdout": -0.115,
+      "control": -0.11,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "60 trades before Apr 2025: -0.13R; 71 after: -0.12R; random entries with the same stop/target: -0.11R"
+     },
+     "1h": {
+      "n": 103,
+      "avg": -0.09,
+      "win": 39,
+      "design": 0.095,
+      "holdout": -0.315,
+      "control": -0.13,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "57 trades before Apr 2025: +0.10R; 46 after: -0.32R; random entries with the same stop/target: -0.13R"
+     },
+     "4h": {
+      "n": 25,
+      "avg": 0.18,
+      "win": 56,
+      "design": -0.113,
+      "holdout": 0.368,
+      "control": 0.07,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "10 trades before Apr 2025: -0.11R; 15 after: +0.37R; random entries with the same stop/target: +0.07R"
+     }
+    },
+    "best": "Best early version (1h, 2R target) did not hold up later: -0.36R"
+   },
+   "livermore": {
+    "by_tf": {
+     "5m": {
+      "n": 979,
+      "avg": -0.14,
+      "win": 59,
+      "design": -0.12,
+      "holdout": -0.164,
+      "control": -0.17,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "464 trades before Apr 2025: -0.12R; 515 after: -0.16R; random entries with the same stop/target: -0.17R"
+     },
+     "15m": {
+      "n": 364,
+      "avg": -0.06,
+      "win": 59,
+      "design": -0.054,
+      "holdout": -0.066,
+      "control": -0.1,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "160 trades before Apr 2025: -0.05R; 204 after: -0.07R; random entries with the same stop/target: -0.10R"
+     },
+     "1h": {
+      "n": 232,
+      "avg": -0.01,
+      "win": 60,
+      "design": 0.023,
+      "holdout": -0.044,
+      "control": -0.08,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "116 trades before Apr 2025: +0.02R; 116 after: -0.04R; random entries with the same stop/target: -0.08R"
+     },
+     "4h": {
+      "n": 89,
+      "avg": 0.16,
+      "win": 66,
+      "design": 0.222,
+      "holdout": 0.064,
+      "control": 0.01,
+      "verdict": "edge",
+      "verdict_label": "beat random",
+      "why": "53 trades before Apr 2025: +0.22R; 36 after: +0.06R; random entries with the same stop/target: +0.01R"
+     }
+    },
+    "best": "4h, EMA 200 trend filter, 2R target: +0.22R on 38 later trades (random +0.09R), 7/10 coins positive"
+   },
+   "rising_wedge": {
+    "by_tf": {
+     "5m": {
+      "n": 8199,
+      "avg": -0.39,
+      "win": 29,
+      "design": -0.285,
+      "holdout": -0.477,
+      "control": -0.49,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "3634 trades before Apr 2025: -0.28R; 4565 after: -0.48R; random entries with the same stop/target: -0.49R"
+     },
+     "15m": {
+      "n": 2595,
+      "avg": -0.19,
+      "win": 29,
+      "design": -0.155,
+      "holdout": -0.226,
+      "control": -0.23,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "1174 trades before Apr 2025: -0.15R; 1421 after: -0.23R; random entries with the same stop/target: -0.23R"
+     },
+     "1h": {
+      "n": 1728,
+      "avg": -0.08,
+      "win": 32,
+      "design": -0.136,
+      "holdout": 0.015,
+      "control": -0.08,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "1054 trades before Apr 2025: -0.14R; 674 after: +0.01R; random entries with the same stop/target: -0.08R"
+     },
+     "4h": {
+      "n": 461,
+      "avg": -0.07,
+      "win": 34,
+      "design": -0.11,
+      "holdout": -0.016,
+      "control": -0.09,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "272 trades before Apr 2025: -0.11R; 189 after: -0.02R; random entries with the same stop/target: -0.09R"
+     },
+     "1d": {
+      "n": 82,
+      "avg": -0.01,
+      "win": 44,
+      "design": -0.032,
+      "holdout": 0.023,
+      "control": -0.08,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "49 trades before Apr 2025: -0.03R; 33 after: +0.02R; random entries with the same stop/target: -0.08R"
+     }
+    },
+    "best": "4h, EMA 200 trend filter, 3 ATR trailing stop: +0.19R on 82 later trades (random +0.00R), 8/11 coins positive"
+   },
+   "falling_wedge": {
+    "by_tf": {
+     "5m": {
+      "n": 7509,
+      "avg": -0.39,
+      "win": 29,
+      "design": -0.326,
+      "holdout": -0.433,
+      "control": -0.48,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "3153 trades before Apr 2025: -0.33R; 4356 after: -0.43R; random entries with the same stop/target: -0.48R"
+     },
+     "15m": {
+      "n": 2434,
+      "avg": -0.21,
+      "win": 29,
+      "design": -0.241,
+      "holdout": -0.176,
+      "control": -0.27,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "1118 trades before Apr 2025: -0.24R; 1316 after: -0.18R; random entries with the same stop/target: -0.27R"
+     },
+     "1h": {
+      "n": 1729,
+      "avg": -0.06,
+      "win": 32,
+      "design": -0.093,
+      "holdout": -0.014,
+      "control": -0.11,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "985 trades before Apr 2025: -0.09R; 744 after: -0.01R; random entries with the same stop/target: -0.11R"
+     },
+     "4h": {
+      "n": 477,
+      "avg": 0.1,
+      "win": 36,
+      "design": 0.182,
+      "holdout": -0.007,
+      "control": -0.06,
+      "verdict": "weak",
+      "verdict_label": "positive, not clearly above random",
+      "why": "262 trades before Apr 2025: +0.18R; 215 after: -0.01R; random entries with the same stop/target: -0.06R"
+     },
+     "1d": {
+      "n": 85,
+      "avg": 0.17,
+      "win": 45,
+      "design": 0.23,
+      "holdout": 0.105,
+      "control": 0.1,
+      "verdict": "edge",
+      "verdict_label": "beat random",
+      "why": "45 trades before Apr 2025: +0.23R; 40 after: +0.10R; random entries with the same stop/target: +0.10R"
+     }
+    },
+    "best": "1d, 3 ATR trailing stop: +0.19R on 40 later trades (random +0.16R), 6/11 coins positive"
+   },
+   "gartley_bull": {
+    "by_tf": {
+     "5m": {
+      "n": 70,
+      "avg": -0.5,
+      "win": 49,
+      "design": -0.648,
+      "holdout": -0.416,
+      "control": -0.33,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "25 trades before Apr 2025: -0.65R; 45 after: -0.42R; random entries with the same stop/target: -0.33R"
+     },
+     "15m": {
+      "n": 24,
+      "avg": -0.34,
+      "win": 46,
+      "design": -0.258,
+      "holdout": -0.396,
+      "control": -0.12,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "10 trades before Apr 2025: -0.26R; 14 after: -0.40R; random entries with the same stop/target: -0.12R"
+     }
+    },
+    "best": "Too rare to test (under 30 trades per period)"
+   },
+   "gartley_bear": {
+    "by_tf": {
+     "5m": {
+      "n": 78,
+      "avg": -0.3,
+      "win": 54,
+      "design": -0.319,
+      "holdout": -0.291,
+      "control": -0.29,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "33 trades before Apr 2025: -0.32R; 45 after: -0.29R; random entries with the same stop/target: -0.29R"
+     },
+     "15m": {
+      "n": 30,
+      "avg": -0.52,
+      "win": 37,
+      "design": -0.526,
+      "holdout": -0.515,
+      "control": -0.17,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "21 trades before Apr 2025: -0.53R; 9 after: -0.52R; random entries with the same stop/target: -0.17R"
+     },
+     "1h": {
+      "n": 21,
+      "avg": -0.19,
+      "win": 52,
+      "design": -0.175,
+      "holdout": -0.218,
+      "control": -0.16,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "13 trades before Apr 2025: -0.17R; 8 after: -0.22R; random entries with the same stop/target: -0.16R"
+     }
+    },
+    "best": "Too rare to test (under 30 trades per period)"
+   },
+   "cypher_bull": {
+    "by_tf": {
+     "5m": {
+      "n": 28,
+      "avg": -0.35,
+      "win": 46,
+      "design": -0.51,
+      "holdout": -0.176,
+      "control": -0.31,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "15 trades before Apr 2025: -0.51R; 13 after: -0.18R; random entries with the same stop/target: -0.31R"
+     }
+    },
+    "best": "Too rare to test (under 30 trades per period)"
+   },
+   "cypher_bear": {
+    "by_tf": {
+     "5m": {
+      "n": 22,
+      "avg": -0.34,
+      "win": 50,
+      "design": -0.134,
+      "holdout": -0.518,
+      "control": -0.42,
+      "verdict": "loses",
+      "verdict_label": "loses after fees",
+      "why": "10 trades before Apr 2025: -0.13R; 12 after: -0.52R; random entries with the same stop/target: -0.42R"
+     }
+    },
+    "best": "Too rare to test (under 30 trades per period)"
+   }
+  }
  }
 }

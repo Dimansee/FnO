@@ -15,6 +15,7 @@ Gold is sized in ounces (fractions allowed, like a spot / CFD account) and opens
 from __future__ import annotations
 
 import json
+import os
 import secrets
 import threading
 from datetime import datetime, timedelta, timezone
@@ -642,6 +643,32 @@ def chart(market: str, symbol: str, tf: str) -> dict:
     markers.sort(key=lambda m: m["time"])
     return {"symbol": symbol, "tf": tf, "candles": candles, "lines": lines, "markers": markers, "positions": pos,
             "symbols": MK.catalog(market), "timeframes": list(CHART_TF)}
+
+
+def chart_patterns(market: str, symbol: str, tf: str, k: float = 2.0) -> dict:
+    """Classic chart patterns found on the same candles as the chart (fno/patterns.py, the detector round 60 tested)."""
+    from . import patterns as PT
+    if tf not in CHART_TF:
+        raise ValueError("Unknown timeframe " + tf)
+    if not MK.valid_symbol(market, symbol):
+        raise ValueError(f"{symbol} is not in the {market} list")
+    k = 3.0 if float(k) >= 3 else 2.0
+    df = MK.candles(market, symbol, tf, CHART_TF[tf], ttl=20 if tf in ("1m", "5m") else 60).tail(1500)
+    times = [int(pd.Timestamp(i).tz_convert("UTC").timestamp()) for i in df.index]
+    rows = PT.for_chart(times, df["open"].values, df["high"].values, df["low"].values, df["close"].values, k=k, keep=12)
+    return {"symbol": symbol, "tf": tf, "zigzag_atr": k, "patterns": rows, "guide": pattern_guide()}
+
+
+def pattern_guide() -> dict:
+    """Pattern cheat sheet + round-60 test results per timeframe (research/round60 summary saved in research_log.json)."""
+    from . import patterns as PT
+    try:
+        with open(os.path.join(os.path.dirname(__file__), "research_log.json")) as f:
+            stats = (json.load(f).get("pattern_stats") or {})
+    except Exception:
+        stats = {}
+    return {"groups": PT.GROUPS, "patterns": [{"id": k, **v, "tested": stats.get("patterns", {}).get(k)} for k, v in PT.GUIDE.items()],
+            "summary": stats.get("summary"), "by_tf": stats.get("by_tf")}
 
 
 # ------------------------------------------------------------------ journal, rulebook, market context

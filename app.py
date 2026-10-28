@@ -1050,6 +1050,19 @@ def gbook_chart():
         return jsonify({"error": str(e)}), 400
 
 
+@app.get("/api/gbook/patterns")
+def gbook_patterns():
+    try:
+        return jsonify(SV.clean(GB.chart_patterns(_mk(), request.args.get("symbol", ""), request.args.get("tf", "1h"), float(request.args.get("k") or 2))))
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+
+
+@app.get("/api/patterns/guide")
+def patterns_guide():
+    return jsonify(SV.clean(GB.pattern_guide()))
+
+
 _last_oproc = {}
 
 

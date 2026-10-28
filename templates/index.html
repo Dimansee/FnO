@@ -474,6 +474,7 @@ details summary{cursor:pointer;font-size:13px}
   header .bar>label{order:6}#refresh{order:7}
   #factors td:first-child{min-width:150px;white-space:normal}#factors .muted,#factors small{display:none}
 }
+@media (max-width:640px){.pattbl tr{display:block;padding:8px 0;border-bottom:1px solid var(--line)}.pattbl td{display:block;border:0!important;padding:2px 10px!important;text-align:left!important}.pattbl tr:first-child{display:none}.pattbl td .mono,.pattbl td.mono{text-align:left}}
 </style>
 </head>
 <body>
@@ -855,9 +856,10 @@ details summary{cursor:pointer;font-size:13px}
   <section id="t-gcontext" class="hidden"><div id="gcBody"></div></section>
   <section id="t-markets" class="hidden"><div id="gxHead"></div>
     <div class="card" id="gxChartCard" style="margin-bottom:14px"><div class="row between wrap" style="gap:10px"><h3 style="margin:0" id="gxChartTitle">Chart</h3>
-      <div class="gxtools"><select id="gxSym" aria-label="Symbol"></select><div class="segs" id="gxTf"></div></div></div>
+      <div class="gxtools"><select id="gxSym" aria-label="Symbol"></select><div class="segs" id="gxTf"></div><button class="seg" id="gxPat" title="Find and draw classic chart patterns (flags, triangles, head and shoulders, wedges, harmonics ...) on these candles">Patterns</button></div></div>
       <div class="gxchart" id="gxChart" style="margin-top:10px"><div class="legend mono" id="gxLegend"></div></div>
-      <p class="muted" id="gxChartNote" style="margin:8px 0 0;font-size:12.5px"></p></div>
+      <p class="muted" id="gxChartNote" style="margin:8px 0 0;font-size:12.5px"></p>
+      <div id="gxPatList"></div></div>
     <div class="card" style="margin-bottom:14px"><div class="row between wrap"><div><h3 style="margin:0">Want to trade yourself?</h3><p class="muted" style="margin:4px 0 0">Market, limit and stop orders with leverage, TP/SL and live P&amp;L in USDT or ₹ — on the Trade screen.</p></div><button class="primary" data-goto="gtrade">Open Trade screen</button></div></div>
     <div id="gxBody"></div></section>
 
@@ -4178,8 +4180,10 @@ async function loadGxChart(quiet) {
     const add = (price, color, title, st) => price != null && GX.pls.push(GX.ser.createPriceLine({price, color, title, lineWidth: 1, lineStyle: st, axisLabelVisible: true}));
     add(p.entry, "#8fa3b0", `Entry (${p.side})`, 2); add(p.stop, "#e2675a", "Stop", 0); add(p.target, "#3fbf8f", "Target", 0);
   });
-  GX.ser.setMarkers((r.markers || []).map(m => ({time: m.time, position: m.kind === "in" ? (m.side === "long" ? "belowBar" : "aboveBar") : (m.side === "long" ? "aboveBar" : "belowBar"),
-    color: m.kind === "in" ? (m.side === "long" ? "#3fbf8f" : "#e2675a") : "#8fa3b0", shape: m.kind === "in" ? (m.side === "long" ? "arrowUp" : "arrowDown") : "circle", text: m.text})));
+  GX.tmarks = (r.markers || []).map(m => ({time: m.time, position: m.kind === "in" ? (m.side === "long" ? "belowBar" : "aboveBar") : (m.side === "long" ? "aboveBar" : "belowBar"),
+    color: m.kind === "in" ? (m.side === "long" ? "#3fbf8f" : "#e2675a") : "#8fa3b0", shape: m.kind === "in" ? (m.side === "long" ? "arrowUp" : "arrowDown") : "circle", text: m.text}));
+  GX.ser.setMarkers(GX.tmarks);
+  if (GX.patOn) gxLoadPatterns(token); else gxClearPatterns();
   if (GX.key !== key) { GX.key = key; const n = bars.length; if (n > 160) GX.chart.timeScale().setVisibleLogicalRange({from: n - 150, to: n + 4}); else GX.chart.timeScale().fitContent(); }
   else if (scrolled) GX.chart.timeScale().setVisibleLogicalRange(scrolled);
   const ln = (r.lines || []).map((l, i) => `<span style="color:${pal[i % pal.length]}">━</span> ${esc(l.name)}`).join(" · ");
@@ -4187,6 +4191,84 @@ async function loadGxChart(quiet) {
   $("#gxLegend").innerHTML = "";
 }
 $("#gxSym").onchange = () => { const was = GX.sym[GX.mk]; GX.sym[GX.mk] = $("#gxSym").value; GX.bars = []; if ((was === "PAXGUSDT") !== (GX.sym[GX.mk] === "PAXGUSDT")) loadMarkets(); else loadGxChart(); };
+/* ---- chart patterns overlay (fno/patterns.py; tested in research round 60) ---- */
+const PAT_COL = {bull: "#3fbf8f", bear: "#e2675a", both: "#f2a93b"};
+const PAT_ST = {forming: "Forming — waiting for a break", signal: "Broke out", "in play": "Broke out — trade still open", "target hit": "Target hit", stopped: "Stopped out", failed: "Failed before breaking", expired: "Expired (no break)"};
+GX.patOn = localStorage.getItem("gxpat") === "1"; GX.pser = []; GX.psel = null; GX.pats = null;
+function gxClearPatterns() { GX.pser.forEach(x => { try { GX.chart.removeSeries(x); } catch (e) {} }); GX.pser = []; }
+async function gxLoadPatterns(token) {
+  const mk = GX.mk, sym = GX.sym[mk] || LEAD[mk] || "SPY", tf = GX.tf;
+  let r; try { r = await api(`/api/gbook/patterns?market=${mk}&symbol=${sym}&tf=${tf}`); } catch (e) { $("#gxPatList").innerHTML = `<p class="muted">Patterns unavailable: ${esc(e.message)}</p>`; return; }
+  if (token != null && token !== GX.token) return;
+  const key = mk + sym + tf; if (GX.pkey !== key) { GX.psel = null; GX.pkey = key; }
+  GX.pats = r; gxDrawPatterns(); gxPatTable();
+}
+function gxDrawPatterns() {
+  gxClearPatterns(); const r = GX.pats; if (!r || !GX.patOn) return;
+  const all = r.patterns || [], show = GX.psel != null ? [all[GX.psel]].filter(Boolean) : all.slice(0, 4);
+  const marks = [...(GX.tmarks || [])];
+  show.forEach(p => {
+    const col = p.side === "long" ? PAT_COL.bull : p.side === "short" ? PAT_COL.bear : PAT_COL[p.bias];
+    const line = (pts, opt) => { if (pts.length < 2 || pts[0].time >= pts[1].time) return; const x = GX.chart.addLineSeries({lineWidth: 2, color: col, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false, priceFormat: GX.fmt, ...opt}); x.setData(pts); GX.pser.push(x); };
+    p.lines.forEach(pts => line(pts, {}));
+    if (p.break_time && p.entry != null) {
+      const end = p.exit_time || (GX.bars.length ? GX.bars[GX.bars.length - 1].time : p.break_time);
+      if (end > p.break_time) {
+        line([{time: p.break_time, value: p.stop}, {time: end, value: p.stop}], {color: "#e2675a", lineWidth: 1, lineStyle: 2});
+        line([{time: p.break_time, value: p.target}, {time: end, value: p.target}], {color: "#3fbf8f", lineWidth: 1, lineStyle: 2});
+      }
+      marks.push({time: p.break_time, position: p.side === "long" ? "belowBar" : "aboveBar", color: col, shape: p.side === "long" ? "arrowUp" : "arrowDown", text: "break"});
+    }
+    const top = p.pivots.reduce((m, x) => x.value > m.value ? x : m, p.pivots[0]);
+    marks.push({time: top.time, position: "aboveBar", color: col, shape: "square", text: p.label});
+  });
+  const seen = new Set(); GX.ser.setMarkers(marks.sort((a, b) => a.time - b.time).filter(m => { const k = m.time + m.text; if (seen.has(k)) return false; seen.add(k); return true; }));
+}
+function gxPatVerdict(t) {
+  if (!t) return '<span class="muted">not tested</span>';
+  const c = t.verdict === "edge" ? "tup" : t.verdict === "weak" ? "" : "tdown";
+  return `<span class="tag ${c}" title="${esc(t.why || "")}">${esc(t.verdict_label || t.verdict)}</span>`;
+}
+function gxPatTable() {
+  const r = GX.pats, el = $("#gxPatList"); if (!r || !GX.patOn) { el.innerHTML = ""; return; }
+  const rows = r.patterns || [], tf = r.tf, guide = Object.fromEntries((r.guide.patterns || []).map(g => [g.id, g]));
+  const px = v => v == null ? "–" : gpx(v), when = t => t ? new Date(t * 1000).toLocaleString("en-IN", {day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", hour12: false}) : "–";
+  const tfStat = g => g && g.tested && g.tested.by_tf ? g.tested.by_tf[tf] : null;
+  el.innerHTML = `<div style="margin-top:12px"><div class="row between wrap" style="gap:8px"><h4 style="margin:0">Patterns on this chart <span class="muted" style="font-weight:400;font-size:12.5px">— last 300 candles, newest first; ${GX.psel != null ? "showing one" : "chart shows the newest 4"}. Click a row to show it alone.</span></h4>
+    ${GX.psel != null ? '<button class="seg" id="gxPatAll">Show newest 4</button>' : ""}</div>
+    ${rows.length ? `<div class="tablewrap" style="margin-top:6px"><table class="pattbl"><tr><th>Pattern</th><th>Found</th><th>Status</th><th>Levels</th><th title="Round 60 backtest of this pattern on ${esc(tf)} candles (2023-26, 16 bps costs, vs random entries)">Tested on ${esc(tf)}</th></tr>
+    ${rows.map((p, i) => { const g = guide[p.name], st = tfStat(g); const col = p.side === "long" ? "up" : p.side === "short" ? "down" : "";
+      return `<tr data-gxp="${i}" style="cursor:pointer;${GX.psel === i ? "outline:2px solid var(--accent, #f2a93b)" : ""}"><td><b style="color:${PAT_COL[p.bias]}">●</b> <b>${esc(p.label)}</b> <span class="muted" style="font-size:12px">${esc(GROUPS_LBL[p.group] || p.group)}</span></td>
+        <td class="muted">${when(p.known_at)}</td><td>${esc(PAT_ST[p.status] || p.status)}${p.side ? ` <span class="${col}">${p.side}</span>` : ""}</td>
+        <td class="mono" style="font-size:12.5px;line-height:1.5">${p.entry != null ? `in ${px(p.entry)}<br><span class="down">SL ${px(p.stop)}</span> · <span class="up">T ${px(p.target)}</span>`
+          : [p.watch_up != null ? "break ↑ " + px(p.watch_up) : "", p.watch_dn != null ? "break ↓ " + px(p.watch_dn) : ""].filter(Boolean).join("<br>") || '<span class="muted">–</span>'}</td>
+        <td style="font-size:12.5px">${st ? `${gxPatVerdict(st)}<br><span class="${cls(st.avg)}">${sgn(st.avg)}R</span> avg · ${st.win}% wins · ${st.n} trades` : `<span class="muted">${tf === "1m" ? "not tested on 1m" : "too few trades"}</span>`}</td></tr>`; }).join("")}</table></div>`
+    : `<p class="muted" style="margin:6px 0 0">No complete pattern in the last 300 candles at this swing size. Try another timeframe.</p>`}
+    <p class="muted" style="font-size:12px;margin:6px 0 0">Swings use a 2 ATR zigzag: a high or low counts only once price has turned 2 ATR from it, so a pattern appears a few candles after its last point — exactly when a trader could have known it. Breakout = a candle CLOSE through the line. Patterns are information only: the autopilot does not trade them.</p>
+    ${gxPatGuide(r.guide, tf)}</div>`;
+}
+const GROUPS_LBL = {continuation: "continuation", neutral: "neutral", reversal: "reversal", special: "special"};
+function gxPatGuide(G, tf) {
+  if (!G) return "";
+  const tfs = ["5m", "15m", "1h", "4h", "1d"];
+  const cell = (t, x) => { const s = t && t.by_tf && t.by_tf[x]; if (!s) return '<td class="muted">–</td>';
+    return `<td class="mono ${s.verdict === "edge" ? "up" : s.verdict === "weak" ? "" : "down"}" title="${s.n} trades · design ${sgn(s.design)}R · holdout ${sgn(s.holdout)}R · random entries ${sgn(s.control)}R">${sgn(s.avg)}R<span class="muted" style="font-size:11px"> ${s.n}</span></td>`; };
+  const grp = Object.keys(G.groups || {});
+  return `<details style="margin-top:12px"><summary><b>Pattern guide</b> — the logic, entry, stop, target and how each one tested on each timeframe</summary>
+    ${G.summary ? `<p style="margin:8px 0">${esc(G.summary)}</p>` : '<p class="muted">Test results are being added.</p>'}
+    ${grp.map(gk => `<h4 style="margin:12px 0 4px">${esc(G.groups[gk])}</h4><div class="tablewrap"><table class="prose"><tr><th>Pattern</th><th>What it is</th><th>Entry · stop · target</th>${tfs.map(x => `<th>${x}</th>`).join("")}<th>Best</th></tr>
+      ${G.patterns.filter(p => p.group === gk).map(p => `<tr><td><b style="color:${PAT_COL[p.bias]}">${esc(p.label)}</b></td><td style="min-width:220px">${esc(p.logic)}</td><td style="min-width:200px">${esc(p.entry)} Stop: ${esc(p.stop.toLowerCase())} Target: ${esc(p.target.toLowerCase())}</td>
+        ${tfs.map(x => cell(p.tested, x)).join("")}<td style="min-width:160px">${p.tested && p.tested.best ? esc(p.tested.best) : "–"}</td></tr>`).join("")}</table></div>`).join("")}
+    <p class="muted" style="font-size:12px;margin:8px 0 0">Numbers = average result per trade in R (1R = the amount risked) after 16 bps costs, textbook version (measured-move target, no trend filter), all coins, 2023 → Oct 2026; small figure = trades. Green = beat random entries with the same stop and target in both the design years and the later test years. Hover a cell for the split.</p></details>`;
+}
+document.addEventListener("click", e => {
+  const tr = e.target.closest("tr[data-gxp]"); if (tr) { GX.psel = +tr.dataset.gxp; gxDrawPatterns(); gxPatTable(); const p = GX.pats.patterns[GX.psel];
+    const i0 = GX.bars.findIndex(b => b.time >= p.start), i1 = GX.bars.findIndex(b => b.time >= (p.exit_time || p.known_at)); if (i0 >= 0) GX.chart.timeScale().setVisibleLogicalRange({from: Math.max(0, i0 - 20), to: (i1 >= 0 ? i1 : GX.bars.length) + 25}); return; }
+  if (e.target.id === "gxPatAll") { GX.psel = null; gxDrawPatterns(); gxPatTable(); }
+});
+$("#gxPat").onclick = () => { GX.patOn = !GX.patOn; try { localStorage.setItem("gxpat", GX.patOn ? "1" : "0"); } catch (e) {} $("#gxPat").classList.toggle("on", GX.patOn);
+  if (GX.patOn) gxLoadPatterns(); else { gxClearPatterns(); GX.ser.setMarkers(GX.tmarks || []); $("#gxPatList").innerHTML = ""; } };
+$("#gxPat").classList.toggle("on", GX.patOn);
 $("#gxTf").onclick = e => { const b = e.target.closest("button"); if (!b) return; GX.tf = b.dataset.gtf; localStorage.setItem("gxtf", GX.tf); loadGxChart(); };
 function gxAutopilot(d) {
   const a = d.autopilot || {}, ago = d.last_tick ? Math.round((Date.now() - Date.parse(d.last_tick)) / 60000) : null;
