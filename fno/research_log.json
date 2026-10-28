@@ -1233,6 +1233,17 @@
    "decision": "Not adopted",
    "summary": "Levels and pivots stay out of the crypto rules, all day or per session.",
    "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r57d",
+   "date": "2026-10-28",
+   "area": "Crypto",
+   "title": "Holding longer: chart patterns and levels with 1-14 day holds or a trailing stop",
+   "asked": "Same pattern and level entries as rounds 57 / 57b, but trades may run 1, 2, 3, 5, 7 or 14 days or with no limit (target = measured move, 2R or 3R), or ride a 2 / 3 / 4 ATR trailing stop. 7,224 versions on 5m-4h.",
+   "result": "Holding longer does not rescue 5m, 15m or 1h patterns or any level setup (still -0.1R to -0.35R a trade after fees). On 4h it helps patterns traded with the trend: bullish patterns held up to 5 days were positive in both periods in 22 of 24 versions. Best single rule, chosen on the older data: symmetrical-triangle breakout on 4h with the EMA 200 trend filter and a 4 ATR trailing stop, +0.39R (275 trades) then +0.31R (195 trades), every year positive (2023 +0.90, 2024 +0.05, 2025 +0.33, 2026 +0.16), beat random entries with the same exit, and only 32% of its entries overlap the live trend rules.",
+   "decision": "Watch-list",
+   "summary": "Candidate for the lab forward test (no money): 4h symmetrical-triangle breakout with the trend, 4 ATR trailing stop. Not added to the autopilot while the rule set is frozen.",
+   "period": "Jan 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
