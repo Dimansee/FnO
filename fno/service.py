@@ -5,6 +5,8 @@ from __future__ import annotations
 import copy
 
 import math
+import threading
+import uuid
 from datetime import date, datetime, time, timedelta
 
 import numpy as np
@@ -174,6 +176,15 @@ def manage_positions(m: M.Market | None = None) -> list[dict]:
     closed = []
     for p in pos:
         if spots.get(p["symbol"]) is None or not all(l["key"] in prices for l in p["legs"]):
+            due = now.time() >= C.SQUARE_OFF or p["opened"][:10] < now.date().isoformat()
+            if due:                                          # square-off is guaranteed: close at the last price we saw
+                last = p.get("last_px") or {}
+                fills = {lg["key"]: float(prices.get(lg["key"], last.get(lg["key"], lg["price"]))) for lg in p["legs"]}
+                rec = P.close_position(p["id"], fills, "Square-off 15:15 (live price unavailable - closed at the last known price)",
+                                       extra={"spot_exit": spots.get(p["symbol"]) or p.get("last_spot"), "price_missing": True})
+                if rec:
+                    closed.append({"symbol": rec["symbol"], "reason": rec["reason"], "pnl": rec["pnl"], "id": p["id"]})
+                continue
             if now.time() >= time(15, 0):                    # near square-off with no price: tell the user, do not stay silent
                 _push_safe(f"{p['symbol']}: no price near square-off",
                            "A position is open but its live price is unavailable. Check it manually before 15:15.",
@@ -187,6 +198,9 @@ def manage_positions(m: M.Market | None = None) -> list[dict]:
         hi, lo = max(p.get("hi", sp), sp), min(p.get("lo", sp), sp)      # best / worst index level seen: feeds the lesson written when the trade closes
         if hi != p.get("hi") or lo != p.get("lo"):
             upd = {**upd, "hi": hi, "lo": lo}
+        lp = {lg["key"]: round(float(prices[lg["key"]]), 2) for lg in p["legs"]}
+        if lp != p.get("last_px"):                       # last seen leg prices: the square-off fallback when the feed drops
+            upd = {**upd, "last_px": lp, "last_spot": round(float(sp), 2)}
         if upd:
             p.update(upd)
             store.update_position(p)
@@ -512,11 +526,71 @@ def chain_view(symbol, expiry: str | None = None):
 # ---------------------------------------------------------------------------
 # Trading actions
 # ---------------------------------------------------------------------------
+_place_locks: dict = {}
+_place_locks_guard = threading.Lock()
+
+
+def _db_lock(name, ttl):
+    """Cross-process lock in the database (SET NX EX): the QStash tick, a page click and a second worker during a deploy
+    cannot run the same critical step at once. Returns a token (release with _db_unlock) or None if someone holds it."""
+    tok = uuid.uuid4().hex
+    try:
+        return tok if store._cmd("SET", f"fno:lock:{name}", tok, "NX", "EX", int(ttl)) is not None else None
+    except Exception:
+        return tok                                   # database briefly unreachable: the process lock still protects us
+
+
+def _db_unlock(name, tok):
+    try:
+        if store._cmd("GET", f"fno:lock:{name}") == tok:
+            store._cmd("DEL", f"fno:lock:{name}")
+    except Exception:
+        pass                                         # it expires on its own
+
+
 def place_signal(symbol, strike=None, auto=False, which=None):
+    """One entry at a time per index (review 28 Oct): two overlapping ticks, or a tick and a click, could both pass the
+    'already have an open trade' check and open the same trade twice."""
+    with _place_locks_guard:
+        lk = _place_locks.setdefault(symbol, threading.Lock())
+    if not lk.acquire(timeout=40):
+        return False, "Another order for this instrument is being placed - try again in a moment."
+    try:
+        tok = _db_lock(f"place:{symbol}", 45)
+        if tok is None:
+            return False, "Another order for this instrument is being placed - try again in a moment."
+        try:
+            return _place_signal(symbol, strike=strike, auto=auto, which=which)
+        finally:
+            _db_unlock(f"place:{symbol}", tok)
+    finally:
+        lk.release()
+
+
+def _data_problem(g) -> str | None:
+    """Automatic entries need real data: an assumed VIX (14.0 when the feed fails) or 5-minute candles older than 20
+    minutes would size and filter trades on numbers that are not today's market."""
+    if g["vix"].get("assumed"):
+        return "Skipped: India VIX is unavailable (14.0 would be assumed), so the VIX filters cannot be checked."
+    try:
+        last = g["candles"].index[-1]
+        age = (g["now"] - last.to_pydatetime().astimezone(g["now"].tzinfo)).total_seconds() / 60 - 5
+        if age > 20:
+            return f"Skipped: the latest 5-minute candle is {age:.0f} minutes old - waiting for fresh prices."
+    except Exception:
+        return "Skipped: no price candles available."
+    return None
+
+
+def _place_signal(symbol, strike=None, auto=False, which=None):
     """which=None: the main slot (Noise / Camarilla / AI / custom). which="trend": the trend-day catcher's own slot (round 23),
     which may hold one position while a main-slot trade is open in the same index."""
     m = M.Market()
     g = _gather(symbol, m)
+    if auto:
+        bad = _data_problem(g)
+        if bad:
+            return False, bad
     acct, pos, tr, cash = P.snapshot()
     pf = eprefs()
     guard = risk_guard(pos, tr, P.base(acct, tr), pf, auto=auto, equity=P.equity(acct, tr))
@@ -1106,8 +1180,41 @@ def _note_skip_safe(sym, slot, msg, now):
         pass
 
 
+_tick_lock = threading.Lock()
+
+
 def tick():
-    """Called every minute by the database scheduler during market hours."""
+    """Called every minute by the scheduler. Only one tick runs at a time (process lock + database lock): a slow tick
+    overlapping the next one could manage the same positions twice or open duplicate trades."""
+    if not _tick_lock.acquire(blocking=False):
+        return {"skipped": "previous tick still running"}
+    try:
+        tok = _db_lock("tick", 110)
+        if tok is None:
+            return {"skipped": "another tick is running"}
+        try:
+            return _tick()
+        finally:
+            _db_unlock("tick", tok)
+    finally:
+        _tick_lock.release()
+
+
+def _sweep_after_close(now) -> list:
+    """After 15:30 nothing intraday may stay open: square off whatever the 15:15 check missed (feed down, app asleep)."""
+    try:
+        if not store.positions():
+            return []
+        out = manage_positions()
+        for c in out:
+            _push_safe(f"{c['symbol']} position closed", f"{c['reason']} - P&L ₹{c['pnl']:+,.0f}", f"close:{c.get('id')}:sweep", "/#portfolio")
+        return out
+    except Exception as e:
+        print("[tick] after-close sweep failed:", e, flush=True)
+        return [{"error": str(e)[:160]}]
+
+
+def _tick():
     now = C.now_ist()
     if now.weekday() >= 5:
         return {"skipped": "weekend"}
@@ -1116,10 +1223,16 @@ def tick():
     if time(8, 55) <= now.time() < C.MARKET_OPEN:
         return {"pre_open": stocks_preopen(now)}
     if not (C.MARKET_OPEN <= now.time() <= C.MARKET_CLOSE):
+        if now.time() > C.MARKET_CLOSE:
+            swept = _sweep_after_close(now)
+        else:
+            swept = []
         if time(15, 31) <= now.time() <= time(20, 0):                  # after the close: the day's research note and lessons (runs once)
             try:
                 from . import datahub as DH
                 out = {"post_close": LN.post_close_in()}
+                if swept:
+                    out["swept"] = swept
                 try:
                     if not store._cmd("SET", f"fno:data:in_saved:{now.date().isoformat()}", "1", "NX", "EX", 86400 * 2) is None:   # once a day
                         out["data_saved"] = DH.save_in(now)
@@ -1134,12 +1247,19 @@ def tick():
                 return out
             except Exception as e:
                 return {"post_close": {"error": str(e)[:160]}}
-        return {"skipped": "outside market hours"}
+        return {"skipped": "outside market hours", **({"swept": swept} if swept else {})}
     try:
         store.set_raw_lazy("fno:last_tick", now.isoformat(timespec="seconds"), 86400 * 4)
     except Exception:
         pass
-    closed = manage_positions()
+    try:
+        closed = manage_positions()
+    except Exception as e:                                   # a failure here must not stop entries / scalp / journal - but say so
+        import traceback
+        traceback.print_exc()
+        closed = []
+        _push_safe("Position check failed", f"Open positions could not be checked this minute: {str(e)[:100]}",
+                   f"mperr:{now.strftime('%H%M')[:3]}", "/#portfolio")
     for c in closed:
         _push_safe(f"{c['symbol']} position closed", f"{c['reason']} - P&L ₹{c['pnl']:+,.0f}", f"close:{c.get('id') or c['symbol']}:{now.strftime('%H%M')}", "/#portfolio")
     placed = []

@@ -247,9 +247,20 @@ def modify_position(market: str, pid: str, b: dict) -> dict:
 
 
 def close_position(market: str, pid: str, px: float, reason: str) -> dict | None:
-    pos = _take_pos(market, pid)
-    if not pos:
+    rec = store.close_into(POS + market, TRD + market, pid, lambda pos: _closed_rec(pos, px, reason))   # one atomic step
+    if not rec:
         return None
+    if not rec.get("manual"):                  # the learning engine studies the rules, not your own manual trades
+        try:
+            from . import learn as LN
+            LN.on_close_g(rec)
+        except Exception:
+            pass
+    return rec
+
+
+def _closed_rec(pos, px, reason):
+    market = pos["market"]
     slip, fee = _slip_fee(market)
     side = 1 if pos["side"] == "long" else -1
     exit_fill = px * (1 - side * slip / 1e4)
@@ -261,13 +272,6 @@ def close_position(market: str, pid: str, px: float, reason: str) -> dict | None
     R = (side * (exit_fill - pos["entry"]) - pos["fees_in"] / pos["qty"] - pos["qty"] * exit_fill * fee / 1e4 / pos["qty"]) / st["risk"]
     rec = {**pos, "closed": _now().isoformat(timespec="seconds"), "exit": round(exit_fill, 6), "gross_pnl": round(gross, 4), "fees": round(fees, 4), "pnl": round(gross - fees, 4),
            "R": round(R, 3), "mfe_R": round(st["mfe"], 2), "mae_R": round(st["mae"], 2), "reason": reason}
-    store.hset(TRD + market, rec["id"], _dump(rec))
-    if not rec.get("manual"):                  # the learning engine studies the rules, not your own manual trades
-        try:
-            from . import learn as LN
-            LN.on_close_g(rec)
-        except Exception:
-            pass
     return rec
 
 

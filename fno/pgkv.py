@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import fnmatch
 import os
+import atexit
 import threading
 import time
 
@@ -23,8 +24,6 @@ import psycopg
 
 URL = os.environ.get("DATABASE_URL", "")
 TABLE = "fno_kv"
-_conn = None
-_lock = threading.RLock()
 _last_purge = [0.0]
 
 DDL = f"""
@@ -70,26 +69,60 @@ def _params(url: str) -> dict:
     return kw
 
 
-def _connect():
-    global _conn
-    kw = _params(URL)
-    if "conninfo" in kw:
-        c = psycopg.connect(kw["conninfo"], autocommit=True, connect_timeout=10, prepare_threshold=None)
-    else:
-        c = psycopg.connect(autocommit=True, connect_timeout=10, prepare_threshold=None, **kw)
-    with c.cursor() as cur:
-        cur.execute(DDL)
-    _conn = c
-    return c
+_pool = None
+_pool_lock = threading.Lock()
+_ddl_done = [False]
+STATEMENT_TIMEOUT_MS = 15000        # one slow query must never hang the app (review 28 Oct: single connection, no timeout)
+
+
+def _configure(conn):
+    conn.execute(f"set statement_timeout = {STATEMENT_TIMEOUT_MS}")
+
+
+def _get_pool():
+    """A small pool (1-4 connections) instead of one shared connection behind a lock: the tick, the background runner and
+    page requests no longer queue behind each other, and dead connections are checked and replaced."""
+    global _pool
+    if _pool is None:
+        with _pool_lock:
+            if _pool is None:
+                from psycopg_pool import ConnectionPool
+                kw = _params(URL)
+                base = dict(autocommit=True, prepare_threshold=None, connect_timeout=10,
+                            keepalives=1, keepalives_idle=30, keepalives_interval=10, keepalives_count=3)
+                ci = kw.pop("conninfo", "")
+                _pool = ConnectionPool(ci, kwargs={**base, **kw}, min_size=1, max_size=4, timeout=20, name="fno-kv",
+                                       configure=_configure, check=ConnectionPool.check_connection, open=True)
+    return _pool
+
+
+def _reset():
+    """Tests: forget the pool and re-create the table on next use."""
+    global _pool
+    try:
+        if _pool is not None:
+            _pool.close()
+    except Exception:
+        pass
+    _pool = None
+    _ddl_done[0] = False
+
+
+atexit.register(_reset)
+
+
+def _ensure_ddl(c):
+    if not _ddl_done[0]:
+        c.execute(DDL)
+        _ddl_done[0] = True
 
 
 def _q(sql, params=(), fetch="all"):
-    """Run one statement; reconnect once if the connection dropped."""
-    global _conn
-    with _lock:
-        for attempt in (1, 2):
-            try:
-                c = _conn if (_conn is not None and not _conn.closed) else _connect()
+    """Run one statement on a pooled connection; retry once on a dropped connection."""
+    for attempt in (1, 2):
+        try:
+            with _get_pool().connection() as c:
+                _ensure_ddl(c)
                 with c.cursor() as cur:
                     cur.execute(sql, params)
                     if fetch == "all":
@@ -97,15 +130,18 @@ def _q(sql, params=(), fetch="all"):
                     if fetch == "one":
                         return cur.fetchone() if cur.description else None
                     return cur.rowcount
-            except (psycopg.OperationalError, psycopg.InterfaceError):
-                try:
-                    if _conn is not None:
-                        _conn.close()
-                except Exception:
-                    pass
-                _conn = None
-                if attempt == 2:
-                    raise
+        except (psycopg.OperationalError, psycopg.InterfaceError):
+            if attempt == 2:
+                raise
+
+
+def _tx(fn):
+    """Run fn(cursor) inside one transaction on one connection (for read-then-write operations)."""
+    with _get_pool().connection() as c:
+        _ensure_ddl(c)
+        with c.transaction():
+            with c.cursor() as cur:
+                return fn(cur)
 
 
 def _purge():
@@ -255,12 +291,19 @@ def execute(*args):
         return _q(f"delete from {TABLE} where k = %s and kind = 'z' and f = any(%s)", (k, a[2:]), "count")
     # ---- lists (field = zero-padded position)
     if cmd == "RPUSH":
-        exp = _exp_of(k)
-        r = _q(f"select coalesce(max(f::bigint), -1) from {TABLE} where k = %s and kind = 'l'", (k,), "one")
-        nxt = int(r[0]) + 1
-        for i, v in enumerate(a[2:]):
-            _q(f"insert into {TABLE} (k, f, v, kind, exp) values (%s, %s, %s, 'l', %s)", (k, f"{nxt + i:012d}", v, exp), "count")
-        return _q(f"select count(*) from {TABLE} where k = %s and kind = 'l' and {LIVE}", (k,), "one")[0]
+        vals = a[2:]
+
+        def push(cur):
+            cur.execute("select pg_advisory_xact_lock(hashtext(%s))", (k,))
+            cur.execute(f"select exp from {TABLE} where k = %s and {LIVE} and exp is not null limit 1", (k,))
+            r = cur.fetchone(); exp = r[0] if r else None
+            cur.execute(f"select coalesce(max(f::bigint), -1) from {TABLE} where k = %s and kind = 'l'", (k,))
+            nxt = int(cur.fetchone()[0]) + 1
+            for i, v in enumerate(vals):
+                cur.execute(f"insert into {TABLE} (k, f, v, kind, exp) values (%s, %s, %s, 'l', %s)", (k, f"{nxt + i:012d}", v, exp))
+            cur.execute(f"select count(*) from {TABLE} where k = %s and kind = 'l' and {LIVE}", (k,))
+            return cur.fetchone()[0]
+        return _tx(push)
     if cmd == "LRANGE":
         rows = [r[0] for r in _q(f"select v from {TABLE} where k = %s and kind = 'l' and {LIVE} order by f", (k,))]
         start, stop = int(a[2]), int(a[3])
@@ -307,6 +350,16 @@ def update_if_exists(k, field, raw):
 def take(k, field):
     r = _q(f"delete from {TABLE} where k = %s and f = %s and {LIVE} returning v", (k, field), "one")
     return r[0] if r else None
+
+
+def move(src_k, src_f, dst_k, dst_f, raw) -> bool:
+    """Atomically remove src_k/src_f and write dst_k/dst_f = raw in ONE statement (closing a position and saving its trade
+    record can no longer be split by a crash or a deploy). False if the source was already gone (someone else closed it)."""
+    r = _q(f"with d as (delete from {TABLE} where k = %s and f = %s and {LIVE} returning v) "
+           f"insert into {TABLE} (k, f, v, kind) select %s, %s, %s, 'h' from d "
+           f"on conflict (k, f) do update set v = excluded.v, kind = 'h', exp = null returning 1",
+           (src_k, src_f, dst_k, dst_f, raw), "one")
+    return bool(r)
 
 
 def size_bytes() -> int:

@@ -10,7 +10,7 @@ os.environ["DATABASE_URL"] = URL
 import fakeredis
 from fno import pgkv
 
-pgkv._q(f"drop table if exists {pgkv.TABLE}", fetch="count"); pgkv._conn = None
+pgkv._q(f"drop table if exists {pgkv.TABLE}", fetch="count"); pgkv._reset()
 R = fakeredis.FakeRedis(decode_responses=True)
 
 
@@ -70,4 +70,18 @@ pgkv.execute("HSET", "pos", "p1", "a")
 assert pgkv.update_if_exists("pos", "p1", "b") == 0 and pgkv.execute("HGET", "pos", "p1") == "b"
 assert pgkv.update_if_exists("pos", "gone", "x") == -1 and pgkv.execute("HGET", "pos", "gone") is None
 assert pgkv.take("pos", "p1") == "b" and pgkv.take("pos", "p1") is None
+pgkv.execute("HSET", "pos", "p2", "x")
+assert pgkv.move("pos", "p2", "trades", "p2", "rec") is True and pgkv.execute("HGET", "trades", "p2") == "rec" and pgkv.execute("HGET", "pos", "p2") is None
+assert pgkv.move("pos", "p2", "trades", "p2", "rec2") is False and pgkv.execute("HGET", "trades", "p2") == "rec"
+import threading as _th
+_th_res = []
+def _close_race():
+    _th_res.append(pgkv.move("pos", "p3", "trades", "p3", "r"))
+pgkv.execute("HSET", "pos", "p3", "y")
+ts = [_th.Thread(target=_close_race) for _ in range(6)]
+[x.start() for x in ts]; [x.join() for x in ts]
+assert _th_res.count(True) == 1, _th_res
+ts = [_th.Thread(target=lambda: pgkv.execute("RPUSH", "lst2", "v")) for _ in range(8)]
+[x.start() for x in ts]; [x.join() for x in ts]
+assert pgkv.execute("LLEN", "lst2") == 8
 print("pgkv: all", len(checks), "Redis comparisons + expiry + atomic ops OK")

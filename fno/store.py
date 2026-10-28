@@ -104,14 +104,20 @@ def _dump(v):
 
 
 def _hash(key) -> dict:
+    """A copy of the hash (callers may iterate while another thread writes). The database read happens outside the
+    lock so a slow query in one thread does not freeze every other request."""
     with _lock:
         hit = _fresh(("h", key))
         if hit:
-            return hit[1]
-        flat = _cmd("HGETALL", key) or []
-        d = dict(zip(flat[::2], flat[1::2])) if isinstance(flat, list) else dict(flat)
+            return dict(hit[1])
+    flat = _cmd("HGETALL", key) or []
+    d = dict(zip(flat[::2], flat[1::2])) if isinstance(flat, list) else dict(flat)
+    with _lock:
+        hit = _fresh(("h", key))
+        if hit:                                             # another thread filled (and maybe updated) it meanwhile
+            return dict(hit[1])
         _mem[("h", key)] = (time.time(), d)
-        return d
+    return dict(d)
 
 
 def _hset_mem(key, field, raw):
@@ -129,16 +135,67 @@ def _load_all(key, sort_field):
     return sorted(rows, key=lambda d: d.get(sort_field) or "")
 
 
+# ---------------- secret settings: encrypted at rest ----------------
+# Broker tokens, the Drive link and the push keys are stored encrypted (review 28 Oct): anyone who reads the database
+# (a leaked DATABASE_URL, a Supabase dashboard session, a backup) sees only "enc:..." for these. The key comes from
+# SESSION_SECRET, so changing SESSION_SECRET makes them unreadable - the app then simply asks you to reconnect.
+SECRET_KEYS = {"upstox", "fyers", "vapid", "drive"}
+_fernet = [None, None]
+
+
+def _fk():
+    sec = C.SESSION_SECRET or ""
+    if not sec:
+        return None
+    if _fernet[0] != sec:
+        import base64, hashlib
+        from cryptography.fernet import Fernet
+        _fernet[:] = [sec, Fernet(base64.urlsafe_b64encode(hashlib.sha256(("fno-settings-v1:" + sec).encode()).digest()))]
+    return _fernet[1]
+
+
+def _enc(key, raw):
+    f = _fk() if key in SECRET_KEYS else None
+    return "enc:" + f.encrypt(raw.encode()).decode() if f else raw
+
+
+def _dec(key, raw):
+    """Returns (json text or None, was_plain)."""
+    if raw is None or not str(raw).startswith("enc:"):
+        return raw, True
+    f = _fk()
+    try:
+        return f.decrypt(raw[4:].encode()).decode(), False
+    except Exception:
+        print(f"[store] could not decrypt setting {key!r} (SESSION_SECRET changed?) - treating it as not set", flush=True)
+        return None, False
+
+
+def _load_setting(key, raw, default=None):
+    txt, plain = _dec(key, raw)
+    if txt is None:
+        return default
+    v = json.loads(txt)
+    if plain and key in SECRET_KEYS and _fk():           # an older plaintext secret: encrypt it in place
+        try:
+            put(key, v)
+        except Exception:
+            pass
+    return v
+
+
 # ---------------- settings (name -> json) ----------------
 def get(key, default=None):
     with _lock:
         hit = _fresh(("s", key))
-        if hit:
-            v = hit[1]
-        else:
-            v = _cmd("HGET", SETTINGS, key)
-            _mem[("s", key)] = (time.time(), v)
-    return json.loads(v) if v is not None else default
+    if hit:
+        v = hit[1]
+    else:
+        v = _cmd("HGET", SETTINGS, key)
+        with _lock:
+            if not _fresh(("s", key)):
+                _mem[("s", key)] = (time.time(), v)
+    return _load_setting(key, v, default) if v is not None else default
 
 
 def get_many(keys) -> dict:
@@ -149,7 +206,7 @@ def get_many(keys) -> dict:
             hit = _fresh(("s", k))
             if hit:
                 if hit[1] is not None:
-                    out[k] = json.loads(hit[1])
+                    out[k] = hit[1]
             else:
                 miss.append(k)
         if miss:
@@ -158,12 +215,17 @@ def get_many(keys) -> dict:
             for k, v in zip(miss, vals):
                 _mem[("s", k)] = (now, v)
                 if v is not None:
-                    out[k] = json.loads(v)
-    return out
+                    out[k] = v
+    res = {}
+    for k, v in out.items():                               # decrypt / parse outside the lock
+        x = _load_setting(k, v)
+        if x is not None:
+            res[k] = x
+    return res
 
 
 def put(key, value):
-    raw = _dump(value)
+    raw = _enc(key, _dump(value))
     with _lock:
         _cmd("HSET", SETTINGS, key, raw)
         _mem[("s", key)] = (time.time(), raw)
@@ -195,12 +257,41 @@ def update_position(pos: dict):
         _hset_mem(POSITIONS, pos["id"], None if r == -1 else raw)
 
 
+def close_position_into_trades(pos_id, build) -> dict | None:
+    return close_into(POSITIONS, TRADES, pos_id, build)
+
+
 def take_position(pos_id) -> dict | None:
     """Atomically remove and return a position (only one closer can win)."""
     with _lock:
         v = _cmd("EVAL", _TAKE, 1, POSITIONS, pos_id)
         _hset_mem(POSITIONS, pos_id, None)
     return json.loads(v) if v else None
+
+
+def close_into(src, dst, field, build):
+    """Close a record in ONE database step: read the open record, build the closed record from it (build(dict) -> dict),
+    then remove it from `src` and save it into `dst` atomically. Returns the closed record, or None if it was already
+    closed by someone else. On Supabase this is a single SQL statement (a crash or deploy can no longer lose a trade
+    between the delete and the insert); on the old Upstash path it falls back to take + insert."""
+    v = _cmd("HGET", src, field)
+    if not v:
+        with _lock:
+            _hset_mem(src, field, None)
+        return None
+    rec = build(json.loads(v))
+    raw = _dump(rec)
+    with _lock:
+        if pgkv.enabled():
+            ok = pgkv.move(src, field, dst, field, raw)
+        else:
+            ok = bool(_cmd("EVAL", _TAKE, 1, src, field))
+            if ok:
+                _cmd("HSET", dst, field, raw)
+        _hset_mem(src, field, None)
+        if ok:
+            _hset_mem(dst, field, raw)
+    return rec if ok else None
 
 
 def clear_positions():

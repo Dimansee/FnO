@@ -812,9 +812,10 @@ def _open(sym, x, i, pl, m, now, cfg, max_spread=None) -> tuple[bool, str]:
 
 def _close(p, idx_px, why, m, now, spot=None) -> dict | None:
     from .market import slip_pct
-    taken = _take_pos(p["id"])
-    if not taken:
-        return None
+    return store.close_into(POS, TRADES, p["id"], lambda _cur: _scalp_rec(p, idx_px, why, m, now, spot, slip_pct))   # one atomic step
+
+
+def _scalp_rec(p, idx_px, why, m, now, spot, slip_pct):
     prices = m.leg_prices([p], {p["symbol"]: spot or idx_px}, m.vix()["level"])
     lg = p["legs"][0]
     prem = prices.get(lg["key"], lg["price"])
@@ -833,7 +834,6 @@ def _close(p, idx_px, why, m, now, spot=None) -> dict | None:
            "charges": round(chg, 2), "pnl": round(gross - chg, 2), "reason": why, "entry_spot": p["entry"],
            "exit_spot": round(float(idx_px), 2), "pts": round(p["side"] * (idx_px - p["entry"]), 2), "risk": p["risk"],
            "conf": p["conf"], "price_src": "live" if lg.get("src", "demo") != "demo" else "formula"}
-    store.hset(TRADES, rec["id"], store._dump(rec))
     return rec
 
 

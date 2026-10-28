@@ -38,7 +38,7 @@ PRODUCTION_HOST = (os.environ.get("APP_HOST") or os.environ.get("RENDER_EXTERNAL
 APP_PASSWORD = os.environ.get("APP_PASSWORD", "")
 SESSION_SECRET = os.environ.get("SESSION_SECRET", "")
 CRON_SECRET = os.environ.get("CRON_SECRET", "")
-LOCK_DATA = os.environ.get("LOCK_DATA_ENDPOINTS", "") == "1"   # set to 1 (after adding the CRON_SECRET GitHub secret) to require login or the cron secret on the journal/recorder data endpoints
+LOCK_DATA = os.environ.get("LOCK_DATA_ENDPOINTS", "1") != "0"   # on by default (review 28 Oct): the journal/recorder data endpoints need login or the cron secret; LOCK_DATA_ENDPOINTS=0 reopens them
 
 # ---------------------------------------------------------------------------
 # Instruments

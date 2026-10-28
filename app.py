@@ -5,6 +5,7 @@ import hashlib
 import json
 import hmac
 import secrets
+import threading
 import time
 import traceback
 from urllib.parse import quote
@@ -44,6 +45,8 @@ def _sign(exp: int) -> str:
 
 
 def _authed() -> bool:
+    if not C.SESSION_SECRET:                 # fail closed: an empty secret would make every cookie forgeable
+        return False
     tok = request.cookies.get(COOKIE, "")
     try:
         exp, mac = tok.split(".", 1)
@@ -78,6 +81,8 @@ def on_bad_input(e):
 @app.errorhandler(Exception)
 def on_error(e):
     traceback.print_exc()
+    if not _authed():                        # strangers get no internal details (paths, SQL, keys in messages)
+        return jsonify({"error": "Something went wrong."}), 500
     return jsonify({"error": str(e) or e.__class__.__name__}), 500
 
 
@@ -187,12 +192,38 @@ def stocks_series():
     return jsonify(SV.stock_series(sym))
 
 
+LOGIN_MAX_FAILS, LOGIN_WINDOW = 10, 900       # 10 wrong passwords per address in 15 minutes, then wait
+
+
+def _client_ip() -> str:
+    fwd = request.headers.get("X-Forwarded-For", "")
+    return (fwd.split(",")[0].strip() if fwd else request.remote_addr) or "?"
+
+
 @app.post("/api/login")
 def login():
-    pw = (request.get_json(silent=True) or {}).get("password", "")
-    if not C.APP_PASSWORD or not hmac.compare_digest(pw, C.APP_PASSWORD):
-        time.sleep(1)
+    if not C.SESSION_SECRET or not C.APP_PASSWORD:
+        return jsonify({"error": "Login is not set up: add APP_PASSWORD and SESSION_SECRET in the Render environment."}), 503
+    key = "fno:login_fail:" + hashlib.sha256(_client_ip().encode()).hexdigest()[:16]
+    try:
+        fails = int(store._cmd("GET", key) or 0)
+    except Exception:
+        fails = 0
+    if fails >= LOGIN_MAX_FAILS:
+        return jsonify({"error": "Too many wrong passwords - try again in 15 minutes."}), 429
+    pw = str((request.get_json(silent=True) or {}).get("password", ""))
+    if not hmac.compare_digest(pw.encode(), C.APP_PASSWORD.encode()):
+        try:                                   # counted in the database, so it holds across restarts and workers
+            n = store._cmd("INCR", key)
+            if int(n or 0) == 1:
+                store._cmd("EXPIRE", key, LOGIN_WINDOW)
+        except Exception:
+            pass
         return jsonify({"error": "Wrong password"}), 401
+    try:
+        store._cmd("DEL", key)
+    except Exception:
+        pass
     resp = jsonify({"ok": True})
     resp.set_cookie(COOKIE, _sign(int(time.time()) + MAX_AGE), max_age=MAX_AGE, httponly=True,
                     secure=True, samesite="Lax")
@@ -220,7 +251,8 @@ def health():
     out = {"ok": True, "db": store.ping(), "time_ist": C.now_ist().isoformat(timespec="seconds"),
            "configured": bool(C.APP_PASSWORD and C.SESSION_SECRET and (C.DATABASE_URL or C.REDIS_URL)),
            "scheduler_connected": bool(C.QSTASH_TOKEN), "global_runner": {**RN.state, "enabled": RN.enabled(), "autopilot_pairs": _ap_counts()}}
-    if request.args.get("deep") == "1":  # data-source reachability only (counts, no data)
+    cron_ok = bool(C.CRON_SECRET) and hmac.compare_digest(request.headers.get("x-cron-secret", ""), C.CRON_SECRET)
+    if request.args.get("deep") == "1" and (_authed() or cron_ok):  # data-source reachability (logged in or cron only: it calls outside services)
         from fno import market as M
         checks = {
             "yahoo_nifty_bars": lambda: len(M.yahoo_candles("^NSEI")),
@@ -620,6 +652,23 @@ def backtest_portfolio_job(jid):
     return jsonify(SV.clean(PB.job(jid)))
 
 
+_heavy = threading.BoundedSemaphore(1)
+
+
+def _heavy_run(fn, days=None):
+    """Backtests run inside the web process (1 worker, 4 threads): one at a time, and only short ones while the live
+    engine is trading, so a long test can't starve the minute tick (review 28 Oct)."""
+    from fno import portfolio_bt as PB
+    if days and days > 250 and PB.market_busy():
+        raise ValueError("During market hours (09:10-15:40) backtests are limited to 250 days - run the longer one after the close.")
+    if not _heavy.acquire(blocking=False):
+        return jsonify({"error": "Another backtest is running - try again when it finishes."}), 429
+    try:
+        return fn()
+    finally:
+        _heavy.release()
+
+
 @app.post("/api/backtest")
 def backtest():
     b = request.get_json(force=True) or {}
@@ -636,7 +685,8 @@ def backtest():
     if sizing not in ("risk", "one_lot", "all_in") or otm not in (-1, 0, 1, 2) or not 1000 <= capital <= 1e9 \
             or strategy not in ("both", "noise", "camarilla", "ai", "trend", "all", "autopilot", "fib"):
         raise ValueError("Invalid backtest settings.")
-    return jsonify(SV.backtest(_sym(), mult, capital, sizing, otm, strategy, days))
+    sym = _sym()
+    return _heavy_run(lambda: jsonify(SV.backtest(sym, mult, capital, sizing, otm, strategy, days)), days)
 
 
 # ---------------------------------------------------------------------------
@@ -932,13 +982,15 @@ def strategies_backtest():
         raw = next((x for x in CU.load_all(store) if x["id"] == b["id"]), None)
     if not raw:
         raise ValueError("Send a strategy to test.")
-    return jsonify(SV.custom_backtest(raw, b.get("symbol"), int(b.get("days") or 250), float(b.get("capital") or C.DEFAULT_CAPITAL), float(b.get("risk_pct") or 1.0)))
+    days = int(b.get("days") or 250)
+    return _heavy_run(lambda: jsonify(SV.custom_backtest(raw, b.get("symbol"), days, float(b.get("capital") or C.DEFAULT_CAPITAL), float(b.get("risk_pct") or 1.0))), days)
 
 
 @app.post("/api/strategies/improve")
 def strategies_improve():
     b = request.get_json(force=True) or {}
-    return jsonify(SV.custom_improve(b.get("id", ""), int(b.get("days") or 250)))
+    days = int(b.get("days") or 250)
+    return _heavy_run(lambda: jsonify(SV.custom_improve(b.get("id", ""), days)), days)
 
 
 # ---------------------------------------------------------------------------

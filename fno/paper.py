@@ -136,19 +136,19 @@ def open_position(cash, symbol, legs, lots, lot, expiry, spot, source, order=Non
 
 
 def close_position(pos_id, prices: dict, reason: str, extra: dict | None = None) -> dict | None:
-    pos = store.take_position(pos_id)
-    if not pos:
+    def build(pos):
+        exit_net = net_price(pos["legs"], prices)
+        gross = (exit_net - pos["entry_prem"]) * pos["qty"]
+        ch = 0.0
+        for lg in pos["legs"]:
+            now = prices.get(lg["key"], lg["price"])
+            b, s = (lg["price"], now) if lg["side"] == "BUY" else (now, lg["price"])
+            ch += I.charges(b, s, pos["qty"], exch_pct=I.exch_rate(pos.get("symbol")))
+        return {**pos, "closed": C.now_ist().isoformat(timespec="seconds"), "exit_prem": round(exit_net, 2),
+                "gross_pnl": round(gross, 2), "charges": round(ch, 2), "pnl": round(gross - ch, 2), "reason": reason, **(extra or {})}
+    rec = store.close_position_into_trades(pos_id, build)       # remove the position and save the trade in one step
+    if not rec:
         return None
-    exit_net = net_price(pos["legs"], prices)
-    gross = (exit_net - pos["entry_prem"]) * pos["qty"]
-    ch = 0.0
-    for lg in pos["legs"]:
-        now = prices.get(lg["key"], lg["price"])
-        b, s = (lg["price"], now) if lg["side"] == "BUY" else (now, lg["price"])
-        ch += I.charges(b, s, pos["qty"], exch_pct=I.exch_rate(pos.get("symbol")))
-    rec = {**pos, "closed": C.now_ist().isoformat(timespec="seconds"), "exit_prem": round(exit_net, 2),
-           "gross_pnl": round(gross, 2), "charges": round(ch, 2), "pnl": round(gross - ch, 2), "reason": reason, **(extra or {})}
-    store.insert_trade(rec)
     try:                                                    # the learning engine writes a lesson for every closed trade; it must never block a close
         from . import learn
         learn.on_close_in(rec)

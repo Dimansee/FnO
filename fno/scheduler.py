@@ -21,7 +21,7 @@ POST_ID = "fno-post-close"
 WARM_ID = "fno-warm"
 WARM_CRON = "20 3 * * 1-5"   # UTC = 08:50 IST: wakes a sleeping free host before the 09:00 pre-open call
 GLOBAL_ID = "fno-global"
-GLOBAL_CRON = "*/10 0-3,10-23 * * *"   # crypto/US books + keeps the free host awake outside Indian hours (108 calls/day; free QStash = 1,000/day)
+GLOBAL_CRON = "*/10 * * * *"   # crypto/US/gold books + keeps the free host awake around the clock, weekends included (144 calls/day; free QStash = 1,000/day)
 
 
 def _dest(host: str | None) -> str | None:
