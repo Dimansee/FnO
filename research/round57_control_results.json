@@ -1,0 +1,205 @@
+{
+ "bull_flag 4h zz2 ema200 mm": {
+  "real_design": {
+   "n": 163,
+   "avg": 0.179,
+   "win": 48.5,
+   "pf": 1.42,
+   "tot": 29.1,
+   "t": 1.89
+  },
+  "real_holdout": {
+   "n": 110,
+   "avg": 0.247,
+   "win": 46.4,
+   "pf": 1.65,
+   "tot": 27.2,
+   "t": 2.13
+  },
+  "random_design": 0.07,
+  "random_holdout": 0.018,
+  "beats_random_design": 0.8,
+  "beats_random_holdout": 1.0,
+  "years": {
+   "2023": 0.343,
+   "2024": 0.132,
+   "2025": -0.023,
+   "2026": 0.464
+  },
+  "share_inside_live_trade": 80.0
+ },
+ "bull_flag 4h zz2 ema200 2R": {
+  "real_design": {
+   "n": 161,
+   "avg": 0.159,
+   "win": 47.8,
+   "pf": 1.37,
+   "tot": 25.6,
+   "t": 1.72
+  },
+  "real_holdout": {
+   "n": 112,
+   "avg": 0.241,
+   "win": 46.4,
+   "pf": 1.63,
+   "tot": 27.0,
+   "t": 2.18
+  },
+  "random_design": 0.067,
+  "random_holdout": 0.01,
+  "beats_random_design": 0.8,
+  "beats_random_holdout": 0.97,
+  "years": {
+   "2023": 0.294,
+   "2024": 0.125,
+   "2025": 0.03,
+   "2026": 0.387
+  },
+  "share_inside_live_trade": 79.0
+ },
+ "asc_tri 4h zz2 ema200 2R": {
+  "real_design": {
+   "n": 115,
+   "avg": 0.097,
+   "win": 47.8,
+   "pf": 1.24,
+   "tot": 11.1,
+   "t": 0.95
+  },
+  "real_holdout": {
+   "n": 66,
+   "avg": 0.296,
+   "win": 51.5,
+   "pf": 1.86,
+   "tot": 19.5,
+   "t": 2.11
+  },
+  "random_design": 0.067,
+  "random_holdout": 0.018,
+  "beats_random_design": 0.67,
+  "beats_random_holdout": 1.0,
+  "years": {
+   "2023": 0.016,
+   "2024": 0.194,
+   "2025": 0.314,
+   "2026": 0.2
+  },
+  "share_inside_live_trade": 51.0
+ },
+ "asc_tri 4h zz2 none 2R": {
+  "real_design": {
+   "n": 155,
+   "avg": 0.066,
+   "win": 45.8,
+   "pf": 1.16,
+   "tot": 10.3,
+   "t": 0.78
+  },
+  "real_holdout": {
+   "n": 87,
+   "avg": 0.268,
+   "win": 51.7,
+   "pf": 1.76,
+   "tot": 23.3,
+   "t": 2.24
+  },
+  "random_design": 0.011,
+  "random_holdout": -0.039,
+  "beats_random_design": 0.57,
+  "beats_random_holdout": 0.9,
+  "years": {
+   "2023": 0.02,
+   "2024": 0.164,
+   "2025": 0.15,
+   "2026": 0.305
+  },
+  "share_inside_live_trade": 38.0
+ },
+ "double_bottom 4h zz3 ema200 2R": {
+  "real_design": {
+   "n": 49,
+   "avg": 0.127,
+   "win": 51.0,
+   "pf": 1.48,
+   "tot": 6.2,
+   "t": 1.03
+  },
+  "real_holdout": {
+   "n": 34,
+   "avg": 0.316,
+   "win": 50.0,
+   "pf": 2.26,
+   "tot": 10.7,
+   "t": 1.8
+  },
+  "random_design": 0.026,
+  "random_holdout": 0.037,
+  "beats_random_design": 0.8,
+  "beats_random_holdout": 1.0,
+  "years": {
+   "2023": 0.374,
+   "2024": -0.108,
+   "2025": 0.187,
+   "2026": 0.424
+  },
+  "share_inside_live_trade": 48.0
+ },
+ "ihs 1h zz3 none 2R": {
+  "real_design": {
+   "n": 187,
+   "avg": 0.172,
+   "win": 48.1,
+   "pf": 1.42,
+   "tot": 32.1,
+   "t": 2.04
+  },
+  "real_holdout": {
+   "n": 140,
+   "avg": 0.129,
+   "win": 50.0,
+   "pf": 1.31,
+   "tot": 18.0,
+   "t": 1.36
+  },
+  "random_design": -0.036,
+  "random_holdout": -0.088,
+  "beats_random_design": 0.83,
+  "beats_random_holdout": 0.9,
+  "years": {
+   "2023": 0.03,
+   "2024": 0.346,
+   "2025": 0.322,
+   "2026": -0.16
+  },
+  "share_inside_live_trade": null
+ },
+ "desc_tri 4h zz2 ema200 1R": {
+  "real_design": {
+   "n": 91,
+   "avg": 0.003,
+   "win": 50.5,
+   "pf": 1.01,
+   "tot": 0.3,
+   "t": 0.04
+  },
+  "real_holdout": {
+   "n": 94,
+   "avg": 0.173,
+   "win": 59.6,
+   "pf": 1.69,
+   "tot": 16.2,
+   "t": 2.2
+  },
+  "random_design": -0.032,
+  "random_holdout": 0.049,
+  "beats_random_design": 0.7,
+  "beats_random_holdout": 0.87,
+  "years": {
+   "2023": 0.017,
+   "2024": -0.064,
+   "2025": 0.218,
+   "2026": 0.117
+  },
+  "share_inside_live_trade": 53.0
+ }
+}

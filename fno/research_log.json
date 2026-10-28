@@ -1211,6 +1211,28 @@
    "decision": "Partly adopted",
    "summary": "Added as the 11th coin at the user's request, under the same weekly check; the per-coin floor stops it trading when its recent results turn negative.",
    "period": "Aug 2020 - Oct 2026"
+  },
+  {
+   "id": "r57",
+   "date": "2026-10-28",
+   "area": "Crypto",
+   "title": "Chart patterns: double tops/bottoms, head & shoulders, triangles, wedges, flags, rectangles",
+   "asked": "14 classic patterns found automatically from swing points (no look-ahead), traded on the breakout with a textbook stop beyond the pattern and a measured-move, 1R or 2R target, with and without the EMA 200 trend filter, on 5m, 15m (5 coins, 2024-) and 1h, 4h (10 coins + gold, 2023-). 672 versions, checked against random entries with the same direction, stop and target.",
+   "result": "5m and 15m lose after fees (-0.28R / -0.12R a trade). On 4h, bullish patterns traded with the trend (bull flag, ascending triangle, double bottom, inverse head & shoulders) were positive in both periods in 29 of 36 versions (+0.09R then +0.15R) and beat random entries. But choosing the 'best' patterns on older data gave only +0.03R on newer data, bearish patterns did not hold up, and 50-80% of the good entries happen while Supertrend 4h / Donchian 55 already hold the same coin. The live Supertrend 4h makes about +0.30R a trade.",
+   "decision": "Watch-list",
+   "summary": "Not added to the autopilot: a weaker copy of the trend rules already trading. A 4h 'bullish pattern with the trend' rule is a candidate for the lab forward test (no money).",
+   "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r57b",
+   "date": "2026-10-28",
+   "area": "Crypto",
+   "title": "Pivots and support/resistance levels, one session at a time",
+   "asked": "The round 55 level setups (multi-touch levels, daily/weekly pivots, Camarilla, round numbers; bounce and breakout) only taking signals inside Asia, London, New York, the overlap or late US hours, on 15m and 1h. 400 versions.",
+   "result": "None was profitable in both periods; median -0.12R to -0.40R a trade after fees in every session. Before fees they break even in every session too, so no session holds a hidden edge.",
+   "decision": "Not adopted",
+   "summary": "Levels and pivots stay out of the crypto rules, all day or per session.",
+   "period": "Jan 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
