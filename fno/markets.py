@@ -26,6 +26,7 @@ CATALOG = {
     "CRYPTO": {
         "BTCUSDT": "Bitcoin", "ETHUSDT": "Ethereum", "SOLUSDT": "Solana", "BNBUSDT": "BNB", "XRPUSDT": "XRP",
         "DOGEUSDT": "Dogecoin", "ADAUSDT": "Cardano", "AVAXUSDT": "Avalanche", "LINKUSDT": "Chainlink", "TONUSDT": "Toncoin",
+        "PAXGUSDT": "Gold (PAX Gold, 1 token = 1 oz)",   # tokenised gold on Binance, 24/7: traded in the crypto book like a coin
     },
     "US": {
         "SPY": "S&P 500 ETF", "QQQ": "Nasdaq 100 ETF", "IWM": "Russell 2000 ETF", "DIA": "Dow ETF", "AAPL": "Apple", "MSFT": "Microsoft",

@@ -21,7 +21,8 @@ LON = ZoneInfo("Europe/London")
 NY = ZoneInfo("America/New_York")
 IST = ZoneInfo("Asia/Kolkata")
 
-NAMES = {"asia": "Asia (Tokyo / Shanghai / Mumbai)", "london": "London", "newyork": "New York", "overlap": "London + New York overlap"}
+NAMES = {"asia": "Asia (Tokyo / Shanghai / Mumbai)", "london": "London", "newyork": "New York", "overlap": "London + New York overlap",
+         "late": "Late US / quiet hours (New York close to Asia open)"}
 
 # key events, in the city where they happen
 EVENTS = [
@@ -58,6 +59,8 @@ def mask(idx: pd.DatetimeIndex, name: str) -> np.ndarray:
         utc = _minutes(idx, UTC)
         # from 00:00 UTC until London opens (07:00 UTC in British summer, 08:00 UTC in winter)
         return utc < _lon_open_utc(idx)
+    if name == "late":            # after New York closes (17:00 New York) until 00:00 UTC: the quietest hours
+        return ~(mask(idx, "asia") | mask(idx, "london") | mask(idx, "newyork"))
     raise ValueError(f"Unknown session '{name}'")
 
 
@@ -95,6 +98,7 @@ def windows_ist(day) -> list[dict]:
         {"id": "london", "name": NAMES["london"], "start": lon_o, "end": lon_c},
         {"id": "newyork", "name": NAMES["newyork"], "start": ny_o, "end": ny_c},
         {"id": "overlap", "name": NAMES["overlap"], "start": max(lon_o, ny_o), "end": min(lon_c, ny_c)},
+        {"id": "late", "name": NAMES["late"], "start": ny_c, "end": _at(day + timedelta(days=1), UTC, (0, 0))},
     ]
     for w in out:
         w["start_ist"] = w["start"].astimezone(IST).strftime("%H:%M")

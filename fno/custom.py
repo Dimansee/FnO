@@ -10,7 +10,7 @@ A strategy is plain JSON (no code is ever executed):
    "exit":  {"stop_atr": 1.5, "atr_n": 14, "target_r": 2.0, "trail_atr": null, "breakeven_r": null,
              "time_stop_bars": null, "exit_on_opposite": false},
    "filters": {"start": "09:30", "end": "14:30", "max_trades_day": 2, "vix_min": null, "vix_max": null,
-               "session": null},          # asia | london | newyork | overlap (world sessions, DST-aware; see fno/sessions.py)
+               "session": null},          # asia | london | newyork | overlap | late (world sessions, DST-aware; see fno/sessions.py)
    "hold": "intraday" | "swing", "enabled": true, "auto": false}
 
   cond = {"l": operand, "op": "gt|lt|ge|le|crosses_above|crosses_below|rising|falling", "r": operand}
@@ -40,7 +40,7 @@ MAX_CONDS, MAX_STRATEGIES = 8, 20
 DEFAULT_EXIT = {"stop_atr": 1.5, "atr_n": 14, "target_r": 2.0, "trail_atr": None, "breakeven_r": None,
                 "time_stop_bars": None, "exit_on_opposite": False, "after_target_trail": None}
 DEFAULT_FILTERS = {"start": None, "end": None, "max_trades_day": 2, "vix_min": None, "vix_max": None, "session": None}
-SESSION_FILTERS = ("asia", "london", "newyork", "overlap")
+SESSION_FILTERS = ("asia", "london", "newyork", "overlap", "late")
 SESSION = {  # market -> (offset used when resampling so bars start on the session clock, square-off hh:mm, last entry hh:mm)
     "IN": {"offset": "15min", "square_off": (15, 15), "open": (9, 15), "close": (15, 30)},
     "US": {"offset": "30min", "square_off": (15, 50), "open": (9, 30), "close": (16, 0)},
@@ -215,7 +215,7 @@ def validate(raw: dict, existing_id: str | None = None) -> dict:
                "vix_min": _num(fl["vix_min"], 5, 90, "VIX minimum"), "vix_max": _num(fl["vix_max"], 5, 90, "VIX maximum"),
                "session": fl.get("session") or None}
     if filters["session"] not in (None,) + SESSION_FILTERS:
-        raise ValueError("Session must be asia, london, newyork or overlap.")
+        raise ValueError("Session must be asia, london, newyork, overlap or late.")
     if filters["session"] and market == "IN":
         raise ValueError("World-session filters are for the crypto, US and gold books.")
     hold = raw.get("hold", "intraday" if market in ("IN",) else "swing")

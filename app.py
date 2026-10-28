@@ -1182,7 +1182,8 @@ def gbook_backtest():
         cap = cap / float(fx.get("USDINR") or 88.0)
 
     def go():
-        res = GBT.run(raw, m, b.get("symbol") or "ALL", days, cap, b.get("risk_pct"), b.get("leverage"), b.get("max_open"), busy=PB.market_busy())
+        res = GBT.run(raw, m, b.get("symbol") or "ALL", days, cap, b.get("risk_pct"), b.get("leverage"), b.get("max_open"), busy=PB.market_busy(),
+                      session=b.get("session") or "all")
         res["fx"] = fx
         res["spec_name"] = raw.get("name", "")
         res["source"] = "Binance public data" if m == "CRYPTO" else "Yahoo Finance (gold = COMEX GC=F)" if m == "GOLD" else "Yahoo Finance"

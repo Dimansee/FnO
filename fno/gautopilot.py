@@ -22,6 +22,11 @@ passed the full design + holdout bar. Every session rule lost after costs (Londo
 4h / daily had no edge. Only the two long breakout rules below were positive in both halves, on few trades and in a
 strong gold bull market, so they are kept as candidates and still face the weekly gate. Only XAUUSD is traded by the
 autopilot (PAXG is the same ounce, so trading both would double one bet).
+
+PAXG in the crypto book (28 Oct 2026, user request): gold is also traded as an 11th "coin" in the separate crypto
+account, under the same rules and weekly gate. On PAXG 1h 2020-26 the crypto trend rules lost while gold went sideways
+(2020-23: Supertrend 4h -0.15R / -0.11R, Donchian 55 4h -0.48R / +0.03R) and made money only in the 2024-26 gold bull run
+(Apr 2025 on: +0.72R / +0.72R). The per-symbol floor (SYMBOL_FLOOR_R) is what stops it trading when that turns.
 """
 from __future__ import annotations
 
@@ -40,7 +45,7 @@ MIN_TRADES, MIN_AVG_R, MIN_PF = 30, 0.03, 1.05
 SYMBOL_FLOOR_R, SYMBOL_MIN_N = -0.10, 6
 CHECK_DAYS = {("CRYPTO", "4h"): 365, ("CRYPTO", "1d"): 1095, ("US", "4h"): 720, ("US", "1h"): 720,
               ("GOLD", "1h"): 720, ("GOLD", "4h"): 720, ("GOLD", "1d"): 2555}   # gold is one symbol: longer windows so there are enough trades to judge
-SYMBOLS = {"CRYPTO": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT", "ADAUSDT", "AVAXUSDT", "LINKUSDT", "TONUSDT"],
+SYMBOLS = {"CRYPTO": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT", "ADAUSDT", "AVAXUSDT", "LINKUSDT", "TONUSDT", "PAXGUSDT"],
            "US": ["SPY", "QQQ", "IWM", "DIA", "AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "AMD", "JPM", "GLD"],
            "GOLD": ["XAUUSD"]}
 

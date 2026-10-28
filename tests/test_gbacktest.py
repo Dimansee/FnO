@@ -43,9 +43,19 @@ print("money_sim OK")
 r = np.random.default_rng(3)
 
 
+_FC = {}
+
+
 def fake_candles(market, symbol, tf, days, ttl=None):
     if symbol == "TONUSDT":
         raise RuntimeError("feed down")
+    if (symbol, tf, days) in _FC:                  # same data on every call, like the real 30-minute cache
+        return _FC[(symbol, tf, days)]
+    _FC[(symbol, tf, days)] = _make(symbol, tf, days)
+    return _FC[(symbol, tf, days)]
+
+
+def _make(symbol, tf, days):
     mins = MK.MINUTES[tf]
     n = int(days * 1440 / mins)
     idx = pd.date_range(end=T0, periods=n, freq=f"{mins}min", tz="UTC")
@@ -61,7 +71,7 @@ res = GBT.run(raw, "CRYPTO", "ALL", 365, 1000.0)
 mo = res["money"]
 assert mo["currency"] == "USDT" and mo["capital"] == 1000.0
 assert res["total"]["n"] > 0 and mo["trades"] + mo["skipped_full"] + mo["skipped_cash"] <= res["total"]["n"]
-assert "TONUSDT" in res["errors"] and len(res["by_symbol"]) == 9, (res["errors"], len(res["by_symbol"]))
+assert "TONUSDT" in res["errors"] and len(res["by_symbol"]) == 10, (res["errors"], len(res["by_symbol"]))
 assert all("symbol" in t for t in res["trades"]) and any(t["pnl"] is not None for t in res["trades"])
 assert abs(sum(x["pnl"] for x in res["by_symbol"]) - mo["net"]) < 0.05, (sum(x["pnl"] for x in res["by_symbol"]), mo["net"])
 one = GBT.run(raw, "CRYPTO", "BTCUSDT", 1500, 1000.0)
@@ -86,3 +96,26 @@ assert d["capital_start"] == 250.0 and d["fx"]["USDINR"] == 80.0
 assert c.post("/api/gbook/backtest", json={"market": "CRYPTO", "spec": raw, "days": 5}).status_code == 400
 print("API OK")
 print("ALL GBACKTEST OK")
+
+# 4. sessions: compare mode, single session, daily rules, PAXG as a crypto coin
+from fno import markets as MK2, gautopilot as AP2, sessions as SS2  # noqa: E402
+assert MK2.valid_symbol("CRYPTO", "PAXGUSDT") and "PAXGUSDT" in AP2.SYMBOLS["CRYPTO"]
+idx = pd.date_range("2026-01-15", periods=24, freq="1h", tz="UTC")
+cover = SS2.mask(idx, "asia") | SS2.mask(idx, "london") | SS2.mask(idx, "newyork") | SS2.mask(idx, "late")
+assert cover.all() and not (SS2.mask(idx, "late") & SS2.mask(idx, "asia")).any()
+cmp_ = GBT.run(raw, "CRYPTO", "ALL", 365, 1000.0, session="compare")
+ids = [x["id"] for x in cmp_["sessions"]]
+assert ids == ["all", "asia", "london", "newyork", "overlap", "late"], ids
+assert cmp_["sessions"][0]["n"] == cmp_["total"]["n"] and cmp_["profile"]["rows"]
+assert all("session" in t for t in cmp_["trades"])
+lon = GBT.run(raw, "CRYPTO", "ALL", 365, 1000.0, session="london")
+assert lon["total"]["n"] == next(x["n"] for x in cmp_["sessions"] if x["id"] == "london")
+assert all(t["session"] in ("london", "overlap") for t in lon["trades"]), {t["session"] for t in lon["trades"]}
+daily = dict(raw, timeframe="1d")
+try:
+    GBT.run(daily, "CRYPTO", "ALL", 365, 1000.0, session="asia")
+    raise AssertionError("daily + one session should be refused")
+except ValueError:
+    pass
+assert [x["id"] for x in GBT.run(daily, "CRYPTO", "ALL", 365, 1000.0, session="compare")["sessions"]] == ["all"]
+print("SESSIONS OK")

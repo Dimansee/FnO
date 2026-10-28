@@ -465,7 +465,7 @@ def _after_close():
 
 
 # ------------------------------------------------------------------ scanner (what every coin / rule is waiting for)
-WATCH = {"CRYPTO": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT"], "US": ["SPY", "QQQ", "AAPL", "NVDA", "MSFT"], "GOLD": ["XAUUSD", "PAXGUSDT"]}
+WATCH = {"CRYPTO": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "PAXGUSDT"], "US": ["SPY", "QQQ", "AAPL", "NVDA", "MSFT"], "GOLD": ["XAUUSD", "PAXGUSDT"]}
 
 
 def _px(v: float) -> str:

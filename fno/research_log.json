@@ -1189,6 +1189,28 @@
    "decision": "Not adopted",
    "summary": "Stops and targets unchanged. These rules win 32-40% of trades and make their money on a few big trends.",
    "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r56",
+   "date": "2026-10-28",
+   "area": "Crypto",
+   "title": "Do the crypto trend rules work better in one session (Asia, London, New York, overlap)?",
+   "asked": "Supertrend 4h and Donchian 55 4h on 11 coins (incl. PAXG gold), only taking signals from bars that start in one session, 2023 - Oct 2026; earlier part vs the part after 1 Apr 2025.",
+   "result": "No session was better than trading all day in both parts. Supertrend 4h all day: +0.30R before and +0.29R after. Asia-only looked best before (+0.72R) and fell to -0.01R after; London, New York and the overlap were near zero before and positive after. Donchian 55: every session within noise of all day. The London-New York overlap moves most (about 1.15% an hour, 1.5x average volume); late US hours least (0.74x volume).",
+   "decision": "Not adopted",
+   "summary": "Rules keep trading all day. The Backtest tab can now run any rule per session or compare all sessions, with an earlier/latest split so a lucky session shows up as such.",
+   "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r56b",
+   "date": "2026-10-28",
+   "area": "Crypto",
+   "title": "Gold (PAXG) traded as a coin in the crypto book",
+   "asked": "Do the live crypto trend rules work on PAXG (tokenised gold on Binance, 24/7)? PAXG 1h Aug 2020 - Oct 2026.",
+   "result": "Only in the gold bull run. 2020-22: Supertrend 4h -0.15R, Donchian 55 4h -0.48R a trade; 2023 - Mar 2025: -0.11R / +0.03R; Apr 2025 on: +0.73R / +0.72R. Daily rules similar, few trades.",
+   "decision": "Partly adopted",
+   "summary": "Added as the 11th coin at the user's request, under the same weekly check; the per-coin floor stops it trading when its recent results turn negative.",
+   "period": "Aug 2020 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
