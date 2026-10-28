@@ -30,6 +30,8 @@ from . import store
 
 DEFAULT_CAPITAL = {"CRYPTO": 10_000.0, "US": 10_000.0, "GOLD": 10_000.0}
 MARKETS = ("CRYPTO", "US", "GOLD")
+RETIRED = {"GOLD"}     # 28 Oct 2026: the Gold workspace was merged into Crypto (gold trades there as PAXG). The old gold
+                       # account opens nothing new; trades it still holds are managed to their exit.
 PREF_DEFAULTS = {"risk_pct": 1.0, "max_leverage": 1.0, "max_open": 4, "auto": True}
 MAX_LEVERAGE = {"CRYPTO": 5.0, "US": 2.0, "GOLD": 10.0}   # gold: MCX / spot margins are ~5-10%
 POS, TRD = "fno:g:pos:", "fno:g:trades:"
@@ -215,6 +217,8 @@ def manual_preview(market: str, b: dict) -> dict:
 
 
 def manual_open(market: str, b: dict) -> dict:
+    if market in RETIRED:
+        raise ValueError("The Gold account was merged into Crypto - trade gold there as PAXG (Gold).")
     from . import gorders as GO
     r = GO.place(market, {"type": "market", "size_mode": "risk", **b})
     return {**r, "id": r.get("position")}
@@ -409,9 +413,21 @@ def _tick(markets, manage_only) -> dict:
         rows: list = []
         try:
             from . import gorders as GO
-            filled = GO.process(market)
+            filled = [] if market in RETIRED else GO.process(market)     # a retired book fills no pending orders
         except Exception as e:
             filled = [{"error": f"orders: {str(e)[:80]}"}]
+        if market in RETIRED:
+            held = positions(market)
+            if not held:
+                out[market] = [{"skipped": "retired - merged into Crypto"}]
+                continue
+            for pos in held:
+                try:
+                    _manage(market, pos, specs.get(pos["strategy_id"]), rows)
+                except Exception as e:
+                    rows.append({"error": f"manage {pos['symbol']}: {str(e)[:100]}"})
+            out[market] = rows
+            continue
         if market in ("US", "GOLD") and not MK.session_open(market, _now()) and not positions(market):
             out[market] = filled + [{"skipped": f"{'US market' if market == 'US' else 'Gold'} closed"}]
             continue

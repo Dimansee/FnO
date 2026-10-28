@@ -143,9 +143,22 @@ def sig(spec, df):
     lg = lg.copy(); sh = sh.copy(); lg.iloc[-1] = True; sh.iloc[-1] = False
     return lg, sh, info
 _cu.signals = sig
+# 28 Oct 2026: the Gold workspace was merged into Crypto. The retired gold book opens nothing new ...
 res = GB.tick(("GOLD",))
+assert not GB.positions("GOLD") and res["GOLD"][0].get("skipped", "").startswith("retired"), res
+try:
+    GB.manual_open("GOLD", {"symbol": "XAUUSD", "side": "long"})
+    raise AssertionError("a retired book accepted a manual trade")
+except ValueError:
+    pass
+# ... but a trade it already held keeps being managed: open one as before the merge, then retire again
+GB.RETIRED = set()
+res = GB.tick(("GOLD",))
+GB.RETIRED = {"GOLD"}
 pos = GB.positions("GOLD")
 assert len(pos) == 1 and pos[0]["symbol"] == "XAUUSD" and pos[0]["strategy_id"] == "s_a10022", (res, pos)
+res2 = GB.tick(("GOLD",))
+assert len(GB.positions("GOLD")) == 1 and not any("error" in r for r in res2["GOLD"]), res2
 assert pos[0]["qty"] != int(pos[0]["qty"]) or pos[0]["qty"] > 0        # ounces, fractions allowed
 assert not GB.positions("CRYPTO") and not GB.positions("US")
 _cu.signals = orig
@@ -193,5 +206,7 @@ assert g["market"] == "GOLD" and g["currency"] == "USD", g
 s = c.get("/api/strategies").get_json()
 assert "GOLD" in s["markets"] and s["markets"]["GOLD"]["sessions"]["overlap"] and "asia_high" in s["meta"]["levels"]
 assert "GOLD" in c.get("/api/health").get_json()["global_runner"]["autopilot_pairs"]
+cg = c.get("/api/gbook?market=CRYPTO").get_json()
+assert "gold_book" not in cg or cg["gold_book"]["positions"], cg.get("gold_book")
 print("API OK")
 print("ALL GOLD OK")

@@ -1016,6 +1016,14 @@ def gbook_get():
         except Exception:
             traceback.print_exc()
     out = GB.portfolio(m)
+    if m == "CRYPTO":                         # the retired gold account, while it still holds or shows anything
+        try:
+            gp = GB.positions("GOLD")
+            if gp:
+                g = GB.portfolio("GOLD")
+                out["gold_book"] = {"positions": g["positions"], "equity": g["equity"], "currency": g["currency"]}
+        except Exception:
+            pass
     try:                                      # rupee value of the account (cached 15 min; falls back to an estimate)
         from fno import gorders as GO
         out["fx"] = GO.fx()

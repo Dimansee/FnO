@@ -92,7 +92,7 @@ def _loop():
     last_ping = 0.0
     while True:
         t0 = time.time()
-        for m in ("CRYPTO", "US", "GOLD"):
+        for m in ("CRYPTO", "US"):                         # GOLD retired 28 Oct 2026 (merged into Crypto as PAXG)
             try:
                 if _indian_hours() and AP.has_result(m):  # heavy re-test waits until the Indian session is over
                     continue

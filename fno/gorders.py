@@ -197,6 +197,8 @@ def _open(market: str, t: dict, fill_px: float | None = None, why: str = "") -> 
 
 
 def place(market: str, b: dict) -> dict:
+    if market in GB.RETIRED:
+        raise ValueError("The Gold account was merged into Crypto - trade gold there as PAXG (Gold).")
     t = _ticket(market, b)
     if t.get("error") and (t["fills_now"] or not t["error"].startswith("US market is closed")):
         raise ValueError(t["error"])

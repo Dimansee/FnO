@@ -1705,7 +1705,17 @@
    "takeaway": "Picking each coin's own 'best' setup is break-even; fixed trend rules pooled over coins are better. Late entries on 4h/daily signals (up to 4 hours) were adopted."
   },
   {
-   "n": 5,
+   "date": "2026-10-23",
+   "topic": "Gold: trading sessions and which rules may trade gold",
+   "ids": [
+    "g1"
+   ],
+   "project_round": null,
+   "takeaway": "Every session rule (London breakout of the Asian range, Asian drift, New York opening range) lost after costs. Only two slow long breakout rules stayed as candidates. The Gold tab is now merged into Crypto, where gold trades as PAXG.",
+   "n": 5
+  },
+  {
+   "n": 6,
    "date": "2026-10-28",
    "topic": "Smart-money / ICT ideas (liquidity sweeps, FVG, order blocks, Silver Bullet)",
    "ids": [
@@ -1715,7 +1725,7 @@
    "takeaway": "No edge: random trend-direction entries did as well as FVG / breaker setups. The only gains came from the trend filter, which the live rules already have."
   },
   {
-   "n": 6,
+   "n": 7,
    "date": "2026-10-28",
    "topic": "Displacement candle on the crypto rules",
    "ids": [
@@ -1725,7 +1735,7 @@
    "takeaway": "Looked good overall (+0.23R vs +0.08R) but held for only 2 of 4 rules in the second half. Watch-list."
   },
   {
-   "n": 7,
+   "n": 8,
    "date": "2026-10-28",
    "topic": "Pivots and support/resistance levels; stop-loss and target",
    "ids": [
@@ -1736,7 +1746,7 @@
    "takeaway": "732 level setups: bounces win about 50% at 1R and lose after fees. Live stop-loss/target settings are already at or near the best of 1,080 combinations."
   },
   {
-   "n": 8,
+   "n": 9,
    "date": "2026-10-28",
    "topic": "Trading sessions; gold (PAXG) as a coin",
    "ids": [
@@ -1747,7 +1757,7 @@
    "takeaway": "No session beats trading all day in both periods. PAXG added as the 11th coin; the trend rules only paid on it during the 2024-26 gold rally."
   },
   {
-   "n": 9,
+   "n": 10,
    "date": "2026-10-28",
    "topic": "Chart patterns; levels by session; holding longer",
    "ids": [
@@ -1759,7 +1769,7 @@
    "takeaway": "Patterns lose on 5m-1h. On 4h, patterns with the trend work, best with a 4 ATR trailing stop: symmetrical triangle +0.39R / +0.31R, every year positive. Watch-list for the lab."
   },
   {
-   "n": 10,
+   "n": 11,
    "date": "2026-10-28",
    "topic": "EMA 20/50 + RSI + support/resistance + volume pullback",
    "ids": [
@@ -1783,9 +1793,9 @@
    "Supertrend 4h + BTC 200-day switch (forward test, no money)"
   ],
   "watch": [
-   "Symmetrical-triangle breakout 4h with the trend, 4 ATR trailing stop (round 9)",
-   "Displacement candle as a filter (round 6)",
-   "4h multi-touch level breakout with the trend (round 7)"
+   "Symmetrical-triangle breakout 4h with the trend, 4 ATR trailing stop (round 10)",
+   "Displacement candle as a filter (round 7)",
+   "4h multi-touch level breakout with the trend (round 8)"
   ],
   "rejected": [
    "Fast rules on 5m / 15m (fees decide)",
@@ -1796,5 +1806,558 @@
    "Fixed targets, partial exits and break-even moves on the trend rules",
    "EMA 20/50 + RSI pullback"
   ]
+ },
+ "india_rounds": [
+  {
+   "n": null,
+   "date": "2026-09-28",
+   "topic": "Market recorder and live reviews",
+   "ids": [
+    "rec",
+    "jr",
+    "jr2",
+    "jr3"
+   ],
+   "takeaway": "Fixed: Autopilot's weekly and daily limits now count only the system's own trades, as in the research (rounds 18 and 20); a manual trade can no longer switch the system off, and the limit message says so."
+  },
+  {
+   "n": "1-2",
+   "date": "2026-10-03",
+   "topic": "Find the best intraday strategy (rounds 1-2)",
+   "ids": [
+    "r1"
+   ],
+   "takeaway": "Noise-area momentum won (+Rs 19.6k on 120 unseen days while the old opening-range rules lost Rs 125k) and became the main rule."
+  },
+  {
+   "n": 3,
+   "date": "2026-10-03",
+   "topic": "Popular Indian F&O creator strategies; small accounts",
+   "ids": [
+    "r3",
+    "r3b"
+   ],
+   "takeaway": "The 1% rule allows ₹150 of risk, but one lot risks ₹1,500-6,000, so the normal backtest takes no trades."
+  },
+  {
+   "n": 4,
+   "date": "2026-10-03",
+   "topic": "Check option prices against real NSE prices",
+   "ids": [
+    "r4"
+   ],
+   "takeaway": "Real NSE prices showed the formula priced options ~9.5% too high; after correcting, buying 1 strike in the money beat ATM, so the rule changed."
+  },
+  {
+   "n": 5,
+   "date": "2026-10-03",
+   "topic": "More families, and stacking filters",
+   "ids": [
+    "r5"
+   ],
+   "takeaway": "Only the Camarilla H4/L4 breakout held up and now runs beside the Noise rule; stacking filters on one rule only overfit."
+  },
+  {
+   "n": 6,
+   "date": "2026-10-03",
+   "topic": "Stress tests of the two strategies",
+   "ids": [
+    "r6"
+   ],
+   "takeaway": "All profit comes from trend days; range days and VIX above 20 lose. Nifty rolls to next expiry at 1 day left, no new signals on Budget day."
+  },
+  {
+   "n": 7,
+   "date": "2026-10-03",
+   "topic": "80-120 point rallies, scalping and stop behaviour",
+   "ids": [
+    "r7"
+   ],
+   "takeaway": "Nifty makes about three 80+ point moves a day, but nothing reliably predicts where they start."
+  },
+  {
+   "n": 8,
+   "date": "2026-10-03",
+   "topic": "An AI model instead of rules",
+   "ids": [
+    "r8"
+   ],
+   "takeaway": "An AI model (LightGBM) made +Rs 21k over 2024-26 against +Rs 192k for the rules; kept only as an optional, off-by-default model."
+  },
+  {
+   "n": 9,
+   "date": "2026-10-04",
+   "topic": "EMA + volume + RSI combinations",
+   "ids": [
+    "r9"
+   ],
+   "takeaway": "3 settings looked robust in training and none was profitable on the 120 unseen days; the volume filter only removed trades."
+  },
+  {
+   "n": 10,
+   "date": "2026-10-04",
+   "topic": "VWAP + EMA + RSI + ADX + volume + ATR + CPR + OI in every combination",
+   "ids": [
+    "r10"
+   ],
+   "takeaway": "2,572 runs. The best survivors (VWAP cross with ATR expansion, volume and put/call ratio) had unseen samples too small to conclude."
+  },
+  {
+   "n": 11,
+   "date": "2026-10-04",
+   "topic": "Rules from a web review, on 1-minute data",
+   "ids": [
+    "r11"
+   ],
+   "takeaway": "Last-half-hour momentum won 50-52% but under 1 index point a trade, so decay and costs ate it."
+  },
+  {
+   "n": 12,
+   "date": "2026-10-10",
+   "topic": "Nine recorded live sessions",
+   "ids": [
+    "r12"
+   ],
+   "takeaway": "Nine sessions (28 Sep to 9 Oct) is a sample for leads, not proof. The journal then showed 13 distinct recommendations (the same idea had been logged repeatedly before a fix)."
+  },
+  {
+   "n": 13,
+   "date": "2026-10-12",
+   "topic": "Sizing, exits, strike, re-entry, Bank Nifty settings, Market Profile",
+   "ids": [
+    "r13"
+   ],
+   "takeaway": "Lead worth re-testing: sizing up when VIX is in its 50-75th percentile (the only scheme better on both halves, but ₹59.7k of the ₹60.6k unseen profit came from that one band)."
+  },
+  {
+   "n": 14,
+   "date": "2026-10-13",
+   "topic": "Re-entry, market structure, expiry-day option selling",
+   "ids": [
+    "r14a",
+    "r14b",
+    "r14c",
+    "r14d"
+   ],
+   "takeaway": "A real edge from fast decay on expiry days, but concentrated in quiet days: the 21 days with a move over 1% gave back ₹232k."
+  },
+  {
+   "n": 15,
+   "date": "2026-10-13",
+   "topic": "An LLM multi-agent trading desk",
+   "ids": [
+    "r15"
+   ],
+   "takeaway": "It matched the rules' direction 34 of 35 times but lost the difference on exits."
+  },
+  {
+   "n": 16,
+   "date": "2026-10-13",
+   "topic": "Cash-equity rules on the Nifty 500",
+   "ids": [
+    "r16"
+   ],
+   "takeaway": "This is the stock rule behind the BUY picks. Momentum and breakout rules looked far bigger but were survivorship bias (today's index list)."
+  },
+  {
+   "n": null,
+   "date": "2026-10-13",
+   "topic": "Quick checks: candles, ORB/VWAP, NR7, Holy Grail",
+   "ids": [
+    "cd",
+    "nr7"
+   ],
+   "takeaway": "After a 5-day fall every day averaged +1.89% over 10 days; it is the drop, not the candle shape."
+  },
+  {
+   "n": 17,
+   "date": "2026-10-14",
+   "topic": "'put 60% of the account into every recommended option'",
+   "ids": [
+    "r17"
+   ],
+   "takeaway": "The same 922 trades were re-sized as a real account. Every step up in size bought more upside with a bigger fall; 2% risk compounding was the most that still looked like an account."
+  },
+  {
+   "n": null,
+   "date": "2026-10-14",
+   "topic": "Stocks: candles, gaps, platform signals, a candlestick book",
+   "ids": [
+    "cd2",
+    "book",
+    "gap",
+    "cmp"
+   ],
+   "takeaway": "No backtests; examples are hand-picked forex charts; most of it is discretionary (support/resistance, Fibonacci, supply/demand)."
+  },
+  {
+   "n": 18,
+   "date": "2026-10-15",
+   "topic": "VIX ceilings, loss limits, event days, system audit",
+   "ids": [
+    "r18a",
+    "r18b",
+    "r18c",
+    "r18d",
+    "r18e",
+    "r18f"
+   ],
+   "takeaway": "Noise now skips VIX ≥ 18 and Camarilla skips VIX > 20. Small trade counts at the high end, so treat as protective, not a profit boost."
+  },
+  {
+   "n": 19,
+   "date": "2026-10-15",
+   "topic": "Monthly profit, day / hour filters, daily limits",
+   "ids": [
+    "r19a",
+    "r19b",
+    "r19c"
+   ],
+   "takeaway": "50% a month is far outside what the rules have ever produced. Tripling risk lifts the average only to ~4% a month and brings 60% falls, so risk stays at 1%."
+  },
+  {
+   "n": 20,
+   "date": "2026-10-15",
+   "topic": "Rs 20,000 account: 1 lot, risk cap, weekly loss cap",
+   "ids": [
+    "r20a",
+    "r20b",
+    "r20c"
+   ],
+   "takeaway": "Autopilot uses a 15% cap: the best compromise of fewer deep falls and still enough trades."
+  },
+  {
+   "n": 21,
+   "date": "2026-10-15",
+   "topic": "Win probability, signal-strength sizing, targets, re-entry, volume",
+   "ids": [
+    "r21a",
+    "r21b",
+    "r21c",
+    "r21d",
+    "r21e"
+   ],
+   "takeaway": "The one-trade rule is deliberate and holds up. Re-entry after a loss is worse; re-entry after a non-losing first trade is promising on the deepest fall but mixed on profit - recheck with more live data."
+  },
+  {
+   "n": 22,
+   "date": "2026-10-15",
+   "topic": "Robustness: slippage, profit concentration, stable settings, Rs 20k to Rs 2L",
+   "ids": [
+    "r22a",
+    "r22b",
+    "r22c",
+    "r22d"
+   ],
+   "takeaway": "The edge breaks even at roughly 1.5% slippage per fill, three times what we assume."
+  },
+  {
+   "n": null,
+   "date": "2026-10-15",
+   "topic": "Extra checks on the live rules (videos, filters, gamma, sideways, straddle)",
+   "ids": [
+    "x1",
+    "x2",
+    "x3",
+    "x4",
+    "x5",
+    "x6",
+    "x7",
+    "x8",
+    "x9",
+    "x10",
+    "x11"
+   ],
+   "takeaway": "The straddle keeps its edge but carries a single-day loss near Rs 23k per lot that no pre-open filter or wing setup removes cheaply; the days the filters skip are the ones that pay the most premium."
+  },
+  {
+   "n": null,
+   "date": "2026-10-17",
+   "topic": "Stocks: all NSE, lower circuit, big movers, momentum, opening dip",
+   "ids": [
+    "univ",
+    "circ",
+    "bigmv",
+    "odip",
+    "rsi10",
+    "srch",
+    "momb"
+   ],
+   "takeaway": "Outside the Nifty 500 the dip still bounces (73% hit per signal) but small caps that fall hardest can keep falling, so letting them take any slot tripled the worst fall."
+  },
+  {
+   "n": 23,
+   "date": "2026-10-18",
+   "topic": "The 13 Oct rally day (+1.6%) that lost money, exit/re-entry variants, and a trend-day catcher",
+   "ids": [
+    "r23"
+   ],
+   "takeaway": "The 13 Oct losses came from exits that save money on reversal days, so they stay; a trend-day catcher was added on paper Autopilot."
+  },
+  {
+   "n": 24,
+   "date": "2026-10-18",
+   "topic": "Rules on Sensex, debit spreads on high-VIX days, an earlier trend-day catcher, a Rs 20k account",
+   "ids": [
+    "r24"
+   ],
+   "takeaway": "Adopted: Sensex on Autopilot with the catcher only; catcher gated at Rs 40k equity on Autopilot."
+  },
+  {
+   "n": 25,
+   "date": "2026-10-18",
+   "topic": "How a Rs 2 lakh account should size (risk 1-4%, caps, drawdown throttles) + a day-end lag review",
+   "ids": [
+    "r25"
+   ],
+   "takeaway": "Sizing unchanged (1% of equity, compounding). Day-end lag review added to the after-close note."
+  },
+  {
+   "n": 26,
+   "date": "2026-10-18",
+   "topic": "Large capital - fixed stop + fixed targets, T1/T2/T3 partial exits, small targets with more trades",
+   "ids": [
+    "r26"
+   ],
+   "takeaway": "Not adopted - exits unchanged for every account size. The current exits win by cutting losers at about 0.5R and letting trend-day winners reach about 1.6R."
+  },
+  {
+   "n": 27,
+   "date": "2026-10-18",
+   "topic": "An 'ultimate' combination - pick the good rule x index blocks, weight them, or rotate them",
+   "ids": [
+    "r27"
+   ],
+   "takeaway": "Adopted for Autopilot: Nifty all three rules, Bank Nifty Noise + Camarilla (no catcher), Sensex Noise + catcher (no Camarilla)."
+  },
+  {
+   "n": 28,
+   "date": "2026-10-18",
+   "topic": "Risk of the round-27 rule set at Rs 2 lakh and Rs 20k; Sensex option recording; Backtest 'Autopilot rules'",
+   "ids": [
+    "r28"
+   ],
+   "takeaway": "Recorder now saves Sensex options; Backtest tab defaults to Autopilot rules per index."
+  },
+  {
+   "n": 29,
+   "date": "2026-10-18",
+   "topic": "Pivot points - are the levels special, breakout / fade rules, pivots as filters, and a Fibonacci breakout rule",
+   "ids": [
+    "r29"
+   ],
+   "takeaway": "Adopted: rule 'fib' (Fibonacci 0.618 breakout, own slot, Camarilla exits) for Nifty and Sensex on paper Autopilot once equity >= Rs 2 lakh."
+  },
+  {
+   "n": 30,
+   "date": "2026-10-18",
+   "topic": "EMA crossover + volume + MACD (+ ADX, VWAP, Donchian) - 768 settings on three indices",
+   "ids": [
+    "r30"
+   ],
+   "takeaway": "Crossover and MACD systems have no edge on these indices after option costs; a volume filter only removes trades."
+  },
+  {
+   "n": 31,
+   "date": "2026-10-18",
+   "topic": "Option selling on real prices - 9:20 straddle / strangle with 25-30% stop per leg, VIX expected-move strangles and iron condors",
+   "ids": [
+    "r31"
+   ],
+   "takeaway": "No valid result yet, and on hold: option selling is not wanted for now (18 Oct)."
+  },
+  {
+   "n": null,
+   "date": "2026-10-18",
+   "topic": "Scalping specification",
+   "ids": [
+    "scalp"
+   ],
+   "takeaway": "Not adopted - built as a separate paper-only Scalp book, off by default."
+  },
+  {
+   "n": 32,
+   "date": "2026-10-20",
+   "topic": "One-direction day: trend lines, candles, pivots, trailing stop",
+   "ids": [
+    "r32"
+   ],
+   "takeaway": "These are the most common retail intraday rules; on index options they have almost no edge before costs and lose after them."
+  },
+  {
+   "n": 33,
+   "date": "2026-10-21",
+   "topic": "Sideways cut, trend lines, conviction size, partial booking",
+   "ids": [
+    "r33"
+   ],
+   "takeaway": "Adopted (conviction sizing, Nifty + Sensex Autopilot). Whether the 5-min, 15-min and 1-hour charts agree with the trade is the first add-on in many rounds that separates good trades from weak ones in every year."
+  },
+  {
+   "n": 34,
+   "date": "2026-10-21",
+   "topic": "Scalping on 1-min / 5-min charts with EMA 9 / 15, volume and liquidity, small stop and target, many lots",
+   "ids": [
+    "r34"
+   ],
+   "takeaway": "EMA 9 / 15 scalping has no edge before costs on any timeframe or index, and more lots do not help: brokerage per order shrinks per lot but slippage and spread grow with every lot."
+  },
+  {
+   "n": 35,
+   "date": "2026-10-21",
+   "topic": "Where can rounds 31-33 be improved? Conviction score robustness, graded size, one-direction on the current rules",
+   "ids": [
+    "r35"
+   ],
+   "takeaway": "The round-33 conviction sizing holds up: a walk-forward choice lands on the same threshold, and it is stable across settings."
+  },
+  {
+   "n": 37,
+   "date": "2026-10-22",
+   "topic": "Re-check - a second trade on the same rule only if the first did not lose (current Autopilot set)",
+   "ids": [
+    "r37"
+   ],
+   "takeaway": "Too few extra trades to matter, worse in 2023 and 2026, and a deeper fall - the same mixed picture as round 21 and now without its one advantage."
+  },
+  {
+   "n": 38,
+   "date": "2026-10-23",
+   "topic": "Why a Rs 20k '1 lot' backtest shows the same Net P&L for 30 and 60 days, and what a small account really earns",
+   "ids": [
+    "r38"
+   ],
+   "takeaway": "The app backtest now replays Autopilot's live rules (strategy Autopilot) and shows what it skipped."
+  },
+  {
+   "n": 39,
+   "date": "2026-10-23",
+   "topic": "Improving the AI experimental strategy - from finding its own trades to judging the rules' signals",
+   "ids": [
+    "r39"
+   ],
+   "takeaway": "The AI judge sizes Autopilot's Nifty signals on top of conviction (switch: Research → Recent changes)."
+  },
+  {
+   "n": 40,
+   "date": "2026-10-24",
+   "topic": "Are the targets too high, and should open profit be locked in? (after 23 Oct)",
+   "ids": [
+    "r40"
+   ],
+   "takeaway": "No exit change: the current exits beat every variant on 2023-25 at both strikes."
+  },
+  {
+   "n": 41,
+   "date": "2026-10-24",
+   "topic": "Target 1 / Target 2 / Target 3 - book part of the position at each target",
+   "ids": [
+    "r41"
+   ],
+   "takeaway": "Booking early caps the few big trend days that pay for all the small losses (winners average ~1.9R, ~20% of trades reach 2R); the earlier the targets, the worse."
+  },
+  {
+   "n": 42,
+   "date": "2026-10-24",
+   "topic": "Compounding from Rs 2 lakh, confidence-based lots, T1/T2/T3 with reversal exits, and 'the market must come back after a big run'",
+   "ids": [
+    "r42"
+   ],
+   "takeaway": "Adopted (switchable, on by default): Autopilot skips trades against a 3-day run of >= 2 daily ATRs."
+  },
+  {
+   "n": 43,
+   "date": "2026-10-25",
+   "topic": "The remaining gaps - Bank Nifty, entry times, gap / VIX / weekday filters, stacking, day stop, low-score skip, drawdown and VIX sizing",
+   "ids": [
+    "r43"
+   ],
+   "takeaway": "Adopted (switchable, on): half risk while the account is more than 15% below its peak - same profit, fewer deep falls."
+  },
+  {
+   "n": 44,
+   "date": "2026-10-25",
+   "topic": "Cap the loss at Rs 2,200 per lot (Rs 2 lakh and Rs 20,000 accounts)",
+   "ids": [
+    "r44"
+   ],
+   "takeaway": "Not adopted: slightly less profit per lot in both periods, less in the Rs 2 lakh account, and mixed for Rs 20,000 (better over the full history, worse in 2026, deeper fall)."
+  },
+  {
+   "n": 46,
+   "date": "2026-10-28",
+   "topic": "Liquidity trading: swing highs/lows, sweeps, BOS, CHoCH (+ evidence review)",
+   "ids": [
+    "r46",
+    "rliq"
+   ],
+   "takeaway": "Most of the toolkit renames older ideas (Wyckoff springs, Turtle Soup, supply/demand zones)."
+  },
+  {
+   "n": 47,
+   "date": "2026-10-28",
+   "topic": "Reel setup - trend, consolidation, volume-profile POC, manipulation below the box, breakout",
+   "ids": [
+    "r47"
+   ],
+   "takeaway": "The selling point of the reel (wait for the manipulation) does worse than a simple breakout."
+  },
+  {
+   "n": 48,
+   "date": "2026-10-28",
+   "topic": "Put-call parity 'guaranteed profit' (reel) - box-spread arbitrage on real option candles",
+   "ids": [
+    "r48"
+   ],
+   "takeaway": "Parity holds within costs; market makers and HFT enforce it in milliseconds, and the gaps a retail trader sees are stale prints."
+  },
+  {
+   "n": 49,
+   "date": "2026-10-28",
+   "topic": "Liquidity sweeps, HH/HL structure, BOS / CHoCH, consolidation boxes and POC as filters, exits and add-ons on Autopilot",
+   "ids": [
+    "r49"
+   ],
+   "takeaway": "Liquidity filters remove winners, booking at liquidity pools cuts the big runs that carry the system, and the add-on setups lower the account."
+  },
+  {
+   "n": 50,
+   "date": "2026-10-28",
+   "topic": "The full ICT / SMC toolkit as mechanical rules (FVG, IFVG, order blocks, breaker, supply/demand, 2022 model, Silver Bullet, Judas, OTE, CISD, SMT)",
+   "ids": [
+    "r50"
+   ],
+   "takeaway": "Every ICT / SMC setup (FVG, order blocks, breaker, Silver Bullet, OTE ...) lost on average across 1,248 runs; only 1.4% were positive in both periods."
+  },
+  {
+   "n": 51,
+   "date": "2026-10-28",
+   "topic": "ICT / SMC concepts as filters on Autopilot, and 'displacement' as a size signal",
+   "ids": [
+    "r51"
+   ],
+   "takeaway": "Liquidity / SMC filters do not improve Autopilot. The one lead is displacement, which is a momentum-continuation marker (not a liquidity idea) and fits the academic breakout / intraday-momentum evidence."
+  },
+  {
+   "n": 53,
+   "date": "2026-10-28",
+   "topic": "Retest of the displacement lead - definition, overlap with conviction / agreement / CPR, walk-forward, Rs 20k, crypto and gold books",
+   "ids": [
+    "r53"
+   ],
+   "takeaway": "Displacement survives every retest on the index book: it is not a copy of conviction, agreement or CPR sizing, it works inside every rule, and tilts chosen on 2023-24 also won on 2025-26."
+  },
+  {
+   "n": 54,
+   "date": "2026-10-28",
+   "topic": "Agent agreement and displacement sizing on top of conviction + the AI judge (closes p-agents)",
+   "ids": [
+    "r54"
+   ],
+   "takeaway": "Agreement is not adopted: on top of conviction + judge it lowers 2026 (3.76L vs 4.65L) and the median year; it only makes falls shallower by trading smaller, and it pulls against the judge's top-rated trades."
+  }
+ ],
+ "india_status": {
+  "note": "Adopted rounds changed the live India Autopilot. Watch-list rounds wait for more live data - see Pending research below."
  }
 }

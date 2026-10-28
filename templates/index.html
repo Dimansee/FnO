@@ -460,7 +460,7 @@ details summary{cursor:pointer;font-size:13px}
 .grid.g2>.span2{grid-column:1/-1}
 .gbform{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:start}.gbform>div{min-width:0}.gbform select,.gbform input{width:100%}.gb-rule{grid-column:span 2}.gb-go{display:flex;align-items:flex-end;align-self:end}.gb-go button{width:100%}.gb-amt{display:flex;gap:6px}.gb-amt input{flex:1;min-width:0}.gb-amt .segs{flex:none}
 @media(max-width:900px){.gbform{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.gbform{grid-template-columns:1fr}.gb-rule{grid-column:auto}}
-.rsround summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;gap:8px;align-items:center}.rsround summary::-webkit-details-marker{display:none}.rsround summary::before{content:"▸";color:var(--faint);transition:transform .15s}.rsround[open] summary::before{transform:rotate(90deg)}.rsnum{font-family:var(--mono,monospace);font-size:12px;padding:2px 8px;border-radius:99px;background:var(--bg2);border:1px solid var(--line)}.rscard{margin-top:10px;background:var(--bg2)}.rsrow:hover td{background:var(--bg2)}.rstable{table-layout:fixed;width:100%}.rstable th,.rstable td{text-align:left!important;white-space:normal!important;vertical-align:top;line-height:1.4}
+.rspend summary{cursor:pointer;list-style:none}.rspend summary::-webkit-details-marker{display:none}.rsround summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;gap:8px;align-items:center}.rsround summary::-webkit-details-marker{display:none}.rsround summary::before{content:"▸";color:var(--faint);transition:transform .15s}.rsround[open] summary::before{transform:rotate(90deg)}.rsnum{font-family:var(--mono,monospace);font-size:12px;padding:2px 8px;border-radius:99px;background:var(--bg2);border:1px solid var(--line)}.rscard{margin-top:10px;background:var(--bg2)}.rsrow:hover td{background:var(--bg2)}.rstable{table-layout:fixed;width:100%}.rstable th,.rstable td{text-align:left!important;white-space:normal!important;vertical-align:top;line-height:1.4}
 @media(max-width:700px){.rstable{table-layout:auto}.rstable col{width:auto!important}.rstable td:nth-child(3){width:100%}.rstable td:nth-child(2),.rstable th:nth-child(2),.rstable td:nth-child(4),.rstable th:nth-child(4){display:none}.rstable .tag{white-space:nowrap;font-size:11px}}
 .gxreset{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
 .gbmonths{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}.gbm b{white-space:nowrap}.gbm{display:flex;justify-content:space-between;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg2);font-size:13px}
@@ -548,7 +548,7 @@ details summary{cursor:pointer;font-size:13px}
     <div class="bar">
       <button class="iconbtn" id="sideToggle" title="Collapse menu"><svg><use href="#i-menu"/></svg></button>
       <div class="brand"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="vertical-align:-5px;margin-right:6px"><path d="M2 17 L8 11 L12 14 L21 5" fill="none" stroke="#f2a93b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="5" r="2.4" fill="#f2a93b"/></svg>F&amp;O <span>Trainer</span></div>
-      <div class="segs" id="wsSwitch" role="tablist" aria-label="Market"><button class="seg" data-ws="IN">India F&amp;O</button><button class="seg" data-ws="CRYPTO">Crypto</button><button class="seg" data-ws="US">US</button><button class="seg" data-ws="GOLD">Gold</button></div>
+      <div class="segs" id="wsSwitch" role="tablist" aria-label="Market"><button class="seg" data-ws="IN">India F&amp;O</button><button class="seg" data-ws="CRYPTO">Crypto</button><button class="seg" data-ws="US">US</button></div>
       <select id="symbol" aria-label="Instrument"></select>
       <span id="srcPill" class="pill demo"><span class="dot"></span><span>…</span></span>
       <div class="spacer"></div>
@@ -769,14 +769,14 @@ details summary{cursor:pointer;font-size:13px}
   </section>
 
   <section id="t-research" class="hidden">
-    <div class="card" id="rsChanges"><h3 style="margin:0 0 4px">Recent changes</h3><p class="muted" style="margin:0">Loading…</p></div>
-    <div id="rsPending" style="margin-top:14px"></div>
-    <div class="card" style="margin-top:14px">
+    <div class="card">
       <div class="cardhead"><h3 style="margin:0">Research log</h3><span class="muted" id="rsCount"></span></div>
       <p class="muted" style="margin:6px 0 10px" id="rsNote"></p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap"><select id="rsArea"></select><select id="rsDec"></select><input id="rsQ" placeholder="Search…" style="min-width:160px"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><div class="segs" id="rsView"><button class="seg" data-rsv="rounds">By round</button><button class="seg" data-rsv="list">All studies</button></div><select id="rsArea"><option value="">All areas</option></select><select id="rsDec"><option value="">All decisions</option><option>Adopted</option><option>Partly adopted</option><option>Watch-list</option><option>Information</option><option>Not adopted</option></select><input id="rsQ" placeholder="Search…" style="min-width:160px"></div>
     </div>
     <div id="rsList" style="margin-top:14px"></div>
+    <div class="card" id="rsChanges" style="margin-top:14px"><h3 style="margin:0 0 4px">Recent changes</h3><p class="muted" style="margin:0">Loading…</p></div>
+    <div id="rsPending" style="margin-top:14px"></div>
     <div id="study" style="margin-top:14px"></div>
   </section>
 
@@ -1003,7 +1003,7 @@ async function start() {
   go((location.hash || (WS.mk === "IN" ? "#signal" : "#markets")).slice(1));
 }
 /* ---- market workspace: India F&O, Crypto or US. Each shows only its own tabs and data. ---- */
-const WS = {mk: localStorage.getItem("ws") || "IN"};
+const WS = {mk: (localStorage.getItem("ws") || "IN").replace("GOLD", "CRYPTO")};      // Gold was merged into Crypto (28 Oct 2026)
 const WS_IN = new Set(["signal", "chain", "portfolio", "scalp", "context", "stocks", "recs", "journal", "data", "backtest", "research", "rules", "aprules", "outcomes", "stockrules", "settings"]);
 const WS_GLOBAL = new Set(["gtrade", "markets", "gportfolio", "gjournal", "grules", "gbacktest", "gresearch", "gcontext"]);
 const wsAllows = t => WS.mk === "IN" ? !WS_GLOBAL.has(t) : !WS_IN.has(t);
@@ -2186,7 +2186,9 @@ async function loadChanges() {
 async function loadResearch() {
   loadChanges();
   if (!S.rlog) S.rlog = await api("/api/research/log");
-  const L = S.rlog, items = L.entries || [];
+  const L = S.rlog;
+  L.entries = (L.entries || []).filter(x => !["Crypto", "Crypto & US", "US", "Gold"].includes(x.area));   // those live on the Crypto side
+  const items = L.entries;
   const areas = [...new Set(items.map(x => x.area))];
   const A = $("#rsArea"), D = $("#rsDec");
   if (A.options.length <= 1) areas.forEach(a => A.add(new Option(a, a)));
@@ -2209,7 +2211,7 @@ function renderPending() {
     return `<div class="stsum" style="margin:4px 0"><span class="mono" style="font-size:12px">${p.done} / ${p.need} ${esc(p.unit)}</span><div class="stbar"><i style="width:${pct}%;background:${ready ? "var(--up,#30ba78)" : "var(--accent,#f2a93b)"}"></i><span class="mono">${pct}%</span></div></div>
       <div class="muted" style="font-size:12px">${ready ? "<b>Enough data - ready to re-run</b>" : `Collecting since ${fmt(p.since)} · ready about ${fmt(p.eta)}`}</div>`; };
   const ready = P.filter(p => p.need && p.done >= p.need).length;
-  $("#rsPending").innerHTML = `<div class="card" style="margin-top:0"><div class="cardhead"><h3 style="margin:0">Pending research</h3><span class="muted">${P.length} studies waiting${ready ? ` · <b>${ready} ready to re-run</b>` : ""}</span></div>
+  $("#rsPending").innerHTML = `<details class="card rspend" style="margin-top:0" ${ready ? "open" : ""}><summary><h3 style="margin:0;display:inline">Pending research</h3> <span class="muted">${P.length} studies waiting for live data${ready ? ` · <b>${ready} ready to re-run</b>` : " · click to open"}</span></summary>
     <p class="muted" style="margin:6px 0 4px;font-size:12px">${esc(S.rlog.pending_note || "")}</p>
     ${groups.map(([g, a]) => `<h4 style="margin:14px 0 6px">Waiting for: ${esc(g)} <span class="muted">(${a.length})</span></h4><div class="rcgrid">${a.map(p => `<div class="rc">
       <div class="top"><div><b>${esc(p.title)}</b></div><span class="rstag">${esc(p.area)}</span></div>
@@ -2217,17 +2219,27 @@ function renderPending() {
       <p style="font-size:12.5px"><b>Why pending:</b> ${esc(p.why)}</p>
       <p style="font-size:12.5px"><b>Collecting:</b> ${esc(p.collecting)}</p>
       <p style="font-size:12.5px"><b>Next step:</b> ${esc(p.next)}</p>
-      ${(p.refs || []).length ? `<p class="muted" style="font-size:11.5px">From: ${p.refs.map(r => esc(title(r))).join(" · ")}</p>` : ""}</div>`).join("")}</div>`).join("")}</div>`;
+      ${(p.refs || []).length ? `<p class="muted" style="font-size:11.5px">From: ${p.refs.map(r => esc(title(r))).join(" · ")}</p>` : ""}</div>`).join("")}</div>`).join("")}</details>`;
 }
 function renderResearchList() {
   const items = (S.rlog && S.rlog.entries) || [];
   const a = $("#rsArea").value, d = $("#rsDec").value, q = $("#rsQ").value.trim().toLowerCase();
+  const view = lsGet("rsview", "rounds"), filtered = a || d || q;
+  document.querySelectorAll("#rsView [data-rsv]").forEach(b => b.classList.toggle("on", b.dataset.rsv === view));
   const f = items.filter(x => (!a || x.area === a) && (!d || x.decision === d) && (!q || JSON.stringify(x).toLowerCase().includes(q)));
   $("#rsCount").textContent = `${f.length} of ${items.length} studies` + (S.rlog.updated ? ` · log updated ${S.rlog.updated}` : "");
+  if (view === "rounds" && (S.rlog.india_rounds || []).length) {
+    const keep = new Set(f.map(x => x.id));
+    const rounds = rsPrep(S.rlog.india_rounds, items).map(r => ({...r, entries: r.entries.filter(e => keep.has(e.id))})).filter(r => r.entries.length);
+    $("#rsList").innerHTML = (filtered ? `<p class="muted" style="margin:0 0 10px">Showing ${rounds.length} rounds that match the filter.</p>` : "") +
+      (rounds.length ? rsRoundsHtml(rounds, "rsi", {note: (S.rlog.india_status || {}).note, studyNote: 'Crypto, US and gold research is on the Crypto side.'}) : '<div class="muted">No studies match.</div>');
+    return;
+  }
   $("#rsList").innerHTML = f.map(x => `<div class="card rscard"><div class="rshead"><span class="mono muted">${esc(x.date)}</span><span class="rstag">${esc(x.area)}</span><span class="rstag ${RS_DEC[x.decision] || ""}">${esc(x.decision)}</span></div>
     <h4 style="margin:6px 0">${esc(x.title)}</h4><p style="margin:0 0 6px"><b>Summary:</b> ${esc(x.summary)}</p>
     <details><summary class="muted">Question, result, period</summary><p><b>Asked:</b> ${esc(x.asked)}</p><p><b>Result:</b> ${esc(x.result)}</p>${x.period ? `<p class="muted">Data period: ${esc(x.period)}</p>` : ""}</details></div>`).join("") || '<div class="muted">No studies match.</div>';
 }
+document.addEventListener("click", e => { const b = e.target.closest("#rsView [data-rsv]"); if (b) { lsSet("rsview", b.dataset.rsv); renderResearchList(); } });
 async function loadStudy(render) {
   if (!S.btDefaults) {
     try { const st = await api("/api/settings"); S.prefs = st.prefs || {}; $("#btSize").value = S.prefs.sizing || "risk"; S.btDefaults = true; } catch (e) {}
@@ -3607,7 +3619,7 @@ function renderLearning() {
     <div class="row"><button id="lxRun">Run after-close research now</button></div></div>
   <div class="card"><div class="row between wrap"><h3 style="margin:0">Autonomy · ${LX.mk ? tabs[LX.mk] : "all markets"}</h3><div class="segs">${Object.entries(modes).map(([k, v]) => `<button class="seg ${d.mode === k ? "on" : ""}" data-lmode="${k}">${v[0]}</button>`).join("")}</div></div>
     <p class="muted" style="margin:10px 0 0">${modes[d.mode][1]}</p>
-    <p class="muted" style="margin:6px 0 0;font-size:12.5px">${LX.mk ? `This switch only affects ${tabs[LX.mk]}.` : "Each market has its own switch (pick a market above); setting it here sets all of them."} Now: ${["IN", "CRYPTO", "US", "GOLD"].map(k => `${tabs[k]} <b>${(modes[(d.modes || {})[k]] || [k])[0]}</b>`).join(" · ")}</p>
+    <p class="muted" style="margin:6px 0 0;font-size:12.5px">${LX.mk ? `This switch only affects ${tabs[LX.mk]}.` : "Each market has its own switch (pick a market above); setting it here sets all of them."} Now: ${["IN", "CRYPTO", "US"].map(k => `${tabs[k]} <b>${(modes[(d.modes || {})[k]] || [k])[0]}</b>`).join(" · ")}</p>
     <p class="muted" style="margin:6px 0 0;font-size:12.5px">Guard-rails: needs ${d.limits.min_signals_veto}+ signals and a very clear negative result (z ≤ −${d.limits.z_veto}) in both halves before skipping anything · at most ${d.limits.max_vetoes_per_strategy} skips per strategy · skips expire after ${d.limits.veto_days} days · the built-in Noise and Camarilla numbers are never changed automatically.</p></div>
   ${pend.length ? `<div class="card" style="margin-top:14px"><h3>Waiting for your approval</h3>${pend.map(c => `<div class="row between wrap pend"><div><b>${esc(c.title)}</b><div class="muted" style="font-size:13px">${esc(JSON.stringify(c.evidence || {}))}</div></div><button class="primary" data-lapply="${c.id}">Approve</button></div>`).join("")}</div>` : ""}
   <div class="grid g2" style="margin-top:14px">
@@ -3785,40 +3797,54 @@ function rsCard(x) {
     <p class="muted" style="margin:6px 0 0;font-size:12.5px">${esc(x.date)} · data ${esc(x.period || "")}</p>
     <p style="margin:8px 0 0"><b>Question.</b> ${esc(x.asked)}</p><p style="margin:6px 0 0"><b>Result.</b> ${esc(x.result)}</p><p style="margin:6px 0 0"><b>Decision.</b> ${esc(x.summary)}</p></div>`;
 }
+/* round-by-round research view, shared by the Crypto and India Research tabs */
+function rsPrep(list, entries) {
+  const byId = Object.fromEntries((entries || []).map(x => [x.id, x]));
+  return (list || []).map((r, i) => ({...r, key: r.n == null ? "x" + i : String(r.n), entries: r.ids.map(id => byId[id]).filter(Boolean)}))
+    .map(r => ({...r, decision: r.entries.map(e => e.decision).sort((a, b) => (RS_RANK[b] || 0) - (RS_RANK[a] || 0))[0] || ""}));
+}
+function rsRoundsHtml(rounds, pre, opts = {}) {
+  const order = lsGet("rsorder", "new"), shown = order === "new" ? rounds.slice().reverse() : rounds;
+  const num = r => r.n == null ? "Extra" : "Round " + r.n;
+  const latest = rounds.length ? rounds[rounds.length - 1].key : null;
+  const listN = a => a.map(r => `<li><b>${esc(r.n == null ? "Extra" : "Round " + r.n)}</b> · ${esc(r.topic)}</li>`).join("");
+  const nTests = rounds.reduce((a, r) => a + r.entries.length, 0), numbered = rounds.filter(r => r.n != null);
+  const kpis = `<div class="grid g4">${kpiCard("Research rounds", numbered.length + (rounds.length > numbered.length ? ` <span class="muted" style="font-size:14px">+ ${rounds.length - numbered.length} extra</span>` : ""), `${nTests} studies · latest ${esc(rounds.length ? rounds[rounds.length - 1].date : "–")}`)}${kpiCard("Led to a change", rounds.filter(r => /Adopted/.test(r.decision)).length, "adopted or partly adopted", "up")}${kpiCard("On the watch-list", rounds.filter(r => r.decision === "Watch-list").length, "promising, not proven")}${kpiCard("Rejected", rounds.filter(r => r.decision === "Not adopted").length, "lost after costs or failed the unseen data", "down")}</div>`;
+  const summary = opts.status ? opts.status : `<div class="grid g2" style="margin-top:14px">
+    <div class="card"><h3>Rounds that changed the live rules</h3><ul class="tight">${listN(rounds.filter(r => /Adopted/.test(r.decision)).slice().reverse())}</ul></div>
+    <div class="card"><h3>Watch-list</h3><ul class="tight">${listN(rounds.filter(r => r.decision === "Watch-list").slice().reverse()) || "<li class='muted'>None</li>"}</ul>${opts.note ? `<p class="muted" style="font-size:12.5px;margin:10px 0 0">${esc(opts.note)}</p>` : ""}</div></div>`;
+  return `${kpis}${summary}
+  <div class="card" style="margin-top:14px"><div class="row between wrap"><h3 style="margin:0">Round by round</h3>
+    <div class="segs rsOrder"><button class="seg ${order === "new" ? "on" : ""}" data-rso="new">Newest first</button><button class="seg ${order !== "new" ? "on" : ""}" data-rso="old">Oldest first</button></div></div>
+    <div class="tablewrap" style="margin-top:10px"><table class="rstable"><colgroup><col style="width:72px"><col style="width:80px"><col style="width:26%"><col><col style="width:120px"></colgroup><tr><th>Round</th><th>Date</th><th>Topic</th><th>Outcome</th><th>Decision</th></tr>
+    ${shown.map(r => `<tr class="rsrow" data-rsgo="${pre}-${r.key}" style="cursor:pointer"><td class="mono"><b>${r.n == null ? '<span class="muted">Extra</span>' : esc(String(r.n))}</b>${r.project_round ? `<div class="muted" style="font-size:11px">study ${r.project_round}</div>` : ""}</td><td class="mono" style="white-space:nowrap">${esc(new Date(r.date + "T00:00:00").toLocaleDateString("en-IN", {day: "2-digit", month: "short"}))}</td><td><b>${esc(r.topic)}</b>${r.entries.length > 1 ? `<div class="muted" style="font-size:11.5px">${r.entries.length} studies</div>` : ""}</td><td style="font-size:13px">${esc(r.takeaway)}</td><td><span class="tag ${RS_TAG(r.decision)}">${esc(r.decision)}</span></td></tr>`).join("")}</table></div>
+    <p class="muted" style="font-size:12px;margin:8px 0 0">Click a round to open its details below.${opts.studyNote ? " " + esc(opts.studyNote) : ""}</p></div>
+  ${shown.map(r => `<details class="card rsround" id="${pre}-${r.key}" style="margin-top:14px" ${r.key === latest ? "open" : ""}><summary><span class="rsnum">${esc(num(r))}</span> <b>${esc(r.topic)}</b> <span class="tag ${RS_TAG(r.decision)}">${esc(r.decision)}</span>
+      <span class="muted" style="font-size:12.5px">· ${esc(r.date)}${r.project_round ? " · study " + r.project_round : ""} · ${r.entries.length} ${r.entries.length > 1 ? "studies" : "study"}</span></summary>
+      <p style="margin:10px 0 12px"><b>In short:</b> ${esc(r.takeaway)}</p>${r.entries.map(rsCard).join("")}</details>`).join("")}`;
+}
 async function loadGResearch() {
-  const d = await api("/api/research/log"), mk = gmk(), want = {CRYPTO: ["Crypto", "Crypto & US"], US: ["US", "Crypto & US"], GOLD: ["Gold"]}[mk] || [];
+  const d = await api("/api/research/log"), mk = gmk(), want = {CRYPTO: ["Crypto", "Crypto & US", "Gold"], US: ["US", "Crypto & US"], GOLD: ["Gold"]}[mk] || [];
   const items = (d.entries || []).filter(x => want.includes(x.area));
   const head = gHead("research", "What was tested for this market, how, and what was decided. Every test uses the app's own engine and costs, and is judged on data the choice never saw.");
   if (mk !== "CRYPTO" || !(d.crypto_rounds || []).length) {
     $("#gsBody").innerHTML = head + (items.length ? items.map(rsCard).join("") : `<div class="card muted">No research for this market yet.</div>`);
     return;
   }
-  const byId = Object.fromEntries((d.entries || []).map(x => [x.id, x]));
-  const rounds = d.crypto_rounds.map(r => ({...r, entries: r.ids.map(i => byId[i]).filter(Boolean)}))
-    .map(r => ({...r, decision: r.entries.map(e => e.decision).sort((a, b) => (RS_RANK[b] || 0) - (RS_RANK[a] || 0))[0] || ""}));
+  const rounds = rsPrep(d.crypto_rounds, d.entries);
   const listed = new Set(rounds.flatMap(r => r.ids)), other = items.filter(x => !listed.has(x.id));
-  const order = lsGet("rsorder", "new"), shown = order === "new" ? rounds.slice().reverse() : rounds;
   const st = d.crypto_status || {}, li = a => (a || []).map(x => `<li>${esc(x)}</li>`).join("");
-  const nTests = rounds.reduce((a, r) => a + r.entries.length, 0), nAd = rounds.filter(r => /Adopted/.test(r.decision)).length;
-  $("#gsBody").innerHTML = head + `
-  <div class="grid g4">${kpiCard("Research rounds", rounds.length, `${nTests} studies · latest ${esc(rounds[rounds.length - 1].date)}`)}${kpiCard("Led to a change", nAd, "adopted or partly adopted", "up")}${kpiCard("On the watch-list", rounds.filter(r => r.decision === "Watch-list").length, "promising, not proven")}${kpiCard("Rejected", rounds.filter(r => r.decision === "Not adopted").length, "lost after fees or failed the unseen data", "down")}</div>
-  <div class="grid g2" style="margin-top:14px">
+  const status = `<div class="grid g2" style="margin-top:14px">
     <div class="card"><h3>What trades now because of this research</h3><ul class="tight">${li(st.live)}</ul>${(st.lab || []).length ? `<p style="margin:10px 0 4px"><b>In the lab (forward test, no money)</b></p><ul class="tight">${li(st.lab)}</ul>` : ""}</div>
-    <div class="card"><h3>Watch-list</h3><ul class="tight">${li(st.watch)}</ul><p style="margin:10px 0 4px"><b>Tested and rejected</b></p><ul class="tight">${li(st.rejected)}</ul></div></div>
-  <div class="card" style="margin-top:14px"><div class="row between wrap"><h3 style="margin:0">Round by round</h3>
-    <div class="segs" id="rsOrder"><button class="seg ${order === "new" ? "on" : ""}" data-rso="new">Newest first</button><button class="seg ${order !== "new" ? "on" : ""}" data-rso="old">Oldest first</button></div></div>
-    <div class="tablewrap" style="margin-top:10px"><table class="rstable"><colgroup><col style="width:70px"><col style="width:80px"><col style="width:26%"><col><col style="width:120px"></colgroup><tr><th>Round</th><th>Date</th><th>Topic</th><th>Outcome</th><th>Decision</th></tr>
-    ${shown.map(r => `<tr class="rsrow" data-rsgo="${r.n}" style="cursor:pointer"><td class="mono"><b>${r.n}</b>${r.project_round ? `<div class="muted" style="font-size:11px">study ${r.project_round}</div>` : ""}</td><td class="mono" style="white-space:nowrap">${esc(new Date(r.date + "T00:00:00").toLocaleDateString("en-IN", {day: "2-digit", month: "short"}))}</td><td><b>${esc(r.topic)}</b></td><td style="font-size:13px">${esc(r.takeaway)}</td><td><span class="tag ${RS_TAG(r.decision)}">${esc(r.decision)}</span></td></tr>`).join("")}</table></div>
-    <p class="muted" style="font-size:12px;margin:8px 0 0">Click a round to jump to its details. "Study" is the number in the project's research files and Project docs.</p></div>
-  ${shown.map(r => `<details class="card rsround" id="rsr-${r.n}" style="margin-top:14px" ${r.n === rounds[rounds.length - 1].n ? "open" : ""}><summary><span class="rsnum">Round ${r.n}</span> <b>${esc(r.topic)}</b> <span class="tag ${RS_TAG(r.decision)}">${esc(r.decision)}</span>
-      <span class="muted" style="font-size:12.5px">· ${esc(r.date)}${r.project_round ? " · study " + r.project_round : ""} · ${r.entries.length} ${r.entries.length > 1 ? "studies" : "study"}</span></summary>
-      <p style="margin:10px 0 12px"><b>In short:</b> ${esc(r.takeaway)}</p>${r.entries.map(rsCard).join("")}</details>`).join("")}
-  ${other.length ? `<h3 class="sect" style="margin-top:18px">Other studies touching this market</h3>${other.map(rsCard).join("")}` : ""}`;
+    <div class="card"><h3>Watch-list</h3><ul class="tight">${li(st.watch)}</ul><p style="margin:10px 0 4px"><b>Tested and rejected</b></p><ul class="tight">${li(st.rejected)}</ul></div></div>`;
+  $("#gsBody").innerHTML = head + rsRoundsHtml(rounds, "rsc", {status, studyNote: '"Study" is the number in the project\'s research files and Project docs.'})
+    + (other.length ? `<h3 class="sect" style="margin-top:18px">Other studies touching this market</h3>${other.map(rsCard).join("")}` : "");
 }
 document.addEventListener("click", e => {
-  const o = e.target.closest("#rsOrder [data-rso]"); if (o) { lsSet("rsorder", o.dataset.rso); loadGResearch(); return; }
-  const g = e.target.closest("[data-rsgo]"); if (g) { const el = $("#rsr-" + g.dataset.rsgo); if (el) { el.open = true; el.scrollIntoView({behavior: "smooth", block: "start"}); } }
+  const o = e.target.closest(".rsOrder [data-rso]"); if (o) { lsSet("rsorder", o.dataset.rso); if (S.tab === "research") renderResearchList(); else loadGResearch(); return; }
+  const g = e.target.closest("[data-rsgo]"); if (g) { const el = document.getElementById(g.dataset.rsgo); if (el) { el.open = true; el.scrollIntoView({behavior: "smooth", block: "start"}); } }
 });
+
 
 async function loadGContext() {
   const mk = gmk(), d = await api("/api/gbook/context?market=" + mk), b = d.breadth || {}, rg = d.regime, se = d.sentiment;
@@ -4099,10 +4125,10 @@ document.addEventListener("click", async e => {
   catch (er) { toast(er.message, 6000); }
 });
 
-const GX = {mk: localStorage.getItem("gmk") || "CRYPTO", data: null, sym: {}, tf: localStorage.getItem("gxtf") || "5m", chart: null, ser: null, lines: [], pls: [], key: null, gold: null};
+const GX = {mk: (localStorage.getItem("gmk") || "CRYPTO").replace("GOLD", "CRYPTO"), data: null, sym: {}, tf: localStorage.getItem("gxtf") || "5m", chart: null, ser: null, lines: [], pls: [], key: null, gold: null};
 async function loadMarkets(quiet) {
   if (WS.mk !== "IN") GX.mk = WS.mk;
-  const gold = GX.mk === "GOLD" ? api("/api/gold/sessions?symbol=" + (GX.sym.GOLD || "XAUUSD")).catch(e => ({error: e.message})) : null;
+  const gold = GX.mk === "CRYPTO" && GX.sym.CRYPTO === "PAXGUSDT" ? api("/api/gold/sessions?symbol=PAXGUSDT").catch(e => ({error: e.message})) : null;
   const [d, g] = await Promise.all([api("/api/gbook?market=" + GX.mk), gold, loadGxChart(quiet)]);
   GX.data = d; GX.gold = g; renderMarkets();
 }
@@ -4160,7 +4186,7 @@ async function loadGxChart(quiet) {
   $("#gxChartNote").innerHTML = `${bars.length} candles from ${mk === "CRYPTO" || sym === "PAXGUSDT" ? "Binance (Bybit if Binance is down)" : mk === "GOLD" ? "Yahoo Finance COMEX gold futures (GC=F, about 10 min delayed)" : "Yahoo Finance (delayed)"}; refreshes every 30 s with Auto on. ${ln ? "Lines: " + ln + ". " : (tf === "4h" || tf === "1d" || (mk === "GOLD" && tf === "1h") ? "" : mk === "GOLD" ? "The gold autopilot rules run on 1h (session rules), 4h and daily bars; switch to those to see their lines. " : "The autopilot rules run on 4h and daily bars; switch to those to see their lines. ")}Arrows = this book's entries, dots = exits.`;
   $("#gxLegend").innerHTML = "";
 }
-$("#gxSym").onchange = () => { GX.sym[GX.mk] = $("#gxSym").value; GX.bars = []; loadGxChart(); };
+$("#gxSym").onchange = () => { const was = GX.sym[GX.mk]; GX.sym[GX.mk] = $("#gxSym").value; GX.bars = []; if ((was === "PAXGUSDT") !== (GX.sym[GX.mk] === "PAXGUSDT")) loadMarkets(); else loadGxChart(); };
 $("#gxTf").onclick = e => { const b = e.target.closest("button"); if (!b) return; GX.tf = b.dataset.gtf; localStorage.setItem("gxtf", GX.tf); loadGxChart(); };
 function gxAutopilot(d) {
   const a = d.autopilot || {}, ago = d.last_tick ? Math.round((Date.now() - Date.parse(d.last_tick)) / 60000) : null;
@@ -4214,6 +4240,12 @@ function gxGold(g) {
       <p class="muted" style="font-size:12px;margin:6px 0 0">From ${esc(st.source || "")} ${st.bar_minutes || ""}-minute bars, ${st.days} trading days. Sessions overlap, so shares add to more than 100%. "~" = within noise. Descriptive only: rules still have to pass their own backtest to trade.</p>` : `<p class="muted" style="margin:10px 0 0">${esc(st.error || "Session statistics are loading…")}</p>`}
     <details style="margin-top:10px"><summary class="muted">What the sessions mean for gold</summary>${(g.notes || []).map(n => `<p style="margin:6px 0 0;font-size:13px">${esc(n)}</p>`).join("")}</details></div>`;
 }
+function gxGoldBook(d) {
+  const g = d.gold_book; if (!g || !(g.positions || []).length) return "";
+  return `<div class="card" style="margin-bottom:14px;border-color:var(--warn,#f2a93b)"><div class="row between wrap"><h3 style="margin:0">Old Gold account</h3><span class="tag twarn">closing</span></div>
+    <p class="muted" style="margin:6px 0 10px;font-size:13px">The Gold tab is now part of Crypto (gold trades here as PAXG). The old gold account opens nothing new; these trades run to their own stop or exit. Value ${money(g.equity, g.currency)}.</p>
+    <div class="tablewrap"><table><tr><th>Symbol</th><th>Strategy</th><th>Side</th><th>Entry</th><th>Now</th><th>Stop</th><th>P&L</th><th></th></tr>${g.positions.map(x => `<tr><td><b>${esc(x.symbol)}</b></td><td>${esc(x.strategy_name)}</td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${gpx(x.entry)}</td><td class="mono">${gpx(x.price)}</td><td class="mono">${gpx(x.stop)}</td><td class="mono ${cls(x.unrealised)}">${fmtN(x.unrealised)}</td><td><button data-gxgold="${x.id}">Close now</button></td></tr>`).join("")}</table></div></div>`;
+}
 function gxInr(v, d) { const fx = ((d || {}).fx || {}).USDINR; return fx && v != null ? "≈ " + rs(v * fx) : ""; }
 function gxKpis(d) {
   const cur = d.currency, st = d.stats || {}, pnl = d.equity - d.capital_start;
@@ -4223,7 +4255,7 @@ function renderMarkets() {
   const d = GX.data, el = $("#gxBody"); if (!d) return; const cur = d.currency, p = d.prefs || {}, st = d.stats || {};
   $("#gxHead").innerHTML = `<div class="pagehead"><div><h2>${tabs[GX.mk]} dashboard</h2><p class="muted">Paper account in ${cur}, fully separate from India F&O: own money, rules, settings and learning. Your own ${tabs[GX.mk]} strategies set to Auto trade first; with none on Auto, the built-in autopilot trades only the rules that pass its weekly check. ${{CRYPTO: "Crypto runs around the clock.", US: "US stocks trade 7:00 pm – 1:30 am IST (9:30 am – 4:00 pm New York).", GOLD: "Gold trades nearly 24 hours on weekdays (Monday ~04:30 IST to Saturday ~03:30 IST, one-hour break daily). XAUUSD = COMEX gold futures price; PAXG = tokenised gold that also trades at weekends."}[GX.mk] || ""}</p></div>
 </div>`;
-  el.innerHTML = `${GX.mk === "GOLD" ? gxGold(GX.gold) : ""}${gxAutopilot(d)}${gxScanner(d)}${gxLab(d)}
+  el.innerHTML = `${GX.mk === "CRYPTO" && GX.sym.CRYPTO === "PAXGUSDT" ? gxGold(GX.gold) : ""}${gxGoldBook(d)}${gxAutopilot(d)}${gxScanner(d)}${gxLab(d)}
   ${gxKpis(d)}
   <div class="card" style="margin-top:14px"><h3>Open positions</h3><div class="tablewrap"><table><tr><th>Symbol</th><th>Strategy</th><th>Side</th><th>Entry</th><th>Now</th><th>Stop</th><th>Target</th><th>R</th><th>P&L</th><th></th></tr>${d.positions.map(x => `<tr><td><b>${esc(x.symbol)}</b></td><td>${esc(x.strategy_name)}</td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${gpx(x.entry)}</td><td class="mono">${gpx(x.price)}</td><td class="mono">${gpx(x.stop)}</td><td class="mono">${x.target == null ? "–" : gpx(x.target)}</td><td class="mono ${cls(x.R_now)}">${sgn(x.R_now)}</td><td class="mono ${cls(x.unrealised)}">${fmtN(x.unrealised)}</td><td style="white-space:nowrap"><button data-gxe="${x.id}" data-sl="${x.stop}" data-tp="${x.target ?? ""}">Edit stop/target</button> <button data-gx="${x.id}">Close</button></td></tr>`).join("") || `<tr><td colspan="10" class="muted">No open positions right now. One opens when an active rule gives a signal, or when you place a manual trade on the Dashboard.</td></tr>`}</table></div></div>`;
 }
@@ -4231,6 +4263,7 @@ function gxPortfolioHtml(d) {
   const cur = d.currency, p = d.prefs || {}, st = d.stats || {};
   return `<div class="pagehead"><div><h2>${tabs[GX.mk]} portfolio</h2><p class="muted">Paper account in ${cur}: money, open trades, every closed trade and the account's own settings. Separate from India F&O.</p></div></div>
   ${gxKpis(d)}
+  ${gxGoldBook(d) ? `<div style="margin-top:14px">${gxGoldBook(d)}</div>` : ""}
   <div class="grid g2" style="margin-top:14px">
     <div class="card"><h3>Account curve</h3><canvas id="gxCurve" class="flowcv" style="height:200px"></canvas>
       ${st.trades ? `<p class="muted" style="margin:8px 0 0">Win rate ${st.win_rate}% · profit factor ${st.profit_factor ?? "–"} · average ${sgn(st.avg_R)}R · deepest fall ${st.max_dd_pct}%</p>` : ""}</div>
@@ -4263,6 +4296,7 @@ document.addEventListener("click", async e => {
   try {
     if (t.dataset.gmk) { GX.mk = t.dataset.gmk; localStorage.setItem("gmk", GX.mk); await loadMarkets(); }
     else if (t.dataset.gx) { const r = await post("/api/gbook/exit", {market: GX.mk, id: t.dataset.gx}); toast(r.message); await reload(); }
+    else if (t.dataset.gxgold) { const r = await post("/api/gbook/exit", {market: "GOLD", id: t.dataset.gxgold}); toast(r.message); await reload(); }
     else if (t.id === "gxSave") { await post("/api/gbook/prefs", {market: GX.mk, risk_pct: +$("#gxRisk").value, max_leverage: +$("#gxLev").value, max_open: +$("#gxMax").value, auto: $("#gxAuto").checked}); toast("Saved"); await reload(); }
     else if (t.dataset.gxc) { lsSet("gxcapcur:" + GX.mk, t.dataset.gxc); document.querySelectorAll("#gxCapCur .seg").forEach(b => b.classList.toggle("on", b === t)); gxCapHint(); }
     else if (t.id === "gxReset") {
