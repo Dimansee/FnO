@@ -1328,8 +1328,8 @@
    "area": "Crypto",
    "title": "Untested items from another AI's crypto 'priority list': RSI divergence, ATR expansion, Bat / Butterfly / Crab / AB=CD harmonics, regime filters; and the live book in money",
    "asked": "Everything else on the list was already tested (patterns r57/r60, candlesticks r2, BOS / CHoCH / sweeps / equal highs r6/r52/r61, MACD / EMA crossovers r1/r58/r62, Bollinger squeeze). New: standalone RSI divergence, ATR-expansion bars, 4 harmonics on 1h / 4h / daily (11 coins, 16 bps, vs random entries); as filters on the live rules ADX >= 20, Choppiness, volatility regime, BTC 200-day, squeeze, no divergence, expansion bar. A filter or rule counts only if it ADDS profit to the current book in both periods.",
-   "result": "Standalone: RSI divergence -0.1R median (one daily version positive); Bat / Butterfly / Crab under 60 trades in 4 years on 11 coins; AB=CD about 0R; ATR expansion is a weak edge (+0.07 to +0.16R vs random +0.01 to +0.06R) but adding it to the book lowers 2023 - Mar 2025 at 3x. Filters in R: only 'skip entries when volatility is in the top third of its year' adds R to 3 of 4 rules, but in money it lowers Apr 2025 - Oct 2026 on the live book (Rs 1.92L vs 1.95L) - not adopted. Main finding: the live book (4 rules, 11 coins, 1x, max 4 open) ends about flat in the money simulation (Rs 2L -> 1.83L, worst fall -34%; 2,061 of 2,666 signals skipped for slots / cash). Dropping Donchian 55 4h (the weakest rule, most signals) and using 3x leverage (same 1% risk) gives Rs 4.86L (-26%), better in both halves (3.59L vs 2.03L; 2.80L vs 1.95L). The in-app weekly re-test, which pauses failing rule/coin pairs, is not modelled.",
-   "decision": "No new signal or filter. Proposed to the user: drop Donchian 55 4h and set 3x leverage (live change, needs approval)",
+   "result": "Standalone: RSI divergence -0.1R median (one daily version positive); Bat / Butterfly / Crab under 60 trades in 4 years on 11 coins; AB=CD about 0R; ATR expansion is a weak edge (+0.07 to +0.16R vs random +0.01 to +0.06R) but adding it to the book lowers 2023 - Mar 2025 at 3x. Filters in R: only 'skip entries when volatility is in the top third of its year' adds R to 3 of 4 rules, but in money it lowers Apr 2025 - Oct 2026 on the live book (Rs 1.92L vs 1.95L) - not adopted. Main finding: the live book (4 rules, 11 coins, 1x, max 4 open) ends about flat in the money simulation (Rs 2L -> 1.83L, worst fall -34%; 2,061 of 2,666 signals skipped for slots / cash). Dropping Donchian 55 4h (the weakest rule, most signals) and using 3x leverage (same 1% risk) gives Rs 4.86L (-26%), better in both halves (3.59L vs 2.03L; 2.80L vs 1.95L). The in-app weekly re-test, which pauses failing rule/coin pairs, is not modelled. Round 64c, the same with the app's weekly re-test replayed week by week: live book Rs 2.17L (-30%; 2.17L before Apr 2025, 1.91L after); without Donchian 55 4h at 2x Rs 2.65L (-26%; 2.48L / 2.33L), at 3x Rs 2.71L (2.45L / 2.41L). 2x chosen: same gain, liquidation needs a 50% move instead of 33%.",
+   "decision": "Adopted 29 Oct: Donchian 55 4h retired from the crypto book and 2x leverage (switchable in Recent changes)",
    "summary": "Nothing new from the list beats the live rules; the crypto book's weak spot is its sizing - too many signals for 4 slots at 1x.",
    "period": "Jan 2023 - Oct 2026"
   }
@@ -1902,29 +1902,25 @@
     "r64"
    ],
    "project_round": 64,
-   "takeaway": "No new signal or filter adds profit. The live book is about flat in money at 1x (Rs 2L -> 1.83L); without Donchian 55 4h and at 3x it makes Rs 4.86L, better in both halves."
+   "takeaway": "No new signal or filter adds profit. The book had more signals than slots at 1x: with the weekly re-test, retiring Donchian 55 4h and using 2x made Rs 2.65L vs 2.17L, better in both halves - adopted 29 Oct."
   }
  ],
  "crypto_status": {
   "live": [
    "Supertrend 10/3 (4h), long and short",
    "Supertrend 10/3 (daily), long and short",
-   "Donchian 55 breakout (4h), long",
    "Donchian 20 breakout (daily), long",
    "11 coins incl. gold (PAXG); each rule and coin must pass a weekly re-test",
    "Late entry up to 4 hours on 4h / daily signals",
-   "Stop 2 ATR, no fixed target: exit on the opposite signal or a 3-4 ATR trailing stop"
+   "Stop 2 ATR, no fixed target: exit on the opposite signal or a 3-4 ATR trailing stop",
+   "1% risk per trade, 2x leverage, max 4 open (from 29 Oct, round 17; Donchian 55 4h retired)"
   ],
   "lab": [
    "Supertrend 4h + BTC 200-day switch (forward test, no money)"
   ],
   "watch": [
-   "Symmetrical-triangle breakout 4h with the trend, 4 ATR trailing stop (round 10)",
    "Displacement candle as a filter (round 7)",
-   "4h multi-touch level breakout with the trend (round 8)",
-   "4h pattern breakouts with the EMA 200 trend: diamond, rising wedge, Livermore, double bottom (round 13)",
-   "1h 3-touch level break with higher highs, EMA 200 trend and 1.5x volume, 3R (round 14)",
-   "Book settings: drop Donchian 55 4h and use 3x leverage - Rs 4.86L vs 1.83L in money, both halves better (round 17, awaiting your decision)"
+   "4h multi-touch level breakout with the trend (round 8)"
   ],
   "rejected": [
    "Fast rules on 5m / 15m (fees decide)",
@@ -1937,7 +1933,8 @@
    "Chart patterns on 5m / 15m / 1h, head and shoulders, harmonic patterns (round 13)",
    "Retest entries after a level break; level breaks on 15m even with all confluences (round 14)",
    "Scalping cheat-sheet strategies on 5 min: ribbon, RSI+MACD, pivot scalp, RMI + Supertrend, regression channel, EMA 9/21 (round 15)",
-   "RSI divergence, harmonics (Bat, Butterfly, Crab, AB=CD), ADX / chop / volatility / squeeze filters (round 17)"
+   "RSI divergence, harmonics (Bat, Butterfly, Crab, AB=CD), ADX / chop / volatility / squeeze filters (round 17)",
+   "Pattern / level-break rules as extra live or lab rules: 4h symmetrical triangle, 4h pattern breakouts, 1h 3-touch level break (+0.14 to +0.22R, below Supertrend 4h's +0.30R; extra rules only compete for the 4 slots) (rounds 10, 13, 14)"
   ]
  },
  "india_rounds": [

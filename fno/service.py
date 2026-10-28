@@ -738,6 +738,9 @@ def changes() -> list[dict]:
         removed = 0
     po = float(acct.get("capital_start") or 0) <= 0 and acct.get("capital_before")
     return [
+        {"id": "crypto_book_r64", "date": "2026-10-29", "title": "Crypto book: Donchian 55 4h retired, 2x leverage (crypto round 17)",
+         "what": "The crypto autopilot no longer opens Donchian 55 breakout (4h) trades, and uses 2x leverage unless you set leverage yourself. Risk per trade stays 1%: leverage only frees cash, so fewer good signals are skipped. In the money replay with the weekly re-test (Rs 2L, 2023 - Oct 2026) this made Rs 2.65L vs 2.17L, better both before and after Apr 2025, worst fall -26% vs -30%. Open Donchian 55 trades are still managed to their exit.",
+         "before": "Four crypto rules (incl. Donchian 55 4h) at 1x leverage.", "on": flag("crypto_book_r64"), "kind": "switch"},
         {"id": "dd_half", "date": "2026-10-25", "title": "Half risk in a deep drawdown (round 43)",
          "what": f"While the account is more than {C.DD_HALF_AT:.0%} below its highest value, Autopilot risks half as much per trade until it recovers. Same typical year, fewer deep falls.",
          "before": "Full risk whatever the drawdown.", "on": flag("dd_half"), "kind": "switch"},
@@ -772,7 +775,7 @@ def changes() -> list[dict]:
 
 
 def revert_change(cid: str, on: bool | None = None) -> str:
-    if cid in ("conviction", "limits_system_only", "small_otm", "ai_judge", "big_run_skip", "dd_half"):
+    if cid in ("conviction", "limits_system_only", "small_otm", "ai_judge", "big_run_skip", "dd_half", "crypto_book_r64"):
         set_flag(cid, bool(on))
         return ("Switched on again." if on else "Switched back to how it worked before.")
     if cid == "weekly_limit":

@@ -101,6 +101,27 @@ CANDIDATES = {
 }
 
 
+# Round 64 (29 Oct 2026, crypto round 17): Donchian 55 4h is retired from the crypto book. With 4 rules on 11 coins the book had
+# far more signals than its 4 slots / cash at 1x; the weakest rule (most signals, +0.07R after the weekly re-test) took slots the
+# better trades needed. Without it (and 2x leverage, see gbook.prefs) the money replay with the weekly re-test made Rs 2.65L vs
+# 2.17L from Rs 2L (2023 - Oct 2026), better before and after Apr 2025, worst fall -26% vs -30%. Switch: Research -> Recent changes.
+RETIRED = {"CRYPTO": {"s_a10002"}}
+
+
+def r64_on() -> bool:
+    try:
+        return bool((store.get("change_flags") or {}).get("crypto_book_r64", True))
+    except Exception:
+        return True
+
+
+def candidates(market: str) -> list[dict]:
+    """The rules the autopilot may trade in this market (retired ones only keep managing positions they already hold)."""
+    out = CANDIDATES.get(market, [])
+    if r64_on():
+        out = [c for c in out if c["id"] not in RETIRED.get(market, set())]
+    return out
+
 def _spec(market: str, cand: dict, symbols: list[str]) -> dict:
     raw = {k: v for k, v in cand.items() if k not in ("research", "about")}
     raw.update(name="Autopilot · " + cand["name"], market=market, symbols=symbols or SYMBOLS[market][:1], hold=cand.get("hold", "swing"),
@@ -136,13 +157,13 @@ def _rule_ok(s: dict) -> tuple[bool, str]:
 def qualify(market: str, force: bool = False) -> dict:
     """Re-test every candidate on recent history and store which rules / symbols may trade. Slow (network): runs off the request path."""
     cur = store.get(f"g_ap_qual:{market}") or {}
-    fresh_ids = {c["id"] for c in CANDIDATES.get(market, [])}
+    fresh_ids = {c["id"] for c in candidates(market)}
     stale_set = set(cur.get("ids") or []) != fresh_ids          # candidate list changed (new research): re-test now
     age = time.time() - float(cur.get("t", 0))
     if not force and not stale_set and age < (RETRY_TTL if cur.get("data_errors") else QUAL_TTL):
         return cur
     rows, ok, errors = [], {}, 0
-    for cand in CANDIDATES.get(market, []):
+    for cand in candidates(market):
         spec = _spec(market, cand, SYMBOLS[market])
         days = CHECK_DAYS.get((market, spec["timeframe"]), 365)
         pooled, per = [], {}
@@ -172,13 +193,13 @@ def qualify(market: str, force: bool = False) -> dict:
 
 def has_result(market: str) -> bool:
     q = store.get(f"g_ap_qual:{market}") or {}
-    return bool(q.get("rows")) and set(q.get("ids") or []) == {c["id"] for c in CANDIDATES.get(market, [])}
+    return bool(q.get("rows")) and set(q.get("ids") or []) == {c["id"] for c in candidates(market)}
 
 
 def active_specs(market: str) -> list[dict]:
     """The autopilot strategies allowed to open trades now (empty until the weekly check has run)."""
     q = store.get(f"g_ap_qual:{market}") or {}
-    cands = {c["id"]: c for c in CANDIDATES.get(market, [])}
+    cands = {c["id"]: c for c in candidates(market)}
     return [_spec(market, cands[cid], syms) for cid, syms in (q.get("ok") or {}).items() if cid in cands and syms]
 
 
@@ -194,7 +215,7 @@ def rulebook(market: str) -> list[dict]:
     q = store.get(f"g_ap_qual:{market}") or {}
     rows = {r["id"]: r for r in q.get("rows", [])}
     out = []
-    for c in CANDIDATES.get(market, []):
+    for c in candidates(market):
         r = rows.get(c["id"], {})
         spec = _spec(market, c, SYMBOLS[market])
         spec.pop("autopilot", None)

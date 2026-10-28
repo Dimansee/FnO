@@ -43,12 +43,20 @@ def _dump(v):
 
 
 # ------------------------------------------------------------------ account
+R64_LEVERAGE = {"CRYPTO": 2.0}       # round 64: crypto book leverage (risk per trade unchanged; it only frees cash for more signals)
+
+
 def prefs(market: str) -> dict:
-    return {**PREF_DEFAULTS, **(store.get(f"g_prefs:{market}") or {})}
+    cur = {**PREF_DEFAULTS, **(store.get(f"g_prefs:{market}") or {})}
+    # Round 64: until you set leverage yourself after 29 Oct 2026, the crypto book uses at least 2x (switch: Research -> Recent changes)
+    from . import gautopilot as AP
+    if market in R64_LEVERAGE and not cur.get("lev_set_at") and AP.r64_on():
+        cur["max_leverage"] = max(float(cur["max_leverage"]), R64_LEVERAGE[market])
+    return cur
 
 
 def set_prefs(market: str, p: dict) -> dict:
-    cur = prefs(market)
+    cur = {**PREF_DEFAULTS, **(store.get(f"g_prefs:{market}") or {})}      # stored values only (not the round-64 default)
     if "risk_pct" in p:
         v = float(p["risk_pct"])
         if not 0.1 <= v <= 5:
@@ -59,6 +67,7 @@ def set_prefs(market: str, p: dict) -> dict:
         if not 1 <= v <= MAX_LEVERAGE[market]:
             raise ValueError(f"Leverage must be between 1 and {MAX_LEVERAGE[market]:g}x for {market}.")
         cur["max_leverage"] = v
+        cur["lev_set_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
     if "max_open" in p:
         v = int(p["max_open"])
         if not 1 <= v <= 12:
@@ -67,7 +76,7 @@ def set_prefs(market: str, p: dict) -> dict:
     if "auto" in p:
         cur["auto"] = bool(p["auto"])
     store.put(f"g_prefs:{market}", cur)
-    return cur
+    return prefs(market)
 
 
 def account(market: str) -> dict:

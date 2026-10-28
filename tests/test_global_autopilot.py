@@ -59,7 +59,7 @@ print("candidates valid:", sum(len(AP.all_specs(m)) for m in ("CRYPTO", "US")))
 
 # 2. qualification tests every pair and stores the result
 q = AP.qualify("CRYPTO", force=True)
-assert len(q["rows"]) == len(AP.CANDIDATES["CRYPTO"]), len(q["rows"])
+assert len(q["rows"]) == len(AP.candidates("CRYPTO")), len(q["rows"])
 assert all(len(r["per_symbol"]) == len(AP.SYMBOLS["CRYPTO"]) for r in q["rows"])
 print("qualify:", [(r["name"][12:40], r["ok"], r["why"][:60]) for r in q["rows"]])
 assert AP.qualify("CRYPTO")["t"] == q["t"]          # cached for a week
@@ -67,7 +67,7 @@ assert len(AP.active_specs("CRYPTO")) == len(q["ok"])
 # a changed candidate list forces a re-test even inside the week
 store.put("g_ap_qual:CRYPTO", {**q, "ids": ["s_old"]})
 q = AP.qualify("CRYPTO")
-assert q["ids"] == sorted(c["id"] for c in AP.CANDIDATES["CRYPTO"])
+assert q["ids"] == sorted(c["id"] for c in AP.candidates("CRYPTO"))
 
 # force a known pass so the trade path is exercised whatever the synthetic data gave
 store.put("g_ap_qual:CRYPTO", {**q, "ok": {"s_a10001": ["BTCUSDT"]}})
@@ -194,7 +194,7 @@ print("chart OK:", len(ch["candles"]), "candles,", len(ch["lines"]), "lines,", l
 j = GB.journal("CRYPTO")
 assert {"trades", "by_day", "by_strategy", "by_symbol", "by_reason", "open"} <= set(j) and len(j["open"]) == len(GB.positions("CRYPTO"))
 rb = GB.rules("CRYPTO")
-assert len(rb["built_in"]) == len(AP.CANDIDATES["CRYPTO"]) and all(r["about"] and r["spec"]["market"] == "CRYPTO" for r in rb["built_in"])
+assert len(rb["built_in"]) == len(AP.candidates("CRYPTO")) and all(r["about"] and r["spec"]["market"] == "CRYPTO" for r in rb["built_in"])
 for r in rb["built_in"]:
     CU.validate(r["spec"], existing_id=r["id"])            # the Backtest tab posts these specs back unchanged
 ctx = GB.context("CRYPTO")
