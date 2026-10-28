@@ -113,6 +113,8 @@ def _loop():
             try:
                 from . import store as _st
                 state["migration"] = _st.auto_migrate_if_due()
+                if state["migration"] not in ("not applicable", "waiting for 1 Nov", "done"):
+                    print("[migration] auto check:", state["migration"], flush=True)
             except Exception as e:
                 state["last_error"] = f"migration: {str(e)[:100]}"
         if time.time() - last_ping > PING_EVERY:

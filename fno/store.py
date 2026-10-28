@@ -462,6 +462,8 @@ def start_migration(dry_run: bool = False) -> dict:
             r = {"ok": False, "error": f"{type(e).__name__}: {str(e)[:300]}"}
         r["finished"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         MIG.update(running=False, result=r, progress=None)
+        print("[migration]", "preview" if dry_run else "copy", {k: r.get(k) for k in ("ok", "error", "keys", "rows_copied", "rows_already_there",
+              "settings_restored", "settings_kept_current", "verified")}, "missing:", [x["key"] for x in r.get("missing_after") or []][:20], flush=True)
         try:
             put("upstash_migration_preview" if dry_run else "upstash_migration", r)
         except Exception:
