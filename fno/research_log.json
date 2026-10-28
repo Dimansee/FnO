@@ -1310,6 +1310,17 @@
    "decision": "Not adopted",
    "summary": "None of the 7 scalping strategies has an edge before costs on Indian indices, Indian stocks, crypto or US stocks; after costs all lose. Matches rounds 34 and 36.",
    "period": "Jan 2023 - Oct 2026 (crypto from Jan 2024, US Aug - Oct 2026)"
+  },
+  {
+   "id": "r63",
+   "date": "2026-10-29",
+   "area": "India + Crypto",
+   "title": "Combinations of the 7 scalping strategies (each entry + 0-3 confirming indicators), 1 / 2 / 5 / 15 min",
+   "asked": "Is there any combination that works? Each round-62 entry was taken only when 0-3 of 8 confirmations agreed (MA ribbon, MACD sign, Supertrend, RMI > 50, EMA 9 > 21, regression slope, RSI > 50, 1-hour EMA 50 trend): 4,743 combinations on Nifty / Bank Nifty / Sensex 1-15 min, 10 Nifty stocks and 5 coins 5-15 min. Ranked on trades before Apr 2025 only, judged on Apr 2025 - Oct 2026. Survivors re-priced as ATM options (app pricing with time decay, real charges, 0.1% / 0.25% slippage per fill, Rs 2,000 risk per trade).",
+   "result": "1, 2-min index charts, all stock combinations and all crypto combinations: nothing holds (crypto 5m 0 of 683 positive in both periods even at 0.08% costs; stocks 0 of 1,509). Index 5 and 15 min: one family works - RMI + Supertrend. On 15 min with MACD and RMI agreeing: 693 trades 2023-26, about 9 Nifty points a trade before costs (t = 2.4), holds about 2.8 hours; as ATM options with time decay and charges +Rs 169 a trade at 0.25% slippage = +Rs 1.17L at Rs 2,000 risk, positive every year (2023 +8k, 2024 +61k, 2025 +10k, 2026 +39k), Nifty +93k and Sensex +48k but Bank Nifty -24k. Without the filters (plain RMI + Supertrend 15 min) +Rs 1.59L but 2023 and 2025 negative. 5 min with ribbon + MACD + 1-hour trend: +Rs 65k, 2025 negative. Through futures every version loses. These are short trend trades (1.5-3 hours), not scalps.",
+   "decision": "Watch-list: paper forward test proposed; live rules unchanged",
+   "summary": "No scalping combination works on 1-2 min, stocks or crypto. A 15-min RMI + Supertrend trend entry confirmed by MACD and RMI is the one combination that held on new data and as priced options (+Rs 169 a trade); Bank Nifty is the weak index.",
+   "period": "Jan 2023 - Oct 2026 (crypto from Jan 2024)"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -1705,6 +1716,13 @@
     "r40"
    ],
    "next": "Re-run research/round40.py with 60 more sessions; adopt only if still ahead and 2023-25 is not worse."
+  },
+  {
+   "id": "p-rmi15",
+   "area": "Index options",
+   "title": "RMI + Supertrend 15-min with MACD + RMI agreeing (Nifty, Sensex) as a paper forward test",
+   "waiting_for": "Your decision to start a paper forward test",
+   "why": "Round 63: the only scalping combination that held on 2025-26 and as priced ATM options: +Rs 169 a trade at Rs 2,000 risk, every year 2023-26 positive. Bank Nifty lost, so Nifty and Sensex only. Needs live paper fills before any money."
   }
  ],
  "crypto_rounds": [
@@ -1861,6 +1879,16 @@
    ],
    "project_round": 62,
    "takeaway": "No edge before costs (within +-0.015% a trade); after the 0.16% fee every strategy loses on every coin in every year, even at 0.08%."
+  },
+  {
+   "n": 16,
+   "date": "2026-10-29",
+   "topic": "Combinations of the 7 scalping strategies on coins",
+   "ids": [
+    "r63"
+   ],
+   "project_round": 63,
+   "takeaway": "No combination works on 5 or 15 min coins after fees; the best early picks lost later even at 0.08% costs."
   }
  ],
  "crypto_status": {
@@ -2453,6 +2481,15 @@
     "r62"
    ],
    "takeaway": "No edge before costs on Nifty / Bank Nifty / Sensex 1-5 min or on 10 Nifty stocks; every one loses after costs. Only RMI + Supertrend on 5-min is near zero, and only with optimistic option costs."
+  },
+  {
+   "n": 63,
+   "date": "2026-10-29",
+   "topic": "Combinations of the 7 scalping strategies",
+   "ids": [
+    "r63"
+   ],
+   "takeaway": "Nothing works on 1-2 min. RMI + Supertrend on 15 min with MACD + RMI agreeing held up on 2025-26 and as real-priced ATM options: +Rs 1.17L over 693 trades at Rs 2,000 risk, every year positive; Bank Nifty negative."
   }
  ],
  "india_status": {
