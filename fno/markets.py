@@ -120,16 +120,70 @@ def _bybit(symbol: str, tf: str, start_ms: int, end_ms: int) -> pd.DataFrame:
     return _frame(rows) if rows else pd.DataFrame(columns=["open", "high", "low", "close", "volume"])
 
 
+# Yahoo Finance tickers for the coins: third source when Binance and Bybit are both down or out of date
+YAHOO_CRYPTO = {"BTCUSDT": "BTC-USD", "ETHUSDT": "ETH-USD", "SOLUSDT": "SOL-USD", "BNBUSDT": "BNB-USD", "XRPUSDT": "XRP-USD",
+                "DOGEUSDT": "DOGE-USD", "ADAUSDT": "ADA-USD", "AVAXUSDT": "AVAX-USD", "LINKUSDT": "LINK-USD",
+                "TONUSDT": "TON11419-USD", "PAXGUSDT": "PAXG-USD"}
+SOURCE: dict = {}                 # (symbol, tf) -> source actually used for the last good fetch
+_LOGGED: dict = {}
+
+
+def _log_once(key: str, msg: str, every: int = 900):
+    if _t.time() - _LOGGED.get(key, 0) > every:
+        _LOGGED[key] = _t.time()
+        print(f"[markets] {msg}", flush=True)
+
+
+def fresh(df: pd.DataFrame, tf: str, now_ms: int | None = None) -> bool:
+    """True when the newest candle is recent: a source that stopped updating (delisted pair, frozen feed) must never be used.
+    Allowed age of the newest bar's start: 3 bars + 1 hour (daily: 2 days + 1 hour)."""
+    if df is None or df.empty:
+        return False
+    now_ms = now_ms or int(_t.time() * 1000)
+    last = int(pd.Timestamp(df.index[-1]).value // 1_000_000)
+    return now_ms - last <= (3 * MINUTES[tf] + 60) * 60_000
+
+
+def _yahoo_crypto(symbol: str, tf: str, days: int) -> pd.DataFrame:
+    import yfinance as yf
+    iv, cap = {"1m": ("1m", 7), "5m": ("5m", 59), "15m": ("15m", 59), "30m": ("30m", 59), "1h": ("1h", 720), "4h": ("1h", 720), "1d": ("1d", 3650)}[tf]
+    d = min(int(days) + 1, cap)
+    df = yf.Ticker(YAHOO_CRYPTO[symbol]).history(period=f"{d}d" if iv != "1d" else "max" if d > 700 else f"{d}d", interval=iv, auto_adjust=False)
+    if df.empty:
+        return df
+    df = df.rename(columns=str.lower)[["open", "high", "low", "close", "volume"]].dropna(subset=["close"])
+    df.index = df.index.tz_convert("UTC") if df.index.tz is not None else df.index.tz_localize("UTC")
+    if tf == "4h":
+        df = df.resample("4h", label="left", closed="left").agg({"open": "first", "high": "max", "low": "min", "close": "last", "volume": "sum"}).dropna(subset=["close"])
+    return df
+
+
 def _crypto(symbol: str, tf: str, days: int) -> pd.DataFrame:
+    """Binance, then Bybit, then Yahoo Finance; a source whose newest candle is old counts as failed (29 Oct 2026: on the server
+    Binance failed and Bybit's PAXGUSDT had stopped in March 2025, so gold showed March prices)."""
     end = int(_t.time() * 1000)
     start = end - int(days * 86400 * 1000)
-    try:
-        df = _binance(symbol, tf, start, end)
-    except Exception:
-        df = pd.DataFrame()
-    if df.empty:
-        df = _bybit(symbol, tf, start, end)
-    return df
+    tried = []
+    for name, fn in (("Binance", lambda: _binance(symbol, tf, start, end)), ("Bybit", lambda: _bybit(symbol, tf, start, end)),
+                     ("Yahoo Finance", lambda: _yahoo_crypto(symbol, tf, days) if symbol in YAHOO_CRYPTO else pd.DataFrame())):
+        try:
+            df = fn()
+        except Exception as e:
+            tried.append(f"{name}: {str(e)[:60]}")
+            continue
+        if fresh(df, tf, end):
+            df = df[df.index >= pd.Timestamp(start, unit="ms", tz="UTC")]
+            if tried:
+                _log_once(f"{symbol}:{tf}:{name}", f"{symbol} {tf} from {name} ({'; '.join(tried)})")
+            SOURCE[(symbol, tf)] = name
+            return df
+        tried.append(f"{name}: " + ("no data" if df is None or df.empty else f"out of date (last candle {pd.Timestamp(df.index[-1]):%Y-%m-%d %H:%M})"))
+    _log_once(f"{symbol}:{tf}:none", f"no up-to-date {symbol} {tf} candles: {'; '.join(tried)}")
+    raise RuntimeError(f"No up-to-date price data for {symbol} right now ({'; '.join(tried)}).")
+
+
+def source(symbol: str, tf: str) -> str | None:
+    return SOURCE.get((symbol, tf))
 
 
 # ------------------------------------------------------------------ US

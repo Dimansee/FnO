@@ -650,8 +650,9 @@ def chart(market: str, symbol: str, tf: str) -> dict:
         k = bisect.bisect_right(times, m["time"]) - 1
         m["time"] = times[max(k, 0)] if times else m["time"]
     markers.sort(key=lambda m: m["time"])
+    src = MK.source(symbol, "1h" if (symbol in MK.BINANCE_GOLD and market == "GOLD" and tf in ("4h", "1d")) else tf)
     return {"symbol": symbol, "tf": tf, "candles": candles, "lines": lines, "markers": markers, "positions": pos,
-            "symbols": MK.catalog(market), "timeframes": list(CHART_TF)}
+            "symbols": MK.catalog(market), "timeframes": list(CHART_TF), "source": src}
 
 
 def chart_patterns(market: str, symbol: str, tf: str, k: float = 2.0) -> dict:
