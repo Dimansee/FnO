@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-28",
+ "updated": "2026-10-29",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
@@ -1299,6 +1299,17 @@
    "decision": "Watch-list; live rules unchanged",
    "summary": "Stacking confluences turns a losing level-break into a small winner only on 1h / 4h and only with the trend; it mostly repeats the live trend rule's trades at a lower profit.",
    "period": "Jan 2023 - Oct 2026 (15m from Jan 2024)"
+  },
+  {
+   "id": "r62",
+   "date": "2026-10-29",
+   "area": "India + Crypto",
+   "title": "7 scalping strategies from a cheat sheet: MA ribbon, relative-strength exit, RSI+MACD momentum, pivot scalping, RMI + Supertrend, regression channel, EMA 9/21 (+ RSI filter)",
+   "asked": "Each strategy coded as written in the user's table (timeframes 1, 2 and 5 minutes, stops, targets, max hold, first-two-hours and lunch rules) and run on Nifty / Bank Nifty / Sensex 1-min (2023 - Oct 2026), 10 Nifty stocks 5-min, 5 coins 5-min (2024-) and 13 US stocks / ETFs 5-min (Aug - Oct 2026). Costs per round trip: index via ATM option ~0.012% (about 3 Nifty points, optimistic), index futures and Indian stocks 0.06%, crypto 0.16% (and 0.08%), US 0.02%.",
+   "result": "No edge before costs: every strategy averages between -0.04% and +0.03% a trade before fees (e.g. EMA 9/21 + RSI on Nifty 1-min: -0.8 index points a trade, 13 trades a day). After costs all 45 market/timeframe combinations lose except two that are at zero: RMI + Supertrend on index 5-min (+0.001% a trade with the optimistic option cost, -0.048% with futures; 2025 negative) and pivot bounces on US stocks (+0.010%, only 3 months, 4/13 symbols). Crypto loses -0.06% to -0.17% a trade on every coin in every year; Indian stocks -0.03% to -0.065% on 10/10 stocks. The faster the strategy, the bigger the loss: the ribbon and EMA/RSI scalps trade 10-16 times a day and lose the most in total.",
+   "decision": "Not adopted",
+   "summary": "None of the 7 scalping strategies has an edge before costs on Indian indices, Indian stocks, crypto or US stocks; after costs all lose. Matches rounds 34 and 36.",
+   "period": "Jan 2023 - Oct 2026 (crypto from Jan 2024, US Aug - Oct 2026)"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -1840,6 +1851,16 @@
    ],
    "project_round": 61,
    "takeaway": "Loses on 15m whatever is stacked. On 1h / 4h with the trend, 4-5 confluences give about +0.15R a trade, but 70-78% of trades duplicate the live Supertrend 4h, which earns more."
+  },
+  {
+   "n": 15,
+   "date": "2026-10-29",
+   "topic": "7 scalping strategies on 5-min coins",
+   "ids": [
+    "r62"
+   ],
+   "project_round": 62,
+   "takeaway": "No edge before costs (within +-0.015% a trade); after the 0.16% fee every strategy loses on every coin in every year, even at 0.08%."
   }
  ],
  "crypto_status": {
@@ -1871,7 +1892,8 @@
    "EMA 20/50 + RSI pullback",
    "Smart-money / ICT setups, order blocks and fair value gaps (rounds 6, 12)",
    "Chart patterns on 5m / 15m / 1h, head and shoulders, harmonic patterns (round 13)",
-   "Retest entries after a level break; level breaks on 15m even with all confluences (round 14)"
+   "Retest entries after a level break; level breaks on 15m even with all confluences (round 14)",
+   "Scalping cheat-sheet strategies on 5 min: ribbon, RSI+MACD, pivot scalp, RMI + Supertrend, regression channel, EMA 9/21 (round 15)"
   ]
  },
  "india_rounds": [
@@ -2422,6 +2444,15 @@
     "r54"
    ],
    "takeaway": "Agreement is not adopted: on top of conviction + judge it lowers 2026 (3.76L vs 4.65L) and the median year; it only makes falls shallower by trading smaller, and it pulls against the judge's top-rated trades."
+  },
+  {
+   "n": 62,
+   "date": "2026-10-29",
+   "topic": "7 scalping strategies (MA ribbon, RS exit, RSI+MACD momentum, pivot scalp, RMI + Supertrend, regression channel, EMA 9/21 + RSI)",
+   "ids": [
+    "r62"
+   ],
+   "takeaway": "No edge before costs on Nifty / Bank Nifty / Sensex 1-5 min or on 10 Nifty stocks; every one loses after costs. Only RMI + Supertrend on 5-min is near zero, and only with optimistic option costs."
   }
  ],
  "india_status": {

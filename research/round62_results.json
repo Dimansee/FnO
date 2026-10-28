@@ -1,0 +1,1461 @@
+[
+{
+"v": {
+"market": "index",
+"tf": "1m",
+"strategy": "S3 momentum RSI+MACD, 0.1% stop"
+},
+"n": 823,
+"per_day": 0.29,
+"gross_pct": 0.0099,
+"gross_win": 45.1,
+"avg_bars": 3.9,
+"net": {
+"option ~3 pts": {
+"avg_pct": -0.0021,
+"win": 38.3,
+"total_pct": -1.7,
+"years": {
+"2023": -0.0099,
+"2024": -0.0163,
+"2025": 0.0099,
+"2026": 0.0051
+},
+"symbols_positive": 1,
+"symbols": 3
+},
+"futures": {
+"avg_pct": -0.0501,
+"win": 20.5,
+"total_pct": -41.2,
+"years": {
+"2023": -0.0579,
+"2024": -0.0643,
+"2025": -0.0381,
+"2026": -0.0429
+},
+"symbols_positive": 0,
+"symbols": 3
+}
+}
+},
+{
+"v": {
+"market": "index",
+"tf": "1m",
+"strategy": "S3 momentum RSI+MACD, 1 ATR stop (variant)"
+},
+"n": 823,
+"per_day": 0.29,
+"gross_pct": 0.009,
+"gross_win": 42.9,
+"avg_bars": 3.6,
+"net": {
+"option ~3 pts": {
+"avg_pct": -0.003,
+"win": 36.3,
+"total_pct": -2.4,
+"years": {
+"2023": -0.0125,
+"2024": -0.0152,
+"2025": 0.0093,
+"2026": 0.0041
+},
+"symbols_positive": 1,
+"symbols": 3
+},
+"futures": {
+"avg_pct": -0.051,
+"win": 19.6,
+"total_pct": -41.9,
+"years": {
+"2023": -0.0605,
+"2024": -0.0632,
+"2025": -0.0387,
+"2026": -0.0439
+},
+"symbols_positive": 0,
+"symbols": 3
+}
+}
+},
+{
+"v": {
+"market": "index",
+"tf": "1m",
+"strategy": "S4 pivot bounce, next pivot target"
+},
+"n": 2260,
+"per_day": 0.8,
+"gross_pct": 0.0067,
+"gross_win": 55.1,
+"avg_bars": 4.9,
+"net": {
+"option ~3 pts": {
+"avg_pct": -0.0053,
+"win": 47.7,
+"total_pct": -11.9,
+"years": {
+"2023": -0.0051,
+"2024": -0.0064,
+"2025": -0.011,
+"2026": 0.005
+},
+"symbols_positive": 1,
+"symbols": 3
+},
+"futures": {
+"avg_pct": -0.0533,
+"win": 25.8,
+"total_pct": -120.4,
+"years": {
+"2023": -0.0531,
+"2024": -0.0544,
+"2025": -0.059,
+"2026": -0.043
+},
+"symbols_positive": 0,
+"symbols": 3
+}
+}
+},
+{
+"v": {
+"market": "index",
+"tf": "1m",
+"strategy": "S5 RMI + Supertrend"
+},
+"n": 21927,
+"per_day": 7.78,
+"gross_pct": -0.0039,
+"gross_win": 40.7,
+"avg_bars": 17.8,
+"net": {
+"option ~3 pts": {
+"avg_pct": -0.0159,
+"win": 34.8,
+"total_pct": -347.9,
+"years": {
+"2023": -0.0155,
+"2024": -0.0195,
+"2025": -0.0154,
+"2026": -0.0125
+},
+"symbols_positive": 0,
+"symbols": 3
+},
+"futures": {
+"avg_pct": -0.0639,
+"win": 19.6,
+"total_pct": -1400.4,
+"years": {
+"2023": -0.0635,
+"2024": -0.0675,
+"2025": -0.0634,
+"2026": -0.0605
+},
+"symbols_positive": 0,
+"symbols": 3
+}
+}
+},
+{
+"v": {
+"market": "index",
+"tf": "1m",
+"strategy": "S7b EMA 9/21 + RSI 50 filter"
+},
+"n": 37325,
+"per_day": 13.24,
+"gross_pct": -0.0031,
+"gross_win": 40.4,
+"avg_bars": 6.0,
+"net": {
+"option ~3 pts": {
+"avg_pct": -0.0151,
+"win": 34.7,
+"total_pct": -565.2,
+"years": {
+"2023": -0.0164,
+"2024": -0.0166,
+"2025": -0.0132,
+"2026": -0.0141
+},
+"symbols_positive": 0,
+"symbols": 3
+},
+"futures": {
+"avg_pct": -0.0631,
+"win": 13.4,
+"total_pct": -2356.8,
+"years": {
+"2023": -0.0644,
+"2024": -0.0646,
+"2025": -0.0612,
+"2026": -0.0621
+},
+"symbols_positive": 0,
+"symbols": 3
+}
+}
+},
+{
+"v": {
+"market": "index",
+"tf": "2m",
+"strategy": "S1 ribbon 5-8-13"
+},
+"n": 29074,
+"per_day": 10.31,
+"gross_pct": -0.002,
+"gross_win": 38.3,
+"avg_bars": 4.7,
+"net": {
+"option ~3 pts": {
+"avg_pct": -0.014,
+"win": 35.4,
+"total_pct": -407.7,
+"years": {
+"2023": -0.0135,
+"2024": -0.0154,
+"2025": -0.0131,
+"2026": -0.0141
+},
+"symbols_positive": 0,
+"symbols": 3
+},
+"futures": {
+"avg_pct": -0.062,
+"win": 19.4,
+"total_pct": -1803.2,
+"years": {
+"2023": -0.0615,
+"2024": -0.0634,
+"2025": -0.0611,
+"2026": -0.0621
+},
+"symbols_positive": 0,
+"symbols": 3
+}
+}
+},
+{
+"v": {
+"market": "index",
+"tf": "2m",
+"strategy": "S6 regression channel, target opposite band"
+},
+"n": 17268,
+"per_day": 6.12,
+"gross_pct": 0.0029,
+"gross_win": 32.1,
+"avg_bars": 7.7,
+"net": {
+"option ~3 pts": {
+"avg_pct": -0.0091,
+"win": 28.9,
+"total_pct": -157.0,
+"years": {
+"2023": -0.0104,
+"2024": -0.0089,
+"2025": -0.0099,
+"2026": -0.0065
+},
+"symbols_positive": 0,
+"symbols": 3
+},
+"futures": {
+"avg_pct": -0.0571,
+"win": 19.6,
+"total_pct": -985.9,
+"years": {
+"2023": -0.0584,
+"2024": -0.0569,
+"2025": -0.0579,
+"2026": -0.0545
+},
+"symbols_positive": 0,
+"symbols": 3
+}
+}
+},
+{
+"v": {
+"market": "index",
+"tf": "2m",
+"strategy": "S6 regression channel, target middle"
+},
+"n": 18791,
+"per_day": 6.66,
+"gross_pct": 0.0029,
+"gross_win": 42.2,
+"avg_bars": 4.4,
+"net": {
+"option ~3 pts": {
+"avg_pct": -0.0091,
+"win": 38.6,
+"total_pct": -171.4,
+"years": {
+"2023": -0.0108,
+"2024": -0.0088,
+"2025": -0.0095,
+"2026": -0.0068
+},
+"symbols_positive": 0,
+"symbols": 3
+},
+"futures": {
+"avg_pct": -0.0571,
+"win": 20.9,
+"total_pct": -1073.3,
+"years": {
+"2023": -0.0588,
+"2024": -0.0568,
+"2025": -0.0575,
+"2026": -0.0548
+},
+"symbols_positive": 0,
+"symbols": 3
+}
+}
+},
+{
+"v": {
+"market": "index",
+"tf": "5m",
+"strategy": "S5 RMI + Supertrend"
+},
+"n": 4085,
+"per_day": 1.45,
+"gross_pct": 0.0125,
+"gross_win": 45.2,
+"avg_bars": 17.7,
+"net": {
+"option ~3 pts": {
+"avg_pct": 0.0005,
+"win": 42.5,
+"total_pct": 2.1,
+"years": {
+"2023": 0.0011,
+"2024": 0.003,
+"2025": -0.0157,
+"2026": 0.0182
+},
+"symbols_positive": 1,
+"symbols": 3
+},
+"futures": {
+"avg_pct": -0.0475,
+"win": 35.2,
+"total_pct": -194.0,
+"years": {
+"2023": -0.0469,
+"2024": -0.045,
+"2025": -0.0637,
+"2026": -0.0298
+},
+"symbols_positive": 0,
+"symbols": 3
+}
+}
+},
+{
+"v": {
+"market": "index",
+"tf": "5m",
+"strategy": "S6 regression channel, target opposite band"
+},
+"n": 6497,
+"per_day": 2.3,
+"gross_pct": 0.0076,
+"gross_win": 35.6,
+"avg_bars": 7.1,
+"net": {
+"option ~3 pts": {
+"avg_pct": -0.0044,
+"win": 33.4,
+"total_pct": -28.6,
+"years": {
+"2023": -0.003,
+"2024": -0.0111,
+"2025": -0.0027,
+"2026": 0.0011
+},
+"symbols_positive": 0,
+"symbols": 3
+},
+"futures": {
+"avg_pct": -0.0524,
+"win": 25.3,
+"total_pct": -340.5,
+"years": {
+"2023": -0.051,
+"2024": -0.0591,
+"2025": -0.0507,
+"2026": -0.0469
+},
+"symbols_positive": 0,
+"symbols": 3
+}
+}
+},
+{
+"v": {
+"market": "index",
+"tf": "5m",
+"strategy": "S6 regression channel, target middle"
+},
+"n": 6894,
+"per_day": 2.44,
+"gross_pct": 0.0034,
+"gross_win": 43.3,
+"avg_bars": 4.4,
+"net": {
+"option ~3 pts": {
+"avg_pct": -0.0086,
+"win": 40.8,
+"total_pct": -59.4,
+"years": {
+"2023": -0.0118,
+"2024": -0.0127,
+"2025": -0.0081,
+"2026": 0.001
+},
+"symbols_positive": 0,
+"symbols": 3
+},
+"futures": {
+"avg_pct": -0.0566,
+"win": 29.6,
+"total_pct": -390.3,
+"years": {
+"2023": -0.0598,
+"2024": -0.0607,
+"2025": -0.0561,
+"2026": -0.047
+},
+"symbols_positive": 0,
+"symbols": 3
+}
+}
+},
+{
+"v": {
+"market": "index",
+"tf": "5m",
+"strategy": "S7a EMA 9/21 cross, 1.5 ATR target"
+},
+"n": 7216,
+"per_day": 2.56,
+"gross_pct": -0.0003,
+"gross_win": 38.2,
+"avg_bars": 3.9,
+"net": {
+"option ~3 pts": {
+"avg_pct": -0.0123,
+"win": 35.6,
+"total_pct": -88.5,
+"years": {
+"2023": -0.012,
+"2024": -0.0197,
+"2025": -0.0083,
+"2026": -0.0077
+},
+"symbols_positive": 0,
+"symbols": 3
+},
+"futures": {
+"avg_pct": -0.0603,
+"win": 31.6,
+"total_pct": -434.8,
+"years": {
+"2023": -0.06,
+"2024": -0.0677,
+"2025": -0.0563,
+"2026": -0.0557
+},
+"symbols_positive": 0,
+"symbols": 3
+}
+}
+},
+{
+"v": {
+"market": "stock",
+"tf": "5m",
+"strategy": "S1 ribbon 5-8-13"
+},
+"n": 39588,
+"per_day": 4.23,
+"gross_pct": -0.0016,
+"gross_win": 40.8,
+"avg_bars": 3.2,
+"net": {
+"intraday": {
+"avg_pct": -0.0616,
+"win": 30.1,
+"total_pct": -2438.8,
+"years": {
+"2023": -0.062,
+"2024": -0.0634,
+"2025": -0.0609,
+"2026": -0.0596
+},
+"symbols_positive": 0,
+"symbols": 10
+}
+}
+},
+{
+"v": {
+"market": "stock",
+"tf": "5m",
+"strategy": "S2 RS breakout, exit on RS weakness"
+},
+"n": 29240,
+"per_day": 3.13,
+"gross_pct": -0.0026,
+"gross_win": 31.1,
+"avg_bars": 6.8,
+"net": {
+"intraday": {
+"avg_pct": -0.0626,
+"win": 25.0,
+"total_pct": -1831.0,
+"years": {
+"2023": -0.0664,
+"2024": -0.0656,
+"2025": -0.067,
+"2026": -0.0478
+},
+"symbols_positive": 0,
+"symbols": 10
+}
+}
+},
+{
+"v": {
+"market": "stock",
+"tf": "5m",
+"strategy": "S2 RS breakout, 1.5R target (comparison)"
+},
+"n": 33835,
+"per_day": 3.62,
+"gross_pct": -0.0033,
+"gross_win": 39.1,
+"avg_bars": 4.8,
+"net": {
+"intraday": {
+"avg_pct": -0.0633,
+"win": 38.8,
+"total_pct": -2140.9,
+"years": {
+"2023": -0.065,
+"2024": -0.0666,
+"2025": -0.0651,
+"2026": -0.0541
+},
+"symbols_positive": 0,
+"symbols": 10
+}
+}
+},
+{
+"v": {
+"market": "stock",
+"tf": "5m",
+"strategy": "S3 momentum RSI+MACD, 0.1% stop"
+},
+"n": 417,
+"per_day": 0.04,
+"gross_pct": 0.0309,
+"gross_win": 28.3,
+"avg_bars": 2.0,
+"net": {
+"intraday": {
+"avg_pct": -0.0291,
+"win": 22.5,
+"total_pct": -12.1,
+"years": {
+"2023": -0.0446,
+"2024": 0.0289,
+"2025": -0.0358,
+"2026": -0.0604
+},
+"symbols_positive": 3,
+"symbols": 10
+}
+}
+},
+{
+"v": {
+"market": "stock",
+"tf": "5m",
+"strategy": "S3 momentum RSI+MACD, 1 ATR stop (variant)"
+},
+"n": 417,
+"per_day": 0.04,
+"gross_pct": 0.0329,
+"gross_win": 44.4,
+"avg_bars": 3.0,
+"net": {
+"intraday": {
+"avg_pct": -0.0271,
+"win": 36.5,
+"total_pct": -11.3,
+"years": {
+"2023": -0.0715,
+"2024": 0.0483,
+"2025": -0.0271,
+"2026": -0.0564
+},
+"symbols_positive": 2,
+"symbols": 10
+}
+}
+},
+{
+"v": {
+"market": "stock",
+"tf": "5m",
+"strategy": "S4 pivot bounce, next pivot target"
+},
+"n": 8232,
+"per_day": 0.88,
+"gross_pct": -0.0012,
+"gross_win": 51.5,
+"avg_bars": 2.9,
+"net": {
+"intraday": {
+"avg_pct": -0.0612,
+"win": 41.0,
+"total_pct": -504.0,
+"years": {
+"2023": -0.066,
+"2024": -0.0637,
+"2025": -0.0522,
+"2026": -0.0641
+},
+"symbols_positive": 0,
+"symbols": 10
+}
+}
+},
+{
+"v": {
+"market": "stock",
+"tf": "5m",
+"strategy": "S5 RMI + Supertrend"
+},
+"n": 13307,
+"per_day": 1.42,
+"gross_pct": 0.0115,
+"gross_win": 43.1,
+"avg_bars": 17.2,
+"net": {
+"intraday": {
+"avg_pct": -0.0485,
+"win": 36.8,
+"total_pct": -645.6,
+"years": {
+"2023": -0.0521,
+"2024": -0.0561,
+"2025": -0.0564,
+"2026": -0.0235
+},
+"symbols_positive": 0,
+"symbols": 10
+}
+}
+},
+{
+"v": {
+"market": "stock",
+"tf": "5m",
+"strategy": "S6 regression channel, target opposite band"
+},
+"n": 23825,
+"per_day": 2.55,
+"gross_pct": -0.0046,
+"gross_win": 32.9,
+"avg_bars": 6.6,
+"net": {
+"intraday": {
+"avg_pct": -0.0646,
+"win": 26.9,
+"total_pct": -1538.2,
+"years": {
+"2023": -0.0632,
+"2024": -0.0632,
+"2025": -0.0687,
+"2026": -0.0624
+},
+"symbols_positive": 0,
+"symbols": 10
+}
+}
+},
+{
+"v": {
+"market": "stock",
+"tf": "5m",
+"strategy": "S6 regression channel, target middle"
+},
+"n": 24945,
+"per_day": 2.67,
+"gross_pct": -0.0053,
+"gross_win": 40.3,
+"avg_bars": 4.2,
+"net": {
+"intraday": {
+"avg_pct": -0.0653,
+"win": 33.0,
+"total_pct": -1628.3,
+"years": {
+"2023": -0.0654,
+"2024": -0.0632,
+"2025": -0.0676,
+"2026": -0.0646
+},
+"symbols_positive": 0,
+"symbols": 10
+}
+}
+},
+{
+"v": {
+"market": "stock",
+"tf": "5m",
+"strategy": "S7a EMA 9/21 cross, 1.5 ATR target"
+},
+"n": 9132,
+"per_day": 0.98,
+"gross_pct": -0.0051,
+"gross_win": 36.8,
+"avg_bars": 3.7,
+"net": {
+"intraday": {
+"avg_pct": -0.0651,
+"win": 31.9,
+"total_pct": -594.5,
+"years": {
+"2023": -0.0682,
+"2024": -0.0632,
+"2025": -0.0704,
+"2026": -0.0567
+},
+"symbols_positive": 0,
+"symbols": 10
+}
+}
+},
+{
+"v": {
+"market": "stock",
+"tf": "5m",
+"strategy": "S7b EMA 9/21 + RSI 50 filter"
+},
+"n": 23777,
+"per_day": 2.54,
+"gross_pct": 0.0009,
+"gross_win": 40.9,
+"avg_bars": 7.0,
+"net": {
+"intraday": {
+"avg_pct": -0.0591,
+"win": 33.8,
+"total_pct": -1404.6,
+"years": {
+"2023": -0.0617,
+"2024": -0.0617,
+"2025": -0.0634,
+"2026": -0.0462
+},
+"symbols_positive": 0,
+"symbols": 10
+}
+}
+},
+{
+"v": {
+"market": "crypto",
+"tf": "5m",
+"strategy": "S1 ribbon 5-8-13"
+},
+"n": 82238,
+"per_day": 15.98,
+"gross_pct": 0.0007,
+"gross_win": 41.0,
+"avg_bars": 3.3,
+"net": {
+"taker 0.16%": {
+"avg_pct": -0.1593,
+"win": 20.1,
+"total_pct": -13100.2,
+"years": {
+"2024": -0.1605,
+"2025": -0.1602,
+"2026": -0.1567
+},
+"symbols_positive": 0,
+"symbols": 5
+},
+"0.08%": {
+"avg_pct": -0.0793,
+"win": 29.2,
+"total_pct": -6521.2,
+"years": {
+"2024": -0.0805,
+"2025": -0.0802,
+"2026": -0.0767
+},
+"symbols_positive": 0,
+"symbols": 5
+}
+}
+},
+{
+"v": {
+"market": "crypto",
+"tf": "5m",
+"strategy": "S3 momentum RSI+MACD, 0.1% stop"
+},
+"n": 314,
+"per_day": 0.06,
+"gross_pct": -0.0038,
+"gross_win": 21.7,
+"avg_bars": 2.5,
+"net": {
+"taker 0.16%": {
+"avg_pct": -0.1638,
+"win": 10.8,
+"total_pct": -51.4,
+"years": {
+"2024": -0.166,
+"2025": -0.1615,
+"2026": -0.1645
+},
+"symbols_positive": 0,
+"symbols": 5
+},
+"0.08%": {
+"avg_pct": -0.0838,
+"win": 16.2,
+"total_pct": -26.3,
+"years": {
+"2024": -0.086,
+"2025": -0.0815,
+"2026": -0.0845
+},
+"symbols_positive": 0,
+"symbols": 5
+}
+}
+},
+{
+"v": {
+"market": "crypto",
+"tf": "5m",
+"strategy": "S3 momentum RSI+MACD, 1 ATR stop (variant)"
+},
+"n": 313,
+"per_day": 0.06,
+"gross_pct": -0.0068,
+"gross_win": 34.5,
+"avg_bars": 3.4,
+"net": {
+"taker 0.16%": {
+"avg_pct": -0.1668,
+"win": 16.9,
+"total_pct": -52.2,
+"years": {
+"2024": -0.1423,
+"2025": -0.1734,
+"2026": -0.1864
+},
+"symbols_positive": 0,
+"symbols": 5
+},
+"0.08%": {
+"avg_pct": -0.0868,
+"win": 24.3,
+"total_pct": -27.2,
+"years": {
+"2024": -0.0623,
+"2025": -0.0934,
+"2026": -0.1064
+},
+"symbols_positive": 0,
+"symbols": 5
+}
+}
+},
+{
+"v": {
+"market": "crypto",
+"tf": "5m",
+"strategy": "S4 pivot bounce, next pivot target"
+},
+"n": 5106,
+"per_day": 0.99,
+"gross_pct": 0.0146,
+"gross_win": 55.0,
+"avg_bars": 3.0,
+"net": {
+"taker 0.16%": {
+"avg_pct": -0.1454,
+"win": 32.5,
+"total_pct": -742.2,
+"years": {
+"2024": -0.1462,
+"2025": -0.1509,
+"2026": -0.1373
+},
+"symbols_positive": 0,
+"symbols": 5
+},
+"0.08%": {
+"avg_pct": -0.0654,
+"win": 43.6,
+"total_pct": -333.7,
+"years": {
+"2024": -0.0662,
+"2025": -0.0709,
+"2026": -0.0573
+},
+"symbols_positive": 0,
+"symbols": 5
+}
+}
+},
+{
+"v": {
+"market": "crypto",
+"tf": "5m",
+"strategy": "S5 RMI + Supertrend"
+},
+"n": 32632,
+"per_day": 6.34,
+"gross_pct": -0.0023,
+"gross_win": 41.5,
+"avg_bars": 17.4,
+"net": {
+"taker 0.16%": {
+"avg_pct": -0.1623,
+"win": 26.9,
+"total_pct": -5296.1,
+"years": {
+"2024": -0.1564,
+"2025": -0.1616,
+"2026": -0.1702
+},
+"symbols_positive": 0,
+"symbols": 5
+},
+"0.08%": {
+"avg_pct": -0.0823,
+"win": 33.3,
+"total_pct": -2685.5,
+"years": {
+"2024": -0.0764,
+"2025": -0.0816,
+"2026": -0.0902
+},
+"symbols_positive": 0,
+"symbols": 5
+}
+}
+},
+{
+"v": {
+"market": "crypto",
+"tf": "5m",
+"strategy": "S6 regression channel, target opposite band"
+},
+"n": 55023,
+"per_day": 10.69,
+"gross_pct": 0.0017,
+"gross_win": 30.4,
+"avg_bars": 7.0,
+"net": {
+"taker 0.16%": {
+"avg_pct": -0.1583,
+"win": 20.5,
+"total_pct": -8711.0,
+"years": {
+"2024": -0.1585,
+"2025": -0.1578,
+"2026": -0.1588
+},
+"symbols_positive": 0,
+"symbols": 5
+},
+"0.08%": {
+"avg_pct": -0.0783,
+"win": 24.6,
+"total_pct": -4309.2,
+"years": {
+"2024": -0.0785,
+"2025": -0.0778,
+"2026": -0.0788
+},
+"symbols_positive": 0,
+"symbols": 5
+}
+}
+},
+{
+"v": {
+"market": "crypto",
+"tf": "5m",
+"strategy": "S6 regression channel, target middle"
+},
+"n": 59313,
+"per_day": 11.53,
+"gross_pct": 0.0002,
+"gross_win": 39.7,
+"avg_bars": 4.2,
+"net": {
+"taker 0.16%": {
+"avg_pct": -0.1598,
+"win": 25.5,
+"total_pct": -9476.7,
+"years": {
+"2024": -0.162,
+"2025": -0.16,
+"2026": -0.1567
+},
+"symbols_positive": 0,
+"symbols": 5
+},
+"0.08%": {
+"avg_pct": -0.0798,
+"win": 32.8,
+"total_pct": -4731.7,
+"years": {
+"2024": -0.082,
+"2025": -0.08,
+"2026": -0.0767
+},
+"symbols_positive": 0,
+"symbols": 5
+}
+}
+},
+{
+"v": {
+"market": "crypto",
+"tf": "5m",
+"strategy": "S7a EMA 9/21 cross, 1.5 ATR target"
+},
+"n": 22887,
+"per_day": 4.45,
+"gross_pct": -0.0019,
+"gross_win": 37.9,
+"avg_bars": 3.6,
+"net": {
+"taker 0.16%": {
+"avg_pct": -0.1619,
+"win": 30.2,
+"total_pct": -3706.4,
+"years": {
+"2024": -0.1597,
+"2025": -0.1629,
+"2026": -0.1635
+},
+"symbols_positive": 0,
+"symbols": 5
+},
+"0.08%": {
+"avg_pct": -0.0819,
+"win": 34.8,
+"total_pct": -1875.5,
+"years": {
+"2024": -0.0797,
+"2025": -0.0829,
+"2026": -0.0835
+},
+"symbols_positive": 0,
+"symbols": 5
+}
+}
+},
+{
+"v": {
+"market": "crypto",
+"tf": "5m",
+"strategy": "S7b EMA 9/21 + RSI 50 filter"
+},
+"n": 58633,
+"per_day": 11.4,
+"gross_pct": -0.007,
+"gross_win": 40.8,
+"avg_bars": 5.8,
+"net": {
+"taker 0.16%": {
+"avg_pct": -0.167,
+"win": 25.1,
+"total_pct": -9793.2,
+"years": {
+"2024": -0.1698,
+"2025": -0.1613,
+"2026": -0.1705
+},
+"symbols_positive": 0,
+"symbols": 5
+},
+"0.08%": {
+"avg_pct": -0.087,
+"win": 33.0,
+"total_pct": -5102.6,
+"years": {
+"2024": -0.0898,
+"2025": -0.0813,
+"2026": -0.0905
+},
+"symbols_positive": 0,
+"symbols": 5
+}
+}
+},
+{
+"v": {
+"market": "crypto",
+"tf": "5m",
+"strategy": "S2 RS breakout, exit on RS weakness"
+},
+"n": 54458,
+"per_day": 13.23,
+"gross_pct": -0.0055,
+"gross_win": 29.9,
+"avg_bars": 5.9,
+"net": {
+"taker 0.16%": {
+"avg_pct": -0.1655,
+"win": 18.5,
+"total_pct": -9010.1,
+"years": {
+"2024": -0.173,
+"2025": -0.1596,
+"2026": -0.1639
+},
+"symbols_positive": 0,
+"symbols": 4
+},
+"0.08%": {
+"avg_pct": -0.0855,
+"win": 23.2,
+"total_pct": -4653.5,
+"years": {
+"2024": -0.093,
+"2025": -0.0796,
+"2026": -0.0839
+},
+"symbols_positive": 0,
+"symbols": 4
+}
+}
+},
+{
+"v": {
+"market": "crypto",
+"tf": "5m",
+"strategy": "S2 RS breakout, 1.5R target (comparison)"
+},
+"n": 64193,
+"per_day": 15.6,
+"gross_pct": -0.007,
+"gross_win": 39.1,
+"avg_bars": 3.7,
+"net": {
+"taker 0.16%": {
+"avg_pct": -0.167,
+"win": 35.7,
+"total_pct": -10721.0,
+"years": {
+"2024": -0.1711,
+"2025": -0.1646,
+"2026": -0.1652
+},
+"symbols_positive": 0,
+"symbols": 4
+},
+"0.08%": {
+"avg_pct": -0.087,
+"win": 38.8,
+"total_pct": -5585.5,
+"years": {
+"2024": -0.0911,
+"2025": -0.0846,
+"2026": -0.0852
+},
+"symbols_positive": 0,
+"symbols": 4
+}
+}
+},
+{
+"v": {
+"market": "us",
+"tf": "5m",
+"strategy": "S1 ribbon 5-8-13"
+},
+"n": 5185,
+"per_day": 6.76,
+"gross_pct": -0.0042,
+"gross_win": 40.8,
+"avg_bars": 3.8,
+"net": {
+"0.02%": {
+"avg_pct": -0.0242,
+"win": 36.1,
+"total_pct": -125.6,
+"years": {
+"2026": -0.0242
+},
+"symbols_positive": 0,
+"symbols": 13
+}
+}
+},
+{
+"v": {
+"market": "us",
+"tf": "5m",
+"strategy": "S3 momentum RSI+MACD, 0.1% stop"
+},
+"n": 62,
+"per_day": 0.08,
+"gross_pct": -0.0022,
+"gross_win": 17.7,
+"avg_bars": 1.7,
+"net": {
+"0.02%": {
+"avg_pct": -0.0222,
+"win": 17.7,
+"total_pct": -1.4,
+"years": {
+"2026": -0.0222
+},
+"symbols_positive": 5,
+"symbols": 13
+}
+}
+},
+{
+"v": {
+"market": "us",
+"tf": "5m",
+"strategy": "S3 momentum RSI+MACD, 1 ATR stop (variant)"
+},
+"n": 64,
+"per_day": 0.08,
+"gross_pct": -0.0249,
+"gross_win": 35.9,
+"avg_bars": 2.4,
+"net": {
+"0.02%": {
+"avg_pct": -0.0449,
+"win": 35.9,
+"total_pct": -2.9,
+"years": {
+"2026": -0.0449
+},
+"symbols_positive": 5,
+"symbols": 13
+}
+}
+},
+{
+"v": {
+"market": "us",
+"tf": "5m",
+"strategy": "S4 pivot bounce, next pivot target"
+},
+"n": 582,
+"per_day": 0.76,
+"gross_pct": 0.03,
+"gross_win": 54.5,
+"avg_bars": 2.7,
+"net": {
+"0.02%": {
+"avg_pct": 0.01,
+"win": 51.0,
+"total_pct": 5.8,
+"years": {
+"2026": 0.01
+},
+"symbols_positive": 4,
+"symbols": 13
+}
+}
+},
+{
+"v": {
+"market": "us",
+"tf": "5m",
+"strategy": "S5 RMI + Supertrend"
+},
+"n": 1170,
+"per_day": 1.53,
+"gross_pct": -0.0371,
+"gross_win": 40.7,
+"avg_bars": 17.5,
+"net": {
+"0.02%": {
+"avg_pct": -0.0571,
+"win": 38.9,
+"total_pct": -66.8,
+"years": {
+"2026": -0.0571
+},
+"symbols_positive": 3,
+"symbols": 13
+}
+}
+},
+{
+"v": {
+"market": "us",
+"tf": "5m",
+"strategy": "S6 regression channel, target opposite band"
+},
+"n": 1549,
+"per_day": 2.02,
+"gross_pct": 0.0036,
+"gross_win": 35.7,
+"avg_bars": 7.1,
+"net": {
+"0.02%": {
+"avg_pct": -0.0164,
+"win": 33.5,
+"total_pct": -25.4,
+"years": {
+"2026": -0.0164
+},
+"symbols_positive": 5,
+"symbols": 13
+}
+}
+},
+{
+"v": {
+"market": "us",
+"tf": "5m",
+"strategy": "S6 regression channel, target middle"
+},
+"n": 1573,
+"per_day": 2.05,
+"gross_pct": 0.0025,
+"gross_win": 41.7,
+"avg_bars": 4.9,
+"net": {
+"0.02%": {
+"avg_pct": -0.0175,
+"win": 39.2,
+"total_pct": -27.6,
+"years": {
+"2026": -0.0175
+},
+"symbols_positive": 4,
+"symbols": 13
+}
+}
+},
+{
+"v": {
+"market": "us",
+"tf": "5m",
+"strategy": "S7a EMA 9/21 cross, 1.5 ATR target"
+},
+"n": 658,
+"per_day": 0.86,
+"gross_pct": -0.0236,
+"gross_win": 32.7,
+"avg_bars": 3.9,
+"net": {
+"0.02%": {
+"avg_pct": -0.0436,
+"win": 31.3,
+"total_pct": -28.7,
+"years": {
+"2026": -0.0436
+},
+"symbols_positive": 0,
+"symbols": 13
+}
+}
+},
+{
+"v": {
+"market": "us",
+"tf": "5m",
+"strategy": "S7b EMA 9/21 + RSI 50 filter"
+},
+"n": 2013,
+"per_day": 2.62,
+"gross_pct": -0.0152,
+"gross_win": 38.3,
+"avg_bars": 8.4,
+"net": {
+"0.02%": {
+"avg_pct": -0.0352,
+"win": 35.1,
+"total_pct": -70.9,
+"years": {
+"2026": -0.0352
+},
+"symbols_positive": 0,
+"symbols": 13
+}
+}
+},
+{
+"v": {
+"market": "us",
+"tf": "5m",
+"strategy": "S2 RS breakout, exit on RS weakness"
+},
+"n": 2445,
+"per_day": 3.45,
+"gross_pct": -0.0208,
+"gross_win": 28.5,
+"avg_bars": 6.7,
+"net": {
+"0.02%": {
+"avg_pct": -0.0408,
+"win": 26.5,
+"total_pct": -99.7,
+"years": {
+"2026": -0.0408
+},
+"symbols_positive": 0,
+"symbols": 12
+}
+}
+},
+{
+"v": {
+"market": "us",
+"tf": "5m",
+"strategy": "S2 RS breakout, 1.5R target (comparison)"
+},
+"n": 2792,
+"per_day": 3.94,
+"gross_pct": -0.0228,
+"gross_win": 36.9,
+"avg_bars": 5.3,
+"net": {
+"0.02%": {
+"avg_pct": -0.0428,
+"win": 36.7,
+"total_pct": -119.4,
+"years": {
+"2026": -0.0428
+},
+"symbols_positive": 0,
+"symbols": 12
+}
+}
+}
+]
