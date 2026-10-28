@@ -1244,6 +1244,17 @@
    "decision": "Watch-list",
    "summary": "Candidate for the lab forward test (no money): 4h symmetrical-triangle breakout with the trend, 4 ATR trailing stop. Not added to the autopilot while the rule set is frozen.",
    "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r58",
+   "date": "2026-10-28",
+   "area": "Crypto",
+   "title": "EMA 20/50 + RSI 40-60 + support/resistance + volume pullback (a strategy suggested by another AI)",
+   "asked": "Long when EMA20 > EMA50, price pulls back to the EMA20 or a support zone, RSI 40-60 turning up, bullish candle with rising volume; short the mirror image; stop beyond the pullback, target 1:2; skip sideways markets. Tested exactly as written and in 128 variations per timeframe (5m, 15m, 15m entries with the 4h trend as suggested, 1h, 4h, daily), long-only (spot) and long+short, on 11 coins; Rs 20,000 at 1% risk, no leverage.",
+   "result": "The suggested 15m-with-4h-trend version lost -0.44R a trade on recent data (long only) and -0.35R before that, on every coin; Rs 20,000 would have fallen to about Rs 8,800 in Apr 2025 - Oct 2026 (and to Rs 10,500 in 2024 - Mar 2025). Before fees it breaks even: its stops are only about 0.5% wide, so the 0.16% round-trip fee costs about a third of the risk on every trade. 5m was worse (-0.94R), 1h -0.21R, 4h about break-even (-0.03R; Rs 20,000 -> 26,300 then -> 18,200). Only some daily, long-only versions with a trailing stop were positive in both periods (+0.13R / +0.16R, under 100 recent trades) - a slow trend-following trade like the rules already live.",
+   "decision": "Not adopted",
+   "summary": "Does not make money on crypto after fees in the form suggested. The daily long-only version is a weak copy of the live trend rules.",
+   "period": "Jan 2023 - Oct 2026 (5m/15m from Jan 2024)"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
