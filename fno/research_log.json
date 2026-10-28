@@ -1321,6 +1321,17 @@
    "decision": "Not adopted (round 63b: lowers the Autopilot's profit)",
    "summary": "A 15-min RMI + Supertrend entry with MACD + RMI agreeing makes money on its own, but added to today's Autopilot it lowers the full-period profit (Rs 30.0L vs 33.4L from Rs 2L), so it is not used.",
    "period": "Jan 2023 - Oct 2026 (crypto from Jan 2024)"
+  },
+  {
+   "id": "r64",
+   "date": "2026-10-29",
+   "area": "Crypto",
+   "title": "Untested items from another AI's crypto 'priority list': RSI divergence, ATR expansion, Bat / Butterfly / Crab / AB=CD harmonics, regime filters; and the live book in money",
+   "asked": "Everything else on the list was already tested (patterns r57/r60, candlesticks r2, BOS / CHoCH / sweeps / equal highs r6/r52/r61, MACD / EMA crossovers r1/r58/r62, Bollinger squeeze). New: standalone RSI divergence, ATR-expansion bars, 4 harmonics on 1h / 4h / daily (11 coins, 16 bps, vs random entries); as filters on the live rules ADX >= 20, Choppiness, volatility regime, BTC 200-day, squeeze, no divergence, expansion bar. A filter or rule counts only if it ADDS profit to the current book in both periods.",
+   "result": "Standalone: RSI divergence -0.1R median (one daily version positive); Bat / Butterfly / Crab under 60 trades in 4 years on 11 coins; AB=CD about 0R; ATR expansion is a weak edge (+0.07 to +0.16R vs random +0.01 to +0.06R) but adding it to the book lowers 2023 - Mar 2025 at 3x. Filters in R: only 'skip entries when volatility is in the top third of its year' adds R to 3 of 4 rules, but in money it lowers Apr 2025 - Oct 2026 on the live book (Rs 1.92L vs 1.95L) - not adopted. Main finding: the live book (4 rules, 11 coins, 1x, max 4 open) ends about flat in the money simulation (Rs 2L -> 1.83L, worst fall -34%; 2,061 of 2,666 signals skipped for slots / cash). Dropping Donchian 55 4h (the weakest rule, most signals) and using 3x leverage (same 1% risk) gives Rs 4.86L (-26%), better in both halves (3.59L vs 2.03L; 2.80L vs 1.95L). The in-app weekly re-test, which pauses failing rule/coin pairs, is not modelled.",
+   "decision": "No new signal or filter. Proposed to the user: drop Donchian 55 4h and set 3x leverage (live change, needs approval)",
+   "summary": "Nothing new from the list beats the live rules; the crypto book's weak spot is its sizing - too many signals for 4 slots at 1x.",
+   "period": "Jan 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -1882,6 +1893,16 @@
    ],
    "project_round": 63,
    "takeaway": "No combination works on 5 or 15 min coins after fees; the best early picks lost later even at 0.08% costs."
+  },
+  {
+   "n": 17,
+   "date": "2026-10-29",
+   "topic": "RSI divergence, ATR expansion, harmonics, regime filters; the book in money",
+   "ids": [
+    "r64"
+   ],
+   "project_round": 64,
+   "takeaway": "No new signal or filter adds profit. The live book is about flat in money at 1x (Rs 2L -> 1.83L); without Donchian 55 4h and at 3x it makes Rs 4.86L, better in both halves."
   }
  ],
  "crypto_status": {
@@ -1902,7 +1923,8 @@
    "Displacement candle as a filter (round 7)",
    "4h multi-touch level breakout with the trend (round 8)",
    "4h pattern breakouts with the EMA 200 trend: diamond, rising wedge, Livermore, double bottom (round 13)",
-   "1h 3-touch level break with higher highs, EMA 200 trend and 1.5x volume, 3R (round 14)"
+   "1h 3-touch level break with higher highs, EMA 200 trend and 1.5x volume, 3R (round 14)",
+   "Book settings: drop Donchian 55 4h and use 3x leverage - Rs 4.86L vs 1.83L in money, both halves better (round 17, awaiting your decision)"
   ],
   "rejected": [
    "Fast rules on 5m / 15m (fees decide)",
@@ -1914,7 +1936,8 @@
    "Smart-money / ICT setups, order blocks and fair value gaps (rounds 6, 12)",
    "Chart patterns on 5m / 15m / 1h, head and shoulders, harmonic patterns (round 13)",
    "Retest entries after a level break; level breaks on 15m even with all confluences (round 14)",
-   "Scalping cheat-sheet strategies on 5 min: ribbon, RSI+MACD, pivot scalp, RMI + Supertrend, regression channel, EMA 9/21 (round 15)"
+   "Scalping cheat-sheet strategies on 5 min: ribbon, RSI+MACD, pivot scalp, RMI + Supertrend, regression channel, EMA 9/21 (round 15)",
+   "RSI divergence, harmonics (Bat, Butterfly, Crab, AB=CD), ADX / chop / volatility / squeeze filters (round 17)"
   ]
  },
  "india_rounds": [
