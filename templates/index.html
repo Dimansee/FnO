@@ -460,6 +460,8 @@ details summary{cursor:pointer;font-size:13px}
 .grid.g2>.span2{grid-column:1/-1}
 .gbform{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:start}.gbform>div{min-width:0}.gbform select,.gbform input{width:100%}.gb-rule{grid-column:span 2}.gb-go{display:flex;align-items:flex-end;align-self:end}.gb-go button{width:100%}.gb-amt{display:flex;gap:6px}.gb-amt input{flex:1;min-width:0}.gb-amt .segs{flex:none}
 @media(max-width:900px){.gbform{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.gbform{grid-template-columns:1fr}.gb-rule{grid-column:auto}}
+.rsround summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;gap:8px;align-items:center}.rsround summary::-webkit-details-marker{display:none}.rsround summary::before{content:"▸";color:var(--faint);transition:transform .15s}.rsround[open] summary::before{transform:rotate(90deg)}.rsnum{font-family:var(--mono,monospace);font-size:12px;padding:2px 8px;border-radius:99px;background:var(--bg2);border:1px solid var(--line)}.rscard{margin-top:10px;background:var(--bg2)}.rsrow:hover td{background:var(--bg2)}.rstable{table-layout:fixed;width:100%}.rstable th,.rstable td{text-align:left!important;white-space:normal!important;vertical-align:top;line-height:1.4}
+@media(max-width:700px){.rstable{table-layout:auto}.rstable col{width:auto!important}.rstable td:nth-child(3){width:100%}.rstable td:nth-child(2),.rstable th:nth-child(2),.rstable td:nth-child(4),.rstable th:nth-child(4){display:none}.rstable .tag{white-space:nowrap;font-size:11px}}
 .gxreset{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
 .gbmonths{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}.gbm b{white-space:nowrap}.gbm{display:flex;justify-content:space-between;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg2);font-size:13px}
 .formgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:10px;align-items:end}.formgrid>div{min-width:0}
@@ -3776,16 +3778,47 @@ document.addEventListener("click", async e => {
   GBT.busy = false; await loadGBacktest();
 });
 
+const RS_TAG = x => ({"Adopted": "tup", "Partly adopted": "tup", "Watch-list": "twarn", "Not adopted": "tdown"}[x] || "");
+const RS_RANK = {"Adopted": 4, "Partly adopted": 3, "Watch-list": 2, "Not adopted": 1};
+function rsCard(x) {
+  return `<div class="card rscard"><div class="row between wrap"><h4 style="margin:0">${esc(x.title)}</h4><span class="tag ${RS_TAG(x.decision)}">${esc(x.decision)}</span></div>
+    <p class="muted" style="margin:6px 0 0;font-size:12.5px">${esc(x.date)} · data ${esc(x.period || "")}</p>
+    <p style="margin:8px 0 0"><b>Question.</b> ${esc(x.asked)}</p><p style="margin:6px 0 0"><b>Result.</b> ${esc(x.result)}</p><p style="margin:6px 0 0"><b>Decision.</b> ${esc(x.summary)}</p></div>`;
+}
 async function loadGResearch() {
   const d = await api("/api/research/log"), mk = gmk(), want = {CRYPTO: ["Crypto", "Crypto & US"], US: ["US", "Crypto & US"], GOLD: ["Gold"]}[mk] || [];
   const items = (d.entries || []).filter(x => want.includes(x.area));
-  const tag = x => ({"Adopted": "tup", "Partly adopted": "tup", "Watch-list": "twarn", "Not adopted": "tdown"}[x.decision] || "");
-  $("#gsBody").innerHTML = gHead("research", "What was tested for this market, how, and what was decided. Every test uses the app's own engine and costs, and is judged on data the choice never saw.")
-  + (items.length ? items.map(x => `<div class="card" style="margin-bottom:12px"><div class="row between wrap"><h3 style="margin:0">${esc(x.title)}</h3><span class="tag ${tag(x)}">${esc(x.decision)}</span></div>
-      <p class="muted" style="margin:6px 0 0;font-size:12.5px">${esc(x.date)} · ${esc(x.area)} · data ${esc(x.period || "")}</p>
-      <p style="margin:8px 0 0"><b>Question.</b> ${esc(x.asked)}</p><p style="margin:6px 0 0"><b>Result.</b> ${esc(x.result)}</p><p style="margin:6px 0 0"><b>Decision.</b> ${esc(x.summary)}</p></div>`).join("")
-    : `<div class="card muted">No research for this market yet.</div>`);
+  const head = gHead("research", "What was tested for this market, how, and what was decided. Every test uses the app's own engine and costs, and is judged on data the choice never saw.");
+  if (mk !== "CRYPTO" || !(d.crypto_rounds || []).length) {
+    $("#gsBody").innerHTML = head + (items.length ? items.map(rsCard).join("") : `<div class="card muted">No research for this market yet.</div>`);
+    return;
+  }
+  const byId = Object.fromEntries((d.entries || []).map(x => [x.id, x]));
+  const rounds = d.crypto_rounds.map(r => ({...r, entries: r.ids.map(i => byId[i]).filter(Boolean)}))
+    .map(r => ({...r, decision: r.entries.map(e => e.decision).sort((a, b) => (RS_RANK[b] || 0) - (RS_RANK[a] || 0))[0] || ""}));
+  const listed = new Set(rounds.flatMap(r => r.ids)), other = items.filter(x => !listed.has(x.id));
+  const order = lsGet("rsorder", "new"), shown = order === "new" ? rounds.slice().reverse() : rounds;
+  const st = d.crypto_status || {}, li = a => (a || []).map(x => `<li>${esc(x)}</li>`).join("");
+  const nTests = rounds.reduce((a, r) => a + r.entries.length, 0), nAd = rounds.filter(r => /Adopted/.test(r.decision)).length;
+  $("#gsBody").innerHTML = head + `
+  <div class="grid g4">${kpiCard("Research rounds", rounds.length, `${nTests} studies · latest ${esc(rounds[rounds.length - 1].date)}`)}${kpiCard("Led to a change", nAd, "adopted or partly adopted", "up")}${kpiCard("On the watch-list", rounds.filter(r => r.decision === "Watch-list").length, "promising, not proven")}${kpiCard("Rejected", rounds.filter(r => r.decision === "Not adopted").length, "lost after fees or failed the unseen data", "down")}</div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><h3>What trades now because of this research</h3><ul class="tight">${li(st.live)}</ul>${(st.lab || []).length ? `<p style="margin:10px 0 4px"><b>In the lab (forward test, no money)</b></p><ul class="tight">${li(st.lab)}</ul>` : ""}</div>
+    <div class="card"><h3>Watch-list</h3><ul class="tight">${li(st.watch)}</ul><p style="margin:10px 0 4px"><b>Tested and rejected</b></p><ul class="tight">${li(st.rejected)}</ul></div></div>
+  <div class="card" style="margin-top:14px"><div class="row between wrap"><h3 style="margin:0">Round by round</h3>
+    <div class="segs" id="rsOrder"><button class="seg ${order === "new" ? "on" : ""}" data-rso="new">Newest first</button><button class="seg ${order !== "new" ? "on" : ""}" data-rso="old">Oldest first</button></div></div>
+    <div class="tablewrap" style="margin-top:10px"><table class="rstable"><colgroup><col style="width:70px"><col style="width:80px"><col style="width:26%"><col><col style="width:120px"></colgroup><tr><th>Round</th><th>Date</th><th>Topic</th><th>Outcome</th><th>Decision</th></tr>
+    ${shown.map(r => `<tr class="rsrow" data-rsgo="${r.n}" style="cursor:pointer"><td class="mono"><b>${r.n}</b>${r.project_round ? `<div class="muted" style="font-size:11px">study ${r.project_round}</div>` : ""}</td><td class="mono" style="white-space:nowrap">${esc(new Date(r.date + "T00:00:00").toLocaleDateString("en-IN", {day: "2-digit", month: "short"}))}</td><td><b>${esc(r.topic)}</b></td><td style="font-size:13px">${esc(r.takeaway)}</td><td><span class="tag ${RS_TAG(r.decision)}">${esc(r.decision)}</span></td></tr>`).join("")}</table></div>
+    <p class="muted" style="font-size:12px;margin:8px 0 0">Click a round to jump to its details. "Study" is the number in the project's research files and Project docs.</p></div>
+  ${shown.map(r => `<details class="card rsround" id="rsr-${r.n}" style="margin-top:14px" ${r.n === rounds[rounds.length - 1].n ? "open" : ""}><summary><span class="rsnum">Round ${r.n}</span> <b>${esc(r.topic)}</b> <span class="tag ${RS_TAG(r.decision)}">${esc(r.decision)}</span>
+      <span class="muted" style="font-size:12.5px">· ${esc(r.date)}${r.project_round ? " · study " + r.project_round : ""} · ${r.entries.length} ${r.entries.length > 1 ? "studies" : "study"}</span></summary>
+      <p style="margin:10px 0 12px"><b>In short:</b> ${esc(r.takeaway)}</p>${r.entries.map(rsCard).join("")}</details>`).join("")}
+  ${other.length ? `<h3 class="sect" style="margin-top:18px">Other studies touching this market</h3>${other.map(rsCard).join("")}` : ""}`;
 }
+document.addEventListener("click", e => {
+  const o = e.target.closest("#rsOrder [data-rso]"); if (o) { lsSet("rsorder", o.dataset.rso); loadGResearch(); return; }
+  const g = e.target.closest("[data-rsgo]"); if (g) { const el = $("#rsr-" + g.dataset.rsgo); if (el) { el.open = true; el.scrollIntoView({behavior: "smooth", block: "start"}); } }
+});
 
 async function loadGContext() {
   const mk = gmk(), d = await api("/api/gbook/context?market=" + mk), b = d.breadth || {}, rg = d.regime, se = d.sentiment;

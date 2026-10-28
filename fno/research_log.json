@@ -1255,6 +1255,17 @@
    "decision": "Not adopted",
    "summary": "Does not make money on crypto after fees in the form suggested. The daily long-only version is a weak copy of the live trend rules.",
    "period": "Jan 2023 - Oct 2026 (5m/15m from Jan 2024)"
+  },
+  {
+   "id": "r53c",
+   "date": "2026-10-28",
+   "area": "Crypto",
+   "title": "Displacement candle on the crypto trend rules (from round 53)",
+   "asked": "Do the crypto autopilot trades do better when one of the last 3 bars before entry is a big candle (body >= 1 ATR) in the trade's direction - the 'displacement' that helped the India rules?",
+   "result": "Over the whole history yes: +0.23R a trade with displacement vs +0.08R without (all 4 rules better). But in the second half it held for only 2 of 4 rules: Supertrend 4h +0.11R vs +0.08R, Donchian 20 daily +0.20R vs -0.04R, while Donchian 55 4h (+0.05R vs +0.14R) and Supertrend daily (+0.16R vs +0.24R) flipped. Gold rules went the other way.",
+   "decision": "Watch-list",
+   "summary": "Not used to size or filter crypto trades; too unstable between halves. Tagged for forward checking only.",
+   "period": "Jan 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -1651,5 +1662,139 @@
    ],
    "next": "Re-run research/round40.py with 60 more sessions; adopt only if still ahead and 2023-25 is not worse."
   }
- ]
+ ],
+ "crypto_rounds": [
+  {
+   "n": 1,
+   "date": "2026-10-17",
+   "topic": "Which textbook rules work on crypto after fees?",
+   "ids": [
+    "glr"
+   ],
+   "project_round": null,
+   "takeaway": "Only slow trend-following on 4h / daily bars held up on unseen data. These became the live rules: Supertrend 4h and daily, Donchian 55 4h, Donchian 20 daily."
+  },
+  {
+   "n": 2,
+   "date": "2026-10-17",
+   "topic": "Candlestick patterns and crypto-only ideas",
+   "ids": [
+    "ccs"
+   ],
+   "project_round": null,
+   "takeaway": "Candles, seasonality, coin rotation, squeezes and funding fades gave no edge after fees. The BTC 200-day switch went to the lab forward test."
+  },
+  {
+   "n": 3,
+   "date": "2026-10-17",
+   "topic": "Your India strategies on crypto",
+   "ids": [
+    "cus"
+   ],
+   "project_round": null,
+   "takeaway": "0 of 32 passed: Noise band, Camarilla, D1 break, Chandelier, 5 EMA, RSI 60/40 and friends all lose after fees on 5m-4h crypto."
+  },
+  {
+   "n": 4,
+   "date": "2026-10-17",
+   "topic": "Best setup per coin, and late entries",
+   "ids": [
+    "pcs"
+   ],
+   "project_round": null,
+   "takeaway": "Picking each coin's own 'best' setup is break-even; fixed trend rules pooled over coins are better. Late entries on 4h/daily signals (up to 4 hours) were adopted."
+  },
+  {
+   "n": 5,
+   "date": "2026-10-28",
+   "topic": "Smart-money / ICT ideas (liquidity sweeps, FVG, order blocks, Silver Bullet)",
+   "ids": [
+    "r52"
+   ],
+   "project_round": 52,
+   "takeaway": "No edge: random trend-direction entries did as well as FVG / breaker setups. The only gains came from the trend filter, which the live rules already have."
+  },
+  {
+   "n": 6,
+   "date": "2026-10-28",
+   "topic": "Displacement candle on the crypto rules",
+   "ids": [
+    "r53c"
+   ],
+   "project_round": 53,
+   "takeaway": "Looked good overall (+0.23R vs +0.08R) but held for only 2 of 4 rules in the second half. Watch-list."
+  },
+  {
+   "n": 7,
+   "date": "2026-10-28",
+   "topic": "Pivots and support/resistance levels; stop-loss and target",
+   "ids": [
+    "r55",
+    "r55b"
+   ],
+   "project_round": 55,
+   "takeaway": "732 level setups: bounces win about 50% at 1R and lose after fees. Live stop-loss/target settings are already at or near the best of 1,080 combinations."
+  },
+  {
+   "n": 8,
+   "date": "2026-10-28",
+   "topic": "Trading sessions; gold (PAXG) as a coin",
+   "ids": [
+    "r56",
+    "r56b"
+   ],
+   "project_round": 56,
+   "takeaway": "No session beats trading all day in both periods. PAXG added as the 11th coin; the trend rules only paid on it during the 2024-26 gold rally."
+  },
+  {
+   "n": 9,
+   "date": "2026-10-28",
+   "topic": "Chart patterns; levels by session; holding longer",
+   "ids": [
+    "r57",
+    "r57b",
+    "r57d"
+   ],
+   "project_round": 57,
+   "takeaway": "Patterns lose on 5m-1h. On 4h, patterns with the trend work, best with a 4 ATR trailing stop: symmetrical triangle +0.39R / +0.31R, every year positive. Watch-list for the lab."
+  },
+  {
+   "n": 10,
+   "date": "2026-10-28",
+   "topic": "EMA 20/50 + RSI + support/resistance + volume pullback",
+   "ids": [
+    "r58"
+   ],
+   "project_round": 58,
+   "takeaway": "Loses after fees on 5m-1h; the suggested 15m + 4h version took Rs 20,000 to about Rs 8,800. Its 0.5% stops make fees a third of every trade's risk."
+  }
+ ],
+ "crypto_status": {
+  "live": [
+   "Supertrend 10/3 (4h), long and short",
+   "Supertrend 10/3 (daily), long and short",
+   "Donchian 55 breakout (4h), long",
+   "Donchian 20 breakout (daily), long",
+   "11 coins incl. gold (PAXG); each rule and coin must pass a weekly re-test",
+   "Late entry up to 4 hours on 4h / daily signals",
+   "Stop 2 ATR, no fixed target: exit on the opposite signal or a 3-4 ATR trailing stop"
+  ],
+  "lab": [
+   "Supertrend 4h + BTC 200-day switch (forward test, no money)"
+  ],
+  "watch": [
+   "Symmetrical-triangle breakout 4h with the trend, 4 ATR trailing stop (round 9)",
+   "Displacement candle as a filter (round 6)",
+   "4h multi-touch level breakout with the trend (round 7)"
+  ],
+  "rejected": [
+   "Fast rules on 5m / 15m (fees decide)",
+   "Pivots, Camarilla, round numbers, support/resistance bounces",
+   "Candlestick patterns, mean reversion, coin rotation, funding fades",
+   "Smart-money / ICT setups",
+   "Session-only trading",
+   "Fixed targets, partial exits and break-even moves on the trend rules",
+   "EMA 20/50 + RSI pullback"
+  ]
+ }
 }
