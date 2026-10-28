@@ -517,12 +517,15 @@ def debug_redis():
 
 @app.post("/api/db/migrate-from-upstash")
 def db_migrate_from_upstash():
-    """One-time copy of the old Upstash data into Supabase (keeps anything Supabase already has). Run after Upstash's
-    monthly quota resets on the 1st; until then Upstash rejects every command."""
-    try:
-        return jsonify(store.migrate_from_upstash())
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)[:300]}), 502
+    """Copy every old Upstash key into Supabase (settings from Upstash win, except live logins; replaced values are kept).
+    {"dry_run": true} only reports what would happen. Runs in the background; poll GET /api/db/migration."""
+    b = request.get_json(silent=True) or {}
+    return jsonify(store.start_migration(dry_run=bool(b.get("dry_run"))))
+
+
+@app.get("/api/db/migration")
+def db_migration_status():
+    return jsonify(store.migration_status())
 
 
 @app.get("/api/autopilot/rules")

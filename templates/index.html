@@ -4140,7 +4140,7 @@ document.addEventListener("click", async e => {
 const DX = {d: null, ds: "in_candles", sym: "NIFTY", tf: "1h", start: "", end: "", fmt: "csv", link: null};
 const dxTime = t => t ? new Date(t).toLocaleString("en-IN", {timeZone: "Asia/Kolkata", day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", hour12: false}) + " IST" : "not yet";
 const dxAgo = t => { if (!t) return ""; const m = Math.round((Date.now() - new Date(t)) / 60000); return m < 2 ? "just now" : m < 120 ? m + " min ago" : m < 2880 ? Math.round(m / 60) + " h ago" : Math.round(m / 1440) + " days ago"; };
-async function loadData() { DX.d = await api("/api/data"); try { DX.bk = await api("/api/backup"); } catch (e) { DX.bk = null; } try { DX.db = await api("/api/debug/redis"); } catch (e) { DX.db = null; } dxPick(DX.ds, true); renderData(); }
+async function loadData() { DX.d = await api("/api/data"); try { DX.bk = await api("/api/backup"); } catch (e) { DX.bk = null; } try { DX.db = await api("/api/debug/redis"); } catch (e) { DX.db = null; } try { DX.mig = await api("/api/db/migration"); } catch (e) { DX.mig = null; } dxPick(DX.ds, true); renderData(); }
 function dxCur() { return DX.d.datasets.find(x => x.id === DX.ds); }
 function dxShift(iso, days) { const d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + days); return d.toISOString().slice(0, 10); }
 function dxPick(id, keep) {
@@ -4196,11 +4196,16 @@ function renderData() {
 }
 function dbCard(b) {
   if (!b) return "";
-  const sb = b.backend === "supabase";
+  const sb = b.backend === "supabase", m = DX.mig || {}, last = m.last, pv = m.preview;
+  const list = (a, n = 12) => a && a.length ? a.slice(0, n).map(esc).join(", ") + (a.length > n ? ` +${a.length - n} more` : "") : "none";
+  const rep = (r, title) => !r ? "" : !r.ok ? `<p class="err" style="margin:8px 0 0">${esc(title)}: ${esc(r.error || "failed")}</p>` : `<div style="margin-top:8px;font-size:13px"><b>${esc(title)}</b> (${esc(String(r.finished || "").replace("T", " ").slice(0, 16))} UTC): ${r.keys} keys · ${r.rows_copied.toLocaleString()} records ${r.dry_run ? "would be" : ""} copied · ${r.rows_already_there.toLocaleString()} already here<br>
+      Settings ${r.dry_run ? "that would be" : ""} restored from Upstash: ${list(r.settings_restored)}<br>Settings added: ${list(r.settings_added)}<br>Kept as set up now (logins / backup): ${list(r.settings_kept_current)}
+      ${r.dry_run ? "" : r.verified ? `<br><span class="tag tup">✓ verified: every old record is in Supabase</span>` : `<br><span class="tag tdown">${r.missing_after.length} keys incomplete</span> ${r.missing_after.slice(0, 5).map(x => esc(x.key)).join(", ")}`}</div>`;
   return `<div class="card" style="margin-top:16px"><h3>Database</h3>
     <p class="muted" style="margin:0 0 8px;font-size:13px">In use: <b>${sb ? "Supabase (Postgres, no monthly request limit)" : b.backend === "upstash" ? "Upstash Redis (free tier: 500,000 requests a month)" : "none"}</b>${sb && b.supabase_table_mb != null ? ` · ${b.supabase_table_mb} MB of 500 MB used` : ""} · ${b.total} requests since the server started (about ${b.per_day_rate.toLocaleString()} a day).</p>
-    ${sb ? `<p class="muted" style="margin:0 0 8px;font-size:13px">Old data from before 28 Oct 2026 is still in Upstash, which refuses every request until its monthly limit resets on the 1st. On or after 1 Nov press this once: it copies everything across and never overwrites anything already saved here.</p>
-    <button id="dbMigrate">Copy old data from Upstash</button>` : ""}</div>`;
+    ${sb && m.upstash_configured ? `<p class="muted" style="margin:0 0 8px;font-size:13px">Old data from before 28 Oct 2026 is in Upstash, which refuses every request until its monthly limit resets on 1 Nov. <b>From 1 Nov the app copies everything across by itself</b> (checked every hour): trades, journal, positions, all books, learning, strategies, saved candles and your <b>old settings, which replace the ones entered since</b> — except broker logins and the Drive backup set up now. Anything replaced is kept aside, nothing is deleted. Afterwards every old record is checked against Supabase.</p>
+    <div class="row wrap"><button id="dbPreview" ${m.running ? "disabled" : ""}>Check what will be copied</button><button id="dbMigrate" ${m.running ? "disabled" : ""}>Copy now</button>${m.running ? `<span class="muted">Working… ${esc(m.progress || "")}</span>` : ""}</div>
+    ${rep(pv, "Preview")}${rep(last, "Copy")}` : ""}</div>`;
 }
 function driveCard(b) {
   if (!b) return "";
@@ -4246,7 +4251,9 @@ document.addEventListener("click", async e => {
   try {
     if (t.dataset.dpick) { dxPick(t.dataset.dpick); renderData(); $("#dxBuilder").scrollIntoView({behavior: "smooth", block: "center"}); }
     else if (t.dataset.drange) { dxParams(); dxRange(t.dataset.drange === "all" ? "all" : +t.dataset.drange); renderData(); }
-    else if (t.id === "dbMigrate") { t.disabled = true; toast("Copying from Upstash…", 8000); let r; try { r = await post("/api/db/migrate-from-upstash"); } catch (e) { r = {ok: false, error: e.message}; } toast(r.ok ? `Copied ${r.rows} records from ${r.keys} keys (${r.skipped_existing} already here, kept)` : "Not copied: " + (r.error || "unknown error"), 10000); t.disabled = false; await loadData(); }
+    else if (t.id === "dbMigrate" || t.id === "dbPreview") { const dry = t.id === "dbPreview"; t.disabled = true; let r; try { r = await post("/api/db/migrate-from-upstash", {dry_run: dry}); } catch (e) { r = {ok: false, error: e.message}; }
+      toast(r.ok ? (dry ? "Checking Upstash… the result appears here in a minute" : "Copying in the background… this page updates when it is done") : "Could not start: " + (r.error || ""), 8000);
+      const poll = setInterval(async () => { try { DX.mig = await api("/api/db/migration"); if (!DX.mig.running) { clearInterval(poll); renderData(); } } catch (e) { clearInterval(poll); } }, 5000); await loadData(); }
     else if (t.id === "dxSave") { t.disabled = true; toast("Saving… this takes up to a minute", 5000); const r = await post("/api/data/save"); toast("Saved: " + JSON.stringify(r).slice(0, 120), 6000); await loadData(); }
     else if (t.id === "dxGo") {
       err.classList.add("hidden"); const p = dxParams(), q = new URLSearchParams(p); q.delete("symbol"); if (p.symbol) q.set("symbol", p.symbol);

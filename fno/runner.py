@@ -108,6 +108,13 @@ def _loop():
         except Exception as e:
             state["last_error"] = f"tick: {str(e)[:100]}"
             traceback.print_exc()
+        if time.time() - state.get("last_mig_check", 0) > 3600:          # one-time Upstash -> Supabase copy, runs itself from 1 Nov
+            state["last_mig_check"] = time.time()
+            try:
+                from . import store as _st
+                state["migration"] = _st.auto_migrate_if_due()
+            except Exception as e:
+                state["last_error"] = f"migration: {str(e)[:100]}"
         if time.time() - last_ping > PING_EVERY:
             last_ping = time.time()
             _ping()

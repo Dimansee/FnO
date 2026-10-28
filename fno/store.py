@@ -309,9 +309,39 @@ def ping() -> bool:
 
 
 # ---------------- one-time copy Upstash -> Supabase ----------------
-def migrate_from_upstash() -> dict:
-    """Copy every fno:* key from Upstash into Postgres, keeping anything Postgres already has (new data wins).
-    Costs one SCAN pass plus about two Upstash commands per key, so it fits easily in a fresh monthly quota."""
+# Rules (28 Oct 2026, the user wants EVERY detail from Upstash, settings included):
+#  - settings (fno:settings): the Upstash value WINS, except live logins / things set up fresh on Supabase (KEEP_CURRENT).
+#    Any Supabase value that gets replaced is kept in fno:migration:replaced ("<key>|<field>" -> old value): nothing is lost.
+#  - every other hash / set / sorted set: merged; where both have the same field, the newer Supabase value is kept.
+#  - strings: copied if missing; pure caches / heartbeats (SKIP_STRINGS) are skipped.  lists: copied if missing.
+#  - expiries (TTL) are carried over; keys already expired in Upstash are not copied.
+#  - afterwards every Upstash key is checked against Supabase and any gap is listed in the report.
+KEEP_CURRENT = {"upstox", "fyers", "drive", "scheduler", "vapid", "instrument_master", "g_last_tick", "upstash_migration"}
+SKIP_STRINGS = ("fno:last_tick", "fno:rec:status", "fno:data:in_saved:", "fno:data:us_saved:", "fno:stocks:")
+MIG = {"running": False, "started": None, "progress": None, "result": None}
+MIG_FROM = "2026-11-01T00:00:00+00:00"          # Upstash's monthly quota resets on the 1st (UTC)
+
+
+def _ups_read(k, typ):
+    if typ == "hash":
+        flat = _upstash("HGETALL", k) or []
+        return dict(flat.items() if isinstance(flat, dict) else zip(flat[::2], flat[1::2]))
+    if typ == "string":
+        return _upstash("GET", k)
+    if typ == "set":
+        return sorted(_upstash("SMEMBERS", k) or [])
+    if typ == "zset":
+        flat = _upstash("ZRANGE", k, 0, -1, "WITHSCORES") or []
+        if flat and isinstance(flat[0], list):
+            flat = [y for pair in flat for y in pair]
+        return {m: float(sc) for m, sc in zip(flat[::2], flat[1::2])}
+    if typ == "list":
+        return _upstash("LRANGE", k, 0, -1) or []
+    return None
+
+
+def migrate_from_upstash(dry_run: bool = False) -> dict:
+    """Copy every key from Upstash into Supabase by the rules above. dry_run=True only reports what would happen."""
     if not pgkv.enabled():
         return {"ok": False, "error": "DATABASE_URL is not set"}
     if not (C.REDIS_URL and C.REDIS_TOKEN):
@@ -323,35 +353,142 @@ def migrate_from_upstash() -> dict:
         keys += batch or []
         if str(cur) == "0":
             break
-    done = {"keys": 0, "rows": 0, "skipped_existing": 0, "types": {}}
-    for k in sorted(set(keys)):
+    keys = sorted(set(keys))
+    rep = {"ok": True, "dry_run": dry_run, "keys": len(keys), "by_type": {}, "rows_copied": 0, "rows_already_there": 0,
+           "settings_restored": [], "settings_kept_current": [], "settings_added": [], "skipped_caches": 0,
+           "lists_skipped_exist": [], "families": {}, "missing_after": [], "verified": None}
+    for n, k in enumerate(keys):
+        MIG["progress"] = f"{n + 1} / {len(keys)} keys"
         typ = _upstash("TYPE", k)
+        if typ == "none":
+            continue
+        rep["by_type"][typ] = rep["by_type"].get(typ, 0) + 1
+        fam = ":".join(k.split(":")[:2]) if k.count(":") >= 1 else k
+        rep["families"][fam] = rep["families"].get(fam, 0) + 1
+        if typ == "string" and k.startswith(SKIP_STRINGS):
+            rep["skipped_caches"] += 1
+            continue
         ttl = _upstash("TTL", k)
         exp_sql, exp_p = ("now() + make_interval(secs => %s)", (int(ttl),)) if isinstance(ttl, int) and ttl > 0 else ("null", ())
-        rows = []
-        if typ == "hash":
-            flat = _upstash("HGETALL", k) or []
-            pairs = flat.items() if isinstance(flat, dict) else zip(flat[::2], flat[1::2])
-            rows = [(f, v, "h", None) for f, v in pairs]
-        elif typ == "string":
-            rows = [("", _upstash("GET", k), "s", None)]
-        elif typ == "set":
-            rows = [(m, "", "S", None) for m in (_upstash("SMEMBERS", k) or [])]
-        elif typ == "zset":
-            flat = _upstash("ZRANGE", k, 0, -1, "WITHSCORES") or []
-            if flat and isinstance(flat[0], list):
-                flat = [y for pair in flat for y in pair]
-            rows = [(m, None, "z", float(sc)) for m, sc in zip(flat[::2], flat[1::2])]
-        elif typ == "list":
-            rows = [(f"{i:012d}", v, "l", None) for i, v in enumerate(_upstash("LRANGE", k, 0, -1) or [])]
-        else:
+        data = _ups_read(k, typ)
+        if data is None:
             continue
-        done["types"][typ] = done["types"].get(typ, 0) + 1
-        done["keys"] += 1
-        for f, v, kind, sc in rows:
-            n = pgkv._q(f"insert into {T} (k, f, v, kind, score, exp) values (%s, %s, %s, %s, %s, {exp_sql}) on conflict (k, f) do nothing",
-                        (k, f, v, kind, sc) + exp_p, "count")
-            done["rows"] += n
-            done["skipped_existing"] += 0 if n else 1
-    forget()
-    return {"ok": True, **done}
+        if typ == "hash":
+            have = {f: v for f, v in pgkv._q(f"select f, v from {T} where k = %s and kind = 'h' and (exp is null or exp > now())", (k,))}
+            for f, v in data.items():
+                if f not in have:
+                    rep["rows_copied"] += 1
+                    if k == SETTINGS:
+                        rep["settings_added"].append(f)
+                    if not dry_run:
+                        pgkv._q(f"insert into {T} (k, f, v, kind, exp) values (%s, %s, %s, 'h', {exp_sql}) on conflict (k, f) do update set v = excluded.v, kind = 'h', exp = excluded.exp",
+                                (k, f, v) + exp_p, "count")
+                elif k == SETTINGS and f not in KEEP_CURRENT and have[f] != v:
+                    rep["settings_restored"].append(f)
+                    if not dry_run:
+                        pgkv._q(f"insert into {T} (k, f, v, kind) values ('fno:migration:replaced', %s, %s, 'h') on conflict (k, f) do update set v = excluded.v",
+                                (f"{k}|{f}", have[f]), "count")
+                        pgkv._q(f"update {T} set v = %s where k = %s and f = %s", (v, k, f), "count")
+                else:
+                    rep["rows_already_there"] += 1
+                    if k == SETTINGS and f in KEEP_CURRENT and have[f] != v:
+                        rep["settings_kept_current"].append(f)
+        elif typ == "string":
+            if pgkv.execute("GET", k) is None:
+                rep["rows_copied"] += 1
+                if not dry_run:
+                    pgkv._q(f"insert into {T} (k, f, v, kind, exp) values (%s, '', %s, 's', {exp_sql}) on conflict (k, f) do update set v = excluded.v, kind = 's', exp = excluded.exp",
+                            (k, data) + exp_p, "count")
+            else:
+                rep["rows_already_there"] += 1
+        elif typ in ("set", "zset"):
+            kind = "S" if typ == "set" else "z"
+            have = {r[0] for r in pgkv._q(f"select f from {T} where k = %s and kind = %s and (exp is null or exp > now())", (k, kind))}
+            items = data.items() if typ == "zset" else [(m, None) for m in data]
+            for m, sc in items:
+                if m in have:
+                    rep["rows_already_there"] += 1
+                    continue
+                rep["rows_copied"] += 1
+                if not dry_run:
+                    pgkv._q(f"insert into {T} (k, f, v, kind, score, exp) values (%s, %s, %s, %s, %s, {exp_sql}) on conflict (k, f) do nothing",
+                            (k, m, None if typ == "zset" else "", kind, sc) + exp_p, "count")
+        elif typ == "list":
+            if pgkv.execute("LLEN", k):
+                rep["lists_skipped_exist"].append(k)
+            else:
+                rep["rows_copied"] += len(data)
+                if not dry_run:
+                    for i, v in enumerate(data):
+                        pgkv._q(f"insert into {T} (k, f, v, kind, exp) values (%s, %s, %s, 'l', {exp_sql}) on conflict (k, f) do nothing",
+                                (k, f"{i:012d}", v) + exp_p, "count")
+    if not dry_run:
+        forget()
+        # verification: every Upstash field / member / string must now exist in Supabase
+        for k in keys:
+            typ = _upstash("TYPE", k)
+            if typ == "string" and k.startswith(SKIP_STRINGS):
+                continue
+            data = _ups_read(k, typ)
+            if data is None:
+                continue
+            if typ == "hash":
+                have = set(r[0] for r in pgkv._q(f"select f from {T} where k = %s and (exp is null or exp > now())", (k,)))
+                miss = [f for f in data if f not in have]
+            elif typ in ("set", "zset"):
+                have = set(r[0] for r in pgkv._q(f"select f from {T} where k = %s and (exp is null or exp > now())", (k,)))
+                miss = [m for m in data if m not in have]
+            elif typ == "string":
+                miss = [] if pgkv.execute("GET", k) is not None else [""]
+            else:
+                miss = [] if (pgkv.execute("LLEN", k) or 0) >= len(data) else ["(list shorter)"]
+            if miss:
+                rep["missing_after"].append({"key": k, "missing": len(miss), "sample": miss[:3]})
+        rep["verified"] = not rep["missing_after"]
+    rep["settings_restored"].sort(); rep["settings_kept_current"].sort(); rep["settings_added"].sort()
+    return rep
+
+
+def start_migration(dry_run: bool = False) -> dict:
+    """Run the copy in a background thread (it can take minutes); progress and the report are in MIG and in settings."""
+    if MIG["running"]:
+        return {"ok": True, "running": True, "progress": MIG["progress"]}
+    MIG.update(running=True, started=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), progress="starting", result=None)
+
+    def job():
+        try:
+            r = migrate_from_upstash(dry_run=dry_run)
+        except Exception as e:
+            r = {"ok": False, "error": f"{type(e).__name__}: {str(e)[:300]}"}
+        r["finished"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        MIG.update(running=False, result=r, progress=None)
+        try:
+            put("upstash_migration_preview" if dry_run else "upstash_migration", r)
+        except Exception:
+            pass
+    threading.Thread(target=job, name="upstash-migration", daemon=True).start()
+    return {"ok": True, "running": True, "started": MIG["started"]}
+
+
+def migration_status() -> dict:
+    return {"running": MIG["running"], "progress": MIG["progress"], "started": MIG["started"],
+            "last": MIG["result"] or get("upstash_migration"), "preview": get("upstash_migration_preview"),
+            "upstash_configured": bool(C.REDIS_URL and C.REDIS_TOKEN), "auto_from": MIG_FROM}
+
+
+def auto_migrate_if_due() -> str:
+    """Called by the background runner about once an hour: on/after 1 Nov, once Upstash answers again, copy everything once."""
+    from datetime import datetime, timezone
+    if backend() != "supabase" or not (C.REDIS_URL and C.REDIS_TOKEN) or MIG["running"]:
+        return "not applicable"
+    if datetime.now(timezone.utc).isoformat() < MIG_FROM:
+        return "waiting for 1 Nov"
+    done = get("upstash_migration") or {}
+    if done.get("ok") and done.get("verified"):
+        return "done"
+    try:
+        _upstash("PING")
+    except Exception as e:
+        return f"Upstash not answering yet: {str(e)[:80]}"
+    start_migration(dry_run=False)
+    return "started"
