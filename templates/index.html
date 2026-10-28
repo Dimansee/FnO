@@ -458,6 +458,10 @@ details summary{cursor:pointer;font-size:13px}
 @media(max-width:900px){.k5{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:520px){.k5{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .grid.g2>.span2{grid-column:1/-1}
+.gbform{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:start}.gbform>div{min-width:0}.gbform select,.gbform input{width:100%}.gb-rule{grid-column:span 2}.gb-go{display:flex;align-items:flex-end;align-self:end}.gb-go button{width:100%}.gb-amt{display:flex;gap:6px}.gb-amt input{flex:1;min-width:0}.gb-amt .segs{flex:none}
+@media(max-width:900px){.gbform{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.gbform{grid-template-columns:1fr}.gb-rule{grid-column:auto}}
+.gxreset{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.gbmonths{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}.gbm b{white-space:nowrap}.gbm{display:flex;justify-content:space-between;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg2);font-size:13px}
 .formgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:10px;align-items:end}.formgrid>div{min-width:0}
 @media (pointer:coarse),(max-width:600px){button.mini,.ghostseg,button.ghost{min-height:34px;padding-top:5px;padding-bottom:5px}button.mini{padding-left:10px;padding-right:10px}}
 @media(max-width:600px){
@@ -2308,6 +2312,13 @@ async function pbInit() {
     $("#pbExit").innerHTML = Object.entries(PB.opts.exits).map(([k, v]) => `<option value="${k}">${esc(v)}</option>`).join("");
     if (!$("#pbTo").value) $("#pbTo").value = new Date(Date.now() + 5.5 * 3600e3).toISOString().slice(0, 10);
   } catch (e) {}
+  try {                       // start both capital boxes from the real account, not a fixed Rs 2,00,000
+    const a = await api("/api/portfolio"), v = Math.round(a.account_value || 0);
+    if (v >= 10000) [["#pbCap", "200000"], ["#btCap", "200000"]].forEach(([id, def]) => {
+      const el = $(id); if (el && el.value === def) { el.value = v; el.title = "Your account value today (" + rs(v) + ")"; }
+      if (el && !el.dataset.acct) { el.dataset.acct = 1; el.insertAdjacentHTML("afterend", `<div class="muted" style="font-size:12px;margin-top:3px">Your account today: ${rs(v)}</div>`); }
+    });
+  } catch (e) {}
   pbSetups();
 }
 function pbParams() {
@@ -3659,32 +3670,85 @@ async function loadGRules() {
     </div></div>`;
 }
 let GB_RULES = null;
-const GBT = {res: null, busy: false};
+const GBT = {res: null, busy: false, cur: null, err: null};
+const lsGet = (k, d) => { try { return localStorage.getItem(k) ?? d; } catch (e) { return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+function gbCur(mk) { const c = GBT.cur || lsGet("gbcur:" + mk, "INR"); return c === "INR" ? "INR" : (mk === "CRYPTO" ? "USDT" : "USD"); }
+function gbMoney(v, r, signed) {        // a backtest amount in the currency picked on the form, with the other one beside it
+  if (v == null || !isFinite(v)) return "–";
+  const cur = r.money.currency, fx = (r.fx || {}).USDINR || 88, inr = GBT.shown === "INR";
+  const a = inr ? (v < 0 ? "-" : signed && v > 0 ? "+" : "") + "₹" + Math.abs(v * fx).toLocaleString("en-IN", {maximumFractionDigits: Math.abs(v * fx) < 1000 ? 2 : 0}) : (signed && v > 0 ? "+" : "") + money(v, cur);
+  return a;
+}
+function gbOther(v, r) { const fx = (r.fx || {}).USDINR || 88; return GBT.shown === "INR" ? money(v, r.money.currency) : "≈ " + rs(v * fx); }
 async function loadGBacktest() {
   const mk = gmk();
   if (!GB_RULES || GB_RULES.market !== mk) GB_RULES = await api("/api/gbook/rules?market=" + mk);
+  if (!GX.data || GX.data.market !== mk) { try { GX.data = await api("/api/gbook?market=" + mk); } catch (e) {} }
   const opts = GB_RULES.built_in.map(r => [r.id, "Built-in · " + r.name]).concat(GB_RULES.own.map(o => [o.id, "Yours · " + o.name]));
-  const prevR = $("#gbRule") && $("#gbRule").value, prevS = $("#gbSym") && $("#gbSym").value, prevD = $("#gbDays") && $("#gbDays").value;
-  $("#gbHead").innerHTML = gHead("backtest", "Test any built-in rule or your own strategy on one coin's past prices, with the same engine, fees and slippage the paper account uses.") +
-    `<div class="card"><div class="grid g4"><div><label>Rule</label><select id="gbRule">${opts.map(([k, v]) => `<option value="${k}" ${k === prevR ? "selected" : ""}>${esc(v)}</option>`).join("")}</select></div>
-    <div><label>${UNIT(mk)}</label><select id="gbSym">${GB_RULES.symbols.map(x => `<option value="${x.id}" ${x.id === prevS ? "selected" : ""}>${esc(x.label)}</option>`).join("")}</select></div>
-    <div><label>Days of history</label><select id="gbDays">${[90, 180, 365, 730, 1095, 1460].map(n => `<option ${String(n) === (prevD || "730") ? "selected" : ""}>${n}</option>`).join("")}</select></div>
-    <div style="display:flex;align-items:flex-end"><button class="primary" id="gbRun" ${GBT.busy ? "disabled" : ""}>${GBT.busy ? "Running…" : "Run backtest"}</button></div></div></div>`;
+  const v = id => $(id) && $(id).value;
+  const prevR = v("#gbRule"), prevS = v("#gbSym") || "ALL", prevD = v("#gbDays") || "730";
+  const cur = gbCur(mk), acct = GX.data && GX.data.market === mk ? GX.data : null, fx = ((acct || {}).fx || {}).USDINR || 88, pf = (acct || {}).prefs || {};
+  const startAmt = v("#gbCap") || lsGet("gbcap:" + mk + ":" + cur, null) || (acct ? (cur === "INR" ? Math.round(acct.capital_start * fx) : acct.capital_start) : (cur === "INR" ? 20000 : 1000));
+  const native = mk === "CRYPTO" ? "USDT" : "USD";
+  $("#gbHead").innerHTML = gHead("backtest", `Test a built-in rule or your own strategy on past prices, with the same engine, fees and slippage the paper account uses. <b>All ${mk === "CRYPTO" ? "coins" : "symbols"}</b> runs the whole book from one account, sized and limited exactly like the live paper account, so the money result is what this account would have made.`) +
+    `<div class="card"><div class="gbform">
+      <div class="gb-rule"><label>Rule</label><select id="gbRule">${opts.map(([k, t]) => `<option value="${k}" ${k === prevR ? "selected" : ""}>${esc(t)}</option>`).join("")}</select></div>
+      <div><label>${UNIT(mk)}</label><select id="gbSym"><option value="ALL" ${prevS === "ALL" ? "selected" : ""}>All ${mk === "CRYPTO" ? "coins" : "symbols"} (as the book trades)</option>${GB_RULES.symbols.map(x => `<option value="${x.id}" ${x.id === prevS ? "selected" : ""}>${esc(x.label)}</option>`).join("")}</select></div>
+      <div><label>History</label><select id="gbDays">${[[90, "3 months"], [180, "6 months"], [365, "1 year"], [730, "2 years"], [1095, "3 years"], [1460, "4 years"]].map(([n, t]) => `<option value="${n}" ${String(n) === String(prevD) ? "selected" : ""}>${t}</option>`).join("")}</select></div>
+      <div><label>Starting amount</label><div class="gb-amt"><input id="gbCap" type="number" min="1" step="any" value="${esc(String(startAmt))}"><div class="segs" id="gbCurSeg"><button class="seg ${cur === "INR" ? "on" : ""}" data-gbc="INR">₹</button><button class="seg ${cur !== "INR" ? "on" : ""}" data-gbc="${native}">${native}</button></div></div>
+        <div class="muted" id="gbCapHint" style="font-size:12px;margin-top:4px"></div></div>
+      <div><label>Risk per trade</label><select id="gbRisk">${[0.5, 1, 1.5, 2, 3].map(x => `<option value="${x}" ${x === (+v("#gbRisk") || pf.risk_pct || 1) ? "selected" : ""}>${x}%${x === pf.risk_pct ? " (your account)" : ""}</option>`).join("")}</select></div>
+      <div><label>Leverage</label><input id="gbLev" type="number" min="1" max="${(acct || {}).max_leverage || 5}" step="0.5" value="${v("#gbLev") || pf.max_leverage || 1}"></div>
+      <div><label>Max open positions</label><input id="gbMax" type="number" min="1" max="10" step="1" value="${v("#gbMax") || pf.max_open || 4}"></div>
+      <div class="gb-go"><button class="primary" id="gbRun" ${GBT.busy ? "disabled" : ""}>${GBT.busy ? "Running…" : "▶ Run backtest"}</button></div>
+    </div><p class="muted" style="font-size:12.5px;margin:10px 0 0">Risk, leverage and max open start from this account's settings (Portfolio tab). ₹ amounts use today's USD/INR rate (1 ${native} ≈ ₹${(+fx).toFixed(2)}).</p></div>`;
+  const hint = () => { const a = +$("#gbCap").value || 0, c = gbCur(mk); $("#gbCapHint").textContent = a ? (c === "INR" ? `≈ ${fmtN(a / fx, 2)} ${native}` : `≈ ${rs(a * fx)}`) : ""; };
+  $("#gbCap").oninput = () => { lsSet("gbcap:" + mk + ":" + gbCur(mk), $("#gbCap").value); hint(); }; hint();
   gbRender();
 }
 function gbRender() {
-  const el = $("#gbBody"); SX.bt = GBT.res; SX.imp = null;
-  el.innerHTML = GBT.busy ? `<div class="card muted" style="margin-top:16px">Working… fetching history and simulating.</div>` : (GBT.res ? btHtml() : `<p class="muted" style="margin-top:14px">Pick a rule and a coin, then run.</p>`);
-  const cv = el.querySelector("#sxCurve"); if (cv && GBT.res && GBT.res.curve_R) setTimeout(() => miniLine(cv, [0].concat(GBT.res.curve_R), {base: 0}), 0);
+  const el = $("#gbBody"), r = GBT.res; SX.bt = r; SX.imp = null;
+  if (GBT.busy) { el.innerHTML = `<div class="card muted" style="margin-top:16px">Working… fetching history and simulating${$("#gbSym") && $("#gbSym").value === "ALL" ? " every coin" : ""}. Usually a few seconds.</div>`; SX.bt = null; return; }
+  if (!r) { el.innerHTML = `<p class="muted" style="margin-top:14px">Pick a rule, ${UNIT(gmk()).toLowerCase()} and amount, then run.</p>`; SX.bt = null; return; }
+  if (r.error) { el.innerHTML = `<div class="card err" style="margin-top:16px">${esc(r.error)}</div>`; SX.bt = null; return; }
+  const m = r.money, fxv = (r.fx || {}).USDINR || 88;
+  const skip = (m.skipped_full || 0) + (m.skipped_cash || 0);
+  const bySym = (r.by_symbol || []).map(x => `<tr><td><b>${esc(x.symbol.replace("USDT", ""))}</b></td><td class="mono">${x.n ?? 0}</td><td class="mono">${x.win_rate ?? "–"}%</td><td class="mono ${cls(x.avg_R)}">${sgn(x.avg_R)}R</td><td class="mono">${x.profit_factor ?? "–"}</td><td class="mono ${cls(x.total_R)}">${sgn(x.total_R)}R</td><td class="mono ${cls(x.pnl)}">${gbMoney(x.pnl, r, true)}</td></tr>`).join("");
+  const months = (m.by_month || []).slice(-12).map(x => `<div class="gbm"><span class="muted">${esc(x.m)}</span><b class="mono ${cls(x.pnl)}">${gbMoney(x.pnl, r, true)}</b></div>`).join("");
+  const tz = {CRYPTO: "UTC", US: "America/New_York", GOLD: "Europe/London"}[gmk()];
+  const when = t => new Date(t).toLocaleString("en-IN", {timeZone: "Asia/Kolkata", day: "2-digit", month: "short", year: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false});
+  const tr = (r.trades || []).slice().reverse().map(x => `<tr><td class="mono">${esc(when(x.ts))}</td><td><b>${esc(x.symbol.replace("USDT", ""))}</b></td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${fmtN(x.entry, x.entry < 10 ? 4 : 2)} → ${fmtN(x.exit, x.exit < 10 ? 4 : 2)}</td><td class="mono ${cls(x.R)}">${sgn(x.R)}R</td><td class="mono ${cls(x.pnl)}">${x.pnl == null ? '<span class="muted">skipped</span>' : gbMoney(x.pnl, r, true)}</td><td>${esc(x.reason)}</td></tr>`).join("");
+  el.innerHTML = `<div style="margin-top:20px"><div class="pagehead"><div><h2>${esc(r.spec_name)} · ${esc(r.symbol === "all coins" || r.symbol === "all symbols" ? r.symbol : r.symbol.replace("USDT", "/USDT"))}</h2><p class="muted">${esc(r.from)} → ${esc(r.to)} · ${r.bars.toLocaleString("en-IN")} bars · ${esc(r.source)}</p></div></div>
+    ${(r.notes || []).length ? `<div class="card" style="margin-bottom:12px;border-color:var(--warn,#f2a93b)">${r.notes.map(esc).join("<br>")}</div>` : ""}
+    <div class="grid g4">${kpiCard("Final balance", gbMoney(m.final, r), `started with ${gbMoney(m.capital, r)} · ${gbOther(m.final, r)}`)}${kpiCard("Profit", gbMoney(m.net, r, true), `${sgn(m.net_pct)}% on the starting amount`, cls(m.net))}${kpiCard("Deepest fall", m.max_dd_pct + "%", "worst drop from a high point", m.max_dd_pct < -25 ? "down" : "")}${kpiCard("Trades taken", m.trades, skip ? `${skip} signals skipped: ${m.skipped_full ? m.skipped_full + " with " + m.max_open + " already open" : ""}${m.skipped_full && m.skipped_cash ? ", " : ""}${m.skipped_cash ? m.skipped_cash + " not enough free cash" : ""}` : `win ${m.win_rate ?? "–"}% · PF ${m.profit_factor ?? "–"}`)}</div>
+    ${m.skipped_cash > m.trades * 0.2 ? `<div class="card" style="margin-top:12px"><b>Many signals were skipped for lack of free cash.</b> <span class="muted">At ${m.leverage}× leverage each position ties up its full value, so only a couple fit at once. Raising leverage (Portfolio settings, up to ${(GX.data || {}).max_leverage || 5}×) lets more trades open with the same risk per trade; it does not change the risk of each trade, only how much cash it blocks.</span></div>` : ""}
+    <div class="grid g2" style="margin-top:14px"><div class="card"><h3>Account value</h3><canvas id="gbCurve" class="flowcv" style="height:230px"></canvas><p class="muted" style="font-size:12px;margin:6px 0 0">${m.risk_pct}% risked per trade, compounding · leverage ${m.leverage}× · max ${m.max_open} open (most seen at once: ${m.max_open_seen}) · best trade ${gbMoney(m.best, r, true)}, worst ${gbMoney(m.worst, r, true)}</p>
+      ${m.top5_share_pct != null ? `<p style="font-size:12.5px;margin:6px 0 0" class="${m.top5_share_pct > 80 ? "down" : "muted"}">The best trade made ${m.best_share_pct}% of the profit and the best 5 made ${m.top5_share_pct}%. ${m.top5_share_pct > 80 ? "The result rests on a few big moves - without them it would look very different." : ""}</p>` : ""}</div>
+      <div class="card"><h3>Month by month</h3>${months ? `<div class="gbmonths">${months}</div>` : '<p class="muted">No closed trades.</p>'}</div></div>
+    ${(r.by_symbol || []).length > 1 ? `<div class="card" style="margin-top:14px"><h3>By ${UNIT(gmk()).toLowerCase()}</h3><div class="tablewrap"><table><tr><th>${UNIT(gmk())}</th><th>Trades</th><th>Win</th><th>Avg R</th><th>PF</th><th>Total R</th><th>Money</th></tr>${bySym}</table></div><p class="muted" style="font-size:12px;margin:8px 0 0">R = result in units of the amount risked, after fees and slippage. Money counts only trades the account could take.</p></div>` : ""}
+    <div id="gbR"></div>
+    <div class="card" style="margin-top:14px"><h3>Trades <span class="muted" style="font-weight:400;font-size:13px">(latest ${(r.trades || []).length} of ${r.total.n || 0}, newest first, times in IST)</span></h3><div class="tablewrap" style="max-height:55vh"><table><tr><th>Opened</th><th>${UNIT(gmk())}</th><th>Side</th><th>Entry → exit</th><th>R</th><th>P&L</th><th>Exit</th></tr>${tr || '<tr><td colspan="7" class="muted">No trades.</td></tr>'}</table></div></div></div>`;
+  $("#gbR").innerHTML = btHtml().replace(/<div class="pagehead">[\s\S]*?<\/div><\/div>/, '<h3 class="sect" style="margin-top:6px">Rule quality in R (risk units)</h3>');
+  const cv = el.querySelector("#sxCurve"); if (cv && r.curve_R) setTimeout(() => miniLine(cv, [0].concat(r.curve_R), {base: 0}), 0);
+  setTimeout(() => miniLine($("#gbCurve"), [m.capital].concat((m.curve || []).map(x => x.v)).map(x => GBT.shown === "INR" ? x * fxv : x), {base: GBT.shown === "INR" ? m.capital * fxv : m.capital}), 0);
   SX.bt = null;
 }
 document.addEventListener("click", async e => {
+  const cb = e.target.closest("#gbCurSeg [data-gbc]");
+  if (cb) {
+    const mk = gmk(), old = gbCur(mk), nw = cb.dataset.gbc === "INR" ? "INR" : "X", fx = ((GX.data || {}).fx || {}).USDINR || 88, a = +$("#gbCap").value || 0;
+    GBT.cur = nw === "INR" ? "INR" : (mk === "CRYPTO" ? "USDT" : "USD"); lsSet("gbcur:" + mk, GBT.cur);
+    if (old !== GBT.cur && a) $("#gbCap").value = old === "INR" ? +(a / fx).toFixed(2) : Math.round(a * fx);
+    await loadGBacktest(); return;
+  }
   if (!e.target.closest("#gbRun")) return;
-  const id = $("#gbRule").value, sym = $("#gbSym").value, days = +$("#gbDays").value;
+  const mk = gmk(), id = $("#gbRule").value, sym = $("#gbSym").value, days = +$("#gbDays").value;
   const r = GB_RULES.built_in.find(x => x.id === id), o = GB_RULES.own.find(x => x.id === id);
-  const spec = clone((r || o).spec); spec.symbols = [sym];
-  GBT.busy = true; GBT.res = null; await loadGBacktest();
-  try { GBT.res = await post("/api/strategies/backtest", {spec, symbol: sym, days}); }
+  const spec = clone((r || o).spec); if (sym !== "ALL") spec.symbols = [sym];
+  const body = {market: mk, spec, symbol: sym, days, capital: +$("#gbCap").value, currency: gbCur(mk) === "INR" ? "INR" : "", risk_pct: +$("#gbRisk").value, leverage: +$("#gbLev").value, max_open: +$("#gbMax").value};
+  GBT.busy = true; GBT.res = null; GBT.shown = gbCur(mk) === "INR" ? "INR" : "NATIVE"; await loadGBacktest();
+  try { GBT.res = await post("/api/gbook/backtest", body); }
   catch (er) { GBT.res = {error: er.message}; }
   GBT.busy = false; await loadGBacktest();
 });
@@ -4094,18 +4158,23 @@ function gxGold(g) {
       <p class="muted" style="font-size:12px;margin:6px 0 0">From ${esc(st.source || "")} ${st.bar_minutes || ""}-minute bars, ${st.days} trading days. Sessions overlap, so shares add to more than 100%. "~" = within noise. Descriptive only: rules still have to pass their own backtest to trade.</p>` : `<p class="muted" style="margin:10px 0 0">${esc(st.error || "Session statistics are loading…")}</p>`}
     <details style="margin-top:10px"><summary class="muted">What the sessions mean for gold</summary>${(g.notes || []).map(n => `<p style="margin:6px 0 0;font-size:13px">${esc(n)}</p>`).join("")}</details></div>`;
 }
+function gxInr(v, d) { const fx = ((d || {}).fx || {}).USDINR; return fx && v != null ? "≈ " + rs(v * fx) : ""; }
+function gxKpis(d) {
+  const cur = d.currency, st = d.stats || {}, pnl = d.equity - d.capital_start;
+  return `<div class="grid g4">${kpiCard("Account value", money(d.equity, cur), `${gxInr(d.equity, d)} · started with ${money(d.capital_start, cur)}`)}${kpiCard("Available", money(d.cash, cur), `${gxInr(d.cash, d)} · ${d.positions.length} open`)}${kpiCard("Realised", money(d.realised, cur), `${gxInr(d.realised, d)} · ${st.trades || 0} closed trades`, cls(d.realised))}${kpiCard("Open profit", money(d.unrealised, cur), `${gxInr(d.unrealised, d)} · right now`, cls(d.unrealised))}</div>`;
+}
 function renderMarkets() {
   const d = GX.data, el = $("#gxBody"); if (!d) return; const cur = d.currency, p = d.prefs || {}, st = d.stats || {};
   $("#gxHead").innerHTML = `<div class="pagehead"><div><h2>${tabs[GX.mk]} dashboard</h2><p class="muted">Paper account in ${cur}, fully separate from India F&O: own money, rules, settings and learning. Your own ${tabs[GX.mk]} strategies set to Auto trade first; with none on Auto, the built-in autopilot trades only the rules that pass its weekly check. ${{CRYPTO: "Crypto runs around the clock.", US: "US stocks trade 7:00 pm – 1:30 am IST (9:30 am – 4:00 pm New York).", GOLD: "Gold trades nearly 24 hours on weekdays (Monday ~04:30 IST to Saturday ~03:30 IST, one-hour break daily). XAUUSD = COMEX gold futures price; PAXG = tokenised gold that also trades at weekends."}[GX.mk] || ""}</p></div>
 </div>`;
   el.innerHTML = `${GX.mk === "GOLD" ? gxGold(GX.gold) : ""}${gxAutopilot(d)}${gxScanner(d)}${gxLab(d)}
-  <div class="grid g4">${kpiCard("Account value", money(d.equity, cur), `started with ${money(d.capital_start, cur)}`)}${kpiCard("Available", money(d.cash, cur), `${d.positions.length} open`)}${kpiCard("Realised", money(d.realised, cur), `${st.trades || 0} closed trades`, cls(d.realised))}${kpiCard("Open profit", money(d.unrealised, cur), "right now", cls(d.unrealised))}</div>
+  ${gxKpis(d)}
   <div class="card" style="margin-top:14px"><h3>Open positions</h3><div class="tablewrap"><table><tr><th>Symbol</th><th>Strategy</th><th>Side</th><th>Entry</th><th>Now</th><th>Stop</th><th>Target</th><th>R</th><th>P&L</th><th></th></tr>${d.positions.map(x => `<tr><td><b>${esc(x.symbol)}</b></td><td>${esc(x.strategy_name)}</td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${gpx(x.entry)}</td><td class="mono">${gpx(x.price)}</td><td class="mono">${gpx(x.stop)}</td><td class="mono">${x.target == null ? "–" : gpx(x.target)}</td><td class="mono ${cls(x.R_now)}">${sgn(x.R_now)}</td><td class="mono ${cls(x.unrealised)}">${fmtN(x.unrealised)}</td><td style="white-space:nowrap"><button data-gxe="${x.id}" data-sl="${x.stop}" data-tp="${x.target ?? ""}">Edit stop/target</button> <button data-gx="${x.id}">Close</button></td></tr>`).join("") || `<tr><td colspan="10" class="muted">No open positions right now. One opens when an active rule gives a signal, or when you place a manual trade on the Dashboard.</td></tr>`}</table></div></div>`;
 }
 function gxPortfolioHtml(d) {
   const cur = d.currency, p = d.prefs || {}, st = d.stats || {};
   return `<div class="pagehead"><div><h2>${tabs[GX.mk]} portfolio</h2><p class="muted">Paper account in ${cur}: money, open trades, every closed trade and the account's own settings. Separate from India F&O.</p></div></div>
-  <div class="grid g4">${kpiCard("Account value", money(d.equity, cur), `started with ${money(d.capital_start, cur)}`)}${kpiCard("Available", money(d.cash, cur), `${d.positions.length} open`)}${kpiCard("Realised", money(d.realised, cur), `${st.trades || 0} closed trades`, cls(d.realised))}${kpiCard("Open profit", money(d.unrealised, cur), "right now", cls(d.unrealised))}</div>
+  ${gxKpis(d)}
   <div class="grid g2" style="margin-top:14px">
     <div class="card"><h3>Account curve</h3><canvas id="gxCurve" class="flowcv" style="height:200px"></canvas>
       ${st.trades ? `<p class="muted" style="margin:8px 0 0">Win rate ${st.win_rate}% · profit factor ${st.profit_factor ?? "–"} · average ${sgn(st.avg_R)}R · deepest fall ${st.max_dd_pct}%</p>` : ""}</div>
@@ -4114,15 +4183,23 @@ function gxPortfolioHtml(d) {
       <div><label>Max leverage (cap ${d.max_leverage}×)</label><input id="gxLev" type="number" step="0.5" min="1" max="${d.max_leverage}" value="${p.max_leverage}"></div>
       <div><label>Max open positions</label><input id="gxMax" type="number" min="1" max="10" value="${p.max_open}"></div></div>
       <label class="sw" style="margin-top:10px"><input type="checkbox" id="gxAuto" ${p.auto ? "checked" : ""}> Let strategies marked "Auto paper-trade" open trades by themselves</label>
-      <div class="row wrap" style="margin-top:12px"><button class="primary" id="gxSave">Save settings</button><input id="gxCap" type="number" value="${GX.mk === "CRYPTO" ? 5000 : 10000}" style="width:110px"><button class="danger" id="gxReset">Reset account</button></div>
+      <div class="row wrap" style="margin-top:12px"><button class="primary" id="gxSave">Save settings</button></div>
+      <div class="gxreset"><h4 style="margin:0 0 6px">Start the account again</h4><p class="muted" style="font-size:12.5px;margin:0 0 8px">Clears open positions and trade history and starts with this amount. The account keeps ${cur}; a ₹ amount is converted at today's rate${((d.fx || {}).USDINR) ? ` (1 ${cur} ≈ ₹${(+d.fx.USDINR).toFixed(2)})` : ""}.</p>
+        <div class="row wrap" style="gap:8px;align-items:center"><input id="gxCap" type="number" min="1" step="any" value="${lsGet("gxcap:" + GX.mk, "20000")}" style="width:140px" aria-label="Starting amount"><div class="segs" id="gxCapCur"><button class="seg ${lsGet("gxcapcur:" + GX.mk, "INR") === "INR" ? "on" : ""}" data-gxc="INR">₹</button><button class="seg ${lsGet("gxcapcur:" + GX.mk, "INR") !== "INR" ? "on" : ""}" data-gxc="${cur}">${cur}</button></div><span class="muted mono" id="gxCapHint" style="font-size:12.5px"></span><button class="danger" id="gxReset">Reset account</button></div></div>
       <p class="muted" style="font-size:12.5px;margin:10px 0 0">Prices come from free public feeds and bars are checked every minute. Fees and slippage are included. Nothing here places a real order.</p></div></div>
   <div class="card" style="margin-top:14px"><h3>Open positions</h3><div class="tablewrap"><table><tr><th>Symbol</th><th>Strategy</th><th>Side</th><th>Entry</th><th>Now</th><th>Stop</th><th>Target</th><th>R</th><th>P&L</th><th></th></tr>${d.positions.map(x => `<tr><td><b>${esc(x.symbol)}</b></td><td>${esc(x.strategy_name)}</td><td class="${x.side === "long" ? "up" : "down"}">${esc(x.side)}</td><td class="mono">${gpx(x.entry)}</td><td class="mono">${gpx(x.price)}</td><td class="mono">${gpx(x.stop)}</td><td class="mono">${x.target == null ? "–" : gpx(x.target)}</td><td class="mono ${cls(x.R_now)}">${sgn(x.R_now)}</td><td class="mono ${cls(x.unrealised)}">${fmtN(x.unrealised)}</td><td style="white-space:nowrap"><button data-gxe="${x.id}" data-sl="${x.stop}" data-tp="${x.target ?? ""}">Edit stop/target</button> <button data-gx="${x.id}">Close</button></td></tr>`).join("") || `<tr><td colspan="10" class="muted">No open positions right now. One opens when an active rule gives a signal, or when you place a manual trade on the Dashboard.</td></tr>`}</table></div></div>
   <div class="card" style="margin-top:14px"><h3>Closed trades</h3><div class="tablewrap" style="max-height:50vh"><table><tr><th>Closed</th><th>Symbol</th><th>Strategy</th><th>Side</th><th>R</th><th>P&L</th><th>Reason</th></tr>${d.history.map(x => `<tr><td class="mono">${esc((x.closed || "").slice(0, 16).replace("T", " "))}</td><td>${esc(x.symbol)}</td><td>${esc(x.strategy_name)}</td><td>${esc(x.side)}</td><td class="mono ${cls(x.R)}">${sgn(x.R)}</td><td class="mono ${cls(x.pnl)}">${fmtN(x.pnl)}</td><td>${esc(x.reason)}</td></tr>`).join("") || `<tr><td colspan="7" class="muted">No closed trades yet.</td></tr>`}</table></div></div>`;
 }
+function gxCapHint() {
+  const el = $("#gxCapHint"); if (!el || !GX.data) return; const fx = (GX.data.fx || {}).USDINR, a = +$("#gxCap").value || 0, inr = lsGet("gxcapcur:" + GX.mk, "INR") === "INR";
+  lsSet("gxcap:" + GX.mk, $("#gxCap").value);
+  el.textContent = !a || !fx ? "" : inr ? `= ${money(a / fx, GX.data.currency)}` : `≈ ${rs(a * fx)}`;
+}
+document.addEventListener("input", e => { if (e.target.id === "gxCap") gxCapHint(); });
 async function loadGPortfolio() {
   if (WS.mk !== "IN") GX.mk = WS.mk;
   GX.data = await api("/api/gbook?market=" + GX.mk);
-  const d = GX.data; $("#gpBody").innerHTML = gxPortfolioHtml(d);
+  const d = GX.data; $("#gpBody").innerHTML = gxPortfolioHtml(d); gxCapHint();
   setTimeout(() => miniLine($("#gxCurve"), (d.stats.equity || []).map(x => x.v), {base: d.capital_start}), 0);
 }
 document.addEventListener("click", async e => {
@@ -4131,7 +4208,11 @@ document.addEventListener("click", async e => {
     if (t.dataset.gmk) { GX.mk = t.dataset.gmk; localStorage.setItem("gmk", GX.mk); await loadMarkets(); }
     else if (t.dataset.gx) { const r = await post("/api/gbook/exit", {market: GX.mk, id: t.dataset.gx}); toast(r.message); await reload(); }
     else if (t.id === "gxSave") { await post("/api/gbook/prefs", {market: GX.mk, risk_pct: +$("#gxRisk").value, max_leverage: +$("#gxLev").value, max_open: +$("#gxMax").value, auto: $("#gxAuto").checked}); toast("Saved"); await reload(); }
-    else if (t.id === "gxReset") { if (confirm("Clear this account's positions and trade history and start over?")) { await post("/api/gbook/reset", {market: GX.mk, capital: +$("#gxCap").value}); toast("Account reset"); await reload(); } }
+    else if (t.dataset.gxc) { lsSet("gxcapcur:" + GX.mk, t.dataset.gxc); document.querySelectorAll("#gxCapCur .seg").forEach(b => b.classList.toggle("on", b === t)); gxCapHint(); }
+    else if (t.id === "gxReset") {
+      const inr = lsGet("gxcapcur:" + GX.mk, "INR") === "INR", a = +$("#gxCap").value;
+      if (!(a > 0)) { toast("Enter the amount to start with"); return; }
+      if (confirm(`Clear this account's positions and trade history and start again with ${inr ? rs(a) : money(a, GX.data.currency)}?`)) { const r = await post("/api/gbook/reset", {market: GX.mk, capital: a, currency: inr ? "INR" : ""}); toast(`Account reset: ${money(r.capital, GX.data.currency)}`); await reload(); } }
   } catch (er) { toast(er.message); }
 });
 

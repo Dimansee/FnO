@@ -15,6 +15,7 @@ fno:positions and fno:trades.
 - fno/paper.py          – demo money, positions, journal
 - fno/service.py        – glue between the above
 - fno/backtest.py       – backtester
+- fno/gbacktest.py      – crypto / US / gold backtest in money: one coin or the whole book, sized like the paper account
 - fno/context.py        – global markets, news, FII/DII
 - fno/store.py          – Upstash Redis storage (REST API)
 - fno/scheduler.py      – registers the every-minute QStash schedule

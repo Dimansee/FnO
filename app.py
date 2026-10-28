@@ -1015,7 +1015,13 @@ def gbook_get():
             GB.tick((m,))
         except Exception:
             traceback.print_exc()
-    return jsonify(SV.clean(GB.portfolio(m)))
+    out = GB.portfolio(m)
+    try:                                      # rupee value of the account (cached 15 min; falls back to an estimate)
+        from fno import gorders as GO
+        out["fx"] = GO.fx()
+    except Exception:
+        out["fx"] = None
+    return jsonify(SV.clean(out))
 
 
 @app.get("/api/gold/sessions")
@@ -1147,8 +1153,41 @@ def gbook_prefs():
 @app.post("/api/gbook/reset")
 def gbook_reset():
     b = request.get_json(force=True) or {}
-    GB.reset(_mk(), float(b.get("capital") or 10000))
-    return jsonify({"ok": True})
+    cap = float(b.get("capital") or 10000)
+    if str(b.get("currency", "")).upper() == "INR":    # amount typed in rupees: convert at today's USD/INR rate
+        from fno import gorders as GO
+        rate = float(GO.fx().get("USDINR") or 88.0)
+        cap = round(cap / rate, 2)
+    GB.reset(_mk(), cap)
+    return jsonify({"ok": True, "capital": cap})
+
+
+@app.post("/api/gbook/backtest")
+def gbook_backtest():
+    """Crypto / US / gold backtest in money: one symbol or the whole book ("ALL"), sized like the paper account."""
+    from fno import gbacktest as GBT, portfolio_bt as PB, gorders as GO
+    b = request.get_json(force=True) or {}
+    m = _mk()
+    raw = b.get("spec")
+    if not raw and b.get("id"):
+        raw = next((x for x in CU.load_all(store) if x["id"] == b["id"]), None)
+    if not raw:
+        raise ValueError("Send a strategy to test.")
+    days = int(b.get("days") or 730)
+    if not 20 <= days <= 1500:
+        raise ValueError("Days must be between 20 and 1500.")
+    cap = float(b.get("capital") or 0) or GB.account(m)["capital_start"]
+    fx = GO.fx()
+    if str(b.get("currency", "")).upper() == "INR":
+        cap = cap / float(fx.get("USDINR") or 88.0)
+
+    def go():
+        res = GBT.run(raw, m, b.get("symbol") or "ALL", days, cap, b.get("risk_pct"), b.get("leverage"), b.get("max_open"), busy=PB.market_busy())
+        res["fx"] = fx
+        res["spec_name"] = raw.get("name", "")
+        res["source"] = "Binance public data" if m == "CRYPTO" else "Yahoo Finance (gold = COMEX GC=F)" if m == "GOLD" else "Yahoo Finance"
+        return jsonify(SV.clean(res))
+    return _heavy_run(go)        # history is capped inside GBT.run (shorter while the Indian market is open), so no day gate here
 
 
 @app.post("/api/gbook/exit")

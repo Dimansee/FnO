@@ -1167,6 +1167,28 @@
    "decision": "Information",
    "summary": "Expired-option prices, bid/ask spreads, chain open interest and FII/DII positioning are not available for past dates, so the app and a nightly GitHub job now save them as they happen for later studies.",
    "period": "from 2026-09-28"
+  },
+  {
+   "id": "r55",
+   "date": "2026-10-28",
+   "area": "Crypto",
+   "title": "Levels: multi-touch support/resistance, pivots, Camarilla, round numbers",
+   "asked": "Do prices that reverse from the same level again and again, daily/weekly pivots, Camarilla levels or round numbers give an edge on 15m / 1h / 4h bars, as bounce or breakout trades with 1R-3R or next-level targets, with and without a trend filter? 732 variants on 10 coins, checked against random entries.",
+   "result": "Bounces from a level win about 50% at a 1R target - a coin flip - and are flat before costs, so every one loses after fees (-0.07R on 4h, -0.17R on 1h, -0.46R on 15m). Only 1 of 732 passed: a 4h breakout through a level touched 3+ times, with the trend filter (+0.11R on unseen data, beat random entries), but its profit is almost all from 2025, half its entries duplicate the live trend rules, and it is below Donchian 55 (+0.14R).",
+   "decision": "Not adopted",
+   "summary": "No level rule added. The 4h multi-touch breakout is on the watch-list for a separate paper test.",
+   "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r55b",
+   "date": "2026-10-28",
+   "area": "Crypto",
+   "title": "Stop-loss and target for the live crypto rules",
+   "asked": "1,080 combinations per rule of initial stop (1.5-4 ATR), trailing stop, fixed target (2R/3R/5R), break-even and 50% partial exit, on Supertrend 4h/daily and Donchian 55/20; chosen on older data, judged on unseen data.",
+   "result": "The live settings are already at or near the best on unseen data (Supertrend 4h: 1st of 1,080). Fixed targets cut profit on every rule; a 50% partial at 1R lifts the win rate to 44-55% but lowers total profit; break-even moves did not help; a tighter 1.5 ATR stop on Supertrend 4h was much worse. Settings that looked best on older data did worse later.",
+   "decision": "Not adopted",
+   "summary": "Stops and targets unchanged. These rules win 32-40% of trades and make their money on a few big trends.",
+   "period": "Jan 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",

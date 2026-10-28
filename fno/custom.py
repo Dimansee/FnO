@@ -577,6 +577,15 @@ def backtest(spec: dict, df: pd.DataFrame, symbol: str, vix: pd.Series | None = 
     trades = simulate(spec, bars, vix)
     for t in trades:
         t["symbol"] = symbol
+    res = summarize(spec, trades, symbol, len(bars), len(set(df.index.date)) if len(df) else 0,
+                    str(df.index[0].date()), str(df.index[-1].date()))
+    if spec["market"] == "IN" and trades:
+        res["option"] = option_pnl(symbol, trades, vix, capital, risk_pct)
+    return res
+
+
+def summarize(spec: dict, trades: list[dict], symbol: str, n_bars: int, days: int, d_from: str, d_to: str) -> dict:
+    """R statistics the backtest screens show, for one symbol or for several pooled (trades in entry-time order)."""
     rs = [t["R"] for t in trades]
     cut = int(len(rs) * 0.7)
     train, unseen = stats_R(rs[:cut]), stats_R(rs[cut:])
@@ -593,20 +602,18 @@ def backtest(spec: dict, df: pd.DataFrame, symbol: str, vix: pd.Series | None = 
         reasons.setdefault(t["reason"], []).append(t["R"])
     sides = {s: stats_R([t["R"] for t in trades if t["side"] == s]) for s in ("long", "short")}
     eq = np.cumsum(rs) if rs else np.array([])
-    days = len(set(df.index.date)) if len(df) else 0
-    res = {"symbol": symbol, "bars": len(bars), "days": days, "from": str(df.index[0].date()), "to": str(df.index[-1].date()),
+    px = lambda v: round(float(v), 2 if abs(v) >= 100 else 4 if abs(v) >= 1 else 6)    # keep cheap coins (DOGE, XRP) readable
+    res = {"symbol": symbol, "bars": n_bars, "days": days, "from": d_from, "to": d_to,
            "total": total, "train_70": train, "unseen_30": unseen, "by_side": sides,
            "by_hour": {k: stats_R(v) for k, v in sorted(hours.items())}, "by_year": {k: stats_R(v) for k, v in sorted(years.items())},
            "by_exit": {k: stats_R(v) for k, v in reasons.items()},
            "curve_R": [round(float(x), 2) for x in eq[-600:]],
-           "trades": [{"ts": t["entry_ts"].isoformat(), "exit_ts": t["exit_ts"].isoformat(), "side": t["side"], "entry": round(t["entry"], 2), "exit": round(t["exit"], 2),
-                       "R": round(t["R"], 2), "reason": t["reason"], "bars": t["bars"]} for t in trades[-200:]],
+           "trades": [{"ts": t["entry_ts"].isoformat(), "exit_ts": t["exit_ts"].isoformat(), "symbol": t.get("symbol", symbol), "side": t["side"],
+                       "entry": px(t["entry"]), "exit": px(t["exit"]), "R": round(t["R"], 2), "reason": t["reason"], "bars": t["bars"]} for t in trades[-200:]],
            "verdict": verdict(total, train, unseen, days),
            "assumptions": ["Signal read at a bar's close, trade starts at the next bar's open.", "A bar touching both stop and target counts as a stop.",
                            f"Costs: {COSTS_BPS[spec['market']][0]:g} bps slippage + {COSTS_BPS[spec['market']][1]:g} bps fees per side on the underlying."
                            if spec["market"] != "IN" else "R is measured on the index, before option costs; money figures below price the ITM option with slippage and charges."]}
-    if spec["market"] == "IN" and trades:
-        res["option"] = option_pnl(symbol, trades, vix, capital, risk_pct)
     return res
 
 
