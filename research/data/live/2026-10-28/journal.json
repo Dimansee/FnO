@@ -1,0 +1,493 @@
+{
+ "ai": {
+  "BANKNIFTY": [],
+  "NIFTY": []
+ },
+ "context": {
+  "BANKNIFTY": {
+   "atr_5m": null,
+   "calendar": null,
+   "camarilla": {
+    "h3": 54167.6326171875,
+    "h4": 54360.366796875,
+    "l3": 53782.1642578125,
+    "l4": 53589.430078125,
+    "pivot": 54194.049479166664
+   },
+   "cpr": {
+    "bc": 54303.625,
+    "tc": 54084.47395833333,
+    "width_pct": 0.406
+   },
+   "expiries": [
+    "2026-11-24",
+    "2026-12-29",
+    "2027-01-26"
+   ],
+   "expiry": "2026-11-24",
+   "fii": {
+    "date": "27-Oct-2026",
+    "dii": -1250.03,
+    "fii": 4240.39,
+    "source": "NSE"
+   },
+   "gap_pct": -0.44,
+   "global": {
+    "avg_equity_chg": 1.52,
+    "notes": []
+   },
+   "lot": 30,
+   "noise_band_at": {
+    "09:45": [
+     53366.8,
+     54348.6
+    ],
+    "10:15": [
+     53336.2,
+     54379.4
+    ],
+    "11:15": [
+     53242.4,
+     54473.6
+    ],
+    "12:15": [
+     53204.3,
+     54511.9
+    ],
+    "13:15": [
+     53089.4,
+     54627.2
+    ],
+    "14:15": [
+     53112.6,
+     54603.9
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 53738.8984375,
+   "pcr_prev_close": null,
+   "pivot": 54194.049479166664,
+   "prefs": {
+    "auto": false,
+    "auto_syms": [
+     "NIFTY"
+    ],
+    "risk_pct": 1.0,
+    "sizing": "risk",
+    "strategies": [
+     "noise",
+     "camarilla"
+    ]
+   },
+   "prev_close": 53974.8984375,
+   "prev_high": 54654.05078125,
+   "prev_low": 53953.19921875,
+   "symbol": "BANKNIFTY",
+   "time": "09:16",
+   "vix": {
+    "chg_pct": 5.625003852495425,
+    "level": 17.322500228881836
+   }
+  },
+  "NIFTY": {
+   "atr_5m": null,
+   "calendar": null,
+   "camarilla": {
+    "h3": 22802.714892578126,
+    "h4": 22855.67978515625,
+    "l3": 22696.785107421874,
+    "l4": 22643.82021484375,
+    "pivot": 22738.849609375
+   },
+   "cpr": {
+    "bc": 22733.3994140625,
+    "tc": 22744.2998046875,
+    "width_pct": 0.048
+   },
+   "expiries": [
+    "2026-11-03",
+    "2026-11-10",
+    "2026-11-17"
+   ],
+   "expiry": "2026-11-03",
+   "fii": {
+    "date": "27-Oct-2026",
+    "dii": -1250.03,
+    "fii": 4240.39,
+    "source": "NSE"
+   },
+   "gap_pct": -0.75,
+   "global": {
+    "avg_equity_chg": 1.52,
+    "notes": []
+   },
+   "lot": 65,
+   "noise_band_at": {
+    "09:45": [
+     22448.7,
+     22880.4
+    ],
+    "10:15": [
+     22379.9,
+     22949.7
+    ],
+    "11:15": [
+     22384.2,
+     22945.4
+    ],
+    "12:15": [
+     22315.9,
+     23014.3
+    ],
+    "13:15": [
+     22257.2,
+     23073.3
+    ],
+    "14:15": [
+     22232.0,
+     23098.7
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 22578.400390625,
+   "pcr_prev_close": null,
+   "pivot": 22738.849609375,
+   "prefs": {
+    "auto": false,
+    "auto_syms": [
+     "NIFTY"
+    ],
+    "risk_pct": 1.0,
+    "sizing": "risk",
+    "strategies": [
+     "noise",
+     "camarilla"
+    ]
+   },
+   "prev_close": 22749.75,
+   "prev_high": 22829.69921875,
+   "prev_low": 22637.099609375,
+   "symbol": "NIFTY",
+   "time": "09:16",
+   "vix": {
+    "chg_pct": 5.625003852495425,
+    "level": 17.322500228881836
+   }
+  }
+ },
+ "date": "2026-10-28",
+ "paper_trades": [
+  {
+   "charges": 76.34,
+   "closed": "2026-10-28T12:11:36+05:30",
+   "delta": 0.51,
+   "entry_prem": 213.3,
+   "exit_ltp": 186.7,
+   "exit_prem": 184.62,
+   "expiry": "2026-11-03",
+   "gross_pnl": -1864.2,
+   "hi": 22663.2,
+   "id": "bea9f3ba",
+   "legs": [
+    {
+     "key": "NSE_FO|53781",
+     "opt": "PE",
+     "price": 213.3,
+     "side": "BUY",
+     "src": "upstox",
+     "strike": 22650.0
+    }
+   ],
+   "lo": 22606.4,
+   "lot": 65,
+   "lots": 1,
+   "margin": 13864.0,
+   "mode": "signal",
+   "opened": "2026-10-28T11:45:04+05:30",
+   "plan": {
+    "ai_judge": {
+     "cut": -0.047,
+     "good": false,
+     "mult": 0.67,
+     "pred": -0.304,
+     "total_mult": 0.5
+    },
+    "auto": true,
+    "breakeven_at": 22569.50446666666,
+    "conviction": {
+     "mult": 0.67,
+     "score": 3
+    },
+    "ctx": {
+     "atr_pct": 0.125,
+     "dte": 6,
+     "gap_pct": -0.32,
+     "minute_of_day": 705,
+     "trend": "mixed",
+     "vix": 16.56,
+     "vix_chg": 0.98,
+     "weekday": 2
+    },
+    "entry": 22617.3,
+    "opt": "PE",
+    "risk_pts": 47.79553333333752,
+    "rr": null,
+    "signal_bar": "11:45",
+    "sl": 22665.095533333337,
+    "strategy": "fib",
+    "target": null,
+    "time_stop_min": 45,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "pnl": -1940.54,
+   "qty": 65,
+   "reason": "Index stop-loss hit",
+   "sl_prem": 188.85,
+   "source": "LIVE \u00b7 Upstox",
+   "spot_at_entry": 22617.3,
+   "spot_exit": 22663.2,
+   "symbol": "NIFTY",
+   "target_fixed": false,
+   "target_prem": 286.64
+  },
+  {
+   "charges": 75.6,
+   "closed": "2026-10-28T12:46:01+05:30",
+   "delta": 0.53,
+   "entry_prem": 221.5,
+   "exit_ltp": 178.05,
+   "exit_prem": 176.8,
+   "expiry": "2026-11-03",
+   "gross_pnl": -2905.5,
+   "hi": 22696.35,
+   "id": "e11c302c",
+   "legs": [
+    {
+     "key": "NSE_FO|53791",
+     "opt": "PE",
+     "price": 221.5,
+     "side": "BUY",
+     "src": "upstox",
+     "strike": 22700.0
+    }
+   ],
+   "lo": 22636.1,
+   "lot": 65,
+   "lots": 1,
+   "margin": 14398.0,
+   "mode": "signal",
+   "opened": "2026-10-28T12:16:06+05:30",
+   "plan": {
+    "ai_judge": {
+     "cut": -0.047,
+     "good": false,
+     "mult": 0.67,
+     "pred": -0.315,
+     "total_mult": 0.5
+    },
+    "auto": true,
+    "breakeven_at": 22584.697500000002,
+    "conviction": {
+     "mult": 0.67,
+     "score": 2
+    },
+    "ctx": {
+     "atr_pct": 0.121,
+     "dte": 6,
+     "gap_pct": -0.32,
+     "minute_of_day": 736,
+     "trend": "up",
+     "vix": 16.47,
+     "vix_chg": 0.43,
+     "weekday": 2
+    },
+    "entry": 22640.7,
+    "opt": "PE",
+    "risk_pts": 56.00249999999869,
+    "rr": null,
+    "signal_bar": "12:15",
+    "sl": 22696.7025,
+    "strategy": "camarilla",
+    "target": null,
+    "time_stop_min": 45,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "pnl": -2981.1,
+   "qty": 65,
+   "reason": "Index stop-loss hit",
+   "sl_prem": 191.93,
+   "source": "LIVE \u00b7 Upstox",
+   "spot_at_entry": 22640.7,
+   "spot_exit": 22696.35,
+   "symbol": "NIFTY",
+   "target_fixed": false,
+   "target_prem": 310.22
+  }
+ ],
+ "recommendations": [
+  {
+   "auto_enabled": false,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 16.47 between 11 and 18 (enough movement to pay for an option, but not a fear spike)"
+     ],
+     [
+      null,
+      "Last check 09:45 (next 10:15) \u00b7 band 22547.8 \u2013 22880.4"
+     ],
+     [
+      null,
+      "Watching CALL side (1/3 conditions met):"
+     ],
+     [
+      "False",
+      "09:45 close 22606.3 above upper band 22880.4"
+     ],
+     [
+      "True",
+      "Above VWAP 22580.4"
+     ],
+     [
+      false,
+      "Still above the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 16.47 between 11 and 20"
+     ],
+     [
+      null,
+      "Yesterday's levels: H4 22855.7 \u00b7 H3 22802.7 \u00b7 L3 22696.8 \u00b7 L4 22643.8"
+     ],
+     [
+      true,
+      "09:55 close crossed below L4"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": 1,
+      "value": "+1.49% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": -1,
+      "value": "-0.32%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 0,
+      "value": "16.47 (+0.4%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": 1,
+      "value": "\u20b94,240 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": 1,
+      "value": "22634.0 vs 22595.4"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": 1,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "id": "NIFTY:camarilla:09:55",
+   "index": {
+    "entry": 22634.0,
+    "risk_pts": 62.78510742187427,
+    "rr": null,
+    "sl": 22696.785107421874,
+    "target": null
+   },
+   "lot": 65,
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 13965.0,
+    "delta": 0.52,
+    "entry_prem": 214.85,
+    "expiry": "2026-11-03",
+    "lots": 1,
+    "ltp": 214.0,
+    "sl_prem": 181.95,
+    "strike": 22700.0,
+    "target_prem": 313.55
+   },
+   "result": {
+    "R": -1.0,
+    "at": "12:45",
+    "close_15_15": 22707.2,
+    "exit_spot": 22696.8,
+    "index_outcome": "stop",
+    "mae_pts": 144.0,
+    "mfe_pts": 136.3,
+    "premium": {
+     "at_exit": 185.7,
+     "entry": 214.85,
+     "high": 323.65,
+     "last": 171.9,
+     "low": 153.75,
+     "max_gain_pct": 50.6,
+     "max_loss_pct": -28.4,
+     "pnl_1lot_if_followed": -1895.0
+    }
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "09:55",
+   "spot": 22639.44921875,
+   "strategy": "camarilla",
+   "symbol": "NIFTY",
+   "time": "09:56:01",
+   "vix": 16.469999313354492
+  }
+ ],
+ "settled": {
+  "at": "2026-10-28T15:16:04+05:30",
+  "lesson": "1 recommendation: 0 target, 1 stop, 0 squared off; -1.0R in total. India VIX was 17.3 at the open. Carry forward: one trade per rule per day, the index-level stop decides, premium paths are shown so you can see where the plan and the option diverged.",
+  "recos": 1
+ },
+ "summary": {
+  "by_outcome": {
+   "square-off": 0,
+   "stop": 1,
+   "target": 0
+  },
+  "by_strategy": {
+   "camarilla": {
+    "R": -1.0,
+    "n": 1
+   }
+  },
+  "paper_pnl": -4922.0,
+  "paper_trades": 2,
+  "recommendations": 1,
+  "settled": 1,
+  "sum_R": -1.0
+ }
+}
