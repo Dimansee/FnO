@@ -3,6 +3,17 @@
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
+   "id": "r65",
+   "date": "2026-10-29",
+   "area": "Index options",
+   "title": "Round 65: Camarilla breakout after the rally - skip stretched breakouts or wait for a pullback to H4?",
+   "asked": "29 Oct Nifty: the Camarilla call came at 10:36 (5-min close 22864.9 above H4 22855.85), at the top of a ~150-point rally; price then went sideways. Should the rule skip breakouts that come after a big run, or wait for a pullback to H4 (support) before buying?",
+   "period": "App backtester with today's Autopilot rules (big-run skip on), Nifty / Bank Nifty / Sensex, 1 lot 1-ITM, Jan 2023 - Oct 2026; 668 Camarilla trades. Only the Camarilla entry changed; Noise band may take the slot a skipped Camarilla trade frees, as in the live app.",
+   "result": "Run-up before the signal (668 trades, by quarter, Rs per lot): last 30 min small Rs 7 / largest Rs 275; last 60 min Rs -46 / Rs 375 - breakouts right after a sharp rally were the BETTER ones (momentum). Distance from the day's low (high for puts): nearest half Rs 382-397, farthest half Rs 73-82 - weaker but still positive. System per-lot net 2023-25 / 2026: live 4.76L / 1.28L; skip if > 4.3 ATR from the day's extreme 4.92L / 1.17L (Camarilla itself -18.8k / -8.4k, gain only from Noise band filling the slot); skip if > 6.2 ATR 4.78L / 1.20L; wait 30 min for a pullback to H4 4.08L / 1.28L; wait 60 min 3.94L / 1.24L; wait 30 min and buy anyway if no pullback 3.71L / 1.53L. Retest fills: Camarilla 2023-25 went from +1.03L to -15k (30 min) / -30k (60 min) - the pullbacks that reach H4 are mostly the failing breakouts, and the strong ones never come back.",
+   "summary": "Nothing passes (needs both periods better): skipping stretched breakouts lowers 2026, waiting for a pullback cuts 2023-25 by 0.7-1.05L. The live rule (buy the first 5-min close beyond H4/L4) stays. A breakout that then goes sideways, like 29 Oct, is the normal losing Camarilla trade: 73% of them lose and are cut by the 45-min time stop (+0.5R not reached) or the H3 stop; the profit comes from the 27% that keep running. Scripts research/round65a.py, round65b.py.",
+   "decision": "Not adopted"
+  },
+  {
    "id": "r54",
    "date": "2026-10-28",
    "area": "Index options",

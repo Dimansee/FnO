@@ -1,0 +1,86 @@
+{
+ "live": {
+  "cam_n": 668,
+  "cam_avg": 233,
+  "cam_win": 27.2,
+  "cam_net_2325": 102952,
+  "cam_net_2026": 52876,
+  "all_net_2325": 475859,
+  "all_net_2026": 127554,
+  "cam_by_sym": {
+   "BANKNIFTY": 68505,
+   "NIFTY": 87323
+  },
+  "acct_err": "'Pandas' object has no attribute 'score'"
+ },
+ "ext4": {
+  "cam_n": 345,
+  "cam_avg": 373,
+  "cam_win": 29.6,
+  "cam_net_2325": 84148,
+  "cam_net_2026": 44461,
+  "all_net_2325": 491685,
+  "all_net_2026": 117440,
+  "cam_by_sym": {
+   "BANKNIFTY": 58798,
+   "NIFTY": 69811
+  },
+  "acct_err": "'Pandas' object has no attribute 'score'"
+ },
+ "ext6": {
+  "cam_n": 508,
+  "cam_avg": 265,
+  "cam_win": 27.8,
+  "cam_net_2325": 89293,
+  "cam_net_2026": 45327,
+  "all_net_2325": 478105,
+  "all_net_2026": 119524,
+  "cam_by_sym": {
+   "BANKNIFTY": 54983,
+   "NIFTY": 79637
+  },
+  "acct_err": "'Pandas' object has no attribute 'score'"
+ },
+ "rt30": {
+  "cam_n": 500,
+  "cam_avg": 78,
+  "cam_win": 23.0,
+  "cam_net_2325": -15261,
+  "cam_net_2026": 54226,
+  "all_net_2325": 408144,
+  "all_net_2026": 127647,
+  "cam_by_sym": {
+   "BANKNIFTY": 10377,
+   "NIFTY": 28588
+  },
+  "acct_err": "'Pandas' object has no attribute 'score'"
+ },
+ "rt60": {
+  "cam_n": 513,
+  "cam_avg": 42,
+  "cam_win": 22.4,
+  "cam_net_2325": -29508,
+  "cam_net_2026": 50857,
+  "all_net_2325": 393897,
+  "all_net_2026": 124278,
+  "cam_by_sym": {
+   "BANKNIFTY": -2739,
+   "NIFTY": 24088
+  },
+  "acct_err": "'Pandas' object has no attribute 'score'"
+ },
+ "rt30f": {
+  "cam_n": 583,
+  "cam_avg": 40,
+  "cam_win": 23.7,
+  "cam_net_2325": -56691,
+  "cam_net_2026": 80122,
+  "all_net_2325": 370624,
+  "all_net_2026": 152716,
+  "cam_by_sym": {
+   "BANKNIFTY": 6846,
+   "NIFTY": 16585
+  },
+  "acct_err": "'Pandas' object has no attribute 'score'"
+ }
+}
