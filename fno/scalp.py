@@ -788,7 +788,29 @@ def moneyness(itm):
     return "ATM" if itm == 0 else f"{abs(itm)} {'ITM' if itm > 0 else 'OTM'}"
 
 
+def shield_block(cfg) -> str | None:
+    """Capital shield for the scalp book: below floor% of its capital the book stops opening trades (same floor as the
+    main book's shield, Autopilot → Safety). Sizing stays 'max lots' as chosen; the 2% day-loss governor still applies."""
+    try:
+        from . import service as SV
+        pf = SV.prefs()
+    except Exception:
+        return None
+    if not pf.get("shield_on", True):
+        return None
+    cap = float(cfg.get("capital") or 0)
+    eq = cap + sum(float(t.get("pnl") or 0) for t in trades())
+    floor = cap * float(pf.get("shield_floor_pct") or 0) / 100
+    if cap > 0 and eq < floor:
+        return (f"Capital shield: scalp book equity ₹{eq:,.0f} is below the floor ₹{floor:,.0f} ({pf.get('shield_floor_pct'):.0f}% of "
+                f"₹{cap:,.0f}). Stopped for today and every day until you reset the scalp book or lower the floor.")
+    return None
+
+
 def _open(sym, x, i, pl, m, now, cfg, max_spread=None) -> tuple[bool, str]:
+    sb = shield_block(cfg)
+    if sb:
+        return False, sb
     exps, lot = m.expiries_and_lot(sym)
     exp = I.pick_trading_expiry(exps, C.INDICES[sym]["expiry"], now.date()) or exps[0]
     spot = pl["entry"]
@@ -912,6 +934,9 @@ def tick(now=None, m=None) -> dict:
             if mode == "none":
                 continue
             if blocked:
+                if find_signal(x, i, mode, sdir, ds["orb_done"], cfg["setups"]):
+                    out["skipped"].append({"symbol": sym, "why": ("Scalp book stopped for today: " + gov["stopped"]) if gov["stopped"]
+                                           else f"Scalp book paused after losses until {str(gov['pause_until'])[11:16]}"})
                 continue
             sig = find_signal(x, i, mode, sdir, ds["orb_done"], cfg["setups"])
             _save_day_state(today, sym, ds)

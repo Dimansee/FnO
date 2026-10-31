@@ -88,11 +88,52 @@ def restore_removed() -> dict:
     return {"restored": n}
 
 
-def reset(capital: float):
+ARCHIVE = "fno:trades:archived"          # closed trades from before a P&L reset (history kept; not in P&L, cash or limits)
+
+
+def archived() -> list[dict]:
+    import json as _j
+    return [_j.loads(v) for v in store.hvals(ARCHIVE)]
+
+
+def reset(capital: float, keep_history: bool = True) -> dict:
+    """Start the paper account again at `capital`. Closed trades are moved to the archive (the journal and the learning
+    engine keep them) unless keep_history=False; open positions are closed out of the books without P&L."""
+    import json as _j
+    now = C.now_ist().isoformat(timespec="seconds")
+    moved = 0
+    if keep_history:
+        for t in store.trades() + _removed():
+            store.hset(ARCHIVE, f"{t['id']}:{now[:10]}", _j.dumps({**t, "archived_at": now}, default=str, separators=(",", ":")))
+            moved += 1
     store.clear_positions()
     store.clear_trades()
     store.hdrop(REMOVED)
-    store.put("account", {"capital_start": float(capital), "created": C.now_ist().isoformat(timespec="seconds")})
+    old = store.get("account") or {}
+    store.put("account", {"capital_start": float(capital), "created": now,
+                          "resets": (old.get("resets") or [])[-20:] + [{"at": now, "from_capital": old.get("capital_start"), "archived": moved}]})
+    return {"archived": moved}
+
+
+def week_reset_at() -> str | None:
+    return (store.get("account") or {}).get("week_reset_at")
+
+
+def reset_week() -> str:
+    """Restart this week's loss count from now (the weekly limit then counts only trades closed after this moment)."""
+    a = account()
+    now = C.now_ist().isoformat(timespec="seconds")
+    store.put("account", {**a, "week_reset_at": now})
+    return now
+
+
+def _week_rows(trades):
+    today = C.today_ist()
+    wk_start = (today - timedelta(days=today.weekday())).isoformat()
+    since = week_reset_at() or ""
+    if since[:10] < wk_start:
+        since = ""
+    return [h for h in trades if wk_start <= h["opened"][:10] <= today.isoformat() and (not since or (h.get("closed") or h["opened"]) > since)]
 
 
 def net_price(legs, prices: dict | None = None) -> float:
@@ -205,20 +246,18 @@ def stats_capital(acct) -> float:
 
 
 def week_pnl(trades) -> float:
-    today = C.today_ist()
-    wk_start = (today - timedelta(days=today.weekday())).isoformat()
-    return float(sum(h["pnl"] for h in trades if wk_start <= h["opened"][:10] <= today.isoformat()))
+    """This week's realised P&L (since Monday, or since the weekly counter was reset this week)."""
+    return float(sum(h["pnl"] for h in _week_rows(trades)))
 
 
 def week_guard(trades, capital, limit=None) -> dict:
     """Round 18: after losing 4% of capital in a week, no new trades until Monday."""
-    today = C.today_ist()
-    wk_start = (today - timedelta(days=today.weekday())).isoformat()
-    wk_pnl = sum(h["pnl"] for h in trades if wk_start <= h["opened"][:10] <= today.isoformat())
+    wk_pnl = sum(h["pnl"] for h in _week_rows(trades))
     limit = C.MAX_WEEKLY_LOSS if limit is None else limit
+    out = {"blocked": False, "week_pnl": round(wk_pnl, 2), "limit_rs": round(limit * capital, 2), "limit_pct": limit}
     if wk_pnl <= -limit * capital:
-        return {"blocked": True, "reason": f"Weekly loss limit hit (₹{wk_pnl:,.0f} this week, limit {limit:.0%}). No new trades until Monday - research round 18."}
-    return {"blocked": False}
+        out.update(blocked=True, reason=f"Weekly loss limit hit (₹{wk_pnl:,.0f} this week, limit {limit:.0%}). No new trades until Monday - research round 18.")
+    return out
 
 
 def stats(trades: list[dict], capital: float) -> dict:

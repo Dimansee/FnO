@@ -263,3 +263,131 @@ def rolling(day: str | None = None, n: int = WINDOW) -> dict:
             "summary": (f"Last {len(days)} sessions: {tcaught} of {tdays} trend-day index moves caught. "
                         + ("Most frequent lag: " + watch[0]["label"].lower() + f" ({watch[0]['times']}×). " + watch[0]["verdict"] if watch else
                            "No lag cause has repeated enough to act on."))}
+
+
+# ---------------------------------------------------------------- weekly improvement review (31 Oct 2026)
+# The user: "improvement fixes recorded after the market - where it lagged - or from the learning of the whole week at once".
+# Every session's lag review, journal decisions and trades of one ISO week are read together and turned into a short list
+# of fixes. Like the daily review, nothing here changes a rule by itself: each fix says what the research already found and
+# whether it is "keep as is", "research next" or "your action" (e.g. capital, a setting, a broker login).
+FIX_TEXT = {
+    "weekly_limit": ("Weekly loss limit blocked entries", "r18b, r20c",
+                     "Adopted rule: in the tests stopping for the week improved profit and the deepest fall. Keep; you can restart the weekly counter yourself in Autopilot → Status."),
+    "daily_limit": ("Daily limit blocked entries", "r19c", "Tested rule; keep."),
+    "money": ("Not enough cash for the signal", "r25", "Your action: more capital, or fewer positions open at once. Sizing up beyond cash was tested and brought 40-80% falls."),
+    "risk_cap": ("1 lot risked too much for the account size", "r20b, r25", "Small-account cap. Grows away as equity grows; a bigger cap did not help in rolling 12-month windows."),
+    "shield": ("Capital shield cut or blocked a trade", "safety", "Your safety rule (Autopilot → Safety). Loosen it only knowing the worst case grows with it."),
+    "data": ("Market data was not reliable", "ops", "Your action: keep the broker logged in (live candles / VIX) - Yahoo fallback is delayed."),
+    "slot_busy": ("Signal blocked by a trade already open", "r23", "Allowing both rules at once lost in 2025 and deepened the fall (r23). Keep."),
+    "learn_veto": ("Learning-engine veto", "learning", "Guarded change with its own evidence (Learning tab); it expires on its own."),
+    "big_run": ("Against a big 3-day run", "r42", "Adopted rule; such trades lost in every test period."),
+    "spread": ("Option spread too wide", "r34", "Keep: wide spreads cost more than the signal earns."),
+    "calendar": ("Calendar rule", "r6", "Keep."),
+    "auto_off": ("Autopilot was off for the instrument", "settings", "Your action: tick the instrument in Settings → Auto-trade if you want it traded."),
+    "not_attempted": ("Signal changed before the minute check", "ops", "Watch: if this repeats on winners, research an entry on the signal bar itself."),
+}
+
+
+def weekly(week: str | None = None) -> dict:
+    """week = 'YYYY-Www' (ISO); default the current week (or last week on a weekend before any trade)."""
+    from . import journal as J
+    from . import paper as P
+    today = C.today_ist()
+    if week:
+        y, w = week.split("-W")
+        monday = date.fromisocalendar(int(y), int(w), 1)
+    else:
+        monday = today - timedelta(days=today.weekday())
+    days = [(monday + timedelta(days=i)).isoformat() for i in range(5)]
+    wk = f"{monday.isocalendar()[0]}-W{monday.isocalendar()[1]:02d}"
+    raw = store._cmd("HGETALL", KEY_DAYS) or []
+    lagh = raw if isinstance(raw, dict) else {raw[i]: raw[i + 1] for i in range(0, len(raw), 2)}
+    sessions, skip_tally, cause_tally = [], {}, {}
+    exec_n = skip_n = 0
+    missed_r = {}
+    for d in days:
+        if d > today.isoformat():
+            break
+        try:
+            jd = J.day(d)
+        except Exception:
+            jd = None
+        dec = (jd or {}).get("decisions") or {"rows": [], "blocks": []}
+        rows = dec.get("rows", [])
+        if not rows and not dec.get("blocks") and d not in lagh:
+            continue
+        e = sum(1 for r in rows if r["status"]["state"] == "executed")
+        s = [r for r in rows if r["status"]["state"] == "skipped"]
+        exec_n += e
+        skip_n += len(s)
+        for r in s:
+            cat = r["status"].get("cat") or "other"
+            t = skip_tally.setdefault(cat, {"n": 0, "R": 0.0, "won": 0, "label": r["status"].get("label"), "examples": []})
+            t["n"] += 1
+            res = r.get("result") or {}
+            if res.get("R") is not None:
+                t["R"] += float(res["R"])
+                t["won"] += 1 if res["R"] > 0 else 0
+            if len(t["examples"]) < 3:
+                t["examples"].append(f"{d[5:]} {r['time']} {r['symbol']} {r.get('strategy') or ''}: {r['what_happened']}")
+        for b in dec.get("blocks", []):
+            cat = b["cat"]
+            t = skip_tally.setdefault(cat, {"n": 0, "R": 0.0, "won": 0, "label": b.get("label"), "examples": []})
+            t.setdefault("blocked_minutes", 0)
+            t["blocked_minutes"] = t.get("blocked_minutes", 0) + max(1, (int(b["to"][:2]) * 60 + int(b["to"][3:])) - (int(b["from"][:2]) * 60 + int(b["from"][3:])))
+        lr = json.loads(lagh[d]) if d in lagh else {}
+        for x in lr.get("causes", []):
+            ct = cause_tally.setdefault(x["cause"], {"n": 0, "rs": 0.0, "pts": 0.0})
+            ct["n"] += 1
+            ct["rs"] += float(x.get("rs") or 0)
+            ct["pts"] += float(x.get("pts") or 0)
+        sm = (jd or {}).get("summary") or {}
+        sessions.append({"date": d, "executed": e, "skipped": len(s), "paper_pnl": sm.get("paper_pnl"), "scalp_pnl": sm.get("scalp_pnl"),
+                         "sum_R": sm.get("sum_R"), "trend_days": lr.get("trend_days"), "trend_caught": lr.get("trend_caught"),
+                         "lesson": ((jd or {}).get("settled") or {}).get("lesson")})
+    tr = [t for t in store.trades() + P.archived() if days[0] <= (t.get("opened") or "")[:10] <= days[-1]]
+    sys_tr = [t for t in tr if t.get("mode") == "signal"]
+    by_st = {}
+    for t in sys_tr:
+        k = (t.get("plan") or {}).get("strategy") or "?"
+        b = by_st.setdefault(k, {"n": 0, "pnl": 0.0, "wins": 0})
+        b["n"] += 1; b["pnl"] += float(t.get("pnl") or 0); b["wins"] += 1 if (t.get("pnl") or 0) > 0 else 0
+    try:
+        from . import scalp as SC
+        sc = [t for t in SC.trades() if days[0] <= (t.get("opened") or "")[:10] <= days[-1]]
+    except Exception:
+        sc = []
+    exits = {}
+    for t in sys_tr:
+        r = (t.get("reason") or "?").split("(")[0].strip()[:40]
+        x = exits.setdefault(r, {"n": 0, "pnl": 0.0}); x["n"] += 1; x["pnl"] += float(t.get("pnl") or 0)
+    fixes = []
+    for cat, t in sorted(skip_tally.items(), key=lambda kv: -(kv[1]["R"] if kv[1]["R"] > 0 else 0) - kv[1]["n"] * 0.01):
+        lab, cards, verdict = FIX_TEXT.get(cat, (t.get("label") or cat, "-", "Not researched yet - flagged for research if it keeps costing."))
+        status = "your action" if verdict.startswith("Your action") else "keep" if any(w in verdict for w in ("Keep", "keep", "Adopted", "Tested rule")) else "research next"
+        if t["R"] > 1.5 and t["won"] >= 2 and status == "keep":
+            status = "watch"
+        fixes.append({"area": "entries", "cat": cat, "title": lab, "times": t["n"], "blocked_minutes": t.get("blocked_minutes"),
+                      "missed_R": round(t["R"], 2) if t["n"] else None, "would_have_won": t["won"], "research": cards, "verdict": verdict,
+                      "status": status, "examples": t["examples"]})
+    for cause, ct in sorted(cause_tally.items(), key=lambda kv: -kv[1]["rs"]):
+        label, cards, verdict = CAUSES.get(cause, (cause, "-", "Not researched yet."))
+        fixes.append({"area": "lag", "cat": cause, "title": label, "times": ct["n"], "rs_left": round(ct["rs"]), "pts": round(ct["pts"]),
+                      "research": cards, "verdict": verdict, "status": "research next" if ct["n"] >= FLAG_MIN and "No change" not in verdict else "keep"})
+    for r, x in sorted(exits.items(), key=lambda kv: kv[1]["pnl"]):
+        if x["n"] >= 2 and x["pnl"] < 0:
+            fixes.append({"area": "exits", "cat": "exit:" + r, "title": f"Exits by '{r}' lost ₹{-x['pnl']:,.0f} over {x['n']} trades", "times": x["n"],
+                          "research": "r23, r40-r41", "verdict": "Exit rules were tested (trail / time stop / targets). One week is far too few trades to change them; it is logged for the 60-session forward check.",
+                          "status": "keep"})
+    pnl = round(sum(float(t.get("pnl") or 0) for t in sys_tr))
+    spnl = round(sum(float(t.get("pnl") or 0) for t in sc))
+    head = (f"Week {wk}: {len(sessions)} session(s), Autopilot {exec_n} executed / {skip_n} skipped, system P&L ₹{pnl:+,.0f}"
+            + (f", scalp ₹{spnl:+,.0f}" if sc else "") + ".")
+    top = next((f for f in fixes if f["status"] in ("your action", "research next", "watch")), None)
+    if top:
+        head += f" First thing to look at: {top['title'].lower()} ({top['times']}×) - {top['status']}."
+    return {"week": wk, "monday": days[0], "headline": head, "sessions": sessions, "executed": exec_n, "skipped": skip_n,
+            "system_pnl": pnl, "scalp_pnl": spnl, "scalp_trades": len(sc), "by_strategy": {k: {**v, "pnl": round(v["pnl"])} for k, v in by_st.items()},
+            "exits": {k: {**v, "pnl": round(v["pnl"])} for k, v in exits.items()}, "fixes": fixes,
+            "rolling": rolling(), "note": "Nothing here changes a rule on its own. 'Keep' = already tested; 'research next' = flagged for a research round; "
+                                          "'watch' = a tested rule that cost money this week - judged over 60 sessions, not one week; 'your action' = a setting, capital or login."}

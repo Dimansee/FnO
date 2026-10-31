@@ -82,7 +82,9 @@ def fii():
 # Position management (also called every minute by the scheduler)
 # ---------------------------------------------------------------------------
 PREF_DEFAULTS = {"autopilot": False, "sizing": "risk", "risk_pct": 1.0, "strategies": ["noise", "camarilla"], "auto": False, "auto_syms": ["NIFTY"],
-                 "enforce_limits": False, "fills": "realistic"}   # demo account: the daily risk limits are shown as a tip unless switched on
+                 "enforce_limits": False, "fills": "realistic",
+                 # capital shield (31 Oct 2026): hard caps on automatic entries so no run of losses or gap can empty the account
+                 "shield_on": True, "shield_floor_pct": 60.0, "shield_open_pct": 50.0, "shield_trade_pct": 15.0}   # demo account: the daily risk limits are shown as a tip unless switched on
 
 
 def prefs() -> dict:
@@ -380,6 +382,122 @@ def risk_guard(pos, tr, capital, pf, auto=False, equity=None) -> dict:
     return g
 
 
+def risk_status() -> dict:
+    """Everything that can stop or shrink automatic trading right now, in one place (banner, Autopilot → Status)."""
+    acct, pos, tr, cash = P.snapshot()
+    pf = eprefs()
+    eq = P.equity(acct, tr)
+    base = P.base(acct, tr)
+    sys_only = bool(pf.get("autopilot")) and flag("limits_system_only")
+    str_ = [h for h in tr if h.get("mode") == "signal"] if sys_only else tr
+    wl = pf.get("weekly_limit") or "auto"
+    if wl == "off":
+        wk = {"blocked": False, "week_pnl": round(P.week_pnl(str_), 2), "limit_rs": None, "mode": "off"}
+    elif wl == "custom" and float(pf.get("weekly_limit_rs") or 0) > 0:
+        lim = float(pf["weekly_limit_rs"]); w = P.week_pnl(str_)
+        wk = {"blocked": w <= -lim, "week_pnl": round(w, 2), "limit_rs": lim, "mode": "custom"}
+    elif pf.get("autopilot"):
+        wk = {**P.week_guard(str_, eq, C.AUTOPILOT_WEEKLY_SMALL if eq < C.AUTOPILOT_SMALL_ACCOUNT else None), "mode": "auto"}
+    else:
+        wk = {**P.week_guard(str_, base), "mode": "auto"}
+    wk["system_only"] = sys_only
+    wk["reset_at"] = P.week_reset_at()
+    g = risk_guard(pos, tr, base, pf, auto=True, equity=eq)
+    day = P.day_guard([p for p in pos if not sys_only or p.get("mode") == "signal"], str_, base)
+    sh = shield_state(acct, pos, tr, pf)
+    try:
+        from . import scalp as SC
+        scfg = SC.settings()
+        now = C.now_ist()
+        sc = {"on": bool(scfg.get("on")), "capital": scfg.get("capital"), "shield": SC.shield_block(scfg),
+              "stopped": {s: (SC.governor(SC._today_trades(s, now), scfg["capital"]) or {}).get("stopped") for s in scfg.get("syms") or []}}
+    except Exception as e:
+        sc = {"error": str(e)[:120]}
+    banners = []
+    if pf.get("auto") or pf.get("autopilot"):
+        if wk.get("blocked"):
+            banners.append({"level": "bad", "kind": "weekly", "text": (g.get("reason") if g.get("blocked") else None) or
+                            f"Weekly loss limit reached (₹{wk['week_pnl']:,.0f} this week). Autopilot takes no new trades until Monday."})
+        elif g.get("blocked"):
+            banners.append({"level": "bad", "kind": "daily", "text": g.get("reason")})
+        elif wk.get("limit_rs") and wk["week_pnl"] <= -0.75 * wk["limit_rs"]:
+            banners.append({"level": "warn", "kind": "weekly_near", "text": f"Close to the weekly loss limit: ₹{wk['week_pnl']:,.0f} of -₹{wk['limit_rs']:,.0f} used this week."})
+        if sh["below_floor"]:
+            banners.append({"level": "bad", "kind": "shield", "text": f"Capital shield: equity ₹{sh['equity']:,.0f} is below the floor ₹{sh['floor']:,.0f}. Autopilot is stopped."})
+    if isinstance(sc, dict) and sc.get("on"):
+        if sc.get("shield"):
+            banners.append({"level": "bad", "kind": "scalp_shield", "text": sc["shield"]})
+        for s_, why in (sc.get("stopped") or {}).items():
+            if why:
+                banners.append({"level": "warn", "kind": "scalp", "text": f"Scalp book {s_} stopped for today: {why}."})
+    return {"autopilot": bool(pf.get("autopilot")), "auto": bool(pf.get("auto")), "auto_syms": pf.get("auto_syms"), "strategies": pf.get("strategies"),
+            "equity": round(eq), "capital_start": acct.get("capital_start"), "cash": round(cash), "open_positions": len(pos),
+            "weekly": wk, "daily": day, "blocked": bool(g.get("blocked")), "block_reason": g.get("reason"), "shield": sh, "scalp": sc,
+            "banners": banners, "resets": (acct.get("resets") or [])[-5:], "time": C.now_ist().isoformat(timespec="seconds")}
+
+
+def autopilot_overview() -> dict:
+    """Autopilot tab: status, the settings it trades with (and what it overrides), live outcomes of its own trades,
+    and the learning / research changes that are applied to it right now."""
+    from . import learn as LN
+    acct, pos, tr, cash = P.snapshot()
+    pf, saved = eprefs(), prefs()
+    auto_tr = [t for t in tr if P.origin(t) == "auto"]
+    sig_tr = [t for t in tr if t.get("mode") == "signal"]
+
+    def agg(rows):
+        n = len(rows)
+        pnl = sum(float(t.get("pnl") or 0) for t in rows)
+        w = [t for t in rows if (t.get("pnl") or 0) > 0]
+        lo = [t for t in rows if (t.get("pnl") or 0) <= 0]
+        return {"n": n, "pnl": round(pnl), "win_rate": round(len(w) / n * 100, 1) if n else None,
+                "avg_win": round(sum(t["pnl"] for t in w) / len(w)) if w else None, "avg_loss": round(sum(t["pnl"] for t in lo) / len(lo)) if lo else None,
+                "best": round(max((t["pnl"] for t in rows), default=0)), "worst": round(min((t["pnl"] for t in rows), default=0))}
+    by_st, by_sym, by_wk, curve = {}, {}, {}, []
+    eq = float(acct.get("capital_start") or 0)
+    for t in sorted(sig_tr, key=lambda x: x.get("closed") or ""):
+        st = (t.get("plan") or {}).get("strategy") or "?"
+        by_st.setdefault(st, []).append(t)
+        by_sym.setdefault(t.get("symbol"), []).append(t)
+        try:
+            wk = datetime.fromisoformat(t["opened"]).strftime("%G-W%V")
+        except Exception:
+            wk = "?"
+        by_wk.setdefault(wk, []).append(t)
+        eq += float(t.get("pnl") or 0)
+        curve.append({"t": (t.get("closed") or "")[:16], "equity": round(eq)})
+    exits = {}
+    for t in sig_tr:
+        r = (t.get("reason") or "?").split("(")[0].strip()[:40]
+        exits.setdefault(r, []).append(t)
+    overrides = []
+    if pf.get("autopilot"):
+        for k, label in (("sizing", "Position size"), ("risk_pct", "Risk per trade %"), ("strategies", "Strategies"), ("auto_syms", "Instruments")):
+            if saved.get(k) != pf.get(k):
+                overrides.append({"setting": label, "saved": saved.get(k), "autopilot_uses": pf.get(k)})
+    try:
+        ov = LN.overlay()
+        lchanges = LN.changes(15)
+        lmode = LN.mode("IN")
+    except Exception:
+        ov, lchanges, lmode = {"rules": []}, [], None
+    return {"status": risk_status(),
+            "settings": {"autopilot": bool(pf.get("autopilot")), "auto": bool(pf.get("auto")), "auto_syms": pf.get("auto_syms"), "strategies": pf.get("strategies"),
+                         "sym_strategies": {s_: sym_strategies(pf, s_) for s_ in (pf.get("auto_syms") or [])}, "sizing": pf.get("sizing"),
+                         "risk_pct": pf.get("risk_pct"), "max_trade_risk": pf.get("max_trade_risk"), "confidence": pf.get("confidence", "standard"),
+                         "weekly_limit": pf.get("weekly_limit") or "auto", "weekly_limit_rs": pf.get("weekly_limit_rs"), "enforce_limits": bool(pf.get("enforce_limits")),
+                         "fills": pf.get("fills"), "entry_window": [C.FIRST_ENTRY_ANY.strftime("%H:%M"), C.LAST_ENTRY_ANY.strftime("%H:%M")],
+                         "square_off": C.SQUARE_OFF.strftime("%H:%M"), "small_account": C.AUTOPILOT_SMALL_ACCOUNT, "weekly_small_pct": C.AUTOPILOT_WEEKLY_SMALL * 100,
+                         "weekly_pct": C.MAX_WEEKLY_LOSS * 100, "daily_loss_pct": C.MAX_DAILY_LOSS * 100, "max_trades_day": C.MAX_TRADES_PER_DAY,
+                         "shield": {k: saved.get(k, PREF_DEFAULTS.get(k)) for k in ("shield_on", "shield_floor_pct", "shield_open_pct", "shield_trade_pct")},
+                         "overrides": overrides, "learn_mode": lmode},
+            "outcomes": {"all_auto": agg(auto_tr), "all_system": agg(sig_tr), "by_strategy": {k: agg(v) for k, v in by_st.items()},
+                         "by_symbol": {k: agg(v) for k, v in by_sym.items()}, "by_week": {k: agg(v) for k, v in sorted(by_wk.items())},
+                         "exits": {k: agg(v) for k, v in exits.items()}, "curve": curve[-400:], "capital_start": acct.get("capital_start"),
+                         "archived": len(P.archived())},
+            "learning": {"mode": lmode, "overlay": ov.get("rules", []), "changes": lchanges, "switches": changes()}}
+
+
 def calendar_guard(symbol, exps, today) -> dict | None:
     """Days the research says to sit out (round 6): Union Budget day, and Bank Nifty on its own expiry day."""
     if today in C.HOLIDAYS:
@@ -400,6 +518,184 @@ def _chart(today, hist):
         out.append({"time": t, "open": r["open"], "high": r["high"], "low": r["low"], "close": r["close"],
                     "vwap": r.get("vwap"), "ema9": r.get("ema9"), "ema21": r.get("ema21")})
     return out
+
+
+def _zones(hist: pd.DataFrame, today: pd.DataFrame, spot: float, n_days: int = 6) -> list[dict]:
+    """Support / resistance zones: 5-minute swing highs and lows (2 bars each side) of the last sessions plus each day's
+    high / low, clustered within 0.12% of price; strength = how many times price turned there."""
+    df = pd.concat([hist[hist.index.normalize().isin(sorted(set(hist.index.normalize()))[-n_days:])] if not hist.empty else hist, today])
+    if len(df) < 10:
+        return []
+    h, l = df["high"].values, df["low"].values
+    pts = []
+    for i in range(2, len(df) - 2):
+        if h[i] >= max(h[i - 2:i + 3]):
+            pts.append(float(h[i]))
+        if l[i] <= min(l[i - 2:i + 3]):
+            pts.append(float(l[i]))
+    for _, g in df.groupby(df.index.date):
+        pts += [float(g["high"].max())] * 2 + [float(g["low"].min())] * 2      # day extremes count double
+    pts.sort()
+    tol = spot * 0.0012
+    zs, cur = [], [pts[0]]
+    for x in pts[1:]:
+        if x - cur[-1] <= tol and x - cur[0] <= 2 * tol:            # no chaining: a zone is at most ~0.25% wide
+            cur.append(x)
+        else:
+            zs.append(cur); cur = [x]
+    zs.append(cur)
+    out = [{"price": round(sum(z) / len(z), 1), "lo": round(min(z), 1), "hi": round(max(z), 1), "touches": len(z)} for z in zs if len(z) >= 3]
+    for z in out:
+        z["kind"] = "resistance" if z["price"] > spot else "support"
+        z["strength"] = 3 if z["touches"] >= 7 else 2 if z["touches"] >= 5 else 1
+    above = sorted([z for z in out if z["price"] > spot], key=lambda z: z["price"])[:5]
+    below = sorted([z for z in out if z["price"] <= spot], key=lambda z: -z["price"])[:5]
+    return below[::-1] + above
+
+
+def live_chart(symbol: str = "NIFTY", day: str | None = None) -> dict:
+    """The working chart: a session's 5-minute candles with every level the rules use, the noise band, VWAP / EMAs,
+    support-resistance zones, and every setup of that day (recommendations, autopilot decisions, paper and scalp trades)
+    with entry, stop, trailing stop, target and exit - plus the risk of each open setup in rupees and % of equity."""
+    from datetime import date as _date
+    from . import journal as J
+    m = M.Market()
+    c = m.candles(symbol)
+    if c is None or c.empty:
+        raise ValueError("No candles available for this instrument right now.")
+    days_avail = sorted({d.isoformat() for d in c.index.date})
+    vault_days = []
+    try:
+        from . import datahub as DH
+        vk = f"{DH.CK}IN:{symbol}"
+        vault_days = DH._days(vk)
+        want = day or days_avail[-1]
+        if want not in days_avail and want in vault_days:            # older session: rebuild from the saved candles
+            i = vault_days.index(want)
+            rows = DH._candles_rows("IN", symbol, _date.fromisoformat(vault_days[max(0, i - 20)]), _date.fromisoformat(want))
+            if rows:
+                v = pd.DataFrame(rows)
+                v.index = pd.to_datetime(v["datetime"]).dt.tz_localize(C.IST)
+                c = v[["open", "high", "low", "close", "volume"]].astype(float)
+    except Exception:
+        pass
+    all_days = sorted(set(days_avail) | set(vault_days))
+    d = day or days_avail[-1]
+    df = I.add_indicators(c[c.index.date <= _date.fromisoformat(d)])
+    today = df[df.index.date == _date.fromisoformat(d)]
+    hist = df[df.index.date < _date.fromisoformat(d)]
+    if today.empty:
+        raise ValueError(f"No candles saved for {d}.")
+    spot = float(today["close"].iloc[-1])
+    lv = {}
+    if not hist.empty:
+        last = hist[hist.index.date == hist.index[-1].date()]
+        ph, pl_, pc = float(last["high"].max()), float(last["low"].min()), float(last["close"].iloc[-1])
+        pv = (ph + pl_ + pc) / 3
+        bc = (ph + pl_) / 2
+        tc = 2 * pv - bc
+        lv = {"prev_high": ph, "prev_low": pl_, "prev_close": pc, "pivot": pv, "r1": 2 * pv - pl_, "s1": 2 * pv - ph,
+              "r2": pv + (ph - pl_), "s2": pv - (ph - pl_), "cpr_top": max(tc, bc), "cpr_bottom": min(tc, bc)}
+        cam = S.camarilla_levels(hist) or {}
+        lv.update({f"cam_{k}": v for k, v in cam.items() if k != "pivot"})
+        fib = S.fib_levels(hist) or {}
+        lv.update({"fib_up": fib.get("h4"), "fib_dn": fib.get("l4")})
+        wk = hist[hist.index >= hist.index[-1] - pd.Timedelta(days=7)]
+        lv.update({"week_high": float(wk["high"].max()), "week_low": float(wk["low"].min())})
+    orr = I.opening_range(today)
+    if orr:
+        lv.update({"or_high": float(orr[0]) if isinstance(orr, (tuple, list)) else None, "or_low": float(orr[1]) if isinstance(orr, (tuple, list)) else None})
+    lv = {k: (round(float(v), 1) if v is not None else None) for k, v in lv.items()}
+    bands = []
+    try:
+        sigma = S.noise_sigma(hist)
+        if sigma and lv.get("prev_close"):
+            b = S.noise_bands(today, lv["prev_close"], sigma)
+            bands = [{"time": int(ts.timestamp()) + 19800, "up": round(float(r["up"]), 1), "lo": round(float(r["lo"]), 1)}
+                     for ts, r in b.iterrows() if pd.notna(r["up"])]
+    except Exception:
+        pass
+    prev = hist[hist.index.date == hist.index[-1].date()] if not hist.empty else hist
+    show = pd.concat([prev, today]) if len(prev) else today
+    candles = [{"time": int(ts.timestamp()) + 19800, "open": round(float(r["open"]), 2), "high": round(float(r["high"]), 2), "low": round(float(r["low"]), 2),
+                "close": round(float(r["close"]), 2), "vwap": None if ts.date() != today.index[0].date() or pd.isna(r.get("vwap")) else round(float(r["vwap"]), 2),
+                "ema9": round(float(r["ema9"]), 2), "ema21": round(float(r["ema21"]), 2)} for ts, r in show.iterrows()]
+    # ---- setups of the day
+    acct, pos, tr, cash = P.snapshot()
+    eq = P.equity(acct, tr)
+    tsec = lambda iso: int(datetime.fromisoformat(str(iso)).timestamp()) + 19800 if iso else None   # noqa: E731
+    try:
+        jd = J.day(d)
+    except Exception:
+        jd = {"decisions": {"rows": []}, "recommendations": []}
+    setups = []
+    for r in (jd.get("decisions") or {}).get("rows", []):
+        ix = r.get("index") or {}
+        if ix.get("entry") is None:
+            continue
+        st = r["status"]
+        tv = st.get("trade") or {}
+        setups.append({"kind": "signal", "time": tsec(f"{d}T{r['time']}:00") if r.get("time") else None, "symbol": r["symbol"], "strategy": r.get("strategy"),
+                       "side": r.get("opt"), "entry": ix.get("entry"), "sl": ix.get("sl"), "target": ix.get("target"), "state": st["state"],
+                       "label": st.get("label"), "msg": st.get("msg"), "what": r.get("what_happened"), "trade_id": tv.get("id")})
+    books = [(p, True, "paper") for p in pos] + [(t, False, "paper") for t in tr if (t.get("opened") or "")[:10] == d]
+    try:
+        from . import scalp as SC
+        books += [(p, True, "scalp") for p in SC.positions()] + [(t, False, "scalp") for t in SC.trades() if (t.get("opened") or "")[:10] == d]
+    except Exception:
+        pass
+    trades_out = []
+    for t, op, book in books:
+        if t.get("symbol") != symbol or (t.get("opened") or "")[:10] != d:
+            continue
+        if book == "scalp":
+            side = 1 if t.get("side", 1) > 0 else -1
+            e_ = t.get("entry") if op else t.get("entry_spot")
+            x = {"book": "scalp", "id": t["id"], "open": op, "opened": tsec(t.get("opened")), "closed": tsec(t.get("closed")), "side": "CE" if side > 0 else "PE",
+                 "entry": e_, "sl": t.get("stop") if op else None, "initial_sl": (e_ - side * t["risk"]) if (e_ and t.get("risk")) else None,
+                 "target": t.get("nl") if op else None, "trail_on": t.get("trail_on"), "exit": t.get("exit_spot"), "pnl": t.get("pnl"),
+                 "reason": t.get("reason"), "strategy": f"scalp {t.get('tag')}", "lots": t.get("lots"), "qty": t.get("qty"), "entry_prem": t.get("entry_prem")}
+        else:
+            pl = t.get("plan") or {}
+            x = {"book": "paper", "id": t["id"], "open": op, "opened": tsec(t.get("opened")), "closed": tsec(t.get("closed")), "side": pl.get("opt"),
+                 "entry": t.get("spot_at_entry"), "sl": t.get("live_sl", pl.get("sl")) if op else pl.get("sl"), "initial_sl": pl.get("sl"),
+                 "target": pl.get("target"), "breakeven": bool(t.get("at_breakeven")), "target_hit": bool(t.get("target_hit")),
+                 "exit": t.get("spot_exit"), "pnl": t.get("pnl"), "reason": t.get("reason"), "strategy": pl.get("strategy") or "manual",
+                 "auto": bool(pl.get("auto")), "lots": t.get("lots"), "qty": t.get("qty"), "entry_prem": t.get("entry_prem"),
+                 "sl_prem": t.get("sl_prem"), "target_prem": t.get("target_prem")}
+        if op and x.get("entry_prem") and x.get("qty"):
+            paid = float(x["entry_prem"]) * float(x["qty"])
+            to_sl = (float(x["entry_prem"]) - float(x.get("sl_prem") or 0)) * float(x["qty"]) if x.get("sl_prem") else None
+            x["risk"] = {"premium_paid": round(paid), "worst_case_pct": round(paid / eq * 100, 1) if eq else None,
+                         "to_stop": round(to_sl) if to_sl is not None else None, "to_stop_pct": round(to_sl / eq * 100, 2) if to_sl and eq else None,
+                         "sl_pts": round(abs(float(x["entry"]) - float(x["sl"])), 1) if x.get("entry") and x.get("sl") else None}
+        trades_out.append(x)
+    live = None
+    if d == C.today_ist().isoformat() and C.MARKET_OPEN <= C.now_ist().time() <= C.MARKET_CLOSE:
+        try:
+            g, ev, order, _ = scan(symbol, m)
+            pl = ev.get("plan")
+            live = {"signal": ev.get("signal"), "checks": [[ok, t] for ok, t in (ev.get("checks") or [])][:10],
+                    "plan": {k: pl.get(k) for k in ("strategy", "opt", "entry", "sl", "target", "risk_pts", "rr", "signal_bar")} if pl else None,
+                    "order": {k: order.get(k) for k in ("strike", "lots", "entry_prem", "sl_prem", "target_prem", "cost_per_lot", "risk_per_lot")} if order else None,
+                    "warnings": ev.get("warnings") or []}
+            if live["order"] and eq:
+                o_ = live["order"]
+                live["risk"] = {"to_stop": round((o_.get("risk_per_lot") or 0) * (o_.get("lots") or 0)),
+                                "to_stop_pct": round((o_.get("risk_per_lot") or 0) * (o_.get("lots") or 0) / eq * 100, 2),
+                                "worst_case": round((o_.get("cost_per_lot") or 0) * (o_.get("lots") or 0)),
+                                "worst_case_pct": round((o_.get("cost_per_lot") or 0) * (o_.get("lots") or 0) / eq * 100, 1)}
+        except Exception as e:
+            live = {"error": str(e)[:160]}
+    try:
+        from . import scalp as SC
+        sz = SC.state(symbol, m).get("zones") if d == C.today_ist().isoformat() else None
+    except Exception:
+        sz = None
+    return {"symbol": symbol, "label": M.instrument(symbol)["label"], "date": d, "days": all_days[-60:], "spot": spot,
+            "session_start": int(today.index[0].timestamp()) + 19800, "candles": candles, "levels": lv, "bands": bands,
+            "zones": _zones(hist, today, spot), "scalp_zones": sz, "setups": setups, "trades": trades_out, "live": live,
+            "shield": shield_state(acct, pos, tr), "equity": round(eq), "live_day": d == C.today_ist().isoformat()}
 
 
 def _mini_chain(ch, spot, width=6):
@@ -548,6 +844,52 @@ def _db_unlock(name, tok):
         pass                                         # it expires on its own
 
 
+_LAST_PLAN: dict = {}          # (symbol, slot) -> the plan the last automatic attempt evaluated (for the journal)
+
+
+def shield_state(acct=None, pos=None, tr=None, pf=None) -> dict:
+    """Capital shield: the hard account-protection caps applied to every automatic entry (F&O book).
+      floor  - equity below floor% of the starting capital: no new automatic trades until you reset or lower it
+      open   - premium paid for all open positions (the most bought options can lose) capped at open% of equity
+      trade  - one trade's planned loss (entry to stop) capped at trade% of equity
+    With open <= 50% and floor at 60%, even every open option expiring worthless after the floor leaves >= 30% of the
+    starting capital: the account cannot be emptied by the automatic system."""
+    if acct is None:
+        acct, pos, tr, _ = P.snapshot()
+    pf = pf or prefs()
+    eq = P.equity(acct, tr)
+    start = float(acct.get("capital_start") or 0) or float(acct.get("capital_before") or 0) or eq
+    floor = start * float(pf.get("shield_floor_pct") or 0) / 100
+    used = sum(float(p.get("margin") or 0) for p in pos)
+    cap = eq * float(pf.get("shield_open_pct") or 100) / 100
+    return {"on": bool(pf.get("shield_on", True)), "equity": round(eq), "start": round(start), "floor": round(floor),
+            "below_floor": bool(pf.get("shield_on", True)) and eq < floor, "open_premium": round(used), "open_cap": round(cap),
+            "open_room": round(max(cap - used, 0)), "trade_cap": round(eq * float(pf.get("shield_trade_pct") or 100) / 100),
+            "floor_pct": float(pf.get("shield_floor_pct") or 0), "open_pct": float(pf.get("shield_open_pct") or 0), "trade_pct": float(pf.get("shield_trade_pct") or 0)}
+
+
+def _shield_lots(order, sh) -> tuple[int, str | None]:
+    """Lots allowed by the shield for this order (0 = skip) and the reason when it cut or blocked the trade."""
+    if not sh["on"]:
+        return order["lots"], None
+    if sh["below_floor"]:
+        return 0, (f"Capital shield: equity ₹{sh['equity']:,.0f} is below the floor ₹{sh['floor']:,.0f} ({sh['floor_pct']:.0f}% of the "
+                   f"starting ₹{sh['start']:,.0f}). Automatic trading is stopped - reset the account or lower the floor in Autopilot → Safety.")
+    lots = int(order["lots"])
+    cost = float(order.get("cost_per_lot") or 0)
+    risk = float(order.get("risk_per_lot") or 0)
+    why = []
+    if cost > 0 and lots * cost > sh["open_room"]:
+        lots = int(sh["open_room"] // cost)
+        why.append(f"open premium ₹{sh['open_premium']:,.0f} + this trade would pass {sh['open_pct']:.0f}% of equity (₹{sh['open_cap']:,.0f})")
+    if risk > 0 and lots * risk > sh["trade_cap"]:
+        lots = min(lots, int(sh["trade_cap"] // risk))
+        why.append(f"planned loss above {sh['trade_pct']:.0f}% of equity (₹{sh['trade_cap']:,.0f}; 1 lot risks ₹{risk:,.0f})")
+    if lots <= 0:
+        return 0, "Capital shield: skipped - " + "; ".join(why) + "."
+    return lots, ("Capital shield: lots cut to %d - %s." % (lots, "; ".join(why))) if lots < order["lots"] else None
+
+
 def place_signal(symbol, strike=None, auto=False, which=None):
     """One entry at a time per index (review 28 Oct): two overlapping ticks, or a tick and a click, could both pass the
     'already have an open trade' check and open the same trade twice."""
@@ -623,6 +965,9 @@ def _place_signal(symbol, strike=None, auto=False, which=None):
         ev = _with_custom(symbol, g, ev, pf, traded)
     if not ev["plan"]:
         return False, f"No valid signal right now ({ev['signal']}). The setup may have changed - refresh."
+    if auto:
+        _LAST_PLAN[(symbol, which or "main")] = {k: ev["plan"].get(k) for k in ("strategy", "signal_bar", "opt", "entry", "sl", "target", "risk_pts", "rr", "exp_r", "p_win", "trail")}
+        _LAST_PLAN[(symbol, which or "main")]["signal"] = ev.get("signal")
     if auto and not _custom_auto_ok(ev["plan"]):
         return False, "The signal comes from a custom strategy that is not switched to auto-trade (you can still place it by hand)."
     if auto:                                                        # the learning engine's guarded rules apply to automatic entries only
@@ -670,6 +1015,12 @@ def _place_signal(symbol, strike=None, auto=False, which=None):
         return False, str(e)
     if order["lots"] <= 0:
         return False, order["note"] or "Position size is zero."
+    if auto:
+        lots_ok, why = _shield_lots(order, shield_state(acct, pos, tr, pf))
+        if lots_ok <= 0:
+            return False, why
+        if lots_ok < order["lots"]:
+            order = {**order, "lots": lots_ok, "note": ((order.get("note") or "") + " " + why).strip()}
     src = m.br.name if g["chain"].attrs.get("source") == "live" and m.br else "demo"
     legs = [{**lg, "src": src} for lg in order["legs"]]
     return P.open_position(cash, symbol, legs, order["lots"], g["lot"], g["trade_exp"], g["spot"], m.source,
@@ -1183,6 +1534,25 @@ def _note_skip_safe(sym, slot, msg, now):
         pass
 
 
+def _note_auto_safe(sym, slot, ok, msg, now):
+    """Journal: every automatic attempt with its outcome; the weekly / daily limit and the capital shield also send one phone alert."""
+    try:
+        from . import journal as J
+        ep = J.note_auto(sym, slot, ok, str(msg or ""), now, plan=_LAST_PLAN.get((sym, slot)))
+    except Exception as e:
+        print("[journal] note_auto failed:", e, flush=True)
+        return
+    if not ep or ep.get("ok"):
+        return
+    if ep["cat"] == "weekly_limit":
+        _push_safe("Weekly loss limit reached", str(msg)[:200] + " Open Autopilot → Status to see the week or reset the weekly counter.",
+                   f"weekly:{now.strftime('%G-%V')}", "/#autopilot")
+    elif ep["cat"] == "daily_limit" and slot != "scalp":
+        _push_safe("Daily limit reached", str(msg)[:200], f"daily:{now.date()}", "/#autopilot")
+    elif ep["cat"] == "shield" and "below the floor" in str(msg):
+        _push_safe("Capital shield stopped Autopilot", str(msg)[:220], f"shield:{now.date()}", "/#autopilot")
+
+
 _tick_lock = threading.Lock()
 
 
@@ -1272,7 +1642,9 @@ def _tick():
         for sym in pf.get("auto_syms") or []:
             try:
                 strats = sym_strategies(pf, sym)
+                _LAST_PLAN.pop((sym, "main"), None)
                 ok, msg = place_signal(sym, auto=True) if not _trend_only(pf, sym) else (False, "trend only")
+                _note_auto_safe(sym, "main", ok, msg, now)
                 if not ok:
                     _note_skip_safe(sym, "main", msg, now)
                 if ok:
@@ -1281,7 +1653,9 @@ def _tick():
                 for slot in C.SLOTS:                      # own-slot rules (round 23 trend-day catcher, round 29 Fibonacci breakout)
                     if slot not in strats or (slot == "trend" and t < C.TREND_FIRST_CHECK):
                         continue
+                    _LAST_PLAN.pop((sym, slot), None)
                     ok, msg = place_signal(sym, auto=True, which=slot)
+                    _note_auto_safe(sym, slot, ok, msg, now)
                     if not ok:
                         _note_skip_safe(sym, slot, msg, now)
                     if ok:
@@ -1293,6 +1667,10 @@ def _tick():
     try:                                                     # scalp book (separate paper ledger, off unless switched on)
         from . import scalp as SC
         sc = SC.tick(now)
+        for x in sc.get("opened") or []:
+            _note_auto_safe(x["symbol"], "scalp", True, x.get("message"), now)
+        for x in sc.get("skipped") or []:
+            _note_auto_safe(x["symbol"], "scalp", False, x.get("why"), now)
         if sc.get("closed"):                                 # one phone alert when the governor stops an index for the day
             scfg = SC.settings()
             for s in {c["symbol"] for c in sc["closed"]}:

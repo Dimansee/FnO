@@ -1,8 +1,16 @@
 # F&O Trainer – web version
 
 Runs on Render (see render.yaml; free web service, Singapore). Earlier host: Vercel (https://fno-trainer.vercel.app).
-Data lives in Upstash Redis (free tier): hashes fno:settings,
-fno:positions and fno:trades.
+Data lives in Supabase Postgres (DATABASE_URL, fno/pgkv.py) since 28 Oct 2026; Upstash Redis is the old store and the
+source of the one-time copy on 1 Nov (fno/store.py: portfolio and scalp book from Upstash, newer research / rules / learning kept).
+
+## Autopilot tab, live chart, journal decisions (31 Oct 2026)
+- Autopilot tab: Status (weekly / daily limit, restart weekly count, reset P&L with history kept), Decisions, Chart,
+  Outcomes, Improvements (weekly review, fno/lag.py weekly()), Learning applied, Rules, Settings, Safety (capital shield).
+- Capital shield (service.shield_state): floor % of capital, max open premium % of equity, max planned loss per trade.
+- Journal: every automatic attempt is logged (journal.note_auto) and linked to its signal: executed, or not executed + why,
+  and what the skipped signal would have done (settled after 15:15).
+- Live chart (/api/chart/live): levels, noise band, S/R zones, signals, trades with entry / SL / trailing SL / target, replay.
 
 ## Structure
 - app.py                – Flask web app / API (gunicorn app:app)

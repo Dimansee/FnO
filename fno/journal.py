@@ -23,8 +23,75 @@ from . import paper as P
 from . import store
 from . import strategy as S
 
-SYMS = ("NIFTY", "BANKNIFTY")
+SYMS = ("NIFTY", "BANKNIFTY", "SENSEX")
 KEEP_DAYS = 60
+MAX_EPISODES = 80
+
+# why an automatic entry did not happen -> (category, plain label). Order matters: first match wins.
+AUTO_CATS = [
+    ("weekly_limit", ("weekly loss limit",), "Weekly loss limit reached"),
+    ("daily_limit", ("daily loss limit", "two losing", "max ", "daily risk limit"), "Daily limit reached"),
+    ("shield", ("capital shield",), "Capital shield (account protection)"),
+    ("money", ("not enough", "cash", "position size is zero", "quantity is zero"), "Not enough money"),
+    ("risk_cap", ("skip (autopilot)", "even 1 lot risks"), "1 lot risks too much of the account"),
+    ("calendar", ("holiday", "budget day", "expiry day"), "Calendar rule (holiday / budget / expiry)"),
+    ("data", ("vix is unavailable", "candle is", "no price candles", "stale"), "Market data not reliable"),
+    ("slot_busy", ("already have an open",), "A trade was already open in this slot"),
+    ("learn_veto", ("learning", "veto", "half size"), "Learning engine veto"),
+    ("big_run", ("round 42",), "Against a big 3-day run (round 42)"),
+    ("spread", ("bid-ask spread",), "Option spread too wide"),
+    ("custom_off", ("custom strategy",), "Custom strategy not set to auto"),
+    ("equity_gate", ("equity reaches", "once equity"), "Rule waits for a bigger account"),
+    ("lock", ("another order",), "Another order was being placed"),
+    ("scalp_gov", ("stopped for today", "paused after", "lost twice today"), "Scalp governor stop"),
+    ("scalp_filter", ("confidence", "too little room", "setup d:"), "Scalp filter not met"),
+]
+
+
+def auto_cat(msg: str) -> tuple[str, str]:
+    m = (msg or "").lower()
+    for cat, keys, label in AUTO_CATS:
+        if any(k in m for k in keys):
+            return cat, label
+    return "other", "Other reason"
+
+
+def note_auto(symbol: str, slot: str, ok: bool, msg: str, now, plan: dict | None = None, trade_id: str | None = None):
+    """Every automatic entry attempt that had a reason to exist (a signal, or a block on one). Consecutive attempts with the
+    same outcome are folded into one episode (from / to / attempts), so the every-minute retry does not flood the day."""
+    if not msg or str(msg).startswith("No valid signal") or msg == "trend only" or "is off for this instrument" in str(msg) \
+            or "only the own-slot rules" in str(msg).lower():
+        return None
+    day = now.date().isoformat()
+    cat, label = ("executed", "Executed") if ok else auto_cat(str(msg))
+    pl = plan or {}
+    ep = {"from": now.strftime("%H:%M"), "to": now.strftime("%H:%M"), "n": 1, "ok": bool(ok), "cat": cat, "label": label, "msg": str(msg)[:260],
+          "strategy": pl.get("strategy") or (slot if slot not in ("main", "scalp") else None), "signal_bar": pl.get("signal_bar"),
+          "opt": pl.get("opt"), "entry": pl.get("entry"), "sl": pl.get("sl"), "target": pl.get("target"), "trade_id": trade_id}
+    field = f"auto:{symbol}:{slot}"
+    lst = _get(day, field) or []
+    last = lst[-1] if lst else None
+    same = last and last["cat"] == ep["cat"] and last.get("strategy") == ep["strategy"] and last.get("signal_bar") == ep["signal_bar"] \
+        and (ok is False) and last["ok"] is False
+    if same:
+        last["to"], last["n"] = ep["to"], last["n"] + 1
+        last["msg"] = ep["msg"]
+    else:
+        lst.append(ep)
+    _put(day, field, lst[-MAX_EPISODES:])
+    # a skipped signal with an index plan becomes a recommendation too, so the close settles what it would have done
+    if not ok and pl.get("entry") is not None and pl.get("sl") is not None and slot != "scalp":
+        stamp = pl.get("signal_bar") or now.strftime("%H:%M")
+        rid = f"{symbol}:{pl.get('strategy')}:{stamp}"
+        if _get(day, f"reco:{rid}") is None:
+            _put(day, f"reco:{rid}", {"id": rid, "symbol": symbol, "time": now.strftime("%H:%M:%S"), "signal_bar": stamp, "strategy": pl.get("strategy"),
+                                     "signal": pl.get("signal"), "opt": pl.get("opt"), "source": "autopilot",
+                                     "index": {"entry": pl.get("entry"), "sl": pl.get("sl"), "target": pl.get("target"),
+                                               "risk_pts": pl.get("risk_pts") or abs(float(pl["entry"]) - float(pl["sl"])), "rr": pl.get("rr")},
+                                     "option": {}, "basis": {"checks": [], "score": None, "factors": [], "ai": None, "exp_r": pl.get("exp_r"),
+                                                             "p_win": pl.get("p_win"), "trail": pl.get("trail")},
+                                     "auto_enabled": True, "result": None})
+    return ep
 
 
 def _key(day):
@@ -104,15 +171,32 @@ def record(symbol, ev, order, g, prefs):
     """Save the current recommendation(s) once per signal candle. Returns the number of new records."""
     day = g["now"].date().isoformat()
     n = 0
-    plan = ev.get("plan")
-    if plan and order:
+    plans = [(ev.get("plan"), order)] + [((ev.get(sl) or {}).get("plan"), None) for sl in C.SLOTS]
+    for plan, od in plans:
+        if plan:
+            n += _record_one(symbol, ev, plan, od, g, prefs, day)
+    ai = ev.get("ai")
+    if ai and ai.get("candidates"):
+        lst = _get(day, f"ai:{symbol}") or []
+        if not lst or lst[-1]["bar"] != ai["bar_end"]:
+            b = ai["candidates"][ai["best"]]
+            lst.append({"bar": ai["bar_end"], "side": b["side"], "stop_k": b["stop_k"], "exp_r": round(b["exp_r"], 3), "p_win": round(b["p_win"], 3),
+                        "spot": round(g["spot"], 1), "trade": b["exp_r"] >= ai.get("threshold", 0.3)})
+            _put(day, f"ai:{symbol}", lst[-90:])
+    return n
+
+
+def _record_one(symbol, ev, plan, order, g, prefs, day) -> int:
+    order = order or {}
+    n = 0
+    if plan:
         stamp = plan.get("signal_bar") or g["now"].strftime("%H:%M")
         rid = f"{symbol}:{plan.get('strategy')}:{stamp}"
         # one record per signal candle; the rule strategies also allow only one trade per day, so one record per day for them
         existing = [f for f in (store._cmd("HKEYS", _key(day)) or []) if f.startswith(f"reco:{symbol}:{plan.get('strategy')}:")]
-        if _get(day, f"reco:{rid}") is None and not (plan.get("strategy") in ("noise", "camarilla") and existing):
+        if _get(day, f"reco:{rid}") is None and not (plan.get("strategy") in ("noise", "camarilla", "trend", "fib") and existing):
             rec = {"id": rid, "symbol": symbol, "time": g["now"].strftime("%H:%M:%S"), "signal_bar": stamp, "strategy": plan.get("strategy"),
-                   "signal": ev.get("signal"), "opt": plan.get("opt"), "index": {"entry": plan.get("entry"), "sl": plan.get("sl"), "target": plan.get("target"),
+                   "signal": plan.get("signal") or ev.get("signal"), "opt": plan.get("opt"), "index": {"entry": plan.get("entry"), "sl": plan.get("sl"), "target": plan.get("target"),
                                                                                "risk_pts": plan.get("risk_pts"), "rr": plan.get("rr")},
                    "option": {"strike": order.get("strike"), "expiry": str(g["trade_exp"]), "ltp": order.get("ltp"), "entry_prem": order.get("entry_prem"),
                               "sl_prem": order.get("sl_prem"), "target_prem": order.get("target_prem"), "lots": order.get("lots"), "cost_per_lot": order.get("cost_per_lot"),
@@ -125,14 +209,6 @@ def record(symbol, ev, order, g, prefs):
                    "result": None}
             _put(day, f"reco:{rid}", rec)
             n += 1
-    ai = ev.get("ai")
-    if ai and ai.get("candidates"):
-        lst = _get(day, f"ai:{symbol}") or []
-        if not lst or lst[-1]["bar"] != ai["bar_end"]:
-            b = ai["candidates"][ai["best"]]
-            lst.append({"bar": ai["bar_end"], "side": b["side"], "stop_k": b["stop_k"], "exp_r": round(b["exp_r"], 3), "p_win": round(b["p_win"], 3),
-                        "spot": round(g["spot"], 1), "trade": b["exp_r"] >= ai.get("threshold", 0.3)})
-            _put(day, f"ai:{symbol}", lst[-90:])
     return n
 
 
@@ -188,8 +264,9 @@ def settle(day, candles_by_sym):
             hit, hit_t, x = "square-off", after.index[-1].strftime("%H:%M"), float(after["close"].iloc[-1])
         mfe = float(((after["high"] if sign > 0 else after["low"]) - e).max() * sign) if sign > 0 else float((e - after["low"]).max())
         mae = float((e - after["low"]).max()) if sign > 0 else float((after["high"] - e).max())
-        prem = _premium_path(day, rec["symbol"], rec["option"]["expiry"], rec["option"]["strike"], rec["opt"], t0)
-        p_in = rec["option"].get("entry_prem") or rec["option"].get("ltp")
+        opt_ = rec.get("option") or {}
+        prem = _premium_path(day, rec["symbol"], opt_.get("expiry"), opt_.get("strike"), rec["opt"], t0) if opt_.get("strike") else []
+        p_in = opt_.get("entry_prem") or opt_.get("ltp")
         res = {"index_outcome": hit, "at": hit_t, "exit_spot": round(x, 1), "R": round(sign * (x - e) / risk, 2), "mfe_pts": round(mfe, 1), "mae_pts": round(mae, 1),
                "close_15_15": float(after["close"].iloc[-1])}
         if prem and p_in:
@@ -229,13 +306,14 @@ def reflect(day, candles_by_sym) -> str | None:
     parts.append(f"{len(recos)} recommendation{'s' if len(recos) != 1 else ''}: {outs.count('target')} target, {outs.count('stop')} stop, "
                  f"{outs.count('square-off')} squared off; {sum(rs):+.1f}R in total.")
     best = max(recos, key=lambda r: r["result"]["R"]); worst = min(recos, key=lambda r: r["result"]["R"])
+    k_ = lambda r: f"{(r.get('option') or {}).get('strike'):g}" if (r.get("option") or {}).get("strike") else ""   # noqa: E731
     if best["result"]["R"] > 0:
-        parts.append(f"Best: {best['symbol']} {best['opt']} {best['option']['strike']:g} at {best['time'][:5]} ({best['result']['R']:+.1f}R, "
+        parts.append(f"Best: {best['symbol']} {best['opt']} {k_(best)} at {best['time'][:5]} ({best['result']['R']:+.1f}R, "
                      f"ran {best['result']['mfe_pts']:.0f} pts in favour).")
     if worst["result"]["R"] < 0 and worst is not best:
         pr = worst["result"].get("premium") or {}
         gain = pr.get("max_gain_pct")
-        parts.append(f"Worst: {worst['symbol']} {worst['opt']} {worst['option']['strike']:g} at {worst['time'][:5]} ({worst['result']['R']:+.1f}R"
+        parts.append(f"Worst: {worst['symbol']} {worst['opt']} {k_(worst)} at {worst['time'][:5]} ({worst['result']['R']:+.1f}R"
                      + (f"; the premium was up {gain:.0f}% at one point before the stop" if gain and gain > 10 else "") + ").")
     sq = [r for r in recos if r["result"]["index_outcome"] == "square-off"]
     if sq:
@@ -279,6 +357,109 @@ def days():
     return out[-KEEP_DAYS:]
 
 
+def _hm(x) -> int:
+    try:
+        return int(str(x)[:2]) * 60 + int(str(x)[3:5])
+    except Exception:
+        return -1
+
+
+def _trade_view(t, is_open=False) -> dict:
+    pl = t.get("plan") or {}
+    return {"id": t.get("id"), "opened": (t.get("opened") or "")[11:16], "closed": (t.get("closed") or "")[11:16] if not is_open else None,
+            "open": is_open, "pnl": None if is_open else t.get("pnl"), "reason": None if is_open else t.get("reason"), "lots": t.get("lots"),
+            "entry_prem": t.get("entry_prem"), "exit_prem": t.get("exit_prem"), "by": "autopilot" if pl.get("auto") else ("you (signal)" if t.get("mode") == "signal" else "you (manual)"),
+            "legs": [f"{l.get('side')} {l.get('strike'):g}{l.get('opt')}" for l in (t.get("legs") or []) if l.get("strike") is not None]}
+
+
+def decisions(d: str, h: dict, recos: list, closed: list, open_: list) -> dict:
+    """Every recommendation / automatic attempt of the day with what the system did about it: executed (and how it
+    ended), or not executed and why, plus the blocks that stopped Autopilot without a specific signal."""
+    eps = {k[5:]: v for k, v in h.items() if k.startswith("auto:")}
+    sys_trades = [(t, False) for t in closed if t.get("mode") == "signal"] + [(p, True) for p in open_ if p.get("mode") == "signal"]
+    used, rows = set(), []
+
+    def match_trade(r):
+        for t, op in sys_trades:
+            pl = t.get("plan") or {}
+            if t.get("symbol") == r["symbol"] and pl.get("strategy") == r.get("strategy") and pl.get("signal_bar") and pl.get("signal_bar") == r.get("signal_bar"):
+                return t, op
+        rt = _hm(r.get("time"))
+        for t, op in sys_trades:
+            pl = t.get("plan") or {}
+            if t.get("symbol") == r["symbol"] and pl.get("strategy") == r.get("strategy") and 0 <= _hm((t.get("opened") or "")[11:16]) - rt <= 30 \
+                    and t.get("id") not in used:
+                return t, op
+        return None, None
+
+    def match_episode(r):
+        mine = [(k, e) for k, lst in eps.items() if k.split(":")[0] == r["symbol"] and not k.endswith(":scalp") for e in lst if not e.get("ok")]
+        exact = [e for _, e in mine if e.get("strategy") == r.get("strategy") and e.get("signal_bar") and e.get("signal_bar") == r.get("signal_bar")]
+        if exact:
+            return exact[0]
+        rt = _hm(r.get("time"))
+        slot = r.get("strategy") if r.get("strategy") in C.SLOTS else "main"
+        near = [e for k, e in mine if k.endswith(":" + slot) and (_hm(e["from"]) - 15 <= rt <= _hm(e["to"]) + 1 or 0 <= _hm(e["from"]) - rt <= 15)]
+        near.sort(key=lambda e: (e["cat"] == "slot_busy", abs(_hm(e["from"]) - rt)))
+        return near[0] if near else None
+
+    for r in recos:
+        t, op = match_trade(r)
+        if t is not None:
+            used.add(t.get("id"))
+            st = {"state": "executed", "label": "Executed", "trade": _trade_view(t, op)}
+        else:
+            e = match_episode(r)
+            if e:
+                st = {"state": "skipped", "cat": e["cat"], "label": e["label"], "msg": e["msg"], "attempts": e.get("n"), "from": e["from"], "to": e["to"]}
+            elif not r.get("auto_enabled"):
+                st = {"state": "skipped", "cat": "auto_off", "label": "Autopilot off for this instrument",
+                      "msg": "Automatic trading was off (or this index was not ticked in Settings → Auto-trade), so the signal was only recorded."}
+            elif _hm(r.get("time")) > C.LAST_ENTRY_ANY.hour * 60 + C.LAST_ENTRY_ANY.minute:
+                st = {"state": "skipped", "cat": "late", "label": "After the last entry time",
+                      "msg": f"Automatic entries stop at {C.LAST_ENTRY_ANY.strftime('%H:%M')}."}
+            else:
+                st = {"state": "skipped", "cat": "not_attempted", "label": "No automatic attempt logged",
+                      "msg": "The minute check did not try this signal (it had changed or expired before the check, or this was before decisions were logged)."}
+        res = r.get("result") or {}
+        if st["state"] == "executed":
+            tv = st["trade"]
+            what = "Still open." if tv["open"] else f"Closed {tv['closed']} · {tv['reason']}"
+        elif res:
+            pr = res.get("premium") or {}
+            what = (f"If taken: {res.get('index_outcome')} at {res.get('at')} ({res.get('R'):+.1f}R on the index)"
+                    + (f", about ₹{pr['pnl_1lot_if_followed']:+,.0f} per lot" if pr.get("pnl_1lot_if_followed") is not None else ""))
+        else:
+            what = "Outcome is worked out after 15:15."
+        rows.append({"time": r.get("time", "")[:5], "symbol": r["symbol"], "strategy": r.get("strategy"), "opt": r.get("opt"),
+                     "index": r.get("index"), "option": r.get("option"), "reco_id": r.get("id"), "status": st, "what_happened": what,
+                     "result": res or None, "source": r.get("source") or "scan"})
+    for t, op in sys_trades:                                 # executed system trades with no recorded recommendation (own-slot, Sensex...)
+        if t.get("id") in used:
+            continue
+        pl = t.get("plan") or {}
+        tv = _trade_view(t, op)
+        rows.append({"time": tv["opened"], "symbol": t.get("symbol"), "strategy": pl.get("strategy"), "opt": pl.get("opt"),
+                     "index": {"entry": pl.get("entry"), "sl": pl.get("sl"), "target": pl.get("target")}, "option": None, "reco_id": None,
+                     "status": {"state": "executed", "label": "Executed", "trade": tv},
+                     "what_happened": "Still open." if op else f"Closed {tv['closed']} · {tv['reason']}",
+                     "result": None, "source": "trade"})
+    rows.sort(key=lambda x: x["time"] or "")
+    blocks = [{"symbol": k.split(":")[0], "slot": k.split(":", 1)[1], **e} for k, lst in eps.items() for e in lst
+              if not e.get("ok") and not e.get("signal_bar") and not k.endswith(":scalp")]
+    blocks.sort(key=lambda e: e["from"])
+    scalp_eps = [{"symbol": k.split(":")[0], **e} for k, lst in eps.items() if k.endswith(":scalp") for e in lst]
+    scalp_eps.sort(key=lambda e: e["from"])
+    by_cat: dict = {}
+    for r in rows:
+        if r["status"]["state"] == "skipped":
+            c = r["status"]["label"]
+            by_cat[c] = by_cat.get(c, 0) + 1
+    return {"rows": rows, "blocks": blocks, "scalp": scalp_eps,
+            "summary": {"signals": len(rows), "executed": sum(1 for r in rows if r["status"]["state"] == "executed"),
+                        "skipped": sum(1 for r in rows if r["status"]["state"] == "skipped"), "skipped_by_reason": by_cat}}
+
+
 def day(d: str) -> dict:
     datetime.fromisoformat(d)
     raw = store._cmd("HGETALL", _key(d)) or []
@@ -287,14 +468,29 @@ def day(d: str) -> dict:
     else:
         h = {raw[i]: json.loads(raw[i + 1]) for i in range(0, len(raw), 2)}
     recos = sorted((v for k, v in h.items() if k.startswith("reco:")), key=lambda r: r["time"])
-    trades = [t for t in store.trades() if t.get("opened", "")[:10] == d]
+    seen_ids = set()
+    trades = []
+    for t in store.trades() + P.archived():                     # archived = trades from before a P&L reset (history kept)
+        if t.get("opened", "")[:10] == d and t.get("id") not in seen_ids:
+            seen_ids.add(t.get("id")); trades.append(t)
+    open_ = [p for p in store.positions() if p.get("opened", "")[:10] == d]
     ai = {s: h.get(f"ai:{s}") or [] for s in SYMS}
     res = [r["result"] for r in recos if r.get("result")]
+    try:
+        from . import scalp as SC
+        scalp_tr = sorted([t for t in SC.trades() if (t.get("opened") or "")[:10] == d], key=lambda t: t.get("opened") or "")
+        scalp_open = [p for p in SC.positions() if (p.get("opened") or "")[:10] == d]
+    except Exception:
+        scalp_tr, scalp_open = [], []
+    dec = decisions(d, h, recos, trades, open_)
     summary = {"recommendations": len(recos), "settled": len(res),
                "by_outcome": {k: sum(1 for r in res if r["index_outcome"] == k) for k in ("target", "stop", "square-off")},
                "sum_R": round(sum(r["R"] for r in res), 2) if res else None,
                "by_strategy": {st: {"n": sum(1 for r in recos if r["strategy"] == st),
                                     "R": round(sum(r["result"]["R"] for r in recos if r["strategy"] == st and r.get("result")), 2)} for st in {r["strategy"] for r in recos}},
-               "paper_trades": len(trades), "paper_pnl": round(sum(t["pnl"] for t in trades), 0)}
+               "paper_trades": len(trades), "paper_pnl": round(sum(t["pnl"] for t in trades), 0),
+               "open_positions": len(open_), "executed": dec["summary"]["executed"], "skipped": dec["summary"]["skipped"],
+               "scalp_trades": len(scalp_tr), "scalp_pnl": round(sum(t.get("pnl") or 0 for t in scalp_tr), 0)}
     return {"date": d, "context": {s: h.get(f"ctx:{s}") for s in SYMS}, "recommendations": recos, "ai": ai, "paper_trades": trades,
+            "open_positions": open_, "decisions": dec, "scalp_trades": scalp_tr, "scalp_open": scalp_open,
             "settled": h.get("settled"), "summary": summary}

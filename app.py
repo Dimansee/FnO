@@ -506,12 +506,51 @@ def account_restore_trades():
 
 @app.post("/api/account/reset")
 def account_reset():
-    cap = float((request.get_json(force=True) or {}).get("capital", C.DEFAULT_CAPITAL))
+    b = request.get_json(force=True) or {}
+    cap = float(b.get("capital", C.DEFAULT_CAPITAL))
     if not 10_000 <= cap <= 100_000_000:
         return jsonify({"ok": False, "message": "Capital must be between ₹10,000 and ₹10 crore."}), 400
     from fno import paper as P
-    P.reset(cap)
-    return jsonify({"ok": True, "message": f"Demo account reset to ₹{cap:,.0f}."})
+    r = P.reset(cap, keep_history=b.get("keep_history", True) is not False)
+    return jsonify({"ok": True, **r, "message": f"P&L reset: the account starts again at ₹{cap:,.0f}" +
+                    (f" ({r['archived']} old trades kept in the history, out of the P&L)." if r["archived"] else ".")})
+
+
+@app.post("/api/account/week-reset")
+def account_week_reset():
+    """Restart this week's loss count (the weekly limit then counts only trades closed from now)."""
+    from fno import paper as P
+    at = P.reset_week()
+    return jsonify({"ok": True, "at": at, "message": "Weekly loss counter restarted - Autopilot can trade again this week (the limit counts from now).",
+                    "status": SV.risk_status()})
+
+
+@app.get("/api/autopilot/overview")
+def autopilot_overview():
+    return jsonify(SV.clean(SV.autopilot_overview()))
+
+
+@app.get("/api/autopilot/weekly")
+def autopilot_weekly():
+    from fno import lag as LG
+    return jsonify(SV.clean(LG.weekly(request.args.get("week") or None)))
+
+
+@app.get("/api/chart/live")
+def chart_live():
+    sym = request.args.get("symbol", "NIFTY")
+    if sym not in C.INDICES:
+        raise ValueError("Unknown instrument")
+    d = request.args.get("date") or None
+    if d:
+        from datetime import date as _d
+        _d.fromisoformat(d)
+    return jsonify(SV.clean(SV.live_chart(sym, d)))
+
+
+@app.get("/api/autopilot/status")
+def autopilot_status():
+    return jsonify(SV.clean(SV.risk_status()))
 
 
 @app.get("/api/backtest/portfolio/options")
@@ -806,6 +845,14 @@ def settings_post():
             if cur.get("weekly_limit") == "custom" and not 500 <= v <= 10_000_000:
                 raise ValueError("Weekly loss limit must be between ₹500 and ₹1 crore.")
             cur["weekly_limit_rs"] = v
+        if "shield_on" in p:
+            cur["shield_on"] = bool(p["shield_on"])
+        for k, lo, hi in (("shield_floor_pct", 0, 95), ("shield_open_pct", 10, 100), ("shield_trade_pct", 1, 50)):
+            if k in p:
+                v = float(p[k])
+                if not lo <= v <= hi:
+                    raise ValueError(f"{k.replace('shield_', 'Shield ').replace('_pct', '')} must be between {lo}% and {hi}%.")
+                cur[k] = v
         store.put("prefs", cur)
     if "fii_manual" in b:
         v = b["fii_manual"]

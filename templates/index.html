@@ -475,10 +475,73 @@ details summary{cursor:pointer;font-size:13px}
   #factors td:first-child{min-width:150px;white-space:normal}#factors .muted,#factors small{display:none}
 }
 @media (max-width:640px){.pattbl tr{display:block;padding:8px 0;border-bottom:1px solid var(--line)}.pattbl td{display:block;border:0!important;padding:2px 10px!important;text-align:left!important}.pattbl tr:first-child{display:none}.pattbl td .mono,.pattbl td.mono{text-align:left}}
+/* ---- 31 Oct 2026: risk banner, Autopilot tab, live chart, decisions ---- */
+#riskBanner{margin:14px 0 0;border-radius:var(--r-md);padding:10px 14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;border:1px solid}
+#riskBanner.bad{background:var(--red-bg);border-color:rgba(226,103,90,.45)}
+#riskBanner.warn{background:var(--amber-bg);border-color:rgba(242,169,59,.4)}
+#riskBanner .rbrows{flex:1;min-width:240px;display:grid;gap:4px}
+#riskBanner .rbrow{display:flex;gap:9px;align-items:baseline;font-size:14px;font-weight:600}
+#riskBanner .rbdot{width:8px;height:8px;border-radius:50%;background:var(--red);flex:none;transform:translateY(-1px)}
+#riskBanner.warn .rbdot{background:var(--amber)}
+#riskBanner .rbact{display:flex;gap:8px;flex-wrap:wrap}
+button.mini{padding:5px 10px;font-size:12.5px}
+.aphead{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.apttl{margin:0;font-size:24px;letter-spacing:-.02em}
+.apsubs{flex-wrap:wrap;max-width:100%}
+.apsubs .seg.on,.lcbar .seg.on{background:var(--panel2);color:var(--gold)}
+.meter{height:8px;border-radius:5px;background:var(--bg2);overflow:hidden;margin-top:8px;border:1px solid var(--line)}
+.meter i{display:block;height:100%;border-radius:5px;background:var(--green);transition:width .4s var(--ease)}
+.meter.mid i{background:var(--amber)}.meter.hot i{background:var(--red)}
+.dpill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:2px 9px;border-radius:99px;white-space:nowrap}
+.dpill.ok{background:var(--green-bg);color:var(--green)}.dpill.no{background:var(--red-bg);color:var(--red)}.dpill.wait{background:var(--amber-bg);color:var(--amber)}
+.dreason{margin-top:4px;font-size:13px}
+.fs12{font-size:12px}.fs13{font-size:13px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:12px;padding:3px 10px;border-radius:99px;border:1px solid var(--line2);background:var(--bg2);color:var(--muted)}
+.chip b{color:var(--text)}
+.blk{display:grid;grid-template-columns:110px 90px 1fr;gap:4px 12px;padding:8px 0;border-top:1px solid var(--line);font-size:13.5px}
+.blk:first-child{border-top:none}
+@media(max-width:640px){.blk{grid-template-columns:1fr}}
+.fix{border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;background:var(--bg2)}
+.fix + .fix{margin-top:10px}
+.fixgrid{display:grid;gap:10px}
+.kv{display:grid;grid-template-columns:minmax(150px,38%) 1fr;gap:6px 14px;font-size:14px}
+.kv > div:nth-child(odd){color:var(--muted)}
+.shieldmath{font-size:14px;line-height:1.6}
+.shieldmath b{font-family:var(--num)}
+/* live chart */
+.lc{display:grid;gap:12px}
+.lcbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.lcbar .grow{flex:1}
+.lclayers{display:flex;gap:6px;flex-wrap:wrap}
+.lclayers label{display:inline-flex;align-items:center;gap:5px;margin:0;font-size:12.5px;padding:4px 9px;border:1px solid var(--line2);border-radius:99px;background:var(--bg2);color:var(--muted);cursor:pointer;user-select:none}
+.lclayers input{min-width:0;margin:0;accent-color:var(--gold)}
+.lclayers label:has(input:checked){color:var(--text);border-color:var(--faint)}
+.lcmain{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:12px}
+@media(max-width:1000px){.lcmain{grid-template-columns:1fr}}
+.lcchart{position:relative;height:560px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--bg2);overflow:hidden}
+@media(max-width:640px){.lcchart{height:420px}}
+.lclegend{position:absolute;left:10px;top:8px;z-index:3;font-size:12.5px;pointer-events:none;font-family:var(--num);color:var(--muted);text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.lclegend .t{font-family:var(--display);font-weight:700;color:var(--text);font-size:13.5px}
+.lcside{display:grid;gap:10px;align-content:start;max-height:640px;overflow:auto}
+.lcside .card{padding:12px 14px}
+.lcside h4{margin:0 0 6px;font-size:14px}
+.setup{border-left:3px solid var(--line2);padding:6px 0 6px 10px;font-size:13px}
+.setup + .setup{margin-top:6px}
+.setup.ex{border-left-color:var(--green)}.setup.sk{border-left-color:var(--red)}.setup.op{border-left-color:var(--gold)}
+.setup .mono{font-size:12.5px}
+.lcreplay{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--panel)}
+.lcreplay input[type=range]{flex:1;min-width:160px;accent-color:var(--gold);padding:0}
+.lcreplay .rtime{font-family:var(--num);min-width:120px;font-size:13px}
+.lcreplay.on{border-color:var(--gold)}
+.rsrow .rsarrow{display:inline-block;transition:transform .2s var(--ease);color:var(--muted);width:14px}
+.rsrow.open .rsarrow{transform:rotate(90deg);color:var(--gold)}
+.rsdet > td{background:var(--bg2);padding:12px 14px!important}
+.rsdet .rscard{margin:10px 0 0;background:var(--panel)}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-signal" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8"/></symbol><symbol id="i-scalp" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol><symbol id="i-chain" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16M9 4v16M15 4v16"/></symbol><symbol id="i-portfolio" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/></symbol><symbol id="i-strategies" viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol><symbol id="i-learning" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"/></symbol><symbol id="i-markets" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></symbol><symbol id="i-context" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></symbol><symbol id="i-stocks" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol><symbol id="i-recs" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8 6.6 19.7l1.1-6.1L3.2 9.4l6.1-.8z"/></symbol><symbol id="i-journal" viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3zM5 17a3 3 0 013-3h11M9 8h6"/></symbol><symbol id="i-backtest" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L5 19a1.5 1.5 0 001.4 2h11.2A1.5 1.5 0 0019 19l-5-10V3"/><path d="M7.5 15h9"/></symbol><symbol id="i-research" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2"/></symbol><symbol id="i-rules" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol><symbol id="i-stockrules" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol><symbol id="i-glossary" viewBox="0 0 24 24"><path d="M4 19l4-14 4 14M5.5 14h5M15 8h5l-5 8h5"/></symbol><symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></symbol><symbol id="i-theme" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></symbol><symbol id="i-data" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6M4 11.5v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></symbol></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-signal" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8"/></symbol><symbol id="i-scalp" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol><symbol id="i-chain" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16M9 4v16M15 4v16"/></symbol><symbol id="i-portfolio" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 012-2h2a2 2 0 012 2v2M3 13h18"/></symbol><symbol id="i-strategies" viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol><symbol id="i-learning" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"/></symbol><symbol id="i-markets" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></symbol><symbol id="i-context" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></symbol><symbol id="i-stocks" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol><symbol id="i-recs" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8 6.6 19.7l1.1-6.1L3.2 9.4l6.1-.8z"/></symbol><symbol id="i-journal" viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3zM5 17a3 3 0 013-3h11M9 8h6"/></symbol><symbol id="i-backtest" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L5 19a1.5 1.5 0 001.4 2h11.2A1.5 1.5 0 0019 19l-5-10V3"/><path d="M7.5 15h9"/></symbol><symbol id="i-research" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2"/></symbol><symbol id="i-rules" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol><symbol id="i-stockrules" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol><symbol id="i-glossary" viewBox="0 0 24 24"><path d="M4 19l4-14 4 14M5.5 14h5M15 8h5l-5 8h5"/></symbol><symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></symbol><symbol id="i-theme" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></symbol><symbol id="i-data" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6M4 11.5v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></symbol><symbol id="i-autopilot" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></symbol><symbol id="i-livechart" viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M6 16V9M6 9h-1M6 9h1M10 14V6M14 17v-5M18 12V5"/><path d="M4 11l5-4 4 3 7-6" stroke-dasharray="2 2"/></symbol></svg>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="bull" viewBox="0 0 48 48"><g fill="#f2a93b"><path d="M16 17.5C9 17.5 3.5 13 4.5 4.5 6.5 10 10.5 12.6 17.5 13.2Z"/><path d="M32 17.5C39 17.5 44.5 13 43.5 4.5 41.5 10 37.5 12.6 30.5 13.2Z"/><path d="M11 19.5c2-1.6 4.4-1.6 5.5-.6-.6 2-2.6 3.3-5.5.6Z"/><path d="M37 19.5c-2-1.6-4.4-1.6-5.5-.6.6 2 2.6 3.3 5.5.6Z"/><path d="M17.5 12.6c3.8-1.6 9.2-1.6 13 0 1.9 1.2 2.8 3.4 2.6 6.4-.4 5-2.6 9.4-3.2 14.2.9 1.4 1.3 3 1.1 4.6-.5 3.4-3.8 5-7 5s-6.5-1.6-7-5c-.2-1.6.2-3.2 1.1-4.6-.6-4.8-2.8-9.2-3.2-14.2-.2-3 .7-5.2 2.6-6.4Z"/></g><g fill="#0e1922"><ellipse cx="19.6" cy="22.6" rx="1.3" ry="1.6"/><ellipse cx="28.4" cy="22.6" rx="1.3" ry="1.6"/><ellipse cx="21.4" cy="37.6" rx="1.2" ry="1.7"/><ellipse cx="26.6" cy="37.6" rx="1.2" ry="1.7"/></g></symbol></svg>
 <div id="pbar" aria-hidden="true"><div class="fill"></div><svg class="pbull"><use href="#bull"/></svg></div>
 <div id="splash" role="status" aria-label="Loading">
@@ -510,7 +573,9 @@ details summary{cursor:pointer;font-size:13px}
       <button data-t="signal" class="on"><svg class="ic"><use href="#i-signal"/></svg><span class="lb">Signal</span></button>
       <button data-t="chain"><svg class="ic"><use href="#i-chain"/></svg><span class="lb">Option chain</span></button>
       <button data-t="portfolio"><svg class="ic"><use href="#i-portfolio"/></svg><span class="lb">Portfolio</span></button>
-      <button data-t="scalp"><svg class="ic"><use href="#i-scalp"/></svg><span class="lb">Scalp book</span><span class="newb">NEW</span></button>
+      <button data-t="scalp"><svg class="ic"><use href="#i-scalp"/></svg><span class="lb">Scalp book</span></button>
+      <button data-t="autopilot"><svg class="ic"><use href="#i-autopilot"/></svg><span class="lb">Autopilot</span><span class="newb">NEW</span></button>
+      <button data-t="livechart"><svg class="ic"><use href="#i-livechart"/></svg><span class="lb">Live chart</span><span class="newb">NEW</span></button>
       <button data-t="markets"><svg class="ic"><use href="#i-markets"/></svg><span class="lb">Dashboard</span><span class="newb">NEW</span></button>
       <button data-t="gtrade"><svg class="ic"><use href="#i-stocks"/></svg><span class="lb">Trade</span><span class="newb">NEW</span></button>
       <button data-t="gportfolio"><svg class="ic"><use href="#i-portfolio"/></svg><span class="lb">Portfolio</span></button>
@@ -531,8 +596,6 @@ details summary{cursor:pointer;font-size:13px}
       <button data-t="gbacktest"><svg class="ic"><use href="#i-backtest"/></svg><span class="lb">Backtest</span></button>
       <button data-t="research"><svg class="ic"><use href="#i-research"/></svg><span class="lb">Research</span></button>
       <button data-t="gresearch"><svg class="ic"><use href="#i-research"/></svg><span class="lb">Research</span></button>
-      <button data-t="aprules"><svg class="ic"><use href="#i-rules"/></svg><span class="lb">Autopilot rules</span><span class="newb">NEW</span></button>
-      <button data-t="outcomes"><svg class="ic"><use href="#i-backtest"/></svg><span class="lb">Outcomes</span><span class="newb">NEW</span></button>
       <button data-t="rules"><svg class="ic"><use href="#i-rules"/></svg><span class="lb">Options rulebook</span></button>
       <button data-t="grules"><svg class="ic"><use href="#i-rules"/></svg><span class="lb">Rulebook</span></button>
       <button data-t="stockrules"><svg class="ic"><use href="#i-stockrules"/></svg><span class="lb">Stock rulebook</span></button>
@@ -561,6 +624,7 @@ details summary{cursor:pointer;font-size:13px}
 </header>
 
 <main class="wrap">
+  <div id="riskBanner" class="hidden"></div>
   <!-- SIGNAL -->
   <section id="t-signal">
     <div class="hero" id="hero">
@@ -786,7 +850,7 @@ details summary{cursor:pointer;font-size:13px}
     <div class="card">
       <div class="cardhead"><h3 style="margin:0">Session journal</h3>
         <div style="display:flex;gap:8px;align-items:center"><select id="jrDay" style="min-width:150px"></select><button id="jrScan" title="Record what the strategies say right now">Record now</button><button id="jrJson">⬇ JSON</button></div></div>
-      <p class="muted" style="margin:6px 0 0">From the open, the server writes down the day's levels and context, every recommendation (rules and AI) with its checklist and order, the AI's view at every 5-minute candle, and after the close what each recommendation would have done on the index and on the option. Nothing here is a trade - the paper trades are in Portfolio.</p>
+      <p class="muted" style="margin:6px 0 0">From the open, the server writes down the day's levels and context, every recommendation (rules and AI) with its checklist and order, <b>every Autopilot decision - executed, or not executed and why</b> - the AI's view at every 5-minute candle, and after the close what each signal did or would have done on the index and on the option. The paper and scalp trades of the day are at the bottom.</p>
     </div>
     <div id="jrBody"></div>
   </section>
@@ -811,8 +875,28 @@ details summary{cursor:pointer;font-size:13px}
     <p class="muted" style="margin-top:0">Plain-language meanings of the words used across the app, with small examples. Type to search.</p>
     <input id="glQ" placeholder="Search a word, e.g. noise, VWAP, circuit" style="width:100%;margin:6px 0"></div><div id="glList"></div></section>
   <section id="t-stockrules" class="hidden"><div class="card rule" id="stockRulebook"></div></section>
-  <section id="t-aprules" class="hidden"><div class="card rule" id="apRules"></div></section>
-  <section id="t-outcomes" class="hidden"><div class="card" id="ocTop"></div><div id="ocPineBox" class="hidden" style="margin-top:12px"></div><div class="card" id="ocTbl" style="margin-top:12px"></div></section>
+  <section id="t-autopilot" class="hidden">
+    <div class="aphead">
+      <div><h2 class="apttl">Autopilot</h2><p class="muted" id="apSub" style="margin:2px 0 0">What the automatic system is doing, why, and how it is protected.</p></div>
+      <div class="segs apsubs" id="apSubs" role="tablist">
+        <button class="seg" data-aps="status">Status</button><button class="seg" data-aps="decisions">Decisions</button><button class="seg" data-aps="chart">Chart</button>
+        <button class="seg" data-aps="outcomes">Outcomes</button><button class="seg" data-aps="improve">Improvements</button><button class="seg" data-aps="learning">Learning applied</button>
+        <button class="seg" data-aps="rules">Rules</button><button class="seg" data-aps="settings">Settings</button><button class="seg" data-aps="safety">Safety</button>
+      </div>
+    </div>
+    <div class="appanel" data-app="status"><div id="apStatus"></div></div>
+    <div class="appanel hidden" data-app="decisions"><div id="apDecisions"></div></div>
+    <div class="appanel hidden" data-app="chart"><div id="lcHostAp"></div></div>
+    <div class="appanel hidden" data-app="outcomes"><div id="apOutcomes"></div>
+      <details class="card" id="ocWrap" style="margin-top:14px"><summary><h3 style="margin:0;display:inline">Research outcomes matrix</h3> <span class="muted">· every tested change vs today's rules (backtest)</span></summary>
+        <div id="ocTop" style="margin-top:10px"></div><div id="ocPineBox" class="hidden" style="margin-top:12px"></div><div id="ocTbl" style="margin-top:12px"></div></details></div>
+    <div class="appanel hidden" data-app="improve"><div id="apImprove"></div></div>
+    <div class="appanel hidden" data-app="learning"><div id="apLearning"></div></div>
+    <div class="appanel hidden" data-app="rules"><div class="card rule" id="apRules"></div></div>
+    <div class="appanel hidden" data-app="settings"><div id="apSettings"></div></div>
+    <div class="appanel hidden" data-app="safety"><div id="apSafety"></div></div>
+  </section>
+  <section id="t-livechart" class="hidden"><div id="lcHostTab"></div></section>
   <section id="t-rules" class="hidden"><div class="card rule" id="rulebook"></div></section>
 
   <!-- SETTINGS -->
@@ -1003,10 +1087,12 @@ async function start() {
   if (q.get("msg")) { toast(q.get("msg"), 6000); history.replaceState(null, "", location.pathname + location.hash); }
   applyWS();
   go((location.hash || (WS.mk === "IN" ? "#signal" : "#markets")).slice(1));
+  riskBanner(); setInterval(() => !document.hidden && riskBanner(), 60000);
 }
 /* ---- market workspace: India F&O, Crypto or US. Each shows only its own tabs and data. ---- */
-const WS = {mk: (localStorage.getItem("ws") || "IN").replace("GOLD", "CRYPTO")};      // Gold was merged into Crypto (28 Oct 2026)
-const WS_IN = new Set(["signal", "chain", "portfolio", "scalp", "context", "stocks", "recs", "journal", "data", "backtest", "research", "rules", "aprules", "outcomes", "stockrules", "settings"]);
+const WS = {mk: (localStorage.getItem("ws") || "IN").replace("GOLD", "CRYPTO")};
+const AP = {sub: "status", ov: null, at: 0, dday: null, week: null};      // Autopilot tab state (31 Oct 2026)      // Gold was merged into Crypto (28 Oct 2026)
+const WS_IN = new Set(["signal", "chain", "portfolio", "scalp", "autopilot", "livechart", "context", "stocks", "recs", "journal", "data", "backtest", "research", "rules", "aprules", "outcomes", "stockrules", "settings"]);
 const WS_GLOBAL = new Set(["gtrade", "markets", "gportfolio", "gjournal", "grules", "gbacktest", "gresearch", "gcontext"]);
 const wsAllows = t => WS.mk === "IN" ? !WS_GLOBAL.has(t) : !WS_IN.has(t);
 function applyWS() {
@@ -1030,9 +1116,13 @@ $("#wsSwitch").onclick = e => {
   go(wsAllows(S.tab) ? S.tab : (WS.mk === "IN" ? "signal" : "markets"));
 };
 function go(t) {
+  const [t0, sub] = String(t).split("/");
+  t = t0;
+  if (t === "aprules" || t === "outcomes") { AP.sub = t === "aprules" ? "rules" : "outcomes"; t = "autopilot"; }
+  else if (t === "autopilot" && sub) AP.sub = sub;
   if (!document.getElementById("t-" + t)) t = "signal";
   if (!wsAllows(t)) t = WS.mk === "IN" ? "signal" : "markets";
-  S.tab = t; location.hash = t;
+  S.tab = t; location.hash = t === "autopilot" ? "autopilot/" + AP.sub : t;
   document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.t === t));
   document.querySelectorAll("main section").forEach(s => s.classList.toggle("hidden", s.id !== "t-" + t));
   placeInk(); load(); schedule();
@@ -1050,7 +1140,7 @@ $("#refresh").onclick = () => load();
 $("#auto").onchange = schedule;
 function schedule() {
   clearInterval(S.timer);
-  if ($("#auto").checked && ["signal", "portfolio", "scalp", "chain", "recs", "markets", "gportfolio"].includes(S.tab)) S.timer = setInterval(() => !document.hidden && load(true), 30000);
+  if ($("#auto").checked && ["signal", "portfolio", "scalp", "chain", "recs", "markets", "gportfolio", "livechart", "autopilot"].includes(S.tab)) S.timer = setInterval(() => !document.hidden && load(true), 30000);
 }
 async function load(quiet) {
   const sec = $("#t-" + S.tab); if (!quiet) { sec.classList.add("loading"); pStart(); }
@@ -1066,8 +1156,8 @@ async function load(quiet) {
     else if (S.tab === "recs") await loadRecs();
     else if (S.tab === "backtest") { await pbInit(); const pj = localStorage.getItem("pbJob"); if (pj && !PB.last) pbWatch(pj); await loadStudy(); }
     else if (S.tab === "research") await loadResearch();
-    else if (S.tab === "aprules") await loadApRules();
-    else if (S.tab === "outcomes") await loadOutcomes();
+    else if (S.tab === "autopilot") await loadAutopilot(quiet);
+    else if (S.tab === "livechart") await loadLiveChart("#lcHostTab", quiet);
     else if (S.tab === "strategies") await loadStrategies();
     else if (S.tab === "learning") await loadLearning();
     else if (S.tab === "markets") await loadMarkets(quiet);
@@ -2170,7 +2260,7 @@ function studyR7(x, k) {
 }
 
 const RS_DEC = {"Adopted": "up", "Not adopted": "down", "Watch-list": "", "Information": "muted"};
-async function loadChanges() {
+async function loadChanges(target = "#rsChanges", title = "Recent changes") {
   try {
     const d = await api("/api/changes");
     const row = c => `<div class="lnote"><div class="row between wrap" style="gap:10px"><div style="flex:1;min-width:240px"><b>${esc(c.title)}</b> <span class="muted mono" style="font-size:12px">${esc(c.date)}</span>
@@ -2178,12 +2268,12 @@ async function loadChanges() {
       <div style="font-size:13.5px;margin-top:3px">${esc(c.what)}</div>${c.before ? `<div class="muted" style="font-size:12.5px">Before: ${esc(c.before)}</div>` : ""}</div>
       <div>${c.kind === "switch" ? `<button class="${c.on ? "danger" : "primary"}" data-chg="${c.id}" data-on="${c.on ? 0 : 1}">${c.on ? "Switch back to before" : "Switch on again"}</button>`
         : (c.on ? `<button class="danger" data-chg="${c.id}">${esc(c.action)}</button>` : "")}</div></div></div>`;
-    $("#rsChanges").innerHTML = `<h3 style="margin:0 0 4px">Recent changes</h3><p class="muted" style="margin:0 0 8px;font-size:12.5px">If something feels off after a change, switch it back here - it takes effect from the next trade. Nothing is deleted.</p>${d.changes.map(row).join("")}`;
+    $(target).innerHTML = `<h3 style="margin:0 0 4px">${esc(title)}</h3><p class="muted" style="margin:0 0 8px;font-size:12.5px">If something feels off after a change, switch it back here - it takes effect from the next trade. Nothing is deleted.</p>${d.changes.map(row).join("")}`;
     document.querySelectorAll("[data-chg]").forEach(b => b.onclick = async () => {
       if (!confirm("Change this back? It takes effect from the next trade.".replace("back", b.dataset.on === "1" ? "on again" : "back"))) return;
-      try { const r = await post("/api/changes/" + b.dataset.chg, {on: b.dataset.on === "1"}); toast(r.message); loadChanges(); } catch (e) { toast(e.message); }
+      try { const r = await post("/api/changes/" + b.dataset.chg, {on: b.dataset.on === "1"}); toast(r.message); AP.ov = null; loadChanges(target, title); } catch (e) { toast(e.message); }
     });
-  } catch (e) { $("#rsChanges").innerHTML = `<h3>Recent changes</h3><p class="muted">Could not load: ${esc(e.message)}</p>`; }
+  } catch (e) { $(target).innerHTML = `<h3>${esc(title)}</h3><p class="muted">Could not load: ${esc(e.message)}</p>`; }
 }
 async function loadResearch() {
   loadChanges();
@@ -2867,36 +2957,39 @@ async function loadJournal() {
   sel.value = d;
   const j = await api("/api/journal/day?date=" + d); S.jr = j;
   const sm = j.summary, ctxCard = sym => {
-    const c = j.context[sym]; if (!c) return `<div class="card"><h3>${sym === "NIFTY" ? "Nifty 50" : "Bank Nifty"}</h3><div class="muted">No context recorded (the server writes it at 09:16).</div></div>`;
+    const c = j.context[sym]; if (!c) return `<div class="card"><h3>${esc(IDX_LABEL[sym] || sym)}</h3><div class="muted">No context recorded (the server writes it at 09:16).</div></div>`;
     const cam = c.camarilla || {};
-    return `<div class="card"><h3>${sym === "NIFTY" ? "Nifty 50" : "Bank Nifty"} · at ${esc(c.time)}</h3>
+    return `<div class="card"><h3>${esc(IDX_LABEL[sym] || sym)} · at ${esc(c.time)}</h3>
       <div class="k4">${kpi("Open", n2(c.open), `gap ${c.gap_pct == null ? "–" : sgn(c.gap_pct) + "%"}`, "muted")}${kpi("Yesterday", n2(c.prev_close), `H ${n2(c.prev_high)} · L ${n2(c.prev_low)}`, "muted")}${kpi("India VIX", n2((c.vix || {}).level), `${sgn((c.vix || {}).chg_pct)}% vs yesterday`, "muted")}${kpi("Put/call OI", c.pcr_prev_close == null ? "–" : n2(c.pcr_prev_close), "yesterday's close", "muted")}</div>
       <div class="row"><span class="muted">Camarilla H4 / H3 / L3 / L4</span><span class="mono">${n2(cam.h4)} / ${n2(cam.h3)} / ${n2(cam.l3)} / ${n2(cam.l4)}</span></div>
       <div class="row"><span class="muted">CPR top / bottom (width)</span><span class="mono">${n2((c.cpr || {}).tc)} / ${n2((c.cpr || {}).bc)} (${(c.cpr || {}).width_pct ?? "–"}%)</span></div>
       <div class="row"><span class="muted">Noise band at checks (lo – up)</span><span class="mono" style="font-size:11.5px">${c.noise_band_at ? Object.entries(c.noise_band_at).map(([t, v]) => `${t} ${v[0]}–${v[1]}`).join(" · ") : "–"}</span></div>
       <div class="row"><span class="muted">Global cues / FII</span><span class="mono">${(c.global || {}).avg_equity_chg == null ? "–" : sgn(c.global.avg_equity_chg) + "%"} / ${c.fii && c.fii.value != null ? "₹" + Math.round(c.fii.value).toLocaleString("en-IN") + " cr" : "–"}</span></div>
-      <div class="row"><span class="muted">Expiry traded · strategies on · auto</span><span class="mono">${esc(c.expiry)} · ${(c.prefs.strategies || []).join(", ")} · ${c.prefs.auto ? (c.prefs.auto_syms || []).join(", ") : "off"}</span></div>
+      <div class="row"><span class="muted">Expiry traded · strategies on · auto</span><span class="mono">${esc(c.expiry)} · ${((c.prefs || {}).strategies || []).join(", ")} · ${(c.prefs || {}).auto ? ((c.prefs || {}).auto_syms || []).join(", ") : "off"}</span></div>
       ${c.calendar && c.calendar.blocked ? `<div class="warn">${esc(c.calendar.reason)}</div>` : ""}</div>`;
   };
   const exW = (S.study && S.study.expected) || {}, winOf = r => r.strategy === "ai" ? (r.basis.p_win != null ? Math.round(r.basis.p_win * 100) + "%" : "–") : ((exW[r.strategy === "camarilla" ? "Camarilla" : "Noise band"] || {}).win_rate != null ? exW[r.strategy === "camarilla" ? "Camarilla" : "Noise band"].win_rate + "%" : "–");
-  const recoRow = r => { const o = r.result; return `<tr><td class="mono">${esc(r.time.slice(0, 5))}<div class="muted" style="font-size:11px">candle ${esc(r.signal_bar)}</div></td><td>${r.symbol === "NIFTY" ? "Nifty" : "Bank Nifty"}</td><td>${{noise: "Noise band", camarilla: "Camarilla", ai: "AI model"}[r.strategy] || esc(r.strategy)}</td>
-    <td class="${r.opt === "CE" ? "up" : "down"}">${r.opt === "CE" ? "Buy CALL" : "Buy PUT"} ${r.option.strike}<div class="muted" style="font-size:11px">${esc(r.option.expiry)} · ${r.option.lots} lot(s)</div></td><td class="mono">₹${n2(r.option.entry_prem)} / <span class="down">₹${n2(r.option.sl_prem)}</span> / <span class="up">${r.option.target_prem == null ? "–" : r.option.target_fixed === false ? "trails (3R ≈ ₹" + n2(r.option.target_prem) + ")" : "₹" + n2(r.option.target_prem)}</span></td>
+  const recoRow = r => { const o = r.result; r.option = r.option || {}; r.basis = r.basis || {checks: []}; r.basis.checks = r.basis.checks || []; return `<tr><td class="mono">${esc(r.time.slice(0, 5))}<div class="muted" style="font-size:11px">candle ${esc(r.signal_bar)}</div></td><td>${esc(IDX_LABEL[r.symbol] || r.symbol)}</td><td>${esc(ST_NAME(r.strategy))}</td>
+    <td class="${r.opt === "CE" ? "up" : "down"}">${r.opt === "CE" ? "Buy CALL" : "Buy PUT"} ${r.option.strike ?? ""}<div class="muted" style="font-size:11px">${r.option.expiry ? esc(r.option.expiry) + " · " + (r.option.lots ?? "–") + " lot(s)" : "index plan (seen by Autopilot)"}</div></td><td class="mono">₹${n2(r.option.entry_prem)} / <span class="down">₹${n2(r.option.sl_prem)}</span> / <span class="up">${r.option.target_prem == null ? "–" : r.option.target_fixed === false ? "trails (3R ≈ ₹" + n2(r.option.target_prem) + ")" : "₹" + n2(r.option.target_prem)}</span></td>
     <td class="mono">${n2(r.index.entry)} / ${n2(r.index.sl)} / ${r.index.target == null ? "–" : n2(r.index.target)}</td>
     <td class="mono">${winOf(r)}</td>
     <td class="mono" style="font-size:12px">${r.basis.exp_r != null ? "expected " + sgn(r.basis.exp_r) + "R" : (r.basis.score != null ? "market score " + sgn(r.basis.score) : "–")}</td>
     <td>${o ? `<span class="badge ${o.index_outcome === "target" ? "ok" : o.index_outcome === "stop" ? "no" : ""}">${o.index_outcome}</span> ${esc(o.at)} · <span class="mono ${cls(o.R)}">${sgn(o.R)}R</span><div class="muted" style="font-size:11px">best ${sgn(o.mfe_pts)} / worst −${n2(o.mae_pts)} pts${o.premium ? ` · premium high ₹${n2(o.premium.high)} (${sgn(o.premium.max_gain_pct)}%), low ₹${n2(o.premium.low)} (${sgn(o.premium.max_loss_pct)}%)` : ""}</div>` : `<span class="muted">pending (settled after 15:15)</span>`}</td>
-    <td class="mono">${o && o.premium ? `₹${n2(o.premium.at_exit)}<div class="${cls(o.premium.at_exit - r.option.entry_prem)}" style="font-size:11px">${sgn((o.premium.at_exit / r.option.entry_prem - 1) * 100)}%${r.lot ? " · " + rs((o.premium.at_exit - r.option.entry_prem) * r.lot * (r.option.lots || 1)) : ""}</div>` : o ? `<span class="muted">no chain record</span>` : "–"}</td>
+    <td class="mono">${o && o.premium && r.option.entry_prem ? `₹${n2(o.premium.at_exit)}<div class="${cls(o.premium.at_exit - r.option.entry_prem)}" style="font-size:11px">${sgn((o.premium.at_exit / r.option.entry_prem - 1) * 100)}%${r.lot ? " · " + rs((o.premium.at_exit - r.option.entry_prem) * r.lot * (r.option.lots || 1)) : ""}</div>` : o ? `<span class="muted">no chain record</span>` : "–"}</td>
     <td><details><summary style="cursor:pointer">basis</summary><ul class="checks" style="font-size:12px">${r.basis.checks.map(([ok, t]) => `<li><span class="ic">${ok === true ? "✅" : ok === false ? "❌" : "👀"}</span><span>${esc(t)}</span></li>`).join("")}</ul>${r.basis.ai ? `<div class="muted" style="font-size:12px">${r.basis.ai.reasons.map(x => `${esc(x.factor)} ${sgn(x.effect)}R`).join(" · ")}</div>` : ""}</details></td></tr>`; };
   const aiRows = sym => (j.ai[sym] || []).map(x => `<tr><td class="mono">${esc(x.bar)}</td><td class="mono">${n2(x.spot)}</td><td class="${x.side === "CE" ? "up" : "down"}">${x.side === "CE" ? "CALL" : "PUT"} · ${x.stop_k}×ATR</td><td class="mono ${cls(x.exp_r)}">${sgn(x.exp_r)}</td><td class="mono">${Math.round(x.p_win * 100)}%</td><td>${x.trade ? '<span class="badge ok">trade</span>' : '<span class="muted">wait</span>'}</td></tr>`).join("");
   $("#jrBody").innerHTML = `
     <div class="k4 k5" style="margin-top:14px">${kpi("Recommendations", sm.recommendations, `${sm.settled} settled`, "muted")}${kpi("Outcomes", `${sm.by_outcome.target} / ${sm.by_outcome.stop} / ${sm.by_outcome["square-off"]}`, "target / stop / square-off", "muted")}${kpi("Sum of R", sm.sum_R == null ? "–" : sgn(sm.sum_R), "on the index path", "muted")}${kpi("Win % (this day)", sm.settled ? Math.round(sm.by_outcome.target / sm.settled * 100) + "%" : "–", "targets ÷ settled", "muted")}${kpi("Paper trades", sm.paper_trades, `P&L ${rs(sm.paper_pnl)}`, "muted")}</div>
     ${j.settled && j.settled.lesson ? `<div class="card" style="margin-top:14px;border-left:3px solid var(--accent,#f2a93b)"><h3>Session wrap-up</h3><p style="margin:0">${esc(j.settled.lesson)}</p><p class="muted" style="font-size:12px;margin:6px 0 0">Written by rules from the day's journal after the close (no AI) - what the recommendations did, the context, and the one thing to carry forward.</p></div>` : ""}
-    <div class="grid g2" style="margin-top:14px">${ctxCard("NIFTY")}${ctxCard("BANKNIFTY")}</div>
+    ${decisionsHtml(j, {title: d})}
+    <div class="grid g2" style="margin-top:14px">${ctxCard("NIFTY")}${ctxCard("BANKNIFTY")}${j.context.SENSEX ? ctxCard("SENSEX") : ""}</div>
     <div class="card" style="margin-top:14px"><h3>Recommendations and what happened</h3>
       ${j.recommendations.length ? `<div class="tablewrap"><table class="prose"><tr><th>Time</th><th>Index</th><th>Strategy</th><th>Option</th><th>Premium entry / SL / target</th><th>Index entry / SL / target</th><th>Win % (backtest)</th><th>Basis</th><th>Outcome</th><th>Exit prem</th><th></th></tr>${j.recommendations.map(recoRow).join("")}</table></div>
       <p class="muted" style="font-size:12px">Win % is the strategy's historical win rate from the 2023-26 backtest (the AI's is its own estimate for that candle). "Market score" is the context score on the Signal page (global cues, gap, VIX, put/call ratio, news, FII) - shown for information, it does not decide trades. Premium SL / target are the option-price estimates of the index levels; the exit premium comes from the recorded 5-minute chain.</p>` : `<div class="empty">No recommendations recorded for this day${j.context.NIFTY ? " - the strategies did not fire" : ""}.</div>`}</div>
     <div class="grid g2" style="margin-top:14px">${["NIFTY", "BANKNIFTY"].map(sym => `<div class="card"><h3>AI view through the day · ${sym === "NIFTY" ? "Nifty" : "Bank Nifty"}</h3>${(j.ai[sym] || []).length ? `<div class="tablewrap" style="max-height:320px;overflow:auto"><table><tr><th>Candle</th><th>Spot</th><th>Best</th><th>Exp. R</th><th>Win</th><th></th></tr>${aiRows(sym)}</table></div>` : `<div class="muted">No AI scores recorded (switch the AI model on in Settings to log its view).</div>`}</div>`).join("")}</div>
-    ${j.paper_trades.length ? `<div class="card" style="margin-top:14px"><h3>Paper trades closed this day</h3><div class="tablewrap"><table><tr><th>Opened</th><th>Index</th><th>Strategy</th><th>Legs</th><th>Lots</th><th>In → out</th><th>P&L</th><th>Reason</th></tr>${j.paper_trades.map(t => `<tr><td class="mono">${esc((t.opened || "").slice(11, 16))}</td><td>${esc(t.symbol)}</td><td>${t.mode !== "signal" ? "Manual" : ({camarilla: "Camarilla", ai: "AI model", trend: "Trend-day", fib: "Fibonacci"}[(t.plan || {}).strategy] || "Noise band")}</td><td>${(t.legs || []).map(l => `${l.side} ${l.strike}${l.opt}`).join(" / ")}</td><td>${t.lots}</td><td class="mono">₹${n2(t.entry_prem)} → ₹${n2(t.exit_prem)}</td><td class="mono ${cls(t.pnl)}">${rs(t.pnl)}</td><td>${esc(t.reason)}</td></tr>`).join("")}</table></div></div>` : ""}`;
+    ${(j.open_positions || []).length ? `<div class="card" style="margin-top:14px"><h3>Positions opened this day and still open</h3><div class="tablewrap"><table><tr><th>Opened</th><th>Index</th><th>Rule</th><th>Legs</th><th>Lots</th><th>Entry</th><th>By</th></tr>${j.open_positions.map(t => `<tr><td class="mono">${esc((t.opened || "").slice(11, 16))}</td><td>${esc(t.symbol)}</td><td>${t.mode !== "signal" ? "Manual" : esc(ST_NAME((t.plan || {}).strategy))}</td><td>${(t.legs || []).map(l => `${l.side} ${l.strike}${l.opt}`).join(" / ")}</td><td>${t.lots}</td><td class="mono">₹${n2(t.entry_prem)}</td><td>${(t.plan || {}).auto ? "Autopilot" : "You"}</td></tr>`).join("")}</table></div></div>` : ""}
+    ${(j.scalp_trades || []).length ? `<div class="card" style="margin-top:14px"><div class="row between wrap"><h3 style="margin:0">Scalp book trades</h3><span class="mono ${cls(sm.scalp_pnl)}">${rs(sm.scalp_pnl)}</span></div><div class="tablewrap" style="margin-top:8px"><table><tr><th>In → out</th><th>Index</th><th>Setup</th><th>Option</th><th>Lots</th><th>Index pts</th><th>P&amp;L</th><th>Exit</th></tr>${j.scalp_trades.map(t => `<tr><td class="mono">${esc((t.opened || "").slice(11, 16))} → ${esc((t.closed || "").slice(11, 16))}</td><td>${esc(t.symbol)}</td><td>${esc(t.tag)}</td><td>${t.strike}${t.opt}</td><td>${t.lots}</td><td class="mono ${cls(t.pts)}">${sgn(t.pts)}</td><td class="mono ${cls(t.pnl)}">${rs(t.pnl)}</td><td class="fs12">${esc(t.reason)}</td></tr>`).join("")}</table></div></div>` : ""}
+    ${j.paper_trades.length ? `<div class="card" style="margin-top:14px"><h3>Paper trades closed this day</h3><div class="tablewrap"><table><tr><th>Opened</th><th>Index</th><th>Strategy</th><th>Legs</th><th>Lots</th><th>In → out</th><th>P&L</th><th>Reason</th></tr>${j.paper_trades.map(t => `<tr><td class="mono">${esc((t.opened || "").slice(11, 16))}</td><td>${esc(t.symbol)}</td><td>${t.mode !== "signal" ? "Manual" : esc(ST_NAME((t.plan || {}).strategy))}${(t.plan || {}).auto ? ' <span class="muted fs12">autopilot</span>' : ""}</td><td>${(t.legs || []).map(l => `${l.side} ${l.strike}${l.opt}`).join(" / ")}</td><td>${t.lots}</td><td class="mono">₹${n2(t.entry_prem)} → ₹${n2(t.exit_prem)}</td><td class="mono ${cls(t.pnl)}">${rs(t.pnl)}</td><td>${esc(t.reason)}</td></tr>`).join("")}</table></div></div>` : ""}`;
 }
 async function loadSettings() {
   loadOrigins();
@@ -3078,7 +3171,7 @@ async function loadOutcomes() {
   const d = OC.data;
   if (!d.rows || !d.rows.length) { $("#ocTop").innerHTML = `<p>${esc(d.error || "No outcomes yet.")}</p>`; $("#ocTbl").innerHTML = ""; return; }
   $("#ocTop").innerHTML = `<h3 style="font-size:19px">Outcomes – every change vs today's Autopilot</h3>
-    <p class="muted">Study run ${esc(d.generated)} · Nifty + Bank Nifty + Sensex · full history ${esc(d.periods.full[0])} → ${esc(d.periods.full[1])}, and 2026 alone (account restarted 1 Jan 2026). Each row changes one thing; the yellow row is today's rules (see <a href="#aprules" onclick="go('aprules');return false">Autopilot rules</a>).</p>
+    <p class="muted">Study run ${esc(d.generated)} · Nifty + Bank Nifty + Sensex · full history ${esc(d.periods.full[0])} → ${esc(d.periods.full[1])}, and 2026 alone (account restarted 1 Jan 2026). Each row changes one thing; the yellow row is today's rules (see <a href="#autopilot/rules" onclick="go('autopilot/rules');return false">Autopilot → Rules</a>).</p>
     <ul class="muted" style="margin:6px 0 10px 18px">${d.notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul>
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
       <label>Starting capital <select id="ocCap">${d.capitals.map(c => `<option value="${c}" ${String(c) === OC.cap ? "selected" : ""}>${ocRs(c)}</option>`).join("")}</select></label>
@@ -3818,12 +3911,11 @@ function rsRoundsHtml(rounds, pre, opts = {}) {
   return `${kpis}${summary}
   <div class="card" style="margin-top:14px"><div class="row between wrap"><h3 style="margin:0">Round by round</h3>
     <div class="segs rsOrder"><button class="seg ${order === "new" ? "on" : ""}" data-rso="new">Newest first</button><button class="seg ${order !== "new" ? "on" : ""}" data-rso="old">Oldest first</button></div></div>
-    <div class="tablewrap" style="margin-top:10px"><table class="rstable"><colgroup><col style="width:72px"><col style="width:80px"><col style="width:26%"><col><col style="width:120px"></colgroup><tr><th>Round</th><th>Date</th><th>Topic</th><th>Outcome</th><th>Decision</th></tr>
-    ${shown.map(r => `<tr class="rsrow" data-rsgo="${pre}-${r.key}" style="cursor:pointer"><td class="mono"><b>${r.n == null ? '<span class="muted">Extra</span>' : esc(String(r.n))}</b>${r.project_round ? `<div class="muted" style="font-size:11px">study ${r.project_round}</div>` : ""}</td><td class="mono" style="white-space:nowrap">${esc(new Date(r.date + "T00:00:00").toLocaleDateString("en-IN", {day: "2-digit", month: "short"}))}</td><td><b>${esc(r.topic)}</b>${r.entries.length > 1 ? `<div class="muted" style="font-size:11.5px">${r.entries.length} studies</div>` : ""}</td><td style="font-size:13px">${esc(r.takeaway)}</td><td><span class="tag ${RS_TAG(r.decision)}">${esc(r.decision)}</span></td></tr>`).join("")}</table></div>
-    <p class="muted" style="font-size:12px;margin:8px 0 0">Click a round to open its details below.${opts.studyNote ? " " + esc(opts.studyNote) : ""}</p></div>
-  ${shown.map(r => `<details class="card rsround" id="${pre}-${r.key}" style="margin-top:14px" ${r.key === latest ? "open" : ""}><summary><span class="rsnum">${esc(num(r))}</span> <b>${esc(r.topic)}</b> <span class="tag ${RS_TAG(r.decision)}">${esc(r.decision)}</span>
-      <span class="muted" style="font-size:12.5px">· ${esc(r.date)}${r.project_round ? " · study " + r.project_round : ""} · ${r.entries.length} ${r.entries.length > 1 ? "studies" : "study"}</span></summary>
-      <p style="margin:10px 0 12px"><b>In short:</b> ${esc(r.takeaway)}</p>${r.entries.map(rsCard).join("")}</details>`).join("")}`;
+    <div class="tablewrap" style="margin-top:10px"><table class="rstable"><colgroup><col style="width:84px"><col style="width:80px"><col style="width:26%"><col><col style="width:120px"></colgroup><tr><th>Round</th><th>Date</th><th>Topic</th><th>Outcome</th><th>Decision</th></tr>
+    ${shown.map(r => `<tr class="rsrow" data-rstog="${pre}-${r.key}" style="cursor:pointer" tabindex="0" aria-expanded="false" title="Click to read this round"><td class="mono"><span class="rsarrow">▸</span> <b>${r.n == null ? '<span class="muted">Extra</span>' : esc(String(r.n))}</b>${r.project_round ? `<div class="muted" style="font-size:11px;padding-left:18px">study ${r.project_round}</div>` : ""}</td><td class="mono" style="white-space:nowrap">${esc(new Date(r.date + "T00:00:00").toLocaleDateString("en-IN", {day: "2-digit", month: "short"}))}</td><td><b>${esc(r.topic)}</b>${r.entries.length > 1 ? `<div class="muted" style="font-size:11.5px">${r.entries.length} studies</div>` : ""}</td><td style="font-size:13px">${esc(r.takeaway)}</td><td><span class="tag ${RS_TAG(r.decision)}">${esc(r.decision)}</span></td></tr>
+      <tr class="rsdet hidden" id="${pre}-${r.key}"><td colspan="5"><div class="muted" style="font-size:12.5px">${esc(num(r))} · ${esc(r.date)}${r.project_round ? " · study " + r.project_round : ""} · ${r.entries.length} ${r.entries.length > 1 ? "studies" : "study"}</div>
+        <p style="margin:6px 0 0"><b>In short:</b> ${esc(r.takeaway)}</p>${r.entries.map(rsCard).join("")}</td></tr>`).join("")}</table></div>
+    <p class="muted" style="font-size:12px;margin:8px 0 0">Click a round (or the ▸ arrow) to open its details right under it; click again to close.${opts.studyNote ? " " + esc(opts.studyNote) : ""}</p></div>`;
 }
 async function loadGResearch() {
   const d = await api("/api/research/log"), mk = gmk(), want = {CRYPTO: ["Crypto", "Crypto & US", "Gold"], US: ["US", "Crypto & US"], GOLD: ["Gold"]}[mk] || [];
@@ -3844,8 +3936,14 @@ async function loadGResearch() {
 }
 document.addEventListener("click", e => {
   const o = e.target.closest(".rsOrder [data-rso]"); if (o) { lsSet("rsorder", o.dataset.rso); if (S.tab === "research") renderResearchList(); else loadGResearch(); return; }
-  const g = e.target.closest("[data-rsgo]"); if (g) { const el = document.getElementById(g.dataset.rsgo); if (el) { el.open = true; el.scrollIntoView({behavior: "smooth", block: "start"}); } }
+  const g = e.target.closest("[data-rstog]"); if (g) rsToggle(g);
 });
+function rsToggle(g) {
+  const el = document.getElementById(g.dataset.rstog); if (!el) return;
+  const open = el.classList.toggle("hidden") === false;
+  g.classList.toggle("open", open); g.setAttribute("aria-expanded", open ? "true" : "false");
+}
+document.addEventListener("keydown", e => { const g = e.target.closest && e.target.closest("[data-rstog]"); if (g && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); rsToggle(g); } });
 
 
 async function loadGContext() {
@@ -4452,11 +4550,13 @@ function dbCard(b) {
   const sb = b.backend === "supabase", m = DX.mig || {}, last = m.last, pv = m.preview;
   const list = (a, n = 12) => a && a.length ? a.slice(0, n).map(esc).join(", ") + (a.length > n ? ` +${a.length - n} more` : "") : "none";
   const rep = (r, title) => !r ? "" : !r.ok ? `<p class="err" style="margin:8px 0 0">${esc(title)}: ${esc(r.error || "failed")}</p>` : `<div style="margin-top:8px;font-size:13px"><b>${esc(title)}</b> (${esc(String(r.finished || "").replace("T", " ").slice(0, 16))} UTC): ${r.keys} keys · ${r.rows_copied.toLocaleString()} records ${r.dry_run ? "would be" : ""} copied · ${r.rows_already_there.toLocaleString()} already here<br>
-      Settings ${r.dry_run ? "that would be" : ""} restored from Upstash: ${list(r.settings_restored)}<br>Settings added: ${list(r.settings_added)}<br>Kept as set up now (logins / backup): ${list(r.settings_kept_current)}
+      ${r.rules ? `Portfolio from Upstash: ${Object.entries(r.portfolio || {}).map(([k, n]) => esc(k.replace("fno:", "")) + " " + n).join(", ") || "none"}${r.supabase_only_trades ? ` · ${r.supabase_only_trades} trades of the temporary Supabase account parked` : ""}<br>
+      Open positions parked (books restart flat): ${(r.stale_open || []).map(x => `${esc(x.key.replace("fno:", ""))} (${x.upstash} old · ${x.supabase} new)`).join(", ") || "none"}<br>
+      Settings from Upstash (accounts): ${list(r.settings_from_upstash)}<br>Rules kept as changed since 28 Oct: ${list(r.settings_kept_supabase)}<br>Merged (both kept, newer on top): ${list(r.settings_merged)}<br>Only in Upstash, added: ${list(r.settings_added)}<br>Logins kept as set up now: ${list(r.settings_kept_current)}${r.stats_added ? `<br>Learning evidence buckets added together: ${r.stats_added}` : ""}` : `Settings restored from Upstash: ${list(r.settings_restored)}<br>Settings added: ${list(r.settings_added)}`}
       ${r.dry_run ? "" : r.verified ? `<br><span class="tag tup">✓ verified: every old record is in Supabase</span>` : `<br><span class="tag tdown">${r.missing_after.length} keys incomplete</span> ${r.missing_after.slice(0, 5).map(x => esc(x.key)).join(", ")}`}</div>`;
   return `<div class="card" style="margin-top:16px"><h3>Database</h3>
     <p class="muted" style="margin:0 0 8px;font-size:13px">In use: <b>${sb ? "Supabase (Postgres, no monthly request limit)" : b.backend === "upstash" ? "Upstash Redis (free tier: 500,000 requests a month)" : "none"}</b>${sb && b.supabase_table_mb != null ? ` · ${b.supabase_table_mb} MB of 500 MB used` : ""} · ${b.total} requests since the server started (about ${b.per_day_rate.toLocaleString()} a day).</p>
-    ${sb && m.upstash_configured ? `<p class="muted" style="margin:0 0 8px;font-size:13px">Old data from before 28 Oct 2026 is in Upstash, which refuses every request until its monthly limit resets on 1 Nov. <b>From 1 Nov the app copies everything across by itself</b> (checked every hour): trades, journal, positions, all books, learning, strategies, saved candles and your <b>old settings, which replace the ones entered since</b> — except broker logins and the Drive backup set up now. Anything replaced is kept aside, nothing is deleted. Afterwards every old record is checked against Supabase.</p>
+    ${sb && m.upstash_configured ? `<p class="muted" style="margin:0 0 8px;font-size:13px">Old data from before 28 Oct 2026 is in Upstash, which refuses every request until its monthly limit resets on 1 Nov. <b>From 1 Nov the app copies everything across by itself</b> (checked every hour): <b>your portfolio and scalp book exactly as they were in Upstash</b> (capital, closed trades, P&amp;L, crypto / US books), so you continue from the old account; open positions from either side are parked and every book starts flat. <b>Research, rule changes and settings made since 28 Oct are kept</b> (merged with the old ones), and the learning of the new days is <b>added</b> to the old learning (journal, lessons, evidence, lag reviews, saved data). Broker logins and the Drive backup set up now stay. Anything replaced is kept aside, nothing is deleted. Afterwards every old record is checked against Supabase.</p>
     <div class="row wrap"><button id="dbPreview" ${m.running ? "disabled" : ""}>Check what will be copied</button><button id="dbMigrate" ${m.running ? "disabled" : ""}>Copy now</button>${m.running ? `<span class="muted">Working… ${esc(m.progress || "")}</span>` : ""}</div>
     ${rep(pv, "Preview")}${rep(last, "Copy")}` : ""}</div>`;
 }
@@ -4569,6 +4669,405 @@ function applyTheme(t) { if (!THEMES.some(x => x[0] === t)) t = "dusk"; document
 $("#themeBtn").onclick = () => { const i = THEMES.findIndex(x => x[0] === document.documentElement.dataset.theme); applyTheme(THEMES[(i + 1) % THEMES.length][0]); toast("Theme: " + THEMES.find(x => x[0] === document.documentElement.dataset.theme)[1], 1500); if (S.dash) drawSession(S.dash, false); };
 $("#sideToggle").onclick = () => document.body.classList.toggle("side-min");
 
+
+/* ====================== 31 Oct 2026: risk banner · Autopilot tab · live chart · decisions ====================== */
+const n0 = v => v == null || !isFinite(v) ? "–" : Math.round(v).toLocaleString("en-IN");
+const n1 = v => v == null || !isFinite(v) ? "–" : Number(v).toLocaleString("en-IN", {maximumFractionDigits: 1});
+const ST_NAME = s => ({noise: "Noise band", camarilla: "Camarilla", ai: "AI model", trend: "Trend-day", fib: "Fibonacci", manual: "Manual"}[s] || (s ? String(s).replace("custom:", "Custom: ") : "–"));
+const SIDE = o => o === "CE" ? '<span class="up">CALL</span>' : o === "PE" ? '<span class="down">PUT</span>' : "–";
+
+/* ---------- risk banner (every page of the India workspace) ---------- */
+async function riskBanner() {
+  const el = $("#riskBanner");
+  if (WS.mk !== "IN") { el.classList.add("hidden"); return; }
+  let s;
+  try { s = await api("/api/autopilot/status"); } catch (e) { return; }
+  S.risk = s;
+  const b = s.banners || [];
+  if (!b.length) { el.className = "hidden"; el.innerHTML = ""; return; }
+  el.className = b.some(x => x.level === "bad") ? "bad" : "warn";
+  el.innerHTML = `<div class="rbrows">${b.map(x => `<div class="rbrow"><span class="rbdot"></span><span>${esc(x.text)}</span></div>`).join("")}</div>
+    <div class="rbact">${b.some(x => x.kind === "weekly" || x.kind === "weekly_near") ? '<button class="mini" data-weekreset>Restart weekly count</button>' : ""}<button class="mini" data-goap="status">Details</button></div>`;
+}
+async function weekReset() {
+  if (!confirm("Restart this week's loss count from now?\n\nThe weekly limit was tested as a safety rule (it improved profit and the deepest fall). After a restart Autopilot can trade again this week and the limit counts only trades closed from now.")) return;
+  try { const r = await post("/api/account/week-reset", {}); toast(r.message, 5000); AP.ov = null; riskBanner(); if (S.tab === "autopilot") loadAutopilot(); } catch (e) { toast(e.message); }
+}
+async function pnlReset(cap, keep) {
+  if (!(cap >= 10000)) { toast("Capital must be at least ₹10,000."); return; }
+  if (!confirm(`Reset the P&L and start the paper account again with ${rs(cap)}?\n\n${keep ? "Closed trades are moved to the history (the journal and the learning keep them) and no longer count in P&L, cash or limits." : "Closed trades will be DELETED."} Open positions are closed out of the book without P&L. The scalp and crypto books are not touched.`)) return;
+  try { const r = await post("/api/account/reset", {capital: cap, keep_history: keep}); toast(r.message, 6000); AP.ov = null; riskBanner(); if (S.tab === "autopilot") loadAutopilot(); } catch (e) { toast(e.message); }
+}
+document.addEventListener("click", e => {
+  if (e.target.closest("[data-weekreset]")) { weekReset(); return; }
+  const g = e.target.closest("[data-goap]"); if (g) { go("autopilot/" + g.dataset.goap); return; }
+  const sb = e.target.closest("#apSubs [data-aps]");
+  if (sb) { AP.sub = sb.dataset.aps; lsSet("apsub", AP.sub); history.replaceState(null, "", "#autopilot/" + AP.sub); loadAutopilot(); }
+});
+
+/* ---------- decisions (Journal + Autopilot → Decisions) ---------- */
+function decisionsHtml(j, opts = {}) {
+  const D = j.decisions || {rows: [], blocks: [], scalp: [], summary: {}}, sm = D.summary || {};
+  const rows = opts.limit ? D.rows.slice(-opts.limit) : D.rows;
+  const pill = st => st.state === "executed" ? `<span class="dpill ok">✓ Executed</span>` : `<span class="dpill no">✕ Not executed</span>`;
+  const row = r => {
+    const st = r.status, ix = r.index || {}, tv = st.trade || {};
+    return `<tr><td class="mono">${esc(r.time)}</td><td>${esc(IDX_LABEL[r.symbol] || r.symbol)}</td><td>${esc(ST_NAME(r.strategy))}${r.source === "autopilot" ? '<div class="muted fs12">seen by Autopilot</div>' : ""}</td><td>${SIDE(r.opt)}</td>
+      <td class="mono fs13">${n1(ix.entry)} / <span class="down">${n1(ix.sl)}</span> / <span class="up">${ix.target == null ? "trails" : n1(ix.target)}</span></td>
+      <td>${pill(st)}${st.state === "executed" ? `<div class="muted fs12">by ${esc(tv.by)} · ${tv.lots ?? "–"} lot(s) ${esc((tv.legs || []).join(" "))}</div>`
+        : `<div class="dreason"><b>${esc(st.label)}</b>${st.attempts > 1 ? ` <span class="muted fs12">(${st.attempts} tries ${esc(st.from)}–${esc(st.to)})</span>` : ""}<div class="muted fs12">${esc(st.msg || "")}</div></div>`}</td>
+      <td class="fs13">${r.status.state === "executed" && tv.pnl != null ? `<b class="${cls(tv.pnl)}">${rs(tv.pnl)}</b> · ` : ""}${esc(r.what_happened)}</td></tr>`;
+  };
+  const chips = Object.entries(sm.skipped_by_reason || {}).map(([k, v]) => `<span class="chip">${esc(k)} <b>${v}</b></span>`).join("");
+  const blocks = (D.blocks || []).map(b => `<div class="blk"><span class="mono">${esc(b.from)}${b.to !== b.from ? "–" + esc(b.to) : ""}</span><span>${esc(IDX_LABEL[b.symbol] || b.symbol)}${b.slot !== "main" ? ` <span class="muted">(${esc(b.slot)})</span>` : ""}</span><span><b>${esc(b.label)}</b>${b.n > 1 ? ` <span class="muted fs12">${b.n} checks</span>` : ""}<div class="muted fs12">${esc(b.msg)}</div></span></div>`).join("");
+  const scalp = (D.scalp || []).map(b => `<div class="blk"><span class="mono">${esc(b.from)}${b.to !== b.from ? "–" + esc(b.to) : ""}</span><span>${esc(IDX_LABEL[b.symbol] || b.symbol)}</span><span>${b.ok ? '<span class="dpill ok">✓ Opened</span>' : `<b>${esc(b.label)}</b>`}${b.n > 1 ? ` <span class="muted fs12">${b.n}×</span>` : ""}<div class="muted fs12">${esc(b.msg)}</div></span></div>`).join("");
+  return `<div class="card" style="margin-top:14px"><div class="row between wrap"><h3 style="margin:0">Autopilot decisions${opts.title ? " · " + esc(opts.title) : ""}</h3>
+      <span class="muted fs13">${sm.signals || 0} signal(s) · <span class="up">${sm.executed || 0} executed</span> · <span class="down">${sm.skipped || 0} not executed</span></span></div>
+    ${chips ? `<div class="chips" style="margin:10px 0 0">${chips}</div>` : ""}
+    ${rows.length ? `<div class="tablewrap" style="margin-top:10px"><table class="prose"><tr><th>Time</th><th>Index</th><th>Rule</th><th>Side</th><th>Index entry / SL / target</th><th>What Autopilot did</th><th>What happened</th></tr>${rows.map(row).join("")}</table></div>
+      <p class="muted fs12" style="margin:8px 0 0">Every recommendation and every automatic attempt of the day. "Not executed" gives the reason the system logged at that minute; "What happened" is the trade's result, or for a skipped signal what it would have done on the index (worked out after 15:15).</p>`
+      : `<div class="empty">No signals ${opts.today ? "yet today" : "this day"}.</div>`}
+    ${blocks ? `<h4 style="margin:16px 0 4px">Autopilot was blocked (no specific signal)</h4><div>${blocks}</div>` : ""}
+    ${scalp && !opts.noScalp ? `<details style="margin-top:12px"><summary class="muted">Scalp book decisions (${(D.scalp || []).length})</summary><div style="margin-top:6px">${scalp}</div></details>` : ""}</div>`;
+}
+
+/* ---------- Autopilot tab ---------- */
+AP.sub = lsGet("apsub", "status");
+async function apData(force) {
+  if (force || !AP.ov || Date.now() - AP.at > 20000) { AP.ov = await api("/api/autopilot/overview"); AP.at = Date.now(); }
+  return AP.ov;
+}
+async function loadAutopilot(quiet) {
+  if (!AP_SUBS.includes(AP.sub)) AP.sub = "status";
+  document.querySelectorAll("#apSubs [data-aps]").forEach(b => b.classList.toggle("on", b.dataset.aps === AP.sub));
+  document.querySelectorAll("#t-autopilot .appanel").forEach(p => p.classList.toggle("hidden", p.dataset.app !== AP.sub));
+  if (quiet && !["status", "chart", "decisions"].includes(AP.sub)) return;
+  const f = {status: apStatus, decisions: apDecisions, chart: q => loadLiveChart("#lcHostAp", q), outcomes: apOutcomes, improve: apImprove,
+             learning: apLearning, rules: loadApRules, settings: apSettings, safety: apSafety}[AP.sub];
+  await f(quiet);
+}
+const AP_SUBS = ["status", "decisions", "chart", "outcomes", "improve", "learning", "rules", "settings", "safety"];
+function weekMeter(wk) {
+  if (!wk.limit_rs) return `<div class="muted fs12">${wk.mode === "off" ? "Weekly limit is off" : "–"}</div>`;
+  const used = Math.max(0, -wk.week_pnl) / wk.limit_rs, pc = Math.min(100, Math.round(used * 100));
+  return `<div class="meter ${pc >= 100 ? "hot" : pc >= 60 ? "mid" : ""}"><i style="width:${pc}%"></i></div><div class="muted fs12" style="margin-top:4px">${pc}% of the −${rs(wk.limit_rs)} weekly limit used${wk.reset_at ? ` · counter restarted ${esc(String(wk.reset_at).slice(5, 16).replace("T", " "))}` : ""}</div>`;
+}
+async function apStatus(quiet) {
+  const ov = await apData(!quiet), s = ov.status, wk = s.weekly, dy = s.daily || {}, sh = s.shield;
+  let jd = null;
+  try { jd = await api("/api/journal/day?date=" + String(s.time).slice(0, 10)); } catch (e) {}
+  const on = s.autopilot ? '<span class="up">ON</span>' : s.auto ? '<span class="up">Auto-trade</span>' : '<span class="down">OFF</span>';
+  const block = s.blocked || sh.below_floor;
+  $("#apStatus").innerHTML = `
+    ${block ? `<div class="card" style="border-color:rgba(226,103,90,.5);background:var(--red-bg)"><h3 style="margin:0 0 4px">Autopilot is not taking new trades</h3><p style="margin:0">${esc(sh.below_floor ? `Capital shield: equity ${rs(sh.equity)} is below the floor ${rs(sh.floor)}.` : s.block_reason)}</p>
+      <div class="row wrap" style="margin-top:10px">${wk.blocked ? '<button class="primary" data-weekreset>Restart weekly count</button>' : ""}<button data-goap="safety">Safety settings</button></div></div>` : ""}
+    <div class="grid g4" style="margin-top:${block ? 14 : 0}px">
+      ${kpiCard("Autopilot", on, `${(s.auto_syms || []).map(x => IDX_LABEL[x] || x).join(", ") || "no instruments"}`)}
+      ${kpiCard("Equity", rs(s.equity), `started ${rs(s.capital_start)} · cash ${rs(s.cash)}`)}
+      <div class="card kpi"><div class="k">This week${wk.system_only ? " (system trades)" : ""}</div><div class="v mono ${cls(wk.week_pnl)}">${rs(wk.week_pnl)}</div>${weekMeter(wk)}</div>
+      ${kpiCard("Today", `<span class="${cls(dy.pnl_today)}">${rs(dy.pnl_today ?? 0)}</span>`, dy.blocked ? esc(dy.reason) : `${dy.trades_today ?? 0} trade(s) · ${s.open_positions} open`)}
+    </div>
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card"><h3>Weekly loss limit &amp; P&amp;L</h3>
+        <div class="kv"><div>Limit in use</div><div>${wk.mode === "off" ? "Off" : wk.mode === "custom" ? "Your amount " + rs(wk.limit_rs) : `Tested rule: ${Math.round((wk.limit_pct || 0) * 100)}% of equity = ${rs(wk.limit_rs)}`}</div>
+          <div>Status</div><div>${wk.blocked ? '<span class="dpill no">Reached - no new trades until Monday</span>' : '<span class="dpill ok">Trading allowed</span>'}</div>
+          <div>Counts</div><div>${wk.system_only ? "Autopilot's own trades (your manual trades don't stop it)" : "All trades"}</div></div>
+        <div class="row wrap" style="margin-top:12px"><button data-weekreset>Restart weekly count</button></div>
+        <p class="muted fs12" style="margin:8px 0 0">Restarting lets Autopilot trade again this week; the limit then counts only trades closed from now. The 15:15 square-off, stops and daily limit are not affected.</p>
+        <h4 style="margin:16px 0 6px">Reset P&amp;L</h4>
+        <div class="row wrap" style="align-items:flex-end"><div><label for="apCap">Start again with</label><input id="apCap" type="number" min="10000" step="1000" value="${Math.round(s.capital_start || 200000)}" style="width:150px"></div>
+          <label class="tog" style="margin:0 0 8px"><input type="checkbox" id="apKeep" checked> keep old trades in the history</label><button class="danger" id="apReset">Reset P&amp;L</button></div>
+        ${(s.resets || []).length ? `<p class="muted fs12" style="margin:8px 0 0">Earlier resets: ${s.resets.map(r => `${esc(String(r.at).slice(0, 10))} (from ${rs(r.from_capital)}, ${r.archived} trades kept)`).join(" · ")}</p>` : ""}</div>
+      <div class="card"><h3>Capital shield</h3>
+        <div class="kv"><div>Status</div><div>${sh.on ? (sh.below_floor ? '<span class="dpill no">Stopped: below floor</span>' : '<span class="dpill ok">On</span>') : '<span class="dpill wait">Off</span>'}</div>
+          <div>Floor (stops Autopilot)</div><div class="mono">${rs(sh.floor)} <span class="muted">(${sh.floor_pct}% of ${rs(sh.start)})</span></div>
+          <div>Open premium</div><div class="mono">${rs(sh.open_premium)} of ${rs(sh.open_cap)} <span class="muted">(${sh.open_pct}% of equity)</span></div>
+          <div>Max loss per trade</div><div class="mono">${rs(sh.trade_cap)} <span class="muted">(${sh.trade_pct}%)</span></div></div>
+        <p class="muted fs12" style="margin:10px 0 0">Bought options can lose at most what was paid. With open premium capped and a floor that stops new trades, a crash or gap cannot empty the account. <a href="#autopilot/safety" data-goap="safety">Change</a></p>
+        ${s.scalp && s.scalp.on ? `<h4 style="margin:14px 0 4px">Scalp book</h4><p class="fs13" style="margin:0">${s.scalp.shield ? esc(s.scalp.shield) : Object.entries(s.scalp.stopped || {}).map(([k, v]) => `${esc(IDX_LABEL[k] || k)}: ${v ? '<span class="down">' + esc(v) + "</span>" : '<span class="up">trading</span>'}`).join(" · ")}</p>` : ""}</div>
+    </div>
+    ${jd ? decisionsHtml(jd, {limit: 12, title: "today", today: true, noScalp: false}) : `<div class="card" style="margin-top:14px"><div class="empty">No journal for today yet - it starts at 09:16 on trading days.</div></div>`}`;
+  $("#apReset").onclick = () => pnlReset(+$("#apCap").value, $("#apKeep").checked);
+}
+async function apDecisions() {
+  if (!S.jrDays) S.jrDays = (await api("/api/journal")).days.slice().reverse();
+  const days = S.jrDays;
+  if (!days.length) { $("#apDecisions").innerHTML = `<div class="card"><div class="empty">The journal starts on the next trading day at 09:16.</div></div>`; return; }
+  AP.dday = AP.dday && days.includes(AP.dday) ? AP.dday : days[0];
+  const j = await api("/api/journal/day?date=" + AP.dday);
+  $("#apDecisions").innerHTML = `<div class="card"><div class="row between wrap"><div><h3 style="margin:0">Every signal and what Autopilot did with it</h3><p class="muted fs13" style="margin:4px 0 0">Executed trades with their result; signals it did not take with the reason (money, weekly limit, data, a trade already open…) and what the signal would have done.</p></div>
+    <select id="apDay">${days.map(d => `<option ${d === AP.dday ? "selected" : ""}>${d}</option>`).join("")}</select></div></div>${decisionsHtml(j, {title: AP.dday})}`;
+  $("#apDay").onchange = e => { AP.dday = e.target.value; apDecisions(); };
+}
+async function apOutcomes() {
+  const o = (await apData()).outcomes, a = o.all_auto, sy = o.all_system;
+  const tbl = (obj, head) => { const e = Object.entries(obj || {}); return e.length ? `<div class="tablewrap"><table><tr><th>${head}</th><th>Trades</th><th>Win %</th><th>P&amp;L</th><th>Avg win</th><th>Avg loss</th><th>Best</th><th>Worst</th></tr>${e.map(([k, v]) => `<tr><td>${esc(head === "Rule" ? ST_NAME(k) : IDX_LABEL[k] || k)}</td><td class="mono">${v.n}</td><td class="mono">${v.win_rate ?? "–"}%</td><td class="mono ${cls(v.pnl)}">${rs(v.pnl)}</td><td class="mono up">${rs(v.avg_win)}</td><td class="mono down">${rs(v.avg_loss)}</td><td class="mono">${rs(v.best)}</td><td class="mono">${rs(v.worst)}</td></tr>`).join("")}</table></div>` : '<p class="muted">No trades yet.</p>'; };
+  $("#apOutcomes").innerHTML = `<div class="grid g4">${kpiCard("Autopilot trades", a.n, `${sy.n} system trades incl. signals you placed`)}${kpiCard("P&L (Autopilot)", `<span class="${cls(a.pnl)}">${rs(a.pnl)}</span>`, `system total ${rs(sy.pnl)}`)}${kpiCard("Win rate", a.win_rate == null ? "–" : a.win_rate + "%", `avg win ${rs(a.avg_win)} · avg loss ${rs(a.avg_loss)}`)}${kpiCard("Best / worst", `<span class="up">${rs(a.best)}</span>`, `worst ${rs(a.worst)}`)}</div>
+    <div class="card" style="margin-top:14px"><h3>Equity from system trades</h3><div id="apCurve" style="height:240px"></div><p class="muted fs12" style="margin:6px 0 0">Live paper results since the account started${o.archived ? ` (the ${o.archived} trades from before a P&L reset are in the history, not here)` : ""}. Compare with the backtest in the research matrix below - live results have run below the backtest so far.</p></div>
+    <div class="grid g2" style="margin-top:14px"><div class="card"><h3>By rule</h3>${tbl(o.by_strategy, "Rule")}</div><div class="card"><h3>By index</h3>${tbl(o.by_symbol, "Index")}</div></div>
+    <div class="grid g2" style="margin-top:14px"><div class="card"><h3>By week</h3>${tbl(o.by_week, "Week")}</div><div class="card"><h3>By exit</h3>${tbl(o.exits, "Exit")}</div></div>`;
+  const el = $("#apCurve");
+  if (o.curve.length > 1) {
+    const ch = LightweightCharts.createChart(el, {...CH_OPTS, timeScale: {...CH_OPTS.timeScale, timeVisible: false}});
+    const ln = ch.addAreaSeries({lineColor: "#f2a93b", topColor: "rgba(242,169,59,.2)", bottomColor: "rgba(242,169,59,0)", lineWidth: 2});
+    let last = 0;
+    ln.setData(o.curve.map(p => { let t = Math.floor(new Date(p.t.replace(" ", "T") + ":00Z").getTime() / 1000); if (t <= last) t = last + 1; last = t; return {time: t, value: p.equity}; }));
+    ln.createPriceLine({price: o.capital_start || 0, color: "#5d7484", lineStyle: 2, lineWidth: 1, title: "start"});
+    ch.timeScale().fitContent();
+  } else el.innerHTML = '<div class="empty">The curve appears after the first closed trades.</div>';
+  const w = $("#ocWrap");
+  if (!w.dataset.b) { w.dataset.b = 1; w.addEventListener("toggle", () => { if (w.open) loadOutcomes().catch(e => toast(e.message)); }); }
+}
+function isoWeekOf(d) {
+  const t = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())), day = t.getUTCDay() || 7;
+  t.setUTCDate(t.getUTCDate() + 4 - day);
+  const y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1)), w = Math.ceil(((t - y0) / 864e5 + 1) / 7);
+  return `${t.getUTCFullYear()}-W${String(w).padStart(2, "0")}`;
+}
+async function apImprove() {
+  const w = await api("/api/autopilot/weekly" + (AP.week ? "?week=" + AP.week : ""));
+  const mon = new Date(w.monday + "T00:00:00Z"), weeks = [];
+  const cur = isoWeekOf(new Date(Date.now() + 5.5 * 3600e3));
+  for (let i = 0; i < 8; i++) { const d = new Date(Date.now() + 5.5 * 3600e3 - i * 7 * 864e5); weeks.push(isoWeekOf(d)); }
+  const ST = {"your action": "twarn", "research next": "tdown", "watch": "twarn", "keep": "tup"};
+  const fx = f => `<div class="fix"><div class="row between wrap"><b>${esc(f.title)}</b><span class="tag ${ST[f.status] || ""}">${esc(f.status)}</span></div>
+    <div class="muted fs12" style="margin:3px 0">${f.area === "lag" ? "Where it lagged" : f.area === "exits" ? "Exits" : "Entries"}${f.times ? ` · ${f.times}×` : ""}${f.blocked_minutes ? ` · blocked ${f.blocked_minutes} min` : ""}${f.missed_R != null && f.missed_R !== 0 ? ` · skipped signals would have made ${sgn(f.missed_R)}R (${f.would_have_won} winners)` : ""}${f.rs_left ? ` · about ${rs(f.rs_left)} left on the table` : ""} · tested in ${esc(f.research)}</div>
+    <div class="fs13">${esc(f.verdict)}</div>${(f.examples || []).length ? `<ul class="tight muted fs12" style="margin:6px 0 0">${f.examples.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}</div>`;
+  $("#apImprove").innerHTML = `<div class="card"><div class="row between wrap"><div><h3 style="margin:0">Improvement review</h3><p class="muted fs13" style="margin:4px 0 0">After every close the day's lag is recorded; here the whole week is read at once and turned into fixes.</p></div>
+      <select id="apWeek">${weeks.map(x => `<option value="${x}" ${x === w.week ? "selected" : ""}>${x === cur ? "This week" : x}</option>`).join("")}</select></div>
+      <p style="margin:12px 0 0;font-size:15px"><b>${esc(w.headline)}</b></p></div>
+    <div class="grid g4" style="margin-top:14px">${kpiCard("Executed", w.executed, "Autopilot trades")}${kpiCard("Not executed", w.skipped, "signals skipped")}${kpiCard("System P&L", `<span class="${cls(w.system_pnl)}">${rs(w.system_pnl)}</span>`, "this week")}${kpiCard("Scalp", `<span class="${cls(w.scalp_pnl)}">${rs(w.scalp_pnl)}</span>`, `${w.scalp_trades} trades`)}</div>
+    <div class="grid g2" style="margin-top:14px;align-items:start">
+      <div class="card"><h3>Fixes for this week</h3><div class="fixgrid">${w.fixes.length ? w.fixes.map(fx).join("") : '<p class="muted">Nothing to fix this week - no skipped signals, lag causes or losing exit types recorded.</p>'}</div><p class="muted fs12" style="margin:10px 0 0">${esc(w.note)}</p></div>
+      <div class="card"><h3>Session by session</h3>${w.sessions.length ? `<div class="tablewrap"><table><tr><th>Day</th><th>Exec / skip</th><th>P&amp;L</th><th>Trend days caught</th></tr>${w.sessions.map(x => `<tr><td class="mono">${esc(x.date.slice(5))}</td><td class="mono">${x.executed} / ${x.skipped}</td><td class="mono ${cls(x.paper_pnl)}">${rs(x.paper_pnl)}${x.scalp_pnl ? `<div class="muted fs12">scalp ${rs(x.scalp_pnl)}</div>` : ""}</td><td class="mono">${x.trend_days == null ? "–" : `${x.trend_caught}/${x.trend_days}`}</td></tr>${x.lesson ? `<tr><td></td><td colspan="3" class="muted fs12">${esc(x.lesson)}</td></tr>` : ""}`).join("")}</table></div>` : '<p class="muted">No sessions recorded this week.</p>'}
+        <h4 style="margin:16px 0 4px">Last ${w.rolling.sessions} sessions</h4><p class="fs13" style="margin:0">${esc(w.rolling.summary)}</p></div></div>`;
+  $("#apWeek").onchange = e => { AP.week = e.target.value === cur ? null : e.target.value; apImprove(); };
+}
+async function apLearning() {
+  const L = (await apData()).learning;
+  $("#apLearning").innerHTML = `<div class="card"><h3>Learning engine: ${esc(L.mode || "–")}</h3><p class="muted fs13" style="margin:0">Guarded changes made from live evidence. They apply to automatic entries only, expire on their own, and can be reverted in the <a href="#learning" onclick="go('learning');return false">Learning</a> tab.</p>
+      ${L.overlay.length ? `<div class="tablewrap" style="margin-top:10px"><table class="prose"><tr><th>Type</th><th>Rule / bucket</th><th>Why</th><th>Since → expires</th></tr>${L.overlay.map(r => `<tr><td><span class="tag ${r.type === "veto" ? "tdown" : "twarn"}">${r.type === "veto" ? "skip" : "½ size"}</span></td><td>${esc(ST_NAME(r.strategy))} ${r.tag ? "· " + esc(r.tag) : ""} <span class="muted">${esc(r.market || "")}</span></td><td class="fs13">${esc(r.reason || "")}${r.evidence ? `<div class="muted fs12">n ${r.evidence.n} · mean ${sgn(r.evidence.mean_R)}R${r.evidence.z != null ? " · z " + r.evidence.z : ""}</div>` : ""}</td><td class="mono fs12">${esc(r.since || "")} → ${esc(r.expires || "until it recovers")}</td></tr>`).join("")}</table></div>` : '<p class="muted" style="margin:10px 0 0">No learning rule is active right now - Autopilot trades the researched rules as they are.</p>'}</div>
+    <div class="card" id="apChanges" style="margin-top:14px"><h3>Research changes in use</h3><p class="muted">Loading…</p></div>
+    <div class="card" style="margin-top:14px"><h3>Recent learning log</h3>${L.changes.length ? L.changes.slice(0, 15).map(c => `<div class="lnote"><div class="row between wrap"><b>${esc(c.title)}</b><span class="muted mono fs12">${esc(String(c.ts || "").slice(0, 16).replace("T", " "))}</span></div><div class="muted fs12">${esc(c.kind)} · ${esc(c.status)}${c.market ? " · " + esc(c.market) : ""}</div></div>`).join("") : '<p class="muted">Nothing logged yet.</p>'}</div>`;
+  loadChanges("#apChanges", "Research changes in use");
+}
+async function apSettings() {
+  const st = (await apData(true)).settings, pf = S.prefs || (await api("/api/settings")).prefs || {};
+  const syms = Object.keys(IDX_LABEL);
+  $("#apSettings").innerHTML = `<div class="grid g2" style="align-items:start"><div class="card"><h3>What Autopilot trades with now</h3>
+      <div class="kv"><div>Mode</div><div>${st.autopilot ? "Autopilot (tested rules decide size, risk, strategies)" : st.auto ? "Auto-trade with your Settings" : "Off - signals are only recorded"}</div>
+        <div>Instruments → rules</div><div>${Object.entries(st.sym_strategies || {}).map(([k, v]) => `<b>${esc(IDX_LABEL[k] || k)}</b>: ${v.map(ST_NAME).join(", ")}`).join("<br>") || "–"}</div>
+        <div>Position size</div><div>${esc(st.sizing)} · ${st.risk_pct}% risk per trade${st.max_trade_risk ? ` · 1-lot floor while 1 lot ≤ ${Math.round(st.max_trade_risk * 100)}% of equity` : ""}</div>
+        <div>Entry window</div><div class="mono">${esc(st.entry_window[0])} – ${esc(st.entry_window[1])} · square-off ${esc(st.square_off)}</div>
+        <div>Weekly limit</div><div>${st.weekly_limit === "auto" ? `tested rule: ${st.weekly_pct}% of equity (${st.weekly_small_pct}% below ${rs(st.small_account)})` : st.weekly_limit === "off" ? "off" : "your amount " + rs(st.weekly_limit_rs)}</div>
+        <div>Daily limits</div><div>-${st.daily_loss_pct}% / 2 losers / ${st.max_trades_day} trades ${st.enforce_limits ? "(enforced)" : "(advice only on paper; the weekly limit always applies to Autopilot)"}</div>
+        <div>Confidence</div><div>${esc(st.confidence)}</div><div>Fills</div><div>${esc(st.fills)}</div><div>Learning</div><div>${esc(st.learn_mode || "–")}</div>
+        <div>Capital shield</div><div>${st.shield.shield_on ? `floor ${st.shield.shield_floor_pct}% · open ${st.shield.shield_open_pct}% · trade ${st.shield.shield_trade_pct}%` : "off"}</div></div>
+      ${st.overrides.length ? `<h4 style="margin:14px 0 4px">Autopilot overrides these saved settings</h4><div class="tablewrap"><table><tr><th>Setting</th><th>Saved</th><th>Autopilot uses</th></tr>${st.overrides.map(o => `<tr><td>${esc(o.setting)}</td><td class="mono fs12">${esc(JSON.stringify(o.saved))}</td><td class="mono fs12">${esc(JSON.stringify(o.autopilot_uses))}</td></tr>`).join("")}</table></div>` : ""}</div>
+    <div class="card"><h3>Quick settings</h3>
+      <label class="tog"><input type="checkbox" id="asAp" ${pf.autopilot ? "checked" : ""}> Autopilot (tested rules decide everything)</label>
+      <label class="tog"><input type="checkbox" id="asAuto" ${pf.auto ? "checked" : ""}> Auto-trade signals with my settings (when Autopilot is off)</label>
+      <div style="margin:10px 0"><label>Instruments for auto-trade (Autopilot uses its own list)</label>${syms.map(x => `<label class="tog" style="display:inline-flex;margin-right:12px"><input type="checkbox" data-assym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${IDX_LABEL[x]}</label>`).join("")}</div>
+      <div class="formrow"><div><label>Weekly loss limit</label><select id="asWl"><option value="auto">Tested rule</option><option value="custom">My amount</option><option value="off">Off</option></select></div>
+        <div><label>My amount (₹)</label><input id="asWlRs" type="number" min="500" step="500" value="${pf.weekly_limit_rs || ""}"></div>
+        <div><label>Confidence</label><select id="asConf"><option value="standard">Standard</option><option value="strong">Strong (no AI judge)</option></select></div></div>
+      <div class="row wrap" style="margin-top:12px"><button class="primary" id="asSave">Save</button><a href="#settings" onclick="go('settings');return false">All settings →</a></div>
+      <p class="muted fs12" style="margin:10px 0 0">Changes apply from the next minute check. Rule numbers themselves are research decisions (see Rules and Research).</p></div></div>`;
+  $("#asWl").value = pf.weekly_limit || "auto"; $("#asConf").value = pf.confidence || "standard";
+  $("#asSave").onclick = async () => {
+    const p = {autopilot: $("#asAp").checked, auto: $("#asAuto").checked, auto_syms: [...document.querySelectorAll("[data-assym]:checked")].map(x => x.dataset.assym),
+               weekly_limit: $("#asWl").value, weekly_limit_rs: +$("#asWlRs").value || 0, confidence: $("#asConf").value};
+    try { await post("/api/settings", {prefs: p}); S.prefs = null; toast("Saved."); AP.ov = null; riskBanner(); apSettings(); } catch (e) { toast(e.message); }
+  };
+}
+async function apSafety() {
+  const ov = await apData(true), sh = ov.status.shield, cfg = ov.settings.shield;
+  const worstNow = sh.open_premium, eq = sh.equity || 1;
+  $("#apSafety").innerHTML = `<div class="grid g2" style="align-items:start"><div class="card"><h3>Capital shield</h3>
+      <p class="muted fs13" style="margin:0 0 10px">Hard caps on every automatic entry in the F&amp;O book (the floor also guards the scalp book). They sit on top of the researched rules and only ever make a trade smaller or skip it.</p>
+      <label class="tog"><input type="checkbox" id="shOn" ${cfg.shield_on ? "checked" : ""}> Shield on</label>
+      <div class="formrow" style="margin-top:8px"><div><label>Floor: stop below % of starting capital</label><input id="shFloor" type="number" min="0" max="95" step="5" value="${cfg.shield_floor_pct}"></div>
+        <div><label>Max premium in open trades, % of equity</label><input id="shOpen" type="number" min="10" max="100" step="5" value="${cfg.shield_open_pct}"></div>
+        <div><label>Max planned loss per trade, % of equity</label><input id="shTrade" type="number" min="1" max="50" step="1" value="${cfg.shield_trade_pct}"></div></div>
+      <div class="row wrap" style="margin-top:12px"><button class="primary" id="shSave">Save</button></div>
+      <div class="note shieldmath" style="margin-top:14px" id="shMath"></div></div>
+    <div class="card"><h3>Every protection, in order</h3><ol class="fs13" style="padding-left:18px;margin:0;line-height:1.7">
+      <li><b>Index stop on every trade</b> - each plan has a stop on the index; breakeven after +1R, trailing exits as researched.</li>
+      <li><b>Only bought options</b> (no option selling) - the most a trade can lose is the premium paid, even in a crash or a gap.</li>
+      <li><b>Size from risk</b> - lots = ${ov.settings.risk_pct}% of equity ÷ the loss of one lot at the stop.</li>
+      <li><b>Capital shield</b> - open premium ≤ ${cfg.shield_open_pct}% of equity, planned loss ≤ ${cfg.shield_trade_pct}% per trade, stop at ${cfg.shield_floor_pct}% of capital.</li>
+      <li><b>Daily limit</b> - -${ov.settings.daily_loss_pct}% / two losers / ${ov.settings.max_trades_day} trades.</li>
+      <li><b>Weekly limit</b> - ${ov.settings.weekly_limit === "off" ? "off" : "stops new trades for the rest of the week"} (alert on your phone when it hits).</li>
+      <li><b>Square-off ${esc(ov.settings.square_off)}</b> - nothing intraday stays open; a sweep after 15:30 closes anything missed, even without a live price.</li>
+      <li><b>Bad-data guard</b> - no automatic entry on an assumed VIX or stale candles.</li>
+      <li><b>Scalp governor</b> - 2% day loss, 5 losers, give-back lock, charges budget; plus the shield floor.</li></ol>
+      <p class="muted fs12" style="margin:10px 0 0">Paper trading only. On a real account, broker margin rules, slippage in fast markets and exchange freezes also apply.</p></div></div>`;
+  const math = () => {
+    const fl = +$("#shFloor").value, op = +$("#shOpen").value, on = $("#shOn").checked;
+    const floorRs = sh.start * fl / 100, worstAfter = floorRs * (1 - op / 100);
+    $("#shMath").innerHTML = on ? `If every open option went to zero right now you would lose <b>${rs(worstNow)}</b> (${(worstNow / eq * 100).toFixed(1)}% of equity ${rs(eq)}).<br>
+      Autopilot stops opening trades once equity falls below <b>${rs(floorRs)}</b>. Even if the positions open at that moment all expired worthless, at least <b>${rs(worstAfter)}</b> (${Math.round(worstAfter / sh.start * 100)}% of the starting ${rs(sh.start)}) would remain - the automatic system cannot take the account to zero.`
+      : `<span class="down">Shield off: only the researched rules limit risk. A run of losses or a gap with several positions open is no longer capped.</span>`;
+  };
+  ["#shFloor", "#shOpen", "#shOn"].forEach(q => $(q).oninput = math); math();
+  $("#shSave").onclick = async () => {
+    try { await post("/api/settings", {prefs: {shield_on: $("#shOn").checked, shield_floor_pct: +$("#shFloor").value, shield_open_pct: +$("#shOpen").value, shield_trade_pct: +$("#shTrade").value}}); toast("Shield saved."); AP.ov = null; riskBanner(); apSafety(); }
+    catch (e) { toast(e.message); }
+  };
+}
+
+/* ---------- Live chart: levels, setups, trades and replay ---------- */
+const LC = {sym: lsGet("lcsym", "NIFTY"), date: null, d: null, root: null, chart: null, ser: null, ls: {}, pls: [], segs: [], k: null, play: null, speed: +lsGet("lcspeed", "2"),
+            lay: (() => { try { return JSON.parse(lsGet("lclay", "")) || null; } catch (e) { return null; } })() ||
+                 {pivots: true, cam: true, fib: false, prev: true, or: true, band: true, avg: true, zones: true, setups: true, trades: true}};
+const LC_LAY = [["pivots", "Pivots / CPR"], ["cam", "Camarilla"], ["fib", "Fibonacci"], ["prev", "Prev day / week"], ["or", "Opening range"], ["band", "Noise band"],
+                ["avg", "VWAP / EMA"], ["zones", "S/R zones"], ["setups", "Signals"], ["trades", "Trades"]];
+function lcBuild() {
+  const r = document.createElement("div"); r.className = "lc";
+  r.innerHTML = `<div class="lcbar"><div class="segs" id="lcSym">${Object.entries(IDX_LABEL).map(([k, v]) => `<button class="seg" data-lcs="${k}">${v}</button>`).join("")}</div>
+      <select id="lcDay" aria-label="Session"></select><span class="pill" id="lcLive"></span><span class="grow"></span>
+      <div class="lclayers" id="lcLay">${LC_LAY.map(([k, v]) => `<label><input type="checkbox" data-lcl="${k}" ${LC.lay[k] ? "checked" : ""}> ${v}</label>`).join("")}</div></div>
+    <div class="lcmain"><div class="lcchart"><div class="lclegend" id="lcLeg"></div><div id="lcChart" style="position:absolute;inset:0"></div></div><aside class="lcside" id="lcSide"></aside></div>
+    <div class="lcreplay" id="lcRep"><button class="mini" id="lcPlay" title="Replay the session bar by bar">▶ Replay</button><button class="mini" id="lcBack" title="One bar back">⏮</button><button class="mini" id="lcFwd" title="One bar forward">⏭</button>
+      <input type="range" id="lcSlider" min="0" max="0" value="0" aria-label="Replay position"><span class="rtime" id="lcTime">live</span>
+      <select id="lcSpeed" aria-label="Replay speed">${[1, 2, 5, 10].map(x => `<option value="${x}" ${x === LC.speed ? "selected" : ""}>${x}×</option>`).join("")}</select><button class="mini" id="lcEnd">Exit replay</button></div>`;
+  LC.root = r;
+  r.querySelector("#lcSym").onclick = e => { const b = e.target.closest("[data-lcs]"); if (!b) return; LC.sym = b.dataset.lcs; lsSet("lcsym", LC.sym); LC.date = null; lcStop(); LC.k = null; lcFetch(); };
+  r.querySelector("#lcDay").onchange = e => { LC.date = e.target.value; lcStop(); LC.k = null; lcFetch(); };
+  r.querySelector("#lcLay").onchange = e => { const c = e.target.closest("[data-lcl]"); if (!c) return; LC.lay[c.dataset.lcl] = c.checked; lsSet("lclay", JSON.stringify(LC.lay)); lcDraw(); };
+  r.querySelector("#lcPlay").onclick = () => LC.play ? lcStop() : lcPlay();
+  r.querySelector("#lcBack").onclick = () => { lcStop(); lcSeek((LC.k ?? lcToday().length) - 1); };
+  r.querySelector("#lcFwd").onclick = () => { lcStop(); lcSeek((LC.k ?? lcToday().length - 1) + 1); };
+  r.querySelector("#lcSlider").oninput = e => { lcStop(); lcSeek(+e.target.value); };
+  r.querySelector("#lcSpeed").onchange = e => { LC.speed = +e.target.value; lsSet("lcspeed", LC.speed); if (LC.play) { lcStop(); lcPlay(); } };
+  r.querySelector("#lcEnd").onclick = () => { lcStop(); LC.k = null; lcDraw(); };
+}
+async function loadLiveChart(host, quiet) {
+  if (!LC.root) lcBuild();
+  const h = $(host);
+  if (LC.root.parentElement !== h) { h.appendChild(LC.root); if (LC.chart) { LC.chart.remove(); LC.chart = null; LC.segs = []; LC.pls = []; } }
+  if (quiet && (LC.k != null || (LC.d && !LC.d.live_day))) return;          // never refresh under a replay or an old session
+  await lcFetch(quiet);
+}
+async function lcFetch(quiet) {
+  let d;
+  try { d = await api(`/api/chart/live?symbol=${LC.sym}${LC.date ? "&date=" + LC.date : ""}`); }
+  catch (e) { $("#lcSide").innerHTML = `<div class="card down">${esc(e.message)}</div>`; return; }
+  const fresh = !LC.d || LC.d.symbol !== d.symbol || LC.d.date !== d.date;
+  LC.d = d;
+  LC.root.querySelectorAll("#lcSym [data-lcs]").forEach(b => b.classList.toggle("on", b.dataset.lcs === d.symbol));
+  $("#lcDay").innerHTML = d.days.slice().reverse().map(x => `<option ${x === d.date ? "selected" : ""}>${x}</option>`).join("");
+  const lv = $("#lcLive"); lv.className = "pill " + (d.live_day ? "live" : "demo"); lv.innerHTML = `<span class="dot"></span><span>${d.live_day ? "Today · refreshes every 30 s" : "Past session"}</span>`;
+  lcDraw(fresh);
+}
+const lcToday = () => (LC.d ? LC.d.candles.filter(c => c.time >= LC.d.session_start) : []);
+const snap5 = t => t == null ? null : t - (t % 300);
+function lcChart() {
+  if (LC.chart) return false;
+  const el = $("#lcChart");
+  LC.chart = LightweightCharts.createChart(el, {...CH_OPTS, timeScale: {...CH_OPTS.timeScale, rightOffset: 8, barSpacing: 8}});
+  LC.ser = LC.chart.addCandlestickSeries(CANDLE);
+  const line = (color, w = 1, st = 0) => LC.chart.addLineSeries({color, lineWidth: w, lineStyle: st, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false});
+  LC.ls = {vwap: line("#f2a93b", 2), ema9: line("#7fb4d9"), ema21: line("#b39ddb"), up: line("rgba(242,169,59,.6)", 1, 2), lo: line("rgba(242,169,59,.6)", 1, 2)};
+  LC.chart.subscribeCrosshairMove(p => lcLegend(p && p.time));
+  return true;
+}
+function lcLegend(t) {
+  const a = LC.shown || []; if (!a.length) return;
+  const b = (t != null && a.find(x => x.time === t)) || a[a.length - 1], i = a.indexOf(b), prev = i > 0 ? a[i - 1].close : b.open, ch = b.close - prev;
+  const tm = new Date(b.time * 1000).toISOString().slice(11, 16);
+  $("#lcLeg").innerHTML = `<div class="t">${esc(LC.d.label)} · 5 min · ${esc(LC.d.date)} ${tm}</div>O ${n2(b.open)} H ${n2(b.high)} L ${n2(b.low)} C <span class="${cls(ch)}">${n2(b.close)}</span>${b.vwap ? ` · VWAP ${n2(b.vwap)}` : ""}`;
+}
+function lcDraw(fresh) {
+  const d = LC.d; if (!d) return;
+  if (lcChart()) fresh = true;
+  const today = lcToday(), n = today.length, k = LC.k == null ? n - 1 : Math.max(0, Math.min(LC.k, n - 1));
+  const cut = today[k] ? today[k].time : Infinity, L = LC.lay;
+  const shown = d.candles.filter(c => c.time <= cut);
+  LC.shown = shown;
+  LC.ser.setData(shown.map(c => ({time: c.time, open: c.open, high: c.high, low: c.low, close: c.close})));
+  const sv = (key, on) => LC.ls[key].setData(on ? shown.filter(c => c[key] != null).map(c => ({time: c.time, value: c[key]})) : []);
+  sv("vwap", L.avg); sv("ema9", L.avg); sv("ema21", L.avg);
+  const bands = L.band ? d.bands.filter(b => b.time <= cut) : [];
+  LC.ls.up.setData(bands.map(b => ({time: b.time, value: b.up}))); LC.ls.lo.setData(bands.map(b => ({time: b.time, value: b.lo})));
+  LC.pls.forEach(p => LC.ser.removePriceLine(p)); LC.pls = [];
+  const lv = d.levels, add = (price, color, title, st = 2, w = 1) => price != null && LC.pls.push(LC.ser.createPriceLine({price, color, title, lineWidth: w, lineStyle: st, axisLabelVisible: true}));
+  if (L.pivots) { add(lv.pivot, "#f2a93b", "P", 0); add(lv.r1, "rgba(226,103,90,.75)", "R1"); add(lv.r2, "rgba(226,103,90,.55)", "R2"); add(lv.s1, "rgba(63,191,143,.75)", "S1"); add(lv.s2, "rgba(63,191,143,.55)", "S2");
+                  add(lv.cpr_top, "rgba(242,169,59,.5)", "TC", 3); add(lv.cpr_bottom, "rgba(242,169,59,.5)", "BC", 3); }
+  if (L.cam) { add(lv.cam_h4, "rgba(127,180,217,.9)", "H4"); add(lv.cam_h3, "rgba(127,180,217,.55)", "H3", 3); add(lv.cam_l3, "rgba(127,180,217,.55)", "L3", 3); add(lv.cam_l4, "rgba(127,180,217,.9)", "L4"); }
+  if (L.fib) { add(lv.fib_up, "rgba(179,157,219,.9)", "Fib ↑"); add(lv.fib_dn, "rgba(179,157,219,.9)", "Fib ↓"); }
+  if (L.prev) { add(lv.prev_high, "#8fa3b0", "PDH", 1); add(lv.prev_low, "#8fa3b0", "PDL", 1); add(lv.week_high, "rgba(143,163,176,.55)", "Wk H", 1); add(lv.week_low, "rgba(143,163,176,.55)", "Wk L", 1); }
+  const orDone = today.length && cut >= d.session_start + 15 * 60;
+  if (L.or && orDone) { add(lv.or_high, "rgba(232,238,240,.6)", "OR H", 2); add(lv.or_low, "rgba(232,238,240,.6)", "OR L", 2); }
+  if (L.zones) (d.zones || []).forEach(z => add(z.price, z.kind === "resistance" ? `rgba(226,103,90,${.25 + .2 * z.strength})` : `rgba(63,191,143,${.25 + .2 * z.strength})`, `${z.kind === "resistance" ? "R" : "S"} zone ×${z.touches}`, 0, z.strength >= 3 ? 3 : z.strength + 0));
+  // setup / trade segments: entry, stop (initial and trailing), target, exit - drawn from the setup time to its exit
+  LC.segs.forEach(s => LC.chart.removeSeries(s)); LC.segs = [];
+  const endT = Math.min(cut, today.length ? today[today.length - 1].time : cut);
+  const seg = (t0, t1, price, color, st = 0, w = 1) => {
+    if (price == null || t0 == null || t1 == null || t0 > cut) return;
+    const a = snap5(t0), b = Math.max(a, snap5(Math.min(t1, endT)));
+    const s = LC.chart.addLineSeries({color, lineWidth: w, lineStyle: st, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false});
+    s.setData(a === b ? [{time: a, value: price}] : [{time: a, value: price}, {time: b, value: price}]); LC.segs.push(s);
+  };
+  const marks = [];
+  if (L.setups) d.setups.forEach(s => {
+    if (s.time == null || s.time > cut) return;
+    const ex = s.state === "executed";
+    marks.push({time: snap5(s.time), position: s.side === "CE" ? "belowBar" : "aboveBar", color: ex ? "#3fbf8f" : "#e2675a", shape: s.side === "CE" ? "arrowUp" : "arrowDown",
+                text: `${ST_NAME(s.strategy)}${ex ? " ✓" : " ✕ " + (s.label || "")}`});
+    if (!ex) { const t1 = s.time + 45 * 60; seg(s.time, t1, s.entry, "rgba(143,163,176,.8)", 2); seg(s.time, t1, s.sl, "rgba(226,103,90,.7)", 2); seg(s.time, t1, s.target, "rgba(63,191,143,.7)", 2); }
+  });
+  if (L.trades) d.trades.forEach(t => {
+    if (t.opened == null || t.opened > cut) return;
+    const closedNow = t.closed != null && t.closed <= cut, t1 = closedNow ? t.closed : endT;
+    seg(t.opened, t1, t.entry, "#e8eef0", 2, 1);
+    if (t.initial_sl != null && t.sl != null && Math.abs(t.initial_sl - t.sl) > 0.01) { seg(t.opened, t1, t.initial_sl, "rgba(226,103,90,.45)", 2); seg(t.opened, t1, t.sl, "#f2a93b", 0, 2); }
+    else seg(t.opened, t1, t.sl ?? t.initial_sl, "#e2675a", 0, 2);
+    seg(t.opened, t1, t.target, "#3fbf8f", 0, 2);
+    marks.push({time: snap5(t.opened), position: t.side === "CE" ? "belowBar" : "aboveBar", color: "#f2a93b", shape: "circle", text: `IN ${t.book === "scalp" ? "scalp" : ST_NAME(t.strategy)}`});
+    if (closedNow) marks.push({time: snap5(t.closed), position: t.side === "CE" ? "aboveBar" : "belowBar", color: (t.pnl || 0) >= 0 ? "#3fbf8f" : "#e2675a", shape: "square", text: `OUT ${rs(t.pnl)}`});
+  });
+  const seen = new Set();
+  LC.ser.setMarkers(marks.sort((a, b) => a.time - b.time).filter(m => { const key = m.time + m.text; if (seen.has(key)) return false; seen.add(key); return true; }));
+  // replay bar + side panel
+  const sl = $("#lcSlider"); sl.max = Math.max(0, n - 1); sl.value = k;
+  $("#lcRep").classList.toggle("on", LC.k != null);
+  $("#lcTime").textContent = LC.k == null ? (d.live_day ? "live" : "full session") : `${new Date(cut * 1000).toISOString().slice(11, 16)} · bar ${k + 1}/${n}`;
+  $("#lcPlay").textContent = LC.play ? "⏸ Pause" : "▶ Replay";
+  $("#lcEnd").classList.toggle("hidden", LC.k == null);
+  if (fresh) { const N = shown.length; LC.chart.timeScale().setVisibleLogicalRange({from: Math.max(0, N - n - 12), to: N + 8}); }
+  lcLegend(null);
+  lcSide(cut);
+}
+function lcSide(cut) {
+  const d = LC.d, sh = d.shield, lv = d.levels, live = d.live;
+  const open = d.trades.filter(t => t.opened <= cut && (t.closed == null || t.closed > cut));
+  const risk = t => t.risk ? `<div class="muted fs12">premium paid ${rs(t.risk.premium_paid)} = worst case ${t.risk.worst_case_pct}% of equity${t.risk.to_stop != null ? ` · to stop ${rs(t.risk.to_stop)} (${t.risk.to_stop_pct}%)` : ""}${t.risk.sl_pts ? ` · SL ${t.risk.sl_pts} pts away` : ""}</div>` : "";
+  const tr = t => `<div class="setup ${t.closed != null && t.closed <= cut ? ((t.pnl || 0) >= 0 ? "ex" : "sk") : "op"}"><b>${t.book === "scalp" ? "Scalp " : ""}${esc(ST_NAME(t.strategy))}</b> ${SIDE(t.side)} ${t.auto ? '<span class="muted fs12">autopilot</span>' : ""}
+     <div class="mono">entry ${n1(t.entry)} · SL ${n1(t.sl ?? t.initial_sl)}${t.initial_sl != null && t.sl != null && Math.abs(t.initial_sl - t.sl) > .01 ? ` <span class="muted">(trailed from ${n1(t.initial_sl)})</span>` : ""} · target ${t.target == null ? "trails" : n1(t.target)}</div>
+     ${t.closed != null && t.closed <= cut ? `<div class="fs12">exit ${n1(t.exit)} · ${esc(t.reason || "")} · <b class="${cls(t.pnl)}">${rs(t.pnl)}</b></div>` : risk(t)}</div>`;
+  const sp = s => `<div class="setup ${s.state === "executed" ? "ex" : "sk"}"><span class="mono">${new Date(s.time * 1000).toISOString().slice(11, 16)}</span> <b>${esc(ST_NAME(s.strategy))}</b> ${SIDE(s.side)} · ${s.state === "executed" ? '<span class="up">executed</span>' : `<span class="down">${esc(s.label || "not executed")}</span>`}
+     <div class="mono">entry ${n1(s.entry)} · SL ${n1(s.sl)} · target ${s.target == null ? "trails" : n1(s.target)}</div>${s.what && (LC.k == null) ? `<div class="muted fs12">${esc(s.what)}</div>` : ""}</div>`;
+  const setups = d.setups.filter(s => s.time != null && s.time <= cut), done = d.trades.filter(t => t.opened <= cut && t.closed != null && t.closed <= cut);
+  const lvRow = (a, b) => `<div>${a}</div><div class="mono">${b}</div>`;
+  $("#lcSide").innerHTML = `
+    ${live && !live.error && LC.k == null ? `<div class="card"><h4>Right now: ${esc(live.signal || "WAIT")}</h4>${live.plan ? `<div class="mono fs13">${esc(ST_NAME(live.plan.strategy))} ${SIDE(live.plan.opt)} · entry ${n1(live.plan.entry)} · SL ${n1(live.plan.sl)} · target ${live.plan.target == null ? "trails" : n1(live.plan.target)}</div>${live.order ? `<div class="fs12" style="margin-top:4px">${live.order.lots} lot(s) ${live.order.strike} @ ₹${n2(live.order.entry_prem)} · SL ₹${n2(live.order.sl_prem)}</div>` : ""}${live.risk ? `<div class="muted fs12">loss at stop ${rs(live.risk.to_stop)} (${live.risk.to_stop_pct}%) · worst case ${rs(live.risk.worst_case)} (${live.risk.worst_case_pct}%)</div>` : ""}` : ""}
+      <ul class="checks" style="font-size:12px;margin-top:6px">${(live.checks || []).slice(0, 6).map(([ok, t]) => `<li><span class="ic">${ok === true ? "✅" : ok === false ? "❌" : "👀"}</span><span>${esc(t)}</span></li>`).join("")}</ul></div>` : ""}
+    <div class="card"><h4>Open at ${LC.k == null ? (d.live_day ? "this moment" : "the close") : new Date(cut * 1000).toISOString().slice(11, 16)}</h4>${open.length ? open.map(tr).join("") : '<p class="muted fs13" style="margin:0">No open position.</p>'}</div>
+    <div class="card"><h4>If the market crashes</h4><p class="fs13" style="margin:0">Bought options lose at most the premium paid. Open premium now ${rs(sh.open_premium)} = <b>${((sh.open_premium || 0) / (sh.equity || 1) * 100).toFixed(1)}%</b> of equity; the shield caps it at ${sh.open_pct}% and stops new trades below ${rs(sh.floor)}.</p></div>
+    <div class="card"><h4>Signals (${setups.length})</h4>${setups.length ? setups.map(sp).join("") : '<p class="muted fs13" style="margin:0">None yet.</p>'}</div>
+    ${done.length ? `<div class="card"><h4>Closed trades (${done.length})</h4>${done.map(tr).join("")}</div>` : ""}
+    <div class="card"><h4>Levels for ${esc(d.date)}</h4><div class="kv fs13">${lvRow("Pivot · CPR", `${n1(lv.pivot)} · ${n1(lv.cpr_bottom)}–${n1(lv.cpr_top)}`)}${lvRow("R1 / R2", `${n1(lv.r1)} / ${n1(lv.r2)}`)}${lvRow("S1 / S2", `${n1(lv.s1)} / ${n1(lv.s2)}`)}${lvRow("Camarilla H4 / L4", `${n1(lv.cam_h4)} / ${n1(lv.cam_l4)}`)}${lvRow("Prev day H / L", `${n1(lv.prev_high)} / ${n1(lv.prev_low)}`)}${lv.or_high ? lvRow("Opening range", `${n1(lv.or_low)} – ${n1(lv.or_high)}`) : ""}</div>
+      ${(d.zones || []).length ? `<div class="chips" style="margin-top:8px">${d.zones.map(z => `<span class="chip">${z.kind === "resistance" ? "R" : "S"} <b>${n1(z.price)}</b> ×${z.touches}</span>`).join("")}</div>` : ""}</div>`;
+}
+function lcSeek(k) { const n = lcToday().length; LC.k = Math.max(0, Math.min(k, n - 1)); lcDraw(); }
+function lcPlay() {
+  const n = lcToday().length; if (!n) return;
+  if (LC.k == null || LC.k >= n - 1) LC.k = Math.min(n - 1, 2);
+  LC.play = setInterval(() => { if (LC.k >= lcToday().length - 1) { lcStop(); return; } LC.k++; lcDraw(); }, Math.round(1000 / LC.speed));
+  lcDraw();
+}
+function lcStop() { if (LC.play) { clearInterval(LC.play); LC.play = null; if (LC.root) $("#lcPlay").textContent = "▶ Replay"; } }
 </script>
 </body>
 </html>

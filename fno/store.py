@@ -400,17 +400,76 @@ def ping() -> bool:
 
 
 # ---------------- one-time copy Upstash -> Supabase ----------------
-# Rules (28 Oct 2026, the user wants EVERY detail from Upstash, settings included):
-#  - settings (fno:settings): the Upstash value WINS, except live logins / things set up fresh on Supabase (KEEP_CURRENT).
-#    Any Supabase value that gets replaced is kept in fno:migration:replaced ("<key>|<field>" -> old value): nothing is lost.
-#  - every other hash / set / sorted set: merged; where both have the same field, the newer Supabase value is kept.
-#  - strings: copied if missing; pure caches / heartbeats (SKIP_STRINGS) are skipped.  lists: copied if missing.
-#  - expiries (TTL) are carried over; keys already expired in Upstash are not copied.
-#  - afterwards every Upstash key is checked against Supabase and any gap is listed in the report.
-KEEP_CURRENT = {"upstox", "fyers", "drive", "scheduler", "vapid", "instrument_master", "g_last_tick", "upstash_migration"}
-SKIP_STRINGS = ("fno:last_tick", "fno:rec:status", "fno:data:in_saved:", "fno:data:us_saved:", "fno:stocks:")
+# Rules (revised 31 Oct 2026 - the user: "everything like Upstash, except keep any new research, any rule change and the
+# learning of the new days; portfolio and scalp book like Upstash so I continue from the previous portfolio"):
+#  PORTFOLIO   paper account(s), closed trades and order history (F&O, scalp, crypto/US/gold): Upstash WINS.
+#              Supabase-only closed trades are moved to fno:migration:supabase_only (nothing is deleted).
+#              Open positions / pending orders: Upstash's are 4+ days stale (options expired, prices moved) and Supabase's
+#              belong to the temporary account, so every book restarts flat; both sets are parked in
+#              fno:migration:stale_open and listed in the report.
+#  RULES       settings / preferences / strategies / switches: the Supabase value WINS where it exists (changes made since
+#              28 Oct are kept); dicts are merged key by key (Supabase on top), lists of {id: ...} merged by id.
+#              Values that are only on Upstash are copied.
+#  LEARNING    lessons, research notes, adopted changes, journal, lag reviews, recorder, saved data: union of both.
+#              Evidence counters (fno:ls:st) are ADDED together so neither side's days are lost.
+#  LOGINS      broker tokens, Drive link, push keys, scheduler: the live Supabase value is kept.
+#  Every Supabase value that gets replaced is kept in fno:migration:replaced ("<key>|<field>" -> old value).
+#  Expiries (TTL) are carried over; keys already expired in Upstash are not copied.
+KEEP_CURRENT = {"upstox", "fyers", "drive", "scheduler", "vapid", "instrument_master", "g_last_tick", "upstash_migration",
+                "upstash_migration_preview"}
+PORTFOLIO_FIELDS = ("account", "g_account:", "g_ordhist:")               # settings fields: Upstash wins
+UPSTASH_FIRST = ("g_lab_started",)                                        # settings fields: the original value wins
+CLOSED_BOOKS = ("fno:trades", "fno:trades:removed", "fno:scalp:trades", "fno:g:trades:")     # hashes: Upstash wins
+OPEN_BOOKS = ("fno:positions", "fno:scalp:positions", "fno:g:pos:", "fno:g:orders:")       # hashes: start flat
+ADD_STATS = ("fno:ls:st",)                                                # evidence counters: n / s / r added
+SKIP_STRINGS = ("fno:last_tick", "fno:rec:status", "fno:data:in_saved:", "fno:data:us_saved:", "fno:stocks:", "fno:scalp:day:",
+                "fno:lock:", "fno:login_fail:")
 MIG = {"running": False, "started": None, "progress": None, "result": None}
 MIG_FROM = "2026-11-01T00:00:00+00:00"          # Upstash's monthly quota resets on the 1st (UTC)
+
+
+def _is(k, fams) -> bool:
+    return any(k == f or (f.endswith(":") and k.startswith(f)) for f in fams)
+
+
+def _jl(v):
+    try:
+        return json.loads(v)
+    except Exception:
+        return None
+
+
+def merge_setting(name: str, ups_raw: str, sup_raw: str) -> tuple[str, str]:
+    """(merged raw value, how) for one fno:settings field present on both sides (rules: Supabase on top)."""
+    if ups_raw == sup_raw:
+        return sup_raw, "same"
+    if name in KEEP_CURRENT:
+        return sup_raw, "kept_current"
+    if _is(name, PORTFOLIO_FIELDS) or name in UPSTASH_FIRST:
+        return ups_raw, "upstash"
+    u, s = _jl(ups_raw), _jl(sup_raw)
+    if name == "learn_overlay" and isinstance(u, dict) and isinstance(s, dict):
+        by = {r.get("id"): r for r in (u.get("rules") or []) if isinstance(r, dict)}
+        by.update({r.get("id"): r for r in (s.get("rules") or []) if isinstance(r, dict)})
+        return _dump({**u, **s, "rules": list(by.values())}), "merged"
+    if isinstance(u, dict) and isinstance(s, dict):
+        return _dump({**u, **s}), "merged"
+    if isinstance(u, list) and isinstance(s, list) and all(isinstance(x, dict) and "id" in x for x in u + s) and (u or s):
+        by = {x["id"]: x for x in u}
+        by.update({x["id"]: x for x in s})
+        return _dump(list(by.values())), "merged"
+    return sup_raw, "supabase"
+
+
+def add_stats(ups_raw: str, sup_raw: str) -> str:
+    """Learning evidence bucket {n, s, r}: both databases' trades / signals counted together."""
+    u, s = _jl(ups_raw) or {}, _jl(sup_raw) or {}
+    try:
+        from .learn import R_KEEP
+    except Exception:
+        R_KEEP = 120
+    return _dump({"n": int(u.get("n", 0)) + int(s.get("n", 0)), "s": round(float(u.get("s", 0)) + float(s.get("s", 0)), 4),
+                  "r": ((u.get("r") or []) + (s.get("r") or []))[-R_KEEP:]})
 
 
 def _ups_read(k, typ):
@@ -445,9 +504,30 @@ def migrate_from_upstash(dry_run: bool = False) -> dict:
         if str(cur) == "0":
             break
     keys = sorted(set(keys))
-    rep = {"ok": True, "dry_run": dry_run, "keys": len(keys), "by_type": {}, "rows_copied": 0, "rows_already_there": 0,
-           "settings_restored": [], "settings_kept_current": [], "settings_added": [], "skipped_caches": 0,
-           "lists_skipped_exist": [], "families": {}, "missing_after": [], "verified": None}
+    rep = {"ok": True, "dry_run": dry_run, "rules": "2026-10-31", "keys": len(keys), "by_type": {}, "rows_copied": 0, "rows_already_there": 0,
+           "settings_from_upstash": [], "settings_kept_supabase": [], "settings_merged": [], "settings_added": [], "settings_kept_current": [],
+           "portfolio": {}, "stale_open": [], "supabase_only_trades": 0, "stats_added": 0,
+           "skipped_caches": 0, "lists_skipped_exist": [], "families": {}, "missing_after": [], "verified": None}
+
+    def w(sql, params):
+        if not dry_run:
+            pgkv._q(sql, params, "count")
+
+    def keep_old(tag, k, f, v):
+        w(f"insert into {T} (k, f, v, kind) values (%s, %s, %s, 'h') on conflict (k, f) do update set v = excluded.v",
+          (tag, f"{k}|{f}", v))
+
+    def sup_hash(k):
+        return {f: v for f, v in pgkv._q(f"select f, v from {T} where k = %s and kind = 'h' and (exp is null or exp > now())", (k,))}
+
+    def hset(k, f, v, exp_sql="null", exp_p=()):
+        w(f"insert into {T} (k, f, v, kind, exp) values (%s, %s, %s, 'h', {exp_sql}) on conflict (k, f) do update set v = excluded.v, kind = 'h', exp = excluded.exp",
+          (k, f, v) + exp_p)
+
+    def hdel(k, f):
+        w(f"delete from {T} where k = %s and f = %s", (k, f))
+
+    seen_open = set()
     for n, k in enumerate(keys):
         MIG["progress"] = f"{n + 1} / {len(keys)} keys"
         typ = _upstash("TYPE", k)
@@ -464,32 +544,71 @@ def migrate_from_upstash(dry_run: bool = False) -> dict:
         data = _ups_read(k, typ)
         if data is None:
             continue
-        if typ == "hash":
-            have = {f: v for f, v in pgkv._q(f"select f, v from {T} where k = %s and kind = 'h' and (exp is null or exp > now())", (k,))}
+        if typ == "hash" and k == SETTINGS:
+            have = sup_hash(k)
             for f, v in data.items():
                 if f not in have:
                     rep["rows_copied"] += 1
-                    if k == SETTINGS:
-                        rep["settings_added"].append(f)
-                    if not dry_run:
-                        pgkv._q(f"insert into {T} (k, f, v, kind, exp) values (%s, %s, %s, 'h', {exp_sql}) on conflict (k, f) do update set v = excluded.v, kind = 'h', exp = excluded.exp",
-                                (k, f, v) + exp_p, "count")
-                elif k == SETTINGS and f not in KEEP_CURRENT and have[f] != v:
-                    rep["settings_restored"].append(f)
-                    if not dry_run:
-                        pgkv._q(f"insert into {T} (k, f, v, kind) values ('fno:migration:replaced', %s, %s, 'h') on conflict (k, f) do update set v = excluded.v",
-                                (f"{k}|{f}", have[f]), "count")
-                        pgkv._q(f"update {T} set v = %s where k = %s and f = %s", (v, k, f), "count")
+                    rep["settings_added"].append(f)
+                    hset(k, f, v)
+                    continue
+                merged, how = merge_setting(f, v, have[f])
+                if how == "same":
+                    rep["rows_already_there"] += 1
+                    continue
+                {"kept_current": rep["settings_kept_current"], "upstash": rep["settings_from_upstash"],
+                 "merged": rep["settings_merged"], "supabase": rep["settings_kept_supabase"]}[how].append(f)
+                if merged != have[f]:
+                    keep_old("fno:migration:replaced", k, f, have[f])
+                    hset(k, f, merged)
+        elif typ == "hash" and _is(k, OPEN_BOOKS):
+            seen_open.add(k)
+            have = sup_hash(k)
+            for f, v in data.items():                                    # Upstash's stale open positions: parked, not reopened
+                keep_old("fno:migration:stale_open", f"upstash:{k}", f, v)
+            for f, v in have.items():                                    # the temporary account's open positions: parked too
+                keep_old("fno:migration:stale_open", f"supabase:{k}", f, v)
+                hdel(k, f)
+            if data or have:
+                rep["stale_open"].append({"key": k, "upstash": len(data), "supabase": len(have)})
+        elif typ == "hash" and _is(k, CLOSED_BOOKS):
+            have = sup_hash(k)
+            for f, v in have.items():
+                if f not in data:                                        # trades of the temporary Supabase account
+                    keep_old("fno:migration:supabase_only", k, f, v)
+                    hdel(k, f)
+                    rep["supabase_only_trades"] += 1
+            for f, v in data.items():
+                if have.get(f) != v:
+                    if f in have:
+                        keep_old("fno:migration:replaced", k, f, have[f])
+                    hset(k, f, v, exp_sql, exp_p)
+                    rep["rows_copied"] += 1
                 else:
                     rep["rows_already_there"] += 1
-                    if k == SETTINGS and f in KEEP_CURRENT and have[f] != v:
-                        rep["settings_kept_current"].append(f)
+            rep["portfolio"][k] = len(data)
+        elif typ == "hash":
+            have = sup_hash(k)
+            add = _is(k, ADD_STATS)
+            done = set(pgkv.execute("SMEMBERS", "fno:migration:stats_added") or []) if add else set()
+            for f, v in data.items():
+                if f not in have:
+                    rep["rows_copied"] += 1
+                    hset(k, f, v, exp_sql, exp_p)
+                    if add:
+                        w(f"insert into {T} (k, f, v, kind) values ('fno:migration:stats_added', %s, '', 'S') on conflict (k, f) do nothing", (f"{k}|{f}",))
+                elif add and have[f] != v and f"{k}|{f}" not in done:   # added once only (a re-run must not count twice)
+                    w(f"insert into {T} (k, f, v, kind) values ('fno:migration:stats_added', %s, '', 'S') on conflict (k, f) do nothing", (f"{k}|{f}",))
+                    rep["stats_added"] += 1
+                    keep_old("fno:migration:replaced", k, f, have[f])
+                    hset(k, f, add_stats(v, have[f]), exp_sql, exp_p)
+                else:
+                    rep["rows_already_there"] += 1
         elif typ == "string":
             if pgkv.execute("GET", k) is None:
                 rep["rows_copied"] += 1
-                if not dry_run:
-                    pgkv._q(f"insert into {T} (k, f, v, kind, exp) values (%s, '', %s, 's', {exp_sql}) on conflict (k, f) do update set v = excluded.v, kind = 's', exp = excluded.exp",
-                            (k, data) + exp_p, "count")
+                w(f"insert into {T} (k, f, v, kind, exp) values (%s, '', %s, 's', {exp_sql}) on conflict (k, f) do update set v = excluded.v, kind = 's', exp = excluded.exp",
+                  (k, data) + exp_p)
             else:
                 rep["rows_already_there"] += 1
         elif typ in ("set", "zset"):
@@ -501,34 +620,39 @@ def migrate_from_upstash(dry_run: bool = False) -> dict:
                     rep["rows_already_there"] += 1
                     continue
                 rep["rows_copied"] += 1
-                if not dry_run:
-                    pgkv._q(f"insert into {T} (k, f, v, kind, score, exp) values (%s, %s, %s, %s, %s, {exp_sql}) on conflict (k, f) do nothing",
-                            (k, m, None if typ == "zset" else "", kind, sc) + exp_p, "count")
+                w(f"insert into {T} (k, f, v, kind, score, exp) values (%s, %s, %s, %s, %s, {exp_sql}) on conflict (k, f) do nothing",
+                  (k, m, None if typ == "zset" else "", kind, sc) + exp_p)
         elif typ == "list":
             if pgkv.execute("LLEN", k):
                 rep["lists_skipped_exist"].append(k)
             else:
                 rep["rows_copied"] += len(data)
-                if not dry_run:
-                    for i, v in enumerate(data):
-                        pgkv._q(f"insert into {T} (k, f, v, kind, exp) values (%s, %s, %s, 'l', {exp_sql}) on conflict (k, f) do nothing",
-                                (k, f"{i:012d}", v) + exp_p, "count")
+                for i, v in enumerate(data):
+                    w(f"insert into {T} (k, f, v, kind, exp) values (%s, %s, %s, 'l', {exp_sql}) on conflict (k, f) do nothing",
+                      (k, f"{i:012d}", v) + exp_p)
+    # open books that exist only on Supabase (no Upstash key at all) also restart flat
+    for k in [r[0] for r in pgkv._q(f"select distinct k from {T} where kind = 'h'")]:
+        if k in seen_open or not _is(k, OPEN_BOOKS):
+            continue
+        have = sup_hash(k)
+        for f, v in have.items():
+            keep_old("fno:migration:stale_open", f"supabase:{k}", f, v)
+            hdel(k, f)
+        if have:
+            rep["stale_open"].append({"key": k, "upstash": 0, "supabase": len(have)})
     if not dry_run:
         forget()
-        # verification: every Upstash field / member / string must now exist in Supabase
+        # verification: every Upstash field / member / string that should be on Supabase now is
         for k in keys:
             typ = _upstash("TYPE", k)
-            if typ == "string" and k.startswith(SKIP_STRINGS):
+            if (typ == "string" and k.startswith(SKIP_STRINGS)) or (typ == "hash" and _is(k, OPEN_BOOKS)):
                 continue
             data = _ups_read(k, typ)
             if data is None:
                 continue
-            if typ == "hash":
+            if typ in ("hash", "set", "zset"):
                 have = set(r[0] for r in pgkv._q(f"select f from {T} where k = %s and (exp is null or exp > now())", (k,)))
                 miss = [f for f in data if f not in have]
-            elif typ in ("set", "zset"):
-                have = set(r[0] for r in pgkv._q(f"select f from {T} where k = %s and (exp is null or exp > now())", (k,)))
-                miss = [m for m in data if m not in have]
             elif typ == "string":
                 miss = [] if pgkv.execute("GET", k) is not None else [""]
             else:
@@ -536,7 +660,8 @@ def migrate_from_upstash(dry_run: bool = False) -> dict:
             if miss:
                 rep["missing_after"].append({"key": k, "missing": len(miss), "sample": miss[:3]})
         rep["verified"] = not rep["missing_after"]
-    rep["settings_restored"].sort(); rep["settings_kept_current"].sort(); rep["settings_added"].sort()
+    for x in ("settings_from_upstash", "settings_kept_supabase", "settings_merged", "settings_added", "settings_kept_current"):
+        rep[x].sort()
     return rep
 
 
@@ -554,7 +679,7 @@ def start_migration(dry_run: bool = False) -> dict:
         r["finished"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         MIG.update(running=False, result=r, progress=None)
         print("[migration]", "preview" if dry_run else "copy", {k: r.get(k) for k in ("ok", "error", "keys", "rows_copied", "rows_already_there",
-              "settings_restored", "settings_kept_current", "verified")}, "missing:", [x["key"] for x in r.get("missing_after") or []][:20], flush=True)
+              "settings_from_upstash", "settings_merged", "settings_kept_supabase", "stale_open", "supabase_only_trades", "verified")}, "missing:", [x["key"] for x in r.get("missing_after") or []][:20], flush=True)
         try:
             put("upstash_migration_preview" if dry_run else "upstash_migration", r)
         except Exception:
