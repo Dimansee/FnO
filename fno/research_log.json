@@ -1376,6 +1376,17 @@
    "decision": "Not adopted",
    "summary": "Higher-high / lower-low breaks, round numbers and multi-day highs / lows add nothing on their own and lower today's Autopilot when added.",
    "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r70",
+   "date": "2026-11-01",
+   "area": "Index options",
+   "title": "User's OI-wall breakout: max-OI strike rejected 2-3 times, then a close through it; exits +50 / trail / half at +50 and +90",
+   "asked": "Level = previous day's largest call-OI strike (resistance; put-OI strike for shorts). Rejections = price came within 0.05% and fell back 0.15% (~35 Nifty pts), counted over today and the 2 previous sessions (>= 2 or >= 3). Entry the candle after a close through the level (5 or 15 min, 09:20-14:30). Stop 35 pts below the level or below the breakout candle. Exits: all at +50; +50 then stop to entry and trail 30 pts; half +50 / half +90; half +50 / rest trailed; hold to the close (points scaled by % for Bank Nifty). Controls: 2nd OI wall, plain 100-pt levels without OI, OI wall without rejections. Nifty + Bank Nifty, Oct 2023 - Oct 2026, every leg priced as an ATM option (decay, charges, 0.25% slippage), Rs 2,000 risk.",
+   "result": "5-min: no edge (most versions lose). 15-min at the OI wall: positive in both periods with every exit; plain 100-pt levels with the same rejections lose, so the OI wall + rejections matter. With 3+ rejections: 45 trades in 3 years, +16 to +23 points and +Rs 350-765 a trade, 60-64% wins, but 2026 negative. With 2+ rejections, candle-low stop, '+50 then trail': 109 trades, +11 points, +Rs 258 a trade, positive every year (+1k, +6k, +11k, +10k) - about Rs 10k a year at Rs 2,000 risk, mostly Nifty. The user's half +50 / half +90: +Rs 115 a trade, 2023-24 negative. Added to today's Autopilot (Rs 2L, compounding, 0.5% slippage): better in 2025 (3.69L vs 3.56L) and 2026 (4.57L vs 4.28L) but worse in Oct 2023 - 2024 (4.02L vs 4.38L) and over Oct 2023 - Oct 2026 (Rs 12.98L vs 13.67L): its trades make money (+Rs 49k) but take cash from Autopilot's bigger trades.",
+   "decision": "Not adopted (lowers Autopilot overall); a real but small standalone edge on 15 min",
+   "summary": "Breaking a max-OI strike after repeated rejections is the first level setup with an edge over plain levels (15-min only), but it is small and, added to Autopilot, lowers the total.",
+   "period": "Oct 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2581,6 +2592,15 @@
     "r69"
    ],
    "takeaway": "No edge in any family; the HH/HL filter does not help; added to Autopilot every version is worse in 2025-26 and overall (Rs 8-20L vs 33.4L): not adopted."
+  },
+  {
+   "n": 70,
+   "date": "2026-11-01",
+   "topic": "OI-wall breakout after 2-3 rejections, +50 / trail / half +50 +90",
+   "ids": [
+    "r70"
+   ],
+   "takeaway": "15-min only: +11 points a trade, positive every year, but about Rs 10k a year and it lowers Autopilot when added (Rs 12.98L vs 13.67L, Oct 2023 - Oct 2026): not adopted."
   }
  ],
  "india_status": {

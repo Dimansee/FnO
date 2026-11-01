@@ -1,0 +1,5042 @@
+[
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 1169,
+"n_early": 490,
+"n_late": 679,
+"pts": 1.3,
+"win": 49.5,
+"rs": -144722,
+"rs_early": -60904,
+"rs_late": -83818,
+"per_trade": -124,
+"years": {
+"2023": -14568,
+"2024": -46336,
+"2025": -32516,
+"2026": -51302
+},
+"per_index": {
+"BANKNIFTY": -52525,
+"NIFTY": -92196
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 1169,
+"n_early": 490,
+"n_late": 679,
+"pts": 1.7,
+"win": 49.0,
+"rs": -110812,
+"rs_early": -60982,
+"rs_late": -49830,
+"per_trade": -95,
+"years": {
+"2023": -16236,
+"2024": -44746,
+"2025": -18414,
+"2026": -31416
+},
+"per_index": {
+"BANKNIFTY": -39945,
+"NIFTY": -70867
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 1169,
+"n_early": 490,
+"n_late": 679,
+"pts": 1.5,
+"win": 49.5,
+"rs": -132906,
+"rs_early": -57076,
+"rs_late": -75831,
+"per_trade": -114,
+"years": {
+"2023": -16774,
+"2024": -40302,
+"2025": -32795,
+"2026": -43036
+},
+"per_index": {
+"BANKNIFTY": -56297,
+"NIFTY": -76609
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 1169,
+"n_early": 490,
+"n_late": 679,
+"pts": 1.5,
+"win": 49.5,
+"rs": -127767,
+"rs_early": -60943,
+"rs_late": -66824,
+"per_trade": -109,
+"years": {
+"2023": -15402,
+"2024": -45541,
+"2025": -25465,
+"2026": -41359
+},
+"per_index": {
+"BANKNIFTY": -46235,
+"NIFTY": -81532
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 1169,
+"n_early": 490,
+"n_late": 679,
+"pts": 5.3,
+"win": 31.2,
+"rs": 113861,
+"rs_early": 26378,
+"rs_late": 87483,
+"per_trade": 97,
+"years": {
+"2023": -23630,
+"2024": 50008,
+"2025": -11162,
+"2026": 98646
+},
+"per_index": {
+"BANKNIFTY": 24696,
+"NIFTY": 89165
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 1169,
+"n_early": 490,
+"n_late": 679,
+"pts": 1.6,
+"win": 41.1,
+"rs": -170962,
+"rs_early": -87470,
+"rs_late": -83491,
+"per_trade": -146,
+"years": {
+"2023": -20107,
+"2024": -67363,
+"2025": -41428,
+"2026": -42063
+},
+"per_index": {
+"BANKNIFTY": -64739,
+"NIFTY": -106223
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 1169,
+"n_early": 490,
+"n_late": 679,
+"pts": 2.2,
+"win": 40.7,
+"rs": -138181,
+"rs_early": -83473,
+"rs_late": -54708,
+"per_trade": -118,
+"years": {
+"2023": -21929,
+"2024": -61543,
+"2025": -4530,
+"2026": -50178
+},
+"per_index": {
+"BANKNIFTY": -42687,
+"NIFTY": -95494
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 1169,
+"n_early": 490,
+"n_late": 679,
+"pts": 1.7,
+"win": 41.1,
+"rs": -184287,
+"rs_early": -96987,
+"rs_late": -87301,
+"per_trade": -158,
+"years": {
+"2023": -26112,
+"2024": -70874,
+"2025": -44836,
+"2026": -42464
+},
+"per_index": {
+"BANKNIFTY": -64779,
+"NIFTY": -119508
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 1169,
+"n_early": 490,
+"n_late": 679,
+"pts": 1.9,
+"win": 41.1,
+"rs": -154571,
+"rs_early": -85471,
+"rs_late": -69100,
+"per_trade": -132,
+"years": {
+"2023": -21018,
+"2024": -64453,
+"2025": -22979,
+"2026": -46121
+},
+"per_index": {
+"BANKNIFTY": -53713,
+"NIFTY": -100858
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 1169,
+"n_early": 490,
+"n_late": 679,
+"pts": 5.0,
+"win": 24.0,
+"rs": 95698,
+"rs_early": 26374,
+"rs_late": 69325,
+"per_trade": 82,
+"years": {
+"2023": -38435,
+"2024": 64809,
+"2025": -4238,
+"2026": 73563
+},
+"per_index": {
+"BANKNIFTY": -32350,
+"NIFTY": 128048
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 358,
+"n_early": 140,
+"n_late": 218,
+"pts": 0.7,
+"win": 48.6,
+"rs": -63725,
+"rs_early": 2615,
+"rs_late": -66341,
+"per_trade": -178,
+"years": {
+"2023": 5031,
+"2024": -2416,
+"2025": -38817,
+"2026": -27524
+},
+"per_index": {
+"BANKNIFTY": -54499,
+"NIFTY": -9226
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 358,
+"n_early": 140,
+"n_late": 218,
+"pts": 4.3,
+"win": 48.0,
+"rs": -11409,
+"rs_early": 22236,
+"rs_late": -33645,
+"per_trade": -32,
+"years": {
+"2023": 11576,
+"2024": 10660,
+"2025": -25577,
+"2026": -8068
+},
+"per_index": {
+"BANKNIFTY": -47158,
+"NIFTY": 35749
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 358,
+"n_early": 140,
+"n_late": 218,
+"pts": 0.9,
+"win": 48.6,
+"rs": -60308,
+"rs_early": 3984,
+"rs_late": -64292,
+"per_trade": -168,
+"years": {
+"2023": 7993,
+"2024": -4009,
+"2025": -34972,
+"2026": -29320
+},
+"per_index": {
+"BANKNIFTY": -62979,
+"NIFTY": 2671
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 358,
+"n_early": 140,
+"n_late": 218,
+"pts": 2.5,
+"win": 48.3,
+"rs": -37567,
+"rs_early": 12426,
+"rs_late": -49993,
+"per_trade": -105,
+"years": {
+"2023": 8304,
+"2024": 4122,
+"2025": -32197,
+"2026": -17796
+},
+"per_index": {
+"BANKNIFTY": -50829,
+"NIFTY": 13261
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 358,
+"n_early": 140,
+"n_late": 218,
+"pts": 5.2,
+"win": 32.7,
+"rs": 5310,
+"rs_early": 42251,
+"rs_late": -36941,
+"per_trade": 15,
+"years": {
+"2023": 14185,
+"2024": 28066,
+"2025": -24748,
+"2026": -12193
+},
+"per_index": {
+"BANKNIFTY": -69372,
+"NIFTY": 74682
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 358,
+"n_early": 140,
+"n_late": 218,
+"pts": 1.3,
+"win": 38.8,
+"rs": -53874,
+"rs_early": -5472,
+"rs_late": -48403,
+"per_trade": -150,
+"years": {
+"2023": 285,
+"2024": -5757,
+"2025": -18603,
+"2026": -29800
+},
+"per_index": {
+"BANKNIFTY": -54690,
+"NIFTY": 816
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 358,
+"n_early": 140,
+"n_late": 218,
+"pts": 3.9,
+"win": 38.3,
+"rs": 23715,
+"rs_early": 14547,
+"rs_late": 9168,
+"per_trade": 66,
+"years": {
+"2023": 12670,
+"2024": 1877,
+"2025": 11361,
+"2026": -2193
+},
+"per_index": {
+"BANKNIFTY": -51312,
+"NIFTY": 75027
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 358,
+"n_early": 140,
+"n_late": 218,
+"pts": 1.0,
+"win": 38.8,
+"rs": -42686,
+"rs_early": -5564,
+"rs_late": -37123,
+"per_trade": -119,
+"years": {
+"2023": 4789,
+"2024": -10353,
+"2025": -7963,
+"2026": -29159
+},
+"per_index": {
+"BANKNIFTY": -67404,
+"NIFTY": 24717
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 358,
+"n_early": 140,
+"n_late": 218,
+"pts": 2.6,
+"win": 38.5,
+"rs": -15080,
+"rs_early": 4538,
+"rs_late": -19617,
+"per_trade": -42,
+"years": {
+"2023": 6477,
+"2024": -1940,
+"2025": -3621,
+"2026": -15997
+},
+"per_index": {
+"BANKNIFTY": -53001,
+"NIFTY": 37921
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 358,
+"n_early": 140,
+"n_late": 218,
+"pts": 6.7,
+"win": 24.6,
+"rs": 115441,
+"rs_early": 75572,
+"rs_late": 39868,
+"per_trade": 322,
+"years": {
+"2023": 27184,
+"2024": 48389,
+"2025": 12440,
+"2026": 27429
+},
+"per_index": {
+"BANKNIFTY": -33506,
+"NIFTY": 148947
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 329,
+"n_early": 125,
+"n_late": 204,
+"pts": 5.4,
+"win": 53.2,
+"rs": -9060,
+"rs_early": 13557,
+"rs_late": -22618,
+"per_trade": -28,
+"years": {
+"2023": -8706,
+"2024": 22263,
+"2025": -12925,
+"2026": -9693
+},
+"per_index": {
+"BANKNIFTY": -26051,
+"NIFTY": 16990
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 329,
+"n_early": 125,
+"n_late": 204,
+"pts": 4.6,
+"win": 52.0,
+"rs": -17046,
+"rs_early": 5811,
+"rs_late": -22858,
+"per_trade": -52,
+"years": {
+"2023": -2824,
+"2024": 8635,
+"2025": -7774,
+"2026": -15084
+},
+"per_index": {
+"BANKNIFTY": -30650,
+"NIFTY": 13604
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 329,
+"n_early": 125,
+"n_late": 204,
+"pts": 5.2,
+"win": 52.6,
+"rs": -12066,
+"rs_early": 8056,
+"rs_late": -20122,
+"per_trade": -37,
+"years": {
+"2023": -6014,
+"2024": 14071,
+"2025": -9372,
+"2026": -10751
+},
+"per_index": {
+"BANKNIFTY": -29209,
+"NIFTY": 17143
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 329,
+"n_early": 125,
+"n_late": 204,
+"pts": 5.0,
+"win": 52.3,
+"rs": -13053,
+"rs_early": 9684,
+"rs_late": -22738,
+"per_trade": -40,
+"years": {
+"2023": -5765,
+"2024": 15449,
+"2025": -10349,
+"2026": -12388
+},
+"per_index": {
+"BANKNIFTY": -28351,
+"NIFTY": 15297
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 329,
+"n_early": 125,
+"n_late": 204,
+"pts": 5.8,
+"win": 34.0,
+"rs": 2420,
+"rs_early": 43613,
+"rs_late": -41193,
+"per_trade": 7,
+"years": {
+"2023": -4472,
+"2024": 48085,
+"2025": -23676,
+"2026": -17516
+},
+"per_index": {
+"BANKNIFTY": -24708,
+"NIFTY": 27128
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 329,
+"n_early": 125,
+"n_late": 204,
+"pts": 5.5,
+"win": 42.6,
+"rs": -945,
+"rs_early": -11313,
+"rs_late": 10368,
+"per_trade": -3,
+"years": {
+"2023": -21864,
+"2024": 10551,
+"2025": -7906,
+"2026": 18274
+},
+"per_index": {
+"BANKNIFTY": -15355,
+"NIFTY": 14411
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 329,
+"n_early": 125,
+"n_late": 204,
+"pts": 3.9,
+"win": 41.3,
+"rs": -10074,
+"rs_early": -12170,
+"rs_late": 2096,
+"per_trade": -31,
+"years": {
+"2023": -10403,
+"2024": -1768,
+"2025": -1278,
+"2026": 3374
+},
+"per_index": {
+"BANKNIFTY": -18302,
+"NIFTY": 8228
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 329,
+"n_early": 125,
+"n_late": 204,
+"pts": 5.4,
+"win": 42.2,
+"rs": 5483,
+"rs_early": -6020,
+"rs_late": 11503,
+"per_trade": 17,
+"years": {
+"2023": -15819,
+"2024": 9799,
+"2025": -6175,
+"2026": 17678
+},
+"per_index": {
+"BANKNIFTY": -11687,
+"NIFTY": 17170
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 329,
+"n_early": 125,
+"n_late": 204,
+"pts": 4.7,
+"win": 41.6,
+"rs": -5510,
+"rs_early": -11742,
+"rs_late": 6232,
+"per_trade": -17,
+"years": {
+"2023": -16133,
+"2024": 4392,
+"2025": -4592,
+"2026": 10824
+},
+"per_index": {
+"BANKNIFTY": -16829,
+"NIFTY": 11319
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 329,
+"n_early": 125,
+"n_late": 204,
+"pts": 4.3,
+"win": 24.0,
+"rs": -15459,
+"rs_early": 22686,
+"rs_late": -38145,
+"per_trade": -47,
+"years": {
+"2023": -17239,
+"2024": 39925,
+"2025": -54447,
+"2026": 16302
+},
+"per_index": {
+"BANKNIFTY": -28446,
+"NIFTY": 12988
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 526,
+"n_early": 242,
+"n_late": 284,
+"pts": -2.1,
+"win": 47.1,
+"rs": -117864,
+"rs_early": -46027,
+"rs_late": -71838,
+"per_trade": -224,
+"years": {
+"2023": -5972,
+"2024": -40055,
+"2025": -39158,
+"2026": -32680
+},
+"per_index": {
+"BANKNIFTY": -49455,
+"NIFTY": -68409
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 526,
+"n_early": 242,
+"n_late": 284,
+"pts": -1.9,
+"win": 46.8,
+"rs": -110043,
+"rs_early": -50663,
+"rs_late": -59379,
+"per_trade": -209,
+"years": {
+"2023": -7645,
+"2024": -43018,
+"2025": -33418,
+"2026": -25961
+},
+"per_index": {
+"BANKNIFTY": -43472,
+"NIFTY": -66570
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 526,
+"n_early": 242,
+"n_late": 284,
+"pts": -2.8,
+"win": 47.1,
+"rs": -132043,
+"rs_early": -54650,
+"rs_late": -77393,
+"per_trade": -251,
+"years": {
+"2023": -8417,
+"2024": -46233,
+"2025": -41329,
+"2026": -36064
+},
+"per_index": {
+"BANKNIFTY": -55912,
+"NIFTY": -76131
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 526,
+"n_early": 242,
+"n_late": 284,
+"pts": -2.0,
+"win": 47.1,
+"rs": -113954,
+"rs_early": -48345,
+"rs_late": -65608,
+"per_trade": -217,
+"years": {
+"2023": -6809,
+"2024": -41536,
+"2025": -36288,
+"2026": -29321
+},
+"per_index": {
+"BANKNIFTY": -46464,
+"NIFTY": -67490
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 526,
+"n_early": 242,
+"n_late": 284,
+"pts": -1.9,
+"win": 27.9,
+"rs": -78221,
+"rs_early": 2955,
+"rs_late": -81177,
+"per_trade": -149,
+"years": {
+"2023": -12252,
+"2024": 15207,
+"2025": -63872,
+"2026": -17305
+},
+"per_index": {
+"BANKNIFTY": -14677,
+"NIFTY": -63544
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 526,
+"n_early": 242,
+"n_late": 284,
+"pts": -0.7,
+"win": 40.5,
+"rs": -106094,
+"rs_early": -43135,
+"rs_late": -62959,
+"per_trade": -202,
+"years": {
+"2023": -9090,
+"2024": -34045,
+"2025": -36038,
+"2026": -26921
+},
+"per_index": {
+"BANKNIFTY": -46493,
+"NIFTY": -59601
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 526,
+"n_early": 242,
+"n_late": 284,
+"pts": -0.3,
+"win": 40.3,
+"rs": -109546,
+"rs_early": -53217,
+"rs_late": -56329,
+"per_trade": -208,
+"years": {
+"2023": -11073,
+"2024": -42144,
+"2025": -25861,
+"2026": -30468
+},
+"per_index": {
+"BANKNIFTY": -35851,
+"NIFTY": -73695
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 526,
+"n_early": 242,
+"n_late": 284,
+"pts": -1.4,
+"win": 40.5,
+"rs": -145869,
+"rs_early": -63524,
+"rs_late": -82346,
+"per_trade": -277,
+"years": {
+"2023": -11375,
+"2024": -52149,
+"2025": -41331,
+"2026": -41015
+},
+"per_index": {
+"BANKNIFTY": -51946,
+"NIFTY": -93924
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 526,
+"n_early": 242,
+"n_late": 284,
+"pts": -0.5,
+"win": 40.5,
+"rs": -107820,
+"rs_early": -48176,
+"rs_late": -59644,
+"per_trade": -205,
+"years": {
+"2023": -10082,
+"2024": -38095,
+"2025": -30949,
+"2026": -28695
+},
+"per_index": {
+"BANKNIFTY": -41172,
+"NIFTY": -66648
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 526,
+"n_early": 242,
+"n_late": 284,
+"pts": -0.5,
+"win": 21.5,
+"rs": -113908,
+"rs_early": 19169,
+"rs_late": -133078,
+"per_trade": -217,
+"years": {
+"2023": -12463,
+"2024": 31633,
+"2025": -68539,
+"2026": -64539
+},
+"per_index": {
+"BANKNIFTY": -41346,
+"NIFTY": -72562
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 162,
+"n_early": 68,
+"n_late": 94,
+"pts": 3.8,
+"win": 51.9,
+"rs": -13081,
+"rs_early": -8335,
+"rs_late": -4746,
+"per_trade": -81,
+"years": {
+"2023": -7202,
+"2024": -1133,
+"2025": -7302,
+"2026": 2556
+},
+"per_index": {
+"BANKNIFTY": -30922,
+"NIFTY": 17842
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 162,
+"n_early": 68,
+"n_late": 94,
+"pts": 4.2,
+"win": 50.6,
+"rs": -9725,
+"rs_early": -11972,
+"rs_late": 2247,
+"per_trade": -60,
+"years": {
+"2023": -1890,
+"2024": -10081,
+"2025": 1829,
+"2026": 418
+},
+"per_index": {
+"BANKNIFTY": -25089,
+"NIFTY": 15364
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 162,
+"n_early": 68,
+"n_late": 94,
+"pts": 2.4,
+"win": 51.9,
+"rs": -21647,
+"rs_early": -14902,
+"rs_late": -6745,
+"per_trade": -134,
+"years": {
+"2023": -4832,
+"2024": -10070,
+"2025": -3274,
+"2026": -3472
+},
+"per_index": {
+"BANKNIFTY": -34135,
+"NIFTY": 12488
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 162,
+"n_early": 68,
+"n_late": 94,
+"pts": 4.0,
+"win": 51.2,
+"rs": -11403,
+"rs_early": -10153,
+"rs_late": -1249,
+"per_trade": -70,
+"years": {
+"2023": -4546,
+"2024": -5607,
+"2025": -2737,
+"2026": 1487
+},
+"per_index": {
+"BANKNIFTY": -28006,
+"NIFTY": 16603
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 162,
+"n_early": 68,
+"n_late": 94,
+"pts": 2.7,
+"win": 34.6,
+"rs": -20924,
+"rs_early": -8999,
+"rs_late": -11925,
+"per_trade": -129,
+"years": {
+"2023": -1212,
+"2024": -7787,
+"2025": 6355,
+"2026": -18280
+},
+"per_index": {
+"BANKNIFTY": -49275,
+"NIFTY": 28351
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 162,
+"n_early": 68,
+"n_late": 94,
+"pts": 0.6,
+"win": 37.7,
+"rs": -32674,
+"rs_early": -32439,
+"rs_late": -236,
+"per_trade": -202,
+"years": {
+"2023": -15220,
+"2024": -17219,
+"2025": -28362,
+"2026": 28127
+},
+"per_index": {
+"BANKNIFTY": -37659,
+"NIFTY": 4984
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 162,
+"n_early": 68,
+"n_late": 94,
+"pts": -0.8,
+"win": 35.8,
+"rs": -36419,
+"rs_early": -37794,
+"rs_late": 1374,
+"per_trade": -225,
+"years": {
+"2023": -6855,
+"2024": -30939,
+"2025": -23968,
+"2026": 25342
+},
+"per_index": {
+"BANKNIFTY": -35825,
+"NIFTY": -594
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 162,
+"n_early": 68,
+"n_late": 94,
+"pts": -0.6,
+"win": 37.7,
+"rs": -39152,
+"rs_early": -33913,
+"rs_late": -5239,
+"per_trade": -242,
+"years": {
+"2023": -12321,
+"2024": -21593,
+"2025": -28165,
+"2026": 22926
+},
+"per_index": {
+"BANKNIFTY": -39836,
+"NIFTY": 684
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 162,
+"n_early": 68,
+"n_late": 94,
+"pts": -0.1,
+"win": 36.4,
+"rs": -34547,
+"rs_early": -35116,
+"rs_late": 569,
+"per_trade": -213,
+"years": {
+"2023": -11037,
+"2024": -24079,
+"2025": -26165,
+"2026": 26735
+},
+"per_index": {
+"BANKNIFTY": -36742,
+"NIFTY": 2195
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 162,
+"n_early": 68,
+"n_late": 94,
+"pts": -3.7,
+"win": 20.4,
+"rs": -57115,
+"rs_early": -38207,
+"rs_late": -18907,
+"per_trade": -353,
+"years": {
+"2023": -12043,
+"2024": -26164,
+"2025": -35159,
+"2026": 16252
+},
+"per_index": {
+"BANKNIFTY": -65116,
+"NIFTY": 8001
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 294,
+"n_early": 135,
+"n_late": 159,
+"pts": -2.0,
+"win": 48.0,
+"rs": -67986,
+"rs_early": -38940,
+"rs_late": -29047,
+"per_trade": -231,
+"years": {
+"2023": -5439,
+"2024": -33501,
+"2025": -22487,
+"2026": -6559
+},
+"per_index": {
+"BANKNIFTY": -25002,
+"NIFTY": -42984
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 294,
+"n_early": 135,
+"n_late": 159,
+"pts": -1.9,
+"win": 47.3,
+"rs": -61782,
+"rs_early": -36674,
+"rs_late": -25109,
+"per_trade": -210,
+"years": {
+"2023": -5439,
+"2024": -31235,
+"2025": -32304,
+"2026": 7195
+},
+"per_index": {
+"BANKNIFTY": -23800,
+"NIFTY": -37982
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 294,
+"n_early": 135,
+"n_late": 159,
+"pts": -2.6,
+"win": 48.0,
+"rs": -72708,
+"rs_early": -44146,
+"rs_late": -28562,
+"per_trade": -247,
+"years": {
+"2023": -5439,
+"2024": -38707,
+"2025": -23631,
+"2026": -4932
+},
+"per_index": {
+"BANKNIFTY": -26541,
+"NIFTY": -46167
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 294,
+"n_early": 135,
+"n_late": 159,
+"pts": -2.0,
+"win": 48.0,
+"rs": -64884,
+"rs_early": -37807,
+"rs_late": -27078,
+"per_trade": -221,
+"years": {
+"2023": -5439,
+"2024": -32368,
+"2025": -27395,
+"2026": 318
+},
+"per_index": {
+"BANKNIFTY": -24401,
+"NIFTY": -40483
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 294,
+"n_early": 135,
+"n_late": 159,
+"pts": 3.5,
+"win": 30.3,
+"rs": 7979,
+"rs_early": 22659,
+"rs_late": -14681,
+"per_trade": 27,
+"years": {
+"2023": -5439,
+"2024": 28098,
+"2025": -45031,
+"2026": 30350
+},
+"per_index": {
+"BANKNIFTY": 8663,
+"NIFTY": -684
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 294,
+"n_early": 135,
+"n_late": 159,
+"pts": -2.1,
+"win": 38.4,
+"rs": -99634,
+"rs_early": -45162,
+"rs_late": -54472,
+"per_trade": -339,
+"years": {
+"2023": -6134,
+"2024": -39028,
+"2025": -40201,
+"2026": -14271
+},
+"per_index": {
+"BANKNIFTY": -22894,
+"NIFTY": -76740
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 294,
+"n_early": 135,
+"n_late": 159,
+"pts": -1.1,
+"win": 38.1,
+"rs": -106527,
+"rs_early": -40980,
+"rs_late": -65547,
+"per_trade": -362,
+"years": {
+"2023": -6134,
+"2024": -34846,
+"2025": -56569,
+"2026": -8978
+},
+"per_index": {
+"BANKNIFTY": -21206,
+"NIFTY": -85321
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 294,
+"n_early": 135,
+"n_late": 159,
+"pts": -2.8,
+"win": 38.4,
+"rs": -120987,
+"rs_early": -57069,
+"rs_late": -63917,
+"per_trade": -412,
+"years": {
+"2023": -6134,
+"2024": -50936,
+"2025": -43634,
+"2026": -20284
+},
+"per_index": {
+"BANKNIFTY": -26406,
+"NIFTY": -94581
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 294,
+"n_early": 135,
+"n_late": 159,
+"pts": -1.6,
+"win": 38.4,
+"rs": -103080,
+"rs_early": -43071,
+"rs_late": -60010,
+"per_trade": -351,
+"years": {
+"2023": -6134,
+"2024": -36937,
+"2025": -48385,
+"2026": -11625
+},
+"per_index": {
+"BANKNIFTY": -22050,
+"NIFTY": -81031
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 294,
+"n_early": 135,
+"n_late": 159,
+"pts": 2.3,
+"win": 21.1,
+"rs": -72297,
+"rs_early": 22240,
+"rs_late": -94537,
+"per_trade": -246,
+"years": {
+"2023": -6134,
+"2024": 28373,
+"2025": -68688,
+"2026": -25849
+},
+"per_index": {
+"BANKNIFTY": -27130,
+"NIFTY": -45167
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 95,
+"n_early": 42,
+"n_late": 53,
+"pts": 5.0,
+"win": 53.7,
+"rs": -5184,
+"rs_early": -3521,
+"rs_late": -1663,
+"per_trade": -55,
+"years": {
+"2023": -1828,
+"2024": -1693,
+"2025": 898,
+"2026": -2561
+},
+"per_index": {
+"BANKNIFTY": -13732,
+"NIFTY": 8548
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 95,
+"n_early": 42,
+"n_late": 53,
+"pts": 7.6,
+"win": 53.7,
+"rs": 3273,
+"rs_early": 2939,
+"rs_late": 333,
+"per_trade": 34,
+"years": {
+"2023": 3484,
+"2024": -545,
+"2025": 4322,
+"2026": -3989
+},
+"per_index": {
+"BANKNIFTY": -3803,
+"NIFTY": 7076
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 95,
+"n_early": 42,
+"n_late": 53,
+"pts": 4.8,
+"win": 53.7,
+"rs": -6095,
+"rs_early": -3138,
+"rs_late": -2957,
+"per_trade": -64,
+"years": {
+"2023": 543,
+"2024": -3681,
+"2025": 3182,
+"2026": -6138
+},
+"per_index": {
+"BANKNIFTY": -12595,
+"NIFTY": 6500
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 95,
+"n_early": 42,
+"n_late": 53,
+"pts": 6.3,
+"win": 53.7,
+"rs": -956,
+"rs_early": -291,
+"rs_late": -665,
+"per_trade": -10,
+"years": {
+"2023": 828,
+"2024": -1119,
+"2025": 2610,
+"2026": -3275
+},
+"per_index": {
+"BANKNIFTY": -8767,
+"NIFTY": 7812
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 95,
+"n_early": 42,
+"n_late": 53,
+"pts": 2.3,
+"win": 33.7,
+"rs": -12934,
+"rs_early": 2097,
+"rs_late": -15031,
+"per_trade": -136,
+"years": {
+"2023": 4162,
+"2024": -2065,
+"2025": 6296,
+"2026": -21327
+},
+"per_index": {
+"BANKNIFTY": -32044,
+"NIFTY": 19110
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 95,
+"n_early": 42,
+"n_late": 53,
+"pts": 3.8,
+"win": 42.1,
+"rs": -6437,
+"rs_early": -13494,
+"rs_late": 7057,
+"per_trade": -68,
+"years": {
+"2023": -6807,
+"2024": -6686,
+"2025": -8860,
+"2026": 15917
+},
+"per_index": {
+"BANKNIFTY": -15844,
+"NIFTY": 9408
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 95,
+"n_early": 42,
+"n_late": 53,
+"pts": 3.6,
+"win": 41.1,
+"rs": -8124,
+"rs_early": -9056,
+"rs_late": 932,
+"per_trade": -86,
+"years": {
+"2023": 1557,
+"2024": -10613,
+"2025": -7612,
+"2026": 8545
+},
+"per_index": {
+"BANKNIFTY": -7123,
+"NIFTY": -1000
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 95,
+"n_early": 42,
+"n_late": 53,
+"pts": 3.5,
+"win": 42.1,
+"rs": -6732,
+"rs_early": -11051,
+"rs_late": 4320,
+"per_trade": -71,
+"years": {
+"2023": -3908,
+"2024": -7143,
+"2025": -6478,
+"2026": 10798
+},
+"per_index": {
+"BANKNIFTY": -12828,
+"NIFTY": 6096
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 95,
+"n_early": 42,
+"n_late": 53,
+"pts": 3.7,
+"win": 41.1,
+"rs": -7280,
+"rs_early": -11275,
+"rs_late": 3995,
+"per_trade": -77,
+"years": {
+"2023": -2625,
+"2024": -8650,
+"2025": -8236,
+"2026": 12231
+},
+"per_index": {
+"BANKNIFTY": -11484,
+"NIFTY": 4204
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 95,
+"n_early": 42,
+"n_late": 53,
+"pts": -3.8,
+"win": 21.1,
+"rs": -34884,
+"rs_early": -20856,
+"rs_late": -14028,
+"per_trade": -367,
+"years": {
+"2023": -3631,
+"2024": -17226,
+"2025": -14363,
+"2026": 335
+},
+"per_index": {
+"BANKNIFTY": -41923,
+"NIFTY": 7039
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 150,
+"n_early": 59,
+"n_late": 91,
+"pts": 2.4,
+"win": 48.7,
+"rs": -16819,
+"rs_early": -724,
+"rs_late": -16095,
+"per_trade": -112,
+"years": {
+"2023": -3030,
+"2024": 2307,
+"2025": -6808,
+"2026": -9287
+},
+"per_index": {
+"BANKNIFTY": -10290,
+"NIFTY": -6529
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 96,
+"n_early": 43,
+"n_late": 53,
+"pts": 6.7,
+"win": 53.1,
+"rs": 719,
+"rs_early": 35,
+"rs_late": 684,
+"per_trade": 7,
+"years": {
+"2023": -1724,
+"2024": 1759,
+"2025": 1090,
+"2026": -406
+},
+"per_index": {
+"BANKNIFTY": -2157,
+"NIFTY": 2876
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 150,
+"n_early": 59,
+"n_late": 91,
+"pts": 2.1,
+"win": 47.3,
+"rs": -15872,
+"rs_early": -6301,
+"rs_late": -9571,
+"per_trade": -106,
+"years": {
+"2023": -2913,
+"2024": -3388,
+"2025": -6590,
+"2026": -2981
+},
+"per_index": {
+"BANKNIFTY": -14307,
+"NIFTY": -1565
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 96,
+"n_early": 43,
+"n_late": 53,
+"pts": 6.5,
+"win": 51.0,
+"rs": 2115,
+"rs_early": -3614,
+"rs_late": 5729,
+"per_trade": 22,
+"years": {
+"2023": -1607,
+"2024": -2008,
+"2025": 3652,
+"2026": 2077
+},
+"per_index": {
+"BANKNIFTY": -9921,
+"NIFTY": 12036
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 150,
+"n_early": 59,
+"n_late": 91,
+"pts": 0.9,
+"win": 48.7,
+"rs": -24762,
+"rs_early": -5057,
+"rs_late": -19705,
+"per_trade": -165,
+"years": {
+"2023": -3841,
+"2024": -1216,
+"2025": -6229,
+"2026": -13476
+},
+"per_index": {
+"BANKNIFTY": -17055,
+"NIFTY": -7706
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 96,
+"n_early": 43,
+"n_late": 53,
+"pts": 5.0,
+"win": 53.1,
+"rs": -5243,
+"rs_early": -1710,
+"rs_late": -3533,
+"per_trade": -55,
+"years": {
+"2023": -2534,
+"2024": 824,
+"2025": 747,
+"2026": -4280
+},
+"per_index": {
+"BANKNIFTY": -7309,
+"NIFTY": 2066
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 150,
+"n_early": 59,
+"n_late": 91,
+"pts": 2.3,
+"win": 48.0,
+"rs": -16346,
+"rs_early": -3512,
+"rs_late": -12833,
+"per_trade": -109,
+"years": {
+"2023": -2972,
+"2024": -540,
+"2025": -6699,
+"2026": -6134
+},
+"per_index": {
+"BANKNIFTY": -12299,
+"NIFTY": -4047
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 96,
+"n_early": 43,
+"n_late": 53,
+"pts": 6.6,
+"win": 52.1,
+"rs": 1417,
+"rs_early": -1790,
+"rs_late": 3207,
+"per_trade": 15,
+"years": {
+"2023": -1665,
+"2024": -124,
+"2025": 2371,
+"2026": 836
+},
+"per_index": {
+"BANKNIFTY": -6039,
+"NIFTY": 7456
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 150,
+"n_early": 59,
+"n_late": 91,
+"pts": 10.8,
+"win": 32.0,
+"rs": 41444,
+"rs_early": 40309,
+"rs_late": 1134,
+"per_trade": 276,
+"years": {
+"2023": -5189,
+"2024": 45498,
+"2025": 2151,
+"2026": -1017
+},
+"per_index": {
+"BANKNIFTY": -4749,
+"NIFTY": 46192
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 96,
+"n_early": 43,
+"n_late": 53,
+"pts": 16.0,
+"win": 33.3,
+"rs": 44233,
+"rs_early": 27272,
+"rs_late": 16961,
+"per_trade": 461,
+"years": {
+"2023": -3883,
+"2024": 31155,
+"2025": 15053,
+"2026": 1908
+},
+"per_index": {
+"BANKNIFTY": 6736,
+"NIFTY": 37498
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 150,
+"n_early": 59,
+"n_late": 91,
+"pts": 1.5,
+"win": 39.3,
+"rs": -14256,
+"rs_early": 3005,
+"rs_late": -17261,
+"per_trade": -95,
+"years": {
+"2023": -5420,
+"2024": 8424,
+"2025": -8105,
+"2026": -9155
+},
+"per_index": {
+"BANKNIFTY": -19438,
+"NIFTY": 5182
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 96,
+"n_early": 43,
+"n_late": 53,
+"pts": 3.6,
+"win": 42.7,
+"rs": -838,
+"rs_early": -1112,
+"rs_late": 274,
+"per_trade": -9,
+"years": {
+"2023": -3301,
+"2024": 2189,
+"2025": 542,
+"2026": -268
+},
+"per_index": {
+"BANKNIFTY": -11012,
+"NIFTY": 10174
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 150,
+"n_early": 59,
+"n_late": 91,
+"pts": 0.9,
+"win": 38.0,
+"rs": -12709,
+"rs_early": -3780,
+"rs_late": -8929,
+"per_trade": -85,
+"years": {
+"2023": -5303,
+"2024": 1522,
+"2025": -2605,
+"2026": -6324
+},
+"per_index": {
+"BANKNIFTY": -19391,
+"NIFTY": 6682
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 96,
+"n_early": 43,
+"n_late": 53,
+"pts": 2.5,
+"win": 40.6,
+"rs": -338,
+"rs_early": -7248,
+"rs_late": 6909,
+"per_trade": -4,
+"years": {
+"2023": -3183,
+"2024": -4064,
+"2025": 6338,
+"2026": 571
+},
+"per_index": {
+"BANKNIFTY": -15251,
+"NIFTY": 14913
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 150,
+"n_early": 59,
+"n_late": 91,
+"pts": -0.2,
+"win": 39.3,
+"rs": -16929,
+"rs_early": -168,
+"rs_late": -16762,
+"per_trade": -113,
+"years": {
+"2023": -6230,
+"2024": 6062,
+"2025": -2718,
+"2026": -14044
+},
+"per_index": {
+"BANKNIFTY": -24001,
+"NIFTY": 7072
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 96,
+"n_early": 43,
+"n_late": 53,
+"pts": 1.4,
+"win": 42.7,
+"rs": -6315,
+"rs_early": -2943,
+"rs_late": -3373,
+"per_trade": -66,
+"years": {
+"2023": -4111,
+"2024": 1168,
+"2025": -226,
+"2026": -3147
+},
+"per_index": {
+"BANKNIFTY": -14246,
+"NIFTY": 7931
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 150,
+"n_early": 59,
+"n_late": 91,
+"pts": 1.2,
+"win": 38.7,
+"rs": -13483,
+"rs_early": -388,
+"rs_late": -13095,
+"per_trade": -90,
+"years": {
+"2023": -5361,
+"2024": 4973,
+"2025": -5355,
+"2026": -7740
+},
+"per_index": {
+"BANKNIFTY": -19415,
+"NIFTY": 5932
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 96,
+"n_early": 43,
+"n_late": 53,
+"pts": 3.0,
+"win": 41.7,
+"rs": -588,
+"rs_early": -4180,
+"rs_late": 3592,
+"per_trade": -6,
+"years": {
+"2023": -3242,
+"2024": -938,
+"2025": 3440,
+"2026": 152
+},
+"per_index": {
+"BANKNIFTY": -13132,
+"NIFTY": 12544
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 150,
+"n_early": 59,
+"n_late": 91,
+"pts": 11.5,
+"win": 26.0,
+"rs": 91450,
+"rs_early": 69181,
+"rs_late": 22269,
+"per_trade": 610,
+"years": {
+"2023": -7579,
+"2024": 76760,
+"2025": 12388,
+"2026": 9880
+},
+"per_index": {
+"BANKNIFTY": 7668,
+"NIFTY": 83782
+}
+},
+{
+"v": {
+"tf": "5m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 96,
+"n_early": 43,
+"n_late": 53,
+"pts": 13.8,
+"win": 28.1,
+"rs": 72649,
+"rs_early": 37172,
+"rs_late": 35477,
+"per_trade": 757,
+"years": {
+"2023": -5459,
+"2024": 42631,
+"2025": 18965,
+"2026": 16512
+},
+"per_index": {
+"BANKNIFTY": 14888,
+"NIFTY": 57761
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 1036,
+"n_early": 441,
+"n_late": 595,
+"pts": -0.6,
+"win": 50.2,
+"rs": -181377,
+"rs_early": -46361,
+"rs_late": -135016,
+"per_trade": -175,
+"years": {
+"2023": -7437,
+"2024": -38924,
+"2025": -80381,
+"2026": -54635
+},
+"per_index": {
+"BANKNIFTY": -57521,
+"NIFTY": -123856
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 1036,
+"n_early": 441,
+"n_late": 595,
+"pts": 0.8,
+"win": 48.2,
+"rs": -111116,
+"rs_early": -28800,
+"rs_late": -82317,
+"per_trade": -107,
+"years": {
+"2023": -5368,
+"2024": -23431,
+"2025": -36255,
+"2026": -46061
+},
+"per_index": {
+"BANKNIFTY": -29377,
+"NIFTY": -81739
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 1036,
+"n_early": 441,
+"n_late": 595,
+"pts": 0.5,
+"win": 50.1,
+"rs": -135307,
+"rs_early": -44583,
+"rs_late": -90724,
+"per_trade": -131,
+"years": {
+"2023": -8783,
+"2024": -35800,
+"2025": -59222,
+"2026": -31502
+},
+"per_index": {
+"BANKNIFTY": -52558,
+"NIFTY": -82749
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 1036,
+"n_early": 441,
+"n_late": 595,
+"pts": 0.1,
+"win": 49.8,
+"rs": -146247,
+"rs_early": -37580,
+"rs_late": -108666,
+"per_trade": -141,
+"years": {
+"2023": -6403,
+"2024": -31178,
+"2025": -58318,
+"2026": -50348
+},
+"per_index": {
+"BANKNIFTY": -43449,
+"NIFTY": -102797
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 1036,
+"n_early": 441,
+"n_late": 595,
+"pts": 5.0,
+"win": 35.0,
+"rs": 71821,
+"rs_early": 44902,
+"rs_late": 26919,
+"per_trade": 69,
+"years": {
+"2023": -15085,
+"2024": 59987,
+"2025": -35132,
+"2026": 62051
+},
+"per_index": {
+"BANKNIFTY": 41852,
+"NIFTY": 29969
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 1036,
+"n_early": 441,
+"n_late": 595,
+"pts": -0.5,
+"win": 47.6,
+"rs": -166998,
+"rs_early": -32714,
+"rs_late": -134284,
+"per_trade": -161,
+"years": {
+"2023": -9131,
+"2024": -23583,
+"2025": -59835,
+"2026": -74449
+},
+"per_index": {
+"BANKNIFTY": -54591,
+"NIFTY": -112406
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 1036,
+"n_early": 441,
+"n_late": 595,
+"pts": 0.2,
+"win": 45.1,
+"rs": -132743,
+"rs_early": -37827,
+"rs_late": -94917,
+"per_trade": -128,
+"years": {
+"2023": -11258,
+"2024": -26569,
+"2025": -14009,
+"2026": -80907
+},
+"per_index": {
+"BANKNIFTY": -39246,
+"NIFTY": -93497
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 1036,
+"n_early": 441,
+"n_late": 595,
+"pts": 0.3,
+"win": 47.2,
+"rs": -138183,
+"rs_early": -46376,
+"rs_late": -91807,
+"per_trade": -133,
+"years": {
+"2023": -12533,
+"2024": -33843,
+"2025": -34050,
+"2026": -57757
+},
+"per_index": {
+"BANKNIFTY": -52460,
+"NIFTY": -85723
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 1036,
+"n_early": 441,
+"n_late": 595,
+"pts": -0.1,
+"win": 46.9,
+"rs": -149870,
+"rs_early": -35270,
+"rs_late": -114600,
+"per_trade": -145,
+"years": {
+"2023": -10195,
+"2024": -25076,
+"2025": -36922,
+"2026": -77678
+},
+"per_index": {
+"BANKNIFTY": -46919,
+"NIFTY": -102952
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 1036,
+"n_early": 441,
+"n_late": 595,
+"pts": 5.0,
+"win": 32.5,
+"rs": 115935,
+"rs_early": 83192,
+"rs_late": 32743,
+"per_trade": 112,
+"years": {
+"2023": -18733,
+"2024": 101925,
+"2025": 23262,
+"2026": 9481
+},
+"per_index": {
+"BANKNIFTY": 22100,
+"NIFTY": 93835
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 323,
+"n_early": 130,
+"n_late": 193,
+"pts": 0.3,
+"win": 50.5,
+"rs": -53170,
+"rs_early": -11900,
+"rs_late": -41270,
+"per_trade": -165,
+"years": {
+"2023": 527,
+"2024": -12426,
+"2025": -16106,
+"2026": -25164
+},
+"per_index": {
+"BANKNIFTY": -59321,
+"NIFTY": 6151
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 323,
+"n_early": 130,
+"n_late": 193,
+"pts": 3.5,
+"win": 48.6,
+"rs": -13262,
+"rs_early": -1000,
+"rs_late": -12261,
+"per_trade": -41,
+"years": {
+"2023": 7766,
+"2024": -8767,
+"2025": -16260,
+"2026": 3999
+},
+"per_index": {
+"BANKNIFTY": -44004,
+"NIFTY": 30742
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 323,
+"n_early": 130,
+"n_late": 193,
+"pts": 1.3,
+"win": 50.5,
+"rs": -42190,
+"rs_early": -5457,
+"rs_late": -36733,
+"per_trade": -131,
+"years": {
+"2023": 1954,
+"2024": -7411,
+"2025": -18204,
+"2026": -18528
+},
+"per_index": {
+"BANKNIFTY": -61655,
+"NIFTY": 19465
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 323,
+"n_early": 130,
+"n_late": 193,
+"pts": 1.9,
+"win": 50.5,
+"rs": -33216,
+"rs_early": -6450,
+"rs_late": -26766,
+"per_trade": -103,
+"years": {
+"2023": 4147,
+"2024": -10597,
+"2025": -16183,
+"2026": -10583
+},
+"per_index": {
+"BANKNIFTY": -51663,
+"NIFTY": 18447
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 323,
+"n_early": 130,
+"n_late": 193,
+"pts": 4.8,
+"win": 35.3,
+"rs": 6604,
+"rs_early": 20658,
+"rs_late": -14054,
+"per_trade": 20,
+"years": {
+"2023": 10590,
+"2024": 10068,
+"2025": -11316,
+"2026": -2738
+},
+"per_index": {
+"BANKNIFTY": -55391,
+"NIFTY": 61995
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 323,
+"n_early": 130,
+"n_late": 193,
+"pts": 0.3,
+"win": 45.8,
+"rs": -77245,
+"rs_early": -25939,
+"rs_late": -51306,
+"per_trade": -239,
+"years": {
+"2023": -6320,
+"2024": -19619,
+"2025": -25137,
+"2026": -26169
+},
+"per_index": {
+"BANKNIFTY": -69141,
+"NIFTY": -8103
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 323,
+"n_early": 130,
+"n_late": 193,
+"pts": 3.2,
+"win": 43.3,
+"rs": -36326,
+"rs_early": -12550,
+"rs_late": -23776,
+"per_trade": -112,
+"years": {
+"2023": -789,
+"2024": -11761,
+"2025": -25671,
+"2026": 1895
+},
+"per_index": {
+"BANKNIFTY": -50549,
+"NIFTY": 14223
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 323,
+"n_early": 130,
+"n_late": 193,
+"pts": 0.9,
+"win": 45.8,
+"rs": -67327,
+"rs_early": -18199,
+"rs_late": -49128,
+"per_trade": -208,
+"years": {
+"2023": -6058,
+"2024": -12141,
+"2025": -29450,
+"2026": -19678
+},
+"per_index": {
+"BANKNIFTY": -70616,
+"NIFTY": 3289
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 323,
+"n_early": 130,
+"n_late": 193,
+"pts": 1.8,
+"win": 45.8,
+"rs": -56785,
+"rs_early": -19244,
+"rs_late": -37541,
+"per_trade": -176,
+"years": {
+"2023": -3555,
+"2024": -15690,
+"2025": -25404,
+"2026": -12137
+},
+"per_index": {
+"BANKNIFTY": -59845,
+"NIFTY": 3060
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 323,
+"n_early": 130,
+"n_late": 193,
+"pts": 4.5,
+"win": 32.2,
+"rs": 4948,
+"rs_early": 12871,
+"rs_late": -7923,
+"per_trade": 15,
+"years": {
+"2023": 6908,
+"2024": 5963,
+"2025": -19975,
+"2026": 12051
+},
+"per_index": {
+"BANKNIFTY": -33534,
+"NIFTY": 38482
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 292,
+"n_early": 114,
+"n_late": 178,
+"pts": 6.1,
+"win": 55.1,
+"rs": 3902,
+"rs_early": -1084,
+"rs_late": 4986,
+"per_trade": 13,
+"years": {
+"2023": -6020,
+"2024": 4936,
+"2025": 10333,
+"2026": -5347
+},
+"per_index": {
+"BANKNIFTY": -2991,
+"NIFTY": 6893
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 292,
+"n_early": 114,
+"n_late": 178,
+"pts": 6.4,
+"win": 52.4,
+"rs": 8081,
+"rs_early": -2024,
+"rs_late": 10105,
+"per_trade": 28,
+"years": {
+"2023": 370,
+"2024": -2394,
+"2025": 8283,
+"2026": 1823
+},
+"per_index": {
+"BANKNIFTY": -5900,
+"NIFTY": 13982
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 292,
+"n_early": 114,
+"n_late": 178,
+"pts": 5.7,
+"win": 55.1,
+"rs": -65,
+"rs_early": -5400,
+"rs_late": 5336,
+"per_trade": 0,
+"years": {
+"2023": -2037,
+"2024": -3363,
+"2025": 9413,
+"2026": -4077
+},
+"per_index": {
+"BANKNIFTY": -3090,
+"NIFTY": 3026
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 292,
+"n_early": 114,
+"n_late": 178,
+"pts": 6.2,
+"win": 54.8,
+"rs": 5992,
+"rs_early": -1554,
+"rs_late": 7546,
+"per_trade": 21,
+"years": {
+"2023": -2825,
+"2024": 1271,
+"2025": 9308,
+"2026": -1762
+},
+"per_index": {
+"BANKNIFTY": -4446,
+"NIFTY": 10437
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 292,
+"n_early": 114,
+"n_late": 178,
+"pts": 4.8,
+"win": 36.6,
+"rs": -6732,
+"rs_early": 2264,
+"rs_late": -8996,
+"per_trade": -23,
+"years": {
+"2023": -1167,
+"2024": 3431,
+"2025": -6218,
+"2026": -2778
+},
+"per_index": {
+"BANKNIFTY": -17872,
+"NIFTY": 11140
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 292,
+"n_early": 114,
+"n_late": 178,
+"pts": 6.2,
+"win": 50.7,
+"rs": -6458,
+"rs_early": -33321,
+"rs_late": 26863,
+"per_trade": -22,
+"years": {
+"2023": -21859,
+"2024": -11463,
+"2025": 5628,
+"2026": 21235
+},
+"per_index": {
+"BANKNIFTY": -3458,
+"NIFTY": -2999
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 292,
+"n_early": 114,
+"n_late": 178,
+"pts": 5.8,
+"win": 47.6,
+"rs": 7639,
+"rs_early": -30185,
+"rs_late": 37824,
+"per_trade": 26,
+"years": {
+"2023": -13160,
+"2024": -17025,
+"2025": 15524,
+"2026": 22300
+},
+"per_index": {
+"BANKNIFTY": -1379,
+"NIFTY": 9018
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 292,
+"n_early": 114,
+"n_late": 178,
+"pts": 6.1,
+"win": 50.7,
+"rs": -3580,
+"rs_early": -33803,
+"rs_late": 30223,
+"per_trade": -12,
+"years": {
+"2023": -16966,
+"2024": -16837,
+"2025": 6818,
+"2026": 23404
+},
+"per_index": {
+"BANKNIFTY": 2998,
+"NIFTY": -6578
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 292,
+"n_early": 114,
+"n_late": 178,
+"pts": 6.0,
+"win": 50.0,
+"rs": 591,
+"rs_early": -31753,
+"rs_late": 32344,
+"per_trade": 2,
+"years": {
+"2023": -17509,
+"2024": -14244,
+"2025": 10576,
+"2026": 21767
+},
+"per_index": {
+"BANKNIFTY": -2419,
+"NIFTY": 3009
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": "any",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 292,
+"n_early": 114,
+"n_late": 178,
+"pts": 4.9,
+"win": 32.2,
+"rs": -3208,
+"rs_early": -23418,
+"rs_late": 20210,
+"per_trade": -11,
+"years": {
+"2023": -15633,
+"2024": -7784,
+"2025": -4546,
+"2026": 24756
+},
+"per_index": {
+"BANKNIFTY": -17857,
+"NIFTY": 14649
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 343,
+"n_early": 153,
+"n_late": 190,
+"pts": -2.2,
+"win": 49.6,
+"rs": -74695,
+"rs_early": -1018,
+"rs_late": -73677,
+"per_trade": -218,
+"years": {
+"2023": -2199,
+"2024": 1180,
+"2025": -47012,
+"2026": -26665
+},
+"per_index": {
+"BANKNIFTY": -25854,
+"NIFTY": -48840
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 343,
+"n_early": 153,
+"n_late": 190,
+"pts": -3.0,
+"win": 47.5,
+"rs": -77083,
+"rs_early": -9527,
+"rs_late": -67556,
+"per_trade": -225,
+"years": {
+"2023": -3012,
+"2024": -6516,
+"2025": -46437,
+"2026": -21119
+},
+"per_index": {
+"BANKNIFTY": -21445,
+"NIFTY": -55638
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 343,
+"n_early": 153,
+"n_late": 190,
+"pts": -3.4,
+"win": 49.3,
+"rs": -85903,
+"rs_early": -19031,
+"rs_late": -66871,
+"per_trade": -250,
+"years": {
+"2023": -3809,
+"2024": -15222,
+"2025": -43961,
+"2026": -22910
+},
+"per_index": {
+"BANKNIFTY": -29398,
+"NIFTY": -56504
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 343,
+"n_early": 153,
+"n_late": 190,
+"pts": -2.6,
+"win": 49.3,
+"rs": -75889,
+"rs_early": -5273,
+"rs_late": -70616,
+"per_trade": -221,
+"years": {
+"2023": -2605,
+"2024": -2668,
+"2025": -46724,
+"2026": -23892
+},
+"per_index": {
+"BANKNIFTY": -23650,
+"NIFTY": -52239
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 343,
+"n_early": 153,
+"n_late": 190,
+"pts": -2.8,
+"win": 32.7,
+"rs": -56707,
+"rs_early": 9548,
+"rs_late": -66255,
+"per_trade": -165,
+"years": {
+"2023": -4563,
+"2024": 14111,
+"2025": -66372,
+"2026": 117
+},
+"per_index": {
+"BANKNIFTY": -28145,
+"NIFTY": -28562
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 343,
+"n_early": 153,
+"n_late": 190,
+"pts": -1.6,
+"win": 48.7,
+"rs": -49031,
+"rs_early": 8566,
+"rs_late": -57596,
+"per_trade": -143,
+"years": {
+"2023": 143,
+"2024": 8422,
+"2025": -32262,
+"2026": -25334
+},
+"per_index": {
+"BANKNIFTY": -18331,
+"NIFTY": -30700
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 343,
+"n_early": 153,
+"n_late": 190,
+"pts": -2.7,
+"win": 46.4,
+"rs": -79851,
+"rs_early": -6192,
+"rs_late": -73659,
+"per_trade": -233,
+"years": {
+"2023": -1860,
+"2024": -4332,
+"2025": -35645,
+"2026": -38013
+},
+"per_index": {
+"BANKNIFTY": -28463,
+"NIFTY": -51388
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 343,
+"n_early": 153,
+"n_late": 190,
+"pts": -2.7,
+"win": 48.4,
+"rs": -70903,
+"rs_early": -10216,
+"rs_late": -60687,
+"per_trade": -207,
+"years": {
+"2023": -3507,
+"2024": -6710,
+"2025": -33091,
+"2026": -27596
+},
+"per_index": {
+"BANKNIFTY": -27597,
+"NIFTY": -43306
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 343,
+"n_early": 153,
+"n_late": 190,
+"pts": -2.1,
+"win": 48.4,
+"rs": -64441,
+"rs_early": 1187,
+"rs_late": -65627,
+"per_trade": -188,
+"years": {
+"2023": -858,
+"2024": 2045,
+"2025": -33954,
+"2026": -31674
+},
+"per_index": {
+"BANKNIFTY": -23397,
+"NIFTY": -41044
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 343,
+"n_early": 153,
+"n_late": 190,
+"pts": 0.1,
+"win": 31.2,
+"rs": -12758,
+"rs_early": 45991,
+"rs_late": -58748,
+"per_trade": -37,
+"years": {
+"2023": -4218,
+"2024": 50209,
+"2025": -41280,
+"2026": -17468
+},
+"per_index": {
+"BANKNIFTY": -27389,
+"NIFTY": 14632
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 109,
+"n_early": 49,
+"n_late": 60,
+"pts": 1.7,
+"win": 52.3,
+"rs": -11248,
+"rs_early": -7237,
+"rs_late": -4010,
+"per_trade": -103,
+"years": {
+"2023": -2735,
+"2024": -4502,
+"2025": 2008,
+"2026": -6019
+},
+"per_index": {
+"BANKNIFTY": -14601,
+"NIFTY": 3353
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 49,
+"n_early": 26,
+"n_late": 23,
+"pts": -1.5,
+"win": 46.9,
+"rs": -10629,
+"rs_early": -6696,
+"rs_late": -3933,
+"per_trade": -217,
+"years": {
+"2023": -1936,
+"2024": -4759,
+"2025": -2401,
+"2026": -1533
+},
+"per_index": {
+"BANKNIFTY": -13964,
+"NIFTY": 3335
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 109,
+"n_early": 49,
+"n_late": 60,
+"pts": 6.0,
+"win": 51.4,
+"rs": 5239,
+"rs_early": -9447,
+"rs_late": 14685,
+"per_trade": 48,
+"years": {
+"2023": -2897,
+"2024": -6549,
+"2025": 2656,
+"2026": 12029
+},
+"per_index": {
+"BANKNIFTY": 837,
+"NIFTY": 4402
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 49,
+"n_early": 26,
+"n_late": 23,
+"pts": -2.6,
+"win": 44.9,
+"rs": -11371,
+"rs_early": -10512,
+"rs_late": -860,
+"per_trade": -232,
+"years": {
+"2023": -1936,
+"2024": -8576,
+"2025": 1050,
+"2026": -1910
+},
+"per_index": {
+"BANKNIFTY": -14259,
+"NIFTY": 2887
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 109,
+"n_early": 49,
+"n_late": 60,
+"pts": 2.6,
+"win": 52.3,
+"rs": -8378,
+"rs_early": -8977,
+"rs_late": 599,
+"per_trade": -77,
+"years": {
+"2023": -3537,
+"2024": -5440,
+"2025": 3246,
+"2026": -2647
+},
+"per_index": {
+"BANKNIFTY": -11641,
+"NIFTY": 3263
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 49,
+"n_early": 26,
+"n_late": 23,
+"pts": -2.8,
+"win": 46.9,
+"rs": -12578,
+"rs_early": -8543,
+"rs_late": -4036,
+"per_trade": -257,
+"years": {
+"2023": -1936,
+"2024": -6606,
+"2025": -1492,
+"2026": -2544
+},
+"per_index": {
+"BANKNIFTY": -15364,
+"NIFTY": 2785
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 109,
+"n_early": 49,
+"n_late": 60,
+"pts": 3.9,
+"win": 52.3,
+"rs": -3004,
+"rs_early": -8342,
+"rs_late": 5338,
+"per_trade": -28,
+"years": {
+"2023": -2816,
+"2024": -5526,
+"2025": 2332,
+"2026": 3005
+},
+"per_index": {
+"BANKNIFTY": -6882,
+"NIFTY": 3877
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 49,
+"n_early": 26,
+"n_late": 23,
+"pts": -2.1,
+"win": 46.9,
+"rs": -11000,
+"rs_early": -8604,
+"rs_late": -2396,
+"per_trade": -224,
+"years": {
+"2023": -1936,
+"2024": -6667,
+"2025": -675,
+"2026": -1721
+},
+"per_index": {
+"BANKNIFTY": -14111,
+"NIFTY": 3111
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 109,
+"n_early": 49,
+"n_late": 60,
+"pts": 15.0,
+"win": 36.7,
+"rs": 46858,
+"rs_early": 28472,
+"rs_late": 18386,
+"per_trade": 430,
+"years": {
+"2023": -5034,
+"2024": 33506,
+"2025": 9093,
+"2026": 9293
+},
+"per_index": {
+"BANKNIFTY": 13295,
+"NIFTY": 33563
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 49,
+"n_early": 26,
+"n_late": 23,
+"pts": -3.8,
+"win": 30.6,
+"rs": -9679,
+"rs_early": -8739,
+"rs_late": -940,
+"per_trade": -198,
+"years": {
+"2023": -1936,
+"2024": -6803,
+"2025": 10914,
+"2026": -11854
+},
+"per_index": {
+"BANKNIFTY": -24398,
+"NIFTY": 14719
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 109,
+"n_early": 49,
+"n_late": 60,
+"pts": 0.5,
+"win": 48.6,
+"rs": -23131,
+"rs_early": -14375,
+"rs_late": -8756,
+"per_trade": -212,
+"years": {
+"2023": -4604,
+"2024": -9771,
+"2025": 551,
+"2026": -9307
+},
+"per_index": {
+"BANKNIFTY": -23825,
+"NIFTY": 694
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 49,
+"n_early": 26,
+"n_late": 23,
+"pts": -0.9,
+"win": 44.9,
+"rs": -10057,
+"rs_early": -7580,
+"rs_late": -2477,
+"per_trade": -205,
+"years": {
+"2023": -3330,
+"2024": -4250,
+"2025": -1766,
+"2026": -711
+},
+"per_index": {
+"BANKNIFTY": -14579,
+"NIFTY": 4523
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 109,
+"n_early": 49,
+"n_late": 60,
+"pts": 4.7,
+"win": 46.8,
+"rs": -4928,
+"rs_early": -14302,
+"rs_late": 9373,
+"per_trade": -45,
+"years": {
+"2023": -4766,
+"2024": -9536,
+"2025": 2532,
+"2026": 6841
+},
+"per_index": {
+"BANKNIFTY": -4738,
+"NIFTY": -190
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 49,
+"n_early": 26,
+"n_late": 23,
+"pts": -0.7,
+"win": 42.9,
+"rs": -9452,
+"rs_early": -10468,
+"rs_late": 1016,
+"per_trade": -193,
+"years": {
+"2023": -3330,
+"2024": -7138,
+"2025": 2551,
+"2026": -1534
+},
+"per_index": {
+"BANKNIFTY": -12758,
+"NIFTY": 3306
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 109,
+"n_early": 49,
+"n_late": 60,
+"pts": 1.5,
+"win": 48.6,
+"rs": -18470,
+"rs_early": -14483,
+"rs_late": -3987,
+"per_trade": -169,
+"years": {
+"2023": -5406,
+"2024": -9078,
+"2025": 1862,
+"2026": -5850
+},
+"per_index": {
+"BANKNIFTY": -19269,
+"NIFTY": 798
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 49,
+"n_early": 26,
+"n_late": 23,
+"pts": -1.1,
+"win": 44.9,
+"rs": -11014,
+"rs_early": -8560,
+"rs_late": -2453,
+"per_trade": -225,
+"years": {
+"2023": -3330,
+"2024": -5230,
+"2025": -5,
+"2026": -2448
+},
+"per_index": {
+"BANKNIFTY": -14356,
+"NIFTY": 3343
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 109,
+"n_early": 49,
+"n_late": 60,
+"pts": 2.6,
+"win": 48.6,
+"rs": -14030,
+"rs_early": -14338,
+"rs_late": 309,
+"per_trade": -129,
+"years": {
+"2023": -4685,
+"2024": -9653,
+"2025": 1542,
+"2026": -1233
+},
+"per_index": {
+"BANKNIFTY": -14281,
+"NIFTY": 252
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 49,
+"n_early": 26,
+"n_late": 23,
+"pts": -0.8,
+"win": 44.9,
+"rs": -9754,
+"rs_early": -9024,
+"rs_late": -730,
+"per_trade": -199,
+"years": {
+"2023": -3330,
+"2024": -5694,
+"2025": 392,
+"2026": -1123
+},
+"per_index": {
+"BANKNIFTY": -13669,
+"NIFTY": 3915
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 109,
+"n_early": 49,
+"n_late": 60,
+"pts": 14.6,
+"win": 35.8,
+"rs": 45002,
+"rs_early": 30879,
+"rs_late": 14123,
+"per_trade": 413,
+"years": {
+"2023": -6903,
+"2024": 37782,
+"2025": 12056,
+"2026": 2067
+},
+"per_index": {
+"BANKNIFTY": 15829,
+"NIFTY": 29173
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "2nd OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 49,
+"n_early": 26,
+"n_late": 23,
+"pts": 2.8,
+"win": 32.7,
+"rs": -121,
+"rs_early": -4183,
+"rs_late": 4062,
+"per_trade": -2,
+"years": {
+"2023": -3330,
+"2024": -853,
+"2025": 15366,
+"2026": -11304
+},
+"per_index": {
+"BANKNIFTY": -15914,
+"NIFTY": 15793
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 109,
+"n_early": 43,
+"n_late": 66,
+"pts": 9.0,
+"win": 57.8,
+"rs": 12205,
+"rs_early": -68,
+"rs_late": 12273,
+"per_trade": 112,
+"years": {
+"2023": -1983,
+"2024": 1916,
+"2025": 12141,
+"2026": 132
+},
+"per_index": {
+"BANKNIFTY": 6112,
+"NIFTY": 6094
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 45,
+"n_early": 17,
+"n_late": 28,
+"pts": 16.0,
+"win": 64.4,
+"rs": 16730,
+"rs_early": 1377,
+"rs_late": 15353,
+"per_trade": 372,
+"years": {
+"2023": -1203,
+"2024": 2581,
+"2025": 16524,
+"2026": -1171
+},
+"per_index": {
+"BANKNIFTY": 4201,
+"NIFTY": 12529
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 109,
+"n_early": 43,
+"n_late": 66,
+"pts": 9.5,
+"win": 55.0,
+"rs": 14930,
+"rs_early": 8277,
+"rs_late": 6653,
+"per_trade": 137,
+"years": {
+"2023": 3663,
+"2024": 4614,
+"2025": 10354,
+"2026": -3701
+},
+"per_index": {
+"BANKNIFTY": -1245,
+"NIFTY": 16175
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 45,
+"n_early": 17,
+"n_late": 28,
+"pts": 22.5,
+"win": 62.2,
+"rs": 26087,
+"rs_early": 14037,
+"rs_late": 12050,
+"per_trade": 580,
+"years": {
+"2023": 928,
+"2024": 13109,
+"2025": 16411,
+"2026": -4362
+},
+"per_index": {
+"BANKNIFTY": 4758,
+"NIFTY": 21329
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 109,
+"n_early": 43,
+"n_late": 66,
+"pts": 6.8,
+"win": 57.8,
+"rs": 3296,
+"rs_early": -2680,
+"rs_late": 5976,
+"per_trade": 30,
+"years": {
+"2023": 363,
+"2024": -3043,
+"2025": 13309,
+"2026": -7332
+},
+"per_index": {
+"BANKNIFTY": -2437,
+"NIFTY": 5733
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 45,
+"n_early": 17,
+"n_late": 28,
+"pts": 15.8,
+"win": 64.4,
+"rs": 15505,
+"rs_early": 2671,
+"rs_late": 12833,
+"per_trade": 345,
+"years": {
+"2023": -25,
+"2024": 2697,
+"2025": 17619,
+"2026": -4786
+},
+"per_index": {
+"BANKNIFTY": 4283,
+"NIFTY": 11222
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 109,
+"n_early": 43,
+"n_late": 66,
+"pts": 9.3,
+"win": 57.8,
+"rs": 13568,
+"rs_early": 4105,
+"rs_late": 9463,
+"per_trade": 124,
+"years": {
+"2023": 840,
+"2024": 3265,
+"2025": 11247,
+"2026": -1785
+},
+"per_index": {
+"BANKNIFTY": 2433,
+"NIFTY": 11134
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 45,
+"n_early": 17,
+"n_late": 28,
+"pts": 19.3,
+"win": 64.4,
+"rs": 21409,
+"rs_early": 7707,
+"rs_late": 13701,
+"per_trade": 476,
+"years": {
+"2023": -137,
+"2024": 7845,
+"2025": 16468,
+"2026": -2766
+},
+"per_index": {
+"BANKNIFTY": 4479,
+"NIFTY": 16929
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 109,
+"n_early": 43,
+"n_late": 66,
+"pts": 6.0,
+"win": 36.7,
+"rs": 280,
+"rs_early": 4325,
+"rs_late": -4045,
+"per_trade": 3,
+"years": {
+"2023": 5519,
+"2024": -1194,
+"2025": 12410,
+"2026": -16455
+},
+"per_index": {
+"BANKNIFTY": -21306,
+"NIFTY": 21586
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 45,
+"n_early": 17,
+"n_late": 28,
+"pts": 24.9,
+"win": 42.2,
+"rs": 30234,
+"rs_early": 24085,
+"rs_late": 6150,
+"per_trade": 672,
+"years": {
+"2023": 8025,
+"2024": 16060,
+"2025": 16129,
+"2026": -9979
+},
+"per_index": {
+"BANKNIFTY": 3100,
+"NIFTY": 27134
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 109,
+"n_early": 43,
+"n_late": 66,
+"pts": 10.0,
+"win": 55.0,
+"rs": 18579,
+"rs_early": -3200,
+"rs_late": 21778,
+"per_trade": 170,
+"years": {
+"2023": -4519,
+"2024": 1320,
+"2025": 10730,
+"2026": 11048
+},
+"per_index": {
+"BANKNIFTY": 6208,
+"NIFTY": 12370
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 45,
+"n_early": 17,
+"n_late": 28,
+"pts": 17.0,
+"win": 62.2,
+"rs": 24051,
+"rs_early": 582,
+"rs_late": 23469,
+"per_trade": 534,
+"years": {
+"2023": -1571,
+"2024": 2153,
+"2025": 20064,
+"2026": 3405
+},
+"per_index": {
+"BANKNIFTY": 3079,
+"NIFTY": 20971
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 109,
+"n_early": 43,
+"n_late": 66,
+"pts": 10.9,
+"win": 53.2,
+"rs": 28072,
+"rs_early": 7341,
+"rs_late": 20731,
+"per_trade": 258,
+"years": {
+"2023": 1127,
+"2024": 6214,
+"2025": 10818,
+"2026": 9913
+},
+"per_index": {
+"BANKNIFTY": 1177,
+"NIFTY": 26896
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 45,
+"n_early": 17,
+"n_late": 28,
+"pts": 23.2,
+"win": 60.0,
+"rs": 34437,
+"rs_early": 13242,
+"rs_late": 21195,
+"per_trade": 765,
+"years": {
+"2023": 561,
+"2024": 12682,
+"2025": 22595,
+"2026": -1400
+},
+"per_index": {
+"BANKNIFTY": 5535,
+"NIFTY": 28902
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 109,
+"n_early": 43,
+"n_late": 66,
+"pts": 7.9,
+"win": 55.0,
+"rs": 12545,
+"rs_early": -4500,
+"rs_late": 17044,
+"per_trade": 115,
+"years": {
+"2023": -2173,
+"2024": -2327,
+"2025": 12541,
+"2026": 4504
+},
+"per_index": {
+"BANKNIFTY": -855,
+"NIFTY": 13400
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 45,
+"n_early": 17,
+"n_late": 28,
+"pts": 16.3,
+"win": 62.2,
+"rs": 21793,
+"rs_early": 1876,
+"rs_late": 19916,
+"per_trade": 484,
+"years": {
+"2023": -393,
+"2024": 2269,
+"2025": 22204,
+"2026": -2288
+},
+"per_index": {
+"BANKNIFTY": 3110,
+"NIFTY": 18683
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 109,
+"n_early": 43,
+"n_late": 66,
+"pts": 10.4,
+"win": 55.0,
+"rs": 23325,
+"rs_early": 2071,
+"rs_late": 21255,
+"per_trade": 214,
+"years": {
+"2023": -1696,
+"2024": 3767,
+"2025": 10774,
+"2026": 10480
+},
+"per_index": {
+"BANKNIFTY": 3693,
+"NIFTY": 19633
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 45,
+"n_early": 17,
+"n_late": 28,
+"pts": 20.1,
+"win": 62.2,
+"rs": 29244,
+"rs_early": 6912,
+"rs_late": 22332,
+"per_trade": 650,
+"years": {
+"2023": -505,
+"2024": 7417,
+"2025": 21329,
+"2026": 1002
+},
+"per_index": {
+"BANKNIFTY": 4307,
+"NIFTY": 24936
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 2",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 109,
+"n_early": 43,
+"n_late": 66,
+"pts": 8.8,
+"win": 34.9,
+"rs": 24457,
+"rs_early": 3061,
+"rs_late": 21396,
+"per_trade": 224,
+"years": {
+"2023": 2983,
+"2024": 78,
+"2025": 16205,
+"2026": 5190
+},
+"per_index": {
+"BANKNIFTY": -11370,
+"NIFTY": 35827
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "OI wall",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 45,
+"n_early": 17,
+"n_late": 28,
+"pts": 26.8,
+"win": 40.0,
+"rs": 40726,
+"rs_early": 23289,
+"rs_late": 17437,
+"per_trade": 905,
+"years": {
+"2023": 7657,
+"2024": 15632,
+"2025": 24680,
+"2026": -7243
+},
+"per_index": {
+"BANKNIFTY": 7283,
+"NIFTY": 33443
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "full@50"
+},
+"n": 160,
+"n_early": 68,
+"n_late": 92,
+"pts": 2.2,
+"win": 53.1,
+"rs": -14073,
+"rs_early": -11086,
+"rs_late": -2986,
+"per_trade": -88,
+"years": {
+"2023": -3215,
+"2024": -7871,
+"2025": -2814,
+"2026": -172
+},
+"per_index": {
+"BANKNIFTY": -2426,
+"NIFTY": -11647
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "50 then trail"
+},
+"n": 160,
+"n_early": 68,
+"n_late": 92,
+"pts": 2.3,
+"win": 51.2,
+"rs": -10760,
+"rs_early": -16705,
+"rs_late": 5945,
+"per_trade": -67,
+"years": {
+"2023": -3215,
+"2024": -13490,
+"2025": -209,
+"2026": 6154
+},
+"per_index": {
+"BANKNIFTY": 1977,
+"NIFTY": -12737
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "half 50/90"
+},
+"n": 160,
+"n_early": 68,
+"n_late": 92,
+"pts": 1.4,
+"win": 53.1,
+"rs": -17984,
+"rs_early": -19692,
+"rs_late": 1708,
+"per_trade": -112,
+"years": {
+"2023": -3215,
+"2024": -16477,
+"2025": -388,
+"2026": 2095
+},
+"per_index": {
+"BANKNIFTY": -3269,
+"NIFTY": -14716
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "half 50+trail"
+},
+"n": 160,
+"n_early": 68,
+"n_late": 92,
+"pts": 2.3,
+"win": 53.1,
+"rs": -12416,
+"rs_early": -13896,
+"rs_late": 1479,
+"per_trade": -78,
+"years": {
+"2023": -3215,
+"2024": -10681,
+"2025": -1512,
+"2026": 2991
+},
+"per_index": {
+"BANKNIFTY": -225,
+"NIFTY": -12192
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "35 pts below the level",
+"exit": "hold to close"
+},
+"n": 160,
+"n_early": 68,
+"n_late": 92,
+"pts": 4.5,
+"win": 36.9,
+"rs": 9459,
+"rs_early": -12719,
+"rs_late": 22179,
+"per_trade": 59,
+"years": {
+"2023": -3215,
+"2024": -9504,
+"2025": -11444,
+"2026": 33623
+},
+"per_index": {
+"BANKNIFTY": -683,
+"NIFTY": 10142
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "full@50"
+},
+"n": 160,
+"n_early": 68,
+"n_late": 92,
+"pts": 0.8,
+"win": 48.8,
+"rs": -12228,
+"rs_early": -4219,
+"rs_late": -8009,
+"per_trade": -76,
+"years": {
+"2023": -3758,
+"2024": -461,
+"2025": -2004,
+"2026": -6004
+},
+"per_index": {
+"BANKNIFTY": -6059,
+"NIFTY": -6169
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "50 then trail"
+},
+"n": 160,
+"n_early": 68,
+"n_late": 92,
+"pts": 0.5,
+"win": 46.2,
+"rs": -26289,
+"rs_early": -13884,
+"rs_late": -12405,
+"per_trade": -164,
+"years": {
+"2023": -3758,
+"2024": -10126,
+"2025": 2351,
+"2026": -14755
+},
+"per_index": {
+"BANKNIFTY": -13455,
+"NIFTY": -12834
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "half 50/90"
+},
+"n": 160,
+"n_early": 68,
+"n_late": 92,
+"pts": -0.1,
+"win": 48.8,
+"rs": -25599,
+"rs_early": -15365,
+"rs_late": -10234,
+"per_trade": -160,
+"years": {
+"2023": -3758,
+"2024": -11607,
+"2025": -726,
+"2026": -9508
+},
+"per_index": {
+"BANKNIFTY": -10843,
+"NIFTY": -14756
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "half 50+trail"
+},
+"n": 160,
+"n_early": 68,
+"n_late": 92,
+"pts": 0.6,
+"win": 48.8,
+"rs": -19259,
+"rs_early": -9052,
+"rs_late": -10207,
+"per_trade": -120,
+"years": {
+"2023": -3758,
+"2024": -5294,
+"2025": 173,
+"2026": -10380
+},
+"per_index": {
+"BANKNIFTY": -9757,
+"NIFTY": -9502
+}
+},
+{
+"v": {
+"tf": "15m",
+"level": "100-pt level, no OI",
+"rejections": ">= 3",
+"stop": "breakout candle low",
+"exit": "hold to close"
+},
+"n": 160,
+"n_early": 68,
+"n_late": 92,
+"pts": 7.7,
+"win": 33.1,
+"rs": 32844,
+"rs_early": 25193,
+"rs_late": 7651,
+"per_trade": 205,
+"years": {
+"2023": -3758,
+"2024": 28952,
+"2025": -1092,
+"2026": 8743
+},
+"per_index": {
+"BANKNIFTY": -12763,
+"NIFTY": 45607
+}
+}
+]

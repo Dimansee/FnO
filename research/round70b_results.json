@@ -1,0 +1,328 @@
+{
+ "200000|Oct 2023-2024": {
+  "Autopilot today": {
+   "final": 438205,
+   "net": 238205,
+   "max_dd_pct": -20.1,
+   "trades": 645,
+   "years": {
+    "2023": -6.6,
+    "2024": 134.7
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 92
+  },
+  "+ OI-wall breakout, 50 then trail": {
+   "final": 401970,
+   "net": 201970,
+   "max_dd_pct": -20.7,
+   "trades": 671,
+   "years": {
+    "2023": -6.4,
+    "2024": 114.7
+   },
+   "new_trades": 36,
+   "new_pnl": -1337.0,
+   "skipped": 109
+  },
+  "+ OI-wall breakout, half 50/90": {
+   "final": 399460,
+   "net": 199460,
+   "max_dd_pct": -21.0,
+   "trades": 669,
+   "years": {
+    "2023": -7.7,
+    "2024": 116.5
+   },
+   "new_trades": 35,
+   "new_pnl": -9179.0,
+   "skipped": 111
+  }
+ },
+ "200000|2025": {
+  "Autopilot today": {
+   "final": 356393,
+   "net": 156393,
+   "max_dd_pct": -21.8,
+   "trades": 509,
+   "years": {
+    "2025": 78.2
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 48
+  },
+  "+ OI-wall breakout, 50 then trail": {
+   "final": 368552,
+   "net": 168552,
+   "max_dd_pct": -21.8,
+   "trades": 551,
+   "years": {
+    "2025": 84.3
+   },
+   "new_trades": 30,
+   "new_pnl": 18451.0,
+   "skipped": 37
+  },
+  "+ OI-wall breakout, half 50/90": {
+   "final": 358616,
+   "net": 158616,
+   "max_dd_pct": -23.6,
+   "trades": 549,
+   "years": {
+    "2025": 79.3
+   },
+   "new_trades": 30,
+   "new_pnl": 21035.0,
+   "skipped": 39
+  }
+ },
+ "200000|2026": {
+  "Autopilot today": {
+   "final": 428169,
+   "net": 228169,
+   "max_dd_pct": -19.1,
+   "trades": 356,
+   "years": {
+    "2026": 114.1
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 46
+  },
+  "+ OI-wall breakout, 50 then trail": {
+   "final": 456776,
+   "net": 256776,
+   "max_dd_pct": -18.9,
+   "trades": 373,
+   "years": {
+    "2026": 128.4
+   },
+   "new_trades": 30,
+   "new_pnl": 11354.0,
+   "skipped": 64
+  },
+  "+ OI-wall breakout, half 50/90": {
+   "final": 450438,
+   "net": 250438,
+   "max_dd_pct": -18.9,
+   "trades": 372,
+   "years": {
+    "2026": 125.2
+   },
+   "new_trades": 30,
+   "new_pnl": 28.0,
+   "skipped": 65
+  }
+ },
+ "200000|Oct 2023-Oct 2026": {
+  "Autopilot today": {
+   "final": 1367266,
+   "net": 1167266,
+   "max_dd_pct": -24.5,
+   "trades": 1528,
+   "years": {
+    "2023": -6.6,
+    "2024": 134.7,
+    "2025": 53.5,
+    "2026": 103.3
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 168
+  },
+  "+ OI-wall breakout, 50 then trail": {
+   "final": 1297605,
+   "net": 1097605,
+   "max_dd_pct": -26.3,
+   "trades": 1632,
+   "years": {
+    "2023": -6.4,
+    "2024": 114.7,
+    "2025": 59.4,
+    "2026": 102.5
+   },
+   "new_trades": 99,
+   "new_pnl": 49480.0,
+   "skipped": 173
+  },
+  "+ OI-wall breakout, half 50/90": {
+   "final": 1273593,
+   "net": 1073593,
+   "max_dd_pct": -25.4,
+   "trades": 1632,
+   "years": {
+    "2023": -7.7,
+    "2024": 116.5,
+    "2025": 61.1,
+    "2026": 97.9
+   },
+   "new_trades": 99,
+   "new_pnl": 25303.0,
+   "skipped": 173
+  }
+ },
+ "20000|Oct 2023-2024": {
+  "Autopilot today": {
+   "final": 5604,
+   "net": -14396,
+   "max_dd_pct": -76.6,
+   "trades": 36,
+   "years": {
+    "2023": -57.1,
+    "2024": -34.6
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 701
+  },
+  "+ OI-wall breakout, 50 then trail": {
+   "final": 144080,
+   "net": 124080,
+   "max_dd_pct": -71.3,
+   "trades": 371,
+   "years": {
+    "2023": -50.6,
+    "2024": 1358.4
+   },
+   "new_trades": 33,
+   "new_pnl": 8319.0,
+   "skipped": 409
+  },
+  "+ OI-wall breakout, half 50/90": {
+   "final": 5218,
+   "net": -14782,
+   "max_dd_pct": -79.5,
+   "trades": 37,
+   "years": {
+    "2023": -55.9,
+    "2024": -40.8
+   },
+   "new_trades": 5,
+   "new_pnl": -1688.0,
+   "skipped": 743
+  }
+ },
+ "20000|2025": {
+  "Autopilot today": {
+   "final": 68135,
+   "net": 48135,
+   "max_dd_pct": -63.4,
+   "trades": 336,
+   "years": {
+    "2025": 240.7
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 221
+  },
+  "+ OI-wall breakout, 50 then trail": {
+   "final": 69773,
+   "net": 49773,
+   "max_dd_pct": -63.0,
+   "trades": 366,
+   "years": {
+    "2025": 248.9
+   },
+   "new_trades": 28,
+   "new_pnl": 4671.0,
+   "skipped": 222
+  },
+  "+ OI-wall breakout, half 50/90": {
+   "final": 70657,
+   "net": 50657,
+   "max_dd_pct": -61.2,
+   "trades": 361,
+   "years": {
+    "2025": 253.3
+   },
+   "new_trades": 27,
+   "new_pnl": 7310.0,
+   "skipped": 227
+  }
+ },
+ "20000|2026": {
+  "Autopilot today": {
+   "final": 97960,
+   "net": 77960,
+   "max_dd_pct": -47.6,
+   "trades": 240,
+   "years": {
+    "2026": 389.8
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 162
+  },
+  "+ OI-wall breakout, 50 then trail": {
+   "final": 42023,
+   "net": 22023,
+   "max_dd_pct": -56.6,
+   "trades": 125,
+   "years": {
+    "2026": 110.1
+   },
+   "new_trades": 12,
+   "new_pnl": -1501.0,
+   "skipped": 312
+  },
+  "+ OI-wall breakout, half 50/90": {
+   "final": 41845,
+   "net": 21845,
+   "max_dd_pct": -56.1,
+   "trades": 125,
+   "years": {
+    "2026": 109.2
+   },
+   "new_trades": 12,
+   "new_pnl": -1678.0,
+   "skipped": 312
+  }
+ },
+ "20000|Oct 2023-Oct 2026": {
+  "Autopilot today": {
+   "final": 41225,
+   "net": 21225,
+   "max_dd_pct": -76.6,
+   "trades": 136,
+   "years": {
+    "2023": -57.1,
+    "2024": -34.6,
+    "2025": 24.3,
+    "2026": 491.7
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 1560
+  },
+  "+ OI-wall breakout, 50 then trail": {
+   "final": 464986,
+   "net": 444986,
+   "max_dd_pct": -71.3,
+   "trades": 1192,
+   "years": {
+    "2023": -50.6,
+    "2024": 1358.4,
+    "2025": 52.8,
+    "2026": 111.2
+   },
+   "new_trades": 91,
+   "new_pnl": 26565.0,
+   "skipped": 613
+  },
+  "+ OI-wall breakout, half 50/90": {
+   "final": 5218,
+   "net": -14782,
+   "max_dd_pct": -79.5,
+   "trades": 37,
+   "years": {
+    "2023": -55.9,
+    "2024": -40.8
+   },
+   "new_trades": 5,
+   "new_pnl": -1688.0,
+   "skipped": 1768
+  }
+ }
+}
