@@ -1,0 +1,233 @@
+{
+ "200000|Oct 2023 - 2024": {
+  "Autopilot today": {
+   "final": 438205,
+   "fall": -20.1,
+   "trades": 645
+  },
+  "PCR agrees (calls only if PCR >= 1, puts if < 1)": {
+   "final": 415508,
+   "fall": -19.3,
+   "skipped": 217,
+   "p_random": 0.335,
+   "random_median": 387508.0
+  },
+  "PCR vs its 20-day median agrees": {
+   "final": 330109,
+   "fall": -24.9,
+   "skipped": 182,
+   "p_random": 0.905,
+   "random_median": 399706.5
+  },
+  "PCR change agrees (rising for calls)": {
+   "final": 408675,
+   "fall": -21.7,
+   "skipped": 171,
+   "p_random": 0.455,
+   "random_median": 402288.0
+  },
+  "OI build-up agrees (puts added for calls)": {
+   "final": 452264,
+   "fall": -19.7,
+   "skipped": 142,
+   "p_random": 0.235,
+   "random_median": 401198.0
+  },
+  "PCR and build-up both agree": {
+   "final": 340559,
+   "fall": -23.5,
+   "skipped": 278,
+   "p_random": 0.775,
+   "random_median": 379069.0
+  },
+  "Skip calls within 0.3% below the call wall / puts within 0.3% above the put wall": {
+   "final": 524763,
+   "fall": -19.9,
+   "skipped": 38,
+   "p_random": 0.06,
+   "random_median": 437710.5
+  },
+  "Skip calls within 0.5% below the call wall / puts within 0.5% above the put wall": {
+   "final": 509536,
+   "fall": -18.5,
+   "skipped": 65,
+   "p_random": 0.1,
+   "random_median": 426677.0
+  },
+  "Only toward max pain (calls below it, puts above it, 0.3% band)": {
+   "final": 316953,
+   "fall": -11.9,
+   "skipped": 396,
+   "p_random": 0.76,
+   "random_median": 343866.0
+  },
+  "Only away from max pain": {
+   "final": 493414,
+   "fall": -19.9,
+   "skipped": 4,
+   "p_random": 0.12,
+   "random_median": 438781.5
+  },
+  "Only through the wall (calls above the call wall, puts below the put wall)": {
+   "final": 400532,
+   "fall": -13.7,
+   "skipped": 389,
+   "p_random": 0.145,
+   "random_median": 350421.0
+  }
+ },
+ "200000|2025 - Oct 2026": {
+  "Autopilot today": {
+   "final": 759444,
+   "fall": -21.8,
+   "trades": 873
+  },
+  "PCR agrees (calls only if PCR >= 1, puts if < 1)": {
+   "final": 524042,
+   "fall": -21.8,
+   "skipped": 287,
+   "p_random": 0.16,
+   "random_median": 433102.5
+  },
+  "PCR vs its 20-day median agrees": {
+   "final": 512387,
+   "fall": -21.0,
+   "skipped": 295,
+   "p_random": 0.165,
+   "random_median": 431281.5
+  },
+  "PCR change agrees (rising for calls)": {
+   "final": 558405,
+   "fall": -20.0,
+   "skipped": 230,
+   "p_random": 0.23,
+   "random_median": 471349.5
+  },
+  "OI build-up agrees (puts added for calls)": {
+   "final": 566787,
+   "fall": -26.8,
+   "skipped": 226,
+   "p_random": 0.135,
+   "random_median": 462401.5
+  },
+  "PCR and build-up both agree": {
+   "final": 440239,
+   "fall": -20.4,
+   "skipped": 386,
+   "p_random": 0.13,
+   "random_median": 365300.5
+  },
+  "Skip calls within 0.3% below the call wall / puts within 0.3% above the put wall": {
+   "final": 840842,
+   "fall": -20.2,
+   "skipped": 51,
+   "p_random": 0.015,
+   "random_median": 627181.5
+  },
+  "Skip calls within 0.5% below the call wall / puts within 0.5% above the put wall": {
+   "final": 803747,
+   "fall": -19.5,
+   "skipped": 78,
+   "p_random": 0.035,
+   "random_median": 600277.5
+  },
+  "Only toward max pain (calls below it, puts above it, 0.3% band)": {
+   "final": 300787,
+   "fall": -20.9,
+   "skipped": 498,
+   "p_random": 0.62,
+   "random_median": 317309.5
+  },
+  "Only away from max pain": {
+   "final": 608945,
+   "fall": -23.7,
+   "skipped": 13,
+   "p_random": 0.865,
+   "random_median": 741887.0
+  },
+  "Only through the wall (calls above the call wall, puts below the put wall)": {
+   "final": 232236,
+   "fall": -23.3,
+   "skipped": 463,
+   "p_random": 0.935,
+   "random_median": 338567.5
+  }
+ },
+ "200000|both together": {
+  "Autopilot today": {
+   "final": 1367266,
+   "fall": -24.5,
+   "trades": 1528
+  },
+  "PCR agrees (calls only if PCR >= 1, puts if < 1)": {
+   "final": 772136,
+   "fall": -23.9,
+   "skipped": 504,
+   "p_random": null,
+   "random_median": null
+  },
+  "PCR vs its 20-day median agrees": {
+   "final": 775365,
+   "fall": -24.9,
+   "skipped": 477,
+   "p_random": null,
+   "random_median": null
+  },
+  "PCR change agrees (rising for calls)": {
+   "final": 1516337,
+   "fall": -21.7,
+   "skipped": 401,
+   "p_random": null,
+   "random_median": null
+  },
+  "OI build-up agrees (puts added for calls)": {
+   "final": 1349973,
+   "fall": -19.9,
+   "skipped": 368,
+   "p_random": null,
+   "random_median": null
+  },
+  "PCR and build-up both agree": {
+   "final": 730056,
+   "fall": -23.5,
+   "skipped": 664,
+   "p_random": null,
+   "random_median": null
+  },
+  "Skip calls within 0.3% below the call wall / puts within 0.3% above the put wall": {
+   "final": 1717889,
+   "fall": -21.3,
+   "skipped": 89,
+   "p_random": null,
+   "random_median": null
+  },
+  "Skip calls within 0.5% below the call wall / puts within 0.5% above the put wall": {
+   "final": 1746927,
+   "fall": -21.1,
+   "skipped": 143,
+   "p_random": null,
+   "random_median": null
+  },
+  "Only toward max pain (calls below it, puts above it, 0.3% band)": {
+   "final": 466001,
+   "fall": -19.4,
+   "skipped": 894,
+   "p_random": null,
+   "random_median": null
+  },
+  "Only away from max pain": {
+   "final": 1645755,
+   "fall": -24.1,
+   "skipped": 17,
+   "p_random": null,
+   "random_median": null
+  },
+  "Only through the wall (calls above the call wall, puts below the put wall)": {
+   "final": 517967,
+   "fall": -19.0,
+   "skipped": 852,
+   "p_random": null,
+   "random_median": null
+  }
+ }
+}

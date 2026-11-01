@@ -1354,6 +1354,17 @@
    "decision": "Not adopted",
    "summary": "Pivot / CPR / previous-day / S/R levels have no edge on their own; the only profitable form (narrow-CPR breaks held to the close) is a weaker copy of Autopilot's trend-day trades and lowers its result.",
    "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r68",
+   "date": "2026-11-01",
+   "area": "Index options",
+   "title": "Open interest: OI walls / max pain as levels, and PCR / OI build-up / OI walls as filters on today's Autopilot",
+   "asked": "From the NSE option bhavcopy (every Nifty and Bank Nifty strike's daily OI, Oct 2023 - Oct 2026; Sensex not available), using only the previous day: call and put walls (largest OI strikes), max pain, PCR, its change, and OI build-up near the money. (B) Walls and max pain as a level family in the round-67 grid (break / retest / bounce / false break, confluence). (C) Ten OI filters on today's Autopilot in the Outcomes-tab replay (Rs 2L, compounding), each against skipping the same number of trades at random (200 times).",
+   "result": "PCR (vs 1 or vs its 20-day median), PCR change, OI build-up and max pain all made Autopilot worse (e.g. PCR agrees: Rs 4.16L vs 4.38L in Oct 2023 - 2024 and Rs 5.24L vs 7.59L in 2025 - Oct 2026). One filter helped: skip a call when the largest call-OI strike is within 0.3% above the entry (a put when the put wall is within 0.3% below) - 89 of 1,528 trades. Those trades averaged -Rs 407 a lot (22% wins) vs +Rs 358 for the rest (p 0.015); replay Rs 5.25L vs 4.38L (Oct 2023 - 2024, p 0.06) and Rs 8.41L vs 7.59L (2025 - Oct 2026, p 0.01), worst fall -21% vs -24%. But by year it helps 2023, 2024, 2025 and hurts 2026 (Rs 3.82L vs 4.28L; the 23 skipped 2026 trades averaged +Rs 571 a lot), and almost all of the effect is Bank Nifty (-Rs 979 a lot vs -Rs 70 on Nifty). OI walls as levels: no direction edge; bounces at OI walls were the worst level behaviour in 2025-26 (-0.14R vs a random twin); confluence with OI walls did not help.",
+   "decision": "Not adopted; 'skip trades running into the OI wall' on the watch-list",
+   "summary": "OI does not give direction (PCR, build-up, max pain all hurt). Trades entered right under an OI wall did badly in 2023-25 but not in 2026, so the wall filter waits for more data.",
+   "period": "Oct 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -1749,6 +1760,13 @@
     "r40"
    ],
    "next": "Re-run research/round40.py with 60 more sessions; adopt only if still ahead and 2023-25 is not worse."
+  },
+  {
+   "id": "p-oi-wall",
+   "area": "Index options",
+   "title": "Skip Autopilot trades entered within 0.3% of the day's OI wall (call wall for calls, put wall for puts)",
+   "waiting_for": "2026 to agree again (re-test after Dec 2026 / Mar 2027 data)",
+   "why": "Round 68: those trades lost -Rs 407 a lot in 2023-25 (p 0.015) and the filter lifted the Rs 2L replay from Rs 13.7L to 17.2L over Oct 2023 - Oct 2026, but it hurt 2026 (Rs 3.82L vs 4.28L) and the effect is mostly Bank Nifty."
   }
  ],
  "crypto_rounds": [
@@ -2534,6 +2552,15 @@
     "r67"
    ],
    "takeaway": "No level has a direction edge; narrow-CPR breaks held to the close make money alone but lower today's Autopilot (Rs 12.3L at best vs 33.4L, 2023-26): not adopted."
+  },
+  {
+   "n": 68,
+   "date": "2026-11-01",
+   "topic": "Open interest: walls, max pain, PCR, build-up - as levels and as Autopilot filters",
+   "ids": [
+    "r68"
+   ],
+   "takeaway": "PCR, OI build-up and max pain make Autopilot worse; OI walls are not tradable levels. Skipping trades within 0.3% of the OI wall helped 2023-25 (+Rs 3.5L over Oct 2023 - Oct 2026 from Rs 2L) but hurt 2026: watch-list."
   }
  ],
  "india_status": {
