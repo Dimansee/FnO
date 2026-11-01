@@ -1,0 +1,440 @@
+{
+ "200000|2023-24": {
+  "Autopilot today": {
+   "final": 765068,
+   "net": 565068,
+   "max_dd_pct": -28.6,
+   "trades": 1021,
+   "years": {
+    "2023": 30.4,
+    "2024": 193.3
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 139
+  },
+  "+ A swing retest, narrow CPR": {
+   "final": 1620662,
+   "net": 1420662,
+   "max_dd_pct": -35.2,
+   "trades": 1498,
+   "years": {
+    "2023": 208.8,
+    "2024": 162.4
+   },
+   "new_trades": 688,
+   "new_pnl": 308951.0,
+   "skipped": 797
+  },
+  "+ B any level retest + structure": {
+   "final": 924611,
+   "net": 724611,
+   "max_dd_pct": -30.1,
+   "trades": 1526,
+   "years": {
+    "2023": 80.3,
+    "2024": 156.4
+   },
+   "new_trades": 760,
+   "new_pnl": 293509.0,
+   "skipped": 872
+  },
+  "+ C round-100s retest + structure": {
+   "final": 765194,
+   "net": 565194,
+   "max_dd_pct": -35.1,
+   "trades": 1284,
+   "years": {
+    "2023": -13.7,
+    "2024": 343.4
+   },
+   "new_trades": 511,
+   "new_pnl": 369977.0,
+   "skipped": 589
+  }
+ },
+ "200000|2025-26": {
+  "Autopilot today": {
+   "final": 824277,
+   "net": 624277,
+   "max_dd_pct": -21.8,
+   "trades": 889,
+   "years": {
+    "2025": 78.2,
+    "2026": 131.3
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 86
+  },
+  "+ A swing retest, narrow CPR": {
+   "final": 457929,
+   "net": 257929,
+   "max_dd_pct": -47.5,
+   "trades": 1520,
+   "years": {
+    "2025": 69.1,
+    "2026": 35.4
+   },
+   "new_trades": 750,
+   "new_pnl": -83053.0,
+   "skipped": 451
+  },
+  "+ B any level retest + structure": {
+   "final": 240535,
+   "net": 40535,
+   "max_dd_pct": -57.7,
+   "trades": 1503,
+   "years": {
+    "2025": 36.8,
+    "2026": -12.1
+   },
+   "new_trades": 788,
+   "new_pnl": -184693.0,
+   "skipped": 572
+  },
+  "+ C round-100s retest + structure": {
+   "final": 523582,
+   "net": 323582,
+   "max_dd_pct": -45.4,
+   "trades": 1340,
+   "years": {
+    "2025": 49.5,
+    "2026": 75.1
+   },
+   "new_trades": 539,
+   "new_pnl": 52548.0,
+   "skipped": 309
+  }
+ },
+ "200000|2023-Oct 2026": {
+  "Autopilot today": {
+   "final": 3336017,
+   "net": 3136017,
+   "max_dd_pct": -28.6,
+   "trades": 1906,
+   "years": {
+    "2023": 30.4,
+    "2024": 193.3,
+    "2025": 76.2,
+    "2026": 147.4
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 229
+  },
+  "+ A swing retest, narrow CPR": {
+   "final": 1973256,
+   "net": 1773256,
+   "max_dd_pct": -54.6,
+   "trades": 3012,
+   "years": {
+    "2023": 208.8,
+    "2024": 162.4,
+    "2025": -23.3,
+    "2026": 58.8
+   },
+   "new_trades": 1442,
+   "new_pnl": -652340.0,
+   "skipped": 1254
+  },
+  "+ B any level retest + structure": {
+   "final": 826290,
+   "net": 626290,
+   "max_dd_pct": -61.9,
+   "trades": 3124,
+   "years": {
+    "2023": 80.3,
+    "2024": 156.4,
+    "2025": 4.8,
+    "2026": -14.7
+   },
+   "new_trades": 1592,
+   "new_pnl": -631143.0,
+   "skipped": 1349
+  },
+  "+ C round-100s retest + structure": {
+   "final": 1517341,
+   "net": 1317341,
+   "max_dd_pct": -49.8,
+   "trades": 2679,
+   "years": {
+    "2023": -13.7,
+    "2024": 343.4,
+    "2025": 31.6,
+    "2026": 50.6
+   },
+   "new_trades": 1073,
+   "new_pnl": 245024.0,
+   "skipped": 843
+  }
+ },
+ "200000|2026": {
+  "Autopilot today": {
+   "final": 468678,
+   "net": 268678,
+   "max_dd_pct": -19.1,
+   "trades": 372,
+   "years": {
+    "2026": 134.3
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 46
+  },
+  "+ A swing retest, narrow CPR": {
+   "final": 344573,
+   "net": 144573,
+   "max_dd_pct": -36.2,
+   "trades": 566,
+   "years": {
+    "2026": 72.3
+   },
+   "new_trades": 275,
+   "new_pnl": -12808.0,
+   "skipped": 254
+  },
+  "+ B any level retest + structure": {
+   "final": 259732,
+   "net": 59732,
+   "max_dd_pct": -39.6,
+   "trades": 565,
+   "years": {
+    "2026": 29.9
+   },
+   "new_trades": 290,
+   "new_pnl": -40326.0,
+   "skipped": 302
+  },
+  "+ C round-100s retest + structure": {
+   "final": 239312,
+   "net": 39312,
+   "max_dd_pct": -34.4,
+   "trades": 489,
+   "years": {
+    "2026": 19.7
+   },
+   "new_trades": 191,
+   "new_pnl": -28586.0,
+   "skipped": 199
+  }
+ },
+ "20000|2023-24": {
+  "Autopilot today": {
+   "final": 172665,
+   "net": 152665,
+   "max_dd_pct": -69.3,
+   "trades": 644,
+   "years": {
+    "2023": 30.2,
+    "2024": 563.2
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 516
+  },
+  "+ A swing retest, narrow CPR": {
+   "final": 86856,
+   "net": 66856,
+   "max_dd_pct": -90.7,
+   "trades": 805,
+   "years": {
+    "2023": -65.8,
+    "2024": 1169.3
+   },
+   "new_trades": 475,
+   "new_pnl": -50473.0,
+   "skipped": 1490
+  },
+  "+ B any level retest + structure": {
+   "final": 273201,
+   "net": 253201,
+   "max_dd_pct": -89.8,
+   "trades": 1202,
+   "years": {
+    "2023": -53.8,
+    "2024": 2856.1
+   },
+   "new_trades": 708,
+   "new_pnl": 108525.0,
+   "skipped": 1196
+  },
+  "+ C round-100s retest + structure": {
+   "final": 343318,
+   "net": 323318,
+   "max_dd_pct": -81.5,
+   "trades": 903,
+   "years": {
+    "2023": -16.0,
+    "2024": 1943.0
+   },
+   "new_trades": 424,
+   "new_pnl": 177661.0,
+   "skipped": 970
+  }
+ },
+ "20000|2025-26": {
+  "Autopilot today": {
+   "final": 185362,
+   "net": 165362,
+   "max_dd_pct": -63.4,
+   "trades": 589,
+   "years": {
+    "2025": 240.7,
+    "2026": 172.1
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 386
+  },
+  "+ A swing retest, narrow CPR": {
+   "final": 4644,
+   "net": -15356,
+   "max_dd_pct": -95.6,
+   "trades": 240,
+   "years": {
+    "2025": -76.8
+   },
+   "new_trades": 126,
+   "new_pnl": -39405.0,
+   "skipped": 1731
+  },
+  "+ B any level retest + structure": {
+   "final": 4404,
+   "net": -15596,
+   "max_dd_pct": -95.8,
+   "trades": 449,
+   "years": {
+    "2025": -78.0
+   },
+   "new_trades": 263,
+   "new_pnl": -31076.0,
+   "skipped": 1626
+  },
+  "+ C round-100s retest + structure": {
+   "final": 47936,
+   "net": 27936,
+   "max_dd_pct": -86.4,
+   "trades": 1051,
+   "years": {
+    "2025": 30.3,
+    "2026": 84.0
+   },
+   "new_trades": 520,
+   "new_pnl": -44797.0,
+   "skipped": 598
+  }
+ },
+ "20000|2023-Oct 2026": {
+  "Autopilot today": {
+   "final": 506103,
+   "net": 486103,
+   "max_dd_pct": -69.3,
+   "trades": 1460,
+   "years": {
+    "2023": 30.2,
+    "2024": 563.2,
+    "2025": 40.9,
+    "2026": 108.1
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 675
+  },
+  "+ A swing retest, narrow CPR": {
+   "final": 189352,
+   "net": 169352,
+   "max_dd_pct": -90.7,
+   "trades": 1898,
+   "years": {
+    "2023": -65.8,
+    "2024": 1169.3,
+    "2025": -6.3,
+    "2026": 132.7
+   },
+   "new_trades": 1115,
+   "new_pnl": -75146.0,
+   "skipped": 2368
+  },
+  "+ B any level retest + structure": {
+   "final": 315802,
+   "net": 295802,
+   "max_dd_pct": -89.8,
+   "trades": 2785,
+   "years": {
+    "2023": -53.8,
+    "2024": 2856.1,
+    "2025": 28.4,
+    "2026": -10.0
+   },
+   "new_trades": 1532,
+   "new_pnl": -116520.0,
+   "skipped": 1688
+  },
+  "+ C round-100s retest + structure": {
+   "final": 898130,
+   "net": 878130,
+   "max_dd_pct": -81.5,
+   "trades": 2321,
+   "years": {
+    "2023": -16.0,
+    "2024": 1943.0,
+    "2025": 60.5,
+    "2026": 63.0
+   },
+   "new_trades": 997,
+   "new_pnl": 199716.0,
+   "skipped": 1201
+  }
+ },
+ "20000|2026": {
+  "Autopilot today": {
+   "final": 102196,
+   "net": 82196,
+   "max_dd_pct": -47.6,
+   "trades": 253,
+   "years": {
+    "2026": 411.0
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 165
+  },
+  "+ A swing retest, narrow CPR": {
+   "final": 125964,
+   "net": 105964,
+   "max_dd_pct": -46.1,
+   "trades": 397,
+   "years": {
+    "2026": 529.8
+   },
+   "new_trades": 217,
+   "new_pnl": 31599.0,
+   "skipped": 423
+  },
+  "+ B any level retest + structure": {
+   "final": 44374,
+   "net": 24374,
+   "max_dd_pct": -66.1,
+   "trades": 488,
+   "years": {
+    "2026": 121.9
+   },
+   "new_trades": 291,
+   "new_pnl": -24556.0,
+   "skipped": 379
+  },
+  "+ C round-100s retest + structure": {
+   "final": 45428,
+   "net": 25428,
+   "max_dd_pct": -63.6,
+   "trades": 422,
+   "years": {
+    "2026": 127.1
+   },
+   "new_trades": 197,
+   "new_pnl": -19551.0,
+   "skipped": 266
+  }
+ }
+}

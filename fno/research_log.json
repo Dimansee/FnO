@@ -1365,6 +1365,17 @@
    "decision": "Not adopted; 'skip trades running into the OI wall' on the watch-list",
    "summary": "OI does not give direction (PCR, build-up, max pain all hurt). Trades entered right under an OI wall did badly in 2023-25 but not in 2026, so the wall filter waits for more data.",
    "period": "Oct 2023 - Oct 2026"
+  },
+  {
+   "id": "r69",
+   "date": "2026-11-01",
+   "area": "Index options",
+   "title": "Breakouts of market structure (higher high / lower low), round numbers (23000, 22700 ...) and major multi-day highs / lows",
+   "asked": "Round-67 grid with new level families: minor round numbers (Nifty every 100, Bank Nifty / Sensex every 500), major round numbers (500 / 1,000), the last two confirmed 15-min swing highs and lows, and 5- and 20-session highs / lows; break / retest / bounce / false break; plus a structure filter (longs only after a higher high + higher low, shorts only after a lower high + lower low = BOS direction) instead of the CPR bias. 13,576 versions, Nifty / Bank Nifty / Sensex 5 and 15 min, Jan 2023 - Oct 2026, options priced with decay and charges; best picks then added to today's Autopilot (Outcomes-tab replay).",
+   "result": "No family has a direction edge (edge over a random-direction twin -0.12R to +0.08R); bounces lose most. The structure (HH/HL) filter did not help: 2025-26 edge +0.005R with it vs +0.013R without. Round numbers behave like any other level; false breaks of major round numbers were slightly positive but small. As in round 67 the money comes from narrow-CPR days held to the close (best 2023-24 picks: +3.4L then +1.2L; any-level and round-100 retests in the structure direction were positive every year, +3.0L / +1.0L). Added to today's Autopilot (Rs 2L): better in 2023-24 for two of three, but every version worse in 2025-26 (Rs 2.4L - 5.2L vs 8.2L) and over 2023 - Oct 2026 (Rs 8.3L - 19.7L vs 33.4L), with worst falls of -50% to -62% vs -29%.",
+   "decision": "Not adopted",
+   "summary": "Higher-high / lower-low breaks, round numbers and multi-day highs / lows add nothing on their own and lower today's Autopilot when added.",
+   "period": "Jan 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2561,6 +2572,15 @@
     "r68"
    ],
    "takeaway": "PCR, OI build-up and max pain make Autopilot worse; OI walls are not tradable levels. Skipping trades within 0.3% of the OI wall helped 2023-25 (+Rs 3.5L over Oct 2023 - Oct 2026 from Rs 2L) but hurt 2026: watch-list."
+  },
+  {
+   "n": 69,
+   "date": "2026-11-01",
+   "topic": "Structure breaks (HH/LL), round numbers and multi-day highs / lows",
+   "ids": [
+    "r69"
+   ],
+   "takeaway": "No edge in any family; the HH/HL filter does not help; added to Autopilot every version is worse in 2025-26 and overall (Rs 8-20L vs 33.4L): not adopted."
   }
  ],
  "india_status": {
