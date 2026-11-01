@@ -45,6 +45,7 @@ SCEN += [sc("Confidence sizing", "No confidence sizing (all 1x)", confidence="no
          sc("Confidence sizing", "Strong confidence (2x / 1x / 0.5x, all indices)", confidence="strong")]
 SCEN += [sc("Filters & brakes", "Big-run skip OFF", big_run_skip=False),
          sc("Filters & brakes", "Half risk in a drawdown OFF", dd_half=False),
+         sc("Filters & brakes", "CPR-width sizing OFF (round 71)", cpr_size=False),
          sc("Filters & brakes", "Equity gates OFF (trend & Fib from day one)", gates=False),
          sc("Filters & brakes", "Small-account 1 OTM OFF (always 1 ITM)", small_otm=False)]
 SCEN += [sc("Strike", "ATM strike", otm=0), sc("Strike", "1 OTM always", otm=1), sc("Strike", "2 OTM always", otm=2)]
@@ -73,7 +74,10 @@ def trades(key, sym):
     ex, otm, brs, mll = key
     f = os.path.join(CACHE, f"{sym}_{ex}_{otm}_{int(brs)}_{mll}.pkl")
     if os.path.exists(f):
-        return pickle.load(open(f, "rb"))
+        T = pickle.load(open(f, "rb"))
+        if len(T) and "cpr_w" not in T:
+            T["cpr_w"] = PB.cpr_widths(candles(sym)).reindex(T.date).values
+        return T
     global _vix
     if _vix is None:
         _vix = H.load("INDIAVIX")["close"]
@@ -96,7 +100,7 @@ def run_cfg(q, start, end):
         A = pd.concat([trades(ak, s) for s in q["indices"]], ignore_index=True)
         A = A[(A.date >= start) & (A.date <= end)]
     R = PB.replay(T, q["capital"], q["sizing"], q["risk_pct"], q["lots"], q["confidence"], q["gates"], q["max_lots"],
-                  q["dd_half"] and q["sizing"] != "fixed", A)
+                  q["dd_half"] and q["sizing"] != "fixed", A, cpr=q.get("cpr_size", False) and q["sizing"] != "fixed")
     s = PB._summary(R, q["capital"])
     if not s.get("trades"):
         return {"trades": 0, "final": q["capital"], "net": 0, "multiple": 1, "max_dd_pct": 0, "win_rate": 0, "profit_factor": None,

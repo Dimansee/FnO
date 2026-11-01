@@ -96,7 +96,21 @@ def _trades(sym, candles, vix, otm, ov, big_run, max_loss=0):
         return T
     T["sym"] = sym
     T["lot"] = D.lot_size(sym)
+    T["cpr_w"] = cpr_widths(candles).reindex(T.date).values
     return T
+
+
+def cpr_widths(candles) -> pd.Series:
+    """Round 71: each session's CPR width (% of the pivot) from the previous session's high / low / close, indexed 'YYYY-MM-DD'."""
+    c = candles
+    if getattr(c.index, "tz", None) is not None:
+        c = c.tz_localize(None)
+    g = c.groupby(c.index.normalize()).agg(H=("high", "max"), L=("low", "min"), C=("close", "last"))
+    p = (g.H + g.L + g.C) / 3
+    bc = (g.H + g.L) / 2
+    w = ((2 * p - bc - bc).abs() / p * 100).shift(1)
+    w.index = [d.strftime("%Y-%m-%d") for d in w.index]
+    return w
 
 
 def _scores(T, candles):
@@ -119,8 +133,9 @@ def _mult(conf, sym, score):
 
 
 def replay(T: pd.DataFrame, capital: float, sizing: str, risk_pct: float, lots_fixed: int, conf: str, gates: bool = True, max_lots: int = 0,
-           dd_half: bool = False, alt: pd.DataFrame | None = None) -> pd.DataFrame:
-    """alt: the same signals priced on the 1-OTM strike; used while equity is below SMALL_OTM_BELOW (live small-account rule)."""
+           dd_half: bool = False, alt: pd.DataFrame | None = None, cpr: bool = False) -> pd.DataFrame:
+    """cpr: round 71 CPR-width sizing (needs the 'cpr_w' column; 1.2x narrow, 0.85x middle, wide days skipped).
+    alt: the same signals priced on the 1-OTM strike; used while equity is below SMALL_OTM_BELOW (live small-account rule)."""
     T = T.sort_values(["date", "entry_time"]).reset_index(drop=True)
     alt_by = {}
     if alt is not None and len(alt):
@@ -146,6 +161,12 @@ def replay(T: pd.DataFrame, capital: float, sizing: str, risk_pct: float, lots_f
         elif gates and str(r.strategy).startswith("Fib") and eq < C.FIB_MIN_EQUITY:
             why = "Fibonacci slot below Rs 2 lakh"
         lots, m = 0, _mult(conf, s, int(r.score))
+        if cpr and why is None:
+            ct = S.cpr_tilt(getattr(r, "cpr_w", None))
+            if ct == 0:
+                why = "wide CPR day (round 71)"
+            elif ct:
+                m *= ct
         if dd_half and eq < (1 - C.DD_HALF_AT) * peak:
             m *= 0.5
         if why is None:
@@ -275,6 +296,7 @@ def _validate(p: dict) -> dict:
     out["gates"] = bool(p.get("gates", True))
     out["small_otm"] = bool(p.get("small_otm", True))
     out["dd_half"] = bool(p.get("dd_half", True))
+    out["cpr_size"] = bool(p.get("cpr_size", True))
     out["max_loss_lot"] = int(p.get("max_loss_lot") or 0)
     if not 0 <= out["max_loss_lot"] <= 100000:
         raise ValueError("Max loss per lot must be 0 (off) - Rs 1,00,000.")
@@ -380,11 +402,12 @@ def _check(jid):
 # Today's Autopilot, as a backtest setting: what "Compare" runs next to the chosen settings (same period, indices, capital).
 BASELINE = {"sizing": "compound", "risk_pct": float(C.AUTOPILOT_RISK_PCT), "lots": 1, "confidence": "standard", "big_run_skip": True,
             "dd_half": True, "otm": -C.STRIKE_ITM, "exit": "current", "max_lots": 50, "max_loss_lot": 0, "gates": True,
-            "small_otm": True}
+            "small_otm": True, "cpr_size": True}
 BASE_LABEL = "Current Autopilot rules"
 DIFF_LABELS = {"sizing": "lots", "risk_pct": "risk %", "lots": "fixed lots", "confidence": "confidence", "big_run_skip": "big-run skip",
                "dd_half": "half risk in a drawdown", "otm": "strike", "exit": "exit", "max_lots": "max lots", "max_loss_lot": "max loss per lot",
-               "gates": "equity gates", "small_otm": "1 OTM below Rs 60k"}
+               "gates": "equity gates", "small_otm": "1 OTM below Rs 60k",
+               "cpr_size": "CPR-width sizing"}
 
 
 def baseline_of(p: dict) -> dict:
@@ -463,7 +486,7 @@ def _run(jid, p):
                 ak = _alt_key(q)
                 A = pd.concat(trades[ak], ignore_index=True) if ak and trades.get(ak) else None
                 R = replay(T, q["capital"], q["sizing"], q["risk_pct"], q["lots"], q["confidence"], q["gates"], q["max_lots"],
-                           q["dd_half"] and q["sizing"] != "fixed", A)
+                           q["dd_half"] and q["sizing"] != "fixed", A, cpr=q.get("cpr_size", False) and q["sizing"] != "fixed")
                 sm = _summary(R, q["capital"])
                 sm["label"] = BASE_LABEL if nm == "compare" else ("Your settings" if diffs else BASE_LABEL)
                 if nm == "main":

@@ -1387,6 +1387,17 @@
    "decision": "Not adopted (lowers Autopilot overall); a real but small standalone edge on 15 min",
    "summary": "Breaking a max-OI strike after repeated rejections is the first level setup with an edge over plain levels (15-min only), but it is small and, added to Autopilot, lowers the total.",
    "period": "Oct 2023 - Oct 2026"
+  },
+  {
+   "id": "r71",
+   "date": "2026-11-01",
+   "area": "Index options",
+   "title": "Remaining combinations as SIZING instead of extra trades: CPR width, dealer gamma (GEX), OI wall, combined",
+   "asked": "Every extra rule since round 63 lost by taking cash from Autopilot's bigger trades. So Autopilot's own trades were sized up or down (no trades added): CPR width from yesterday's H/L/C (narrow < 0.25%, wide > 0.5%); dealer gamma from the previous day's option OI (Nifty / Bank Nifty, short vs long gamma); trade through vs into the OI wall (rounds 68/70); all three combined. x1.3/x0.7 and x1.5/x0.5, then a grid. Outcomes-tab replay (Rs 2L and Rs 20k, compounding, today's rules), shuffled-multiplier control.",
+   "result": "Only CPR width works. Per lot, trades on narrow-CPR days earn more every year (+Rs 96 / 682 / 370 / 489 in 2023-26) and the rest lose (t-test p = 0.0004). Chosen setting: narrow x1.2, middle x0.85, wide days skipped. Rs 2L: 2023 2.88L vs 2.61L, 2024 6.15L vs 4.63L, 2025 3.85L vs 3.56L, 2026 5.22L vs 4.69L, Jan 2023 - Oct 2026 44.2L vs 33.4L; worst fall -31.3% vs -28.6%. A whole zone of settings (up 1.2-1.3, middle 0.7-0.85) beats today in every period, so it is not a lucky pick. Rs 20k (as the app sizes it): full 6.54L vs 5.06L, but 2024 1.61L vs 1.73L and 2026 about equal. Gamma, OI-wall and combined tilts were not better in every period.",
+   "decision": "Adopted 1 Nov 2026 as a switch (Research -> Recent changes: 'CPR-width sizing (round 71)'); also in the Outcomes / portfolio backtest baseline",
+   "summary": "Sizing by CPR width (1.2x narrow, 0.85x middle, skip wide) lifts Autopilot in every year at Rs 2L without adding trades; gamma and OI-wall tilts do not.",
+   "period": "Jan 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2601,6 +2612,15 @@
     "r70"
    ],
    "takeaway": "15-min only: +11 points a trade, positive every year, but about Rs 10k a year and it lowers Autopilot when added (Rs 12.98L vs 13.67L, Oct 2023 - Oct 2026): not adopted."
+  },
+  {
+   "n": 71,
+   "date": "2026-11-01",
+   "topic": "Sizing tilts: CPR width, dealer gamma, OI wall, combined",
+   "ids": [
+    "r71"
+   ],
+   "takeaway": "CPR-width sizing (1.2x narrow / 0.85x middle / skip wide) beat today's Autopilot in 2023, 2024, 2025 and 2026 at Rs 2L (44.2L vs 33.4L overall): adopted as a switch. Gamma / OI-wall tilts: no."
   }
  ],
  "india_status": {

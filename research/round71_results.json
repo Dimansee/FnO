@@ -1,0 +1,250 @@
+{
+ "cpr x1.3/x0.7": {
+  "2023-24": {
+   "base": 765068,
+   "base_fall": -28.6,
+   "tilt": 923075,
+   "tilt_fall": -34.0,
+   "p": 0.0
+  },
+  "2025": {
+   "base": 356393,
+   "base_fall": -21.8,
+   "tilt": 382823,
+   "tilt_fall": -26.4,
+   "p": 0.58
+  },
+  "2026": {
+   "base": 468678,
+   "base_fall": -19.1,
+   "tilt": 640408,
+   "tilt_fall": -22.0,
+   "p": 0.03
+  },
+  "2023 - Oct 2026": {
+   "base": 3336017,
+   "base_fall": -28.6,
+   "tilt": 4937954,
+   "tilt_fall": -34.0,
+   "p": null
+  },
+  "better_every_period": true
+ },
+ "cpr x1.5/x0.5": {
+  "2023-24": {
+   "base": 765068,
+   "base_fall": -28.6,
+   "tilt": 1138222,
+   "tilt_fall": -36.1,
+   "p": 0.06
+  },
+  "2025": {
+   "base": 356393,
+   "base_fall": -21.8,
+   "tilt": 421114,
+   "tilt_fall": -26.3,
+   "p": 0.32
+  },
+  "2026": {
+   "base": 468678,
+   "base_fall": -19.1,
+   "tilt": 490856,
+   "tilt_fall": -26.1,
+   "p": 0.56
+  },
+  "2023 - Oct 2026": {
+   "base": 3336017,
+   "base_fall": -28.6,
+   "tilt": 7412182,
+   "tilt_fall": -36.1,
+   "p": null
+  },
+  "better_every_period": true
+ },
+ "gamma x1.3/x0.7": {
+  "Oct 2023-24": {
+   "base": 438205,
+   "base_fall": -20.1,
+   "tilt": 423685,
+   "tilt_fall": -20.0,
+   "p": 0.64
+  },
+  "2025": {
+   "base": 356393,
+   "base_fall": -21.8,
+   "tilt": 361210,
+   "tilt_fall": -20.8,
+   "p": 0.49
+  },
+  "2026": {
+   "base": 428169,
+   "base_fall": -19.1,
+   "tilt": 365325,
+   "tilt_fall": -18.6,
+   "p": 0.89
+  },
+  "Oct 2023 - Oct 2026": {
+   "base": 1367266,
+   "base_fall": -24.5,
+   "tilt": 1029044,
+   "tilt_fall": -20.9,
+   "p": null
+  },
+  "better_every_period": false
+ },
+ "gamma x1.5/x0.5": {
+  "Oct 2023-24": {
+   "base": 438205,
+   "base_fall": -20.1,
+   "tilt": 442245,
+   "tilt_fall": -18.7,
+   "p": 0.44
+  },
+  "2025": {
+   "base": 356393,
+   "base_fall": -21.8,
+   "tilt": 359271,
+   "tilt_fall": -20.7,
+   "p": 0.62
+  },
+  "2026": {
+   "base": 428169,
+   "base_fall": -19.1,
+   "tilt": 351828,
+   "tilt_fall": -19.2,
+   "p": 0.89
+  },
+  "Oct 2023 - Oct 2026": {
+   "base": 1367266,
+   "base_fall": -24.5,
+   "tilt": 863411,
+   "tilt_fall": -19.6,
+   "p": null
+  },
+  "better_every_period": false
+ },
+ "oiwall x1.3/x0.7": {
+  "Oct 2023-24": {
+   "base": 438205,
+   "base_fall": -20.1,
+   "tilt": 574174,
+   "tilt_fall": -20.3,
+   "p": 0.0
+  },
+  "2025": {
+   "base": 356393,
+   "base_fall": -21.8,
+   "tilt": 317266,
+   "tilt_fall": -27.1,
+   "p": 0.98
+  },
+  "2026": {
+   "base": 428169,
+   "base_fall": -19.1,
+   "tilt": 419361,
+   "tilt_fall": -20.1,
+   "p": 0.83
+  },
+  "Oct 2023 - Oct 2026": {
+   "base": 1367266,
+   "base_fall": -24.5,
+   "tilt": 1691685,
+   "tilt_fall": -26.4,
+   "p": null
+  },
+  "better_every_period": false
+ },
+ "oiwall x1.5/x0.5": {
+  "Oct 2023-24": {
+   "base": 438205,
+   "base_fall": -20.1,
+   "tilt": 534002,
+   "tilt_fall": -19.8,
+   "p": 0.04
+  },
+  "2025": {
+   "base": 356393,
+   "base_fall": -21.8,
+   "tilt": 309948,
+   "tilt_fall": -28.1,
+   "p": 1.0
+  },
+  "2026": {
+   "base": 428169,
+   "base_fall": -19.1,
+   "tilt": 392343,
+   "tilt_fall": -20.6,
+   "p": 0.88
+  },
+  "Oct 2023 - Oct 2026": {
+   "base": 1367266,
+   "base_fall": -24.5,
+   "tilt": 1377444,
+   "tilt_fall": -27.5,
+   "p": null
+  },
+  "better_every_period": false
+ },
+ "combined x1.3/x0.7": {
+  "Oct 2023-24": {
+   "base": 438205,
+   "base_fall": -20.1,
+   "tilt": 472263,
+   "tilt_fall": -20.7,
+   "p": 0.2
+  },
+  "2025": {
+   "base": 356393,
+   "base_fall": -21.8,
+   "tilt": 354396,
+   "tilt_fall": -24.9,
+   "p": 0.42
+  },
+  "2026": {
+   "base": 428169,
+   "base_fall": -19.1,
+   "tilt": 403908,
+   "tilt_fall": -21.0,
+   "p": 0.8
+  },
+  "Oct 2023 - Oct 2026": {
+   "base": 1367266,
+   "base_fall": -24.5,
+   "tilt": 1387382,
+   "tilt_fall": -27.1,
+   "p": null
+  },
+  "better_every_period": false
+ },
+ "combined x1.5/x0.5": {
+  "Oct 2023-24": {
+   "base": 438205,
+   "base_fall": -20.1,
+   "tilt": 475938,
+   "tilt_fall": -22.1,
+   "p": 0.26
+  },
+  "2025": {
+   "base": 356393,
+   "base_fall": -21.8,
+   "tilt": 372561,
+   "tilt_fall": -24.8,
+   "p": 0.19
+  },
+  "2026": {
+   "base": 428169,
+   "base_fall": -19.1,
+   "tilt": 403800,
+   "tilt_fall": -21.6,
+   "p": 0.84
+  },
+  "Oct 2023 - Oct 2026": {
+   "base": 1367266,
+   "base_fall": -24.5,
+   "tilt": 1392072,
+   "tilt_fall": -26.5,
+   "p": null
+  },
+  "better_every_period": false
+ }
+}

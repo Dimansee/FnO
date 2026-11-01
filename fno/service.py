@@ -996,6 +996,13 @@ def _place_signal(symbol, strike=None, auto=False, which=None):
         jd["total_mult"] = round(min(max((conv["mult"] if conv else 1.0) * jd["mult"], lo), hi), 3)
         pf = {**pf, "risk_pct": rp0 * jd["total_mult"]}
         ev = {**ev, "plan": {**ev["plan"], "ai_judge": jd}}
+    cpr = _cpr_size(symbol, g, pf) if auto else None
+    if cpr is not None:
+        if cpr["mult"] <= 0:
+            return False, (f"Skipped (round 71): wide CPR today ({cpr['width']:.2f}% of the pivot, above {C.CPR_WIDE:g}%). "
+                           "Autopilot trades on wide-CPR days lost money per lot in every test year.")
+        pf = {**pf, "risk_pct": float(pf.get("risk_pct") or 1.0) * cpr["mult"]}
+        ev = {**ev, "plan": {**ev["plan"], "cpr_size": cpr}}
     if pf.get("autopilot") and flag("dd_half"):                      # round 43: half risk while deep below the peak
         try:
             eq_now, pk = P.equity(acct, tr), P.peak_equity(acct, tr)
@@ -1089,6 +1096,9 @@ def changes() -> list[dict]:
         removed = 0
     po = float(acct.get("capital_start") or 0) <= 0 and acct.get("capital_before")
     return [
+        {"id": "cpr_size", "date": "2026-11-01", "title": "CPR-width sizing (round 71)",
+         "what": f"Autopilot sizes each index trade by the day's CPR width (from yesterday's high / low / close): {C.CPR_MULT_NARROW:g}x risk when the CPR is narrow (< {C.CPR_NARROW:g}%), {C.CPR_MULT_MID:g}x in the middle, and no trade when it is wide (> {C.CPR_WIDE:g}%). No new trades are added. In the Outcomes replay (Rs 2L, compounding) it was better in 2023, 2024, 2025 and 2026; 2023 - Oct 2026 Rs 44.2L vs 33.4L, worst fall -31% vs -29%.",
+         "before": "Same size whatever the CPR width.", "on": flag("cpr_size"), "kind": "switch"},
         {"id": "crypto_book_r64", "date": "2026-10-29", "title": "Crypto book: Donchian 55 4h retired, 2x leverage (crypto round 17)",
          "what": "The crypto autopilot no longer opens Donchian 55 breakout (4h) trades, and uses 2x leverage unless you set leverage yourself. Risk per trade stays 1%: leverage only frees cash, so fewer good signals are skipped. In the money replay with the weekly re-test (Rs 2L, 2023 - Oct 2026) this made Rs 2.65L vs 2.17L, better both before and after Apr 2025, worst fall -26% vs -30%. Open Donchian 55 trades are still managed to their exit.",
          "before": "Four crypto rules (incl. Donchian 55 4h) at 1x leverage.", "on": flag("crypto_book_r64"), "kind": "switch"},
@@ -1126,7 +1136,7 @@ def changes() -> list[dict]:
 
 
 def revert_change(cid: str, on: bool | None = None) -> str:
-    if cid in ("conviction", "limits_system_only", "small_otm", "ai_judge", "big_run_skip", "dd_half", "crypto_book_r64"):
+    if cid in ("conviction", "limits_system_only", "small_otm", "ai_judge", "big_run_skip", "dd_half", "crypto_book_r64", "cpr_size"):
         set_flag(cid, bool(on))
         return ("Switched on again." if on else "Switched back to how it worked before.")
     if cid == "weekly_limit":
@@ -1161,6 +1171,19 @@ def _conviction(symbol, g, plan, pf) -> dict | None:
         if strong:                                                  # round 42 opt-in: 2x / 1x / 0.5x on every index
             return {"score": int(sc), "mult": next(m for lo, m in C.STRONG_CONF if sc >= lo), "mode": "strong"}
         return {"score": int(sc), "mult": S.conviction_mult(sc)}
+    except Exception:
+        return None
+
+
+def _cpr_size(symbol, g, pf) -> dict | None:
+    """Round 71: Autopilot risk x1.2 on narrow-CPR days, x0.85 on middle days, skip on wide days (Nifty, Bank Nifty, Sensex).
+    None when it does not apply or the width cannot be worked out (the trade keeps its size)."""
+    if not pf.get("autopilot") or symbol not in C.AUTOPILOT_SYMS or not flag("cpr_size"):
+        return None
+    try:
+        w = S.cpr_width(S.session_frames(g["candles"], g["now"])[1])
+        m = S.cpr_tilt(w)
+        return None if m is None else {"width": round(w, 3), "mult": m}
     except Exception:
         return None
 

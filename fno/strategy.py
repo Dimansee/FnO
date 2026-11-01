@@ -53,6 +53,30 @@ def session_frames(candles: pd.DataFrame, now: datetime):
     return today, hist
 
 
+def cpr_width(hist: pd.DataFrame) -> float | None:
+    """Round 71: today's CPR width in % of the pivot, from the last completed session in `hist`."""
+    if hist is None or hist.empty:
+        return None
+    last = hist[hist.index.date == hist.index[-1].date()]
+    h, l, c = float(last["high"].max()), float(last["low"].min()), float(last["close"].iloc[-1])
+    p = (h + l + c) / 3
+    if p <= 0:
+        return None
+    bc = (h + l) / 2
+    return abs((2 * p - bc) - bc) / p * 100
+
+
+def cpr_tilt(width: float | None) -> float | None:
+    """Round 71 risk multiplier for a CPR width: 1.2x narrow, 0.85x middle, 0 = skip (wide). None when unknown."""
+    if width is None or width != width:
+        return None
+    if width < C.CPR_NARROW:
+        return C.CPR_MULT_NARROW
+    if width > C.CPR_WIDE:
+        return 0.0
+    return C.CPR_MULT_MID
+
+
 def big_run(hist: pd.DataFrame) -> dict | None:
     """Round 42: the 3-session move before today and the 14-day ATR, from prior sessions' 5-minute bars.
     {"move3", "atr", "k" (|move| in ATRs), "dir" (+1 up / -1 down)}; None without enough history."""

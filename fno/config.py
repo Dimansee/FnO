@@ -198,6 +198,11 @@ CONVICTION_SYMS = {"NIFTY", "SENSEX"}
 CONVICTION_MIN_SCORE = 5
 CONVICTION_HIGH = 1.33
 CONVICTION_LOW = 0.67
+# Round 71: CPR-width sizing. Width = |TC - BC| / pivot x 100 from the previous session's high / low / close. Narrow-CPR days
+# (< 0.25%) trend more, so Autopilot risks 1.2x; middle days 0.85x; wide-CPR days (> 0.5%) are skipped. Outcomes replay, Rs 2L:
+# better in 2023, 2024, 2025 and 2026 (full 44.2L vs 33.4L); narrow-day trades earn more per lot every year (t-test p = 0.0004).
+CPR_NARROW, CPR_WIDE = 0.25, 0.5
+CPR_MULT_NARROW, CPR_MULT_MID = 1.2, 0.85
 CONVICTION_STRATS = ("noise", "camarilla", "trend", "fib")
 # Round 42 "strong" confidence sizing (opt-in, Settings): all three indices, score 5-6 -> 2x risk, 3-4 -> 1x, 0-2 -> 0.5x.
 # Backtest from Rs 2 lakh: more profit (1-year median +95% vs +53%) but a fall of 30%+ in 58% of 1-year paths (vs 36%).
