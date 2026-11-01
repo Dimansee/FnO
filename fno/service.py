@@ -1539,14 +1539,53 @@ def _push_safe(title, body, event_id, url="/"):
         return {"error": str(e)[:120]}
 
 
-def _push_signal(sym, ev, order, g):
-    plan = ev["plan"]
-    name = {"noise": "Noise-area", "camarilla": "Camarilla", "ai": "AI model", "trend": "Trend-day", "fib": "Fibonacci"}.get(plan.get("strategy"), plan.get("strategy"))
-    tgt = f"target ₹{order.get('target_prem')}" if order.get("target_fixed", True) else "no fixed target, trails"
+def _reco_id(sym, plan, now) -> str:
+    """One notification per Indian F&O signal: the recommendation, the placed trade and the 'not placed' alert share this id."""
+    return f"reco:{sym}:{(plan or {}).get('strategy')}:{(plan or {}).get('signal_bar') or now.strftime('%H:%M')}:{now.date()}"
+
+
+def _sname(st):
+    return {"noise": "Noise-area", "camarilla": "Camarilla", "ai": "AI model", "trend": "Trend-day", "fib": "Fibonacci"}.get(st, st)
+
+
+def _push_entry(sym, slot, ok, msg, now):
+    """Every Indian F&O entry (placed) and every valid signal Autopilot did not place, the minute it happens."""
+    lp = _LAST_PLAN.get((sym, slot))
+    if not lp:
+        return None if not ok else _push_safe(f"{sym}: paper trade placed", str(msg)[:160], f"placed{slot}:{sym}:{now.strftime('%H%M')}", "/#portfolio")
+    side = "CALL" if lp.get("opt") == "CE" else "PUT" if lp.get("opt") == "PE" else (lp.get("signal") or "")
+    lv = f"index {lp['entry']:.0f} SL {lp['sl']:.0f}" + (f" T {lp['target']:.0f}" if lp.get("target") is not None else "") if lp.get("entry") and lp.get("sl") else ""
+    rid = _reco_id(sym, lp, now)
+    if ok:
+        r = _push_safe(f"{sym}: {_sname(lp.get('strategy'))} {side} placed", (str(msg)[:150] + (f" | {lv}" if lv else "")), "placed:" + rid, "/#portfolio")
+        try:                                                 # the 5-minute recommendation alert for this same signal is then not needed
+            store._cmd("SET", f"fno:push:sent:{rid}", "1", "EX", 86400)
+        except Exception:
+            pass
+        return r
+    try:                                                     # the same reason for the same rule: at most one alert per 30 minutes
+        import hashlib
+        h = hashlib.sha1(str(msg)[:60].encode()).hexdigest()[:10]
+        if store._cmd("SET", f"fno:push:skipmsg:{sym}:{slot}:{lp.get('strategy')}:{h}", "1", "NX", "EX", 1800) is None:
+            return {"skipped": "same reason recently"}
+    except Exception:
+        pass
+    return _push_safe(f"{sym} {side} signal - not placed", f"{_sname(lp.get('strategy'))}: {lv}. Autopilot skipped it: {str(msg)[:140]}",
+                      _reco_id(sym, lp, now), "/#signal")
+
+
+def _push_signal(sym, ev, order, g, plan=None, slot=None):
+    plan = plan or ev["plan"]
+    name = _sname(plan.get("strategy"))
     itgt = f"T {plan['target']:.0f}" if plan.get("target") is not None else "no T"
-    body = (f"{name}: {order.get('strike'):g} {plan.get('opt')} @ ₹{order.get('entry_prem')} (SL ₹{order.get('sl_prem')}, {tgt}) "
-            f"| index {plan.get('entry'):.0f} SL {plan.get('sl'):.0f} {itgt} | score {ev.get('score')}")
-    return _push_safe(f"{sym} {ev.get('signal')}", body, f"reco:{sym}:{plan.get('strategy')}:{plan.get('signal_bar') or g['now'].strftime('%H:%M')}:{g['now'].date()}", "/#journal")
+    if order:
+        tgt = f"target ₹{order.get('target_prem')}" if order.get("target_fixed", True) else "no fixed target, trails"
+        body = (f"{name}: {order.get('strike'):g} {plan.get('opt')} @ ₹{order.get('entry_prem')} (SL ₹{order.get('sl_prem')}, {tgt}) "
+                f"| index {plan.get('entry'):.0f} SL {plan.get('sl'):.0f} {itgt} | score {ev.get('score')}")
+    else:
+        body = f"{name}: buy {plan.get('opt')} | index {plan.get('entry'):.0f} SL {plan.get('sl'):.0f} {itgt}"
+    sig = (ev.get(slot) or {}).get("signal") if slot else ev.get("signal")
+    return _push_safe(f"{sym} {sig or plan.get('opt')}", body, _reco_id(sym, plan, g["now"]), "/#journal")
 
 
 def _note_skip_safe(sym, slot, msg, now):
@@ -1672,7 +1711,7 @@ def _tick():
                     _note_skip_safe(sym, "main", msg, now)
                 if ok:
                     placed.append({"symbol": sym, "message": msg})
-                    _push_safe(f"{sym}: paper trade placed", str(msg)[:160], f"placed:{sym}:{now.strftime('%H%M')}", "/#portfolio")
+                _push_entry(sym, "main", ok, msg, now)
                 for slot in C.SLOTS:                      # own-slot rules (round 23 trend-day catcher, round 29 Fibonacci breakout)
                     if slot not in strats or (slot == "trend" and t < C.TREND_FIRST_CHECK):
                         continue
@@ -1683,8 +1722,7 @@ def _tick():
                         _note_skip_safe(sym, slot, msg, now)
                     if ok:
                         placed.append({"symbol": sym, "message": msg, "strategy": slot})
-                        _push_safe(f"{sym}: {'trend-day' if slot == 'trend' else 'Fibonacci'} paper trade placed", str(msg)[:160],
-                                   f"placed{slot}:{sym}:{now.strftime('%H%M')}", "/#portfolio")
+                    _push_entry(sym, slot, ok, msg, now)
             except Exception as e:                       # one instrument failing must not stop the others
                 placed.append({"symbol": sym, "error": str(e)[:120]})
     try:                                                     # scalp book (separate paper ledger, off unless switched on)
@@ -1692,6 +1730,7 @@ def _tick():
         sc = SC.tick(now)
         for x in sc.get("opened") or []:
             _note_auto_safe(x["symbol"], "scalp", True, x.get("message"), now)
+            _push_safe(f"{x['symbol']}: scalp trade placed", str(x.get("message"))[:180], f"scalp:{x['symbol']}:{now.strftime('%H%M')}", "/#scalp")
         for x in sc.get("skipped") or []:
             _note_auto_safe(x["symbol"], "scalp", False, x.get("why"), now)
         if sc.get("closed"):                                 # one phone alert when the governor stops an index for the day
@@ -1804,8 +1843,12 @@ def journal_tick(now):
             try:
                 g, ev, order, _ = scan(sym, m, pf)
                 out[sym] = J.record(sym, ev, order, g, pf)
-                if out[sym] and ev.get("plan") and order:
+                if out[sym] and ev.get("plan"):
                     _push_signal(sym, ev, order, g)
+                for sl in C.SLOTS:                           # trend-day / Fibonacci recommendations too
+                    sp = (ev.get(sl) or {}).get("plan")
+                    if out[sym] and sp:
+                        _push_signal(sym, ev, None, g, plan=sp, slot=sl)
             except Exception as e:
                 out[sym] = f"error: {str(e)[:100]}"
         return out
