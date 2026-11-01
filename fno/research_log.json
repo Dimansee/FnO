@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-29",
+ "updated": "2026-11-01",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
@@ -1343,6 +1343,17 @@
    "decision": "Adopted 29 Oct: Donchian 55 4h retired from the crypto book and 2x leverage (switchable in Recent changes)",
    "summary": "Nothing new from the list beats the live rules; the crypto book's weak spot is its sizing - too many signals for 4 slots at 1x.",
    "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r67",
+   "date": "2026-11-01",
+   "area": "Index options",
+   "title": "Levels grid: CPR, floor pivots, previous-day H/L/C, multi-touch S/R zones, opening range - break / retest / bounce / false break, with confluence ('matching')",
+   "asked": "Every behaviour at every level family, alone and where two families meet (within 0.1%): break, break-and-retest, first-touch bounce, false-break reversal; stop beyond the level or the signal bar; targets next level / 1.5R / 2R / end of day; filters CPR width, day bias (open vs CPR), morning window; 5 and 15 min; Nifty, Bank Nifty, Sensex 2023 - Oct 2026; 8,344 versions; index R against a random-direction twin and money as ATM options (decay, charges, 0.25% slippage, Rs 2,000 risk). Then the best ones added to today's Autopilot (Outcomes-tab replay).",
+   "result": "The levels themselves give no direction edge: edge over the random twin -0.06R to +0.02R in every family and behaviour; fixed targets (next level, 1.5R, 2R) lose in almost every version; bounces and retests are the worst. What makes money is a trend-day effect: break of any level in the day's CPR direction on narrow-CPR days, held to the close (best on 2023-24: +8.0L, then +1.9L in 2025-26; by year +5.2L, +2.8L, +1.4L, +0.5L - fading). Wide-CPR days lose (-0.21R). Confluence adds a little in 2025-26 only. Added to today's Autopilot (Rs 2L, compounding, 0.5% slippage): 2023 - Oct 2026 Rs 6.2L - 12.3L vs Rs 33.4L without it, deeper falls (-37% to -65% vs -29%); worse in 2023-24 in every version; only 'with confluence on Nifty + Sensex' is better in 2025-26 (Rs 20.0L vs 8.2L) but worse in 2023-24 and with a deeper fall. The rule mostly duplicates the trend-day trades Autopilot already takes and crowds them out.",
+   "decision": "Not adopted",
+   "summary": "Pivot / CPR / previous-day / S/R levels have no edge on their own; the only profitable form (narrow-CPR breaks held to the close) is a weaker copy of Autopilot's trend-day trades and lowers its result.",
+   "period": "Jan 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2514,6 +2525,15 @@
     "r63"
    ],
    "takeaway": "Nothing works on 1-2 min. RMI + Supertrend 15 min (MACD + RMI agreeing) is profitable alone, but added to today's Autopilot it lowers the 2023-26 result (Rs 30.0L vs 33.4L from Rs 2L): not adopted."
+  },
+  {
+   "n": 67,
+   "date": "2026-11-01",
+   "topic": "Levels grid: CPR, pivots, previous-day H/L, S/R zones, opening range, with confluence",
+   "ids": [
+    "r67"
+   ],
+   "takeaway": "No level has a direction edge; narrow-CPR breaks held to the close make money alone but lower today's Autopilot (Rs 12.3L at best vs 33.4L, 2023-26): not adopted."
   }
  ],
  "india_status": {

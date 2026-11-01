@@ -1,0 +1,548 @@
+{
+ "200000|2023-24": {
+  "Autopilot today": {
+   "final": 765068,
+   "net": 565068,
+   "max_dd_pct": -28.6,
+   "trades": 1021,
+   "years": {
+    "2023": 30.4,
+    "2024": 193.3
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 139
+  },
+  "+ A (no confluence), all three": {
+   "final": 515425,
+   "net": 315425,
+   "max_dd_pct": -38.4,
+   "trades": 1709,
+   "years": {
+    "2023": 63.3,
+    "2024": 57.8
+   },
+   "new_trades": 988,
+   "new_pnl": 113573.0,
+   "skipped": 918
+  },
+  "+ A (no confluence), Nifty + Sensex": {
+   "final": 268795,
+   "net": 68795,
+   "max_dd_pct": -44.0,
+   "trades": 1371,
+   "years": {
+    "2023": -17.5,
+    "2024": 62.8
+   },
+   "new_trades": 747,
+   "new_pnl": -19124.0,
+   "skipped": 823
+  },
+  "+ B (with confluence), all three": {
+   "final": 337931,
+   "net": 137931,
+   "max_dd_pct": -50.2,
+   "trades": 1636,
+   "years": {
+    "2023": 25.4,
+    "2024": 34.7
+   },
+   "new_trades": 911,
+   "new_pnl": -97357.0,
+   "skipped": 885
+  },
+  "+ B (with confluence), Nifty + Sensex": {
+   "final": 289529,
+   "net": 89529,
+   "max_dd_pct": -37.3,
+   "trades": 1505,
+   "years": {
+    "2023": 18.8,
+    "2024": 21.9
+   },
+   "new_trades": 721,
+   "new_pnl": -86231.0,
+   "skipped": 631
+  }
+ },
+ "200000|2025-26": {
+  "Autopilot today": {
+   "final": 824277,
+   "net": 624277,
+   "max_dd_pct": -21.8,
+   "trades": 889,
+   "years": {
+    "2025": 78.2,
+    "2026": 131.3
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 86
+  },
+  "+ A (no confluence), all three": {
+   "final": 175981,
+   "net": -24019,
+   "max_dd_pct": -63.3,
+   "trades": 1489,
+   "years": {
+    "2025": 18.9,
+    "2026": -26.0
+   },
+   "new_trades": 850,
+   "new_pnl": -246962.0,
+   "skipped": 755
+  },
+  "+ A (no confluence), Nifty + Sensex": {
+   "final": 666837,
+   "net": 466837,
+   "max_dd_pct": -47.3,
+   "trades": 1413,
+   "years": {
+    "2025": 53.8,
+    "2026": 116.8
+   },
+   "new_trades": 675,
+   "new_pnl": 67302.0,
+   "skipped": 437
+  },
+  "+ B (with confluence), all three": {
+   "final": 468602,
+   "net": 268602,
+   "max_dd_pct": -58.0,
+   "trades": 1551,
+   "years": {
+    "2025": 115.6,
+    "2026": 8.7
+   },
+   "new_trades": 856,
+   "new_pnl": -256012.0,
+   "skipped": 587
+  },
+  "+ B (with confluence), Nifty + Sensex": {
+   "final": 1996584,
+   "net": 1796584,
+   "max_dd_pct": -32.2,
+   "trades": 1370,
+   "years": {
+    "2025": 214.3,
+    "2026": 217.7
+   },
+   "new_trades": 596,
+   "new_pnl": 541548.0,
+   "skipped": 401
+  }
+ },
+ "200000|full": {
+  "Autopilot today": {
+   "final": 3336017,
+   "net": 3136017,
+   "max_dd_pct": -28.6,
+   "trades": 1906,
+   "years": {
+    "2023": 30.4,
+    "2024": 193.3,
+    "2025": 76.2,
+    "2026": 147.4
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 229
+  },
+  "+ A (no confluence), all three": {
+   "final": 425516,
+   "net": 225516,
+   "max_dd_pct": -62.7,
+   "trades": 3409,
+   "years": {
+    "2023": 63.3,
+    "2024": 57.8,
+    "2025": -32.8,
+    "2026": 22.8
+   },
+   "new_trades": 1956,
+   "new_pnl": -267248.0,
+   "skipped": 1462
+  },
+  "+ A (no confluence), Nifty + Sensex": {
+   "final": 623797,
+   "net": 423797,
+   "max_dd_pct": -48.1,
+   "trades": 2808,
+   "years": {
+    "2023": -17.5,
+    "2024": 62.8,
+    "2025": 24.5,
+    "2026": 86.4
+   },
+   "new_trades": 1430,
+   "new_pnl": -32082.0,
+   "skipped": 1236
+  },
+  "+ B (with confluence), all three": {
+   "final": 344216,
+   "net": 144216,
+   "max_dd_pct": -64.9,
+   "trades": 3252,
+   "years": {
+    "2023": 25.4,
+    "2024": 34.7,
+    "2025": -11.6,
+    "2026": 15.2
+   },
+   "new_trades": 1791,
+   "new_pnl": -318268.0,
+   "skipped": 1407
+  },
+  "+ B (with confluence), Nifty + Sensex": {
+   "final": 1233696,
+   "net": 1033696,
+   "max_dd_pct": -37.3,
+   "trades": 2856,
+   "years": {
+    "2023": 18.8,
+    "2024": 21.9,
+    "2025": 46.6,
+    "2026": 190.7
+   },
+   "new_trades": 1308,
+   "new_pnl": 89769.0,
+   "skipped": 1051
+  }
+ },
+ "200000|y2026": {
+  "Autopilot today": {
+   "final": 468678,
+   "net": 268678,
+   "max_dd_pct": -19.1,
+   "trades": 372,
+   "years": {
+    "2026": 134.3
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 46
+  },
+  "+ A (no confluence), all three": {
+   "final": 130936,
+   "net": -69064,
+   "max_dd_pct": -52.7,
+   "trades": 487,
+   "years": {
+    "2026": -34.5
+   },
+   "new_trades": 313,
+   "new_pnl": -86724.0,
+   "skipped": 473
+  },
+  "+ A (no confluence), Nifty + Sensex": {
+   "final": 468374,
+   "net": 268374,
+   "max_dd_pct": -37.3,
+   "trades": 595,
+   "years": {
+    "2026": 134.2
+   },
+   "new_trades": 292,
+   "new_pnl": 119056.0,
+   "skipped": 197
+  },
+  "+ B (with confluence), all three": {
+   "final": 319287,
+   "net": 119287,
+   "max_dd_pct": -34.1,
+   "trades": 524,
+   "years": {
+    "2026": 59.6
+   },
+   "new_trades": 289,
+   "new_pnl": -34806.0,
+   "skipped": 393
+  },
+  "+ B (with confluence), Nifty + Sensex": {
+   "final": 556772,
+   "net": 356772,
+   "max_dd_pct": -28.7,
+   "trades": 534,
+   "years": {
+    "2026": 178.4
+   },
+   "new_trades": 238,
+   "new_pnl": 120931.0,
+   "skipped": 226
+  }
+ },
+ "20000|2023-24": {
+  "Autopilot today": {
+   "final": 172665,
+   "net": 152665,
+   "max_dd_pct": -69.3,
+   "trades": 644,
+   "years": {
+    "2023": 30.2,
+    "2024": 563.2
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 516
+  },
+  "+ A (no confluence), all three": {
+   "final": 245621,
+   "net": 225621,
+   "max_dd_pct": -62.9,
+   "trades": 1571,
+   "years": {
+    "2023": 381.4,
+    "2024": 155.1
+   },
+   "new_trades": 1036,
+   "new_pnl": 111910.0,
+   "skipped": 1056
+  },
+  "+ A (no confluence), Nifty + Sensex": {
+   "final": 217300,
+   "net": 197300,
+   "max_dd_pct": -61.6,
+   "trades": 1435,
+   "years": {
+    "2023": 174.2,
+    "2024": 296.2
+   },
+   "new_trades": 815,
+   "new_pnl": 44466.0,
+   "skipped": 759
+  },
+  "+ B (with confluence), all three": {
+   "final": 97756,
+   "net": 77756,
+   "max_dd_pct": -84.0,
+   "trades": 1022,
+   "years": {
+    "2023": 74.9,
+    "2024": 179.5
+   },
+   "new_trades": 724,
+   "new_pnl": -33685.0,
+   "skipped": 1499
+  },
+  "+ B (with confluence), Nifty + Sensex": {
+   "final": 99690,
+   "net": 79690,
+   "max_dd_pct": -68.2,
+   "trades": 1116,
+   "years": {
+    "2023": 85.9,
+    "2024": 168.1
+   },
+   "new_trades": 670,
+   "new_pnl": -63287.0,
+   "skipped": 1020
+  }
+ },
+ "20000|2025-26": {
+  "Autopilot today": {
+   "final": 185362,
+   "net": 165362,
+   "max_dd_pct": -63.4,
+   "trades": 589,
+   "years": {
+    "2025": 240.7,
+    "2026": 172.1
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 386
+  },
+  "+ A (no confluence), all three": {
+   "final": 26395,
+   "net": 6395,
+   "max_dd_pct": -84.6,
+   "trades": 1134,
+   "years": {
+    "2025": 191.2,
+    "2026": -54.7
+   },
+   "new_trades": 757,
+   "new_pnl": -92734.0,
+   "skipped": 1110
+  },
+  "+ A (no confluence), Nifty + Sensex": {
+   "final": 102742,
+   "net": 82742,
+   "max_dd_pct": -62.4,
+   "trades": 1034,
+   "years": {
+    "2025": 388.1,
+    "2026": 5.3
+   },
+   "new_trades": 592,
+   "new_pnl": -9323.0,
+   "skipped": 816
+  },
+  "+ B (with confluence), all three": {
+   "final": 102373,
+   "net": 82373,
+   "max_dd_pct": -64.4,
+   "trades": 1044,
+   "years": {
+    "2025": 523.8,
+    "2026": -17.9
+   },
+   "new_trades": 662,
+   "new_pnl": -60133.0,
+   "skipped": 1094
+  },
+  "+ B (with confluence), Nifty + Sensex": {
+   "final": 567119,
+   "net": 547119,
+   "max_dd_pct": -36.0,
+   "trades": 1182,
+   "years": {
+    "2025": 817.5,
+    "2026": 209.0
+   },
+   "new_trades": 573,
+   "new_pnl": 174209.0,
+   "skipped": 589
+  }
+ },
+ "20000|full": {
+  "Autopilot today": {
+   "final": 506103,
+   "net": 486103,
+   "max_dd_pct": -69.3,
+   "trades": 1460,
+   "years": {
+    "2023": 30.2,
+    "2024": 563.2,
+    "2025": 40.9,
+    "2026": 108.1
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 675
+  },
+  "+ A (no confluence), all three": {
+   "final": 97442,
+   "net": 77442,
+   "max_dd_pct": -74.6,
+   "trades": 2753,
+   "years": {
+    "2023": 381.4,
+    "2024": 155.1,
+    "2025": -34.9,
+    "2026": -39.1
+   },
+   "new_trades": 1761,
+   "new_pnl": -115300.0,
+   "skipped": 2118
+  },
+  "+ A (no confluence), Nifty + Sensex": {
+   "final": 666813,
+   "net": 646813,
+   "max_dd_pct": -61.6,
+   "trades": 2810,
+   "years": {
+    "2023": 174.2,
+    "2024": 296.2,
+    "2025": 41.6,
+    "2026": 116.8
+   },
+   "new_trades": 1478,
+   "new_pnl": 86744.0,
+   "skipped": 1234
+  },
+  "+ B (with confluence), all three": {
+   "final": 101998,
+   "net": 81998,
+   "max_dd_pct": -84.0,
+   "trades": 2050,
+   "years": {
+    "2023": 74.9,
+    "2024": 179.5,
+    "2025": 35.7,
+    "2026": -23.1
+   },
+   "new_trades": 1370,
+   "new_pnl": -143361.0,
+   "skipped": 2609
+  },
+  "+ B (with confluence), Nifty + Sensex": {
+   "final": 567473,
+   "net": 547473,
+   "max_dd_pct": -68.2,
+   "trades": 2289,
+   "years": {
+    "2023": 85.9,
+    "2024": 168.1,
+    "2025": 83.8,
+    "2026": 209.7
+   },
+   "new_trades": 1232,
+   "new_pnl": 91463.0,
+   "skipped": 1618
+  }
+ },
+ "20000|y2026": {
+  "Autopilot today": {
+   "final": 102196,
+   "net": 82196,
+   "max_dd_pct": -47.6,
+   "trades": 253,
+   "years": {
+    "2026": 411.0
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 165
+  },
+  "+ A (no confluence), all three": {
+   "final": 11534,
+   "net": -8466,
+   "max_dd_pct": -87.6,
+   "trades": 442,
+   "years": {
+    "2026": -42.3
+   },
+   "new_trades": 319,
+   "new_pnl": -47833.0,
+   "skipped": 518
+  },
+  "+ A (no confluence), Nifty + Sensex": {
+   "final": 109265,
+   "net": 89265,
+   "max_dd_pct": -63.0,
+   "trades": 464,
+   "years": {
+    "2026": 446.3
+   },
+   "new_trades": 275,
+   "new_pnl": 9051.0,
+   "skipped": 328
+  },
+  "+ B (with confluence), all three": {
+   "final": 10020,
+   "net": -9980,
+   "max_dd_pct": -89.1,
+   "trades": 410,
+   "years": {
+    "2026": -49.9
+   },
+   "new_trades": 283,
+   "new_pnl": -56434.0,
+   "skipped": 507
+  },
+  "+ B (with confluence), Nifty + Sensex": {
+   "final": 90752,
+   "net": 70752,
+   "max_dd_pct": -77.3,
+   "trades": 379,
+   "years": {
+    "2026": 353.8
+   },
+   "new_trades": 223,
+   "new_pnl": 9859.0,
+   "skipped": 381
+  }
+ }
+}
