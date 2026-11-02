@@ -1409,6 +1409,17 @@
    "decision": "Not adopted. The 2 Nov trade was a good read of a two-way day, but over 3.7 years the same rotation loses after decay, spread and charges; live rules unchanged.",
    "summary": "Opening-candle retest to the top loses every year after option costs and cuts Autopilot from Rs 44L to Rs 8.5L; not adopted.",
    "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r73",
+   "date": "2026-11-02",
+   "area": "Index options",
+   "title": "What is left to improve? Regime sizing tilts on Autopilot's own trades, and a cheaper instrument (expiry, strike, futures)",
+   "asked": "User: any way, strategy, indicator or point of view to improve the setup; backtest if needed. 72 rounds had already tested entries (indicators, patterns, levels, SMC, OI, scalping) and they lost after option costs or crowded out Autopilot's trend trades; only sizing (r71 CPR) lifted every year. So: (A) size Autopilot's own trades by 10 readings known at entry - VIX percentile, VIX 5-day change, gap size, gap direction, expiry day, NR7, yesterday's candle direction, entry hour, breadth (other two indices on the trade's side of their open), weekday - x1.2/x0.85 and x1.3/x0.7 in the Outcomes replay, shuffled-multiplier control, and a chance check (same test on year-shuffled P&L). (B) same signals, other instrument: roll to next week's expiry at < 3 or < 5 days left (today: <= 1), 2 ITM instead of 1 ITM, and index futures with realistic costs.",
+   "result": "(A) 3 of 28 buckets were better in every year 2023-26 (entries 11:00-13:00 up, Fridays up, VIX rising >8% in 5 days down), but on shuffled data 3.7 buckets pass that test by chance (P(>=3) = 0.68), so they are noise. Replays: 11-13 x1.3 full 51.3L vs 40.9L but shuffle p 0.28; Friday x1.3 69.3L but a deeper fall; VIX-rising x0.85 worse in 2023. Nothing passes. (B) Rs 2L full period: today 40.9L; roll <3 days 37.7L (2026 4.70L vs 4.97L); roll <5 days 31.4L; 2 ITM 17.2L; 2 ITM roll <3 25.7L. Futures per lot: -21k / +3.62L / +1.59L / +1.05L vs options +36k / +2.74L / +1.66L / +1.17L (2023-26), average loss -2.4k vs -1.2k, and ~Rs 2L margin per lot.",
+   "decision": "Not adopted. Live rules unchanged: 1 ITM, roll at <= 1 day, no extra tilts. Remaining gains are operational (signals not placed on 21 and 29 Oct, settings reset on 28 Oct) and the pending live-data items.",
+   "summary": "No regime tilt beats chance and no other expiry, strike or futures beats today's 1-ITM options; Autopilot stays as is.",
+   "period": "Jan 2023 - 30 Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2641,6 +2652,15 @@
     "r72"
    ],
    "takeaway": "Negative every year after option costs; random direction does as well; added to Autopilot it cuts 44.2L to 8.5L. Not adopted. Daily post-market review started (research/daily_review.py)."
+  },
+  {
+   "n": 73,
+   "date": "2026-11-02",
+   "topic": "Regime sizing tilts + instrument choice (expiry, strike, futures)",
+   "ids": [
+    "r73"
+   ],
+   "takeaway": "10 regime readings as size tilts: the 3 'every year' buckets are what chance gives (3.7 expected). Next-week expiry, 2 ITM and futures all lower Autopilot. Not adopted."
   }
  ],
  "india_status": {
