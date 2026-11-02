@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-01",
+ "updated": "2026-11-02",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
@@ -1398,6 +1398,17 @@
    "decision": "Adopted 1 Nov 2026 as a switch (Research -> Recent changes: 'CPR-width sizing (round 71)'); also in the Outcomes / portfolio backtest baseline",
    "summary": "Sizing by CPR width (1.2x narrow, 0.85x middle, skip wide) lifts Autopilot in every year at Rs 2L without adding trades; gamma and OI-wall tilts do not.",
    "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r72",
+   "date": "2026-11-02",
+   "area": "Index options",
+   "title": "User's 2 Nov trade: opening-candle high/low retest -> exit at the morning top (two-level rotation)",
+   "asked": "From the user's 2 Nov Nifty chart (23350 CE in at 65 on the retest of the opening candle's high, out at 82 at the 'rejection from top'). Rule: the 09:15 5-min candle's high is broken, price runs at least 0.15% and makes a top, comes back to the opening high (within 0.05%) and closes back above it -> buy a call next bar (09:30-14:30), stop under the retest bar, exit at the top. Puts mirror it at the opening low. Grid of 128: 5-min or 15-min opening range, run 0.15/0.25%, touch 0.05/0.1%, green retest candle or not, room >= 1R or 1.5R, exits at the top / top then trail / 2R / hold to 15:15. Nifty, Bank Nifty, Sensex, Jan 2023 - Oct 2026, ATM option priced like the app, Rs 2,000 risk; random-direction twin; then added to today's Autopilot in the Outcomes replay (Rs 2L and Rs 20k).",
+   "result": "The user's exact rule (exit at the top): 909 trades, 28% wins, +0.04R on the index but -Rs 202 a trade after option costs, negative every year (2023 -63k, 2024 -73k, 2025 -45k, 2026 -2k); the coin-flip twin does about the same (+0.06R), so the level adds no direction edge. Exit at the top, then trail / 2R: also negative. Only 'hold to 15:15' is slightly positive, and its random twin earns more - the trend-day effect seen in rounds 67/69. Added to Autopilot (Rs 2L): Jan 2023 - Oct 2026 Rs 8.5L vs 44.2L today, worse in every year, worst fall -40% vs -31%. Rs 20k: 3k vs 6.5L.",
+   "decision": "Not adopted. The 2 Nov trade was a good read of a two-way day, but over 3.7 years the same rotation loses after decay, spread and charges; live rules unchanged.",
+   "summary": "Opening-candle retest to the top loses every year after option costs and cuts Autopilot from Rs 44L to Rs 8.5L; not adopted.",
+   "period": "Jan 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2621,6 +2632,15 @@
     "r71"
    ],
    "takeaway": "CPR-width sizing (1.2x narrow / 0.85x middle / skip wide) beat today's Autopilot in 2023, 2024, 2025 and 2026 at Rs 2L (44.2L vs 33.4L overall): adopted as a switch. Gamma / OI-wall tilts: no."
+  },
+  {
+   "n": 72,
+   "date": "2026-11-02",
+   "topic": "User's opening-candle retest -> top rotation (2 Nov trade)",
+   "ids": [
+    "r72"
+   ],
+   "takeaway": "Negative every year after option costs; random direction does as well; added to Autopilot it cuts 44.2L to 8.5L. Not adopted. Daily post-market review started (research/daily_review.py)."
   }
  ],
  "india_status": {

@@ -1,0 +1,560 @@
+{
+ "200000|2023-24": {
+  "Autopilot today": {
+   "final": 888408,
+   "net": 688408,
+   "max_dd_pct": -31.3,
+   "trades": 973,
+   "years": {
+    "2023": 44.0,
+    "2024": 208.4
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 187
+  },
+  "+ user's rule: 5m candle, run 0.15%, exit at top": {
+   "final": 416410,
+   "net": 216410,
+   "max_dd_pct": -40.4,
+   "trades": 1198,
+   "years": {
+    "2023": 3.4,
+    "2024": 101.4
+   },
+   "new_trades": 334,
+   "new_pnl": -244498.0,
+   "skipped": 446
+  },
+  "+ user's rule, exit top then trail": {
+   "final": 512175,
+   "net": 312175,
+   "max_dd_pct": -35.9,
+   "trades": 1201,
+   "years": {
+    "2023": 35.1,
+    "2024": 89.6
+   },
+   "new_trades": 339,
+   "new_pnl": -212529.0,
+   "skipped": 443
+  }
+ },
+ "200000|2025-26": {
+  "Autopilot today": {
+   "final": 1083935,
+   "net": 883935,
+   "max_dd_pct": -24.6,
+   "trades": 862,
+   "years": {
+    "2025": 92.4,
+    "2026": 181.7
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 113
+  },
+  "+ user's rule: 5m candle, run 0.15%, exit at top": {
+   "final": 708011,
+   "net": 508011,
+   "max_dd_pct": -34.1,
+   "trades": 1160,
+   "years": {
+    "2025": 41.3,
+    "2026": 150.5
+   },
+   "new_trades": 337,
+   "new_pnl": -117680.0,
+   "skipped": 240
+  },
+  "+ user's rule, exit top then trail": {
+   "final": 648001,
+   "net": 448001,
+   "max_dd_pct": -40.0,
+   "trades": 1113,
+   "years": {
+    "2025": 19.3,
+    "2026": 171.6
+   },
+   "new_trades": 323,
+   "new_pnl": -88917.0,
+   "skipped": 287
+  }
+ },
+ "200000|2023": {
+  "Autopilot today": {
+   "final": 288049,
+   "net": 88049,
+   "max_dd_pct": -31.2,
+   "trades": 450,
+   "years": {
+    "2023": 44.0
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 92
+  },
+  "+ user's rule: 5m candle, run 0.15%, exit at top": {
+   "final": 206730,
+   "net": 6730,
+   "max_dd_pct": -37.0,
+   "trades": 552,
+   "years": {
+    "2023": 3.4
+   },
+   "new_trades": 166,
+   "new_pnl": -81709.0,
+   "skipped": 233
+  },
+  "+ user's rule, exit top then trail": {
+   "final": 270112,
+   "net": 70112,
+   "max_dd_pct": -35.4,
+   "trades": 548,
+   "years": {
+    "2023": 35.1
+   },
+   "new_trades": 165,
+   "new_pnl": -12964.0,
+   "skipped": 237
+  }
+ },
+ "200000|2024": {
+  "Autopilot today": {
+   "final": 614941,
+   "net": 414941,
+   "max_dd_pct": -19.8,
+   "trades": 512,
+   "years": {
+    "2024": 207.5
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 106
+  },
+  "+ user's rule: 5m candle, run 0.15%, exit at top": {
+   "final": 406619,
+   "net": 206619,
+   "max_dd_pct": -24.4,
+   "trades": 638,
+   "years": {
+    "2024": 103.3
+   },
+   "new_trades": 168,
+   "new_pnl": -144798.0,
+   "skipped": 221
+  },
+  "+ user's rule, exit top then trail": {
+   "final": 418072,
+   "net": 218072,
+   "max_dd_pct": -26.3,
+   "trades": 641,
+   "years": {
+    "2024": 109.0
+   },
+   "new_trades": 173,
+   "new_pnl": -169048.0,
+   "skipped": 218
+  }
+ },
+ "200000|2025": {
+  "Autopilot today": {
+   "final": 384769,
+   "net": 184769,
+   "max_dd_pct": -24.6,
+   "trades": 497,
+   "years": {
+    "2025": 92.4
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 60
+  },
+  "+ user's rule: 5m candle, run 0.15%, exit at top": {
+   "final": 282684,
+   "net": 82684,
+   "max_dd_pct": -34.1,
+   "trades": 680,
+   "years": {
+    "2025": 41.3
+   },
+   "new_trades": 218,
+   "new_pnl": -103924.0,
+   "skipped": 145
+  },
+  "+ user's rule, exit top then trail": {
+   "final": 238628,
+   "net": 38628,
+   "max_dd_pct": -40.0,
+   "trades": 648,
+   "years": {
+    "2025": 19.3
+   },
+   "new_trades": 210,
+   "new_pnl": -116656.0,
+   "skipped": 177
+  }
+ },
+ "200000|2026": {
+  "Autopilot today": {
+   "final": 521597,
+   "net": 321597,
+   "max_dd_pct": -21.1,
+   "trades": 347,
+   "years": {
+    "2026": 160.8
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 71
+  },
+  "+ user's rule: 5m candle, run 0.15%, exit at top": {
+   "final": 393135,
+   "net": 193135,
+   "max_dd_pct": -25.1,
+   "trades": 410,
+   "years": {
+    "2026": 96.6
+   },
+   "new_trades": 101,
+   "new_pnl": -23551.0,
+   "skipped": 165
+  },
+  "+ user's rule, exit top then trail": {
+   "final": 433021,
+   "net": 233021,
+   "max_dd_pct": -24.9,
+   "trades": 411,
+   "years": {
+    "2026": 116.5
+   },
+   "new_trades": 101,
+   "new_pnl": 4205.0,
+   "skipped": 164
+  }
+ },
+ "200000|Jan 2023 - Oct 2026": {
+  "Autopilot today": {
+   "final": 4418037,
+   "net": 4218037,
+   "max_dd_pct": -31.3,
+   "trades": 1853,
+   "years": {
+    "2023": 44.0,
+    "2024": 208.4,
+    "2025": 88.3,
+    "2026": 164.1
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 282
+  },
+  "+ user's rule: 5m candle, run 0.15%, exit at top": {
+   "final": 850042,
+   "net": 650042,
+   "max_dd_pct": -40.4,
+   "trades": 2394,
+   "years": {
+    "2023": 3.4,
+    "2024": 101.4,
+    "2025": -8.3,
+    "2026": 122.7
+   },
+   "new_trades": 682,
+   "new_pnl": -427086.0,
+   "skipped": 650
+  },
+  "+ user's rule, exit top then trail": {
+   "final": 1128154,
+   "net": 928154,
+   "max_dd_pct": -39.3,
+   "trades": 2419,
+   "years": {
+    "2023": 35.1,
+    "2024": 89.6,
+    "2025": -13.3,
+    "2026": 154.0
+   },
+   "new_trades": 692,
+   "new_pnl": -384443.0,
+   "skipped": 625
+  }
+ },
+ "20000|2023-24": {
+  "Autopilot today": {
+   "final": 195915,
+   "net": 175915,
+   "max_dd_pct": -66.2,
+   "trades": 669,
+   "years": {
+    "2023": 59.0,
+    "2024": 516.0
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 491
+  },
+  "+ user's rule: 5m candle, run 0.15%, exit at top": {
+   "final": 3336,
+   "net": -16664,
+   "max_dd_pct": -83.7,
+   "trades": 156,
+   "years": {
+    "2023": -83.3
+   },
+   "new_trades": 78,
+   "new_pnl": -12456.0,
+   "skipped": 1488
+  },
+  "+ user's rule, exit top then trail": {
+   "final": 4987,
+   "net": -15013,
+   "max_dd_pct": -89.8,
+   "trades": 380,
+   "years": {
+    "2023": -51.3,
+    "2024": -48.8
+   },
+   "new_trades": 167,
+   "new_pnl": -15060.0,
+   "skipped": 1264
+  }
+ },
+ "20000|2025-26": {
+  "Autopilot today": {
+   "final": 188619,
+   "net": 168619,
+   "max_dd_pct": -62.6,
+   "trades": 575,
+   "years": {
+    "2025": 242.2,
+    "2026": 175.6
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 400
+  },
+  "+ user's rule: 5m candle, run 0.15%, exit at top": {
+   "final": 98084,
+   "net": 78084,
+   "max_dd_pct": -82.2,
+   "trades": 878,
+   "years": {
+    "2025": 32.2,
+    "2026": 271.1
+   },
+   "new_trades": 344,
+   "new_pnl": -60780.0,
+   "skipped": 522
+  },
+  "+ user's rule, exit top then trail": {
+   "final": 103327,
+   "net": 83327,
+   "max_dd_pct": -71.2,
+   "trades": 862,
+   "years": {
+    "2025": 84.3,
+    "2026": 180.3
+   },
+   "new_trades": 339,
+   "new_pnl": -50085.0,
+   "skipped": 538
+  }
+ },
+ "20000|2023": {
+  "Autopilot today": {
+   "final": 31805,
+   "net": 11805,
+   "max_dd_pct": -58.9,
+   "trades": 308,
+   "years": {
+    "2023": 59.0
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 234
+  },
+  "+ user's rule: 5m candle, run 0.15%, exit at top": {
+   "final": 3336,
+   "net": -16664,
+   "max_dd_pct": -83.7,
+   "trades": 156,
+   "years": {
+    "2023": -83.3
+   },
+   "new_trades": 78,
+   "new_pnl": -12456.0,
+   "skipped": 629
+  },
+  "+ user's rule, exit top then trail": {
+   "final": 9740,
+   "net": -10260,
+   "max_dd_pct": -80.0,
+   "trades": 371,
+   "years": {
+    "2023": -51.3
+   },
+   "new_trades": 161,
+   "new_pnl": -12991.0,
+   "skipped": 414
+  }
+ },
+ "20000|2024": {
+  "Autopilot today": {
+   "final": 160910,
+   "net": 140910,
+   "max_dd_pct": -32.6,
+   "trades": 314,
+   "years": {
+    "2024": 704.6
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 304
+  },
+  "+ user's rule: 5m candle, run 0.15%, exit at top": {
+   "final": 119337,
+   "net": 99337,
+   "max_dd_pct": -47.7,
+   "trades": 467,
+   "years": {
+    "2024": 496.7
+   },
+   "new_trades": 167,
+   "new_pnl": -41856.0,
+   "skipped": 392
+  },
+  "+ user's rule, exit top then trail": {
+   "final": 140576,
+   "net": 120576,
+   "max_dd_pct": -31.3,
+   "trades": 458,
+   "years": {
+    "2024": 602.9
+   },
+   "new_trades": 161,
+   "new_pnl": -39608.0,
+   "skipped": 401
+  }
+ },
+ "20000|2025": {
+  "Autopilot today": {
+   "final": 68436,
+   "net": 48436,
+   "max_dd_pct": -62.6,
+   "trades": 331,
+   "years": {
+    "2025": 242.2
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 226
+  },
+  "+ user's rule: 5m candle, run 0.15%, exit at top": {
+   "final": 26432,
+   "net": 6432,
+   "max_dd_pct": -78.4,
+   "trades": 507,
+   "years": {
+    "2025": 32.2
+   },
+   "new_trades": 224,
+   "new_pnl": -49778.0,
+   "skipped": 318
+  },
+  "+ user's rule, exit top then trail": {
+   "final": 36864,
+   "net": 16864,
+   "max_dd_pct": -63.4,
+   "trades": 528,
+   "years": {
+    "2025": 84.3
+   },
+   "new_trades": 232,
+   "new_pnl": -47992.0,
+   "skipped": 297
+  }
+ },
+ "20000|2026": {
+  "Autopilot today": {
+   "final": 101474,
+   "net": 81474,
+   "max_dd_pct": -45.9,
+   "trades": 248,
+   "years": {
+    "2026": 407.4
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 170
+  },
+  "+ user's rule: 5m candle, run 0.15%, exit at top": {
+   "final": 98693,
+   "net": 78693,
+   "max_dd_pct": -50.2,
+   "trades": 365,
+   "years": {
+    "2026": 393.5
+   },
+   "new_trades": 117,
+   "new_pnl": -10431.0,
+   "skipped": 210
+  },
+  "+ user's rule, exit top then trail": {
+   "final": 87978,
+   "net": 67978,
+   "max_dd_pct": -56.7,
+   "trades": 356,
+   "years": {
+    "2026": 339.9
+   },
+   "new_trades": 116,
+   "new_pnl": -3960.0,
+   "skipped": 219
+  }
+ },
+ "20000|Jan 2023 - Oct 2026": {
+  "Autopilot today": {
+   "final": 654317,
+   "net": 634317,
+   "max_dd_pct": -66.2,
+   "trades": 1433,
+   "years": {
+    "2023": 59.0,
+    "2024": 516.0,
+    "2025": 12.7,
+    "2026": 196.3
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 702
+  },
+  "+ user's rule: 5m candle, run 0.15%, exit at top": {
+   "final": 3336,
+   "net": -16664,
+   "max_dd_pct": -83.7,
+   "trades": 156,
+   "years": {
+    "2023": -83.3
+   },
+   "new_trades": 78,
+   "new_pnl": -12456.0,
+   "skipped": 2888
+  },
+  "+ user's rule, exit top then trail": {
+   "final": 38990,
+   "net": 18990,
+   "max_dd_pct": -90.1,
+   "trades": 519,
+   "years": {
+    "2023": -51.3,
+    "2024": -48.8,
+    "2025": 13.2,
+    "2026": 590.7
+   },
+   "new_trades": 211,
+   "new_pnl": -19418.0,
+   "skipped": 2525
+  }
+ }
+}
