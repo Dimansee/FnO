@@ -18,9 +18,7 @@
    "2026-11-05"
   ]
  },
- "errors": [
-  "no chain snapshots for this day (app recorder off or NSE blocked and no broker login)"
- ],
+ "errors": [],
  "candles": {
   "rows": 190017,
   "instruments": 527,
@@ -29,7 +27,7 @@
  "bhav_fo_rows": 4369,
  "participant_oi": true,
  "participant_vol": true,
- "snapshots": 0,
+ "snapshots": 300,
  "journal_recos": 0,
- "updated": "2026-10-31T15:18:15+05:30"
+ "updated": "2026-11-03T03:58:13+05:30"
 }
