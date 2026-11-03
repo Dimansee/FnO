@@ -1497,6 +1497,17 @@
    "decision": "Not adopted. The stock-volume proxy of buying imbalance adds nothing stable. A true order-book imbalance (total buy vs sell quantity, best-5 depth on ATM options / futures) can only be tested after the recorder collects it; ~60 sessions needed.",
    "period": "Jan 2023 - Oct 2026",
    "summary": "Buying imbalance (heavyweight signed-volume proxy): one bucket better every year but the 1.3x tilt fails (2023-24 lower, deeper fall, shuffle better); not adopted. Real order-book imbalance not recorded yet."
+  },
+  {
+   "id": "r81",
+   "date": "2026-11-03",
+   "area": "Index options",
+   "title": "How option sellers work - can a buyer profit by taking the sellers' side (opposite to the crowd of buyers)?",
+   "asked": "User (3 Nov): check how sellers work, so we can go opposite to the buyers (never selling ourselves). Signals from the previous day only: NSE participant OI (Dec 2022 - Nov 2026) - Client net index-option position z-score (go against clients), Pro and FII z-scores (follow the big writers); bhavcopy OI build-up near the money (puts written -> sellers expect support -> buy calls; Oct 2023 on); combo of client-contra + writers. (A) stand-alone: buy the ATM option at 09:30 next day, 0.5% index stop, hold to 15:15 or trail; 20 versions; app option model, 0.25% slip, Rs 2,000 risk, random-direction twin. (B) today's Autopilot trades with / against each reading per year; buckets consistent every year replayed (skip = drop the trades) at Rs 2L and Rs 20k vs dropping the same number of trades at random within each year.",
+   "result": "(A) No stand-alone edge: every version except one lost money in 2025-26, and the random-direction twin earned about the same (client-contra hold-to-close +Rs 255 a trade vs twin +219: the profit is from holding long options on moving days, not the direction). (B) When the sellers' positioning is extreme and Autopilot trades the same way, it does worse in every year: with Pro positioning -620 / -174 / -329 / -780 per lot vs the rest (2023-26); with client-contra -359 / -736 / -238 / -169. Skipping the Pro-'with' trades at Rs 2L: 2023-24 9.58L vs 8.88L, 2025-26 10.80L vs 10.28L, worst fall -21.8% vs -31.3%, far better than dropping the same number at random (13.1L) - but the full compounded period is lower (36.0L vs 40.9L) because ~25% fewer trades compound less; Rs 20k full 10.8L vs 6.25L, fall -38% vs -66%, 2023-24 1.86L vs 1.96L. Client-contra skip: 2025-26 8.40L vs 10.28L - fails.",
+   "decision": "Not adopted: the Pro-'with' skip improves both halves and the worst fall at Rs 2L but fails the full-period part of the bar (and Rs 20k 2023-24). Added to the watch list (p-pro-with) for forward checking. Sellers' positioning does not tell a buyer which way to buy; at most it marks crowded days to stay out of.",
+   "period": "Dec 2022 - Oct 2026 (participant), Oct 2023 - Oct 2026 (OI build-up)",
+   "summary": "Following the sellers: no stand-alone edge; skipping Autopilot trades that go with extreme Pro positioning improves both halves and the fall but lowers the full period - watch list."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -1906,6 +1917,21 @@
    "title": "1.3x size when the trade goes against a big (> 0.5%) S&P 500 move from the night before",
    "waiting_for": "live paper record of these trades (about 60 more) and a re-test after Mar 2027 data",
    "why": "Round 76: these trades beat the rest in every year 2023-26 (unseen Jan-Oct 2023 too) and 1.3x passes the Rs 2L bar (64.6L vs 40.9L), but 1.1-1.25x lower the full period with deeper falls, so the size step is not stable yet."
+  },
+  {
+   "id": "p-pro-with",
+   "area": "Index options",
+   "title": "Skip Autopilot trades that go WITH extreme Pro (prop-desk) option positioning (participant OI z >= 1 the day before)",
+   "waiting_for": "More sessions",
+   "why": "Round 81: those trades were worse than the rest in every year 2023-26 (-174 to -780 per lot). Skipping them at Rs 2L: both halves better (9.58L vs 8.88L, 10.80L vs 10.28L), worst fall -21.8% vs -31.3%, far better than random skipping; but the full compounded period is lower (36.0L vs 40.9L).",
+   "collecting": "Participant OI + paper Autopilot trades",
+   "since": "2026-11-03",
+   "need": 60,
+   "unit": "sessions",
+   "refs": [
+    "r81"
+   ],
+   "next": "Re-run research/round81_follow_the_sellers.py with the new sessions; adopt only if it passes the full bar (full period, both halves, Rs 2L, no deeper fall)."
   }
  ],
  "crypto_rounds": [
@@ -2808,6 +2834,15 @@
     "r80"
    ],
    "takeaway": "No stable edge from the proxy; a true bid/ask-quantity imbalance needs new recording (~60 sessions). Not adopted."
+  },
+  {
+   "n": 81,
+   "date": "2026-11-03",
+   "topic": "How sellers work: follow the writers / go against the buyers",
+   "ids": [
+    "r81"
+   ],
+   "takeaway": "No stand-alone edge from sellers' positioning. Skipping Autopilot trades that go with extreme Pro positioning helps both halves and the fall but lowers the full period - watch list p-pro-with."
   }
  ],
  "india_status": {
