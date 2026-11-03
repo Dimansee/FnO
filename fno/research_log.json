@@ -1442,6 +1442,17 @@
    "decision": "Not adopted. Small-target entries lose after option costs (matches rounds 7, 62, 63). The overnight carry fails the full-period bar at Rs 2L and its profit depends on about 10 big-gap nights in 3 years; it is a bet on rare gaps, not a steady 20-50 point edge. Live rules unchanged; no option selling.",
    "summary": "No new intraday entry pays: 20/30/50-point targets win 54-79% of the time but lose after option costs, and the 2-3 Nov money came mostly from overnight gaps. Carrying an option after a strong close pays only through a handful of huge gaps and lowers Autopilot over the full period at Rs 2L. Not adopted.",
    "period": "Jan 2023 - 3 Nov 2026 (index); Oct 2023 - Oct 2026 (real option prices)"
+  },
+  {
+   "id": "r76",
+   "date": "2026-11-03",
+   "area": "Index options",
+   "title": "Three inputs Autopilot never used: option IV vs realised volatility, global cues (US close, Asian open), FII positioning (NSE participant OI)",
+   "asked": "User (3 Nov): something is still missing from the research. Picked the three inputs never tested on the indices. New backfill-history job pulled NSE participant-wise OI (966 days, Dec 2022 - Nov 2026) and US/Asia daily prices from Dec 2022. Each Autopilot trade (Jan 2023 - Oct 2026, today's rules) got: VIX at the open vs 10/20-day realised volatility and VIX's 1-year percentile; last US session (S&P 500, Nasdaq, Dow) and today's Nikkei / Hang Seng open, with or against the trade and big or not; previous day's FII index-futures long share, its change, FII index call-vs-put longs, client futures long share. Buckets better / worse than the rest in every year were replayed as size tilts and skips (Rs 2L and Rs 20k), with a shuffle control, and checked again on Jan-Oct 2023, which was not used to pick them in the first pass.",
+   "result": "FII positioning: no bucket holds every year; with/against FII flips sign by year (e.g. FII futures strongly with the trade: 2024 -Rs 751 a lot, 2026 +784). IV vs realised: options are 'dear' (VIX > 1.3x realised) on 79% of trades; 'fair' days slightly better but tilts fail the bar (full 29.9L / 49.9L vs 40.9L, deeper falls). Global cues: trades WITH a big (> 0.5%) US move from the night before do worse (S&P with_big -Rs 316 a lot within gap-with trades; hurts Camarilla and Fibonacci, not Noise or Trend-day); skipping them looked best on Nov 2023 - Oct 2026 (Rs 2L full 73.3L vs 40.9L) but on the unseen Jan-Oct 2023 the gap was small (+95 vs +139 a lot), 2023 becomes 2.86L vs 2.88L and Rs 20k falls deeper (-75% vs -66%): fails. Trades AGAINST a big US move do better in every year (Jan-Oct 2023 too: +Rs 1,219 a lot, 31 trades); 1.3x size on them passes at Rs 2L (2023 3.18L, 2024 6.27L, 2025 4.49L, 2026 5.67L, full 64.6L vs 2.88/6.15/3.85/4.97/40.9L, fall -31.2% vs -31.3%, shuffle p 0.00) but is not stable: 1.1x-1.25x improve every single year yet lower the full period (34.5L-37.7L) with deeper falls (-32.3% to -32.8%), and at Rs 20k 1.35x+ is worse.",
+   "decision": "Not adopted. FII and IV have no stable edge. The US-against-big tilt is the most consistent new effect found in a while (better in all 4 years, holds on unseen 2023) but the size step that passes is a knife-edge on the compounded full period; added to the watch list for a live paper record before any rule change.",
+   "summary": "FII positioning and IV-vs-realised add nothing stable. Global cues matter a little: Autopilot does worse trading with a big overnight US move and better trading against one; a 1.3x size on 'against' trades passes the bar but nearby sizes do not, so it goes on the watch list, not into the rules.",
+   "period": "Jan 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -1844,6 +1855,13 @@
    "title": "Skip Autopilot trades entered within 0.3% of the day's OI wall (call wall for calls, put wall for puts)",
    "waiting_for": "2026 to agree again (re-test after Dec 2026 / Mar 2027 data)",
    "why": "Round 68: those trades lost -Rs 407 a lot in 2023-25 (p 0.015) and the filter lifted the Rs 2L replay from Rs 13.7L to 17.2L over Oct 2023 - Oct 2026, but it hurt 2026 (Rs 3.82L vs 4.28L) and the effect is mostly Bank Nifty."
+  },
+  {
+   "id": "p-us-against",
+   "area": "Index options",
+   "title": "1.3x size when the trade goes against a big (> 0.5%) S&P 500 move from the night before",
+   "waiting_for": "live paper record of these trades (about 60 more) and a re-test after Mar 2027 data",
+   "why": "Round 76: these trades beat the rest in every year 2023-26 (unseen Jan-Oct 2023 too) and 1.3x passes the Rs 2L bar (64.6L vs 40.9L), but 1.1-1.25x lower the full period with deeper falls, so the size step is not stable yet."
   }
  ],
  "crypto_rounds": [
@@ -2701,6 +2719,15 @@
     "r75"
    ],
    "takeaway": "20/30/50-pt targets win often but lose after option costs in every family. Most of 2-3 Nov's gain was overnight gaps. Strong-close overnight carry pays only via ~10 huge gaps and lowers Autopilot's full period at Rs 2L (35.9L vs 40.9L). No rule change."
+  },
+  {
+   "n": 76,
+   "date": "2026-11-03",
+   "topic": "New inputs: IV vs realised, global cues (US close, Asian open), FII participant OI",
+   "ids": [
+    "r76"
+   ],
+   "takeaway": "FII and IV: no stable edge. Trades against a big overnight US move do better every year; 1.3x on them passes at Rs 2L but 1.1-1.25x lower the full period - watch list, no rule change."
   }
  ],
  "india_status": {
