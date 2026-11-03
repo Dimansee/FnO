@@ -1,0 +1,826 @@
+[
+{
+"day": "2026-10-05",
+"idx": {
+"NIFTY": {
+"move_pct": 0.1,
+"trend": false,
+"cpr": "middle",
+"trades": 3,
+"caught_pts": -166.0,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": -0.23,
+"trend": false,
+"cpr": "middle",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "NIFTY",
+"lag": "range_day_loss",
+"rs": 4789
+},
+{
+"sym": "BANKNIFTY",
+"lag": "range_day"
+}
+]
+},
+{
+"day": "2026-10-06",
+"idx": {
+"NIFTY": {
+"move_pct": 0.76,
+"trend": false,
+"cpr": "narrow",
+"trades": 1,
+"caught_pts": 4.3,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": 0.41,
+"trend": false,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "NIFTY",
+"lag": "trail_exit",
+"pts": 89.6
+},
+{
+"sym": "NIFTY",
+"lag": "range_day_loss",
+"rs": 254
+},
+{
+"sym": "BANKNIFTY",
+"lag": "range_day"
+}
+]
+},
+{
+"day": "2026-10-07",
+"idx": {
+"NIFTY": {
+"move_pct": -0.39,
+"trend": false,
+"cpr": "middle",
+"trades": 1,
+"caught_pts": -26.5,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": 0.16,
+"trend": false,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": [
+{
+"side": "CALL",
+"R": -1.0
+}
+]
+}
+},
+"lags": [
+{
+"sym": "NIFTY",
+"lag": "trail_exit",
+"pts": 81.3
+},
+{
+"sym": "NIFTY",
+"lag": "range_day_loss",
+"rs": 1604
+},
+{
+"sym": "BANKNIFTY",
+"lag": "range_day"
+}
+]
+},
+{
+"day": "2026-10-08",
+"idx": {
+"NIFTY": {
+"move_pct": -1.63,
+"trend": true,
+"cpr": "narrow",
+"trades": 2,
+"caught_pts": 294.7,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": -0.96,
+"trend": true,
+"cpr": "narrow",
+"trades": 1,
+"caught_pts": 113.5,
+"r72": []
+}
+},
+"lags": []
+},
+{
+"day": "2026-10-09",
+"idx": {
+"NIFTY": {
+"move_pct": 0.92,
+"trend": true,
+"cpr": "middle",
+"trades": 1,
+"caught_pts": 62.2,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": 0.93,
+"trend": true,
+"cpr": "narrow",
+"trades": 1,
+"caught_pts": 256.4,
+"r72": []
+}
+},
+"lags": []
+},
+{
+"day": "2026-10-12",
+"idx": {
+"NIFTY": {
+"move_pct": -1.02,
+"trend": true,
+"cpr": "narrow",
+"trades": 2,
+"caught_pts": -19.4,
+"r72": [
+{
+"side": "PUT",
+"R": 12.72
+}
+]
+},
+"BANKNIFTY": {
+"move_pct": -0.78,
+"trend": false,
+"cpr": "middle",
+"trades": 1,
+"caught_pts": -3.7,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "BANKNIFTY",
+"lag": "range_day_loss",
+"rs": 40
+}
+]
+},
+{
+"day": "2026-10-13",
+"idx": {
+"NIFTY": {
+"move_pct": 1.6,
+"trend": true,
+"cpr": "middle",
+"trades": 1,
+"caught_pts": -5.5,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": 1.04,
+"trend": true,
+"cpr": "narrow",
+"trades": 1,
+"caught_pts": -129.6,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "NIFTY",
+"lag": "trail_exit",
+"pts": 197.7
+},
+{
+"sym": "BANKNIFTY",
+"lag": "trail_exit",
+"pts": 299.2
+}
+]
+},
+{
+"day": "2026-10-14",
+"idx": {
+"NIFTY": {
+"move_pct": -0.41,
+"trend": false,
+"cpr": "wide",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": [
+{
+"side": "PUT",
+"R": -1.0
+}
+]
+},
+"BANKNIFTY": {
+"move_pct": -0.16,
+"trend": false,
+"cpr": "middle",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "NIFTY",
+"lag": "range_day"
+},
+{
+"sym": "NIFTY",
+"lag": "wide_cpr"
+},
+{
+"sym": "BANKNIFTY",
+"lag": "range_day"
+}
+]
+},
+{
+"day": "2026-10-15",
+"idx": {
+"NIFTY": {
+"move_pct": 1.44,
+"trend": true,
+"cpr": "narrow",
+"trades": 1,
+"caught_pts": 189.4,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": 0.66,
+"trend": false,
+"cpr": "narrow",
+"trades": 1,
+"caught_pts": 49.2,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "BANKNIFTY",
+"lag": "range_day_loss",
+"rs": 2475
+}
+]
+},
+{
+"day": "2026-10-16",
+"idx": {
+"NIFTY": {
+"move_pct": 0.35,
+"trend": false,
+"cpr": "middle",
+"trades": 1,
+"caught_pts": 26.9,
+"r72": [
+{
+"side": "CALL",
+"R": -1.0
+}
+]
+},
+"BANKNIFTY": {
+"move_pct": -0.15,
+"trend": false,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "BANKNIFTY",
+"lag": "range_day"
+}
+]
+},
+{
+"day": "2026-10-19",
+"idx": {
+"NIFTY": {
+"move_pct": -1.13,
+"trend": true,
+"cpr": "middle",
+"trades": 4,
+"caught_pts": -248.7,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": -0.61,
+"trend": false,
+"cpr": "narrow",
+"trades": 1,
+"caught_pts": -227.2,
+"r72": []
+},
+"SENSEX": {
+"move_pct": -1.33,
+"trend": true,
+"cpr": "middle",
+"trades": 1,
+"caught_pts": 233.5,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "NIFTY",
+"lag": "wrong_way",
+"rs": 8321
+},
+{
+"sym": "BANKNIFTY",
+"lag": "range_day_loss",
+"rs": 3325
+}
+]
+},
+{
+"day": "2026-10-21",
+"idx": {
+"NIFTY": {
+"move_pct": -0.89,
+"trend": true,
+"cpr": "middle",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": -1.31,
+"trend": true,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+},
+"SENSEX": {
+"move_pct": -0.85,
+"trend": true,
+"cpr": "middle",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "NIFTY",
+"lag": "no_trade_trend",
+"pts": 204.7
+},
+{
+"sym": "BANKNIFTY",
+"lag": "no_trade_trend",
+"pts": 730.9
+},
+{
+"sym": "SENSEX",
+"lag": "no_trade_trend",
+"pts": 628.2
+}
+]
+},
+{
+"day": "2026-10-22",
+"idx": {
+"NIFTY": {
+"move_pct": -0.0,
+"trend": false,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": 0.35,
+"trend": false,
+"cpr": "middle",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+},
+"SENSEX": {
+"move_pct": -0.13,
+"trend": false,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "NIFTY",
+"lag": "range_day"
+},
+{
+"sym": "BANKNIFTY",
+"lag": "range_day"
+},
+{
+"sym": "SENSEX",
+"lag": "range_day"
+}
+]
+},
+{
+"day": "2026-10-23",
+"idx": {
+"NIFTY": {
+"move_pct": -0.63,
+"trend": false,
+"cpr": "narrow",
+"trades": 2,
+"caught_pts": -94.8,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": -1.23,
+"trend": true,
+"cpr": "narrow",
+"trades": 1,
+"caught_pts": 417.8,
+"r72": []
+},
+"SENSEX": {
+"move_pct": -0.74,
+"trend": false,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "NIFTY",
+"lag": "breakeven_loss",
+"rs": 1660
+},
+{
+"sym": "NIFTY",
+"lag": "breakeven_loss",
+"rs": 753
+},
+{
+"sym": "NIFTY",
+"lag": "range_day_loss",
+"rs": 2414
+},
+{
+"sym": "SENSEX",
+"lag": "range_day"
+}
+]
+},
+{
+"day": "2026-10-26",
+"idx": {
+"NIFTY": {
+"move_pct": 1.02,
+"trend": true,
+"cpr": "narrow",
+"trades": 2,
+"caught_pts": 95.2,
+"r72": [
+{
+"side": "CALL",
+"R": 7.97
+}
+]
+},
+"BANKNIFTY": {
+"move_pct": 0.21,
+"trend": false,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+},
+"SENSEX": {
+"move_pct": 0.84,
+"trend": true,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "BANKNIFTY",
+"lag": "range_day"
+},
+{
+"sym": "SENSEX",
+"lag": "no_trade_trend",
+"pts": 616.7
+}
+]
+},
+{
+"day": "2026-10-27",
+"idx": {
+"NIFTY": {
+"move_pct": 0.18,
+"trend": false,
+"cpr": "wide",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": -0.82,
+"trend": true,
+"cpr": "middle",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+},
+"SENSEX": {
+"move_pct": 0.16,
+"trend": false,
+"cpr": "middle",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "NIFTY",
+"lag": "range_day"
+},
+{
+"sym": "NIFTY",
+"lag": "wide_cpr"
+},
+{
+"sym": "BANKNIFTY",
+"lag": "no_trade_trend",
+"pts": 445.8
+},
+{
+"sym": "SENSEX",
+"lag": "range_day"
+}
+]
+},
+{
+"day": "2026-10-28",
+"idx": {
+"NIFTY": {
+"move_pct": 0.09,
+"trend": false,
+"cpr": "narrow",
+"trades": 2,
+"caught_pts": -88.4,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": 0.88,
+"trend": true,
+"cpr": "middle",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+},
+"SENSEX": {
+"move_pct": -0.01,
+"trend": false,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "NIFTY",
+"lag": "range_day_loss",
+"rs": 4922
+},
+{
+"sym": "BANKNIFTY",
+"lag": "no_trade_trend",
+"pts": 474.2
+},
+{
+"sym": "SENSEX",
+"lag": "range_day"
+}
+]
+},
+{
+"day": "2026-10-29",
+"idx": {
+"NIFTY": {
+"move_pct": 1.08,
+"trend": true,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": 1.35,
+"trend": true,
+"cpr": "middle",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+},
+"SENSEX": {
+"move_pct": 1.2,
+"trend": true,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "NIFTY",
+"lag": "no_trade_trend",
+"pts": 246.1
+},
+{
+"sym": "BANKNIFTY",
+"lag": "no_trade_trend",
+"pts": 734.1
+},
+{
+"sym": "SENSEX",
+"lag": "no_trade_trend",
+"pts": 882.6
+}
+]
+},
+{
+"day": "2026-10-30",
+"idx": {
+"NIFTY": {
+"move_pct": 0.39,
+"trend": false,
+"cpr": "middle",
+"trades": 2,
+"caught_pts": -87.2,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": -0.4,
+"trend": false,
+"cpr": "middle",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+},
+"SENSEX": {
+"move_pct": 0.35,
+"trend": false,
+"cpr": "middle",
+"trades": 1,
+"caught_pts": -49.8,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "NIFTY",
+"lag": "range_day_loss",
+"rs": 4313
+},
+{
+"sym": "BANKNIFTY",
+"lag": "range_day"
+},
+{
+"sym": "SENSEX",
+"lag": "breakeven_loss",
+"rs": 1775
+},
+{
+"sym": "SENSEX",
+"lag": "range_day_loss",
+"rs": 1775
+}
+]
+},
+{
+"day": "2026-11-02",
+"idx": {
+"NIFTY": {
+"move_pct": 0.94,
+"trend": true,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": 0.3,
+"trend": false,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+},
+"SENSEX": {
+"move_pct": 0.68,
+"trend": false,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "NIFTY",
+"lag": "no_trade_trend",
+"pts": 218.5
+},
+{
+"sym": "BANKNIFTY",
+"lag": "range_day"
+},
+{
+"sym": "SENSEX",
+"lag": "range_day"
+}
+]
+},
+{
+"day": "2026-11-03",
+"idx": {
+"NIFTY": {
+"move_pct": 0.97,
+"trend": true,
+"cpr": "middle",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": 0.19,
+"trend": false,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+},
+"SENSEX": {
+"move_pct": 0.82,
+"trend": true,
+"cpr": "middle",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "NIFTY",
+"lag": "no_trade_trend",
+"pts": 228.6
+},
+{
+"sym": "BANKNIFTY",
+"lag": "range_day"
+},
+{
+"sym": "SENSEX",
+"lag": "no_trade_trend",
+"pts": 629.2
+}
+]
+}
+]
