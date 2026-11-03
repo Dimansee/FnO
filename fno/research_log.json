@@ -1519,6 +1519,17 @@
    "decision": "Not adopted. RSI5 <= 30 fails the bar (2025-26 flat-to-lower, deeper fall) and only works at one threshold. Calls after a 5-day sell-off were worse in every year (-103 to -863 per lot) - noted, but found after looking, so it is not a rule.",
    "period": "Jan 2023 - Oct 2026",
    "summary": "Web scan: the untested ideas (NR4/NR7, prior-day RSI5) do not pass; RSI5 <= 30 skip is a knife-edge."
+  },
+  {
+   "id": "r83",
+   "date": "2026-11-03",
+   "area": "Index options",
+   "title": "Why the Outcomes-tab row 'compound 2% · strong · brake off · 2 OTM · loss cap 2,200 · Nifty + Sensex' (Rs 2.18 Cr) is not live",
+   "asked": "User (3 Nov): this row turns Rs 2L into Rs 2.18 Cr (rank 5 of 32,256 combinations) - why are we not running it? Re-run with the Outcomes engine against today's Autopilot: each year, 2023-24 and 2025-26 restarted from the capital, Rs 2L and Rs 20k; each of the 6 changes alone; +1% / +2% extra slippage per fill; share of profit in the 10 best trades.",
+   "result": "Rs 2L: better in every year and both halves (2023-24 120.4L vs 8.88L, 2025-26 112.3L vs 10.28L, full 234.6L vs 40.9L) with the same worst fall (-30.7% vs -31.3%); worst single trade -Rs 1.64L. Rs 20k (the size of the live account): 2023 ends at 0.08L (-60%), worst fall -80% vs -66%. Most of the gain is betting bigger on the same signals: risk 2% alone 130.9L, confidence 'strong' alone 106.5L (bigger size on high-score signals), brake off 43.8L, loss cap 47.7L, Nifty + Sensex 42.8L (and 0.34L at Rs 20k). The one change that is not just leverage: 2 OTM strike alone - Rs 2L 2023 3.61L / 2024 6.30L / 2025 3.88L / 2026 7.47L vs 2.88 / 6.15 / 3.85 / 4.97, 2023-24 11.40L vs 8.88L, 2025-26 12.38L vs 10.28L, full 61.0L vs 40.9L, fall -29.5% vs -31.3% (passes the Rs 2L bar), but at Rs 20k 2025-26 1.44L vs 1.75L. Costs: with +1% slippage per fill the row's Rs 2L fall becomes -65% and Rs 20k ends at Rs 4k (today's rules also collapse at Rs 20k: 0.20L).",
+   "decision": "Not adopted as a whole: it is mostly 2-3x more risk per trade, picked as the best of 32,256 paths, and at the live account size it loses 60% in 2023 with an -80% fall. The 2 OTM strike passes the Rs 2L bar on its own but fails at Rs 20k and is priced by the model (2-OTM spreads are the widest in % terms) - candidate for an equity-gated rule (like the trend slot) after a real-price check of 2-OTM fills on recorded sessions.",
+   "period": "Jan 2023 - Oct 2026",
+   "summary": "Grid row Rs 2.18 Cr: mostly bigger bets; fails at Rs 20k (-60% in 2023, -80% fall). 2 OTM alone passes at Rs 2L - candidate for an equity-gated rule after a real-price check."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2863,6 +2874,15 @@
     "r82"
    ],
    "takeaway": "Everything else found online was already tested. NR4/NR7 unstable; skipping trades after RSI5 <= 30 lifts 2023-24 but not 2025-26 and only at that threshold. Not adopted."
+  },
+  {
+   "n": 83,
+   "date": "2026-11-03",
+   "topic": "Why the Rs 2.18 Cr Outcomes row is not live",
+   "ids": [
+    "r83"
+   ],
+   "takeaway": "It is mostly 2-3x more risk on the same signals; at Rs 20k it loses 60% in 2023 (fall -80%). 2 OTM alone passes the Rs 2L bar - possible equity-gated rule after a real-price check."
   }
  ],
  "india_status": {
