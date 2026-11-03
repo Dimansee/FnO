@@ -1,0 +1,370 @@
+{
+ "summary": [
+  {
+   "sig": "any",
+   "exit": "next_close",
+   "side": "PUT",
+   "n": 1477,
+   "win": 0.341,
+   "ret": -3.85,
+   "rs_trade": -646,
+   "rs_total": -954577,
+   "years": {
+    "2023": -124141.0,
+    "2024": -290441.0,
+    "2025": -534571.0,
+    "2026": -5423.0
+   },
+   "by_sym": {
+    "BANKNIFTY": -589926.0,
+    "NIFTY": -364651.0
+   },
+   "worst": -33718,
+   "gap_pts_mean": 0.035
+  },
+  {
+   "sig": "any",
+   "exit": "next_close",
+   "side": "CALL",
+   "n": 1477,
+   "win": 0.36,
+   "ret": -8.07,
+   "rs_trade": -908,
+   "rs_total": -1341075,
+   "years": {
+    "2023": 64575.0,
+    "2024": -382293.0,
+    "2025": -436867.0,
+    "2026": -586489.0
+   },
+   "by_sym": {
+    "BANKNIFTY": -756835.0,
+    "NIFTY": -584239.0
+   },
+   "worst": -21332,
+   "gap_pts_mean": 0.035
+  },
+  {
+   "sig": "any",
+   "exit": "next_open",
+   "side": "PUT",
+   "n": 1477,
+   "win": 0.318,
+   "ret": -5.22,
+   "rs_trade": -611,
+   "rs_total": -902697,
+   "years": {
+    "2023": -113805.0,
+    "2024": -385812.0,
+    "2025": -282318.0,
+    "2026": -120762.0
+   },
+   "by_sym": {
+    "BANKNIFTY": -504060.0,
+    "NIFTY": -398637.0
+   },
+   "worst": -24132,
+   "gap_pts_mean": 0.035
+  },
+  {
+   "sig": "any",
+   "exit": "next_open",
+   "side": "CALL",
+   "n": 1477,
+   "win": 0.351,
+   "ret": -3.5,
+   "rs_trade": -560,
+   "rs_total": -827149,
+   "years": {
+    "2023": 928.0,
+    "2024": -143924.0,
+    "2025": -305967.0,
+    "2026": -378186.0
+   },
+   "by_sym": {
+    "BANKNIFTY": -570099.0,
+    "NIFTY": -257050.0
+   },
+   "worst": -20271,
+   "gap_pts_mean": 0.035
+  },
+  {
+   "sig": "strong",
+   "exit": "next_close",
+   "side": "PUT",
+   "n": 204,
+   "win": 0.363,
+   "ret": 7.48,
+   "rs_trade": -51,
+   "rs_total": -10358,
+   "years": {
+    "2023": 10545.0,
+    "2024": -83965.0,
+    "2025": 53870.0,
+    "2026": 9192.0
+   },
+   "by_sym": {
+    "BANKNIFTY": 882.0,
+    "NIFTY": -11241.0
+   },
+   "worst": -21378,
+   "gap_pts_mean": -0.146
+  },
+  {
+   "sig": "strong",
+   "exit": "next_close",
+   "side": "CALL",
+   "n": 222,
+   "win": 0.365,
+   "ret": 0.12,
+   "rs_trade": -215,
+   "rs_total": -47657,
+   "years": {
+    "2023": -8882.0,
+    "2024": -10128.0,
+    "2025": -29104.0,
+    "2026": 456.0
+   },
+   "by_sym": {
+    "BANKNIFTY": -31868.0,
+    "NIFTY": -15789.0
+   },
+   "worst": -17223,
+   "gap_pts_mean": 0.189
+  },
+  {
+   "sig": "strong",
+   "exit": "next_open",
+   "side": "PUT",
+   "n": 204,
+   "win": 0.485,
+   "ret": 4.83,
+   "rs_trade": 232,
+   "rs_total": 47330,
+   "years": {
+    "2023": 7398.0,
+    "2024": -18511.0,
+    "2025": 49353.0,
+    "2026": 9091.0
+   },
+   "by_sym": {
+    "BANKNIFTY": 13961.0,
+    "NIFTY": 33368.0
+   },
+   "worst": -16740,
+   "gap_pts_mean": -0.146
+  },
+  {
+   "sig": "strong",
+   "exit": "next_open",
+   "side": "CALL",
+   "n": 222,
+   "win": 0.455,
+   "ret": 6.04,
+   "rs_trade": 406,
+   "rs_total": 90104,
+   "years": {
+    "2023": 5011.0,
+    "2024": 22982.0,
+    "2025": -17681.0,
+    "2026": 79792.0
+   },
+   "by_sym": {
+    "BANKNIFTY": 1310.0,
+    "NIFTY": 88794.0
+   },
+   "worst": -11971,
+   "gap_pts_mean": 0.189
+  },
+  {
+   "sig": "strong+",
+   "exit": "next_close",
+   "side": "PUT",
+   "n": 155,
+   "win": 0.381,
+   "ret": 11.16,
+   "rs_trade": 159,
+   "rs_total": 24688,
+   "years": {
+    "2023": 14900.0,
+    "2024": -65391.0,
+    "2025": 71048.0,
+    "2026": 4131.0
+   },
+   "by_sym": {
+    "BANKNIFTY": 10728.0,
+    "NIFTY": 13959.0
+   },
+   "worst": -21378,
+   "gap_pts_mean": -0.175
+  },
+  {
+   "sig": "strong+",
+   "exit": "next_close",
+   "side": "CALL",
+   "n": 147,
+   "win": 0.354,
+   "ret": -2.69,
+   "rs_trade": -910,
+   "rs_total": -133794,
+   "years": {
+    "2023": 882.0,
+    "2024": -31373.0,
+    "2025": 14070.0,
+    "2026": -117372.0
+   },
+   "by_sym": {
+    "BANKNIFTY": -104525.0,
+    "NIFTY": -29269.0
+   },
+   "worst": -17223,
+   "gap_pts_mean": 0.106
+  },
+  {
+   "sig": "strong+",
+   "exit": "next_open",
+   "side": "PUT",
+   "n": 155,
+   "win": 0.51,
+   "ret": 7.33,
+   "rs_trade": 334,
+   "rs_total": 51772,
+   "years": {
+    "2023": 5831.0,
+    "2024": -567.0,
+    "2025": 56820.0,
+    "2026": -10312.0
+   },
+   "by_sym": {
+    "BANKNIFTY": 14615.0,
+    "NIFTY": 37157.0
+   },
+   "worst": -16740,
+   "gap_pts_mean": -0.175
+  },
+  {
+   "sig": "strong+",
+   "exit": "next_open",
+   "side": "CALL",
+   "n": 147,
+   "win": 0.395,
+   "ret": 0.67,
+   "rs_trade": -175,
+   "rs_total": -25742,
+   "years": {
+    "2023": 5186.0,
+    "2024": 11073.0,
+    "2025": -6456.0,
+    "2026": -35546.0
+   },
+   "by_sym": {
+    "BANKNIFTY": -56349.0,
+    "NIFTY": 30607.0
+   },
+   "worst": -11971,
+   "gap_pts_mean": 0.106
+  },
+  {
+   "sig": "top10",
+   "exit": "next_close",
+   "side": "PUT",
+   "n": 137,
+   "win": 0.358,
+   "ret": -1.01,
+   "rs_trade": 220,
+   "rs_total": 30122,
+   "years": {
+    "2023": -7582.0,
+    "2024": -97102.0,
+    "2025": -34510.0,
+    "2026": 169316.0
+   },
+   "by_sym": {
+    "BANKNIFTY": 79565.0,
+    "NIFTY": -49443.0
+   },
+   "worst": -20313,
+   "gap_pts_mean": -0.143
+  },
+  {
+   "sig": "top10",
+   "exit": "next_close",
+   "side": "CALL",
+   "n": 179,
+   "win": 0.341,
+   "ret": -0.11,
+   "rs_trade": -308,
+   "rs_total": -55169,
+   "years": {
+    "2023": -7084.0,
+    "2024": -41775.0,
+    "2025": -42267.0,
+    "2026": 35957.0
+   },
+   "by_sym": {
+    "BANKNIFTY": -39834.0,
+    "NIFTY": -15335.0
+   },
+   "worst": -20779,
+   "gap_pts_mean": 0.201
+  },
+  {
+   "sig": "top10",
+   "exit": "next_open",
+   "side": "PUT",
+   "n": 137,
+   "win": 0.496,
+   "ret": 3.22,
+   "rs_trade": 254,
+   "rs_total": 34755,
+   "years": {
+    "2023": 5628.0,
+    "2024": -14458.0,
+    "2025": -20821.0,
+    "2026": 64406.0
+   },
+   "by_sym": {
+    "BANKNIFTY": 33347.0,
+    "NIFTY": 1408.0
+   },
+   "worst": -11634,
+   "gap_pts_mean": -0.143
+  },
+  {
+   "sig": "top10",
+   "exit": "next_open",
+   "side": "CALL",
+   "n": 179,
+   "win": 0.508,
+   "ret": 9.06,
+   "rs_trade": 669,
+   "rs_total": 119811,
+   "years": {
+    "2023": 8901.0,
+    "2024": 8472.0,
+    "2025": 189.0,
+    "2026": 102248.0
+   },
+   "by_sym": {
+    "BANKNIFTY": 21185.0,
+    "NIFTY": 98625.0
+   },
+   "worst": -11971,
+   "gap_pts_mean": 0.201
+  }
+ ],
+ "shuffle": {
+  "strong|next_close|PUT": 0.1255,
+  "strong|next_close|CALL": 0.0625,
+  "strong|next_open|PUT": 0.0,
+  "strong|next_open|CALL": 0.0,
+  "strong+|next_close|PUT": 0.1115,
+  "strong+|next_close|CALL": 0.4935,
+  "strong+|next_open|PUT": 0.0,
+  "strong+|next_open|CALL": 0.092,
+  "top10|next_close|PUT": 0.108,
+  "top10|next_close|CALL": 0.108,
+  "top10|next_open|PUT": 0.0015,
+  "top10|next_open|CALL": 0.0
+ }
+}

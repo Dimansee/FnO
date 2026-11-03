@@ -1431,6 +1431,17 @@
    "decision": "No rule change. Shield kept as the user's account protection; gap-and-hold not adopted. Added the journal-pull job; re-ran the 2 Nov recorder (Upstox returned no candles at 03:58 IST).",
    "summary": "Autopilot was not broken: post-23 Oct trades were parked by the 1 Nov copy, 2 Nov's two signals were stopped by the capital shield (both would have lost), and gap-up days have no tested rule that pays.",
    "period": "Jan 2023 - Oct 2026; live 28 Oct - 3 Nov 2026"
+  },
+  {
+   "id": "r75",
+   "date": "2026-11-03",
+   "area": "Index options",
+   "title": "23 Oct - 3 Nov rally: any other entry for 20-50 points? Trend-continuation entries with small targets, and carrying an option overnight after a strong close",
+   "asked": "User (3 Nov): Nifty gained 500+ points in two sessions and Autopilot took nothing; is there any entry (breakout or otherwise) beyond the current rules that makes 20-50 points? Mapped every 40-point swing on Nifty / Bank Nifty / Sensex 22 Oct - 3 Nov, replayed today's rules without capital gates, then tested (A) four trend-continuation entries (pullback to 20-EMA / session average in a trend, base breakout to a new day high, 12:00-13:00 box break after 13:00, follow-through of yesterday's strong close through the 15-min opening range) with 20 / 30 / 50-point targets, a trail or hold to 15:15, as ATM options at Rs 2,000 risk, Jan 2023 - Oct 2026, random twin; (B) buying an ATM option at the close after a strong day and selling at the next open or close, on real NSE option prices (Oct 2023 - Oct 2026, Nifty + Bank Nifty), signal at 15:15, 1% and 2% slippage, shuffle control; (C) the carry added to today's Autopilot (Outcomes replay).",
+   "result": "Tape: Nifty 30 Oct close 23,053 -> 3 Nov close 23,811 (+758); 310 of those points were the two opening gaps (2 Nov +169, 3 Nov +141), which no intraday rule can catch. Intraday there were 40-pt swings every day, but as many failed as worked. Today's rules with no capital limit: 29-30 Oct calls fired and were closed flat by the 45-min time stop / breakeven stop; 2-3 Nov nothing (gap above H4, price under the session average midday on 2 Nov). (A) Small targets win often but lose money after option costs: pullback t20 54% wins -Rs 163/trade, t30 -141, t50 -174 (every year negative); base break, afternoon box and follow-through lose at every target (-Rs 82 to -281/trade). The pullback has a small direction edge over its random twin (+0.06 to +0.14R vs ~0R) but option costs eat it; only hold-to-15:15 is positive (2023-24 +3.6L, 2025-26 -0.76L). Best 2023-24 pick added to Autopilot: Rs 2L -> 6.9L vs 40.9L, fall -67% vs -31%. (B) Holding every night loses (time decay): calls -Rs 290/night, puts -394. After a strong close (>= 0.5% up and in the top 20% of the range at 15:15; puts mirror) selling at the next open: calls 222 nights +Rs 702/night (+1.56L), puts 204 +Rs 480 (+0.98L), shuffle p < 0.001, still positive at 2% slippage; selling at the next close is much weaker. But 99% of the profit is the 10 biggest nights (gaps of 2-5%: Apr 2025, Feb 2026); without them it is ~0 (median +Rs 89). Live 21 Oct - 2 Nov on recorded prices: 8 signals, +Rs 4.8k on 1 lot; it did not fire before the 2 Nov or 3 Nov gaps (2 Nov was +0.47% at 15:15). (C) Added to Autopilot: Rs 2L every single year better (2023 3.03 vs 2.88L, 2024 6.46 vs 6.15, 2025 4.20 vs 3.85, 2026 4.99 vs 4.97) but full period 35.9L vs 40.9L (carry losses trip the weekly loss limit 305 vs 225 times and block main trades); Rs 20k 12.3L vs 6.25L, fall -52% vs -66%.",
+   "decision": "Not adopted. Small-target entries lose after option costs (matches rounds 7, 62, 63). The overnight carry fails the full-period bar at Rs 2L and its profit depends on about 10 big-gap nights in 3 years; it is a bet on rare gaps, not a steady 20-50 point edge. Live rules unchanged; no option selling.",
+   "summary": "No new intraday entry pays: 20/30/50-point targets win 54-79% of the time but lose after option costs, and the 2-3 Nov money came mostly from overnight gaps. Carrying an option after a strong close pays only through a handful of huge gaps and lowers Autopilot over the full period at Rs 2L. Not adopted.",
+   "period": "Jan 2023 - 3 Nov 2026 (index); Oct 2023 - Oct 2026 (real option prices)"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2681,6 +2692,15 @@
     "r74"
    ],
    "takeaway": "Trades after 23 Oct exist but were parked by the 1 Nov copy; 2 Nov signals stopped by the shield at Rs 24k equity (both lost anyway). Shield vs none: mixed by year. Gap-and-hold loses in 2026 in every version. No rule change."
+  },
+  {
+   "n": 75,
+   "date": "2026-11-03",
+   "topic": "23 Oct - 3 Nov rally: small-target trend entries and overnight carry after a strong close",
+   "ids": [
+    "r75"
+   ],
+   "takeaway": "20/30/50-pt targets win often but lose after option costs in every family. Most of 2-3 Nov's gain was overnight gaps. Strong-close overnight carry pays only via ~10 huge gaps and lowers Autopilot's full period at Rs 2L (35.9L vs 40.9L). No rule change."
   }
  ],
  "india_status": {
