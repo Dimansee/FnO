@@ -1508,6 +1508,17 @@
    "decision": "Not adopted: the Pro-'with' skip improves both halves and the worst fall at Rs 2L but fails the full-period part of the bar (and Rs 20k 2023-24). Added to the watch list (p-pro-with) for forward checking. Sellers' positioning does not tell a buyer which way to buy; at most it marks crowded days to stay out of.",
    "period": "Dec 2022 - Oct 2026 (participant), Oct 2023 - Oct 2026 (OI build-up)",
    "summary": "Following the sellers: no stand-alone edge; skipping Autopilot trades that go with extreme Pro positioning improves both halves and the fall but lowers the full period - watch list."
+  },
+  {
+   "id": "r82",
+   "date": "2026-11-03",
+   "area": "Index options",
+   "title": "Web scan for untested ideas: NR4/NR7 days and the prior-day 5-day RSI from Zarattini, Aziz & Barbon (2025)",
+   "asked": "User (3 Nov): anything on any platform to improve the algo that we have not tested? Scanned recent sources: the 2025 'Beat the market' paper behind the Noise band (VWAP trailing stop - already in the Noise exit; volatility-targeted sizing - VIX sizing tested in r43; band multiplier - r22c plateau; NR4/triangle days and prior-day RSI(5) - untested), a 2025 follow-up on exits (VWAP / ladder exits - covered by r21c/r23/r40), a public NIFTY tick-verified research repo (ORB with trail + re-entry - r13/r21d/nr7; FVG retest - r50), and Indian broker blogs (VWAP/EMA/box-breakout scalps - r34/r62/r63/r78). Tested the two untested items on today's Autopilot trades (Jan 2023 - Oct 2026): yesterday was an NR4 / NR7 day; yesterday's 5-day RSI >= 70 / <= 30, and 'stretched' with / against the trade. Buckets better/worse every year replayed at Rs 2L and Rs 20k vs the same count at random.",
+   "result": "NR4 / NR7: no stable effect (NR4 trades worse in 2023-25, much better in 2026). RSI5 >= 70: flips by year. Two buckets were worse every year: RSI5 <= 30 (after a 5-day sell-off; -496 / -1,092 / -608 / -548 per lot vs the rest) and RSI5 stretched in the trade's direction. Skipping RSI5 <= 30 at Rs 2L: full 55.9L vs 40.9L, 2023-24 11.96L vs 8.88L, but 2025-26 10.26L vs 10.28L, 2026 4.53L vs 4.97L and a deeper fall (-32.4% vs -31.3%); random skip of the same count 41.0L. The threshold is a knife-edge: at <= 25, <= 20 or <= 35 the 'worse every year' pattern disappears. Skipping 'stretched with': 2025-26 8.11L vs 10.28L - fails.",
+   "decision": "Not adopted. RSI5 <= 30 fails the bar (2025-26 flat-to-lower, deeper fall) and only works at one threshold. Calls after a 5-day sell-off were worse in every year (-103 to -863 per lot) - noted, but found after looking, so it is not a rule.",
+   "period": "Jan 2023 - Oct 2026",
+   "summary": "Web scan: the untested ideas (NR4/NR7, prior-day RSI5) do not pass; RSI5 <= 30 skip is a knife-edge."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2843,6 +2854,15 @@
     "r81"
    ],
    "takeaway": "No stand-alone edge from sellers' positioning. Skipping Autopilot trades that go with extreme Pro positioning helps both halves and the fall but lowers the full period - watch list p-pro-with."
+  },
+  {
+   "n": 82,
+   "date": "2026-11-03",
+   "topic": "Web scan: NR4/NR7 and prior-day RSI(5) from the Noise-band paper",
+   "ids": [
+    "r82"
+   ],
+   "takeaway": "Everything else found online was already tested. NR4/NR7 unstable; skipping trades after RSI5 <= 30 lifts 2023-24 but not 2025-26 and only at that threshold. Not adopted."
   }
  ],
  "india_status": {
