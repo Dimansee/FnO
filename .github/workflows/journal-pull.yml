@@ -1,0 +1,46 @@
+name: journal-pull
+# On demand: saves the app's own decision journal (every Autopilot signal, placed or skipped with the reason, trades,
+# context and settings) for chosen days into the research-data branch, without waiting for the nightly recorder
+# (which needs the day's candles first). Used to check why Autopilot did or did not trade.
+on:
+  workflow_dispatch:
+    inputs:
+      dates:
+        description: "Dates (YYYY-MM-DD, space separated). Empty = today (IST)"
+        required: false
+        default: ""
+permissions:
+  contents: write
+concurrency:
+  group: record-market-day
+  cancel-in-progress: false
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research-data
+      - name: fetch journal and health
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          DATES: ${{ github.event.inputs.dates }}
+        run: |
+          APP="https://fno-trainer.onrender.com"
+          [ -z "$DATES" ] && DATES=$(TZ=Asia/Kolkata date +%F)
+          curl -s -m 90 -H "x-cron-secret: $CRON_SECRET" "$APP/api/health?deep=1" > /tmp/health.json || true
+          for d in $DATES; do
+            mkdir -p research/data/live/$d
+            curl -s -m 90 -H "x-cron-secret: $CRON_SECRET" "$APP/api/journal/day?date=$d" > research/data/live/$d/journal_now.json
+            cp /tmp/health.json research/data/live/$d/health_now.json
+            echo "$d: $(wc -c < research/data/live/$d/journal_now.json) bytes"
+          done
+      - name: commit
+        run: |
+          git config user.name "fno-data-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/data/live
+          git commit -m "journal pull $(date -u +%F-%H%M) [skip ci]" || echo "nothing to commit"
+          git pull --rebase -q origin research-data || true
+          git push origin HEAD:research-data
