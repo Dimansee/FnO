@@ -1741,6 +1741,16 @@ def _tick():
                     _push_safe(f"{s} scalp book stopped for today", gv["stopped"], f"scalpstop:{s}:{now.date()}", "/#scalp")
     except Exception as e:
         sc = {"error": str(e)[:160]}
+    try:                                                     # overnight carry slot (round 77; separate paper ledger, off unless switched on)
+        from . import carry as CY
+        cy = CY.tick(now)
+        for x in cy.get("opened") or []:
+            _push_safe(f"{x['symbol']}: overnight carry bought", str(x.get("message"))[:180], f"carry:{x['symbol']}:{now.date()}", "/#scalp")
+        for x in cy.get("closed") or []:
+            _push_safe(f"{x['symbol']}: overnight carry sold", f"{x['strike']:g}{x['opt']} at the open, gap {x['gap_pct']:+.2f}% - P&L ₹{x['pnl']:+,.0f}",
+                       f"carryx:{x['id']}", "/#scalp")
+    except Exception as e:
+        cy = {"error": str(e)[:160]}
     if t <= time(9, 45):
         try:
             stocks_morning_push(now)
@@ -1769,7 +1779,7 @@ def _tick():
                     _push_safe("Upstox data token ending soon", h["text"] + ". Generate a new one in the Upstox developer page and paste it in Settings.", f"antoken:{now.date()}", "/#settings")
     except Exception:
         pass
-    return {"closed": closed, "placed": placed, "scalp": sc, "recorded": rec, "journal": jr, "time": now.isoformat(timespec="seconds")}
+    return {"closed": closed, "placed": placed, "scalp": sc, "carry": cy, "recorded": rec, "journal": jr, "time": now.isoformat(timespec="seconds")}
 
 
 def _untested_note(symbol, g, ev):

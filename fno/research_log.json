@@ -1453,6 +1453,17 @@
    "decision": "Not adopted. FII and IV have no stable edge. The US-against-big tilt is the most consistent new effect found in a while (better in all 4 years, holds on unseen 2023) but the size step that passes is a knife-edge on the compounded full period; added to the watch list for a live paper record before any rule change.",
    "summary": "FII positioning and IV-vs-realised add nothing stable. Global cues matter a little: Autopilot does worse trading with a big overnight US move and better trading against one; a 1.3x size on 'against' trades passes the bar but nearby sizes do not, so it goes on the watch list, not into the rules.",
    "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r77",
+   "date": "2026-11-03",
+   "area": "Index options",
+   "title": "Overnight carry as its own slot with its own weekly budget, next to today's Autopilot (round 75 follow-up)",
+   "asked": "User (3 Nov): what if we carry forward to the next day? Round 75c added the carry inside Autopilot's book, where carry losses hit the weekly loss limit and blocked main trades (35.9L vs 40.9L). Tested here as a separate slot: main Autopilot replayed exactly as today (BASELINE incl. CPR sizing, Outcomes-tab replay), carry beside it on the same account, combined equity and combined worst fall. Signal = round 75b 'strong' close (>= 0.5% open->15:15 and close in the outer 20% of the range), buy the ATM option of the nearest expiry alive tomorrow, sell at the next open; real NSE option prices (Nifty + Bank Nifty, Oct 2023 - Oct 2026); guard premium <= 50% of equity. Four variants (1 lot both sides; 1 lot + 2% weekly budget; 1 lot calls only; 5% of equity + 3% weekly budget) at 1% and 2% slippage, Rs 2L and Rs 20k.",
+   "result": "Every variant beat today's Autopilot in 2023-24, 2025-26 and the full period with a shallower worst fall. Rs 2L, 1 lot + 2% weekly budget, 1% slip: 2023-24 9.37L vs 8.88L, 2025-26 11.59L vs 10.28L, full 43.5L vs 40.9L, fall -29.8% vs -31.3%; at 2% slip full 42.3L, fall -30.2%. Rs 20k: full 8.1L vs 6.25L, fall -50.4% vs -66.0%. 5%-of-equity sizing: 61.3L (1% slip) / 50.9L (2%). BUT the carry itself is a bet on rare gaps: 426 nights made Rs +2.54L, the 10 biggest nights +2.52L (2 Feb 2026, 4 Apr 2025, 7 Apr 2026, 6 Mar 2026 ...); without them ~Rs 0, median night +Rs 89; at 2% slippage without the top 5 nights it loses in both halves (-15.7k 2023-24, -52.2k 2025-26). 2023-24 has carry only from Oct 2023 (real option prices start then).",
+   "decision": "Passed the bar, but the edge sits on about 10 gap nights, so the user chose an opt-in paper slot instead of an Autopilot rule. Shipped: fno/carry.py - separate paper ledger (own capital, default Rs 50k, own positions and journal), OFF by default, Nifty + Bank Nifty, 1 lot, buy at 15:20-15:28 after a strong close, sell at the next open from 09:15, own 2% weekly budget, premium <= 50% of the slot's equity, capital-shield floor. Card in the Scalp book tab; API /api/carry. Main Autopilot rules unchanged. Test tests/test_carry.py (live signal = round 75b on 739 of 739 Nifty days). Re-check after 60 live carry nights: keep only if the paper journal is not worse than the backtest median.",
+   "period": "Oct 2023 - Oct 2026 (carry); Jan 2023 - Oct 2026 (Autopilot)",
+   "summary": "Overnight carry as a separate slot passes the bar (43.5L vs 40.9L at Rs 2L, shallower fall) but ~all profit is 10 gap nights; shipped as an opt-in paper slot, OFF by default."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2728,6 +2739,15 @@
     "r76"
    ],
    "takeaway": "FII and IV: no stable edge. Trades against a big overnight US move do better every year; 1.3x on them passes at Rs 2L but 1.1-1.25x lower the full period - watch list, no rule change."
+  },
+  {
+   "n": 77,
+   "date": "2026-11-03",
+   "topic": "Overnight carry as its own slot (round 75 follow-up)",
+   "ids": [
+    "r77"
+   ],
+   "takeaway": "Carry beside Autopilot with its own budget beats Autopilot alone in both halves with a shallower fall, but ~all its profit is 10 big gap nights. Shipped as an opt-in paper slot (Scalp book tab), OFF by default; Autopilot unchanged."
   }
  ],
  "india_status": {

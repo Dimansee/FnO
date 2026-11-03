@@ -415,6 +415,30 @@ def scalp_exit():
     return jsonify({"ok": True, "trade": SV.clean(rec)})
 
 
+@app.get("/api/carry")
+def carry_page():
+    from fno import carry as CY
+    return jsonify(SV.clean(CY.page()))
+
+
+@app.post("/api/carry/settings")
+def carry_settings():
+    from fno import carry as CY
+    return jsonify({"ok": True, "settings": CY.save_settings(request.get_json(force=True) or {})})
+
+
+@app.post("/api/carry/exit")
+def carry_exit():
+    from fno import carry as CY
+    try:
+        rec = CY.exit_now(str((request.get_json(force=True) or {}).get("id", "")))
+    except Exception as e:
+        return jsonify({"error": str(e)[:160]}), 400
+    if not rec:
+        return jsonify({"error": "That carry position is already closed or has no price right now."}), 400
+    return jsonify({"ok": True, "trade": SV.clean(rec)})
+
+
 @app.post("/api/scalp/reset")
 def scalp_reset():
     from fno import scalp as SC
