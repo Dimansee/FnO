@@ -1,0 +1,34 @@
+{
+ "date": "2026-11-03",
+ "expiries": {
+  "NIFTY": [
+   "2026-11-03",
+   "2026-11-09"
+  ],
+  "BANKNIFTY": [
+   "2026-11-23",
+   "2026-12-29"
+  ],
+  "FINNIFTY": [
+   "2026-11-23",
+   "2026-12-29"
+  ],
+  "SENSEX": [
+   "2026-11-05",
+   "2026-11-12"
+  ]
+ },
+ "errors": [
+  "bhavcopy not available yet",
+  "participant_oi not available yet",
+  "participant_vol not available yet"
+ ],
+ "candles": {
+  "rows": 219085,
+  "instruments": 590,
+  "options_without_data": 117
+ },
+ "snapshots": 292,
+ "journal_recos": 0,
+ "updated": "2026-11-03T16:14:11+05:30"
+}
