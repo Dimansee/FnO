@@ -1,0 +1,1874 @@
+{
+ "20000|none (backtest so far)": {
+  "2023": {
+   "final": 31805,
+   "dd": -58.9,
+   "trades": 308,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 166,
+    "trend slot below Rs 40k": 34,
+    "weekly loss limit": 16,
+    "wide CPR day (round 71)": 10,
+    "not enough free cash": 8
+   }
+  },
+  "2024": {
+   "final": 160910,
+   "dd": -32.6,
+   "trades": 314,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 179,
+    "weekly loss limit": 94,
+    "wide CPR day (round 71)": 13,
+    "trend slot below Rs 40k": 11,
+    "not enough free cash": 6,
+    "1 lot risks > 15% of the account": 1
+   }
+  },
+  "2025": {
+   "final": 68436,
+   "dd": -62.6,
+   "trades": 331,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 176,
+    "not enough free cash": 16,
+    "weekly loss limit": 16,
+    "trend slot below Rs 40k": 10,
+    "wide CPR day (round 71)": 8
+   }
+  },
+  "2026": {
+   "final": 87996,
+   "dd": -45.9,
+   "trades": 254,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 122,
+    "weekly loss limit": 33,
+    "trend slot below Rs 40k": 13,
+    "not enough free cash": 11,
+    "wide CPR day (round 71)": 9,
+    "1 lot risks > 15% of the account": 1
+   }
+  },
+  "full": {
+   "final": 625220,
+   "dd": -66.2,
+   "trades": 1458,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 347,
+    "weekly loss limit": 258,
+    "wide CPR day (round 71)": 47,
+    "trend slot below Rs 40k": 40,
+    "not enough free cash": 10
+   }
+  }
+ },
+ "20000|live: open 50%, floor 60%": {
+  "2023": {
+   "final": 24080,
+   "dd": -49.6,
+   "trades": 211,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 167,
+    "trend slot below Rs 40k": 77,
+    "not enough free cash": 72,
+    "wide CPR day (round 71)": 10,
+    "weekly loss limit": 5
+   }
+  },
+  "2024": {
+   "final": 164409,
+   "dd": -31.9,
+   "trades": 302,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 183,
+    "weekly loss limit": 74,
+    "not enough free cash": 34,
+    "wide CPR day (round 71)": 13,
+    "trend slot below Rs 40k": 12
+   }
+  },
+  "2025": {
+   "final": 56355,
+   "dd": -51.0,
+   "trades": 236,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 179,
+    "not enough free cash": 109,
+    "trend slot below Rs 40k": 14,
+    "weekly loss limit": 10,
+    "wide CPR day (round 71)": 8,
+    "1 lot risks > 15% of the account": 1
+   }
+  },
+  "2026": {
+   "final": 72509,
+   "dd": -39.4,
+   "trades": 176,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 128,
+    "not enough free cash": 89,
+    "trend slot below Rs 40k": 24,
+    "weekly loss limit": 15,
+    "wide CPR day (round 71)": 9,
+    "1 lot risks > 15% of the account": 2
+   }
+  },
+  "full": {
+   "final": 823751,
+   "dd": -54.0,
+   "trades": 1407,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 327,
+    "weekly loss limit": 186,
+    "not enough free cash": 105,
+    "trend slot below Rs 40k": 84,
+    "wide CPR day (round 71)": 51
+   }
+  }
+ },
+ "20000|open 70%, floor 60%": {
+  "2023": {
+   "final": 18415,
+   "dd": -70.8,
+   "trades": 270,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 165,
+    "trend slot below Rs 40k": 46,
+    "not enough free cash": 31,
+    "weekly loss limit": 20,
+    "wide CPR day (round 71)": 10
+   }
+  },
+  "2024": {
+   "final": 177890,
+   "dd": -31.3,
+   "trades": 326,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 151,
+    "weekly loss limit": 100,
+    "not enough free cash": 15,
+    "wide CPR day (round 71)": 15,
+    "trend slot below Rs 40k": 11
+   }
+  },
+  "2025": {
+   "final": 55436,
+   "dd": -53.4,
+   "trades": 280,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 176,
+    "not enough free cash": 64,
+    "weekly loss limit": 16,
+    "trend slot below Rs 40k": 13,
+    "wide CPR day (round 71)": 8
+   }
+  },
+  "2026": {
+   "final": 73243,
+   "dd": -43.7,
+   "trades": 228,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 127,
+    "not enough free cash": 42,
+    "weekly loss limit": 20,
+    "trend slot below Rs 40k": 15,
+    "wide CPR day (round 71)": 9,
+    "1 lot risks > 15% of the account": 2
+   }
+  },
+  "full": {
+   "final": 825792,
+   "dd": -73.3,
+   "trades": 1472,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 321,
+    "weekly loss limit": 213,
+    "trend slot below Rs 40k": 57,
+    "wide CPR day (round 71)": 49,
+    "not enough free cash": 46,
+    "1 lot risks > 15% of the account": 2
+   }
+  }
+ },
+ "20000|open 100% (cash), floor 60%": {
+  "2023": {
+   "final": 31805,
+   "dd": -58.9,
+   "trades": 308,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 166,
+    "trend slot below Rs 40k": 34,
+    "weekly loss limit": 16,
+    "wide CPR day (round 71)": 10,
+    "not enough free cash": 8
+   }
+  },
+  "2024": {
+   "final": 160910,
+   "dd": -32.6,
+   "trades": 314,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 179,
+    "weekly loss limit": 94,
+    "wide CPR day (round 71)": 13,
+    "trend slot below Rs 40k": 11,
+    "not enough free cash": 6,
+    "1 lot risks > 15% of the account": 1
+   }
+  },
+  "2025": {
+   "final": 68436,
+   "dd": -62.6,
+   "trades": 331,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 176,
+    "not enough free cash": 16,
+    "weekly loss limit": 16,
+    "trend slot below Rs 40k": 10,
+    "wide CPR day (round 71)": 8
+   }
+  },
+  "2026": {
+   "final": 87996,
+   "dd": -45.9,
+   "trades": 254,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 122,
+    "weekly loss limit": 33,
+    "trend slot below Rs 40k": 13,
+    "not enough free cash": 11,
+    "wide CPR day (round 71)": 9,
+    "1 lot risks > 15% of the account": 1
+   }
+  },
+  "full": {
+   "final": 625220,
+   "dd": -66.2,
+   "trades": 1458,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 347,
+    "weekly loss limit": 258,
+    "wide CPR day (round 71)": 47,
+    "trend slot below Rs 40k": 40,
+    "not enough free cash": 10
+   }
+  }
+ },
+ "20000|floor 60% only": {
+  "2023": {
+   "final": 31805,
+   "dd": -58.9,
+   "trades": 308,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 166,
+    "trend slot below Rs 40k": 34,
+    "weekly loss limit": 16,
+    "wide CPR day (round 71)": 10,
+    "not enough free cash": 8
+   }
+  },
+  "2024": {
+   "final": 160910,
+   "dd": -32.6,
+   "trades": 314,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 179,
+    "weekly loss limit": 94,
+    "wide CPR day (round 71)": 13,
+    "trend slot below Rs 40k": 11,
+    "not enough free cash": 6,
+    "1 lot risks > 15% of the account": 1
+   }
+  },
+  "2025": {
+   "final": 68436,
+   "dd": -62.6,
+   "trades": 331,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 176,
+    "not enough free cash": 16,
+    "weekly loss limit": 16,
+    "trend slot below Rs 40k": 10,
+    "wide CPR day (round 71)": 8
+   }
+  },
+  "2026": {
+   "final": 87996,
+   "dd": -45.9,
+   "trades": 254,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 122,
+    "weekly loss limit": 33,
+    "trend slot below Rs 40k": 13,
+    "not enough free cash": 11,
+    "wide CPR day (round 71)": 9,
+    "1 lot risks > 15% of the account": 1
+   }
+  },
+  "full": {
+   "final": 625220,
+   "dd": -66.2,
+   "trades": 1458,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 347,
+    "weekly loss limit": 258,
+    "wide CPR day (round 71)": 47,
+    "trend slot below Rs 40k": 40,
+    "not enough free cash": 10
+   }
+  }
+ },
+ "20000|open 50% + 1-lot exception, floor 60%": {
+  "2023": {
+   "final": 30617,
+   "dd": -60.8,
+   "trades": 307,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 166,
+    "trend slot below Rs 40k": 35,
+    "weekly loss limit": 16,
+    "wide CPR day (round 71)": 10,
+    "not enough free cash": 8
+   }
+  },
+  "2024": {
+   "final": 158077,
+   "dd": -32.6,
+   "trades": 314,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 179,
+    "weekly loss limit": 94,
+    "wide CPR day (round 71)": 13,
+    "trend slot below Rs 40k": 11,
+    "not enough free cash": 6,
+    "1 lot risks > 15% of the account": 1
+   }
+  },
+  "2025": {
+   "final": 68436,
+   "dd": -62.6,
+   "trades": 331,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 176,
+    "not enough free cash": 16,
+    "weekly loss limit": 16,
+    "trend slot below Rs 40k": 10,
+    "wide CPR day (round 71)": 8
+   }
+  },
+  "2026": {
+   "final": 87996,
+   "dd": -45.9,
+   "trades": 254,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 122,
+    "weekly loss limit": 33,
+    "trend slot below Rs 40k": 13,
+    "not enough free cash": 11,
+    "wide CPR day (round 71)": 9,
+    "1 lot risks > 15% of the account": 1
+   }
+  },
+  "full": {
+   "final": 626052,
+   "dd": -68.1,
+   "trades": 1465,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 345,
+    "weekly loss limit": 252,
+    "wide CPR day (round 71)": 47,
+    "trend slot below Rs 40k": 41,
+    "not enough free cash": 10
+   }
+  }
+ },
+ "25000|none (backtest so far)": {
+  "2023": {
+   "final": 46538,
+   "dd": -51.9,
+   "trades": 347,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 167,
+    "weekly loss limit": 13,
+    "wide CPR day (round 71)": 12,
+    "trend slot below Rs 40k": 2,
+    "not enough free cash": 1
+   }
+  },
+  "2024": {
+   "final": 161069,
+   "dd": -32.9,
+   "trades": 319,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 180,
+    "weekly loss limit": 87,
+    "wide CPR day (round 71)": 13,
+    "trend slot below Rs 40k": 11,
+    "not enough free cash": 7,
+    "1 lot risks > 15% of the account": 1
+   }
+  },
+  "2025": {
+   "final": 68827,
+   "dd": -63.6,
+   "trades": 332,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 176,
+    "weekly loss limit": 17,
+    "not enough free cash": 14,
+    "trend slot below Rs 40k": 10,
+    "wide CPR day (round 71)": 8
+   }
+  },
+  "2026": {
+   "final": 91358,
+   "dd": -44.5,
+   "trades": 257,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 124,
+    "weekly loss limit": 25,
+    "trend slot below Rs 40k": 15,
+    "not enough free cash": 13,
+    "wide CPR day (round 71)": 9
+   }
+  },
+  "full": {
+   "final": 639540,
+   "dd": -58.0,
+   "trades": 1512,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 342,
+    "weekly loss limit": 254,
+    "wide CPR day (round 71)": 49,
+    "trend slot below Rs 40k": 2,
+    "not enough free cash": 1
+   }
+  }
+ },
+ "25000|live: open 50%, floor 60%": {
+  "2023": {
+   "final": 26472,
+   "dd": -52.0,
+   "trades": 251,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 167,
+    "not enough free cash": 60,
+    "trend slot below Rs 40k": 46,
+    "wide CPR day (round 71)": 10,
+    "weekly loss limit": 8
+   }
+  },
+  "2024": {
+   "final": 178445,
+   "dd": -31.1,
+   "trades": 324,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 158,
+    "weekly loss limit": 81,
+    "not enough free cash": 31,
+    "wide CPR day (round 71)": 17,
+    "trend slot below Rs 40k": 7
+   }
+  },
+  "2025": {
+   "final": 56482,
+   "dd": -50.9,
+   "trades": 253,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 181,
+    "not enough free cash": 105,
+    "wide CPR day (round 71)": 8,
+    "trend slot below Rs 40k": 7,
+    "weekly loss limit": 3
+   }
+  },
+  "2026": {
+   "final": 88547,
+   "dd": -37.0,
+   "trades": 187,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 127,
+    "not enough free cash": 88,
+    "trend slot below Rs 40k": 19,
+    "weekly loss limit": 13,
+    "wide CPR day (round 71)": 9
+   }
+  },
+  "full": {
+   "final": 823455,
+   "dd": -56.3,
+   "trades": 1448,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 325,
+    "weekly loss limit": 190,
+    "not enough free cash": 93,
+    "trend slot below Rs 40k": 53,
+    "wide CPR day (round 71)": 51
+   }
+  }
+ },
+ "25000|open 70%, floor 60%": {
+  "2023": {
+   "final": 27854,
+   "dd": -62.7,
+   "trades": 294,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 167,
+    "not enough free cash": 30,
+    "trend slot below Rs 40k": 28,
+    "weekly loss limit": 13,
+    "wide CPR day (round 71)": 10
+   }
+  },
+  "2024": {
+   "final": 177488,
+   "dd": -31.4,
+   "trades": 329,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 152,
+    "weekly loss limit": 96,
+    "not enough free cash": 15,
+    "wide CPR day (round 71)": 15,
+    "trend slot below Rs 40k": 11
+   }
+  },
+  "2025": {
+   "final": 55572,
+   "dd": -56.3,
+   "trades": 285,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 176,
+    "not enough free cash": 62,
+    "weekly loss limit": 17,
+    "wide CPR day (round 71)": 9,
+    "trend slot below Rs 40k": 8
+   }
+  },
+  "2026": {
+   "final": 73132,
+   "dd": -43.7,
+   "trades": 230,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 127,
+    "not enough free cash": 43,
+    "weekly loss limit": 19,
+    "trend slot below Rs 40k": 15,
+    "wide CPR day (round 71)": 9
+   }
+  },
+  "full": {
+   "final": 825487,
+   "dd": -71.0,
+   "trades": 1491,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 323,
+    "weekly loss limit": 214,
+    "wide CPR day (round 71)": 49,
+    "not enough free cash": 44,
+    "trend slot below Rs 40k": 39
+   }
+  }
+ },
+ "25000|open 100% (cash), floor 60%": {
+  "2023": {
+   "final": 46538,
+   "dd": -51.9,
+   "trades": 347,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 167,
+    "weekly loss limit": 13,
+    "wide CPR day (round 71)": 12,
+    "trend slot below Rs 40k": 2,
+    "not enough free cash": 1
+   }
+  },
+  "2024": {
+   "final": 161069,
+   "dd": -32.9,
+   "trades": 319,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 180,
+    "weekly loss limit": 87,
+    "wide CPR day (round 71)": 13,
+    "trend slot below Rs 40k": 11,
+    "not enough free cash": 7,
+    "1 lot risks > 15% of the account": 1
+   }
+  },
+  "2025": {
+   "final": 68827,
+   "dd": -63.6,
+   "trades": 332,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 176,
+    "weekly loss limit": 17,
+    "not enough free cash": 14,
+    "trend slot below Rs 40k": 10,
+    "wide CPR day (round 71)": 8
+   }
+  },
+  "2026": {
+   "final": 91358,
+   "dd": -44.5,
+   "trades": 257,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 124,
+    "weekly loss limit": 25,
+    "trend slot below Rs 40k": 15,
+    "not enough free cash": 13,
+    "wide CPR day (round 71)": 9
+   }
+  },
+  "full": {
+   "final": 639540,
+   "dd": -58.0,
+   "trades": 1512,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 342,
+    "weekly loss limit": 254,
+    "wide CPR day (round 71)": 49,
+    "trend slot below Rs 40k": 2,
+    "not enough free cash": 1
+   }
+  }
+ },
+ "25000|floor 60% only": {
+  "2023": {
+   "final": 46538,
+   "dd": -51.9,
+   "trades": 347,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 167,
+    "weekly loss limit": 13,
+    "wide CPR day (round 71)": 12,
+    "trend slot below Rs 40k": 2,
+    "not enough free cash": 1
+   }
+  },
+  "2024": {
+   "final": 161069,
+   "dd": -32.9,
+   "trades": 319,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 180,
+    "weekly loss limit": 87,
+    "wide CPR day (round 71)": 13,
+    "trend slot below Rs 40k": 11,
+    "not enough free cash": 7,
+    "1 lot risks > 15% of the account": 1
+   }
+  },
+  "2025": {
+   "final": 68827,
+   "dd": -63.6,
+   "trades": 332,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 176,
+    "weekly loss limit": 17,
+    "not enough free cash": 14,
+    "trend slot below Rs 40k": 10,
+    "wide CPR day (round 71)": 8
+   }
+  },
+  "2026": {
+   "final": 91358,
+   "dd": -44.5,
+   "trades": 257,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 124,
+    "weekly loss limit": 25,
+    "trend slot below Rs 40k": 15,
+    "not enough free cash": 13,
+    "wide CPR day (round 71)": 9
+   }
+  },
+  "full": {
+   "final": 639540,
+   "dd": -58.0,
+   "trades": 1512,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 342,
+    "weekly loss limit": 254,
+    "wide CPR day (round 71)": 49,
+    "trend slot below Rs 40k": 2,
+    "not enough free cash": 1
+   }
+  }
+ },
+ "25000|open 50% + 1-lot exception, floor 60%": {
+  "2023": {
+   "final": 46705,
+   "dd": -51.6,
+   "trades": 347,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 167,
+    "weekly loss limit": 13,
+    "wide CPR day (round 71)": 12,
+    "trend slot below Rs 40k": 2,
+    "not enough free cash": 1
+   }
+  },
+  "2024": {
+   "final": 160949,
+   "dd": -32.9,
+   "trades": 319,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 180,
+    "weekly loss limit": 87,
+    "wide CPR day (round 71)": 13,
+    "trend slot below Rs 40k": 11,
+    "not enough free cash": 7,
+    "1 lot risks > 15% of the account": 1
+   }
+  },
+  "2025": {
+   "final": 68827,
+   "dd": -63.6,
+   "trades": 332,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 176,
+    "weekly loss limit": 17,
+    "not enough free cash": 14,
+    "trend slot below Rs 40k": 10,
+    "wide CPR day (round 71)": 8
+   }
+  },
+  "2026": {
+   "final": 91358,
+   "dd": -44.5,
+   "trades": 257,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 124,
+    "weekly loss limit": 25,
+    "trend slot below Rs 40k": 15,
+    "not enough free cash": 13,
+    "wide CPR day (round 71)": 9
+   }
+  },
+  "full": {
+   "final": 643134,
+   "dd": -58.0,
+   "trades": 1516,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 334,
+    "weekly loss limit": 258,
+    "wide CPR day (round 71)": 49,
+    "trend slot below Rs 40k": 2,
+    "not enough free cash": 1
+   }
+  }
+ },
+ "50000|none (backtest so far)": {
+  "2023": {
+   "final": 110302,
+   "dd": -22.6,
+   "trades": 301,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 144,
+    "weekly loss limit": 85,
+    "wide CPR day (round 71)": 12
+   }
+  },
+  "2024": {
+   "final": 226212,
+   "dd": -26.9,
+   "trades": 379,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 132,
+    "weekly loss limit": 92,
+    "wide CPR day (round 71)": 15
+   }
+  },
+  "2025": {
+   "final": 132144,
+   "dd": -42.6,
+   "trades": 316,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 152,
+    "weekly loss limit": 80,
+    "wide CPR day (round 71)": 9
+   }
+  },
+  "2026": {
+   "final": 157372,
+   "dd": -41.8,
+   "trades": 241,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 102,
+    "weekly loss limit": 82,
+    "wide CPR day (round 71)": 11,
+    "trend slot below Rs 40k": 7
+   }
+  },
+  "full": {
+   "final": 1218619,
+   "dd": -29.2,
+   "trades": 1623,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 292,
+    "Fibonacci slot below Rs 2 lakh": 190,
+    "wide CPR day (round 71)": 55
+   }
+  }
+ },
+ "50000|live: open 50%, floor 60%": {
+  "2023": {
+   "final": 111325,
+   "dd": -22.3,
+   "trades": 283,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 147,
+    "weekly loss limit": 82,
+    "not enough free cash": 18,
+    "wide CPR day (round 71)": 12
+   }
+  },
+  "2024": {
+   "final": 196343,
+   "dd": -29.2,
+   "trades": 356,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 138,
+    "weekly loss limit": 83,
+    "not enough free cash": 26,
+    "wide CPR day (round 71)": 15
+   }
+  },
+  "2025": {
+   "final": 118304,
+   "dd": -33.8,
+   "trades": 275,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 151,
+    "weekly loss limit": 80,
+    "not enough free cash": 42,
+    "wide CPR day (round 71)": 9
+   }
+  },
+  "2026": {
+   "final": 159913,
+   "dd": -21.4,
+   "trades": 229,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 104,
+    "weekly loss limit": 73,
+    "not enough free cash": 26,
+    "wide CPR day (round 71)": 11
+   }
+  },
+  "full": {
+   "final": 1221753,
+   "dd": -29.3,
+   "trades": 1607,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 284,
+    "Fibonacci slot below Rs 2 lakh": 192,
+    "wide CPR day (round 71)": 55,
+    "not enough free cash": 22
+   }
+  }
+ },
+ "50000|open 70%, floor 60%": {
+  "2023": {
+   "final": 105540,
+   "dd": -22.6,
+   "trades": 294,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 138,
+    "weekly loss limit": 96,
+    "wide CPR day (round 71)": 12,
+    "not enough free cash": 2
+   }
+  },
+  "2024": {
+   "final": 228976,
+   "dd": -28.0,
+   "trades": 380,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 130,
+    "weekly loss limit": 88,
+    "wide CPR day (round 71)": 15,
+    "not enough free cash": 5
+   }
+  },
+  "2025": {
+   "final": 141745,
+   "dd": -37.5,
+   "trades": 316,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 154,
+    "weekly loss limit": 75,
+    "wide CPR day (round 71)": 9,
+    "not enough free cash": 3
+   }
+  },
+  "2026": {
+   "final": 145485,
+   "dd": -36.7,
+   "trades": 242,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 113,
+    "weekly loss limit": 62,
+    "wide CPR day (round 71)": 11,
+    "not enough free cash": 10,
+    "trend slot below Rs 40k": 5
+   }
+  },
+  "full": {
+   "final": 1173184,
+   "dd": -29.0,
+   "trades": 1614,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 301,
+    "Fibonacci slot below Rs 2 lakh": 188,
+    "wide CPR day (round 71)": 55,
+    "not enough free cash": 2
+   }
+  }
+ },
+ "50000|open 100% (cash), floor 60%": {
+  "2023": {
+   "final": 110302,
+   "dd": -22.6,
+   "trades": 301,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 144,
+    "weekly loss limit": 85,
+    "wide CPR day (round 71)": 12
+   }
+  },
+  "2024": {
+   "final": 226212,
+   "dd": -26.9,
+   "trades": 379,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 132,
+    "weekly loss limit": 92,
+    "wide CPR day (round 71)": 15
+   }
+  },
+  "2025": {
+   "final": 132144,
+   "dd": -42.6,
+   "trades": 316,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 152,
+    "weekly loss limit": 80,
+    "wide CPR day (round 71)": 9
+   }
+  },
+  "2026": {
+   "final": 29460,
+   "dd": -41.1,
+   "trades": 23,
+   "shield_skips": 390,
+   "skips": {
+    "shield floor": 390,
+    "Fibonacci slot below Rs 2 lakh": 14,
+    "weekly loss limit": 8,
+    "trend slot below Rs 40k": 7,
+    "wide CPR day (round 71)": 1
+   }
+  },
+  "full": {
+   "final": 1218619,
+   "dd": -29.2,
+   "trades": 1623,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 292,
+    "Fibonacci slot below Rs 2 lakh": 190,
+    "wide CPR day (round 71)": 55
+   }
+  }
+ },
+ "50000|floor 60% only": {
+  "2023": {
+   "final": 110302,
+   "dd": -22.6,
+   "trades": 301,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 144,
+    "weekly loss limit": 85,
+    "wide CPR day (round 71)": 12
+   }
+  },
+  "2024": {
+   "final": 226212,
+   "dd": -26.9,
+   "trades": 379,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 132,
+    "weekly loss limit": 92,
+    "wide CPR day (round 71)": 15
+   }
+  },
+  "2025": {
+   "final": 132144,
+   "dd": -42.6,
+   "trades": 316,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 152,
+    "weekly loss limit": 80,
+    "wide CPR day (round 71)": 9
+   }
+  },
+  "2026": {
+   "final": 29460,
+   "dd": -41.1,
+   "trades": 23,
+   "shield_skips": 390,
+   "skips": {
+    "shield floor": 390,
+    "Fibonacci slot below Rs 2 lakh": 14,
+    "weekly loss limit": 8,
+    "trend slot below Rs 40k": 7,
+    "wide CPR day (round 71)": 1
+   }
+  },
+  "full": {
+   "final": 1218619,
+   "dd": -29.2,
+   "trades": 1623,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 292,
+    "Fibonacci slot below Rs 2 lakh": 190,
+    "wide CPR day (round 71)": 55
+   }
+  }
+ },
+ "50000|open 50% + 1-lot exception, floor 60%": {
+  "2023": {
+   "final": 109809,
+   "dd": -22.3,
+   "trades": 302,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 148,
+    "weekly loss limit": 80,
+    "wide CPR day (round 71)": 12
+   }
+  },
+  "2024": {
+   "final": 226212,
+   "dd": -26.9,
+   "trades": 379,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 132,
+    "weekly loss limit": 92,
+    "wide CPR day (round 71)": 15
+   }
+  },
+  "2025": {
+   "final": 132144,
+   "dd": -42.6,
+   "trades": 316,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 152,
+    "weekly loss limit": 80,
+    "wide CPR day (round 71)": 9
+   }
+  },
+  "2026": {
+   "final": 29460,
+   "dd": -41.1,
+   "trades": 23,
+   "shield_skips": 390,
+   "skips": {
+    "shield floor": 390,
+    "Fibonacci slot below Rs 2 lakh": 14,
+    "weekly loss limit": 8,
+    "trend slot below Rs 40k": 7,
+    "wide CPR day (round 71)": 1
+   }
+  },
+  "full": {
+   "final": 1227087,
+   "dd": -29.2,
+   "trades": 1628,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 280,
+    "Fibonacci slot below Rs 2 lakh": 197,
+    "wide CPR day (round 71)": 55
+   }
+  }
+ },
+ "100000|none (backtest so far)": {
+  "2023": {
+   "final": 138289,
+   "dd": -22.4,
+   "trades": 301,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 149,
+    "weekly loss limit": 80,
+    "wide CPR day (round 71)": 12
+   }
+  },
+  "2024": {
+   "final": 277073,
+   "dd": -27.9,
+   "trades": 437,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 105,
+    "Fibonacci slot below Rs 2 lakh": 55,
+    "wide CPR day (round 71)": 21
+   }
+  },
+  "2025": {
+   "final": 182122,
+   "dd": -26.9,
+   "trades": 318,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 149,
+    "weekly loss limit": 81,
+    "wide CPR day (round 71)": 9
+   }
+  },
+  "2026": {
+   "final": 204920,
+   "dd": -19.9,
+   "trades": 265,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 96,
+    "weekly loss limit": 70,
+    "wide CPR day (round 71)": 12
+   }
+  },
+  "full": {
+   "final": 1231683,
+   "dd": -28.4,
+   "trades": 1663,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 278,
+    "Fibonacci slot below Rs 2 lakh": 164,
+    "wide CPR day (round 71)": 55
+   }
+  }
+ },
+ "100000|live: open 50%, floor 60%": {
+  "2023": {
+   "final": 140718,
+   "dd": -22.0,
+   "trades": 301,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 151,
+    "weekly loss limit": 77,
+    "wide CPR day (round 71)": 12,
+    "not enough free cash": 1
+   }
+  },
+  "2024": {
+   "final": 276838,
+   "dd": -27.9,
+   "trades": 437,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 105,
+    "Fibonacci slot below Rs 2 lakh": 55,
+    "wide CPR day (round 71)": 21
+   }
+  },
+  "2025": {
+   "final": 183666,
+   "dd": -26.6,
+   "trades": 320,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 151,
+    "weekly loss limit": 75,
+    "wide CPR day (round 71)": 9,
+    "not enough free cash": 2
+   }
+  },
+  "2026": {
+   "final": 211986,
+   "dd": -19.4,
+   "trades": 263,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 96,
+    "weekly loss limit": 70,
+    "wide CPR day (round 71)": 12,
+    "not enough free cash": 2
+   }
+  },
+  "full": {
+   "final": 1248379,
+   "dd": -28.5,
+   "trades": 1663,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 275,
+    "Fibonacci slot below Rs 2 lakh": 162,
+    "wide CPR day (round 71)": 55,
+    "not enough free cash": 5
+   }
+  }
+ },
+ "100000|open 70%, floor 60%": {
+  "2023": {
+   "final": 138289,
+   "dd": -22.4,
+   "trades": 301,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 149,
+    "weekly loss limit": 80,
+    "wide CPR day (round 71)": 12
+   }
+  },
+  "2024": {
+   "final": 277073,
+   "dd": -27.9,
+   "trades": 437,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 105,
+    "Fibonacci slot below Rs 2 lakh": 55,
+    "wide CPR day (round 71)": 21
+   }
+  },
+  "2025": {
+   "final": 182122,
+   "dd": -26.9,
+   "trades": 318,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 149,
+    "weekly loss limit": 81,
+    "wide CPR day (round 71)": 9
+   }
+  },
+  "2026": {
+   "final": 204920,
+   "dd": -19.9,
+   "trades": 265,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 96,
+    "weekly loss limit": 70,
+    "wide CPR day (round 71)": 12
+   }
+  },
+  "full": {
+   "final": 1231683,
+   "dd": -28.4,
+   "trades": 1663,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 278,
+    "Fibonacci slot below Rs 2 lakh": 164,
+    "wide CPR day (round 71)": 55
+   }
+  }
+ },
+ "100000|open 100% (cash), floor 60%": {
+  "2023": {
+   "final": 138289,
+   "dd": -22.4,
+   "trades": 301,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 149,
+    "weekly loss limit": 80,
+    "wide CPR day (round 71)": 12
+   }
+  },
+  "2024": {
+   "final": 277073,
+   "dd": -27.9,
+   "trades": 437,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 105,
+    "Fibonacci slot below Rs 2 lakh": 55,
+    "wide CPR day (round 71)": 21
+   }
+  },
+  "2025": {
+   "final": 182122,
+   "dd": -26.9,
+   "trades": 318,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 149,
+    "weekly loss limit": 81,
+    "wide CPR day (round 71)": 9
+   }
+  },
+  "2026": {
+   "final": 204920,
+   "dd": -19.9,
+   "trades": 265,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 96,
+    "weekly loss limit": 70,
+    "wide CPR day (round 71)": 12
+   }
+  },
+  "full": {
+   "final": 1231683,
+   "dd": -28.4,
+   "trades": 1663,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 278,
+    "Fibonacci slot below Rs 2 lakh": 164,
+    "wide CPR day (round 71)": 55
+   }
+  }
+ },
+ "100000|floor 60% only": {
+  "2023": {
+   "final": 138289,
+   "dd": -22.4,
+   "trades": 301,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 149,
+    "weekly loss limit": 80,
+    "wide CPR day (round 71)": 12
+   }
+  },
+  "2024": {
+   "final": 277073,
+   "dd": -27.9,
+   "trades": 437,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 105,
+    "Fibonacci slot below Rs 2 lakh": 55,
+    "wide CPR day (round 71)": 21
+   }
+  },
+  "2025": {
+   "final": 182122,
+   "dd": -26.9,
+   "trades": 318,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 149,
+    "weekly loss limit": 81,
+    "wide CPR day (round 71)": 9
+   }
+  },
+  "2026": {
+   "final": 204920,
+   "dd": -19.9,
+   "trades": 265,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 96,
+    "weekly loss limit": 70,
+    "wide CPR day (round 71)": 12
+   }
+  },
+  "full": {
+   "final": 1231683,
+   "dd": -28.4,
+   "trades": 1663,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 278,
+    "Fibonacci slot below Rs 2 lakh": 164,
+    "wide CPR day (round 71)": 55
+   }
+  }
+ },
+ "100000|open 50% + 1-lot exception, floor 60%": {
+  "2023": {
+   "final": 139274,
+   "dd": -22.0,
+   "trades": 301,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 149,
+    "weekly loss limit": 80,
+    "wide CPR day (round 71)": 12
+   }
+  },
+  "2024": {
+   "final": 276838,
+   "dd": -27.9,
+   "trades": 437,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 105,
+    "Fibonacci slot below Rs 2 lakh": 55,
+    "wide CPR day (round 71)": 21
+   }
+  },
+  "2025": {
+   "final": 182122,
+   "dd": -26.9,
+   "trades": 318,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 149,
+    "weekly loss limit": 81,
+    "wide CPR day (round 71)": 9
+   }
+  },
+  "2026": {
+   "final": 204829,
+   "dd": -19.9,
+   "trades": 266,
+   "shield_skips": 0,
+   "skips": {
+    "Fibonacci slot below Rs 2 lakh": 96,
+    "weekly loss limit": 69,
+    "wide CPR day (round 71)": 12
+   }
+  },
+  "full": {
+   "final": 1404815,
+   "dd": -28.3,
+   "trades": 1671,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 274,
+    "Fibonacci slot below Rs 2 lakh": 160,
+    "wide CPR day (round 71)": 55
+   }
+  }
+ },
+ "200000|none (backtest so far)": {
+  "2023": {
+   "final": 288049,
+   "dd": -31.2,
+   "trades": 450,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 75,
+    "wide CPR day (round 71)": 12,
+    "Fibonacci slot below Rs 2 lakh": 5
+   }
+  },
+  "2024": {
+   "final": 614941,
+   "dd": -19.8,
+   "trades": 512,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 76,
+    "wide CPR day (round 71)": 22,
+    "Fibonacci slot below Rs 2 lakh": 8
+   }
+  },
+  "2025": {
+   "final": 384769,
+   "dd": -24.6,
+   "trades": 497,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 45,
+    "wide CPR day (round 71)": 11,
+    "Fibonacci slot below Rs 2 lakh": 4
+   }
+  },
+  "2026": {
+   "final": 497181,
+   "dd": -21.1,
+   "trades": 372,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 46,
+    "wide CPR day (round 71)": 13,
+    "Fibonacci slot below Rs 2 lakh": 12
+   }
+  },
+  "full": {
+   "final": 4092530,
+   "dd": -31.3,
+   "trades": 1872,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 225,
+    "wide CPR day (round 71)": 58,
+    "Fibonacci slot below Rs 2 lakh": 5
+   }
+  }
+ },
+ "200000|live: open 50%, floor 60%": {
+  "2023": {
+   "final": 286092,
+   "dd": -31.7,
+   "trades": 455,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 69,
+    "wide CPR day (round 71)": 12,
+    "Fibonacci slot below Rs 2 lakh": 5,
+    "not enough free cash": 1
+   }
+  },
+  "2024": {
+   "final": 616864,
+   "dd": -19.7,
+   "trades": 510,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 75,
+    "wide CPR day (round 71)": 22,
+    "Fibonacci slot below Rs 2 lakh": 8,
+    "not enough free cash": 3
+   }
+  },
+  "2025": {
+   "final": 384769,
+   "dd": -24.6,
+   "trades": 497,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 45,
+    "wide CPR day (round 71)": 11,
+    "Fibonacci slot below Rs 2 lakh": 4
+   }
+  },
+  "2026": {
+   "final": 454653,
+   "dd": -22.1,
+   "trades": 380,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 37,
+    "wide CPR day (round 71)": 13,
+    "Fibonacci slot below Rs 2 lakh": 12,
+    "not enough free cash": 1
+   }
+  },
+  "full": {
+   "final": 4097145,
+   "dd": -31.8,
+   "trades": 1875,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 219,
+    "wide CPR day (round 71)": 58,
+    "Fibonacci slot below Rs 2 lakh": 5,
+    "not enough free cash": 3
+   }
+  }
+ },
+ "200000|open 70%, floor 60%": {
+  "2023": {
+   "final": 288049,
+   "dd": -31.2,
+   "trades": 450,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 75,
+    "wide CPR day (round 71)": 12,
+    "Fibonacci slot below Rs 2 lakh": 5
+   }
+  },
+  "2024": {
+   "final": 614941,
+   "dd": -19.8,
+   "trades": 512,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 76,
+    "wide CPR day (round 71)": 22,
+    "Fibonacci slot below Rs 2 lakh": 8
+   }
+  },
+  "2025": {
+   "final": 384769,
+   "dd": -24.6,
+   "trades": 497,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 45,
+    "wide CPR day (round 71)": 11,
+    "Fibonacci slot below Rs 2 lakh": 4
+   }
+  },
+  "2026": {
+   "final": 494925,
+   "dd": -21.6,
+   "trades": 367,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 51,
+    "wide CPR day (round 71)": 13,
+    "Fibonacci slot below Rs 2 lakh": 12
+   }
+  },
+  "full": {
+   "final": 4092530,
+   "dd": -31.3,
+   "trades": 1872,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 225,
+    "wide CPR day (round 71)": 58,
+    "Fibonacci slot below Rs 2 lakh": 5
+   }
+  }
+ },
+ "200000|open 100% (cash), floor 60%": {
+  "2023": {
+   "final": 288049,
+   "dd": -31.2,
+   "trades": 450,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 75,
+    "wide CPR day (round 71)": 12,
+    "Fibonacci slot below Rs 2 lakh": 5
+   }
+  },
+  "2024": {
+   "final": 614941,
+   "dd": -19.8,
+   "trades": 512,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 76,
+    "wide CPR day (round 71)": 22,
+    "Fibonacci slot below Rs 2 lakh": 8
+   }
+  },
+  "2025": {
+   "final": 384769,
+   "dd": -24.6,
+   "trades": 497,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 45,
+    "wide CPR day (round 71)": 11,
+    "Fibonacci slot below Rs 2 lakh": 4
+   }
+  },
+  "2026": {
+   "final": 497181,
+   "dd": -21.1,
+   "trades": 372,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 46,
+    "wide CPR day (round 71)": 13,
+    "Fibonacci slot below Rs 2 lakh": 12
+   }
+  },
+  "full": {
+   "final": 4092530,
+   "dd": -31.3,
+   "trades": 1872,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 225,
+    "wide CPR day (round 71)": 58,
+    "Fibonacci slot below Rs 2 lakh": 5
+   }
+  }
+ },
+ "200000|floor 60% only": {
+  "2023": {
+   "final": 288049,
+   "dd": -31.2,
+   "trades": 450,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 75,
+    "wide CPR day (round 71)": 12,
+    "Fibonacci slot below Rs 2 lakh": 5
+   }
+  },
+  "2024": {
+   "final": 614941,
+   "dd": -19.8,
+   "trades": 512,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 76,
+    "wide CPR day (round 71)": 22,
+    "Fibonacci slot below Rs 2 lakh": 8
+   }
+  },
+  "2025": {
+   "final": 384769,
+   "dd": -24.6,
+   "trades": 497,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 45,
+    "wide CPR day (round 71)": 11,
+    "Fibonacci slot below Rs 2 lakh": 4
+   }
+  },
+  "2026": {
+   "final": 497181,
+   "dd": -21.1,
+   "trades": 372,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 46,
+    "wide CPR day (round 71)": 13,
+    "Fibonacci slot below Rs 2 lakh": 12
+   }
+  },
+  "full": {
+   "final": 4092530,
+   "dd": -31.3,
+   "trades": 1872,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 225,
+    "wide CPR day (round 71)": 58,
+    "Fibonacci slot below Rs 2 lakh": 5
+   }
+  }
+ },
+ "200000|open 50% + 1-lot exception, floor 60%": {
+  "2023": {
+   "final": 286613,
+   "dd": -31.5,
+   "trades": 452,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 73,
+    "wide CPR day (round 71)": 12,
+    "Fibonacci slot below Rs 2 lakh": 5
+   }
+  },
+  "2024": {
+   "final": 614574,
+   "dd": -19.8,
+   "trades": 512,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 76,
+    "wide CPR day (round 71)": 22,
+    "Fibonacci slot below Rs 2 lakh": 8
+   }
+  },
+  "2025": {
+   "final": 384769,
+   "dd": -24.6,
+   "trades": 497,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 45,
+    "wide CPR day (round 71)": 11,
+    "Fibonacci slot below Rs 2 lakh": 4
+   }
+  },
+  "2026": {
+   "final": 497429,
+   "dd": -21.0,
+   "trades": 380,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 38,
+    "wide CPR day (round 71)": 13,
+    "Fibonacci slot below Rs 2 lakh": 12
+   }
+  },
+  "full": {
+   "final": 4097052,
+   "dd": -31.6,
+   "trades": 1874,
+   "shield_skips": 0,
+   "skips": {
+    "weekly loss limit": 223,
+    "wide CPR day (round 71)": 58,
+    "Fibonacci slot below Rs 2 lakh": 5
+   }
+  }
+ }
+}

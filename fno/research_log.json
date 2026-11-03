@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-02",
+ "updated": "2026-11-03",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
@@ -1420,6 +1420,17 @@
    "decision": "Not adopted. Live rules unchanged: 1 ITM, roll at <= 1 day, no extra tilts. Remaining gains are operational (signals not placed on 21 and 29 Oct, settings reset on 28 Oct) and the pending live-data items.",
    "summary": "No regime tilt beats chance and no other expiry, strike or futures beats today's 1-ITM options; Autopilot stays as is.",
    "period": "Jan 2023 - 30 Oct 2026"
+  },
+  {
+   "id": "r74",
+   "date": "2026-11-03",
+   "area": "Index options",
+   "title": "Why no Autopilot trades after 23 Oct? Live check, the capital shield at small equity, and a gap-and-hold rule for gap-up days",
+   "asked": "User: the FnO trainer took its last trade on 23 Oct and none since; find why and improve the logic after reading the market. Checked the live journal for 2-3 Nov (new on-demand journal-pull job), the 28/30 Oct journals, the 1 Nov Upstash->Supabase copy rules and the entry guards. Then (A) replayed today's Autopilot with the capital shield (31 Oct defaults: open premium <= 50% of equity, floor 60%) and variants at Rs 20k-2L; (B) tested a gap-and-hold rule for days that open beyond Camarilla H4/L4 (2 Nov: Nifty +0.89%, Sensex +1.04% gaps), 32 versions, then added the 2023-24 pick to Autopilot.",
+   "result": "Live: Autopilot did trade on 28 Oct (2 trades) and 30 Oct (3 trades, -Rs 11k together); the 1 Nov copy kept the Upstash portfolio as asked on 31 Oct and parked them in fno:migration:supabase_only, so the trade list ends around 23-26 Oct. 2 Nov: Nifty and Sensex opened above H4 and never reached the noise band, so no rule fired; Bank Nifty Camarilla fired at 09:30 and 10:45 and both were refused by the capital shield (one lot > 50% of the Rs 24,130 equity); both hit their stop (-2R). 3 Nov to 12:40: no signal. At Rs 24k the trend slot (Rs 40k) and Fibonacci (Rs 2L) are also gated off. (A) Shield at Rs 25k: 2023 0.26L vs 0.47L, 2024 1.78L vs 1.61L, 2025 0.56L vs 0.69L, 2026 0.89L vs 0.91L, worst fall -56% vs -58%; at Rs 1-2L no real difference; a 1-lot exception = no shield. Mixed, not a clear cost. (B) Gap-and-hold: every one of 32 versions lost in 2026; best 2023-24 pick -Rs 85k in 2025-26; added to Autopilot Rs 2L 25.7L vs 40.9L.",
+   "decision": "No rule change. Shield kept as the user's account protection; gap-and-hold not adopted. Added the journal-pull job; re-ran the 2 Nov recorder (Upstox returned no candles at 03:58 IST).",
+   "summary": "Autopilot was not broken: post-23 Oct trades were parked by the 1 Nov copy, 2 Nov's two signals were stopped by the capital shield (both would have lost), and gap-up days have no tested rule that pays.",
+   "period": "Jan 2023 - Oct 2026; live 28 Oct - 3 Nov 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2661,6 +2672,15 @@
     "r73"
    ],
    "takeaway": "10 regime readings as size tilts: the 3 'every year' buckets are what chance gives (3.7 expected). Next-week expiry, 2 ITM and futures all lower Autopilot. Not adopted."
+  },
+  {
+   "n": 74,
+   "date": "2026-11-03",
+   "topic": "No trades since 23 Oct: live check, capital shield at small equity, gap-and-hold rule",
+   "ids": [
+    "r74"
+   ],
+   "takeaway": "Trades after 23 Oct exist but were parked by the 1 Nov copy; 2 Nov signals stopped by the shield at Rs 24k equity (both lost anyway). Shield vs none: mixed by year. Gap-and-hold loses in 2026 in every version. No rule change."
   }
  ],
  "india_status": {
