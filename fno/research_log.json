@@ -1464,6 +1464,17 @@
    "decision": "Passed the bar, but the edge sits on about 10 gap nights, so the user chose an opt-in paper slot instead of an Autopilot rule. Shipped: fno/carry.py - separate paper ledger (own capital, default Rs 50k, own positions and journal), OFF by default, Nifty + Bank Nifty, 1 lot, buy at 15:20-15:28 after a strong close, sell at the next open from 09:15, own 2% weekly budget, premium <= 50% of the slot's equity, capital-shield floor. Card in the Scalp book tab; API /api/carry. Main Autopilot rules unchanged. Test tests/test_carry.py (live signal = round 75b on 739 of 739 Nifty days). Re-check after 60 live carry nights: keep only if the paper journal is not worse than the backtest median.",
    "period": "Oct 2023 - Oct 2026 (carry); Jan 2023 - Oct 2026 (Autopilot)",
    "summary": "Overnight carry as a separate slot passes the bar (43.5L vs 40.9L at Rs 2L, shallower fall) but ~all profit is 10 gap nights; shipped as an opt-in paper slot, OFF by default."
+  },
+  {
+   "id": "r78",
+   "date": "2026-11-03",
+   "area": "Index options",
+   "title": "User's scalp: consolidation, then volume comes in and price breaks - 10-15 premium-point target, 2 lots every time",
+   "asked": "User (3 Nov): add a scalp that trades when the market consolidates and volume suddenly comes in and it breaks up; target 10-15 points on the option premium, minimum 2 lots. Tested on 1-min Nifty / Bank Nifty / Sensex Jan 2023 - Oct 2026: box = last 15 or 30 one-minute bars with a range <= 0.10% / 0.15% of price (Bank Nifty x1.3); break = 1-min close beyond the box, 09:30-14:45; volume = heavyweight-stock 5-min volume vs its usual level at that time of day (none / >= 1.3x / >= 1.5x; the index has no volume); ATM option, 2 lots fixed; target premium +10 or +15; stop box edge or premium -10; 20-min time stop (also run with no time stop); both sides or calls only. 96 versions, app pricing (calibrated Black-Scholes + decay), 0.25% and 0.5% slippage + charges, random-side twin.",
+   "result": "0 of 96 versions made money in either 2023-24 or 2025-26, in any year or on any index. Best (30-bar box, 0.10%, volume >= 1.5x, +15 target, -10 premium stop, calls only): 2.2 trades a day, 33% wins, -Rs 332 a trade, 2023 -58.7k, 2024 -22.8k, 2025 -62.1k, 2026 -35.7k. The average trade is about -1.4 premium points before costs (time decay plus no follow-through), so fees and slippage only make it worse. The volume filter does not help (-Rs 316 a trade at 1.5x vs -303 with no filter), and the 10-point target hits more often but pays less. Random-side entries at the same minutes did no worse. Without the time stop: still 0 of 96. Same finding as rounds 7, 34, 36, 62, 63 and 75 (base breakout).",
+   "decision": "Not adopted; no new scalp setup. Small premium targets win often enough to look good but lose after time decay and costs, and the volume proxy adds nothing.",
+   "period": "Jan 2023 - Oct 2026",
+   "summary": "Consolidation + volume breakout scalp with 10-15 premium-point targets, 2 lots: 0 of 96 versions profitable in any period; not adopted."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2748,6 +2759,15 @@
     "r77"
    ],
    "takeaway": "Carry beside Autopilot with its own budget beats Autopilot alone in both halves with a shallower fall, but ~all its profit is 10 big gap nights. Shipped as an opt-in paper slot (Scalp book tab), OFF by default; Autopilot unchanged."
+  },
+  {
+   "n": 78,
+   "date": "2026-11-03",
+   "topic": "Scalp: consolidation + volume breakout, 10-15 premium-point target, 2 lots",
+   "ids": [
+    "r78"
+   ],
+   "takeaway": "0 of 96 versions profitable in any year. About -1.4 premium points a trade before costs; the volume filter adds nothing. Not adopted."
   }
  ],
  "india_status": {
