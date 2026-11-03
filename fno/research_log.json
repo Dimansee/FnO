@@ -1486,6 +1486,17 @@
    "decision": "Not adopted. Neither idea holds in both halves. With rounds 1-79 the classic intraday buy-side ideas on index options are covered; the remaining levers are capital (trend slot at Rs 40k, Bank Nifty past the shield at ~Rs 50k) and the forward paper tests already on the watch list.",
    "period": "Jan 2023 - Oct 2026",
    "summary": "Gap fade and turn-of-month: neither holds in both 2023-24 and 2025-26; not adopted."
+  },
+  {
+   "id": "r80",
+   "date": "2026-11-03",
+   "area": "Index options",
+   "title": "Buying imbalance: does buy/sell pressure behind the signal decide whether Autopilot's trade works?",
+   "asked": "User (3 Nov): what about buying imbalance? No order-book (bid/ask quantity) or aggressor-side volume history exists for 2023-26 - the recorder keeps option bid/ask prices, OI and volume only - and index candles have no volume. Proxy over the full period: signed volume of the heavyweight stocks (volume on rising 5-min bars minus falling, / total; Nifty/Sensex 10 heavyweights, Bank Nifty 4 banks) over the 15 or 30 min before each Autopilot entry (today's BASELINE, Jan 2023 - Oct 2026); 'with' = imbalance in the trade's direction >= 0.2/0.4, 'against' <= -0.2/-0.4; plus a volume-surge (>= 1.5x usual) check. Buckets better/worse in every year replayed at Rs 2L and Rs 20k with a within-year shuffle control.",
+   "result": "Autopilot's breakouts already mostly go with the buying (with 0.2: ~1,360 trades vs ~100 against), so a filter has little to remove. Only one bucket held every year: strong buying with the trade over the last 30 min (>= 0.4), +Rs 241 / +5 / +156 / +367 per lot vs the rest in 2023-26. As 1.3x size at Rs 2L: full 49.9L vs 40.9L but 2023-24 8.67L vs 8.88L and a deeper fall (-35.1% vs -31.3%); the shuffled labels did better still (56.3L), so the gain is from sizing up, not the imbalance. Rs 20k: 6.94L vs 6.25L, both halves flat. 'Against' buckets are tiny (3-27 trades a year) and flip sign. Volume surge >= 1.5x: better in 2023-25, worse in 2026.",
+   "decision": "Not adopted. The stock-volume proxy of buying imbalance adds nothing stable. A true order-book imbalance (total buy vs sell quantity, best-5 depth on ATM options / futures) can only be tested after the recorder collects it; ~60 sessions needed.",
+   "period": "Jan 2023 - Oct 2026",
+   "summary": "Buying imbalance (heavyweight signed-volume proxy): one bucket better every year but the 1.3x tilt fails (2023-24 lower, deeper fall, shuffle better); not adopted. Real order-book imbalance not recorded yet."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2788,6 +2799,15 @@
     "r79"
    ],
    "takeaway": "Gap fade: no version positive in 2025-26; adding the best lowers Autopilot (34.9L vs 40.9L) with a deeper fall. Turn-of-month: no stable bucket. Not adopted."
+  },
+  {
+   "n": 80,
+   "date": "2026-11-03",
+   "topic": "Buying imbalance (signed heavyweight volume) behind Autopilot signals",
+   "ids": [
+    "r80"
+   ],
+   "takeaway": "No stable edge from the proxy; a true bid/ask-quantity imbalance needs new recording (~60 sessions). Not adopted."
   }
  ],
  "india_status": {
