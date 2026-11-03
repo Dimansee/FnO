@@ -1475,6 +1475,17 @@
    "decision": "Not adopted; no new scalp setup. Small premium targets win often enough to look good but lose after time decay and costs, and the volume proxy adds nothing.",
    "period": "Jan 2023 - Oct 2026",
    "summary": "Consolidation + volume breakout scalp with 10-15 premium-point targets, 2 lots: 0 of 96 versions profitable in any period; not adopted."
+  },
+  {
+   "id": "r79",
+   "date": "2026-11-03",
+   "area": "Index options",
+   "title": "What is left beyond the tested rules? Gap fade (gap fill) as an entry, and the turn-of-month effect",
+   "asked": "User (3 Nov): is there any strategy beyond the tested ones to add to Autopilot? Searched the 78 rounds for classic intraday index ideas not yet covered. Intraday momentum (last-half-hour, first-half-hour sign) was round 11; the Noise band is Zarattini's intraday momentum; ORB / NR7 / Holy Grail, levels, OI, SMC, pivots, VWAP/EMA/RSI combos, gaps as filters (r43), gap-and-hold (r74), overnight carry (r75/r77), IV / global / FII (r76) are all done. Two were left: (A) gap fade - gap >= 0.3/0.5/0.8%, after 09:30 or 09:45 price falls back through the open or the opening-range low/high, buy the ATM option against the gap, stop = day's extreme, target yesterday's close or hold to 15:15 (24 versions, app option model, Rs 2,000 risk, random twin, best picked on 2023-24, then added to today's Autopilot); (B) turn of the month (last trading day + first 3) on Autopilot's own trades.",
+   "result": "(A) Gap fade: 6 of 24 versions made money in 2023-24, none of them in 2025-26; random-direction twins did as well or better. Best on 2023-24 (0.3% gap, 09:30, break of the opening-range low/high, hold to 15:15): 2023-24 +1.10L, 2025-26 -0.89L. Added to Autopilot at Rs 2L: full 34.9L vs 40.9L, 2025-26 8.25L vs 10.28L, worst fall -38.3% vs -31.3%; at Rs 20k 2025-26 0.41L vs 1.75L, fall -75.8%. (B) Turn of month: Autopilot calls on turn-of-month days averaged +519 / +786 / +1,728 per trade in 2023-25 but -1,324 in 2026; puts flip sign by year - no stable bucket, not replayed.",
+   "decision": "Not adopted. Neither idea holds in both halves. With rounds 1-79 the classic intraday buy-side ideas on index options are covered; the remaining levers are capital (trend slot at Rs 40k, Bank Nifty past the shield at ~Rs 50k) and the forward paper tests already on the watch list.",
+   "period": "Jan 2023 - Oct 2026",
+   "summary": "Gap fade and turn-of-month: neither holds in both 2023-24 and 2025-26; not adopted."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2768,6 +2779,15 @@
     "r78"
    ],
    "takeaway": "0 of 96 versions profitable in any year. About -1.4 premium points a trade before costs; the volume filter adds nothing. Not adopted."
+  },
+  {
+   "n": 79,
+   "date": "2026-11-03",
+   "topic": "Anything left? Gap fade entry and turn-of-month",
+   "ids": [
+    "r79"
+   ],
+   "takeaway": "Gap fade: no version positive in 2025-26; adding the best lowers Autopilot (34.9L vs 40.9L) with a deeper fall. Turn-of-month: no stable bucket. Not adopted."
   }
  ],
  "india_status": {
