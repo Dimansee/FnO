@@ -1,0 +1,879 @@
+{
+ "rank_2023_24": [
+  {
+   "pair": "BANKNIFTY Camarilla",
+   "n": 171,
+   "rs": 108615.3,
+   "pf": 1.77
+  },
+  {
+   "pair": "NIFTY Trend-day",
+   "n": 87,
+   "rs": 69696.25,
+   "pf": 2.06
+  },
+  {
+   "pair": "SENSEX Trend-day",
+   "n": 91,
+   "rs": 52809.0,
+   "pf": 1.75
+  },
+  {
+   "pair": "SENSEX Fibonacci 0.618",
+   "n": 193,
+   "rs": 44471.4,
+   "pf": 1.31
+  },
+  {
+   "pair": "NIFTY Noise band",
+   "n": 64,
+   "rs": 41711.15,
+   "pf": 1.96
+  },
+  {
+   "pair": "NIFTY Fibonacci 0.618",
+   "n": 188,
+   "rs": 37941.8,
+   "pf": 1.28
+  },
+  {
+   "pair": "SENSEX Noise band",
+   "n": 113,
+   "rs": 24942.4,
+   "pf": 1.28
+  },
+  {
+   "pair": "NIFTY Camarilla",
+   "n": 194,
+   "rs": 23168.6,
+   "pf": 1.17
+  },
+  {
+   "pair": "BANKNIFTY Noise band",
+   "n": 59,
+   "rs": -5521.2,
+   "pf": 0.91
+  }
+ ],
+ "rank_2025_26": [
+  {
+   "pair": "BANKNIFTY Camarilla",
+   "n": 143,
+   "rs": -11302.5,
+   "pf": 0.93
+  },
+  {
+   "pair": "BANKNIFTY Noise band",
+   "n": 63,
+   "rs": 17080.5,
+   "pf": 1.32
+  },
+  {
+   "pair": "NIFTY Camarilla",
+   "n": 164,
+   "rs": 86420.75,
+   "pf": 1.66
+  },
+  {
+   "pair": "NIFTY Fibonacci 0.618",
+   "n": 156,
+   "rs": 122560.1,
+   "pf": 2.09
+  },
+  {
+   "pair": "NIFTY Noise band",
+   "n": 59,
+   "rs": 28221.7,
+   "pf": 1.69
+  },
+  {
+   "pair": "NIFTY Trend-day",
+   "n": 75,
+   "rs": 15017.6,
+   "pf": 1.19
+  },
+  {
+   "pair": "SENSEX Fibonacci 0.618",
+   "n": 161,
+   "rs": 54631.8,
+   "pf": 1.42
+  },
+  {
+   "pair": "SENSEX Noise band",
+   "n": 101,
+   "rs": 22716.8,
+   "pf": 1.32
+  },
+  {
+   "pair": "SENSEX Trend-day",
+   "n": 78,
+   "rs": 28608.6,
+   "pf": 1.38
+  }
+ ],
+ "sets": {
+  "all 9 (today)": [
+   "BANKNIFTY Camarilla",
+   "BANKNIFTY Noise band",
+   "NIFTY Camarilla",
+   "NIFTY Fibonacci 0.618",
+   "NIFTY Noise band",
+   "NIFTY Trend-day",
+   "SENSEX Fibonacci 0.618",
+   "SENSEX Noise band",
+   "SENSEX Trend-day"
+  ],
+  "top 3 by Rs, picked on 2023-24": [
+   "BANKNIFTY Camarilla",
+   "NIFTY Trend-day",
+   "SENSEX Trend-day"
+  ],
+  "top 4 by Rs, picked on 2023-24": [
+   "BANKNIFTY Camarilla",
+   "NIFTY Trend-day",
+   "SENSEX Fibonacci 0.618",
+   "SENSEX Trend-day"
+  ],
+  "top 5 by Rs, picked on 2023-24": [
+   "BANKNIFTY Camarilla",
+   "NIFTY Noise band",
+   "NIFTY Trend-day",
+   "SENSEX Fibonacci 0.618",
+   "SENSEX Trend-day"
+  ],
+  "top 6 by Rs, picked on 2023-24": [
+   "BANKNIFTY Camarilla",
+   "NIFTY Fibonacci 0.618",
+   "NIFTY Noise band",
+   "NIFTY Trend-day",
+   "SENSEX Fibonacci 0.618",
+   "SENSEX Trend-day"
+  ],
+  "top 5 by profit factor, picked on 2023-24": [
+   "BANKNIFTY Camarilla",
+   "NIFTY Noise band",
+   "NIFTY Trend-day",
+   "SENSEX Fibonacci 0.618",
+   "SENSEX Trend-day"
+  ],
+  "top 5 in hindsight (full period, not fair)": [
+   "BANKNIFTY Camarilla",
+   "NIFTY Camarilla",
+   "NIFTY Fibonacci 0.618",
+   "NIFTY Trend-day",
+   "SENSEX Fibonacci 0.618"
+  ],
+  "rolling: top 5 of the last 12 months, re-picked quarterly": {
+   "2023-01-01": [
+    "BANKNIFTY Camarilla",
+    "BANKNIFTY Noise band",
+    "NIFTY Camarilla",
+    "NIFTY Fibonacci 0.618",
+    "NIFTY Noise band",
+    "NIFTY Trend-day",
+    "SENSEX Fibonacci 0.618",
+    "SENSEX Noise band",
+    "SENSEX Trend-day"
+   ],
+   "2023-04-01": [
+    "BANKNIFTY Camarilla",
+    "NIFTY Camarilla",
+    "NIFTY Fibonacci 0.618",
+    "NIFTY Trend-day",
+    "SENSEX Fibonacci 0.618"
+   ],
+   "2023-07-01": [
+    "BANKNIFTY Camarilla",
+    "NIFTY Camarilla",
+    "NIFTY Trend-day",
+    "SENSEX Fibonacci 0.618",
+    "SENSEX Trend-day"
+   ],
+   "2023-10-01": [
+    "BANKNIFTY Camarilla",
+    "NIFTY Camarilla",
+    "NIFTY Trend-day",
+    "SENSEX Noise band",
+    "SENSEX Trend-day"
+   ],
+   "2024-01-01": [
+    "BANKNIFTY Camarilla",
+    "NIFTY Camarilla",
+    "NIFTY Noise band",
+    "NIFTY Trend-day",
+    "SENSEX Trend-day"
+   ],
+   "2024-04-01": [
+    "NIFTY Camarilla",
+    "NIFTY Fibonacci 0.618",
+    "NIFTY Trend-day",
+    "SENSEX Fibonacci 0.618",
+    "SENSEX Trend-day"
+   ],
+   "2024-07-01": [
+    "NIFTY Fibonacci 0.618",
+    "NIFTY Noise band",
+    "NIFTY Trend-day",
+    "SENSEX Fibonacci 0.618",
+    "SENSEX Trend-day"
+   ],
+   "2024-10-01": [
+    "NIFTY Fibonacci 0.618",
+    "NIFTY Noise band",
+    "NIFTY Trend-day",
+    "SENSEX Fibonacci 0.618",
+    "SENSEX Trend-day"
+   ],
+   "2025-01-01": [
+    "BANKNIFTY Camarilla",
+    "NIFTY Noise band",
+    "NIFTY Trend-day",
+    "SENSEX Fibonacci 0.618",
+    "SENSEX Trend-day"
+   ],
+   "2025-04-01": [
+    "BANKNIFTY Camarilla",
+    "NIFTY Camarilla",
+    "NIFTY Fibonacci 0.618",
+    "SENSEX Fibonacci 0.618",
+    "SENSEX Trend-day"
+   ],
+   "2025-07-01": [
+    "BANKNIFTY Camarilla",
+    "NIFTY Camarilla",
+    "NIFTY Fibonacci 0.618",
+    "NIFTY Noise band",
+    "SENSEX Fibonacci 0.618"
+   ],
+   "2025-10-01": [
+    "NIFTY Camarilla",
+    "NIFTY Fibonacci 0.618",
+    "NIFTY Noise band",
+    "SENSEX Fibonacci 0.618",
+    "SENSEX Noise band"
+   ],
+   "2026-01-01": [
+    "NIFTY Camarilla",
+    "NIFTY Fibonacci 0.618",
+    "NIFTY Noise band",
+    "SENSEX Fibonacci 0.618",
+    "SENSEX Noise band"
+   ],
+   "2026-04-01": [
+    "NIFTY Fibonacci 0.618",
+    "NIFTY Noise band",
+    "SENSEX Fibonacci 0.618",
+    "SENSEX Noise band",
+    "SENSEX Trend-day"
+   ],
+   "2026-07-01": [
+    "BANKNIFTY Noise band",
+    "NIFTY Camarilla",
+    "NIFTY Fibonacci 0.618",
+    "NIFTY Trend-day",
+    "SENSEX Trend-day"
+   ],
+   "2026-10-01": [
+    "BANKNIFTY Noise band",
+    "NIFTY Camarilla",
+    "NIFTY Fibonacci 0.618",
+    "NIFTY Noise band",
+    "NIFTY Trend-day"
+   ]
+  }
+ },
+ "replays": {
+  "all 9 (today)_200000": {
+   "2023": {
+    "final": 288049,
+    "dd": -31.2,
+    "trades": 450
+   },
+   "2024": {
+    "final": 614941,
+    "dd": -19.8,
+    "trades": 512
+   },
+   "2025": {
+    "final": 384769,
+    "dd": -24.6,
+    "trades": 497
+   },
+   "2026": {
+    "final": 497181,
+    "dd": -21.1,
+    "trades": 372
+   },
+   "2023-24": {
+    "final": 888408,
+    "dd": -31.3,
+    "trades": 973
+   },
+   "2025-26": {
+    "final": 1028409,
+    "dd": -24.6,
+    "trades": 887
+   },
+   "full": {
+    "final": 4092530,
+    "dd": -31.3,
+    "trades": 1872
+   }
+  },
+  "top 3 by Rs, picked on 2023-24_200000": {
+   "2023": {
+    "final": 239539,
+    "dd": -15.6,
+    "trades": 146
+   },
+   "2024": {
+    "final": 360657,
+    "dd": -15.8,
+    "trades": 185
+   },
+   "2025": {
+    "final": 189920,
+    "dd": -24.2,
+    "trades": 149
+   },
+   "2026": {
+    "final": 215997,
+    "dd": -22.2,
+    "trades": 132
+   },
+   "2023-24": {
+    "final": 398595,
+    "dd": -18.0,
+    "trades": 331
+   },
+   "2025-26": {
+    "final": 202925,
+    "dd": -24.2,
+    "trades": 281
+   },
+   "full": {
+    "final": 378727,
+    "dd": -25.4,
+    "trades": 619
+   }
+  },
+  "top 4 by Rs, picked on 2023-24_200000": {
+   "2023": {
+    "final": 278787,
+    "dd": -21.2,
+    "trades": 230
+   },
+   "2024": {
+    "final": 389926,
+    "dd": -13.8,
+    "trades": 278
+   },
+   "2025": {
+    "final": 183632,
+    "dd": -30.4,
+    "trades": 178
+   },
+   "2026": {
+    "final": 243745,
+    "dd": -26.1,
+    "trades": 193
+   },
+   "2023-24": {
+    "final": 543154,
+    "dd": -22.5,
+    "trades": 516
+   },
+   "2025-26": {
+    "final": 205415,
+    "dd": -30.4,
+    "trades": 341
+   },
+   "full": {
+    "final": 708902,
+    "dd": -22.5,
+    "trades": 954
+   }
+  },
+  "top 5 by Rs, picked on 2023-24_200000": {
+   "2023": {
+    "final": 269417,
+    "dd": -20.8,
+    "trades": 259
+   },
+   "2024": {
+    "final": 434501,
+    "dd": -15.3,
+    "trades": 304
+   },
+   "2025": {
+    "final": 227575,
+    "dd": -22.2,
+    "trades": 251
+   },
+   "2026": {
+    "final": 248439,
+    "dd": -26.9,
+    "trades": 214
+   },
+   "2023-24": {
+    "final": 623274,
+    "dd": -21.2,
+    "trades": 568
+   },
+   "2025-26": {
+    "final": 260808,
+    "dd": -26.3,
+    "trades": 470
+   },
+   "full": {
+    "final": 792792,
+    "dd": -23.4,
+    "trades": 1058
+   }
+  },
+  "top 6 by Rs, picked on 2023-24_200000": {
+   "2023": {
+    "final": 288313,
+    "dd": -22.9,
+    "trades": 338
+   },
+   "2024": {
+    "final": 600272,
+    "dd": -17.3,
+    "trades": 379
+   },
+   "2025": {
+    "final": 297272,
+    "dd": -23.1,
+    "trades": 341
+   },
+   "2026": {
+    "final": 313628,
+    "dd": -20.4,
+    "trades": 264
+   },
+   "2023-24": {
+    "final": 825677,
+    "dd": -22.9,
+    "trades": 728
+   },
+   "2025-26": {
+    "final": 456961,
+    "dd": -23.1,
+    "trades": 620
+   },
+   "full": {
+    "final": 2287469,
+    "dd": -22.9,
+    "trades": 1352
+   }
+  },
+  "top 5 by profit factor, picked on 2023-24_200000": {
+   "2023": {
+    "final": 269417,
+    "dd": -20.8,
+    "trades": 259
+   },
+   "2024": {
+    "final": 434501,
+    "dd": -15.3,
+    "trades": 304
+   },
+   "2025": {
+    "final": 227575,
+    "dd": -22.2,
+    "trades": 251
+   },
+   "2026": {
+    "final": 248439,
+    "dd": -26.9,
+    "trades": 214
+   },
+   "2023-24": {
+    "final": 623274,
+    "dd": -21.2,
+    "trades": 568
+   },
+   "2025-26": {
+    "final": 260808,
+    "dd": -26.3,
+    "trades": 470
+   },
+   "full": {
+    "final": 792792,
+    "dd": -23.4,
+    "trades": 1058
+   }
+  },
+  "top 5 in hindsight (full period, not fair)_200000": {
+   "2023": {
+    "final": 307146,
+    "dd": -22.1,
+    "trades": 338
+   },
+   "2024": {
+    "final": 447502,
+    "dd": -20.2,
+    "trades": 417
+   },
+   "2025": {
+    "final": 306950,
+    "dd": -23.5,
+    "trades": 368
+   },
+   "2026": {
+    "final": 421002,
+    "dd": -18.5,
+    "trades": 270
+   },
+   "2023-24": {
+    "final": 613986,
+    "dd": -24.8,
+    "trades": 764
+   },
+   "2025-26": {
+    "final": 736042,
+    "dd": -27.6,
+    "trades": 656
+   },
+   "full": {
+    "final": 1713124,
+    "dd": -27.4,
+    "trades": 1413
+   }
+  },
+  "rolling: top 5 of the last 12 months, re-picked quarterly_200000": {
+   "2023": {
+    "final": 307967,
+    "dd": -21.3,
+    "trades": 341
+   },
+   "2024": {
+    "final": 429906,
+    "dd": -16.4,
+    "trades": 320
+   },
+   "2025": {
+    "final": 159170,
+    "dd": -37.8,
+    "trades": 211
+   },
+   "2026": {
+    "final": 340791,
+    "dd": -16.2,
+    "trades": 204
+   },
+   "2023-24": {
+    "final": 667320,
+    "dd": -24.1,
+    "trades": 666
+   },
+   "2025-26": {
+    "final": 195089,
+    "dd": -40.5,
+    "trades": 335
+   },
+   "full": {
+    "final": 1400124,
+    "dd": -24.1,
+    "trades": 1208
+   }
+  },
+  "all 9 (today)_20000": {
+   "2023": {
+    "final": 31805,
+    "dd": -58.9,
+    "trades": 308
+   },
+   "2024": {
+    "final": 160910,
+    "dd": -32.6,
+    "trades": 314
+   },
+   "2025": {
+    "final": 68436,
+    "dd": -62.6,
+    "trades": 331
+   },
+   "2026": {
+    "final": 87996,
+    "dd": -45.9,
+    "trades": 254
+   },
+   "2023-24": {
+    "final": 195915,
+    "dd": -66.2,
+    "trades": 669
+   },
+   "2025-26": {
+    "final": 175142,
+    "dd": -62.6,
+    "trades": 581
+   },
+   "full": {
+    "final": 625220,
+    "dd": -66.2,
+    "trades": 1458
+   }
+  },
+  "top 3 by Rs, picked on 2023-24_20000": {
+   "2023": {
+    "final": 63112,
+    "dd": -21.8,
+    "trades": 134
+   },
+   "2024": {
+    "final": 12457,
+    "dd": -37.7,
+    "trades": 9
+   },
+   "2025": {
+    "final": 22358,
+    "dd": -34.1,
+    "trades": 28
+   },
+   "2026": {
+    "final": 16889,
+    "dd": -50.0,
+    "trades": 35
+   },
+   "2023-24": {
+    "final": 177522,
+    "dd": -28.3,
+    "trades": 311
+   },
+   "2025-26": {
+    "final": 16055,
+    "dd": -51.2,
+    "trades": 65
+   },
+   "full": {
+    "final": 172177,
+    "dd": -32.9,
+    "trades": 589
+   }
+  },
+  "top 4 by Rs, picked on 2023-24_20000": {
+   "2023": {
+    "final": 63112,
+    "dd": -21.8,
+    "trades": 134
+   },
+   "2024": {
+    "final": 12457,
+    "dd": -37.7,
+    "trades": 9
+   },
+   "2025": {
+    "final": 22358,
+    "dd": -34.1,
+    "trades": 28
+   },
+   "2026": {
+    "final": 16889,
+    "dd": -50.0,
+    "trades": 35
+   },
+   "2023-24": {
+    "final": 178503,
+    "dd": -28.3,
+    "trades": 324
+   },
+   "2025-26": {
+    "final": 16055,
+    "dd": -51.2,
+    "trades": 65
+   },
+   "full": {
+    "final": 188024,
+    "dd": -28.5,
+    "trades": 634
+   }
+  },
+  "top 5 by Rs, picked on 2023-24_20000": {
+   "2023": {
+    "final": 66098,
+    "dd": -23.6,
+    "trades": 178
+   },
+   "2024": {
+    "final": 31515,
+    "dd": -57.4,
+    "trades": 111
+   },
+   "2025": {
+    "final": 29010,
+    "dd": -57.9,
+    "trades": 71
+   },
+   "2026": {
+    "final": 17993,
+    "dd": -65.9,
+    "trades": 76
+   },
+   "2023-24": {
+    "final": 221656,
+    "dd": -24.5,
+    "trades": 412
+   },
+   "2025-26": {
+    "final": 18043,
+    "dd": -67.0,
+    "trades": 151
+   },
+   "full": {
+    "final": 291148,
+    "dd": -25.1,
+    "trades": 898
+   }
+  },
+  "top 6 by Rs, picked on 2023-24_20000": {
+   "2023": {
+    "final": 66098,
+    "dd": -23.6,
+    "trades": 178
+   },
+   "2024": {
+    "final": 31515,
+    "dd": -57.4,
+    "trades": 111
+   },
+   "2025": {
+    "final": 29010,
+    "dd": -57.9,
+    "trades": 71
+   },
+   "2026": {
+    "final": 17993,
+    "dd": -65.9,
+    "trades": 76
+   },
+   "2023-24": {
+    "final": 227393,
+    "dd": -24.5,
+    "trades": 438
+   },
+   "2025-26": {
+    "final": 18043,
+    "dd": -67.0,
+    "trades": 151
+   },
+   "full": {
+    "final": 537635,
+    "dd": -24.5,
+    "trades": 1057
+   }
+  },
+  "top 5 by profit factor, picked on 2023-24_20000": {
+   "2023": {
+    "final": 66098,
+    "dd": -23.6,
+    "trades": 178
+   },
+   "2024": {
+    "final": 31515,
+    "dd": -57.4,
+    "trades": 111
+   },
+   "2025": {
+    "final": 29010,
+    "dd": -57.9,
+    "trades": 71
+   },
+   "2026": {
+    "final": 17993,
+    "dd": -65.9,
+    "trades": 76
+   },
+   "2023-24": {
+    "final": 221656,
+    "dd": -24.5,
+    "trades": 412
+   },
+   "2025-26": {
+    "final": 18043,
+    "dd": -67.0,
+    "trades": 151
+   },
+   "full": {
+    "final": 291148,
+    "dd": -25.1,
+    "trades": 898
+   }
+  },
+  "top 5 in hindsight (full period, not fair)_20000": {
+   "2023": {
+    "final": 45987,
+    "dd": -36.7,
+    "trades": 190
+   },
+   "2024": {
+    "final": 51186,
+    "dd": -51.9,
+    "trades": 213
+   },
+   "2025": {
+    "final": 10481,
+    "dd": -80.8,
+    "trades": 156
+   },
+   "2026": {
+    "final": 70227,
+    "dd": -33.2,
+    "trades": 151
+   },
+   "2023-24": {
+    "final": 130032,
+    "dd": -43.1,
+    "trades": 422
+   },
+   "2025-26": {
+    "final": 26479,
+    "dd": -84.2,
+    "trades": 213
+   },
+   "full": {
+    "final": 177639,
+    "dd": -43.3,
+    "trades": 769
+   }
+  },
+  "rolling: top 5 of the last 12 months, re-picked quarterly_20000": {
+   "2023": {
+    "final": 43807,
+    "dd": -38.9,
+    "trades": 259
+   },
+   "2024": {
+    "final": 146230,
+    "dd": -20.9,
+    "trades": 167
+   },
+   "2025": {
+    "final": 7784,
+    "dd": -70.8,
+    "trades": 45
+   },
+   "2026": {
+    "final": 49273,
+    "dd": -34.8,
+    "trades": 96
+   },
+   "2023-24": {
+    "final": 212577,
+    "dd": -51.5,
+    "trades": 467
+   },
+   "2025-26": {
+    "final": 6299,
+    "dd": -71.8,
+    "trades": 58
+   },
+   "full": {
+    "final": 398694,
+    "dd": -51.5,
+    "trades": 1010
+   }
+  }
+ }
+}

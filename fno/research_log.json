@@ -1530,6 +1530,17 @@
    "decision": "Not adopted as a whole: it is mostly 2-3x more risk per trade, picked as the best of 32,256 paths, and at the live account size it loses 60% in 2023 with an -80% fall. The 2 OTM strike passes the Rs 2L bar on its own but fails at Rs 20k and is priced by the model (2-OTM spreads are the widest in % terms) - candidate for an equity-gated rule (like the trend slot) after a real-price check of 2-OTM fills on recorded sessions.",
    "period": "Jan 2023 - Oct 2026",
    "summary": "Grid row Rs 2.18 Cr: mostly bigger bets; fails at Rs 20k (-60% in 2023, -80% fall). 2 OTM alone passes at Rs 2L - candidate for an equity-gated rule after a real-price check."
+  },
+  {
+   "id": "r84",
+   "date": "2026-11-03",
+   "area": "Index options",
+   "title": "Autopilot v2.0 idea: trade only the best 5 rule x index pairs",
+   "asked": "User (3 Nov): make an Autopilot v2.0 where only the best 5 combinations trade (chosen: rule x index pairs). Universe = the 9 live pairs (others were dropped in rounds 27/29). Picked on 2023-24 only (by per-lot P&L or profit factor; top 3/4/5/6), judged on unseen 2025-26; a 'live' rolling version (top 5 of the last 12 months, re-picked every quarter); and the hindsight top 5 for reference. Outcomes replay (today's BASELINE incl. CPR sizing), Rs 2L and Rs 20k.",
+   "result": "The ranking does not carry forward: Bank Nifty Camarilla was best in 2023-24 (+1.09L per lot) and worst in 2025-26 (-11k); Nifty Fibonacci and Nifty Camarilla were 6th and 8th in 2023-24 and the two best in 2025-26 (+1.23L, +86k). Rs 2L: top 5 picked on 2023-24 - 2025-26 2.61L vs 10.28L, full 7.9L vs 40.9L; top 6 22.9L; top 3 3.8L; rolling quarterly top 5 14.0L (2025-26 1.95L); even the hindsight top 5 is lower (17.1L) because fewer trades compound less. Only the worst fall is shallower (-23% vs -31%). Rs 20k: top 5 2025-26 0.18L vs 1.75L.",
+   "decision": "Not adopted; no v2.0 built. Trading all 9 pairs beats any 'best 5' selection, fixed or rolling, because which pair is best changes from year to year and the pairs' losing stretches do not overlap. Same finding as round 27 (top 3 blocks +155k vs +240k).",
+   "period": "Jan 2023 - Oct 2026",
+   "summary": "Best-5 rule x index pairs: much worse than all 9 in every version (2025-26 2.61L vs 10.28L at Rs 2L); not adopted."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2883,6 +2894,15 @@
     "r83"
    ],
    "takeaway": "It is mostly 2-3x more risk on the same signals; at Rs 20k it loses 60% in 2023 (fall -80%). 2 OTM alone passes the Rs 2L bar - possible equity-gated rule after a real-price check."
+  },
+  {
+   "n": 84,
+   "date": "2026-11-03",
+   "topic": "Autopilot v2.0: only the best 5 rule x index pairs",
+   "ids": [
+    "r84"
+   ],
+   "takeaway": "Last period's best pairs are not next period's (Bank Nifty Camarilla best -> worst). Top 5 fixed, rolling or even hindsight all lose to trading all 9. Not built."
   }
  ],
  "india_status": {
