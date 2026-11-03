@@ -11,6 +11,7 @@ Redis layout:
   fno:rec:<YYYY-MM-DD>  list of JSON snapshots {t, sym, src, spot, exp, rows:[[strike, ce..., pe...]]}
   fno:rec:days          set of dates that have snapshots
   fno:rec:status        JSON {last, src, err, ...}
+  fno:rec:depth:<date>  list of JSON order-book snapshots {t, sym, exp, spot, rows:[DEPTH_FIELDS]} (Upstox only)
 """
 from __future__ import annotations
 
@@ -24,7 +25,10 @@ from . import config as C
 from . import store
 
 FIELDS = ["strike", "ce_ltp", "ce_bid", "ce_ask", "ce_oi", "ce_vol", "ce_iv",
-          "pe_ltp", "pe_bid", "pe_ask", "pe_oi", "pe_vol", "pe_iv"]
+          "pe_ltp", "pe_bid", "pe_ask", "pe_oi", "pe_vol", "pe_iv",
+          "ce_bq", "ce_aq", "pe_bq", "pe_aq"]   # best bid / ask QUANTITY (added 3 Nov 2026; older days have 13 fields)
+DEPTH_STRIKES = 2          # order book of ATM +- 2 strikes, nearest expiry, both symbols: ONE extra broker call per snapshot
+DEPTH_FIELDS = ["strike", "opt", "ltp", "total_buy_qty", "total_sell_qty", "volume", "oi", "bids[price,qty,orders]x5", "asks[price,qty,orders]x5"]
 SYMS = ["NIFTY", "BANKNIFTY"]
 NSE_NAME = {"NIFTY": "NIFTY", "BANKNIFTY": "BANKNIFTY", "FINNIFTY": "FINNIFTY"}
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -77,6 +81,7 @@ def _nse_rows(data):
         for o in (ce, pe):
             row += [_f(o, "lastPrice"), _f(o, "bidprice", "buyPrice1", "bidPrice"), _f(o, "askPrice", "sellPrice1", "askprice"),
                     _f(o, "openInterest"), _f(o, "totalTradedVolume"), _f(o, "impliedVolatility")]
+        row += [_f(ce, "bidQty", "buyQuantity1"), _f(ce, "askQty", "sellQuantity1"), _f(pe, "bidQty", "buyQuantity1"), _f(pe, "askQty", "sellQuantity1")]
         rows.append(row)
     return rows
 
@@ -125,7 +130,41 @@ def broker_chain(m, sym, n_exp=2):
             continue
         rows = [[r.get(k) for k in FIELDS] for r in ch.to_dict("records")]
         out.append((e.isoformat(), float(ch["spot"].dropna().iloc[0]) if ch["spot"].notna().any() else None, rows))
+        if not hasattr(m, "_depth_keys"):
+            m._depth_keys = {}
+        if sym not in m._depth_keys and "ce_key" in ch and ch["spot"].notna().any():     # nearest expiry only
+            sp = float(ch["spot"].dropna().iloc[0])
+            near = ch.iloc[(ch["strike"] - sp).abs().argsort()[:2 * DEPTH_STRIKES + 1]]
+            m._depth_keys[sym] = (e.isoformat(), sp, [(float(r["strike"]), o, r[f"{o.lower()}_key"]) for _, r in near.iterrows()
+                                                      for o in ("CE", "PE") if r.get(f"{o.lower()}_key")])
     return out or None
+
+
+def depth_snapshot(m, now) -> int:
+    """One full-market-quote call for the ATM +- 2 strikes of every recorded symbol (Upstox only). Never retried; skipped while
+    Upstox has us in a cool-down. Returns the number of order-book rows saved."""
+    want = getattr(m, "_depth_keys", None) or {}
+    if not want or getattr(getattr(m, "br", None), "name", "") != "upstox" or not hasattr(m.br, "depth"):
+        return 0
+    from . import brokers as BR
+    if BR.upstox_cooldown_left() > 0:
+        return 0
+    keys = [k for _, _, ks in want.values() for _, _, k in ks]
+    q = m.br.depth(keys)
+    batch = []
+    for sym, (exp, sp, ks) in want.items():
+        rows = []
+        for k_, o, key in ks:
+            d = q.get(key)
+            if d:
+                rows.append([k_, o, d["ltp"], d["tbq"], d["tsq"], d["vol"], d["oi"], d["bids"], d["asks"]])
+        if rows:
+            batch.append(json.dumps({"t": now.strftime("%H:%M"), "sym": sym, "exp": exp, "spot": sp, "rows": rows}, separators=(",", ":")))
+    if batch:
+        key = f"fno:rec:depth:{now.date().isoformat()}"
+        store._cmd("RPUSH", key, *batch)
+        store._cmd("EXPIRE", key, C.RECORD_KEEP_DAYS * 86400)
+    return sum(len(json.loads(b)["rows"]) for b in batch)
 
 
 def _trim(rows, spot, width):
@@ -182,11 +221,17 @@ def snapshot(now=None, market=None, force=False):
             src_used.add(src)
     if _batch:
         store._cmd("RPUSH", key, *_batch)          # one command for all of this snapshot's chains (was one per chain)
+    depth_n = 0
+    if market is not None and market.live:
+        try:
+            depth_n = depth_snapshot(market, now)
+        except Exception as e:                     # a rate limit or a bad reply here must never stop the chain snapshot
+            errs.append(f"depth: {str(e)[:80]}")
     if saved and day not in _REC_READY:
         store._cmd("EXPIRE", key, C.RECORD_KEEP_DAYS * 86400)
         store._cmd("SADD", "fno:rec:days", day)
         _REC_READY.add(day)
-    st = {"last_try": now.isoformat(timespec="seconds"), "saved": saved, "src": sorted(src_used), "errors": errs[:4]}
+    st = {"last_try": now.isoformat(timespec="seconds"), "saved": saved, "depth_rows": depth_n, "src": sorted(src_used), "errors": errs[:4]}
     if saved:
         st["last_ok"] = st["last_try"]
     if not saved:
@@ -222,4 +267,6 @@ def status() -> dict:
 def day(d: str) -> dict:
     date.fromisoformat(d)                                      # validates (ValueError -> 400)
     raw = store._cmd("LRANGE", f"fno:rec:{d}", 0, -1) or []
-    return {"date": d, "fields": FIELDS, "snapshots": [json.loads(x) for x in raw]}
+    dep = store._cmd("LRANGE", f"fno:rec:depth:{d}", 0, -1) or []
+    return {"date": d, "fields": FIELDS, "snapshots": [json.loads(x) for x in raw],
+            "depth_fields": DEPTH_FIELDS, "depth": [json.loads(x) for x in dep]}

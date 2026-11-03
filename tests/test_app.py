@@ -51,7 +51,7 @@ def _fake_nse(sym, n_exp=2):
     REC_CALLS.append(sym)
     spot = 24800 if sym == "NIFTY" else 52000
     step = 50 if sym == "NIFTY" else 100
-    rows = [[spot + k * step, 120.5 - k, 120, 121, 1000 + k, 50, 13.1, 110.25 + k, 110, 111, 900, 40, 13.4] for k in range(-30, 31)]
+    rows = [[spot + k * step, 120.5 - k, 120, 121, 1000 + k, 50, 13.1, 110.25 + k, 110, 111, 900, 40, 13.4, 650, 975, 1300, 325] for k in range(-30, 31)]
     return [("2026-10-06", spot, rows), ("2026-10-13", spot, rows)]
 R.nse_chain = _fake_nse
 

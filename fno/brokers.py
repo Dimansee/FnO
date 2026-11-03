@@ -168,6 +168,21 @@ class Upstox:
                 out[k] = {"ltp": last, "prev_close": (last - chg) if last is not None else None, "bid": bid, "ask": ask}
         return out
 
+    def depth(self, keys):
+        """Order book of a few instruments in ONE call (full market quote): total buy / sell quantity and the 5 best
+        bids / asks. Used by the recorder every 5 minutes for the at-the-money options (buying / selling imbalance research)."""
+        out = {}
+        if not keys:
+            return out
+        data = self._get("/v2/market-quote/quotes", {"instrument_key": ",".join(keys[:450])}) or {}
+        for v in data.values():
+            dep = v.get("depth") or {}
+            lv = lambda side: [[_num(x.get("price")), _num(x.get("quantity")), _num(x.get("orders"))] for x in (dep.get(side) or [])[:5]]
+            out[v.get("instrument_token") or ""] = {"ltp": _num(v.get("last_price")), "tbq": _num(v.get("total_buy_quantity")),
+                                                     "tsq": _num(v.get("total_sell_quantity")), "vol": _num(v.get("volume")),
+                                                     "oi": _num(v.get("oi")), "bids": lv("buy"), "asks": lv("sell")}
+        return out
+
     def expiries(self, key):
         data = self._get("/v2/option/contract", {"instrument_key": key}) or []
         exps = sorted({date.fromisoformat(d["expiry"]) for d in data if d.get("expiry")})
@@ -188,6 +203,7 @@ class Upstox:
                     f"{tag}_bid": _num(md.get("bid_price")), f"{tag}_ask": _num(md.get("ask_price")),
                     f"{tag}_oi": oi, f"{tag}_chg_oi": oi - poi, f"{tag}_vol": _num(md.get("volume")),
                     f"{tag}_iv": _num(g.get("iv")), f"{tag}_delta": _num(g.get("delta")),
+                    f"{tag}_bq": _num(md.get("bid_qty")), f"{tag}_aq": _num(md.get("ask_qty")),   # best bid / ask quantity (round 80 recorder)
                 })
             rows.append(row)
         return pd.DataFrame(rows).sort_values("strike").reset_index(drop=True) if rows else pd.DataFrame()
