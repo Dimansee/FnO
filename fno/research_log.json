@@ -1563,6 +1563,17 @@
    "decision": "Not added to Autopilot. Inside Autopilot's budget it already failed (r75c: 35.9L vs 40.9L at Rs 2L). As its own slot it passes the bar (r77) and exists as the opt-in Carry card (Scalp book tab), which is the right home: the profit is a few big gap nights a year, and most nights lose Rs 1-4k. Keep it OFF, or ON with its own paper capital, never sized up. Same day: journal context guard shipped (context was written from yesterday's candles at 09:16 on 4-5 Nov; no rule change).",
    "period": "Oct 2023 - Oct 2026 + live 28 Sep - 5 Nov 2026",
    "summary": "BTST in Autopilot: no. Forward 24 signals +Rs 4.8k (Nifty+BN) all from the 4->5 Nov gap; no filter survives without the big nights. Stays an opt-in Carry slot."
+  },
+  {
+   "id": "r87",
+   "date": "2026-11-05",
+   "area": "Index options",
+   "title": "Round 87: TradingView's built-in strategies - Bar up/down, Bollinger Bands, Channel breakout, Consecutive up/down, Greedy, Inside bar, Momentum, 2-MA cross, Volatility expansion close",
+   "asked": "User (5 Nov): try these TradingView strategies (and 'liquidity levels / order block'). Each coded as TradingView ships it with default inputs, stop-and-reverse turned into bought ATM calls/puts (no selling), one position per index, entries 09:20-14:45, out at 15:15; 5-min and 15-min Nifty / Bank Nifty / Sensex candles Jan 2023 - Oct 2026; app option pricing, real charges, 0.5% slippage, 1 lot; random-direction twin. Index/version pairs positive in both halves then added to today's Autopilot (round-72b replay, Rs 2L and Rs 20k).",
+   "result": "5-min: all 9 lose in both halves (-Rs 79 to -217 per trade per lot; Bar up/down and Volatility expansion trade 43-45 times a day). 15-min: Channel (+9.4 pts/trade), Consecutive (+12.3), Momentum (+10.7) and 2-MA cross (+8.8) pick direction better than the twin (-Rs 181 to -219), but after costs only Consecutive is about break-even (+Rs 5/trade: 2023-24 +1.84L, 2025-26 -1.59L); Bank Nifty loses with every strategy; Bollinger (mean reversion) is the worst. Positive in both halves only on single indices: Momentum Nifty / Sensex, Channel Nifty, Consecutive Nifty, 2-MA Nifty. Added to Autopilot at Rs 2L (today 8.88L / 10.84L / 44.2L full, fall -31.3%): Momentum Nifty 14.4L / 9.9L / 65.7L, fall -38.0%; Channel Nifty 12.7L / 8.4L / 64.9L, -38.3%; Consecutive Nifty 9.3L / 15.5L / 43.9L, -49.0%; Momentum Nifty+Sensex 4.6L / 26.0L / 20.0L, -48.8%; 2-MA Nifty 8.5L / 4.7L / 30.8L, -31.0%. Rs 20k full period: every version ends at Rs 2.4k-3.3k vs 6.54L (account wiped, falls -85% to -90%).",
+   "decision": "Not adopted. None is better in both halves without a deeper fall at Rs 2L, and at Rs 20k every one blows up the account. 5-min versions trade too often for option costs. The trend-following ones (momentum, channel, 2-MA) confirm what the Noise band already does, but trading them all day adds costs and losing streaks. Liquidity levels / order blocks not re-run: rounds 49, 52, 61 and the rliq note (no edge, PF 0.80-1.08).",
+   "period": "Jan 2023 - Oct 2026",
+   "summary": "9 TradingView built-in strategies: all lose on 5-min; 15-min trend ones pick direction but lose to costs; none passes when added to Autopilot (Rs 20k: account wiped). Not adopted."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2943,6 +2954,15 @@
     "r86"
    ],
    "takeaway": "One gap night (4->5 Nov, +Rs 13.5k) carried the whole forward record; without the big nights every filter loses. Not in Autopilot; opt-in Carry slot stays."
+  },
+  {
+   "n": 87,
+   "date": "2026-11-05",
+   "topic": "TradingView built-in strategies (9) + liquidity/order blocks",
+   "ids": [
+    "r87"
+   ],
+   "takeaway": "5-min all lose; 15-min momentum/channel/2-MA find direction but option costs eat it; none passes added to Autopilot, all wipe a Rs 20k account."
   }
  ],
  "india_status": {

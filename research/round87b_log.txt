@@ -1,0 +1,75 @@
+  trades NIFTY ('current', -1, True, 0): 989 in 18s
+  trades BANKNIFTY ('current', -1, True, 0): 438 in 14s
+  trades SENSEX ('current', -1, True, 0): 738 in 17s
+  trades NIFTY ('current', 1, True, 0): 989 in 17s
+  trades BANKNIFTY ('current', 1, True, 0): 438 in 14s
+  trades SENSEX ('current', 1, True, 0): 738 in 16s
+15m Momentum, Nifty + Sensex trades 4311
+15m Momentum, Nifty trades 2154
+15m Channel breakout, Nifty trades 2693
+15m Consecutive up/down, Nifty trades 1823
+15m 2-MA cross, Nifty trades 1164
+
+== Rs 200,000 | 2023-24
+  Autopilot today                          final Rs      888,408  fall -31.3%  trades   973  new    0 (+0)
+  + 15m Momentum, Nifty + Sensex           final Rs      459,511  fall -43.9%  trades  1904  new 1324 (-21,783)
+  + 15m Momentum, Nifty                    final Rs    1,443,422  fall -33.7%  trades  1625  new  823 (+339,231)
+  + 15m Channel breakout, Nifty            final Rs    1,269,164  fall -29.3%  trades  1780  new  963 (+147,848)
+  + 15m Consecutive up/down, Nifty         final Rs      932,188  fall -35.9%  trades  1572  new  707 (+254,581)
+  + 15m 2-MA cross, Nifty                  final Rs      849,861  fall -30.9%  trades  1322  new  450 (-92,906)
+
+== Rs 200,000 | 2025-26
+  Autopilot today                          final Rs    1,083,935  fall -24.6%  trades   862  new    0 (+0)
+  + 15m Momentum, Nifty + Sensex           final Rs    2,603,665  fall -42.9%  trades  1954  new 1265 (+1,228,977)
+  + 15m Momentum, Nifty                    final Rs      987,610  fall -30.8%  trades  1549  new  775 (+254,901)
+  + 15m Channel breakout, Nifty            final Rs      842,628  fall -34.9%  trades  1657  new  935 (+77,307)
+  + 15m Consecutive up/down, Nifty         final Rs    1,552,949  fall -45.6%  trades  1464  new  669 (+296,072)
+  + 15m 2-MA cross, Nifty                  final Rs      467,264  fall -31.6%  trades  1146  new  414 (-30,491)
+
+== Rs 200,000 | 2026
+  Autopilot today                          final Rs      521,597  fall -21.1%  trades   347  new    0 (+0)
+  + 15m Momentum, Nifty + Sensex           final Rs    1,085,128  fall -34.9%  trades   813  new  534 (+466,828)
+  + 15m Momentum, Nifty                    final Rs      612,568  fall -29.2%  trades   644  new  327 (+117,984)
+  + 15m Channel breakout, Nifty            final Rs      654,863  fall -26.8%  trades   632  new  357 (+87,725)
+  + 15m Consecutive up/down, Nifty         final Rs      627,208  fall -30.2%  trades   546  new  253 (+124,795)
+  + 15m 2-MA cross, Nifty                  final Rs      367,542  fall -29.9%  trades   477  new  170 (+27,104)
+
+== Rs 200,000 | Jan 2023 - Oct 2026
+  Autopilot today                          final Rs    4,418,037  fall -31.3%  trades  1853  new    0 (+0)
+  + 15m Momentum, Nifty + Sensex           final Rs    2,002,137  fall -48.8%  trades  3816  new 2568 (+733,080)
+  + 15m Momentum, Nifty                    final Rs    6,572,389  fall -38.0%  trades  3199  new 1624 (+2,130,306)
+  + 15m Channel breakout, Nifty            final Rs    6,492,917  fall -38.3%  trades  3492  new 1913 (+1,304,700)
+  + 15m Consecutive up/down, Nifty         final Rs    4,394,798  fall -49.0%  trades  2946  new 1339 (+1,302,513)
+  + 15m 2-MA cross, Nifty                  final Rs    3,082,221  fall -31.0%  trades  2454  new  848 (+226,869)
+
+== Rs 20,000 | 2023-24
+  Autopilot today                          final Rs      195,915  fall -66.2%  trades   669  new    0 (+0)
+  + 15m Momentum, Nifty + Sensex           final Rs        2,653  fall -89.7%  trades   144  new  121 (-28,339)
+  + 15m Momentum, Nifty                    final Rs        2,386  fall -88.2%  trades    42  new   36 (-16,980)
+  + 15m Channel breakout, Nifty            final Rs        3,259  fall -89.2%  trades    97  new   87 (-16,156)
+  + 15m Consecutive up/down, Nifty         final Rs        2,957  fall -85.2%  trades    54  new   43 (-11,405)
+  + 15m 2-MA cross, Nifty                  final Rs        2,472  fall -87.6%  trades    21  new   15 (-15,556)
+
+== Rs 20,000 | 2025-26
+  Autopilot today                          final Rs      188,619  fall -62.6%  trades   575  new    0 (+0)
+  + 15m Momentum, Nifty + Sensex           final Rs       96,432  fall -97.0%  trades  1084  new  780 (+26,695)
+  + 15m Momentum, Nifty                    final Rs      287,633  fall -61.1%  trades  1250  new  707 (+90,423)
+  + 15m Channel breakout, Nifty            final Rs      180,108  fall -58.6%  trades  1209  new  783 (-4,942)
+  + 15m Consecutive up/down, Nifty         final Rs      430,157  fall -72.4%  trades  1142  new  602 (+137,439)
+  + 15m 2-MA cross, Nifty                  final Rs      107,306  fall -91.3%  trades   556  new  275 (+11,006)
+
+== Rs 20,000 | 2026
+  Autopilot today                          final Rs      101,474  fall -45.9%  trades   248  new    0 (+0)
+  + 15m Momentum, Nifty + Sensex           final Rs       96,452  fall -70.8%  trades   356  new  246 (+40,716)
+  + 15m Momentum, Nifty                    final Rs        4,659  fall -76.7%  trades    17  new   14 (-11,113)
+  + 15m Channel breakout, Nifty            final Rs      139,531  fall -50.3%  trades   455  new  305 (+14,186)
+  + 15m Consecutive up/down, Nifty         final Rs        4,589  fall -80.3%  trades    36  new   23 (-11,415)
+  + 15m 2-MA cross, Nifty                  final Rs      135,352  fall -34.3%  trades   339  new  152 (+20,868)
+
+== Rs 20,000 | Jan 2023 - Oct 2026
+  Autopilot today                          final Rs      654,317  fall -66.2%  trades  1433  new    0 (+0)
+  + 15m Momentum, Nifty + Sensex           final Rs        2,653  fall -89.7%  trades   144  new  121 (-28,339)
+  + 15m Momentum, Nifty                    final Rs        2,386  fall -88.2%  trades    42  new   36 (-16,980)
+  + 15m Channel breakout, Nifty            final Rs        3,259  fall -89.2%  trades    97  new   87 (-16,156)
+  + 15m Consecutive up/down, Nifty         final Rs        2,957  fall -85.2%  trades    54  new   43 (-11,405)
+  + 15m 2-MA cross, Nifty                  final Rs        2,472  fall -87.6%  trades    21  new   15 (-15,556)

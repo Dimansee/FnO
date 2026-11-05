@@ -1,0 +1,554 @@
+{
+ "200000|2023-24": {
+  "Autopilot today": {
+   "final": 888408,
+   "net": 688408,
+   "max_dd_pct": -31.3,
+   "trades": 973,
+   "years": {
+    "2023": 44.0,
+    "2024": 208.4
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 187
+  },
+  "+ 15m Momentum, Nifty + Sensex": {
+   "final": 459511,
+   "max_dd_pct": -43.9,
+   "trades": 1904,
+   "years": {
+    "2023": -25.9,
+    "2024": 210.2
+   },
+   "new_trades": 1324,
+   "new_pnl": -21783.0
+  },
+  "+ 15m Momentum, Nifty": {
+   "final": 1443422,
+   "max_dd_pct": -33.7,
+   "trades": 1625,
+   "years": {
+    "2023": 37.4,
+    "2024": 425.1
+   },
+   "new_trades": 823,
+   "new_pnl": 339231.0
+  },
+  "+ 15m Channel breakout, Nifty": {
+   "final": 1269164,
+   "max_dd_pct": -29.3,
+   "trades": 1780,
+   "years": {
+    "2023": 89.2,
+    "2024": 235.4
+   },
+   "new_trades": 963,
+   "new_pnl": 147848.0
+  },
+  "+ 15m Consecutive up/down, Nifty": {
+   "final": 932188,
+   "max_dd_pct": -35.9,
+   "trades": 1572,
+   "years": {
+    "2023": 36.6,
+    "2024": 241.3
+   },
+   "new_trades": 707,
+   "new_pnl": 254581.0
+  },
+  "+ 15m 2-MA cross, Nifty": {
+   "final": 849861,
+   "max_dd_pct": -30.9,
+   "trades": 1322,
+   "years": {
+    "2023": 44.4,
+    "2024": 194.2
+   },
+   "new_trades": 450,
+   "new_pnl": -92906.0
+  }
+ },
+ "200000|2025-26": {
+  "Autopilot today": {
+   "final": 1083935,
+   "net": 883935,
+   "max_dd_pct": -24.6,
+   "trades": 862,
+   "years": {
+    "2025": 92.4,
+    "2026": 181.7
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 113
+  },
+  "+ 15m Momentum, Nifty + Sensex": {
+   "final": 2603665,
+   "max_dd_pct": -42.9,
+   "trades": 1954,
+   "years": {
+    "2025": 127.3,
+    "2026": 472.6
+   },
+   "new_trades": 1265,
+   "new_pnl": 1228977.0
+  },
+  "+ 15m Momentum, Nifty": {
+   "final": 987610,
+   "max_dd_pct": -30.8,
+   "trades": 1549,
+   "years": {
+    "2025": 69.8,
+    "2026": 190.8
+   },
+   "new_trades": 775,
+   "new_pnl": 254901.0
+  },
+  "+ 15m Channel breakout, Nifty": {
+   "final": 842628,
+   "max_dd_pct": -34.9,
+   "trades": 1657,
+   "years": {
+    "2025": 43.9,
+    "2026": 192.8
+   },
+   "new_trades": 935,
+   "new_pnl": 77307.0
+  },
+  "+ 15m Consecutive up/down, Nifty": {
+   "final": 1552949,
+   "max_dd_pct": -45.6,
+   "trades": 1464,
+   "years": {
+    "2025": 124.4,
+    "2026": 246.0
+   },
+   "new_trades": 669,
+   "new_pnl": 296072.0
+  },
+  "+ 15m 2-MA cross, Nifty": {
+   "final": 467264,
+   "max_dd_pct": -31.6,
+   "trades": 1146,
+   "years": {
+    "2025": 43.4,
+    "2026": 62.9
+   },
+   "new_trades": 414,
+   "new_pnl": -30491.0
+  }
+ },
+ "200000|2026": {
+  "Autopilot today": {
+   "final": 521597,
+   "net": 321597,
+   "max_dd_pct": -21.1,
+   "trades": 347,
+   "years": {
+    "2026": 160.8
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 71
+  },
+  "+ 15m Momentum, Nifty + Sensex": {
+   "final": 1085128,
+   "max_dd_pct": -34.9,
+   "trades": 813,
+   "years": {
+    "2026": 442.6
+   },
+   "new_trades": 534,
+   "new_pnl": 466828.0
+  },
+  "+ 15m Momentum, Nifty": {
+   "final": 612568,
+   "max_dd_pct": -29.2,
+   "trades": 644,
+   "years": {
+    "2026": 206.3
+   },
+   "new_trades": 327,
+   "new_pnl": 117984.0
+  },
+  "+ 15m Channel breakout, Nifty": {
+   "final": 654863,
+   "max_dd_pct": -26.8,
+   "trades": 632,
+   "years": {
+    "2026": 227.4
+   },
+   "new_trades": 357,
+   "new_pnl": 87725.0
+  },
+  "+ 15m Consecutive up/down, Nifty": {
+   "final": 627208,
+   "max_dd_pct": -30.2,
+   "trades": 546,
+   "years": {
+    "2026": 213.6
+   },
+   "new_trades": 253,
+   "new_pnl": 124795.0
+  },
+  "+ 15m 2-MA cross, Nifty": {
+   "final": 367542,
+   "max_dd_pct": -29.9,
+   "trades": 477,
+   "years": {
+    "2026": 83.8
+   },
+   "new_trades": 170,
+   "new_pnl": 27104.0
+  }
+ },
+ "200000|Jan 2023 - Oct 2026": {
+  "Autopilot today": {
+   "final": 4418037,
+   "net": 4218037,
+   "max_dd_pct": -31.3,
+   "trades": 1853,
+   "years": {
+    "2023": 44.0,
+    "2024": 208.4,
+    "2025": 88.3,
+    "2026": 164.1
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 282
+  },
+  "+ 15m Momentum, Nifty + Sensex": {
+   "final": 2002137,
+   "max_dd_pct": -48.8,
+   "trades": 3816,
+   "years": {
+    "2023": -25.9,
+    "2024": 210.2,
+    "2025": 1.7,
+    "2026": 328.2
+   },
+   "new_trades": 2568,
+   "new_pnl": 733080.0
+  },
+  "+ 15m Momentum, Nifty": {
+   "final": 6572389,
+   "max_dd_pct": -38.0,
+   "trades": 3199,
+   "years": {
+    "2023": 37.4,
+    "2024": 425.1,
+    "2025": 9.0,
+    "2026": 317.8
+   },
+   "new_trades": 1624,
+   "new_pnl": 2130306.0
+  },
+  "+ 15m Channel breakout, Nifty": {
+   "final": 6492917,
+   "max_dd_pct": -38.3,
+   "trades": 3492,
+   "years": {
+    "2023": 89.2,
+    "2024": 235.4,
+    "2025": 44.7,
+    "2026": 253.5
+   },
+   "new_trades": 1913,
+   "new_pnl": 1304700.0
+  },
+  "+ 15m Consecutive up/down, Nifty": {
+   "final": 4394798,
+   "max_dd_pct": -49.0,
+   "trades": 2946,
+   "years": {
+    "2023": 36.6,
+    "2024": 241.3,
+    "2025": 64.9,
+    "2026": 185.9
+   },
+   "new_trades": 1339,
+   "new_pnl": 1302513.0
+  },
+  "+ 15m 2-MA cross, Nifty": {
+   "final": 3082221,
+   "max_dd_pct": -31.0,
+   "trades": 2454,
+   "years": {
+    "2023": 44.4,
+    "2024": 194.2,
+    "2025": 59.4,
+    "2026": 127.6
+   },
+   "new_trades": 848,
+   "new_pnl": 226869.0
+  }
+ },
+ "20000|2023-24": {
+  "Autopilot today": {
+   "final": 195915,
+   "net": 175915,
+   "max_dd_pct": -66.2,
+   "trades": 669,
+   "years": {
+    "2023": 59.0,
+    "2024": 516.0
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 491
+  },
+  "+ 15m Momentum, Nifty + Sensex": {
+   "final": 2653,
+   "max_dd_pct": -89.7,
+   "trades": 144,
+   "years": {
+    "2023": -86.7
+   },
+   "new_trades": 121,
+   "new_pnl": -28339.0
+  },
+  "+ 15m Momentum, Nifty": {
+   "final": 2386,
+   "max_dd_pct": -88.2,
+   "trades": 42,
+   "years": {
+    "2023": -88.1
+   },
+   "new_trades": 36,
+   "new_pnl": -16980.0
+  },
+  "+ 15m Channel breakout, Nifty": {
+   "final": 3259,
+   "max_dd_pct": -89.2,
+   "trades": 97,
+   "years": {
+    "2023": -83.7
+   },
+   "new_trades": 87,
+   "new_pnl": -16156.0
+  },
+  "+ 15m Consecutive up/down, Nifty": {
+   "final": 2957,
+   "max_dd_pct": -85.2,
+   "trades": 54,
+   "years": {
+    "2023": -85.2
+   },
+   "new_trades": 43,
+   "new_pnl": -11405.0
+  },
+  "+ 15m 2-MA cross, Nifty": {
+   "final": 2472,
+   "max_dd_pct": -87.6,
+   "trades": 21,
+   "years": {
+    "2023": -87.6
+   },
+   "new_trades": 15,
+   "new_pnl": -15556.0
+  }
+ },
+ "20000|2025-26": {
+  "Autopilot today": {
+   "final": 188619,
+   "net": 168619,
+   "max_dd_pct": -62.6,
+   "trades": 575,
+   "years": {
+    "2025": 242.2,
+    "2026": 175.6
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 400
+  },
+  "+ 15m Momentum, Nifty + Sensex": {
+   "final": 96432,
+   "max_dd_pct": -97.0,
+   "trades": 1084,
+   "years": {
+    "2025": 90.6,
+    "2026": 153.0
+   },
+   "new_trades": 780,
+   "new_pnl": 26695.0
+  },
+  "+ 15m Momentum, Nifty": {
+   "final": 287633,
+   "max_dd_pct": -61.1,
+   "trades": 1250,
+   "years": {
+    "2025": 404.3,
+    "2026": 185.2
+   },
+   "new_trades": 707,
+   "new_pnl": 90423.0
+  },
+  "+ 15m Channel breakout, Nifty": {
+   "final": 180108,
+   "max_dd_pct": -58.6,
+   "trades": 1209,
+   "years": {
+    "2025": 405.6,
+    "2026": 78.1
+   },
+   "new_trades": 783,
+   "new_pnl": -4942.0
+  },
+  "+ 15m Consecutive up/down, Nifty": {
+   "final": 430157,
+   "max_dd_pct": -72.4,
+   "trades": 1142,
+   "years": {
+    "2025": 234.9,
+    "2026": 542.2
+   },
+   "new_trades": 602,
+   "new_pnl": 137439.0
+  },
+  "+ 15m 2-MA cross, Nifty": {
+   "final": 107306,
+   "max_dd_pct": -91.3,
+   "trades": 556,
+   "years": {
+    "2025": -73.0,
+    "2026": 1889.4
+   },
+   "new_trades": 275,
+   "new_pnl": 11006.0
+  }
+ },
+ "20000|2026": {
+  "Autopilot today": {
+   "final": 101474,
+   "net": 81474,
+   "max_dd_pct": -45.9,
+   "trades": 248,
+   "years": {
+    "2026": 407.4
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 170
+  },
+  "+ 15m Momentum, Nifty + Sensex": {
+   "final": 96452,
+   "max_dd_pct": -70.8,
+   "trades": 356,
+   "years": {
+    "2026": 382.3
+   },
+   "new_trades": 246,
+   "new_pnl": 40716.0
+  },
+  "+ 15m Momentum, Nifty": {
+   "final": 4659,
+   "max_dd_pct": -76.7,
+   "trades": 17,
+   "years": {
+    "2026": -76.7
+   },
+   "new_trades": 14,
+   "new_pnl": -11113.0
+  },
+  "+ 15m Channel breakout, Nifty": {
+   "final": 139531,
+   "max_dd_pct": -50.3,
+   "trades": 455,
+   "years": {
+    "2026": 597.7
+   },
+   "new_trades": 305,
+   "new_pnl": 14186.0
+  },
+  "+ 15m Consecutive up/down, Nifty": {
+   "final": 4589,
+   "max_dd_pct": -80.3,
+   "trades": 36,
+   "years": {
+    "2026": -77.1
+   },
+   "new_trades": 23,
+   "new_pnl": -11415.0
+  },
+  "+ 15m 2-MA cross, Nifty": {
+   "final": 135352,
+   "max_dd_pct": -34.3,
+   "trades": 339,
+   "years": {
+    "2026": 576.8
+   },
+   "new_trades": 152,
+   "new_pnl": 20868.0
+  }
+ },
+ "20000|Jan 2023 - Oct 2026": {
+  "Autopilot today": {
+   "final": 654317,
+   "net": 634317,
+   "max_dd_pct": -66.2,
+   "trades": 1433,
+   "years": {
+    "2023": 59.0,
+    "2024": 516.0,
+    "2025": 12.7,
+    "2026": 196.3
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 702
+  },
+  "+ 15m Momentum, Nifty + Sensex": {
+   "final": 2653,
+   "max_dd_pct": -89.7,
+   "trades": 144,
+   "years": {
+    "2023": -86.7
+   },
+   "new_trades": 121,
+   "new_pnl": -28339.0
+  },
+  "+ 15m Momentum, Nifty": {
+   "final": 2386,
+   "max_dd_pct": -88.2,
+   "trades": 42,
+   "years": {
+    "2023": -88.1
+   },
+   "new_trades": 36,
+   "new_pnl": -16980.0
+  },
+  "+ 15m Channel breakout, Nifty": {
+   "final": 3259,
+   "max_dd_pct": -89.2,
+   "trades": 97,
+   "years": {
+    "2023": -83.7
+   },
+   "new_trades": 87,
+   "new_pnl": -16156.0
+  },
+  "+ 15m Consecutive up/down, Nifty": {
+   "final": 2957,
+   "max_dd_pct": -85.2,
+   "trades": 54,
+   "years": {
+    "2023": -85.2
+   },
+   "new_trades": 43,
+   "new_pnl": -11405.0
+  },
+  "+ 15m 2-MA cross, Nifty": {
+   "final": 2472,
+   "max_dd_pct": -87.6,
+   "trades": 21,
+   "years": {
+    "2023": -87.6
+   },
+   "new_trades": 15,
+   "new_pnl": -15556.0
+  }
+ }
+}
