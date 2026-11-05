@@ -196,6 +196,8 @@ INDICATORS = {
     "volratio": {"label": "Volume vs average", "params": {"n": 20}, "outs": ["value"], "fn": lambda df, n: vol_ratio(df, int(n))},
     "highest": {"label": "Highest high (previous n)", "params": {"n": 20}, "outs": ["value"], "fn": lambda df, n: df["high"].rolling(int(n)).max().shift(1)},
     "lowest": {"label": "Lowest low (previous n)", "params": {"n": 20}, "outs": ["value"], "fn": lambda df, n: df["low"].rolling(int(n)).min().shift(1)},
+    "chg_atr": {"label": "Move vs ATR (close minus previous close, in ATRs)", "params": {"n": 5}, "outs": ["value"],
+                "fn": lambda df, n: (df["close"] - df["close"].shift(1)) / atr(df, int(n))},
     "vwap": {"label": "VWAP (session)", "params": {}, "outs": ["value"], "fn": lambda df: I.vwap(df)},
 }
 
@@ -209,7 +211,8 @@ LEVELS = {
     "asia_high": "Asian session high (00:00 UTC to London open)", "asia_low": "Asian session low (00:00 UTC to London open)",
     "ny_or_high": "New York opening range high (08:30-09:00 New York)", "ny_or_low": "New York opening range low (08:30-09:00 New York)",
 }
-PRICES = ("open", "high", "low", "close", "volume", "hl2", "hlc3", "range_pct", "body_pct", "hour", "minute")
+PRICES = ("open", "high", "low", "close", "volume", "hl2", "hlc3", "range_pct", "body_pct", "hour", "minute",
+          "prev_open", "prev_high", "prev_low", "prev_close")   # prev_* = the bar before (TradingView's open[1], high[1] ...)
 OPS = {"gt": ">", "lt": "<", "ge": ">=", "le": "<=", "crosses_above": "crosses above", "crosses_below": "crosses below",
        "rising": "is rising for", "falling": "is falling for"}
 
@@ -311,6 +314,8 @@ def operand_series(df: pd.DataFrame, op: dict, cache: dict) -> pd.Series:
             return df[p].astype(float)
         if p in ("hl2", "hlc3"):
             return _src(df, p)
+        if p in ("prev_open", "prev_high", "prev_low", "prev_close"):
+            return df[p[5:]].astype(float).shift(1)
         if p == "range_pct":
             return (df["high"] - df["low"]) / df["close"] * 100
         if p == "body_pct":
