@@ -128,6 +128,9 @@ def _put(day, field, value):
 # ---------------------------------------------------------------- context at the open
 def write_context(symbol, g, gc, fi, prefs):
     from . import service as SV
+    cd = g.get("candles")
+    if cd is None or len(cd) == 0 or cd.index[-1].date() != g["now"].date():
+        return None      # today's first candle has not arrived yet: writing now would store yesterday as "today" (4-5 Nov 2026); the next tick retries
     today, hist = S.session_frames(g["candles"], g["now"])
     sigma = S.noise_sigma(hist)
     lv = S.camarilla_levels(hist)

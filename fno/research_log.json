@@ -1552,6 +1552,17 @@
    "decision": "Not adopted; nothing to replay in Autopilot. Same answer as r75 (pullback to the session average: small edge, eaten by option costs; Autopilot add-on 6.9L vs 40.9L), r55/r69 (round-number bounces) and r40 (wider trails win on days like this and lose overall). 2025-26 is flat before costs.",
    "period": "Jan 2023 - Oct 2026 + 5 Nov 2026 replay",
    "summary": "VWAP/24,350 reversal CE: +Rs 13-14k on 5 Nov with a loose trail, but the setup is flat in 2025-26 before costs; not adopted."
+  },
+  {
+   "id": "r86",
+   "date": "2026-11-05",
+   "area": "Index options",
+   "title": "Round 86: BTST (buy today, sell tomorrow) inside Autopilot? Forward check of the carry rule and filter search",
+   "asked": "User (5 Nov): can BTST be added to Autopilot if it is profitable? Already tested in r75b (rule), r75c (inside Autopilot's budget) and r77 (own slot, shipped as the opt-in Carry slot, OFF by default). New here: (A) the live carry rule on every recorded day 28 Sep - 5 Nov 2026 with recorded option prices (Nifty, Bank Nifty, Sensex for reference); (B) can a filter (days to expiry, size of the day's move, side, index) make the r75b strong-close nights pay without the 10 biggest gap nights, in both 2023-24 and 2025-26?",
+   "result": "(A) 26 recorded nights, 24 signals, 7 wins. Nifty + Bank Nifty (the slot's indices): +Rs 4,757 - all from one night, 4 Nov -> 5 Nov (+1.74% gap, 23900 CE 186 -> 396, +Rs 13,544); without it -Rs 8,787. Sensex -Rs 5,612. (B) 426 strong-close nights 2023-26: 2023-24 +48k / median +219, 2025-26 +2.06L / median +21; without the 10 best nights -1.5k and -43k. Every filter bucket loses without its 10 best nights in 2025-26 (DTE 1/2/3-4/5+: -30k/-5k/-21k/-74k; move 0.5-0.75/0.75-1/1-1.5/1.5%+: -53k/-40k/-35k/-57k; calls -72k, puts -46k; Nifty -53k, Bank Nifty -65k). No filter turns it into a steady edge.",
+   "decision": "Not added to Autopilot. Inside Autopilot's budget it already failed (r75c: 35.9L vs 40.9L at Rs 2L). As its own slot it passes the bar (r77) and exists as the opt-in Carry card (Scalp book tab), which is the right home: the profit is a few big gap nights a year, and most nights lose Rs 1-4k. Keep it OFF, or ON with its own paper capital, never sized up. Same day: journal context guard shipped (context was written from yesterday's candles at 09:16 on 4-5 Nov; no rule change).",
+   "period": "Oct 2023 - Oct 2026 + live 28 Sep - 5 Nov 2026",
+   "summary": "BTST in Autopilot: no. Forward 24 signals +Rs 4.8k (Nifty+BN) all from the 4->5 Nov gap; no filter survives without the big nights. Stays an opt-in Carry slot."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2923,6 +2934,15 @@
     "r85"
    ],
    "takeaway": "Loose trail made Rs 13-14k on the day, tight trails Rs 2k; over 2023-26 the setup is flat after costs and nothing in 2025-26. Not adopted."
+  },
+  {
+   "n": 86,
+   "date": "2026-11-05",
+   "topic": "BTST inside Autopilot? Forward check + filter search",
+   "ids": [
+    "r86"
+   ],
+   "takeaway": "One gap night (4->5 Nov, +Rs 13.5k) carried the whole forward record; without the big nights every filter loses. Not in Autopilot; opt-in Carry slot stays."
   }
  ],
  "india_status": {

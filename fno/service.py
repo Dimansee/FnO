@@ -1842,8 +1842,8 @@ def journal_tick(now):
             if J._get(day, f"ctx:{sym}") is None:
                 m = m or M.Market()
                 g = _gather(sym, m)
-                J.write_context(sym, g, gcues(), fii(), eprefs())
-                out[f"ctx:{sym}"] = "written"
+                ok = J.write_context(sym, g, gcues(), fii(), eprefs())
+                out[f"ctx:{sym}"] = "written" if ok is not None else "waiting for today's first candle"
         if t < time(9, 30):
             return out or {"skipped": "context already written"}
     if time(9, 30) <= t <= time(14, 50) and now.minute % 5 == 1:
