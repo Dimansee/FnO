@@ -1574,6 +1574,17 @@
    "decision": "Not adopted. None is better in both halves without a deeper fall at Rs 2L, and at Rs 20k every one blows up the account. 5-min versions trade too often for option costs. The trend-following ones (momentum, channel, 2-MA) confirm what the Noise band already does, but trading them all day adds costs and losing streaks. Liquidity levels / order blocks not re-run: rounds 49, 52, 61 and the rliq note (no edge, PF 0.80-1.08).",
    "period": "Jan 2023 - Oct 2026",
    "summary": "9 TradingView built-in strategies: all lose on 5-min; 15-min trend ones pick direction but lose to costs; none passes when added to Autopilot (Rs 20k: account wiped). Not adopted."
+  },
+  {
+   "id": "r88",
+   "date": "2026-11-05",
+   "area": "Index options",
+   "title": "Round 88: combinations of the parts that passed alone - equity-gated 2-OTM strike, + the carry slot, + cost stress and real spreads",
+   "asked": "User (5 Nov): from the research or the current rules, is there any combination that makes more profit than today's baseline, any problem, anything for Autopilot - research and backtest. Two parts had passed alone but were never combined: 2 OTM (r83, passes at Rs 2L, fails at Rs 20k -> 'equity-gated rule after a real-price check') and the carry slot (r77). Tested: strike by equity (below Rs 60k 1 OTM as today, then 1 ITM, 2 OTM from G = Rs 60k / 1L / 2L / 5L) in the Outcomes replay, each with and without the r77 carry slot (1 lot, 2% weekly budget), Rs 2L and Rs 20k, every year and both halves, +1% slippage per fill, without the 10 best trades. Real-price check: bid/ask half-spread per strike from 23 recorded days (5 Oct - 5 Nov 2026).",
+   "result": "Rs 2L (today 2023-24 8.88L / 2025-26 10.84L / full 44.18L, fall -31.3%): 2 OTM from Rs 60k or 1L 11.40L / 13.35L / 66.1L (-29.5%); from 2L 11.25L / 13.35L / 66.1L but 2024 6.06L vs 6.15L; from 5L 9.29L / 13.61L / 59.9L (-31.3%), never worse in any year. Rs 20k (today 1.96L / 1.89L / 6.54L): from 60k 1.82L / 1.57L; from 1L 2.01L / 1.65L; from 2L 1.82L / 1.89L - all worse in a half; from 5L 1.96L / 1.89L / 6.69L. Without the 10 best trades (Rs 2L full) 21.9L vs 17.8L. With the carry slot on top of the 5L gate: Rs 2L 9.78L / 14.91L / 62.5L, fall -29.8%. +1% slippage per fill: Rs 2L today 4.21L / 3.27L / 4.37L (fall -45.6%, ~0 without the top 10 trades); Rs 20k today 0.05L / 0.36L / 0.28L (fall -87%) - every version collapses the same way at Rs 20k. Real spreads: median half-spread Nifty 1 ITM 0.115%, ATM 0.117%, 1 OTM 0.119%, 2 OTM 0.127% (p90 0.25%); Bank Nifty 0.146-0.153% at every strike - the backtest's 0.5% per fill is 3-4x the real spread and 2 OTM costs about the same as 1 ITM.",
+   "decision": "Adopted 5 Nov 2026 as a switch (Research -> Recent changes: 'Big account: 2 strikes out of the money (round 88)'): from Rs 5 lakh equity Autopilot buys 2 OTM instead of 1 ITM; below that nothing changes, so the live Rs 20k account is unaffected until it grows. Lower gates not adopted (worse at Rs 20k in one half). Carry stays the opt-in slot (r77/r86: profit sits on ~10 gap nights). Also in the Backtest tab / Outcomes baseline. Main risk found: the whole edge is thin against costs - at +1% slippage a Rs 20k account goes to ~Rs 28k over 4 years with an -87% fall, so fill quality matters more than any new rule. Re-check after 60 live trades at >= Rs 5L.",
+   "summary": "2 OTM from Rs 5L equity: never worse in any year at Rs 2L or Rs 20k, 59.9L vs 44.2L at Rs 2L; real 2-OTM spreads match 1 ITM. Adopted as a switch. No combination changes a Rs 20k account; costs are the real risk.",
+   "period": "Jan 2023 - Oct 2026; spreads 5 Oct - 5 Nov 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2963,6 +2974,15 @@
     "r87"
    ],
    "takeaway": "5-min all lose; 15-min momentum/channel/2-MA find direction but option costs eat it; none passes added to Autopilot, all wipe a Rs 20k account."
+  },
+  {
+   "n": 88,
+   "date": "2026-11-05",
+   "topic": "Combinations of passed parts: equity-gated 2 OTM, + carry slot, cost stress, real spreads",
+   "ids": [
+    "r88"
+   ],
+   "takeaway": "2 OTM from Rs 5L equity never loses to today in any year at Rs 2L or Rs 20k (59.9L vs 44.2L at Rs 2L); real 2-OTM spreads equal 1 ITM. Adopted as a switch. At Rs 20k no combination helps, and +1% slippage wipes it out."
   }
  ],
  "india_status": {

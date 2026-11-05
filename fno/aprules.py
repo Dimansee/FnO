@@ -38,14 +38,15 @@ def rulebook() -> dict:
     """Sections of {title, rows: [[name, value]]} plus the live switch states."""
     per = _idx_rules()
     which = {r: ", ".join(LABEL[s] for s, rr in per.items() if r in rr) for r in NAMES}
-    sw = {k: _flag(k) for k in ("conviction", "big_run_skip", "dd_half", "small_otm", "ai_judge", "limits_system_only")}
+    sw = {k: _flag(k) for k in ("conviction", "big_run_skip", "dd_half", "small_otm", "ai_judge", "limits_system_only", "big_otm")}
     on = lambda k: "ON" if sw[k] else "OFF (switched off in Research → Changes)"
     sections = [
         {"title": "What Autopilot trades", "rows": [
             ["Indices", ", ".join(LABEL[s] for s in C.AUTOPILOT_SYMS)],
             *[[LABEL[s], " + ".join(NAMES[r] for r in rr)] for s, rr in per.items()],
             ["Instrument", f"Buys an index option (CALL for up, PUT for down). Strike {C.STRIKE_ITM} step in the money"
-                           + (f"; 1 step out of the money while equity is below {_rs(C.SMALL_OTM_BELOW)}" if sw["small_otm"] else "")],
+                           + (f"; 1 step out of the money while equity is below {_rs(C.SMALL_OTM_BELOW)}" if sw["small_otm"] else "")
+                           + (f"; {C.BIG_OTM_STRIKES} steps out of the money once equity reaches {_rs(C.BIG_OTM_FROM)}" if sw["big_otm"] else "")],
             ["Never sells options", "Only buys - the most you can lose on a trade is the premium paid; the stop normally exits well before that"],
         ]},
         {"title": "Entry rules", "rows": [

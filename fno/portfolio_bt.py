@@ -133,19 +133,23 @@ def _mult(conf, sym, score):
 
 
 def replay(T: pd.DataFrame, capital: float, sizing: str, risk_pct: float, lots_fixed: int, conf: str, gates: bool = True, max_lots: int = 0,
-           dd_half: bool = False, alt: pd.DataFrame | None = None, cpr: bool = False) -> pd.DataFrame:
+           dd_half: bool = False, alt: pd.DataFrame | None = None, cpr: bool = False, hi: pd.DataFrame | None = None) -> pd.DataFrame:
     """cpr: round 71 CPR-width sizing (needs the 'cpr_w' column; 1.2x narrow, 0.85x middle, wide days skipped).
-    alt: the same signals priced on the 1-OTM strike; used while equity is below SMALL_OTM_BELOW (live small-account rule)."""
+    alt: the same signals priced on the 1-OTM strike; used while equity is below SMALL_OTM_BELOW (live small-account rule).
+    hi: the same signals priced on the 2-OTM strike; used once equity reaches BIG_OTM_FROM (round 88 big-account rule)."""
     T = T.sort_values(["date", "entry_time"]).reset_index(drop=True)
     alt_by = {}
     if alt is not None and len(alt):
         alt_by = {(a.sym, a.date, a.entry_time, a.strategy): a for a in alt.itertuples(index=False)}
+    hi_by = {(a.sym, a.date, a.entry_time, a.strategy): a for a in hi.itertuples(index=False)} if hi is not None and len(hi) else {}
     eq = peak = float(capital)
     open_pos, rows = [], []
     week, week_start, week_pnl, blocked = None, eq, 0.0, False
     for r in T.itertuples(index=False):
         if alt_by and eq < C.SMALL_OTM_BELOW:
             r = alt_by.get((r.sym, r.date, r.entry_time, r.strategy), r)
+        elif hi_by and eq >= C.BIG_OTM_FROM:
+            r = hi_by.get((r.sym, r.date, r.entry_time, r.strategy), r)
         s, lot = r.sym, int(r.lot)
         key_in, key_out = r.date + r.entry_time, r.date + r.exit_time
         open_pos = [p for p in open_pos if p[0] > key_in]
@@ -295,6 +299,7 @@ def _validate(p: dict) -> dict:
     out["compare"] = bool(p.get("compare", True))
     out["gates"] = bool(p.get("gates", True))
     out["small_otm"] = bool(p.get("small_otm", True))
+    out["big_otm"] = bool(p.get("big_otm", True))
     out["dd_half"] = bool(p.get("dd_half", True))
     out["cpr_size"] = bool(p.get("cpr_size", True))
     out["max_loss_lot"] = int(p.get("max_loss_lot") or 0)
@@ -402,11 +407,11 @@ def _check(jid):
 # Today's Autopilot, as a backtest setting: what "Compare" runs next to the chosen settings (same period, indices, capital).
 BASELINE = {"sizing": "compound", "risk_pct": float(C.AUTOPILOT_RISK_PCT), "lots": 1, "confidence": "standard", "big_run_skip": True,
             "dd_half": True, "otm": -C.STRIKE_ITM, "exit": "current", "max_lots": 50, "max_loss_lot": 0, "gates": True,
-            "small_otm": True, "cpr_size": True}
+            "small_otm": True, "cpr_size": True, "big_otm": True}
 BASE_LABEL = "Current Autopilot rules"
 DIFF_LABELS = {"sizing": "lots", "risk_pct": "risk %", "lots": "fixed lots", "confidence": "confidence", "big_run_skip": "big-run skip",
                "dd_half": "half risk in a drawdown", "otm": "strike", "exit": "exit", "max_lots": "max lots", "max_loss_lot": "max loss per lot",
-               "gates": "equity gates", "small_otm": "1 OTM below Rs 60k",
+               "gates": "equity gates", "small_otm": "1 OTM below Rs 60k", "big_otm": "2 OTM from Rs 5L",
                "cpr_size": "CPR-width sizing"}
 
 
@@ -440,6 +445,13 @@ def _alt_key(q):
     return None
 
 
+def _hi_key(q):
+    """Round 88: trades on the 2-OTM strike, used once equity reaches BIG_OTM_FROM (rule strike 1 ITM, compounding)."""
+    if q.get("big_otm") and int(q["otm"]) == -C.STRIKE_ITM and q["sizing"] != "fixed":
+        return (q["exit"], C.BIG_OTM_STRIKES, bool(q["big_run_skip"]), int(q["max_loss_lot"] or 0))
+    return None
+
+
 def _run(jid, p):
     with _lock:
         if _jobs[jid].get("cancel"):
@@ -457,6 +469,8 @@ def _run(jid, p):
                 keys.setdefault(_trade_key(q), []).append(nm)
                 if _alt_key(q):
                     keys.setdefault(_alt_key(q), []).append(nm + ":alt")
+                if _hi_key(q):
+                    keys.setdefault(_hi_key(q), []).append(nm + ":hi")
             trades = {k: [] for k in keys}
             for sym in p["indices"]:
                 _set(jid, progress=f"loading {sym} history")
@@ -485,8 +499,10 @@ def _run(jid, p):
                 T = pd.concat(trades[k], ignore_index=True)
                 ak = _alt_key(q)
                 A = pd.concat(trades[ak], ignore_index=True) if ak and trades.get(ak) else None
+                hk = _hi_key(q)
+                Hh = pd.concat(trades[hk], ignore_index=True) if hk and trades.get(hk) else None
                 R = replay(T, q["capital"], q["sizing"], q["risk_pct"], q["lots"], q["confidence"], q["gates"], q["max_lots"],
-                           q["dd_half"] and q["sizing"] != "fixed", A, cpr=q.get("cpr_size", False) and q["sizing"] != "fixed")
+                           q["dd_half"] and q["sizing"] != "fixed", A, cpr=q.get("cpr_size", False) and q["sizing"] != "fixed", hi=Hh)
                 sm = _summary(R, q["capital"])
                 sm["label"] = BASE_LABEL if nm == "compare" else ("Your settings" if diffs else BASE_LABEL)
                 if nm == "main":

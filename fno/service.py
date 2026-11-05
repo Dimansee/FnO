@@ -1014,7 +1014,8 @@ def _place_signal(symbol, strike=None, auto=False, which=None):
     if strike is None:
         strike = _small_account_strike(ev["plan"], g["chain"], g["spot"], pf, P.equity(acct, tr))
         if strike is not None:
-            ev = {**ev, "plan": {**ev["plan"], "small_account_otm": True}}
+            big = P.equity(acct, tr) >= C.BIG_OTM_FROM
+            ev = {**ev, "plan": {**ev["plan"], ("big_account_otm" if big else "small_account_otm"): True}}
     try:
         order = S.build_order(ev["plan"], g["chain"], g["spot"], g["vix"]["level"], g["lot"], _size_capital(acct, tr, pf),
                               strike=strike, cash=cash, prefs=pf)
@@ -1057,13 +1058,19 @@ def _evaluate_once(symbol, g, cstats, guard, traded, strats):
 def _small_account_strike(plan, chain, spot, pf, equity):
     """Round 38: below SMALL_OTM_BELOW equity, Autopilot buys 1 strike out of the money instead of 1 in the money. The cheaper lot
     fits the cash and the 15% one-lot risk check far more often, so a small account keeps trading through a dip instead of sitting
-    out the big trend days. None = use the normal rule."""
-    if not pf.get("autopilot") or equity >= C.SMALL_OTM_BELOW or not flag("small_otm"):
+    out the big trend days. Round 88: from BIG_OTM_FROM equity, 2 strikes out of the money instead. None = use the normal rule."""
+    if not pf.get("autopilot"):
+        return None
+    if equity < C.SMALL_OTM_BELOW and flag("small_otm"):
+        n = C.SMALL_OTM_STRIKES
+    elif equity >= C.BIG_OTM_FROM and flag("big_otm"):
+        n = C.BIG_OTM_STRIKES
+    else:
         return None
     try:
         strikes = chain["strike"].values
         atm_i = int(abs(strikes - spot).argmin())
-        i = atm_i + (C.SMALL_OTM_STRIKES if plan["opt"] == "CE" else -C.SMALL_OTM_STRIKES)
+        i = atm_i + (n if plan["opt"] == "CE" else -n)
         return float(strikes[i]) if 0 <= i < len(strikes) else None
     except Exception:
         return None
@@ -1096,6 +1103,9 @@ def changes() -> list[dict]:
         removed = 0
     po = float(acct.get("capital_start") or 0) <= 0 and acct.get("capital_before")
     return [
+        {"id": "big_otm", "date": "2026-11-05", "title": "Big account: 2 strikes out of the money (round 88)",
+         "what": f"Once equity reaches ₹{C.BIG_OTM_FROM:,.0f}, Autopilot buys the strike {C.BIG_OTM_STRIKES} steps out of the money instead of 1 in the money. Same signals and the same risk per trade. In the Outcomes replay (Rs 2L, compounding) 2023-24 Rs 9.29L vs 8.88L, 2025-26 Rs 13.61L vs 10.84L, 2023 - Oct 2026 Rs 59.9L vs 44.2L, same worst fall (-31%); never worse in any year at Rs 2L or Rs 20k. Recorded bid/ask spreads on 2 OTM are about the same as on 1 ITM. Below ₹{C.BIG_OTM_FROM:,.0f} nothing changes.",
+         "before": "1 strike in the money whatever the account size.", "on": flag("big_otm"), "kind": "switch"},
         {"id": "cpr_size", "date": "2026-11-01", "title": "CPR-width sizing (round 71)",
          "what": f"Autopilot sizes each index trade by the day's CPR width (from yesterday's high / low / close): {C.CPR_MULT_NARROW:g}x risk when the CPR is narrow (< {C.CPR_NARROW:g}%), {C.CPR_MULT_MID:g}x in the middle, and no trade when it is wide (> {C.CPR_WIDE:g}%). No new trades are added. In the Outcomes replay (Rs 2L, compounding) it was better in 2023, 2024, 2025 and 2026; 2023 - Oct 2026 Rs 44.2L vs 33.4L, worst fall -31% vs -29%.",
          "before": "Same size whatever the CPR width.", "on": flag("cpr_size"), "kind": "switch"},
@@ -1136,7 +1146,7 @@ def changes() -> list[dict]:
 
 
 def revert_change(cid: str, on: bool | None = None) -> str:
-    if cid in ("conviction", "limits_system_only", "small_otm", "ai_judge", "big_run_skip", "dd_half", "crypto_book_r64", "cpr_size"):
+    if cid in ("conviction", "limits_system_only", "small_otm", "ai_judge", "big_run_skip", "dd_half", "crypto_book_r64", "cpr_size", "big_otm"):
         set_flag(cid, bool(on))
         return ("Switched on again." if on else "Switched back to how it worked before.")
     if cid == "weekly_limit":

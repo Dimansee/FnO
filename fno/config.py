@@ -222,3 +222,9 @@ AUTOPILOT_SMALL_ACCOUNT = 100_000   # below this equity the weekly loss cap is 1
 AUTOPILOT_WEEKLY_SMALL = 0.15
 SMALL_OTM_BELOW = 60_000    # round 38: below this equity Autopilot buys 1 strike OUT of the money (cheaper lot -> passes the
 SMALL_OTM_STRIKES = 1       # 15% risk and cash checks more often); Rs 20k / 40k 1-lot accounts: median 12 months better, fewer losing
+# Round 88: from BIG_OTM_FROM equity Autopilot buys 2 strikes OUT of the money (same signals, same sizing). Outcomes replay:
+# Rs 2L 2023-24 9.29L vs 8.88L, 2025-26 13.61L vs 10.84L, full 59.9L vs 44.2L, same worst fall (-31.3%), never worse in any
+# year at Rs 2L or Rs 20k. Lower gates (Rs 60k / 1L / 2L) lost at Rs 20k in 2023-24. Recorded bid/ask (23 days): 2-OTM
+# half-spread 0.13% (Nifty) / 0.15% (Bank Nifty), same as 1 ITM, well inside the 0.5% per fill the backtest charges.
+BIG_OTM_FROM = 500_000
+BIG_OTM_STRIKES = 2
