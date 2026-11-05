@@ -188,7 +188,6 @@ def main():
             print(f"{tf:>3} {name:<9} n={s['n']:>6} ({s['per_day']}/day) win {s['win']:.0%}  pts/trade {s['pts']:+.1f}  "
                   f"Rs/trade/lot {s['rs_trade']:+.0f}  2023-24 {s['a']:+,.0f}  2025-26 {s['b']:+,.0f}  | twin Rs/trade {r['twin']['rs_trade']:+.0f}  "
                   f"| " + "  ".join(f"{k[:2]} {v['a']:+,.0f}/{v['b']:+,.0f}" for k, v in r["by_sym"].items()), flush=True)
-            A.to_csv(os.path.join(HERE, f"out_round87_{tf}_{name}.csv.gz"), index=False)
     json.dump(res, open(os.path.join(HERE, "round87_results.json"), "w"), indent=1)
 
 

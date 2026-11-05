@@ -1585,6 +1585,17 @@
    "decision": "Adopted 5 Nov 2026 as a switch (Research -> Recent changes: 'Big account: 2 strikes out of the money (round 88)'): from Rs 5 lakh equity Autopilot buys 2 OTM instead of 1 ITM; below that nothing changes, so the live Rs 20k account is unaffected until it grows. Lower gates not adopted (worse at Rs 20k in one half). Carry stays the opt-in slot (r77/r86: profit sits on ~10 gap nights). Also in the Backtest tab / Outcomes baseline. Main risk found: the whole edge is thin against costs - at +1% slippage a Rs 20k account goes to ~Rs 28k over 4 years with an -87% fall, so fill quality matters more than any new rule. Re-check after 60 live trades at >= Rs 5L.",
    "summary": "2 OTM from Rs 5L equity: never worse in any year at Rs 2L or Rs 20k, 59.9L vs 44.2L at Rs 2L; real 2-OTM spreads match 1 ITM. Adopted as a switch. No combination changes a Rs 20k account; costs are the real risk.",
    "period": "Jan 2023 - Oct 2026; spreads 5 Oct - 5 Nov 2026"
+  },
+  {
+   "id": "r89",
+   "date": "2026-11-05",
+   "area": "Index options",
+   "title": "Round 89: Channel breakout + RSI (user request)",
+   "asked": "User (5 Nov): backtest Channel breakout + RSI. TradingView Channel Breakout (5 and 20 bars, stop-and-reverse, bought ATM calls/puts, 09:20-14:45 entries, out 15:15) with RSI(14) filters: none, >50/<50, >60/<40, not overbought/oversold (<70/>30), band 50-70/30-50; 5m and 15m; Nifty, Bank Nifty, Sensex, Jan 2023 - Oct 2026; app option pricing, 0.5% slippage, 1 lot; random twin. Versions positive in both halves on Nifty + Sensex added to today's Autopilot (round-72b replay).",
+   "result": "Own trades (Rs per trade per lot, 2023-24 / 2025-26): 5m ch5: none -169 (-17.3L / -21.1L), RSI 60/40 -1 (+42k / -46k; Nifty +98k/+60k, Sensex +36k/+52k). 15m ch20: none +50 (+2.74L / -1.15L), RSI 50 +27, 60/40 +25, <70/>30 +42, band +15. RSI cuts trades and losses on fast 5-min channels but does not beat the plain 20-bar channel on 15m; Bank Nifty loses in 2025-26 in every version. Added to Autopilot, Nifty + Sensex, Rs 2L (today 8.88L / 10.84L / 44.2L, fall -31.3%): 15m ch20 no RSI 21.1L / 32.0L / 117.5L, fall -53.3%; 15m ch20 + RSI 50 6.3L / 58.0L / 106.8L, -43.6%; 5m ch5 + RSI 60/40 5.8L / 10.4L / 21.2L, -48.5%; 5m ch20 18.8L full, -62.4%; 5m ch20 + RSI 60/40 0.87L, -92.5%. Rs 20k full: 15m ch20 10.6L vs 6.5L but fall -91.8%; 5m versions wipe the account.",
+   "decision": "Not adopted. RSI does not improve the channel inside Autopilot (RSI 50 is worse than no RSI in 2023-24). The plain 15-minute 20-bar channel on Nifty + Sensex is better in both halves at Rs 2L but takes the worst fall from -31% to -53% (and -92% at Rs 20k), so it fails the bar. Watch item: a smaller size for the channel trades might keep the gain with a shallower fall - untested.",
+   "period": "Jan 2023 - Oct 2026",
+   "summary": "Channel + RSI: RSI helps fast 5m channels but none passes added to Autopilot; plain 15m 20-bar channel on Nifty+Sensex is better in both halves but the worst fall goes to -53%. Not adopted."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2983,6 +2994,15 @@
     "r88"
    ],
    "takeaway": "2 OTM from Rs 5L equity never loses to today in any year at Rs 2L or Rs 20k (59.9L vs 44.2L at Rs 2L); real 2-OTM spreads equal 1 ITM. Adopted as a switch. At Rs 20k no combination helps, and +1% slippage wipes it out."
+  },
+  {
+   "n": 89,
+   "date": "2026-11-05",
+   "topic": "Channel breakout + RSI",
+   "ids": [
+    "r89"
+   ],
+   "takeaway": "RSI doesn't help inside Autopilot; 15m 20-bar channel (no RSI) on Nifty+Sensex is better both halves but fall -53% vs -31%; not adopted, half-size version untested."
   }
  ],
  "india_status": {

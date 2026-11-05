@@ -1,0 +1,404 @@
+{
+ "200000|2023-24": {
+  "Autopilot today": {
+   "final": 888408,
+   "net": 688408,
+   "max_dd_pct": -31.3,
+   "trades": 973,
+   "years": {
+    "2023": 44.0,
+    "2024": 208.4
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 187
+  },
+  "+ 5m channel 5 + RSI 60/40": {
+   "final": 575381,
+   "max_dd_pct": -48.5,
+   "trades": 1249,
+   "new_trades": 802,
+   "new_pnl": 119213.0
+  },
+  "+ 5m channel 20, no RSI": {
+   "final": 225563,
+   "max_dd_pct": -62.4,
+   "trades": 1446,
+   "new_trades": 1048,
+   "new_pnl": -95857.0
+  },
+  "+ 5m channel 20 + RSI 60/40": {
+   "final": 314262,
+   "max_dd_pct": -62.4,
+   "trades": 1135,
+   "new_trades": 733,
+   "new_pnl": 18713.0
+  },
+  "+ 15m channel 20, no RSI": {
+   "final": 2114147,
+   "max_dd_pct": -42.6,
+   "trades": 1474,
+   "new_trades": 723,
+   "new_pnl": 577287.0
+  },
+  "+ 15m channel 20 + RSI 50": {
+   "final": 628028,
+   "max_dd_pct": -42.4,
+   "trades": 1431,
+   "new_trades": 703,
+   "new_pnl": 12449.0
+  }
+ },
+ "200000|2025-26": {
+  "Autopilot today": {
+   "final": 1083935,
+   "net": 883935,
+   "max_dd_pct": -24.6,
+   "trades": 862,
+   "years": {
+    "2025": 92.4,
+    "2026": 181.7
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 113
+  },
+  "+ 5m channel 5 + RSI 60/40": {
+   "final": 1038114,
+   "max_dd_pct": -42.2,
+   "trades": 1451,
+   "new_trades": 860,
+   "new_pnl": 481733.0
+  },
+  "+ 5m channel 20, no RSI": {
+   "final": 5290421,
+   "max_dd_pct": -55.8,
+   "trades": 1736,
+   "new_trades": 1147,
+   "new_pnl": 3299525.0
+  },
+  "+ 5m channel 20 + RSI 60/40": {
+   "final": 87307,
+   "max_dd_pct": -85.4,
+   "trades": 1047,
+   "new_trades": 691,
+   "new_pnl": -56183.0
+  },
+  "+ 15m channel 20, no RSI": {
+   "final": 3199093,
+   "max_dd_pct": -36.1,
+   "trades": 1347,
+   "new_trades": 682,
+   "new_pnl": 1226537.0
+  },
+  "+ 15m channel 20 + RSI 50": {
+   "final": 5798975,
+   "max_dd_pct": -37.0,
+   "trades": 1359,
+   "new_trades": 669,
+   "new_pnl": 2251710.0
+  }
+ },
+ "200000|2026": {
+  "Autopilot today": {
+   "final": 521597,
+   "net": 321597,
+   "max_dd_pct": -21.1,
+   "trades": 347,
+   "years": {
+    "2026": 160.8
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 71
+  },
+  "+ 5m channel 5 + RSI 60/40": {
+   "final": 159601,
+   "max_dd_pct": -76.8,
+   "trades": 449,
+   "new_trades": 303,
+   "new_pnl": -54919.0
+  },
+  "+ 5m channel 20, no RSI": {
+   "final": 3583638,
+   "max_dd_pct": -41.0,
+   "trades": 768,
+   "new_trades": 518,
+   "new_pnl": 1872376.0
+  },
+  "+ 5m channel 20 + RSI 60/40": {
+   "final": 159334,
+   "max_dd_pct": -69.7,
+   "trades": 417,
+   "new_trades": 273,
+   "new_pnl": -79498.0
+  },
+  "+ 15m channel 20, no RSI": {
+   "final": 569388,
+   "max_dd_pct": -36.7,
+   "trades": 535,
+   "new_trades": 273,
+   "new_pnl": 153836.0
+  },
+  "+ 15m channel 20 + RSI 50": {
+   "final": 750172,
+   "max_dd_pct": -33.7,
+   "trades": 510,
+   "new_trades": 253,
+   "new_pnl": 193641.0
+  }
+ },
+ "200000|Jan 2023 - Oct 2026": {
+  "Autopilot today": {
+   "final": 4418037,
+   "net": 4218037,
+   "max_dd_pct": -31.3,
+   "trades": 1853,
+   "years": {
+    "2023": 44.0,
+    "2024": 208.4,
+    "2025": 88.3,
+    "2026": 164.1
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 282
+  },
+  "+ 5m channel 5 + RSI 60/40": {
+   "final": 2115694,
+   "max_dd_pct": -48.5,
+   "trades": 2661,
+   "new_trades": 1634,
+   "new_pnl": 986443.0
+  },
+  "+ 5m channel 20, no RSI": {
+   "final": 1878993,
+   "max_dd_pct": -62.4,
+   "trades": 3061,
+   "new_trades": 2118,
+   "new_pnl": 800845.0
+  },
+  "+ 5m channel 20 + RSI 60/40": {
+   "final": 86946,
+   "max_dd_pct": -92.5,
+   "trades": 2343,
+   "new_trades": 1463,
+   "new_pnl": -147706.0
+  },
+  "+ 15m channel 20, no RSI": {
+   "final": 11745427,
+   "max_dd_pct": -53.3,
+   "trades": 2807,
+   "new_trades": 1399,
+   "new_pnl": 4992158.0
+  },
+  "+ 15m channel 20 + RSI 50": {
+   "final": 10683776,
+   "max_dd_pct": -43.6,
+   "trades": 2734,
+   "new_trades": 1353,
+   "new_pnl": 4560365.0
+  }
+ },
+ "20000|2023-24": {
+  "Autopilot today": {
+   "final": 195915,
+   "net": 175915,
+   "max_dd_pct": -66.2,
+   "trades": 669,
+   "years": {
+    "2023": 59.0,
+    "2024": 516.0
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 491
+  },
+  "+ 5m channel 5 + RSI 60/40": {
+   "final": 2537,
+   "max_dd_pct": -91.3,
+   "trades": 44,
+   "new_trades": 42,
+   "new_pnl": -17076.0
+  },
+  "+ 5m channel 20, no RSI": {
+   "final": 2808,
+   "max_dd_pct": -89.8,
+   "trades": 30,
+   "new_trades": 28,
+   "new_pnl": -16488.0
+  },
+  "+ 5m channel 20 + RSI 60/40": {
+   "final": 2856,
+   "max_dd_pct": -89.3,
+   "trades": 43,
+   "new_trades": 39,
+   "new_pnl": -16124.0
+  },
+  "+ 15m channel 20, no RSI": {
+   "final": 162728,
+   "max_dd_pct": -91.8,
+   "trades": 759,
+   "new_trades": 453,
+   "new_pnl": 47771.0
+  },
+  "+ 15m channel 20 + RSI 50": {
+   "final": 150496,
+   "max_dd_pct": -92.8,
+   "trades": 703,
+   "new_trades": 408,
+   "new_pnl": 46894.0
+  }
+ },
+ "20000|2025-26": {
+  "Autopilot today": {
+   "final": 188619,
+   "net": 168619,
+   "max_dd_pct": -62.6,
+   "trades": 575,
+   "years": {
+    "2025": 242.2,
+    "2026": 175.6
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 400
+  },
+  "+ 5m channel 5 + RSI 60/40": {
+   "final": 3355,
+   "max_dd_pct": -96.4,
+   "trades": 219,
+   "new_trades": 168,
+   "new_pnl": -41508.0
+  },
+  "+ 5m channel 20, no RSI": {
+   "final": 82268,
+   "max_dd_pct": -89.9,
+   "trades": 1265,
+   "new_trades": 932,
+   "new_pnl": 56335.0
+  },
+  "+ 5m channel 20 + RSI 60/40": {
+   "final": 5184,
+   "max_dd_pct": -95.1,
+   "trades": 368,
+   "new_trades": 291,
+   "new_pnl": -23766.0
+  },
+  "+ 15m channel 20, no RSI": {
+   "final": 326934,
+   "max_dd_pct": -64.8,
+   "trades": 939,
+   "new_trades": 551,
+   "new_pnl": 79204.0
+  },
+  "+ 15m channel 20 + RSI 50": {
+   "final": 518708,
+   "max_dd_pct": -58.8,
+   "trades": 1085,
+   "new_trades": 593,
+   "new_pnl": 126699.0
+  }
+ },
+ "20000|2026": {
+  "Autopilot today": {
+   "final": 101474,
+   "net": 81474,
+   "max_dd_pct": -45.9,
+   "trades": 248,
+   "years": {
+    "2026": 407.4
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 170
+  },
+  "+ 5m channel 5 + RSI 60/40": {
+   "final": 86318,
+   "max_dd_pct": -80.6,
+   "trades": 480,
+   "new_trades": 338,
+   "new_pnl": 42947.0
+  },
+  "+ 5m channel 20, no RSI": {
+   "final": 95277,
+   "max_dd_pct": -73.7,
+   "trades": 562,
+   "new_trades": 422,
+   "new_pnl": 59519.0
+  },
+  "+ 5m channel 20 + RSI 60/40": {
+   "final": 86063,
+   "max_dd_pct": -84.4,
+   "trades": 520,
+   "new_trades": 358,
+   "new_pnl": 7089.0
+  },
+  "+ 15m channel 20, no RSI": {
+   "final": 4306,
+   "max_dd_pct": -78.5,
+   "trades": 8,
+   "new_trades": 5,
+   "new_pnl": -11463.0
+  },
+  "+ 15m channel 20 + RSI 50": {
+   "final": 4306,
+   "max_dd_pct": -78.5,
+   "trades": 8,
+   "new_trades": 5,
+   "new_pnl": -11463.0
+  }
+ },
+ "20000|Jan 2023 - Oct 2026": {
+  "Autopilot today": {
+   "final": 654317,
+   "net": 634317,
+   "max_dd_pct": -66.2,
+   "trades": 1433,
+   "years": {
+    "2023": 59.0,
+    "2024": 516.0,
+    "2025": 12.7,
+    "2026": 196.3
+   },
+   "new_trades": 0,
+   "new_pnl": 0.0,
+   "skipped": 702
+  },
+  "+ 5m channel 5 + RSI 60/40": {
+   "final": 2537,
+   "max_dd_pct": -91.3,
+   "trades": 44,
+   "new_trades": 42,
+   "new_pnl": -17076.0
+  },
+  "+ 5m channel 20, no RSI": {
+   "final": 2808,
+   "max_dd_pct": -89.8,
+   "trades": 30,
+   "new_trades": 28,
+   "new_pnl": -16488.0
+  },
+  "+ 5m channel 20 + RSI 60/40": {
+   "final": 2856,
+   "max_dd_pct": -89.3,
+   "trades": 43,
+   "new_trades": 39,
+   "new_pnl": -16124.0
+  },
+  "+ 15m channel 20, no RSI": {
+   "final": 1056349,
+   "max_dd_pct": -91.8,
+   "trades": 1814,
+   "new_trades": 1027,
+   "new_pnl": 431002.0
+  },
+  "+ 15m channel 20 + RSI 50": {
+   "final": 753053,
+   "max_dd_pct": -92.8,
+   "trades": 1786,
+   "new_trades": 994,
+   "new_pnl": 273622.0
+  }
+ }
+}

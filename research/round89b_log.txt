@@ -1,0 +1,64 @@
+
+== Rs 200,000 | 2023-24
+  Autopilot today                    final Rs      888,408  fall -31.3%  trades   973  new    0 (+0)
+  + 5m channel 5 + RSI 60/40         final Rs      575,381  fall -48.5%  trades  1249  new  802 (+119,213)
+  + 5m channel 20, no RSI            final Rs      225,563  fall -62.4%  trades  1446  new 1048 (-95,857)
+  + 5m channel 20 + RSI 60/40        final Rs      314,262  fall -62.4%  trades  1135  new  733 (+18,713)
+  + 15m channel 20, no RSI           final Rs    2,114,147  fall -42.6%  trades  1474  new  723 (+577,287)
+  + 15m channel 20 + RSI 50          final Rs      628,028  fall -42.4%  trades  1431  new  703 (+12,449)
+
+== Rs 200,000 | 2025-26
+  Autopilot today                    final Rs    1,083,935  fall -24.6%  trades   862  new    0 (+0)
+  + 5m channel 5 + RSI 60/40         final Rs    1,038,114  fall -42.2%  trades  1451  new  860 (+481,733)
+  + 5m channel 20, no RSI            final Rs    5,290,421  fall -55.8%  trades  1736  new 1147 (+3,299,525)
+  + 5m channel 20 + RSI 60/40        final Rs       87,307  fall -85.4%  trades  1047  new  691 (-56,183)
+  + 15m channel 20, no RSI           final Rs    3,199,093  fall -36.1%  trades  1347  new  682 (+1,226,537)
+  + 15m channel 20 + RSI 50          final Rs    5,798,975  fall -37.0%  trades  1359  new  669 (+2,251,710)
+
+== Rs 200,000 | 2026
+  Autopilot today                    final Rs      521,597  fall -21.1%  trades   347  new    0 (+0)
+  + 5m channel 5 + RSI 60/40         final Rs      159,601  fall -76.8%  trades   449  new  303 (-54,919)
+  + 5m channel 20, no RSI            final Rs    3,583,638  fall -41.0%  trades   768  new  518 (+1,872,376)
+  + 5m channel 20 + RSI 60/40        final Rs      159,334  fall -69.7%  trades   417  new  273 (-79,498)
+  + 15m channel 20, no RSI           final Rs      569,388  fall -36.7%  trades   535  new  273 (+153,836)
+  + 15m channel 20 + RSI 50          final Rs      750,172  fall -33.7%  trades   510  new  253 (+193,641)
+
+== Rs 200,000 | Jan 2023 - Oct 2026
+  Autopilot today                    final Rs    4,418,037  fall -31.3%  trades  1853  new    0 (+0)
+  + 5m channel 5 + RSI 60/40         final Rs    2,115,694  fall -48.5%  trades  2661  new 1634 (+986,443)
+  + 5m channel 20, no RSI            final Rs    1,878,993  fall -62.4%  trades  3061  new 2118 (+800,845)
+  + 5m channel 20 + RSI 60/40        final Rs       86,946  fall -92.5%  trades  2343  new 1463 (-147,706)
+  + 15m channel 20, no RSI           final Rs   11,745,427  fall -53.3%  trades  2807  new 1399 (+4,992,158)
+  + 15m channel 20 + RSI 50          final Rs   10,683,776  fall -43.6%  trades  2734  new 1353 (+4,560,365)
+
+== Rs 20,000 | 2023-24
+  Autopilot today                    final Rs      195,915  fall -66.2%  trades   669  new    0 (+0)
+  + 5m channel 5 + RSI 60/40         final Rs        2,537  fall -91.3%  trades    44  new   42 (-17,076)
+  + 5m channel 20, no RSI            final Rs        2,808  fall -89.8%  trades    30  new   28 (-16,488)
+  + 5m channel 20 + RSI 60/40        final Rs        2,856  fall -89.3%  trades    43  new   39 (-16,124)
+  + 15m channel 20, no RSI           final Rs      162,728  fall -91.8%  trades   759  new  453 (+47,771)
+  + 15m channel 20 + RSI 50          final Rs      150,496  fall -92.8%  trades   703  new  408 (+46,894)
+
+== Rs 20,000 | 2025-26
+  Autopilot today                    final Rs      188,619  fall -62.6%  trades   575  new    0 (+0)
+  + 5m channel 5 + RSI 60/40         final Rs        3,355  fall -96.4%  trades   219  new  168 (-41,508)
+  + 5m channel 20, no RSI            final Rs       82,268  fall -89.9%  trades  1265  new  932 (+56,335)
+  + 5m channel 20 + RSI 60/40        final Rs        5,184  fall -95.1%  trades   368  new  291 (-23,766)
+  + 15m channel 20, no RSI           final Rs      326,934  fall -64.8%  trades   939  new  551 (+79,204)
+  + 15m channel 20 + RSI 50          final Rs      518,708  fall -58.8%  trades  1085  new  593 (+126,699)
+
+== Rs 20,000 | 2026
+  Autopilot today                    final Rs      101,474  fall -45.9%  trades   248  new    0 (+0)
+  + 5m channel 5 + RSI 60/40         final Rs       86,318  fall -80.6%  trades   480  new  338 (+42,947)
+  + 5m channel 20, no RSI            final Rs       95,277  fall -73.7%  trades   562  new  422 (+59,519)
+  + 5m channel 20 + RSI 60/40        final Rs       86,063  fall -84.4%  trades   520  new  358 (+7,089)
+  + 15m channel 20, no RSI           final Rs        4,306  fall -78.5%  trades     8  new    5 (-11,463)
+  + 15m channel 20 + RSI 50          final Rs        4,306  fall -78.5%  trades     8  new    5 (-11,463)
+
+== Rs 20,000 | Jan 2023 - Oct 2026
+  Autopilot today                    final Rs      654,317  fall -66.2%  trades  1433  new    0 (+0)
+  + 5m channel 5 + RSI 60/40         final Rs        2,537  fall -91.3%  trades    44  new   42 (-17,076)
+  + 5m channel 20, no RSI            final Rs        2,808  fall -89.8%  trades    30  new   28 (-16,488)
+  + 5m channel 20 + RSI 60/40        final Rs        2,856  fall -89.3%  trades    43  new   39 (-16,124)
+  + 15m channel 20, no RSI           final Rs    1,056,349  fall -91.8%  trades  1814  new 1027 (+431,002)
+  + 15m channel 20 + RSI 50          final Rs      753,053  fall -92.8%  trades  1786  new  994 (+273,622)
