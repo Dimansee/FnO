@@ -29,7 +29,7 @@ def rsi(c, n=14):
 
 
 def orders(name, o, h, l, c):
-    if not name.startswith("ch"):
+    if not name.startswith("ch|"):
         return _orig(name, o, h, l, c)
     _, n, f = name.split("|")
     n = int(n)

@@ -1,0 +1,26 @@
+
+19 of 36 pieces make money on their own in 2023-24: 15m channel NIFTY, 15m channel SENSEX, 15m consec NIFTY, 15m consec BANKNIFTY, 15m consec SENSEX, 15m greedy BANKNIFTY, 15m momentum NIFTY, 15m momentum SENSEX, 15m ma2 NIFTY, 15m volexp NIFTY, 15m volexp SENSEX, 15m ch|20|none NIFTY, 15m ch|20|none BANKNIFTY, 15m ch|20|none SENSEX, 15m ch|20|50 NIFTY, 15m ch|20|50 BANKNIFTY, 15m ch|20|50 SENSEX, 5m ch|5|60/40 NIFTY, 5m ch|5|60/40 SENSEX
+
+--- search on 2023-24: Autopilot today 888,408 fall -31.3%
+  step 1: + 15m consec SENSEX -> 1,694,047 fall -30.4%
+  step 2: nothing improves 2023-24 without a deeper fall - stop
+  judged (15m consec SENSEX):
+    Rs 200,000 2023-24  today      888,408 (-31.3%)  combo    1,694,047 (-30.4%)  SEARCHED
+    Rs 200,000 2025-26  today    1,083,935 (-24.6%)  combo    1,725,202 (-43.4%)  UNSEEN
+    Rs 200,000 full     today    4,418,037 (-31.3%)  combo    5,015,533 (-52.2%)  
+    Rs  20,000 2023-24  today      195,915 (-66.2%)  combo        2,971 (-86.4%)  SEARCHED
+    Rs  20,000 2025-26  today      188,619 (-62.6%)  combo      268,484 (-84.3%)  UNSEEN
+    Rs  20,000 full     today      654,317 (-66.2%)  combo        2,971 (-86.4%)  
+
+16 of 36 pieces make money on their own in 2025-26: 15m channel NIFTY, 15m channel SENSEX, 15m consec NIFTY, 15m greedy NIFTY, 15m greedy SENSEX, 15m inside NIFTY, 15m momentum NIFTY, 15m momentum SENSEX, 15m ma2 NIFTY, 15m ma2 SENSEX, 15m ch|20|none NIFTY, 15m ch|20|none SENSEX, 15m ch|20|50 NIFTY, 15m ch|20|50 SENSEX, 5m ch|5|60/40 NIFTY, 5m ch|5|60/40 SENSEX
+
+--- search on 2025-26: Autopilot today 1,083,935 fall -24.6%
+  step 1: + 15m ch|20|50 SENSEX (half size) -> 1,673,660 fall -25.8%
+  step 2: nothing improves 2025-26 without a deeper fall - stop
+  judged (15m ch|20|50 SENSEX half):
+    Rs 200,000 2023-24  today      888,408 (-31.3%)  combo    1,395,969 (-26.8%)  UNSEEN
+    Rs 200,000 2025-26  today    1,083,935 (-24.6%)  combo    1,673,660 (-25.8%)  SEARCHED
+    Rs 200,000 full     today    4,418,037 (-31.3%)  combo    9,177,204 (-27.1%)  
+    Rs  20,000 2023-24  today      195,915 (-66.2%)  combo        3,554 (-89.3%)  UNSEEN
+    Rs  20,000 2025-26  today      188,619 (-62.6%)  combo      315,417 (-52.8%)  SEARCHED
+    Rs  20,000 full     today      654,317 (-66.2%)  combo        3,554 (-89.3%)  

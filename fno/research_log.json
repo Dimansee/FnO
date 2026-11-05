@@ -1596,6 +1596,17 @@
    "decision": "Not adopted. RSI does not improve the channel inside Autopilot (RSI 50 is worse than no RSI in 2023-24). The plain 15-minute 20-bar channel on Nifty + Sensex is better in both halves at Rs 2L but takes the worst fall from -31% to -53% (and -92% at Rs 20k), so it fails the bar. Watch item: a smaller size for the channel trades might keep the gain with a shallower fall - untested.",
    "period": "Jan 2023 - Oct 2026",
    "summary": "Channel + RSI: RSI helps fast 5m channels but none passes added to Autopilot; plain 15m 20-bar channel on Nifty+Sensex is better in both halves but the worst fall goes to -53%. Not adopted."
+  },
+  {
+   "id": "r90",
+   "date": "2026-11-05",
+   "area": "Index options",
+   "title": "Round 90: any combination of today's new pieces that beats today's Autopilot? (combination search + robustness)",
+   "asked": "User (5 Nov): is there any combination of pairs (strategy x index) that beats today's Autopilot? 36 pieces from rounds 87/89 (12 strategies x 3 indices), full or half size. Greedy forward search inside the Autopilot replay at Rs 2L, chosen on one half only and judged on the other (search on 2023-24 -> judge 2025-26, and the reverse). Then 90b: robustness of the pick against today's Autopilot INCLUDING round 88 (2 OTM from Rs 5L): channel 15/20/25 bars, with/without RSI, full/half/quarter size, Nifty/Sensex/both, every year; Rs 20k with an equity gate (piece trades only from Rs 1L/2L/5L).",
+   "result": "Search on 2023-24 picked 15m Consecutive up/down Sensex: unseen 2025-26 17.3L vs 10.8L but fall -43% vs -25% - fails. Search on 2025-26 picked 15m 20-bar channel + RSI 50 on Sensex at half size: unseen 2023-24 14.0L vs 8.9L with a shallower fall (-27% vs -31%). Robustness at Rs 2L vs today incl. r88 (2023-24 9.29L / 2025-26 13.61L / full 59.9L, falls -31/-25/-31%): Sensex channel 20 + RSI50 half 15.65L / 26.10L / 110.5L (-27/-27/-27%); no RSI half 15.66L / 26.15L / 109.6L; channel 15 half 18.87L / 25.00L / 109.7L (-32/-26/-32%); channel 25 half 17.20L / 28.94L / 117.2L (-26/-25/-26%); quarter size 10.36L / 24.02L / 70.5L; full size 17.46L / 35.60L / 111.7L (-33/-28/-33%); Nifty + Sensex half 29.48L / 38.44L / 162.7L (-27/-28/-30%, better in all 4 years). But 2026 alone is lower for most Sensex versions (4.5L vs 5.2L; channel 25: 5.78L). Rs 20k without a gate: every version wipes the account in 2023 (0.03-0.04L). With a Rs 1L gate: Sensex ch20 no RSI half 2.39L / 2.27L / 17.0L vs 1.96L / 1.89L / 6.69L, same falls; Nifty+Sensex ch20+RSI50 half 2.21L / 2.52L / 26.0L.",
+   "decision": "Candidate - the first new piece since r88 that beats today's Autopilot in both halves at Rs 2L without a deeper fall, and the whole family (channel 15/20/25, RSI or not, half/quarter size) does too, so it is not one lucky setting. RSI adds nothing; the edge is the 15-min 20-bar channel on Sensex (and Nifty). Needs an equity gate (from Rs 1L) because it wipes a Rs 20k account. Caveats: picked after searching 36 pieces; 2026 alone is weaker for most versions. Not built yet - waiting for the user's choice (opt-in switch vs on from Rs 1L).",
+   "period": "Jan 2023 - Oct 2026",
+   "summary": "Combination search: a 15m 20-bar channel slot on Sensex (+Nifty) at half size beats today's Autopilot in both halves at Rs 2L (full 110-163L vs 60L, falls -26 to -30% vs -31%); needs a Rs 1L equity gate; 2026 weaker. Candidate, not yet built."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2020,6 +2031,20 @@
     "r81"
    ],
    "next": "Re-run research/round81_follow_the_sellers.py with the new sessions; adopt only if it passes the full bar (full period, both halves, Rs 2L, no deeper fall)."
+  },
+  {
+   "id": "p-channel-slot",
+   "area": "Index options",
+   "title": "15m 20-bar channel slot (Sensex / Nifty), half size, from Rs 1L equity",
+   "waiting_for": "User decision",
+   "why": "Round 90: beats today's Autopilot in both halves at Rs 2L without a deeper fall; robust across channel 15/20/25, RSI or not, half/quarter size; wipes a Rs 20k account without a gate.",
+   "since": "2026-11-05",
+   "refs": [
+    "r87",
+    "r89",
+    "r90"
+   ],
+   "next": "If chosen: build as its own Autopilot slot behind a switch (Recent changes), half size, equity gate Rs 1L, with a test; paper-track 60 sessions."
   }
  ],
  "crypto_rounds": [
@@ -3003,6 +3028,15 @@
     "r89"
    ],
    "takeaway": "RSI doesn't help inside Autopilot; 15m 20-bar channel (no RSI) on Nifty+Sensex is better both halves but fall -53% vs -31%; not adopted, half-size version untested."
+  },
+  {
+   "n": 90,
+   "date": "2026-11-05",
+   "topic": "Combination search over today's new pieces",
+   "ids": [
+    "r90"
+   ],
+   "takeaway": "15m 20-bar channel on Sensex (+Nifty), half size, gate Rs 1L: beats Autopilot in both halves at Rs 2L, robust across neighbours; 2026 weaker; candidate pending user choice."
   }
  ],
  "india_status": {
