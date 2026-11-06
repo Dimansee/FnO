@@ -14,7 +14,7 @@ Limits (stated honestly):
 from __future__ import annotations
 
 import json
-from datetime import timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 import numpy as np
@@ -278,7 +278,7 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
             do_fib = "fib" in ap
         else:
             do_fib = strategy == "fib"
-            main_strats = ["noise", "camarilla"] if strategy in ("both", "all") else ([] if strategy in ("trend", "fib") else [strategy])
+            main_strats = ["noise", "camarilla"] if strategy in ("both", "all") else ([] if strategy in ("trend", "fib", "channel") else [strategy])
             do_trend = strategy in ("trend", "all")
         if do_trend:                   # round 23: own slot, not blocked by an open Noise / Camarilla trade
             res = _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing, otm, budget_pct, I.exch_rate(symbol),
@@ -328,10 +328,14 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
                 continue
             trades.append(t)
             busy_until = t["exit_time"]
+    if strategy in ("autopilot", "channel") and symbol in C.CHANNEL_SYMS:   # round 90: 15-min channel slot (own slot)
+        trades += _channel_trades(symbol, meta, df, frames, trade_from, vx, vix_daily, step, lot, capital, sizing, otm, budget_pct,
+                                  size_fn if strategy == "autopilot" else None)
     trades.sort(key=lambda t: (t["date"], t["entry_time"]))
-    if run_skip:                                       # round 42: no trade against a big 3-day run
+    if run_skip:                                       # round 42: no trade against a big 3-day run (the channel slot is not filtered, as live)
         n0 = len(trades)
-        trades = [t for t in trades if not S.against_big_run(runs.get(t["date"]), "CE" if t["side"] == "CALL" else "PE")]
+        trades = [t for t in trades if str(t.get("strategy", "")).startswith("Channel")
+                  or not S.against_big_run(runs.get(t["date"]), "CE" if t["side"] == "CALL" else "PE")]
         skips["big_run"] = n0 - len(trades)
     live = None
     if strategy == "autopilot" and live_rules:
@@ -597,6 +601,104 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
         }
 
 
+def _channel_trades(symbol, meta, df, frames, trade_from, vx, vix_daily, step, lot, capital, sizing, otm, budget_pct, size_fn=None):
+    """Round 90: the 15-min channel slot, same rules as the live check (S.channel_frame / S.channel_signal): a stop order at the
+    last CHANNEL_N bars' high (CALL, RSI > 50) / low (PUT, RSI < 50) works in the next 15-min bar 09:30-14:45; stop-and-reverse;
+    index stop at the opposite channel edge at entry; square-off with the 15:00 bar. Sized at CHANNEL_SIZE of the normal risk."""
+    cb = S.channel_frame(df)
+    if cb.empty:
+        return []
+    out = []
+    by_day = {d: g for d, g in cb.groupby(cb.index.date)}
+    days_ok = {d for d, g in frames if len(g) >= 60}
+
+    def vix_at(ts, d):
+        if vx is not None:
+            i = vx.index.searchsorted(ts, side="right") - 1
+            if i >= 0:
+                return float(vx.iloc[i])
+        if vix_daily is not None and len(vix_daily):
+            v = vix_daily[vix_daily.index < pd.Timestamp(d)]
+            if len(v):
+                return float(v.iloc[-1])
+        return 14.0
+
+    sq_start = (datetime.combine(date.today(), C.SQUARE_OFF) - timedelta(minutes=C.CHANNEL_TF)).time()
+    for d, g in by_day.items():
+        if d not in days_ok or (trade_from and d < trade_from):
+            continue
+        day_exps = I.demo_expiries(meta["expiry"], d, 3, meta.get("exchange", "NSE"))
+        if d in C.BUDGET_DAYS or (symbol in C.SKIP_OWN_EXPIRY and day_exps and day_exps[0] == d):
+            continue                                       # the live calendar guard blocks every slot on these days
+        exp = I.pick_trading_expiry(day_exps, meta["expiry"], d)
+        if exp is None:
+            continue
+        o, h, l, c = (g[k].values for k in ("open", "high", "low", "close"))
+        hi_, lo_, rsi_, atr_ = g["hi"].values, g["lo"].values, g["rsi"].values, g["atr"].values
+        idx = list(g.index)
+        pos = None                                         # (sign, i, fill, stop, risk)
+
+        def close(pos, i, x, why):
+            sign, i0, e, stop, risk = pos
+            ts_in, ts_out = idx[i0], idx[i]
+            t_in, t_out = ts_in + timedelta(minutes=1), (ts_out + timedelta(minutes=C.CHANNEL_TF) if why == "Square-off" else ts_out + timedelta(minutes=1))
+            opt = "CE" if sign > 0 else "PE"
+            k = round(e / step) * step + sign * otm * step
+
+            def prem(s_, when, ts):
+                iv = PR.iv(symbol, vix_at(ts, d), s_, k, opt, (exp - d).days, step, meta["iv_mult"]) if meta["iv_mult"] else 0.25
+                t = I.years_to_expiry(exp, when.to_pydatetime().replace(tzinfo=None))
+                return I.bs_price(s_, k, max(t, 1 / (365 * 24 * 12)), iv, opt)
+
+            p_in = prem(e, t_in, ts_in) * (1 + SLIP)
+            risk_unit = max(p_in - prem(e - sign * risk, t_in, ts_in), p_in * 0.05)
+            cost = p_in * lot
+            if cost > capital:
+                return
+            if sizing == "one_lot":
+                lots = 1
+            else:
+                budget = capital * budget_pct * (size_fn(ts_in, sign) if size_fn else 1.0)
+                lots = int(budget // (risk_unit * lot))
+                if lots == 0 and risk_unit * lot <= 1.5 * capital * budget_pct:
+                    lots = 1
+                if lots == 0:
+                    return
+                lots = min(lots, int(capital // cost))
+            p_out = PR.real_adjust(p_in / (1 + SLIP), prem(x, t_out, ts_out), (exp - d).days, (t_out - t_in).total_seconds() / 3600) * (1 - SLIP)
+            qty = lots * lot
+            pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty, exch_pct=I.exch_rate(symbol))
+            out.append({"date": d.isoformat(), "entry_time": t_in.strftime("%H:%M"), "exit_time": t_out.strftime("%H:%M"),
+                        "side": "CALL" if sign > 0 else "PUT", "type": "ATM option" if not otm else (f"{otm} OTM option" if otm > 0 else f"{-otm} ITM option"),
+                        "band": None, "spot_in": round(e, 1), "spot_out": round(float(x), 1), "R": round(sign * (x - e) / risk, 2),
+                        "prem_in": round(p_in, 2), "prem_out": round(p_out, 2), "lots": lots, "pnl": round(pnl, 0), "reason": why,
+                        "equity": 0, "strategy": "Channel 15m", "risk_lot": round(risk_unit * lot, 0), "mfe_R": None, "pieces": 1,
+                        "risk_lot_capped": round(risk_unit * lot, 0)})
+
+        for i in range(1, len(idx)):
+            j, t = i - 1, idx[i].time()
+            if pos is not None and C.CHANNEL_HARD_STOP:    # index stop at the opposite edge at entry (live safety stop)
+                sign, stop = pos[0], pos[3]
+                if (sign > 0 and l[i] <= stop) or (sign < 0 and h[i] >= stop):
+                    x = min(o[i], stop) if sign > 0 else max(o[i], stop)
+                    close(pos, i, x, "Index stop-loss hit"); pos = None
+            if C.CHANNEL_FIRST_BAR <= t <= C.CHANNEL_LAST_BAR and not np.isnan(hi_[j]) and not np.isnan(rsi_[j]):
+                cand = []
+                if rsi_[j] > C.CHANNEL_RSI_MID and h[i] > hi_[j] and not (pos and pos[0] > 0):
+                    f = max(o[i], hi_[j]); cand.append((abs(f - o[i]), 1, f))
+                if rsi_[j] < C.CHANNEL_RSI_MID and l[i] < lo_[j] and not (pos and pos[0] < 0):
+                    f = min(o[i], lo_[j]); cand.append((abs(f - o[i]), -1, f))
+                if cand:
+                    _, sign, f = min(cand)
+                    if pos is not None:
+                        close(pos, i, f, "Channel reversed"); pos = None
+                    a = atr_[j] if not np.isnan(atr_[j]) else abs(hi_[j] - lo_[j]) / 4
+                    pos = (sign, i, f, lo_[j] if sign > 0 else hi_[j], a / C.CHANNEL_SIZE)
+            if pos is not None and t >= sq_start:
+                close(pos, i, c[i], "Square-off"); pos = None
+    return out
+
+
 def _flag(name):
     try:
         from . import store as _st
@@ -631,6 +733,8 @@ def _autopilot_replay(trades, capital, lot, alt=None):
             why["trend_gate"] += 1; continue
         if t["strategy"].startswith("Fibonacci") and eq < C.FIB_MIN_EQUITY:
             why["fib_gate"] += 1; continue
+        if t["strategy"].startswith("Channel") and (eq < C.CHANNEL_MIN_EQUITY or not _flag("channel_slot")):
+            why["channel_gate"] = why.get("channel_gate", 0) + 1; continue
         if t["lots"] == 1 and t.get("risk_lot") and t["risk_lot"] > C.AUTOPILOT_MAX_TRADE_RISK * eq:
             why["risk15"] += 1; continue
         if cost + sum(p[1] for p in open_) > eq:

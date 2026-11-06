@@ -48,7 +48,8 @@ SCEN += [sc("Filters & brakes", "Big-run skip OFF", big_run_skip=False),
          sc("Filters & brakes", "CPR-width sizing OFF (round 71)", cpr_size=False),
          sc("Filters & brakes", "Equity gates OFF (trend & Fib from day one)", gates=False),
          sc("Filters & brakes", "Small-account 1 OTM OFF (always 1 ITM)", small_otm=False),
-         sc("Filters & brakes", "Big-account 2 OTM OFF (round 88)", big_otm=False)]
+         sc("Filters & brakes", "Big-account 2 OTM OFF (round 88)", big_otm=False),
+         sc("Filters & brakes", "15-min channel slot OFF (round 90)", channel=False)]
 SCEN += [sc("Strike", "ATM strike", otm=0), sc("Strike", "1 OTM always", otm=1), sc("Strike", "2 OTM always", otm=2)]
 SCEN += [sc("Lot cap", f"Max {m} lots" if m else "No lot cap", max_lots=m) for m in (0, 20, 100, 200)]
 SCEN += [sc("Loss cap per lot", f"Close at ₹{m:,} loss per lot", max_loss_lot=m) for m in (1500, 2200, 3000)]
@@ -106,7 +107,8 @@ def run_cfg(q, start, end):
         Hh = pd.concat([trades(hk, s) for s in q["indices"]], ignore_index=True)
         Hh = Hh[(Hh.date >= start) & (Hh.date <= end)]
     R = PB.replay(T, q["capital"], q["sizing"], q["risk_pct"], q["lots"], q["confidence"], q["gates"], q["max_lots"],
-                  q["dd_half"] and q["sizing"] != "fixed", A, cpr=q.get("cpr_size", False) and q["sizing"] != "fixed", hi=Hh)
+                  q["dd_half"] and q["sizing"] != "fixed", A, cpr=q.get("cpr_size", False) and q["sizing"] != "fixed", hi=Hh,
+                  channel=q.get("channel", True))
     s = PB._summary(R, q["capital"])
     if not s.get("trades"):
         return {"trades": 0, "final": q["capital"], "net": 0, "multiple": 1, "max_dd_pct": 0, "win_rate": 0, "profit_factor": None,

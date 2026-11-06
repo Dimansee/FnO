@@ -220,6 +220,10 @@ def evaluate(symbol, candles, vix, cstats, news, gcues, fii, now: datetime, day_
         res["fib"] = evaluate_camarilla(today, hist, vix, now, tt.get("fib", False), lv_override=fib_levels(hist), name="fib", label="Fibonacci 0.618")
         res["checks"].append((None, "Fibonacci 0.618 breakout (own slot):"))
         res["checks"] += res["fib"]["checks"]
+    if "channel" in enabled:                     # round 90: 15-min channel breakout, own slot (Nifty + Sensex, from Rs 5L)
+        res["channel"] = evaluate_channel(candles, vix, now, tt.get("channel_last"))
+        res["checks"].append((None, "15-min channel breakout (own slot):"))
+        res["checks"] += res["channel"]["checks"]
     if "camarilla" not in enabled:
         return res
     res["checks"].append((None, "Second strategy - Camarilla breakout:"))
@@ -304,6 +308,106 @@ def evaluate_camarilla(today, hist, vix, now: datetime, traded_today=False, lv_o
     else:
         side = "above H4" if spot >= lv["pivot"] else "below L4"
         out["checks"].append((False, f"Waiting for a 5-min close {side} (now {spot:.1f})"))
+    return out
+
+
+# ---------------- round 90: 15-minute channel breakout slot (Nifty + Sensex, half size, from Rs 5L equity)
+def channel_bars(candles: pd.DataFrame, now: datetime) -> pd.DataFrame:
+    """Completed 15-min bars (session-anchored at 09:15) built from the 5-min candles, with the channel and RSI known at each
+    bar's close: hi / lo = highest high / lowest low of the last CHANNEL_N bars (this one included), rsi = RSI(14, Wilder)."""
+    today, hist = session_frames(candles, now)
+    b = channel_frame(pd.concat([hist, today]), drop_partial_last=True)
+    return b
+
+
+def channel_frame(df: pd.DataFrame, drop_partial_last: bool = False) -> pd.DataFrame:
+    """5-min candles -> 15-min bars with hi / lo (last CHANNEL_N bars), rsi and atr at each bar's close. Shared by the live check
+    and the backtester. drop_partial_last: drop the last bar if it is not complete yet (live)."""
+    df = df[["open", "high", "low", "close"]]
+    if df.empty:
+        return df
+    rule = f"{C.CHANNEL_TF}min"
+    parts = []
+    for d, g in df.groupby(df.index.date):
+        r = g.resample(rule, origin=g.index[0].replace(hour=9, minute=15, second=0, microsecond=0), label="left", closed="left")
+        b = r.agg({"open": "first", "high": "max", "low": "min", "close": "last"})
+        b["n"] = r["close"].count()
+        parts.append(b.dropna(subset=["close"]))
+    b = pd.concat(parts)
+    per = C.CHANNEL_TF // C.CANDLE_MIN
+    if drop_partial_last and len(b) and b["n"].iloc[-1] < per:
+        b = b.iloc[:-1]                                    # the 15-min bar still forming
+    b["hi"] = b["high"].rolling(C.CHANNEL_N).max()
+    b["lo"] = b["low"].rolling(C.CHANNEL_N).min()
+    d = b["close"].diff()
+    up = d.clip(lower=0).ewm(alpha=1 / C.CHANNEL_RSI_N, adjust=False).mean()
+    dn = (-d.clip(upper=0)).ewm(alpha=1 / C.CHANNEL_RSI_N, adjust=False).mean()
+    b["rsi"] = 100 - 100 / (1 + up / dn.replace(0, float("nan")))
+    pc = b["close"].shift(1)
+    tr = pd.concat([b["high"] - b["low"], (b["high"] - pc).abs(), (b["low"] - pc).abs()], axis=1).max(axis=1)
+    b["atr"] = tr.rolling(14).mean()
+    return b
+
+
+def channel_state(candles: pd.DataFrame, now: datetime) -> dict | None:
+    """The live channel: levels and RSI at the last completed 15-min bar (orders for the bar now forming), or None."""
+    b = channel_bars(candles, now)
+    if b.empty or pd.isna(b["hi"].iloc[-1]) or pd.isna(b["rsi"].iloc[-1]):
+        return None
+    last = b.index[-1]
+    cur = last + timedelta(minutes=C.CHANNEL_TF)          # start of the 15-min bar the orders work in
+    sub = candles[[ts >= cur for ts in candles.index]] if len(candles) else candles
+    sub = sub[[ts + timedelta(minutes=C.CANDLE_MIN) <= now for ts in sub.index]] if len(sub) else sub   # completed 5-min bars only
+    return {"bar_end": cur, "same_day": last.date() == now.date(), "hi": float(b["hi"].iloc[-1]), "lo": float(b["lo"].iloc[-1]),
+            "rsi": float(b["rsi"].iloc[-1]), "atr": float(b["atr"].iloc[-1]) if not pd.isna(b["atr"].iloc[-1]) else None,
+            "cur_hi": float(sub["high"].max()) if len(sub) else None, "cur_lo": float(sub["low"].min()) if len(sub) else None}
+
+
+def channel_signal(st: dict | None, spot: float) -> str | None:
+    """'CE' when price trades above the channel high with RSI > 50, 'PE' below the low with RSI < 50 (the backtest's stop orders)."""
+    if not st:
+        return None
+    hi_now = max(spot, st.get("cur_hi") or spot)          # touched during this 15-min bar = the stop order filled
+    lo_now = min(spot, st.get("cur_lo") or spot)
+    up = hi_now > st["hi"] and st["rsi"] > C.CHANNEL_RSI_MID
+    dn = lo_now < st["lo"] and st["rsi"] < C.CHANNEL_RSI_MID
+    if up and dn:                                          # both touched in one bar: the side price is on now
+        return "CE" if spot >= (st["hi"] + st["lo"]) / 2 else "PE"
+    return "CE" if up else "PE" if dn else None
+
+
+def evaluate_channel(candles, vix, now: datetime, last_side: str | None = None) -> dict:
+    """Round 90 slot. last_side: the opt of today's last channel trade - the next one must be the other way (stop-and-reverse)."""
+    out = {"signal": "WAIT", "checks": [], "plan": None}
+    st = channel_state(candles, now)
+    if not st or not st["same_day"]:
+        out["checks"].append((None, "Waiting for today's first completed 15-min bar"))
+        return out
+    cur = st["bar_end"]
+    if not (C.CHANNEL_FIRST_BAR <= cur.time() <= C.CHANNEL_LAST_BAR):
+        out["signal"] = "NO NEW ENTRIES" if cur.time() > C.CHANNEL_LAST_BAR else "WAIT"
+        out["checks"].append((False, f"Channel entries in the 15-min bars {C.CHANNEL_FIRST_BAR:%H:%M}-{C.CHANNEL_LAST_BAR:%H:%M}"))
+        return out
+    spot = float(candles["close"].iloc[-1])
+    out["checks"].append((None, f"15-min channel ({C.CHANNEL_N} bars): high {st['hi']:.1f} · low {st['lo']:.1f} · RSI {st['rsi']:.0f} · now {spot:.1f}"))
+    opt = channel_signal(st, spot)
+    if opt and opt == last_side:
+        out["checks"].append((False, "Already traded this direction today: the channel only reverses"))
+        return out
+    if not opt:
+        out["checks"].append((False, f"Waiting for a break above {st['hi']:.1f} with RSI > 50 or below {st['lo']:.1f} with RSI < 50"))
+        return out
+    sign = 1 if opt == "CE" else -1
+    a = st["atr"] or abs(st["hi"] - st["lo"]) / 4
+    stop = st["lo"] if opt == "CE" else st["hi"]
+    out["signal"] = "BUY CALL" if opt == "CE" else "BUY PUT"
+    out["checks"].append((True, f"Price broke the 15-min channel {'high' if opt == 'CE' else 'low'} with RSI {st['rsi']:.0f}"))
+    # risk_pts sizes the trade: ATR(14, 15-min) as tested, doubled for half size. 'sl' = the opposite channel edge at entry (shown;
+    # enforced only if C.CHANNEL_HARD_STOP) - the tested exit is the opposite channel break.
+    out["plan"] = {"strategy": "channel", "opt": opt, "entry": spot, "risk_pts": a / C.CHANNEL_SIZE, "sl": stop,
+                   "signal_bar": (cur - timedelta(minutes=C.CHANNEL_TF)).strftime("%H:%M"), "target": None, "rr": None,
+                   "breakeven_at": None, "time_stop_min": None,
+                   "trail": "no fixed stop: exits on the opposite 15-min channel break (RSI the other side of 50), else 15:15"}
     return out
 
 
@@ -630,7 +734,7 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
     if t >= C.SQUARE_OFF or pos["opened"][:10] < now.date().isoformat():
         return "Square-off 15:15", upd
     is_custom = bool(plan) and str(plan.get("strategy", "")).startswith("custom:")
-    if not plan or (plan.get("strategy") not in ("noise", "camarilla", "ai", "trend", "fib") and not is_custom):
+    if not plan or (plan.get("strategy") not in ("noise", "camarilla", "ai", "trend", "fib", "channel") and not is_custom):
         if prem <= pos["sl_prem"]:
             return "Premium stop-loss hit", upd
         if prem >= pos["target_prem"]:
@@ -638,6 +742,13 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
         if not plan:
             return None, upd
     long_ = plan["opt"] == "CE"
+    if plan.get("strategy") == "channel":           # round 90: stop-and-reverse - out on the opposite channel break (no fixed stop, as tested)
+        if C.CHANNEL_HARD_STOP and ((long_ and spot <= plan["sl"]) or (not long_ and spot >= plan["sl"])):
+            return "Index stop-loss hit (opposite channel edge)", upd
+        if (state and state.get("same_day") and state["bar_end"].time() <= C.CHANNEL_LAST_BAR      # reversals only while entries are open
+                and channel_signal(state, spot) == ("PE" if long_ else "CE")):
+            return f"Channel reversed: price broke the 15-min channel {'low' if long_ else 'high'} with RSI {state['rsi']:.0f}", upd
+        return None, upd
     sl = pos.get("live_sl", plan["sl"])
     # Between two one-minute checks the market can touch the stop or target and come back. While the stop and target are still
     # fixed, the high / low of the 5-minute bars since entry (ext = (high, low)) reveal that. Stop first, as in the backtests.

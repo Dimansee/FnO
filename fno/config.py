@@ -147,7 +147,7 @@ TREND_BE_R = 1.0
 # stop, else 15:15 - the Camarilla exits. Own slot. Picked on 2023-25 for Nifty and Sensex (Bank Nifty lost). Autopilot adds it once
 # equity reaches FIB_MIN_EQUITY: at Rs 2 lakh it lifted the median 12-month return +25% -> +41% but deepened the typical fall.
 FIB_MIN_EQUITY = 200_000
-SLOTS = ("trend", "fib")      # rules with their own position slot (may hold a trade while a Noise / Camarilla trade is open)
+SLOTS = ("trend", "fib", "channel")   # rules with their own position slot (may hold a trade while a Noise / Camarilla trade is open)
 TREND_MIN_EQUITY = 40_000   # round 24: Autopilot adds the trend slot only once equity is >= Rs 40k (1-year bootstrap from Rs 20k:
                             # 65.9% of paths ended unable to afford a lot vs 73.5% ungated and 68.5% without the catcher)
 # Market recorder (fno/recorder.py): option-chain snapshots kept for later research
@@ -228,3 +228,21 @@ SMALL_OTM_STRIKES = 1       # 15% risk and cash checks more often); Rs 20k / 40k
 # half-spread 0.13% (Nifty) / 0.15% (Bank Nifty), same as 1 ITM, well inside the 0.5% per fill the backtest charges.
 BIG_OTM_FROM = 500_000
 BIG_OTM_STRIKES = 2
+# Round 90 (5 Nov 2026): 15-minute channel breakout slot, Nifty + Sensex, half size, once equity reaches CHANNEL_MIN_EQUITY (Rs 5L).
+# A 15-min bar that trades above the highest high of the last 20 completed 15-min bars with RSI(14, 15-min) > 50 -> CALL;
+# below the lowest low with RSI < 50 -> PUT. Stop-and-reverse: exits on the opposite break, else at 15:15. Entries 09:30-14:59.
+# Found by a 36-piece search (round 90: picked on 2025-26, held on unseen 2023-24). In the app's own engine (Outcomes replay,
+# today's rules incl. round 88) with a Rs 5L gate: Rs 2L 2023-24 18.3L vs 9.3L, 2025-26 21.9L vs 13.0L, 2023 - Oct 2026 164.4L
+# vs 57.4L, worst fall -31.3% vs -31.3% (2025-26 alone -28.3% vs -24.6%); Rs 20k 1.96L / 1.81L / 8.32L vs 1.96L / 1.81L / 6.56L
+# (never worse). A Rs 1L gate made a Rs 20k account worse over the full period (5.37L vs 6.56L) - user chose Rs 5L (5 Nov).
+CHANNEL_MIN_EQUITY = 500_000
+CHANNEL_SYMS = ("NIFTY", "SENSEX")
+CHANNEL_TF = 15            # minutes
+CHANNEL_N = 20             # bars
+CHANNEL_RSI_N = 14
+CHANNEL_RSI_MID = 50.0
+CHANNEL_SIZE = 0.5         # half the normal risk (the tested size)
+CHANNEL_FIRST_BAR = time(9, 30)   # first 15-min bar that may trade (the 09:15 bar sets the first order)
+CHANNEL_LAST_BAR = time(14, 45)   # last 15-min bar that may open a trade
+CHANNEL_HARD_STOP = False  # an index stop at the opposite edge at entry was NOT in the round-90 test and cost money in the app's
+                           # backtest (Sensex 2025-26 -11k vs +0.5k per lot): the opposite channel break is the exit, as tested

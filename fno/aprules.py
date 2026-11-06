@@ -38,7 +38,7 @@ def rulebook() -> dict:
     """Sections of {title, rows: [[name, value]]} plus the live switch states."""
     per = _idx_rules()
     which = {r: ", ".join(LABEL[s] for s, rr in per.items() if r in rr) for r in NAMES}
-    sw = {k: _flag(k) for k in ("conviction", "big_run_skip", "dd_half", "small_otm", "ai_judge", "limits_system_only", "big_otm")}
+    sw = {k: _flag(k) for k in ("conviction", "big_run_skip", "dd_half", "small_otm", "ai_judge", "limits_system_only", "big_otm", "channel_slot")}
     on = lambda k: "ON" if sw[k] else "OFF (switched off in Research → Changes)"
     sections = [
         {"title": "What Autopilot trades", "rows": [
@@ -60,7 +60,11 @@ def rulebook() -> dict:
              f"≥{C.TREND_VWAP_SHARE:.0%} of today's bars. Own slot. Only once equity ≥ {_rs(C.TREND_MIN_EQUITY)}. VIX ≥ {C.VIX_MIN:g}"],
             ["Fibonacci 0.618 (" + which["fib"] + ")",
              f"5-min close crossing yesterday's pivot ± 0.618 × range, {_t(C.FIRST_ENTRY_ANY)}-{_t(C.CAM_LAST_ENTRY)}. Own slot. Only once equity ≥ {_rs(C.FIB_MIN_EQUITY)}"],
-            ["Slots", "One Noise/Camarilla position per index; trend-day and Fibonacci each have their own slot"],
+            ["15-min channel (" + " + ".join(LABEL[x] for x in C.CHANNEL_SYMS) + ")",
+             f"{on('channel_slot')}: price breaks the highest high (CALL) / lowest low (PUT) of the last {C.CHANNEL_N} completed 15-min bars, "
+             f"with RSI(14, 15-min) above / below 50. 15-min bars {_t(C.CHANNEL_FIRST_BAR)}-{_t(C.CHANNEL_LAST_BAR)}. Own slot, half the normal risk. "
+             f"Only once equity ≥ {_rs(C.CHANNEL_MIN_EQUITY)} (round 90)"],
+            ["Slots", "One Noise/Camarilla position per index; trend-day, Fibonacci and the 15-min channel each have their own slot"],
         ]},
         {"title": "Stops, targets and exits", "rows": [
             ["Noise", f"Stop {C.STOP_ATR:g} × ATR(14, 5-min) on the index. Target {C.RR_NOISE:g}R. Trails on the band / VWAP. No breakeven move"],
@@ -68,6 +72,8 @@ def rulebook() -> dict:
                           f"Exit after {C.CAM_TIME_STOP} min if +0.5R not reached. No target"],
             ["Trend-day", f"Stop = distance to VWAP + 0.5 ATR (1-3 ATR). Stop to entry at +{C.TREND_BE_R:g}R. No target"],
             ["Fibonacci", f"Stop at the 0.382 level (1-3 ATR). Stop to entry at +1R. {C.CAM_TIME_STOP}-min time stop. No target"],
+            ["15-min channel", "No fixed stop (as tested): exits when the channel breaks the other way with RSI the other side of 50, "
+                               "then trades that way (stop-and-reverse) until 14:45; otherwise holds to 15:15. Half size. No target"],
             ["Square-off", f"Every open trade closes at {_t(C.SQUARE_OFF)}. Nothing is held overnight"],
             ["Partial booking", "None - the whole position exits together (rounds 40-41: T1/T2/T3 booking earned less)"],
         ]},
