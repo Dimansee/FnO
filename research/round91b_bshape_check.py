@@ -9,7 +9,7 @@ Usage: python research/round91b_bshape_check.py [data_dir]
 import os, sys, json, itertools, warnings
 warnings.filterwarnings("ignore")
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE); sys.path.insert(0, os.path.dirname(HERE))
-DATA = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "data")
+DATA = next((a for a in sys.argv[1:] if not a.startswith("--")), os.path.join(HERE, "data"))
 import numpy as np, pandas as pd
 import round91_profile_shapes as M
 import outcomes as O
@@ -43,7 +43,7 @@ def to_pb(T, lab):
                           "exit_time": [min(x, "15:20") for x in (d.index[g.j.values] + pd.Timedelta(minutes=5)).strftime("%H:%M")],
                           "sym": s, "strategy": f"Profile b-shape r91 {lab}", "side": np.where(g.side.values > 0, "CALL", "PUT"),
                           "prem_in": pi, "prem_out": po, "lot": lot, "risk_lot": np.maximum(risk * (1 + SLIP), pi * 0.05) * lot,
-                          "R": g.R.values, "spot_in": g.ep.values, "spot_out": g.xs.values, "reason": "r91", "pieces": 1})
+                          "R": g.R.values, "spot_in": g.ep.values, "spot_out": g["xs"].values, "reason": "r91", "pieces": 1})
         o["risk_lot_capped"] = o["risk_lot"]
         cw = PB.cpr_widths(O.candles(s)); o["cpr_w"] = cw.reindex(o.date).values
         o["score"] = PB._scores(o, O.candles(s))
@@ -72,8 +72,13 @@ def replay(q, a, b, extra=None):
 
 def main():
     res = {"neigh": {}, "by_sym": {}, "opp": {}, "add": {}}
-    # 1. neighbours
-    for nb, plo, vah in itertools.product((32, 48, 64), (0.33, 0.38, 0.43), (0.60, 0.66, 0.72)):
+    # 1. neighbours (skipped with --replay-only: reuse the saved results)
+    only = "--replay-only" in sys.argv
+    if only:
+        res = json.load(open(os.path.join(HERE, "round91b_results.json"))) if os.path.exists(os.path.join(HERE, "round91b_results.json")) else res
+        res.setdefault("add", {})
+    grid = [] if only else list(itertools.product((32, 48, 64), (0.33, 0.38, 0.43), (0.60, 0.66, 0.72)))
+    for nb, plo, vah in grid:
         M.NB = nb; M.TH.update(p_lo=plo, va_hi=vah)
         for src, trig in itertools.product(("vol", "tpo"), ("touch", "reject", "accept")):
             E = {s: [e for e in M.entries(s, src, "prev", trig) if e[6] == "b"] for s in M.IDX}
@@ -86,7 +91,7 @@ def main():
                 res["neigh"][f"{nb}|{plo}|{vah}|{src}|{trig}|{ks}"] = half(T)
         print("neighbours done for bins", nb, plo, vah, flush=True)
     M.NB = 48; M.TH.update(p_lo=0.38, va_hi=0.66)
-    N = pd.DataFrame(res["neigh"]).T
+    N = pd.DataFrame(res["neigh"]).T if res["neigh"] else pd.DataFrame({"a": [0], "b": [0], "rs_tr": [0]})
     both = ((N.a > 0) & (N.b > 0)).mean()
     print(f"neighbours: {len(N)} versions, Rs/trade median {N.rs_tr.median():+.0f}, positive both halves {both:.0%}, "
           f"positive overall {(N.a + N.b > 0).mean():.0%}", flush=True)
