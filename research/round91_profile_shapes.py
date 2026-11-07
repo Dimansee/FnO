@@ -51,6 +51,7 @@ STOCKS = ["RELIANCE", "HDFCBANK", "ICICIBANK", "INFY", "TCS", "ITC", "LT", "SBIN
 BANKS = ["HDFCBANK", "ICICIBANK", "SBIN", "AXISBANK"]
 SLIP = 0.005
 NB = 48
+TH = {'p_hi': 0.62, 'p_lo': 0.38, 'va_lo': 0.34, 'va_hi': 0.66}   # shape thresholds (round 91b varies them)
 _C = {}
 
 
@@ -155,15 +156,15 @@ def describe(mids, dens, o, c, rng, atr_d, trend_k):
             i = max(peaks) if side > 0 else min(peaks)
             out.update(shape="trend", side=side, level=mids[i])
         return out
-    if p >= 0.62 and pl >= 0.34 and lo_i > edge:
+    if p >= TH['p_hi'] and pl >= TH['va_lo'] and lo_i > edge:
         seg = range(edge, lo_i)
         i = min(seg, key=lambda k: sm[k])
         out.update(shape="P", side=1, level=mids[i])
-    elif p <= 0.38 and ph <= 0.66 and hi_i < NB - 1 - edge:
+    elif p <= TH['p_lo'] and ph <= TH['va_hi'] and hi_i < NB - 1 - edge:
         seg = range(hi_i + 1, NB - edge)
         i = min(seg, key=lambda k: sm[k])
         out.update(shape="b", side=-1, level=mids[i])
-    elif 0.38 < p < 0.62 and lo_i > 0 and hi_i < NB - 1:
+    elif TH['p_lo'] < p < TH['p_hi'] and lo_i > 0 and hi_i < NB - 1:
         out.update(shape="D")
     return out
 
@@ -268,16 +269,18 @@ def sim(sym, E, ks, tgt, flip=None):
     dd = df.d.values
     hm = df.index.hour.values * 60 + df.index.minute.values
     out = []
-    rng = np.random.default_rng(flip) if flip is not None else None
+    rng = np.random.default_rng(flip) if isinstance(flip, int) else None
     for (i, ep, side, lev, ext, poc, shp, lim) in E:
         A = a5[i]
         ref = min(lev, ext) if side > 0 else max(lev, ext)
         risk = abs(ep - ref) + ks * A
         risk = max(risk, 0.25 * A)
-        if rng is not None:
+        if flip == "opp":
+            side = -side
+        elif rng is not None:
             side = int(rng.choice([1, -1]))
         sl = ep - side * risk
-        if tgt == "poc" and poc is not None and rng is None and (poc - ep) * side > 0.25 * risk:
+        if tgt == "poc" and poc is not None and flip is None and (poc - ep) * side > 0.25 * risk:
             tp = poc
         elif tgt == "close":
             tp = None
@@ -317,6 +320,7 @@ def summ(T, col):
         return {"n": 0}
     a, b = T[T.date < "2025"], T[T.date >= "2025"]
     r = {"n": int(len(T)), "win": round(float((T.R > 0).mean()), 3), "R": round(float(T.R.mean()), 3),
+         "mean_col": round(float(T[col].mean()), 4) if col in T else None,
          "R_a": round(float(a.R.mean()), 3) if len(a) else None, "R_b": round(float(b.R.mean()), 3) if len(b) else None,
          "se": round(float(T.R.std() / np.sqrt(len(T))), 3)}
     if col in T:
