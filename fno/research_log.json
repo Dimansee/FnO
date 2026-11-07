@@ -1618,6 +1618,17 @@
    "decision": "Not adopted. No shape rule beats chance after option costs; the one positive shape (b on the volume proxy) reverses on the TPO profile, was picked from 420 rows, and lowers Autopilot's full period at Rs 2L (best 165.6L vs 171.7L) - the limit-touch version also deepens the fall by ~3 pts. 'Order flow tells you when' needs aggressor-tagged ticks and depth, which the feed does not have (round 80: ~60 sessions of new recording). Watch list p-bshape: re-check if real Nifty futures volume is recorded.",
    "summary": "Profile shapes: prior POC = random level; reel triggers = coin flip; stocks 0/240 after costs. b-shape short pays only on the volume proxy (reverses on TPO) and lowers Autopilot at Rs 2L. Not adopted.",
    "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r92",
+   "date": "2026-11-07",
+   "area": "Index options",
+   "title": "Round 92: re-check after rounds 88 + 90 - trail 1.5R after +2.5R, 2 OTM always, Rs 1,500 loss cap per lot, all pairs and the triple, and the cap on the 2-OTM tier only",
+   "asked": "User (7 Nov): is any combination left to re-check, or any improvement from past research and the data collected? 30 pending studies checked: none has enough live data yet (earliest p-liq / p-vix13 about 24 Dec, p-combo / p-live-opt about 31 Dec, order-flow / depth need about 60 sessions, 28 recorded). The Outcomes table regenerated with rounds 88 + 90 had three rows beating today at Rs 2L and Rs 20k over the full period and in 2026: trail 1.5R behind the best move once +2.5R (r40, p-r40-exits), 2 OTM always (r88 decided before r90), close at Rs 1,500 loss per lot. The table shows only full period and 2026, so each was tested alone, in pairs and all three, by half, on the same engine (data to 16 Oct).",
+   "result": "Rs 2L today 18.27L / 22.91L / full 171.7L (-31.3%), Rs 20k 1.96L / 1.89L / 8.70L. T 30.70L / 21.27L / 183.0L (-25.9%), Rs 20k 1.94L / 2.21L. S 34.61L / 22.90L / 190.6L, Rs 20k 1.69L / 1.57L. L 29.56L / 18.83L / 180.7L, Rs 20k 1.62L / 1.48L. T+S 35.58L / 14.24L; T+L 30.81L / 21.69L / 167.1L; S+L 37.84L / 31.08L / 190.0L (-29.7%) but Rs 20k 1.58L / 1.41L; T+S+L 37.74L / 16.73L. Round 92b, cap only on the 2-OTM tier: gate Rs 5L 18.25L / 15.41L / 141.5L; gate Rs 2L 37.91L / 22.80L, Rs 20k 1.76L; gate Rs 1L 37.90L / 31.17L, Rs 20k 2.02L / 1.50L; 2 OTM from Rs 2L, no cap 37.55L / 22.89L, Rs 20k 1.82L. The big full-period Rs 20k numbers (up to 32L) come from one compounding path; every restart from Rs 20k in a half is worse.",
+   "decision": "No change. No version is better in both halves at both capitals. The Outcomes table's full-period gains come from 2023-24 alone or from one Rs 20k compounding path. The trail stays on the live watch (p-r40-exits). Re-check this set when the pending live-data studies come due (late Dec - Jan).",
+   "summary": "Nothing left that beats today's rules in both halves at Rs 2L and Rs 20k: trail, 2 OTM always, Rs 1,500 cap and every combination fail in one half; no pending live study has enough data yet.",
+   "period": "Jan 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -3065,6 +3076,15 @@
     "r91"
    ],
    "takeaway": "Prior POC behaves like a random price; the reel's triggers do no better than a coin flip; 0/240 stock versions profit after costs. The b-shape short works only on the volume proxy (reverses on TPO) and lowers Autopilot at Rs 2L. Not adopted."
+  },
+  {
+   "n": 92,
+   "date": "2026-11-07",
+   "topic": "Re-check after r88 + r90: trail 2.5R/1.5R, 2 OTM always, Rs 1,500 cap, combos",
+   "ids": [
+    "r92"
+   ],
+   "takeaway": "No version beats today in both halves at Rs 2L and Rs 20k; full-period gains in the Outcomes table come from 2023-24 or one compounding path. No change."
   }
  ],
  "india_status": {
