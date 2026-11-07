@@ -1,0 +1,675 @@
+{
+ "today": {
+  "sized_trades": 0,
+  "200000": {
+   "2023-24": {
+    "final": 1826929,
+    "dd": -31.3,
+    "trades": 1139
+   },
+   "2025-26": {
+    "final": 2291316,
+    "dd": -28.3,
+    "trades": 1064
+   },
+   "full": {
+    "final": 17167247,
+    "dd": -31.3,
+    "trades": 2590
+   },
+   "2026": {
+    "final": 557956,
+    "dd": -21.1,
+    "trades": 350
+   }
+  },
+  "20000": {
+   "2023-24": {
+    "final": 195915,
+    "dd": -66.2,
+    "trades": 669
+   },
+   "2025-26": {
+    "final": 188619,
+    "dd": -62.6,
+    "trades": 575
+   },
+   "full": {
+    "final": 869705,
+    "dd": -66.2,
+    "trades": 1473
+   },
+   "2026": {
+    "final": 101474,
+    "dd": -45.9,
+    "trades": 248
+   }
+  }
+ },
+ "A book all at 2R": {
+  "sized_trades": 0,
+  "200000": {
+   "2023-24": {
+    "final": 536909,
+    "dd": -28.7,
+    "trades": 1034
+   },
+   "2025-26": {
+    "final": 616102,
+    "dd": -24.4,
+    "trades": 863
+   },
+   "full": {
+    "final": 4743480,
+    "dd": -28.7,
+    "trades": 2508
+   },
+   "2026": {
+    "final": 339077,
+    "dd": -19.2,
+    "trades": 354
+   }
+  },
+  "20000": {
+   "2023-24": {
+    "final": 133645,
+    "dd": -69.8,
+    "trades": 630
+   },
+   "2025-26": {
+    "final": 57404,
+    "dd": -76.5,
+    "trades": 519
+   },
+   "full": {
+    "final": 327230,
+    "dd": -69.8,
+    "trades": 1306
+   },
+   "2026": {
+    "final": 35117,
+    "dd": -51.7,
+    "trades": 109
+   }
+  }
+ },
+ "B up 2R -> next signal 1.5x (strong only)": {
+  "sized_trades": 65,
+  "200000": {
+   "2023-24": {
+    "final": 1586244,
+    "dd": -30.2,
+    "trades": 1123
+   },
+   "2025-26": {
+    "final": 2368942,
+    "dd": -28.3,
+    "trades": 1069
+   },
+   "full": {
+    "final": 14647309,
+    "dd": -30.2,
+    "trades": 2603
+   },
+   "2026": {
+    "final": 552938,
+    "dd": -21.5,
+    "trades": 343
+   }
+  },
+  "20000": {
+   "2023-24": {
+    "final": 195787,
+    "dd": -66.2,
+    "trades": 668
+   },
+   "2025-26": {
+    "final": 189901,
+    "dd": -62.6,
+    "trades": 576
+   },
+   "full": {
+    "final": 906275,
+    "dd": -66.2,
+    "trades": 1476
+   },
+   "2026": {
+    "final": 101474,
+    "dd": -45.9,
+    "trades": 248
+   }
+  }
+ },
+ "B up 2R -> next signal 1.5x (any)": {
+  "sized_trades": 91,
+  "200000": {
+   "2023-24": {
+    "final": 1588284,
+    "dd": -30.1,
+    "trades": 1123
+   },
+   "2025-26": {
+    "final": 2800468,
+    "dd": -28.5,
+    "trades": 1078
+   },
+   "full": {
+    "final": 15416522,
+    "dd": -30.1,
+    "trades": 2557
+   },
+   "2026": {
+    "final": 552938,
+    "dd": -21.5,
+    "trades": 343
+   }
+  },
+  "20000": {
+   "2023-24": {
+    "final": 195787,
+    "dd": -66.2,
+    "trades": 668
+   },
+   "2025-26": {
+    "final": 189901,
+    "dd": -62.6,
+    "trades": 576
+   },
+   "full": {
+    "final": 906275,
+    "dd": -66.2,
+    "trades": 1476
+   },
+   "2026": {
+    "final": 101474,
+    "dd": -45.9,
+    "trades": 248
+   }
+  }
+ },
+ "C after a 2R win -> next strong 1.5x": {
+  "sized_trades": 1,
+  "200000": {
+   "2023-24": {
+    "final": 1826929,
+    "dd": -31.3,
+    "trades": 1139
+   },
+   "2025-26": {
+    "final": 2291316,
+    "dd": -28.3,
+    "trades": 1064
+   },
+   "full": {
+    "final": 17167247,
+    "dd": -31.3,
+    "trades": 2590
+   },
+   "2026": {
+    "final": 557956,
+    "dd": -21.1,
+    "trades": 350
+   }
+  },
+  "20000": {
+   "2023-24": {
+    "final": 195915,
+    "dd": -66.2,
+    "trades": 669
+   },
+   "2025-26": {
+    "final": 188619,
+    "dd": -62.6,
+    "trades": 575
+   },
+   "full": {
+    "final": 869705,
+    "dd": -66.2,
+    "trades": 1473
+   },
+   "2026": {
+    "final": 101474,
+    "dd": -45.9,
+    "trades": 248
+   }
+  }
+ },
+ "D book at 2R + next strong 1.5x": {
+  "sized_trades": 76,
+  "200000": {
+   "2023-24": {
+    "final": 544726,
+    "dd": -31.3,
+    "trades": 1045
+   },
+   "2025-26": {
+    "final": 530052,
+    "dd": -26.4,
+    "trades": 857
+   },
+   "full": {
+    "final": 4712403,
+    "dd": -31.3,
+    "trades": 2518
+   },
+   "2026": {
+    "final": 342728,
+    "dd": -19.2,
+    "trades": 355
+   }
+  },
+  "20000": {
+   "2023-24": {
+    "final": 133645,
+    "dd": -69.8,
+    "trades": 630
+   },
+   "2025-26": {
+    "final": 57404,
+    "dd": -76.5,
+    "trades": 519
+   },
+   "full": {
+    "final": 338774,
+    "dd": -69.8,
+    "trades": 1304
+   },
+   "2026": {
+    "final": 35117,
+    "dd": -51.7,
+    "trades": 109
+   }
+  }
+ },
+ "B up 2R -> next signal 2.0x (strong only)": {
+  "sized_trades": 65,
+  "200000": {
+   "2023-24": {
+    "final": 1493090,
+    "dd": -33.0,
+    "trades": 1139
+   },
+   "2025-26": {
+    "final": 2431664,
+    "dd": -29.0,
+    "trades": 1066
+   },
+   "full": {
+    "final": 14844810,
+    "dd": -33.0,
+    "trades": 2592
+   },
+   "2026": {
+    "final": 596112,
+    "dd": -20.7,
+    "trades": 343
+   }
+  },
+  "20000": {
+   "2023-24": {
+    "final": 196524,
+    "dd": -66.5,
+    "trades": 673
+   },
+   "2025-26": {
+    "final": 190507,
+    "dd": -62.6,
+    "trades": 576
+   },
+   "full": {
+    "final": 905653,
+    "dd": -66.5,
+    "trades": 1492
+   },
+   "2026": {
+    "final": 101474,
+    "dd": -45.9,
+    "trades": 248
+   }
+  }
+ },
+ "B up 2R -> next signal 2.0x (any)": {
+  "sized_trades": 91,
+  "200000": {
+   "2023-24": {
+    "final": 1856467,
+    "dd": -32.9,
+    "trades": 1146
+   },
+   "2025-26": {
+    "final": 2809800,
+    "dd": -28.9,
+    "trades": 1070
+   },
+   "full": {
+    "final": 15381894,
+    "dd": -32.9,
+    "trades": 2627
+   },
+   "2026": {
+    "final": 596112,
+    "dd": -20.7,
+    "trades": 343
+   }
+  },
+  "20000": {
+   "2023-24": {
+    "final": 194737,
+    "dd": -66.5,
+    "trades": 673
+   },
+   "2025-26": {
+    "final": 190507,
+    "dd": -62.6,
+    "trades": 576
+   },
+   "full": {
+    "final": 904747,
+    "dd": -66.5,
+    "trades": 1488
+   },
+   "2026": {
+    "final": 101474,
+    "dd": -45.9,
+    "trades": 248
+   }
+  }
+ },
+ "C after a 2R win -> next strong 2.0x": {
+  "sized_trades": 1,
+  "200000": {
+   "2023-24": {
+    "final": 1826929,
+    "dd": -31.3,
+    "trades": 1139
+   },
+   "2025-26": {
+    "final": 2291316,
+    "dd": -28.3,
+    "trades": 1064
+   },
+   "full": {
+    "final": 17167247,
+    "dd": -31.3,
+    "trades": 2590
+   },
+   "2026": {
+    "final": 557956,
+    "dd": -21.1,
+    "trades": 350
+   }
+  },
+  "20000": {
+   "2023-24": {
+    "final": 195915,
+    "dd": -66.2,
+    "trades": 669
+   },
+   "2025-26": {
+    "final": 188619,
+    "dd": -62.6,
+    "trades": 575
+   },
+   "full": {
+    "final": 869705,
+    "dd": -66.2,
+    "trades": 1473
+   },
+   "2026": {
+    "final": 101474,
+    "dd": -45.9,
+    "trades": 248
+   }
+  }
+ },
+ "D book at 2R + next strong 2.0x": {
+  "sized_trades": 76,
+  "200000": {
+   "2023-24": {
+    "final": 770282,
+    "dd": -29.3,
+    "trades": 1101
+   },
+   "2025-26": {
+    "final": 416558,
+    "dd": -29.6,
+    "trades": 822
+   },
+   "full": {
+    "final": 6074105,
+    "dd": -29.3,
+    "trades": 2598
+   },
+   "2026": {
+    "final": 347321,
+    "dd": -19.1,
+    "trades": 356
+   }
+  },
+  "20000": {
+   "2023-24": {
+    "final": 136223,
+    "dd": -69.8,
+    "trades": 629
+   },
+   "2025-26": {
+    "final": 57404,
+    "dd": -76.5,
+    "trades": 519
+   },
+   "full": {
+    "final": 344189,
+    "dd": -69.8,
+    "trades": 1301
+   },
+   "2026": {
+    "final": 27600,
+    "dd": -54.5,
+    "trades": 86
+   }
+  }
+ },
+ "_pass": {
+  "A book all at 2R": false,
+  "B up 2R -> next signal 1.5x (strong only)": false,
+  "B up 2R -> next signal 1.5x (any)": false,
+  "C after a 2R win -> next strong 1.5x": false,
+  "D book at 2R + next strong 1.5x": false,
+  "B up 2R -> next signal 2.0x (strong only)": false,
+  "B up 2R -> next signal 2.0x (any)": false,
+  "C after a 2R win -> next strong 2.0x": false,
+  "D book at 2R + next strong 2.0x": false,
+  "C2 after a 2R win -> next strong 1.5x (any later day)": false,
+  "D2 book at 2R + next strong 1.5x (any later day)": false,
+  "C2 after a 2R win -> next strong 2.0x (any later day)": false,
+  "D2 book at 2R + next strong 2.0x (any later day)": false
+ },
+ "C2 after a 2R win -> next strong 1.5x (any later day)": {
+  "sized_trades": 404,
+  "200000": {
+   "2023-24": {
+    "final": 870073,
+    "dd": -29.5,
+    "trades": 1075
+   },
+   "2025-26": {
+    "final": 2630054,
+    "dd": -27.8,
+    "trades": 1028
+   },
+   "full": {
+    "final": 11904292,
+    "dd": -29.5,
+    "trades": 2509
+   },
+   "2026": {
+    "final": 962961,
+    "dd": -25.4,
+    "trades": 373
+   }
+  },
+  "20000": {
+   "2023-24": {
+    "final": 196093,
+    "dd": -66.2,
+    "trades": 666
+   },
+   "2025-26": {
+    "final": 186960,
+    "dd": -62.6,
+    "trades": 574
+   },
+   "full": {
+    "final": 1043866,
+    "dd": -66.2,
+    "trades": 1469
+   },
+   "2026": {
+    "final": 101474,
+    "dd": -45.9,
+    "trades": 248
+   }
+  }
+ },
+ "D2 book at 2R + next strong 1.5x (any later day)": {
+  "sized_trades": 605,
+  "200000": {
+   "2023-24": {
+    "final": 595002,
+    "dd": -26.4,
+    "trades": 1053
+   },
+   "2025-26": {
+    "final": 687020,
+    "dd": -27.6,
+    "trades": 836
+   },
+   "full": {
+    "final": 4924851,
+    "dd": -26.4,
+    "trades": 2518
+   },
+   "2026": {
+    "final": 348715,
+    "dd": -20.4,
+    "trades": 355
+   }
+  },
+  "20000": {
+   "2023-24": {
+    "final": 133010,
+    "dd": -69.8,
+    "trades": 630
+   },
+   "2025-26": {
+    "final": 57404,
+    "dd": -76.5,
+    "trades": 519
+   },
+   "full": {
+    "final": 338815,
+    "dd": -69.8,
+    "trades": 1300
+   },
+   "2026": {
+    "final": 47932,
+    "dd": -65.7,
+    "trades": 209
+   }
+  }
+ },
+ "C2 after a 2R win -> next strong 2.0x (any later day)": {
+  "sized_trades": 404,
+  "200000": {
+   "2023-24": {
+    "final": 1056474,
+    "dd": -29.0,
+    "trades": 1092
+   },
+   "2025-26": {
+    "final": 3653088,
+    "dd": -28.6,
+    "trades": 1061
+   },
+   "full": {
+    "final": 12609898,
+    "dd": -29.0,
+    "trades": 2534
+   },
+   "2026": {
+    "final": 1111829,
+    "dd": -29.9,
+    "trades": 397
+   }
+  },
+  "20000": {
+   "2023-24": {
+    "final": 193347,
+    "dd": -66.7,
+    "trades": 662
+   },
+   "2025-26": {
+    "final": 194403,
+    "dd": -62.6,
+    "trades": 573
+   },
+   "full": {
+    "final": 3651274,
+    "dd": -66.7,
+    "trades": 1722
+   },
+   "2026": {
+    "final": 101023,
+    "dd": -45.9,
+    "trades": 248
+   }
+  }
+ },
+ "D2 book at 2R + next strong 2.0x (any later day)": {
+  "sized_trades": 605,
+  "200000": {
+   "2023-24": {
+    "final": 503801,
+    "dd": -27.9,
+    "trades": 1035
+   },
+   "2025-26": {
+    "final": 656345,
+    "dd": -26.0,
+    "trades": 830
+   },
+   "full": {
+    "final": 3526015,
+    "dd": -29.9,
+    "trades": 2529
+   },
+   "2026": {
+    "final": 346474,
+    "dd": -22.3,
+    "trades": 342
+   }
+  },
+  "20000": {
+   "2023-24": {
+    "final": 139269,
+    "dd": -69.8,
+    "trades": 628
+   },
+   "2025-26": {
+    "final": 67039,
+    "dd": -76.5,
+    "trades": 524
+   },
+   "full": {
+    "final": 329898,
+    "dd": -69.8,
+    "trades": 1297
+   },
+   "2026": {
+    "final": 47932,
+    "dd": -65.7,
+    "trades": 209
+   }
+  }
+ }
+}

@@ -1629,6 +1629,17 @@
    "decision": "No change. No version is better in both halves at both capitals. The Outcomes table's full-period gains come from 2023-24 alone or from one Rs 20k compounding path. The trail stays on the live watch (p-r40-exits). Re-check this set when the pending live-data studies come due (late Dec - Jan).",
    "summary": "Nothing left that beats today's rules in both halves at Rs 2L and Rs 20k: trail, 2 OTM always, Rs 1,500 cap and every combination fail in one half; no pending live study has enough data yet.",
    "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r93",
+   "date": "2026-11-07",
+   "area": "Index options",
+   "title": "Round 93: book at 1:2, then size up the next signal if signals are strong",
+   "asked": "User (7 Nov): what if we take profit at 1:2 and, after 1:2, increase lot size on the next signal when signals are strong? Earlier: fixed 2R targets lost to the current exits (r21c, r26, older rules); pyramiding on re-entry deepened the fall to -57% (r14a); conviction sizing by the 0-6 agreement score is live (r33). Tested on today's Autopilot (rounds 88 + 90), Outcomes engine, data to 16 Oct: A book everything at 2R; B a new trade gets 1.5x / 2x when a same-index same-direction trade is already >= +2R at its entry (strong score >= 5 only, or any); C after a trade closes >= +2R, the next strong trade that session gets 1.5x / 2x; C2 the same on any later day; D / D2 = A + C / C2. Size set by scaling the trade's risk per lot (lot caps, cash and slippage still apply).",
+   "result": "Rs 2L today 18.27L / 22.91L / full 171.7L (-31.3%), 2026 5.58L; Rs 20k 1.96L / 1.89L / 8.70L. A book at 2R 5.37L / 6.16L / 47.4L, Rs 20k 1.34L / 0.57L / 3.27L. B 1.5x strong 15.86L / 23.69L / 146.5L; B 2x any 18.56L / 28.10L / 153.8L (-32.9%), Rs 20k 9.05L. C same session: fires once in 4 years (2R winners mostly run to the 15:15 square-off), no change. C2 next strong on any later day: 1.5x 8.70L / 26.30L / 119.0L, 2026 9.63L; 2x 10.56L / 36.53L / 126.1L, 2026 11.12L, Rs 20k 1.93L / 1.94L / 36.5L. D 2x 7.70L / 4.17L / 60.7L; D2 1.5x 5.95L / 6.87L / 49.3L.",
+   "decision": "Not adopted. A 1:2 target cuts the trend-day winners that pay for Autopilot (about 37% wins; profit comes from trades well past 2R) - every version with it ends at a quarter to a third of today. Sizing up after a 2R win (C2) has no steady 'hot hand': it doubles 2025-26 and 2026 but loses ~40% in 2023-24 and the full period. Sizing up while another trade is +2R (B) lowers 2023-24 and the full period. Bigger size on strong signals is already live (r33 conviction sizing).",
+   "summary": "Book at 1:2 = a quarter to a third of today's profit; size-up after a 2R win or while a trade is +2R helps some years, hurts others; nothing passes both halves at Rs 2L and Rs 20k. Not adopted.",
+   "period": "Jan 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -3085,6 +3096,15 @@
     "r92"
    ],
    "takeaway": "No version beats today in both halves at Rs 2L and Rs 20k; full-period gains in the Outcomes table come from 2023-24 or one compounding path. No change."
+  },
+  {
+   "n": 93,
+   "date": "2026-11-07",
+   "topic": "Book at 1:2, then size up the next strong signal",
+   "ids": [
+    "r93"
+   ],
+   "takeaway": "A 1:2 target cuts the trend-day winners (Rs 2L full 47L vs 172L). Size-up after a 2R win doubles 2025-26 but loses ~40% in 2023-24; no hot hand. Not adopted."
   }
  ],
  "india_status": {

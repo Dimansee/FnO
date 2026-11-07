@@ -120,5 +120,51 @@ def main():
     json.dump(res, open(os.path.join(HERE, "round93_results.json"), "w"), indent=1)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__" and "--c2" not in sys.argv:
     main()
+
+
+def mult_after_win_any_day(T, m, strong=True):
+    """C2: after a trade closes at >= +2R, the next (strong) trade on any later bar or day gets m (one per win)."""
+    T = T.sort_values(["date", "entry_time"]).reset_index(drop=True)
+    ts_in = pd.to_datetime(T.date + " " + T.entry_time)
+    ts_out = pd.to_datetime(T.date + " " + T.exit_time)
+    out, pending = {}, []
+    order = np.argsort(ts_in.values, kind="stable")
+    wins = sorted(ts_out[T.R >= 2.0].tolist())
+    wi = 0
+    armed = 0
+    for i in order:
+        while wi < len(wins) and wins[wi] < ts_in[i]:
+            armed += 1; wi += 1
+        r = T.iloc[i]
+        if armed and (not strong or r.score >= 5):
+            out[(r.sym, r.date, r.entry_time, r.strategy)] = m
+            armed -= 1
+    return out
+
+
+def main2():
+    q0 = dict(O.B0)
+    base = frames(q0); tp = frames({**q0, "exit": "tp_2r"})
+    res = json.load(open(os.path.join(HERE, "round93_results.json")))
+    V = {}
+    for m in (1.5, 2.0):
+        V[f"C2 after a 2R win -> next strong {m}x (any later day)"] = (base, mult_after_win_any_day(base[0], m))
+        V[f"D2 book at 2R + next strong {m}x (any later day)"] = (tp, mult_after_win_any_day(tp[0], m))
+    for name, (frs, mult) in V.items():
+        res[name] = {"sized_trades": len(mult)}
+        for cap in (200_000, 20_000):
+            res[name][str(cap)] = {p: replay({**q0, "capital": cap}, frs, mult, a, b) for p, (a, b) in PER.items()}
+        r2, r20 = res[name]["200000"], res[name]["20000"]
+        print(f"{name:<52} sized {len(mult):>4} | Rs2L 23-24 {r2['2023-24']['final'] / 1e5:6.2f}L 25-26 {r2['2025-26']['final'] / 1e5:6.2f}L "
+              f"full {r2['full']['final'] / 1e5:7.2f}L ({r2['full']['dd']:+.1f}%) 2026 {r2['2026']['final'] / 1e5:5.2f}L | "
+              f"Rs20k 23-24 {r20['2023-24']['final'] / 1e5:5.2f}L 25-26 {r20['2025-26']['final'] / 1e5:5.2f}L full {r20['full']['final'] / 1e5:6.2f}L "
+              f"({r20['full']['dd']:+.1f}%)", flush=True)
+        res["_pass"][name] = R92.passes(res[name], res["today"])
+    print("PASS:", [n for n, v in res["_pass"].items() if v], flush=True)
+    json.dump(res, open(os.path.join(HERE, "round93_results.json"), "w"), indent=1)
+
+
+if __name__ == "__main__" and "--c2" in sys.argv:
+    main2()
