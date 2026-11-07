@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-06",
+ "updated": "2026-11-07",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
@@ -1607,6 +1607,17 @@
    "decision": "Adopted 5 Nov 2026 (user's choice) as an Autopilot slot behind a switch (Research -> Changes: '15-min channel breakout slot from Rs 5 lakh'): Nifty + Sensex, 15-min 20-bar channel with RSI(14) 50 filter, stop-and-reverse, half size, no fixed stop (as tested), entries 09:30-14:59, from Rs 5L equity. The app's own engine (Outcomes replay incl. r88) gave: Rs 2L 2023-24 18.3L vs 9.3L, 2025-26 21.9L vs 13.0L, full 164.4L vs 57.4L, worst fall -31.3% both (2025-26 alone -28.3% vs -24.6%); Rs 20k 1.96L / 1.81L / 8.32L vs 1.96L / 1.81L / 6.56L. A Rs 1L gate (first choice) made Rs 20k worse over the full period in the app engine (5.37L vs 6.56L), so the gate is Rs 5L. A fixed index stop at the opposite edge cost money (Sensex 2025-26 -11k vs +0.5k per lot) and was left out. Live check matched the research trades on 50 of 51 days (Nifty + Sensex, Sep-Oct 2026). Caveats: found by searching 36 pieces; 2026 alone was weaker for some versions; compounded totals are path-sensitive. Re-check after 60 live channel trades.",
    "period": "Jan 2023 - Oct 2026",
    "summary": "Combination search -> 15-min 20-bar channel slot on Nifty + Sensex, half size, from Rs 5L equity: adopted as a switch (Rs 2L full 164L vs 57L, same worst fall; never worse at Rs 20k)."
+  },
+  {
+   "id": "r91",
+   "date": "2026-11-07",
+   "area": "Index options",
+   "title": "Round 91: volume-profile shapes from a reel - P, b, D and thin/trend, with order-flow style triggers",
+   "asked": "User (7 Nov) shared a reel: P shape = value at the top after a rally, buyers defend the thin part below; b = mirror, sellers defend the thin part above; D = balance, fade the edges, target the POC; thin and long = trend, don't fade, buy the pullback to the last spot that built volume; the shape tells you where, order flow (sellers absorbed, buyers accepted in the body) tells you when. Research and backtest.",
+   "result": "Evidence: no published test of the shapes (NexusFi, LuxAlgo, NinjaTrader give definitions only; LuxAlgo: shapes are 'only clean in hindsight'). The one study (Jozwicki & Trippner 2025, WIG20, 6 months) reports a 'reaction' at the prior POC in ~90% of sessions with no random-level control; here the prior POC is no different from random prices (0.3 daily-ATR move within an hour: Nifty 43.8% vs 41.3% random, Bank Nifty 44.0% vs 44.3%, Sensex 38.8% vs 40.2%). Backtest Jan 2023 - Oct 2026: profiles as TPO (1-min) and a heavyweight-volume proxy (real 5-min volume of 10 large caps), previous session or 09:15-11:15; triggers touch / rejection candle / close back in the body / rejection on 1.5x volume; ATM options, app pricing, 0.5% slippage, random twin. 420 index rows: no all-shape version positive in both halves; the reel's triggers do no better than the coin-flip twin. Stocks with real volume: 0 of 240 versions positive after 0.09% costs. Morning trend shape: +0.05 to +0.46R in index points in every version, but 25 of 28 option versions lose in 2025-26 (entries after 11:15, decay). One lead: previous-day b shape -> PUT at the thin zone above value, held to the close (vol proxy, rejection: +Rs 465/trade, 234 trades, every year positive; the CALL on the same entries -Rs 425; 324 neighbours median +Rs 164, 57% positive both halves; Nifty and Sensex carry it, Bank Nifty flat). But on the TPO profile the same rule is flat (+Rs 3) and the CALL wins (+Rs 380, every year). Added to today's Autopilot (rounds 88 + 90), Rs 2L: today 18.27L / 22.91L / full 171.7L (-31.3%); + b vol reject 17.23L / 25.33L / 165.6L; + b TPO 14.32L / 21.08L / 161.7L (-34.2%); + b vol touch 18.59L / 25.42L / 160.4L (-34.2%). Rs 20k: today 1.96L / 1.89L / 8.70L (-66%); + b vol touch 2.28L / 2.22L / 27.3L (-63%); the other two deepen the fall to -87% / -90%.",
+   "decision": "Not adopted. No shape rule beats chance after option costs; the one positive shape (b on the volume proxy) reverses on the TPO profile, was picked from 420 rows, and lowers Autopilot's full period at Rs 2L (best 165.6L vs 171.7L) - the limit-touch version also deepens the fall by ~3 pts. 'Order flow tells you when' needs aggressor-tagged ticks and depth, which the feed does not have (round 80: ~60 sessions of new recording). Watch list p-bshape: re-check if real Nifty futures volume is recorded.",
+   "summary": "Profile shapes: prior POC = random level; reel triggers = coin flip; stocks 0/240 after costs. b-shape short pays only on the volume proxy (reverses on TPO) and lowers Autopilot at Rs 2L. Not adopted.",
+   "period": "Jan 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2046,6 +2057,13 @@
    "need": 60,
    "unit": "trades",
    "next": "Keep only if live channel trades are not worse than the backtest median per lot."
+  },
+  {
+   "id": "p-bshape",
+   "area": "Index options",
+   "title": "Previous-day b-shape profile -> PUT at the thin zone above value (volume profile)",
+   "waiting_for": "Real Nifty / Sensex futures volume history",
+   "why": "Round 91: +Rs 465/trade every year on a heavyweight-volume proxy, but flat on TPO and lowers Autopilot at Rs 2L; only worth re-testing on real futures volume."
   }
  ],
  "crypto_rounds": [
@@ -3038,6 +3056,15 @@
     "r90"
    ],
    "takeaway": "15-min 20-bar channel (RSI 50) on Nifty + Sensex, half size: adopted as an Autopilot slot from Rs 5L equity (switch). Rs 2L full 164L vs 57L, same worst fall."
+  },
+  {
+   "n": 91,
+   "date": "2026-11-07",
+   "topic": "Volume-profile shapes (reel): P, b, D, thin/trend + order-flow triggers",
+   "ids": [
+    "r91"
+   ],
+   "takeaway": "Prior POC behaves like a random price; the reel's triggers do no better than a coin flip; 0/240 stock versions profit after costs. The b-shape short works only on the volume proxy (reverses on TPO) and lowers Autopilot at Rs 2L. Not adopted."
   }
  ],
  "india_status": {

@@ -283,80 +283,80 @@
  "add": {
   "200000|2023-24": {
    "Autopilot today": {
-    "final": 928928,
+    "final": 1826929,
     "dd": -31.3,
     "new": 0,
     "new_pnl": 0.0
    },
    "+ b-shape (vol|reject|1.0)": {
-    "final": 952291,
+    "final": 1723297,
     "dd": -28.7,
-    "new": 109,
-    "new_pnl": 78762.0
+    "new": 98,
+    "new_pnl": 67203.0
    },
    "+ b-shape (tpo|reject|1.0)": {
-    "final": 1095788,
+    "final": 1431985,
     "dd": -34.2,
-    "new": 118,
-    "new_pnl": 54851.0
+    "new": 112,
+    "new_pnl": 32093.0
    },
    "+ b-shape (vol|touch|1.0)": {
-    "final": 991466,
+    "final": 1858981,
     "dd": -34.2,
-    "new": 170,
-    "new_pnl": 114087.0
+    "new": 156,
+    "new_pnl": 207298.0
    }
   },
   "200000|2025-26": {
    "Autopilot today": {
-    "final": 1361101,
-    "dd": -24.6,
+    "final": 2291316,
+    "dd": -28.3,
     "new": 0,
     "new_pnl": 0.0
    },
    "+ b-shape (vol|reject|1.0)": {
-    "final": 1293525,
-    "dd": -25.9,
+    "final": 2532917,
+    "dd": -27.1,
     "new": 88,
-    "new_pnl": 69733.0
+    "new_pnl": 62036.0
    },
    "+ b-shape (tpo|reject|1.0)": {
-    "final": 1339020,
-    "dd": -25.9,
-    "new": 92,
-    "new_pnl": -9835.0
+    "final": 2107865,
+    "dd": -27.5,
+    "new": 88,
+    "new_pnl": -14871.0
    },
    "+ b-shape (vol|touch|1.0)": {
-    "final": 1531259,
-    "dd": -27.5,
-    "new": 105,
-    "new_pnl": 187324.0
+    "final": 2542127,
+    "dd": -27.4,
+    "new": 104,
+    "new_pnl": 179463.0
    }
   },
   "200000|full": {
    "Autopilot today": {
-    "final": 5992118,
+    "final": 17167247,
     "dd": -31.3,
     "new": 0,
     "new_pnl": 0.0
    },
    "+ b-shape (vol|reject|1.0)": {
-    "final": 8094815,
+    "final": 16563437,
     "dd": -28.7,
-    "new": 198,
-    "new_pnl": 506298.0
+    "new": 170,
+    "new_pnl": 890655.0
    },
    "+ b-shape (tpo|reject|1.0)": {
-    "final": 8307218,
+    "final": 16165646,
     "dd": -34.2,
-    "new": 206,
-    "new_pnl": 201878.0
+    "new": 185,
+    "new_pnl": 61924.0
    },
    "+ b-shape (vol|touch|1.0)": {
-    "final": 8159464,
+    "final": 16036766,
     "dd": -34.2,
-    "new": 273,
-    "new_pnl": 1014854.0
+    "new": 247,
+    "new_pnl": 643660.0
    }
   },
   "20000|2023-24": {
@@ -413,29 +413,31 @@
   },
   "20000|full": {
    "Autopilot today": {
-    "final": 669212,
+    "final": 869705,
     "dd": -66.2,
     "new": 0,
     "new_pnl": 0.0
    },
    "+ b-shape (vol|reject|1.0)": {
-    "final": 2159299,
+    "final": 3576941,
     "dd": -86.8,
-    "new": 198,
-    "new_pnl": 181669.0
+    "new": 187,
+    "new_pnl": 138821.0
    },
    "+ b-shape (tpo|reject|1.0)": {
-    "final": 1248079,
+    "final": 2103671,
     "dd": -90.0,
-    "new": 202,
-    "new_pnl": 3175.0
+    "new": 198,
+    "new_pnl": 688.0
    },
    "+ b-shape (vol|touch|1.0)": {
-    "final": 2011630,
+    "final": 2728943,
     "dd": -63.1,
-    "new": 274,
-    "new_pnl": 287122.0
+    "new": 272,
+    "new_pnl": 181748.0
    }
   }
- }
+ },
+ "neigh_summary": "324 versions (bins 32/48/64 x POC <= 0.33/0.38/0.43 x VAH <= 0.60/0.66/0.72 x vol/tpo x touch/reject/accept x stop 0.5/1.0 ATR5), held to 15:15: Rs/trade median +164, positive both halves 57%, positive overall 80% (from the run log; the first run crashed before saving the grid)",
+ "note": "'add' replay rebuilt on the current trade cache (rounds 88 + 90 in the baseline); an earlier run on a pre-round-90 cache is superseded"
 }
