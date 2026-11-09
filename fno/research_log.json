@@ -1651,6 +1651,17 @@
    "decision": "Not adopted - user decision 9 Nov 2026: no option selling, buying only. Evidence kept for reference: bear call spreads to expiry pass widely on Nifty / Bank Nifty and hold out of sample; bull put spreads fail; overnight selling loses to costs.",
    "summary": "Credit strategies: bear call spreads pass, bull put spreads fail, overnight selling loses to costs. Not adopted - the app stays buy-only (user's decision).",
    "period": "9 Oct 2023 - 9 Oct 2026"
+  },
+  {
+   "id": "r95",
+   "date": "2026-11-09",
+   "area": "Index options",
+   "title": "Round 95: can the credit-strategy finding be used for option BUYING? (buy OTM puts / calls and debit spreads to expiry; Autopilot calls vs puts)",
+   "asked": "User (9 Nov), after keeping the app buy-only: can we use the credit strategy for option buying? Round 94's sellers won on call spreads and lost on put spreads, so the buyer's mirror (buy puts / put spreads) was tested on the same real NSE prices, strikes and timing: buy the OTM put or call k x EM away (k 0.5 / 1 / 1.5), or a debit spread with a sold wing 0.5 / 1 / 2%, 1-4 days before expiry, held to expiry, 2% worse fills, charges, STT on exercise. Also Autopilot's own CALL vs PUT result per lot.",
+   "result": "0 of 192 buy-side versions pass; every family loses on median (per lot, 3 years): Nifty buy OTM put -1.02L, buy OTM call -1.10L, put debit spread -30k, call debit spread -64k; Bank Nifty -31k / -1.01L / -7k / -45k. The sellers' small put-spread loss does not become a buyer's gain once the buyer pays the premium's decay and costs. Autopilot per lot by side: 2023 CALL +28 / PUT +45, 2024 +330 / +345, 2025 +389 / -46, 2026 -617 / +626 - it follows each year's market direction, no stable call/put tilt to add.",
+   "decision": "Not adopted. Buying to expiry (naked or debit spreads) loses in every version; the seller's edge is time decay and is not available to a buyer. Autopilot keeps buying intraday trend moves (its edge is direction on trend days, not premium); no call/put filter from this.",
+   "summary": "Buy-side mirror of the credit finding: 0 of 192 versions pass, every family negative; Autopilot's call/put split follows the year's direction. Nothing to add.",
+   "period": "9 Oct 2023 - 9 Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -3125,6 +3136,15 @@
     "r94"
    ],
    "takeaway": "Bear call spreads to expiry pass; bull put spreads fail; overnight selling loses to costs. Not adopted - app stays buy-only (user's decision)."
+  },
+  {
+   "n": 95,
+   "date": "2026-11-09",
+   "topic": "Credit finding used for buying: OTM puts / calls and debit spreads to expiry",
+   "ids": [
+    "r95"
+   ],
+   "takeaway": "0 of 192 buy-side versions pass; buying to expiry pays the decay sellers collect. Autopilot's call/put split just follows each year's direction. Nothing to add."
   }
  ],
  "india_status": {
