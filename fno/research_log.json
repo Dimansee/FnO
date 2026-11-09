@@ -1648,8 +1648,8 @@
    "title": "Round 94: credit strategies (hedged option selling) on real NSE prices - bull put / bear call spreads, iron condors, positional to expiry and overnight",
    "asked": "User (9 Nov): what is a credit strategy, backtest it on the basis of research. Research basis: volatility premium real but thin (IV ~2 pts above realised), Bhat et al. find the premium overnight not intraday, always own the wing, must survive without its best 10% of days. Data: NSE bhavcopy Nifty + Bank Nifty, 9 Oct 2023 - 9 Oct 2026 (741 days, strikes within 15%, 4 Jun 2024 included). Positional: enter at the close 1-4 trading days before the nearest expiry, short strike 0.5 / 1 / 1.5x the VIX expected move, wing 0.5 / 1 / 2% of spot, stop none / 1x / 2x credit on daily closes, cash-settled at the expiry close; overnight: sell at close, buy back next open. Fills 2% (min 0.25 pt) worse per leg, app charges, STT on exercised wing, lots 65 / 30. Bar: positive Oct 2023 - Dec 2024 and 2025 - Oct 2026, positive without best 10% of trades, PF >= 1.2, stop must not flip the sign.",
    "result": "Positional: 70 of 216 settings pass. By structure (settings passing of 36): Nifty bear call spread 25, Nifty iron condor 15, Nifty bull put 3; Bank Nifty bear call 16, iron condor 9, bull put 2. Medians with no stop: Nifty BCS +31k per lot (2023-24 +4.6k, 2025-26 +23.8k), BN BCS +25k, Nifty BPS +0.8k (-25k without best 10%), BN BPS -19k. Middle setting (2 days before expiry, 1x EM, 1% wing): Nifty BCS +47.8k per lot over 3 years, 157 trades, 91% wins, PF 1.75, worst -12.4k, max fall -17.4k, max loss 14.7k per lot, but 2023-24 only +0.6k. Picked on 2023-24 only: Nifty top-5 median 2025-26 +1.03L per lot (all versions +16k); BN +30k (all +2k). Best: Nifty IC 4 days, 0.5x EM, 2% wing, stop 2x: +2.03L per lot (+73k / +1.30L), PF 1.79, worst -18.4k, max loss 28.3k. Narrow 0.5% wing (max loss ~6-7k, fits Rs 20-24k): Nifty BCS 4 days 1x EM +27.2k (2023-24 +0.6k, 2025-26 +26.6k), 94% wins, worst -6.2k; BN IC 1 day 0.5x EM +47.3k mostly 2024. Overnight: 0 of 36 pass; gross (no costs) there is a small premium (BN IC +1.75L per lot over 737 nights, Nifty +29k) but 8 orders a night plus spread cost about Rs 230 a night, more than the decay.",
-   "decision": "Watch-list, awaiting the user's call (standing preference: no option selling in the app for now). Evidence: selling OTM CALL spreads to expiry on Nifty / Bank Nifty is the robust part (passes across most settings, holds out of sample); selling PUT spreads fails (sell-offs outweigh the put premium); iron condors pass only where the call side carries them; overnight selling loses to costs. Limits: daily closes only (no intraday stops), 3 years of one market regime, Bank Nifty weekly ended Nov 2024, no Sensex (BSE) data, expiry-day short-leg margin (~2% ELM) can exceed a Rs 20k account - test an exit the day before expiry before any paper book.",
-   "summary": "Bear call spreads to expiry pass widely on Nifty and Bank Nifty and hold out of sample (Nifty middle setting +48k per lot in 3 years, 91% wins, max loss 15k); bull put spreads fail; overnight selling loses to costs. Watch-list pending the user's decision on option selling.",
+   "decision": "Not adopted - user decision 9 Nov 2026: no option selling, buying only. Evidence kept for reference: bear call spreads to expiry pass widely on Nifty / Bank Nifty and hold out of sample; bull put spreads fail; overnight selling loses to costs.",
+   "summary": "Credit strategies: bear call spreads pass, bull put spreads fail, overnight selling loses to costs. Not adopted - the app stays buy-only (user's decision).",
    "period": "9 Oct 2023 - 9 Oct 2026"
   }
  ],
@@ -2097,13 +2097,6 @@
    "title": "Previous-day b-shape profile -> PUT at the thin zone above value (volume profile)",
    "waiting_for": "Real Nifty / Sensex futures volume history",
    "why": "Round 91: +Rs 465/trade every year on a heavyweight-volume proxy, but flat on TPO and lowers Autopilot at Rs 2L; only worth re-testing on real futures volume."
-  },
-  {
-   "id": "p-credit",
-   "area": "Index options",
-   "title": "Nifty bear call spread to expiry (credit book)",
-   "waiting_for": "User decision on option selling; then an exit-before-expiry test (expiry-day margin) and a paper book",
-   "why": "Round 94: passes 25 of 36 Nifty settings and holds out of sample; needs margin check at Rs 20-24k and intraday-stop realism."
   }
  ],
  "crypto_rounds": [
@@ -3131,7 +3124,7 @@
    "ids": [
     "r94"
    ],
-   "takeaway": "Bear call spreads to expiry pass widely and hold out of sample; bull put spreads fail; overnight selling loses to costs. Watch-list, user's call (no-selling preference)."
+   "takeaway": "Bear call spreads to expiry pass; bull put spreads fail; overnight selling loses to costs. Not adopted - app stays buy-only (user's decision)."
   }
  ],
  "india_status": {
