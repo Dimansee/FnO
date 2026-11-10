@@ -1673,6 +1673,17 @@
    "decision": "Not adopted. Adding 10-15 lots raises profit but deepens the worst fall to -51% or worse, and loses at Rs 20k in 2023-24. The equity-gated, size-matched version (+100% of its lots after Rs 2,500, lock +Rs 500, from Rs 5L) is a near-miss: better in every period at Rs 2L, unchanged at Rs 20k, but its 2025-26 fall is 3.1 pts deeper. Watch list p-addon: re-check with intrabar stops and once live fills show slippage on larger orders.",
    "summary": "Pyramiding 10-15 lots after Rs 1,500-2,500: more profit, but falls -51% to -69% and worse at Rs 20k. Gated from Rs 5L at +100% of the trade's lots is a near-miss (2025-26 fall 3.1 pts deeper). Not adopted; watch list.",
    "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r97",
+   "date": "2026-11-10",
+   "area": "Index options",
+   "title": "Round 97: add 15-25 lots once a trade is in profit and scalp them - target 5-10 premium points, stop 2-3 points",
+   "asked": "User (10 Nov): add 20-25 or 15 lots, target 10 points (minimum 5) for the added lots only, stop 2-3 points. Method: today's Autopilot (rounds 88 + 90), Outcomes replay, Rs 2L and Rs 20k, Jan 2023 - Oct 2026; trigger as round 96 (Rs 1,500 / 2,500 open profit at a 5-min close); add 15 / 20 / 25 lots (cash-limited); add-on exits checked on 1-MIN index candles with the option re-priced at each minute's high and low (stop first if both hit in one minute); target +5 / +10, stop -2 / -3 premium points; 0.5% slippage per fill, app charges; stress +1 point on stop fills; also only from Rs 5L. 96 versions.",
+   "result": "0 of 96 versions beat today in any period at either capital. About 90% of add-ons hit the stop first, 5-17% the target. Rs 2L: 20 lots, +10 / -3 after Rs 1,500 -> 7.29L / 10.83L / full 142.3L vs today 18.27L / 22.91L / 171.7L (add-ons -29.4L, account falls through zero mid-way); with 1 pt stop slippage full 129.2L; best version (15 lots after Rs 2,500, +10 / -2, from Rs 5L) 15.40L / 19.78L / 157.5L, fall -34.9%. Rs 20k: every ungated version wipes the account (2023-24 -0.09L to -0.97L). Why: a typical minute moves the traded option 3.8 points (Nifty, premium ~168), 12.0 (Bank Nifty, ~692), 11.4 (Sensex, ~560); 0.5% slippage alone is ~0.8 / 3.5 / 2.8 points per fill - a 2-3 point stop sits inside one minute's noise.",
+   "decision": "Not adopted. Tight 2-3 point stops on 15-25 extra lots are hit by ordinary one-minute noise ~90% of the time; every version loses, most heavily, and small accounts are wiped out.",
+   "summary": "Add-on scalp (15-25 lots, +5-10 / -2-3 premium points): 0 of 96 versions beat today; ~90% stopped by one-minute noise; Rs 20k accounts wiped. Not adopted.",
+   "period": "Jan 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -3172,6 +3183,15 @@
     "r96"
    ],
    "takeaway": "More profit but falls -51% to -69%, and worse at Rs 20k in 2023-24. Gated from Rs 5L at +100% of the trade's lots is a near-miss (2025-26 fall 3.1 pts deeper). Not adopted."
+  },
+  {
+   "n": 97,
+   "date": "2026-11-10",
+   "topic": "Add 15-25 lots after profit and scalp them (+5-10 / -2-3 premium points)",
+   "ids": [
+    "r97"
+   ],
+   "takeaway": "0 of 96 versions beat today; ~90% of add-ons stopped by one-minute noise (Nifty option moves ~3.8 pts a minute); small accounts wiped. Not adopted."
   }
  ],
  "india_status": {
