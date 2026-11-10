@@ -113,7 +113,8 @@ def overlay(R, P, cap, trig, n_add, stop):
             if added is None:
                 if par >= trig:
                     p_add = mid * (1 + SLIP)
-                    q = min(n_add, int(max(free, 0) // (p_add * lot)))
+                    want = n_add(lots, eq_before) if callable(n_add) else n_add
+                    q = min(want, int(max(free, 0) // (p_add * lot)))
                     if q <= 0:
                         break
                     added = (when, p_add, q)
@@ -179,5 +180,47 @@ def main():
     json.dump(res, open(os.path.join(HERE, "round96_results.json"), "w"), indent=1)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__" and "--small" not in sys.argv:
     main()
+
+
+SIZES = {"+50% of its lots": lambda L, e: max(1, int(round(0.5 * L))), "+100% of its lots": lambda L, e: L,
+         "+3 lots": 3, "+5 lots": 5,
+         "+15 lots only from Rs 5L": lambda L, e: 15 if e >= 500_000 else 0,
+         "+100% of its lots only from Rs 5L": lambda L, e: L if e >= 500_000 else 0}
+
+
+def main_small():
+    q0 = dict(O.B0)
+    k, ak, hk = PB._trade_key(q0), PB._alt_key(q0), PB._hi_key(q0)
+    T = pd.concat([O.trades(k, s) for s in q0["indices"]], ignore_index=True)
+    A = pd.concat([O.trades(ak, s) for s in q0["indices"]], ignore_index=True) if ak else None
+    H = pd.concat([O.trades(hk, s) for s in q0["indices"]], ignore_index=True) if hk else None
+    res = json.load(open(os.path.join(HERE, "round96_results.json")))
+    for cap in (200_000, 20_000):
+        for pn, (a, b) in PER.items():
+            cut = lambda X: X[(X.date >= a) & (X.date <= b)] if X is not None else None  # noqa: E731
+            q = {**q0, "capital": cap}
+            R = PB.replay(cut(T), cap, q["sizing"], q["risk_pct"], q["lots"], q["confidence"], q["gates"], q["max_lots"],
+                          q["dd_half"], cut(A), cpr=q.get("cpr_size", False), hi=cut(H), channel=q.get("channel", True))
+            s0 = PB._summary(R, cap)
+            R = R[R["skipped"].isna()].reset_index(drop=True); R = attach(R, (T, A, H))
+            P, _ = paths(R)
+            row = res.setdefault(f"{cap}|{pn}", {})
+            for trig in (1500, 2500):
+                for nm, fn in SIZES.items():
+                    for stop in ("BE", "lock"):
+                        X = overlay(R, P, cap, trig, fn, stop)
+                        tot = float(X.pnl.sum()) if len(X) else 0.0
+                        eq = R.groupby("date").equity.last()
+                        add = X.groupby("date").pnl.sum().reindex(eq.index).fillna(0).cumsum() if len(X) else 0
+                        curve = eq + add
+                        dd = float((curve / curve.cummax() - 1).min() * 100)
+                        row[f"{trig}|{nm}|{stop}"] = {"final": round(s0["final"] + tot), "addon_total": round(tot), "n": int(len(X)), "dd": round(dd, 1)}
+                        print(f"Rs {cap:,} {pn:<8} {trig} {nm:<36} {stop:<4} final {(s0['final'] + tot) / 1e5:7.2f}L (today {s0['final'] / 1e5:6.2f}L) "
+                              f"dd {dd:+.1f}% (today {s0['max_dd_pct']}%) n={len(X)}", flush=True)
+    json.dump(res, open(os.path.join(HERE, "round96_results.json"), "w"), indent=1)
+
+
+if __name__ == "__main__" and "--small" in sys.argv:
+    main_small()
