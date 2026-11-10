@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-10 05:01 IST",
+ "generated": "2026-11-10 13:05 IST",
  "data_to": "2026-11-09",
  "buy_on": "next trading day's open",
  "tiers": {
@@ -1069,7 +1069,7 @@
      "direction": "up",
      "fo": false,
      "price_date": "2026-08-14",
-     "current": null,
+     "current": 419.93,
      "current_date": "2026-11-09",
      "close": 444.9,
      "entry": "next open (reference \u20b9444.90)",
