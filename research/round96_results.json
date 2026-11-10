@@ -184,6 +184,150 @@
    "worst": -46195,
    "dd": -65.8,
    "stopped": 0.886
+  },
+  "1500|+50% of its lots|BE": {
+   "final": 2214669,
+   "addon_total": 387740,
+   "n": 600,
+   "dd": -38.7
+  },
+  "1500|+50% of its lots|lock": {
+   "final": 2230541,
+   "addon_total": 403612,
+   "n": 600,
+   "dd": -37.1
+  },
+  "1500|+100% of its lots|BE": {
+   "final": 2650915,
+   "addon_total": 823986,
+   "n": 600,
+   "dd": -40.5
+  },
+  "1500|+100% of its lots|lock": {
+   "final": 2667631,
+   "addon_total": 840702,
+   "n": 600,
+   "dd": -40.1
+  },
+  "1500|+3 lots|BE": {
+   "final": 2295887,
+   "addon_total": 468958,
+   "n": 600,
+   "dd": -45.6
+  },
+  "1500|+3 lots|lock": {
+   "final": 2245283,
+   "addon_total": 418354,
+   "n": 600,
+   "dd": -42.5
+  },
+  "1500|+5 lots|BE": {
+   "final": 2507390,
+   "addon_total": 680461,
+   "n": 600,
+   "dd": -48.7
+  },
+  "1500|+5 lots|lock": {
+   "final": 2510806,
+   "addon_total": 683877,
+   "n": 600,
+   "dd": -41.1
+  },
+  "1500|+15 lots only from Rs 5L|BE": {
+   "final": 3627458,
+   "addon_total": 1800529,
+   "n": 331,
+   "dd": -31.3
+  },
+  "1500|+15 lots only from Rs 5L|lock": {
+   "final": 3659480,
+   "addon_total": 1832551,
+   "n": 331,
+   "dd": -31.3
+  },
+  "1500|+100% of its lots only from Rs 5L|BE": {
+   "final": 2612598,
+   "addon_total": 785669,
+   "n": 331,
+   "dd": -31.3
+  },
+  "1500|+100% of its lots only from Rs 5L|lock": {
+   "final": 2628356,
+   "addon_total": 801427,
+   "n": 331,
+   "dd": -31.3
+  },
+  "2500|+50% of its lots|BE": {
+   "final": 2209836,
+   "addon_total": 382907,
+   "n": 500,
+   "dd": -35.8
+  },
+  "2500|+50% of its lots|lock": {
+   "final": 2187589,
+   "addon_total": 360660,
+   "n": 500,
+   "dd": -34.9
+  },
+  "2500|+100% of its lots|BE": {
+   "final": 2651104,
+   "addon_total": 824175,
+   "n": 500,
+   "dd": -36.3
+  },
+  "2500|+100% of its lots|lock": {
+   "final": 2642853,
+   "addon_total": 815924,
+   "n": 500,
+   "dd": -35.3
+  },
+  "2500|+3 lots|BE": {
+   "final": 2320691,
+   "addon_total": 493762,
+   "n": 500,
+   "dd": -35.1
+  },
+  "2500|+3 lots|lock": {
+   "final": 2274709,
+   "addon_total": 447780,
+   "n": 500,
+   "dd": -39.2
+  },
+  "2500|+5 lots|BE": {
+   "final": 2481990,
+   "addon_total": 655061,
+   "n": 500,
+   "dd": -46.2
+  },
+  "2500|+5 lots|lock": {
+   "final": 2497648,
+   "addon_total": 670719,
+   "n": 500,
+   "dd": -47.5
+  },
+  "2500|+15 lots only from Rs 5L|BE": {
+   "final": 3425314,
+   "addon_total": 1598385,
+   "n": 293,
+   "dd": -31.3
+  },
+  "2500|+15 lots only from Rs 5L|lock": {
+   "final": 3471203,
+   "addon_total": 1644274,
+   "n": 293,
+   "dd": -31.3
+  },
+  "2500|+100% of its lots only from Rs 5L|BE": {
+   "final": 2548863,
+   "addon_total": 721934,
+   "n": 293,
+   "dd": -31.3
+  },
+  "2500|+100% of its lots only from Rs 5L|lock": {
+   "final": 2574055,
+   "addon_total": 747126,
+   "n": 293,
+   "dd": -31.3
   }
  },
  "200000|2025-26": {
@@ -371,6 +515,150 @@
    "worst": -59716,
    "dd": -53.9,
    "stopped": 0.872
+  },
+  "1500|+50% of its lots|BE": {
+   "final": 2711815,
+   "addon_total": 420499,
+   "n": 589,
+   "dd": -28.4
+  },
+  "1500|+50% of its lots|lock": {
+   "final": 2635178,
+   "addon_total": 343862,
+   "n": 589,
+   "dd": -28.5
+  },
+  "1500|+100% of its lots|BE": {
+   "final": 2915266,
+   "addon_total": 623950,
+   "n": 589,
+   "dd": -29.0
+  },
+  "1500|+100% of its lots|lock": {
+   "final": 2916736,
+   "addon_total": 625420,
+   "n": 589,
+   "dd": -28.4
+  },
+  "1500|+3 lots|BE": {
+   "final": 2722835,
+   "addon_total": 431519,
+   "n": 589,
+   "dd": -25.6
+  },
+  "1500|+3 lots|lock": {
+   "final": 2761676,
+   "addon_total": 470360,
+   "n": 589,
+   "dd": -24.8
+  },
+  "1500|+5 lots|BE": {
+   "final": 2971726,
+   "addon_total": 680410,
+   "n": 589,
+   "dd": -24.8
+  },
+  "1500|+5 lots|lock": {
+   "final": 3009921,
+   "addon_total": 718605,
+   "n": 589,
+   "dd": -22.9
+  },
+  "1500|+15 lots only from Rs 5L|BE": {
+   "final": 2858609,
+   "addon_total": 567293,
+   "n": 329,
+   "dd": -51.4
+  },
+  "1500|+15 lots only from Rs 5L|lock": {
+   "final": 2902735,
+   "addon_total": 611419,
+   "n": 329,
+   "dd": -50.8
+  },
+  "1500|+100% of its lots only from Rs 5L|BE": {
+   "final": 2744262,
+   "addon_total": 452946,
+   "n": 329,
+   "dd": -32.1
+  },
+  "1500|+100% of its lots only from Rs 5L|lock": {
+   "final": 2738249,
+   "addon_total": 446933,
+   "n": 329,
+   "dd": -31.5
+  },
+  "2500|+50% of its lots|BE": {
+   "final": 2746063,
+   "addon_total": 454747,
+   "n": 483,
+   "dd": -28.1
+  },
+  "2500|+50% of its lots|lock": {
+   "final": 2634439,
+   "addon_total": 343123,
+   "n": 483,
+   "dd": -28.7
+  },
+  "2500|+100% of its lots|BE": {
+   "final": 2863902,
+   "addon_total": 572586,
+   "n": 483,
+   "dd": -28.7
+  },
+  "2500|+100% of its lots|lock": {
+   "final": 2842747,
+   "addon_total": 551431,
+   "n": 483,
+   "dd": -28.5
+  },
+  "2500|+3 lots|BE": {
+   "final": 2709154,
+   "addon_total": 417838,
+   "n": 483,
+   "dd": -32.3
+  },
+  "2500|+3 lots|lock": {
+   "final": 2704678,
+   "addon_total": 413362,
+   "n": 483,
+   "dd": -29.8
+  },
+  "2500|+5 lots|BE": {
+   "final": 2834880,
+   "addon_total": 543564,
+   "n": 483,
+   "dd": -47.5
+  },
+  "2500|+5 lots|lock": {
+   "final": 2889939,
+   "addon_total": 598623,
+   "n": 483,
+   "dd": -41.1
+  },
+  "2500|+15 lots only from Rs 5L|BE": {
+   "final": 2837168,
+   "addon_total": 545852,
+   "n": 272,
+   "dd": -37.2
+  },
+  "2500|+15 lots only from Rs 5L|lock": {
+   "final": 2938725,
+   "addon_total": 647409,
+   "n": 272,
+   "dd": -34.4
+  },
+  "2500|+100% of its lots only from Rs 5L|BE": {
+   "final": 2701034,
+   "addon_total": 409718,
+   "n": 272,
+   "dd": -31.6
+  },
+  "2500|+100% of its lots only from Rs 5L|lock": {
+   "final": 2679732,
+   "addon_total": 388416,
+   "n": 272,
+   "dd": -31.4
   }
  },
  "200000|full": {
@@ -558,6 +846,150 @@
    "worst": -46195,
    "dd": -65.8,
    "stopped": 0.903
+  },
+  "1500|+50% of its lots|BE": {
+   "final": 20318015,
+   "addon_total": 3150768,
+   "n": 1767,
+   "dd": -38.7
+  },
+  "1500|+50% of its lots|lock": {
+   "final": 20401359,
+   "addon_total": 3234112,
+   "n": 1767,
+   "dd": -37.1
+  },
+  "1500|+100% of its lots|BE": {
+   "final": 21116046,
+   "addon_total": 3948799,
+   "n": 1767,
+   "dd": -40.5
+  },
+  "1500|+100% of its lots|lock": {
+   "final": 21062771,
+   "addon_total": 3895524,
+   "n": 1767,
+   "dd": -40.1
+  },
+  "1500|+3 lots|BE": {
+   "final": 18314943,
+   "addon_total": 1147696,
+   "n": 1767,
+   "dd": -45.6
+  },
+  "1500|+3 lots|lock": {
+   "final": 18246133,
+   "addon_total": 1078886,
+   "n": 1767,
+   "dd": -42.5
+  },
+  "1500|+5 lots|BE": {
+   "final": 18925071,
+   "addon_total": 1757824,
+   "n": 1767,
+   "dd": -48.7
+  },
+  "1500|+5 lots|lock": {
+   "final": 18944451,
+   "addon_total": 1777204,
+   "n": 1767,
+   "dd": -41.1
+  },
+  "1500|+15 lots only from Rs 5L|BE": {
+   "final": 21945352,
+   "addon_total": 4778105,
+   "n": 1498,
+   "dd": -31.3
+  },
+  "1500|+15 lots only from Rs 5L|lock": {
+   "final": 21909518,
+   "addon_total": 4742271,
+   "n": 1498,
+   "dd": -31.3
+  },
+  "1500|+100% of its lots only from Rs 5L|BE": {
+   "final": 21077729,
+   "addon_total": 3910482,
+   "n": 1498,
+   "dd": -31.3
+  },
+  "1500|+100% of its lots only from Rs 5L|lock": {
+   "final": 21023496,
+   "addon_total": 3856249,
+   "n": 1498,
+   "dd": -31.3
+  },
+  "2500|+50% of its lots|BE": {
+   "final": 20536616,
+   "addon_total": 3369369,
+   "n": 1645,
+   "dd": -35.8
+  },
+  "2500|+50% of its lots|lock": {
+   "final": 20566796,
+   "addon_total": 3399549,
+   "n": 1645,
+   "dd": -34.9
+  },
+  "2500|+100% of its lots|BE": {
+   "final": 21508442,
+   "addon_total": 4341195,
+   "n": 1645,
+   "dd": -36.3
+  },
+  "2500|+100% of its lots|lock": {
+   "final": 21437554,
+   "addon_total": 4270307,
+   "n": 1645,
+   "dd": -35.3
+  },
+  "2500|+3 lots|BE": {
+   "final": 18467455,
+   "addon_total": 1300208,
+   "n": 1645,
+   "dd": -35.1
+  },
+  "2500|+3 lots|lock": {
+   "final": 18392572,
+   "addon_total": 1225325,
+   "n": 1645,
+   "dd": -39.2
+  },
+  "2500|+5 lots|BE": {
+   "final": 19138733,
+   "addon_total": 1971486,
+   "n": 1645,
+   "dd": -46.2
+  },
+  "2500|+5 lots|lock": {
+   "final": 19125612,
+   "addon_total": 1958365,
+   "n": 1645,
+   "dd": -47.5
+  },
+  "2500|+15 lots only from Rs 5L|BE": {
+   "final": 22119351,
+   "addon_total": 4952104,
+   "n": 1438,
+   "dd": -31.3
+  },
+  "2500|+15 lots only from Rs 5L|lock": {
+   "final": 22120643,
+   "addon_total": 4953396,
+   "n": 1438,
+   "dd": -31.3
+  },
+  "2500|+100% of its lots only from Rs 5L|BE": {
+   "final": 21406202,
+   "addon_total": 4238955,
+   "n": 1438,
+   "dd": -31.3
+  },
+  "2500|+100% of its lots only from Rs 5L|lock": {
+   "final": 21368756,
+   "addon_total": 4201509,
+   "n": 1438,
+   "dd": -31.3
   }
  },
  "20000|2023-24": {
@@ -745,6 +1177,150 @@
    "worst": -30466,
    "dd": -386.3,
    "stopped": 0.918
+  },
+  "1500|+50% of its lots|BE": {
+   "final": 219912,
+   "addon_total": 23997,
+   "n": 245,
+   "dd": -65.5
+  },
+  "1500|+50% of its lots|lock": {
+   "final": 204995,
+   "addon_total": 9080,
+   "n": 245,
+   "dd": -67.0
+  },
+  "1500|+100% of its lots|BE": {
+   "final": 217772,
+   "addon_total": 21857,
+   "n": 245,
+   "dd": -65.5
+  },
+  "1500|+100% of its lots|lock": {
+   "final": 205942,
+   "addon_total": 10027,
+   "n": 245,
+   "dd": -67.0
+  },
+  "1500|+3 lots|BE": {
+   "final": 243681,
+   "addon_total": 47766,
+   "n": 245,
+   "dd": -71.1
+  },
+  "1500|+3 lots|lock": {
+   "final": 238364,
+   "addon_total": 42449,
+   "n": 245,
+   "dd": -64.7
+  },
+  "1500|+5 lots|BE": {
+   "final": 253514,
+   "addon_total": 57599,
+   "n": 245,
+   "dd": -62.0
+  },
+  "1500|+5 lots|lock": {
+   "final": 230618,
+   "addon_total": 34703,
+   "n": 245,
+   "dd": -80.2
+  },
+  "1500|+15 lots only from Rs 5L|BE": {
+   "final": 195915,
+   "addon_total": 0,
+   "n": 0,
+   "dd": -66.0
+  },
+  "1500|+15 lots only from Rs 5L|lock": {
+   "final": 195915,
+   "addon_total": 0,
+   "n": 0,
+   "dd": -66.0
+  },
+  "1500|+100% of its lots only from Rs 5L|BE": {
+   "final": 195915,
+   "addon_total": 0,
+   "n": 0,
+   "dd": -66.0
+  },
+  "1500|+100% of its lots only from Rs 5L|lock": {
+   "final": 195915,
+   "addon_total": 0,
+   "n": 0,
+   "dd": -66.0
+  },
+  "2500|+50% of its lots|BE": {
+   "final": 185719,
+   "addon_total": -10196,
+   "n": 171,
+   "dd": -59.1
+  },
+  "2500|+50% of its lots|lock": {
+   "final": 183158,
+   "addon_total": -12757,
+   "n": 171,
+   "dd": -61.1
+  },
+  "2500|+100% of its lots|BE": {
+   "final": 187106,
+   "addon_total": -8809,
+   "n": 171,
+   "dd": -59.1
+  },
+  "2500|+100% of its lots|lock": {
+   "final": 184544,
+   "addon_total": -11371,
+   "n": 171,
+   "dd": -61.1
+  },
+  "2500|+3 lots|BE": {
+   "final": 212614,
+   "addon_total": 16699,
+   "n": 171,
+   "dd": -46.9
+  },
+  "2500|+3 lots|lock": {
+   "final": 206263,
+   "addon_total": 10348,
+   "n": 171,
+   "dd": -60.4
+  },
+  "2500|+5 lots|BE": {
+   "final": 210161,
+   "addon_total": 14246,
+   "n": 171,
+   "dd": -43.2
+  },
+  "2500|+5 lots|lock": {
+   "final": 200143,
+   "addon_total": 4228,
+   "n": 171,
+   "dd": -53.4
+  },
+  "2500|+15 lots only from Rs 5L|BE": {
+   "final": 195915,
+   "addon_total": 0,
+   "n": 0,
+   "dd": -66.0
+  },
+  "2500|+15 lots only from Rs 5L|lock": {
+   "final": 195915,
+   "addon_total": 0,
+   "n": 0,
+   "dd": -66.0
+  },
+  "2500|+100% of its lots only from Rs 5L|BE": {
+   "final": 195915,
+   "addon_total": 0,
+   "n": 0,
+   "dd": -66.0
+  },
+  "2500|+100% of its lots only from Rs 5L|lock": {
+   "final": 195915,
+   "addon_total": 0,
+   "n": 0,
+   "dd": -66.0
   }
  },
  "20000|2025-26": {
@@ -932,6 +1508,150 @@
    "worst": -11885,
    "dd": -177.7,
    "stopped": 0.902
+  },
+  "1500|+50% of its lots|BE": {
+   "final": 232483,
+   "addon_total": 43864,
+   "n": 221,
+   "dd": -77.8
+  },
+  "1500|+50% of its lots|lock": {
+   "final": 214932,
+   "addon_total": 26313,
+   "n": 221,
+   "dd": -68.4
+  },
+  "1500|+100% of its lots|BE": {
+   "final": 229762,
+   "addon_total": 41143,
+   "n": 221,
+   "dd": -77.8
+  },
+  "1500|+100% of its lots|lock": {
+   "final": 212044,
+   "addon_total": 23425,
+   "n": 221,
+   "dd": -68.4
+  },
+  "1500|+3 lots|BE": {
+   "final": 246010,
+   "addon_total": 57391,
+   "n": 221,
+   "dd": -65.6
+  },
+  "1500|+3 lots|lock": {
+   "final": 222712,
+   "addon_total": 34093,
+   "n": 221,
+   "dd": -57.1
+  },
+  "1500|+5 lots|BE": {
+   "final": 240533,
+   "addon_total": 51914,
+   "n": 221,
+   "dd": -61.6
+  },
+  "1500|+5 lots|lock": {
+   "final": 204395,
+   "addon_total": 15776,
+   "n": 221,
+   "dd": -58.5
+  },
+  "1500|+15 lots only from Rs 5L|BE": {
+   "final": 188619,
+   "addon_total": 0,
+   "n": 0,
+   "dd": -62.6
+  },
+  "1500|+15 lots only from Rs 5L|lock": {
+   "final": 188619,
+   "addon_total": 0,
+   "n": 0,
+   "dd": -62.6
+  },
+  "1500|+100% of its lots only from Rs 5L|BE": {
+   "final": 188619,
+   "addon_total": 0,
+   "n": 0,
+   "dd": -62.6
+  },
+  "1500|+100% of its lots only from Rs 5L|lock": {
+   "final": 188619,
+   "addon_total": 0,
+   "n": 0,
+   "dd": -62.6
+  },
+  "2500|+50% of its lots|BE": {
+   "final": 232581,
+   "addon_total": 43962,
+   "n": 164,
+   "dd": -78.1
+  },
+  "2500|+50% of its lots|lock": {
+   "final": 217227,
+   "addon_total": 28608,
+   "n": 164,
+   "dd": -76.5
+  },
+  "2500|+100% of its lots|BE": {
+   "final": 230864,
+   "addon_total": 42245,
+   "n": 164,
+   "dd": -78.1
+  },
+  "2500|+100% of its lots|lock": {
+   "final": 215228,
+   "addon_total": 26609,
+   "n": 164,
+   "dd": -76.5
+  },
+  "2500|+3 lots|BE": {
+   "final": 137654,
+   "addon_total": -50965,
+   "n": 164,
+   "dd": -103.8
+  },
+  "2500|+3 lots|lock": {
+   "final": 152570,
+   "addon_total": -36049,
+   "n": 164,
+   "dd": -91.8
+  },
+  "2500|+5 lots|BE": {
+   "final": 86711,
+   "addon_total": -101908,
+   "n": 164,
+   "dd": -107.9
+  },
+  "2500|+5 lots|lock": {
+   "final": 81002,
+   "addon_total": -107617,
+   "n": 164,
+   "dd": -109.5
+  },
+  "2500|+15 lots only from Rs 5L|BE": {
+   "final": 188619,
+   "addon_total": 0,
+   "n": 0,
+   "dd": -62.6
+  },
+  "2500|+15 lots only from Rs 5L|lock": {
+   "final": 188619,
+   "addon_total": 0,
+   "n": 0,
+   "dd": -62.6
+  },
+  "2500|+100% of its lots only from Rs 5L|BE": {
+   "final": 188619,
+   "addon_total": 0,
+   "n": 0,
+   "dd": -62.6
+  },
+  "2500|+100% of its lots only from Rs 5L|lock": {
+   "final": 188619,
+   "addon_total": 0,
+   "n": 0,
+   "dd": -62.6
   }
  },
  "20000|full": {
@@ -1119,6 +1839,150 @@
    "worst": -55738,
    "dd": -844.0,
    "stopped": 0.905
+  },
+  "1500|+50% of its lots|BE": {
+   "final": 1038634,
+   "addon_total": 168929,
+   "n": 604,
+   "dd": -65.5
+  },
+  "1500|+50% of its lots|lock": {
+   "final": 980630,
+   "addon_total": 110925,
+   "n": 604,
+   "dd": -67.0
+  },
+  "1500|+100% of its lots|BE": {
+   "final": 1093869,
+   "addon_total": 224164,
+   "n": 604,
+   "dd": -65.5
+  },
+  "1500|+100% of its lots|lock": {
+   "final": 1072692,
+   "addon_total": 202987,
+   "n": 604,
+   "dd": -67.0
+  },
+  "1500|+3 lots|BE": {
+   "final": 1096115,
+   "addon_total": 226410,
+   "n": 604,
+   "dd": -71.1
+  },
+  "1500|+3 lots|lock": {
+   "final": 1110520,
+   "addon_total": 240815,
+   "n": 604,
+   "dd": -64.7
+  },
+  "1500|+5 lots|BE": {
+   "final": 1283553,
+   "addon_total": 413848,
+   "n": 604,
+   "dd": -62.0
+  },
+  "1500|+5 lots|lock": {
+   "final": 1269176,
+   "addon_total": 399471,
+   "n": 604,
+   "dd": -80.2
+  },
+  "1500|+15 lots only from Rs 5L|BE": {
+   "final": 1248951,
+   "addon_total": 379246,
+   "n": 55,
+   "dd": -66.0
+  },
+  "1500|+15 lots only from Rs 5L|lock": {
+   "final": 1260178,
+   "addon_total": 390473,
+   "n": 55,
+   "dd": -66.0
+  },
+  "1500|+100% of its lots only from Rs 5L|BE": {
+   "final": 994363,
+   "addon_total": 124658,
+   "n": 55,
+   "dd": -66.0
+  },
+  "1500|+100% of its lots only from Rs 5L|lock": {
+   "final": 1001768,
+   "addon_total": 132063,
+   "n": 55,
+   "dd": -66.0
+  },
+  "2500|+50% of its lots|BE": {
+   "final": 986948,
+   "addon_total": 117243,
+   "n": 461,
+   "dd": -59.1
+  },
+  "2500|+50% of its lots|lock": {
+   "final": 972928,
+   "addon_total": 103223,
+   "n": 461,
+   "dd": -61.1
+  },
+  "2500|+100% of its lots|BE": {
+   "final": 1118417,
+   "addon_total": 248712,
+   "n": 461,
+   "dd": -59.1
+  },
+  "2500|+100% of its lots|lock": {
+   "final": 1087050,
+   "addon_total": 217345,
+   "n": 461,
+   "dd": -61.1
+  },
+  "2500|+3 lots|BE": {
+   "final": 887974,
+   "addon_total": 18269,
+   "n": 461,
+   "dd": -85.3
+  },
+  "2500|+3 lots|lock": {
+   "final": 891407,
+   "addon_total": 21702,
+   "n": 461,
+   "dd": -77.3
+  },
+  "2500|+5 lots|BE": {
+   "final": 911991,
+   "addon_total": 42286,
+   "n": 461,
+   "dd": -104.3
+  },
+  "2500|+5 lots|lock": {
+   "final": 969875,
+   "addon_total": 100170,
+   "n": 461,
+   "dd": -96.9
+  },
+  "2500|+15 lots only from Rs 5L|BE": {
+   "final": 1345166,
+   "addon_total": 475461,
+   "n": 45,
+   "dd": -66.0
+  },
+  "2500|+15 lots only from Rs 5L|lock": {
+   "final": 1350283,
+   "addon_total": 480578,
+   "n": 45,
+   "dd": -66.0
+  },
+  "2500|+100% of its lots only from Rs 5L|BE": {
+   "final": 1030245,
+   "addon_total": 160540,
+   "n": 45,
+   "dd": -66.0
+  },
+  "2500|+100% of its lots only from Rs 5L|lock": {
+   "final": 1030128,
+   "addon_total": 160423,
+   "n": 45,
+   "dd": -66.0
   }
  }
 }

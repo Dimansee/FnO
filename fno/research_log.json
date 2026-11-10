@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-09",
+ "updated": "2026-11-10",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
@@ -1662,6 +1662,17 @@
    "decision": "Not adopted. Buying to expiry (naked or debit spreads) loses in every version; the seller's edge is time decay and is not available to a buyer. Autopilot keeps buying intraday trend moves (its edge is direction on trend days, not premium); no call/put filter from this.",
    "summary": "Buy-side mirror of the credit finding: 0 of 192 versions pass, every family negative; Autopilot's call/put split follows the year's direction. Nothing to add.",
    "period": "9 Oct 2023 - 9 Oct 2026"
+  },
+  {
+   "id": "r96",
+   "date": "2026-11-10",
+   "area": "Index options",
+   "title": "Round 96: add 10-15 lots once a trade is Rs 1,500-2,500 in profit, stop at breakeven or in profit (pyramiding into the same trade)",
+   "asked": "User (10 Nov): add 10-15 more lots after Rs 1,500-2,500 profit, with their stop at breakeven or in some profit. Method: today's Autopilot (rounds 88 + 90), Outcomes replay at Rs 2L and Rs 20k; every taken trade's option re-marked on 5-min bars with the app's pricing (implied vol backed out of the entry price; re-marked exits vs stored exits: median gap 1.4-1.9%, corr 0.998); trigger Rs 1,500 / 2,000 / 2,500 open profit at a bar close; add 10 / 15 lots (cash-limited), then smaller sizes (+50% / +100% of the trade's lots, +3 / +5 lots) and versions that add only from Rs 5L equity; stop for the add-on: whole position back to Rs 0 (BE), to +Rs 500 (lock), or the add-on's own entry (own); charges and 0.5% slippage; bar closes only; add-on profit not re-invested.",
+   "result": "10-15 lots: Rs 2L more profit in every period but much deeper falls - best full 221L vs 171.7L, falls -51% to -69% (today -31%); 2023-24 falls -51% to -66%. Rs 20k: 2023-24 worse in every version (best 1.58L vs 1.96L, some below zero), falls -82% to -86%. Only ~15-17% of add-ons win; trend-day runs carry them. 'own' stop is the weakest. Smaller sizes from the start: +50% of lots 203-206L (fall -35% to -39%), +100% 211-215L (-35% to -41%), +3 / +5 lots 182-189L (-35% to -49%). Gated from Rs 5L: Rs 2L 2023-24 25.5-36.6L vs 18.27L (same -31.3% fall), 2025-26 26.8-29.4L vs 22.91L but fall -31.4% to -51.4% vs -28.3%, full 210-221L at -31.3%; Rs 20k halves unchanged (never reach Rs 5L), full 9.9-13.5L vs 8.70L. Closest: +100% of the trade's lots after Rs 2,500, lock +Rs 500, from Rs 5L: 25.74L / 26.80L / 213.7L, 2025-26 fall -31.4% (3.1 pts deeper than today; bar allows 2).",
+   "decision": "Not adopted. Adding 10-15 lots raises profit but deepens the worst fall to -51% or worse, and loses at Rs 20k in 2023-24. The equity-gated, size-matched version (+100% of its lots after Rs 2,500, lock +Rs 500, from Rs 5L) is a near-miss: better in every period at Rs 2L, unchanged at Rs 20k, but its 2025-26 fall is 3.1 pts deeper. Watch list p-addon: re-check with intrabar stops and once live fills show slippage on larger orders.",
+   "summary": "Pyramiding 10-15 lots after Rs 1,500-2,500: more profit, but falls -51% to -69% and worse at Rs 20k. Gated from Rs 5L at +100% of the trade's lots is a near-miss (2025-26 fall 3.1 pts deeper). Not adopted; watch list.",
+   "period": "Jan 2023 - Oct 2026"
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2108,6 +2119,13 @@
    "title": "Previous-day b-shape profile -> PUT at the thin zone above value (volume profile)",
    "waiting_for": "Real Nifty / Sensex futures volume history",
    "why": "Round 91: +Rs 465/trade every year on a heavyweight-volume proxy, but flat on TPO and lowers Autopilot at Rs 2L; only worth re-testing on real futures volume."
+  },
+  {
+   "id": "p-addon",
+   "area": "Index options",
+   "title": "Add +100% of the trade's lots after Rs 2,500 open profit, stop lock +Rs 500, from Rs 5L equity",
+   "waiting_for": "Intrabar (1-min) stop check and live fill slippage on larger orders",
+   "why": "Round 96 near-miss: better in every period at Rs 2L (full 213.7L vs 171.7L), unchanged at Rs 20k, but the 2025-26 fall is 3.1 pts deeper."
   }
  ],
  "crypto_rounds": [
@@ -3145,6 +3163,15 @@
     "r95"
    ],
    "takeaway": "0 of 192 buy-side versions pass; buying to expiry pays the decay sellers collect. Autopilot's call/put split just follows each year's direction. Nothing to add."
+  },
+  {
+   "n": 96,
+   "date": "2026-11-10",
+   "topic": "Pyramiding: add 10-15 lots after Rs 1,500-2,500 profit, stop at breakeven / in profit",
+   "ids": [
+    "r96"
+   ],
+   "takeaway": "More profit but falls -51% to -69%, and worse at Rs 20k in 2023-24. Gated from Rs 5L at +100% of the trade's lots is a near-miss (2025-26 fall 3.1 pts deeper). Not adopted."
   }
  ],
  "india_status": {
