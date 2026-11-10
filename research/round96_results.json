@@ -1,0 +1,1124 @@
+{
+ "200000|2023-24": {
+  "today": {
+   "final": 1826929,
+   "dd": -31.3,
+   "trades": 1139
+  },
+  "1500|10|BE": {
+   "final": 3251435,
+   "addon_total": 1424506,
+   "n": 600,
+   "avg_lots": 10.0,
+   "win": 0.167,
+   "worst": -30812,
+   "dd": -39.5,
+   "stopped": 0.808
+  },
+  "1500|10|lock": {
+   "final": 3236118,
+   "addon_total": 1409189,
+   "n": 600,
+   "avg_lots": 10.0,
+   "win": 0.16,
+   "worst": -30812,
+   "dd": -35.8,
+   "stopped": 0.815
+  },
+  "1500|10|own": {
+   "final": 2765564,
+   "addon_total": 938635,
+   "n": 600,
+   "avg_lots": 10.0,
+   "win": 0.107,
+   "worst": -30812,
+   "dd": -40.0,
+   "stopped": 0.883
+  },
+  "1500|15|BE": {
+   "final": 3713883,
+   "addon_total": 1886954,
+   "n": 600,
+   "avg_lots": 14.9,
+   "win": 0.153,
+   "worst": -46195,
+   "dd": -51.4,
+   "stopped": 0.823
+  },
+  "1500|15|lock": {
+   "final": 3671909,
+   "addon_total": 1844980,
+   "n": 600,
+   "avg_lots": 14.9,
+   "win": 0.148,
+   "worst": -46195,
+   "dd": -57.3,
+   "stopped": 0.83
+  },
+  "1500|15|own": {
+   "final": 3045107,
+   "addon_total": 1218178,
+   "n": 600,
+   "avg_lots": 14.9,
+   "win": 0.107,
+   "worst": -46195,
+   "dd": -64.4,
+   "stopped": 0.883
+  },
+  "2000|10|BE": {
+   "final": 3032919,
+   "addon_total": 1205990,
+   "n": 550,
+   "avg_lots": 10.0,
+   "win": 0.176,
+   "worst": -30812,
+   "dd": -55.0,
+   "stopped": 0.798
+  },
+  "2000|10|lock": {
+   "final": 3038270,
+   "addon_total": 1211341,
+   "n": 550,
+   "avg_lots": 10.0,
+   "win": 0.169,
+   "worst": -30812,
+   "dd": -51.2,
+   "stopped": 0.807
+  },
+  "2000|10|own": {
+   "final": 2733800,
+   "addon_total": 906871,
+   "n": 550,
+   "avg_lots": 10.0,
+   "win": 0.118,
+   "worst": -30812,
+   "dd": -47.8,
+   "stopped": 0.873
+  },
+  "2000|15|BE": {
+   "final": 3556032,
+   "addon_total": 1729103,
+   "n": 550,
+   "avg_lots": 14.8,
+   "win": 0.162,
+   "worst": -46195,
+   "dd": -65.8,
+   "stopped": 0.816
+  },
+  "2000|15|lock": {
+   "final": 3615535,
+   "addon_total": 1788606,
+   "n": 550,
+   "avg_lots": 14.8,
+   "win": 0.16,
+   "worst": -46195,
+   "dd": -63.5,
+   "stopped": 0.82
+  },
+  "2000|15|own": {
+   "final": 3099567,
+   "addon_total": 1272638,
+   "n": 550,
+   "avg_lots": 14.8,
+   "win": 0.118,
+   "worst": -46195,
+   "dd": -64.5,
+   "stopped": 0.873
+  },
+  "2500|10|BE": {
+   "final": 2988029,
+   "addon_total": 1161100,
+   "n": 500,
+   "avg_lots": 10.0,
+   "win": 0.18,
+   "worst": -30812,
+   "dd": -60.1,
+   "stopped": 0.796
+  },
+  "2500|10|lock": {
+   "final": 2884344,
+   "addon_total": 1057415,
+   "n": 500,
+   "avg_lots": 10.0,
+   "win": 0.172,
+   "worst": -30812,
+   "dd": -56.0,
+   "stopped": 0.804
+  },
+  "2500|10|own": {
+   "final": 2515559,
+   "addon_total": 688630,
+   "n": 500,
+   "avg_lots": 10.0,
+   "win": 0.108,
+   "worst": -30812,
+   "dd": -50.0,
+   "stopped": 0.886
+  },
+  "2500|15|BE": {
+   "final": 3399479,
+   "addon_total": 1572550,
+   "n": 500,
+   "avg_lots": 14.8,
+   "win": 0.162,
+   "worst": -46195,
+   "dd": -68.7,
+   "stopped": 0.818
+  },
+  "2500|15|lock": {
+   "final": 3481918,
+   "addon_total": 1654989,
+   "n": 500,
+   "avg_lots": 14.8,
+   "win": 0.16,
+   "worst": -46195,
+   "dd": -66.1,
+   "stopped": 0.822
+  },
+  "2500|15|own": {
+   "final": 2803477,
+   "addon_total": 976548,
+   "n": 500,
+   "avg_lots": 14.8,
+   "win": 0.108,
+   "worst": -46195,
+   "dd": -65.8,
+   "stopped": 0.886
+  }
+ },
+ "200000|2025-26": {
+  "today": {
+   "final": 2291316,
+   "dd": -28.3,
+   "trades": 1064
+  },
+  "1500|10|BE": {
+   "final": 3727178,
+   "addon_total": 1435862,
+   "n": 589,
+   "avg_lots": 10.0,
+   "win": 0.16,
+   "worst": -39029,
+   "dd": -25.3,
+   "stopped": 0.823
+  },
+  "1500|10|lock": {
+   "final": 3812001,
+   "addon_total": 1520685,
+   "n": 589,
+   "avg_lots": 10.0,
+   "win": 0.153,
+   "worst": -39029,
+   "dd": -23.5,
+   "stopped": 0.832
+  },
+  "1500|10|own": {
+   "final": 3524396,
+   "addon_total": 1233080,
+   "n": 589,
+   "avg_lots": 10.0,
+   "win": 0.124,
+   "worst": -32506,
+   "dd": -26.6,
+   "stopped": 0.866
+  },
+  "1500|15|BE": {
+   "final": 4640805,
+   "addon_total": 2349489,
+   "n": 589,
+   "avg_lots": 14.8,
+   "win": 0.153,
+   "worst": -50724,
+   "dd": -22.6,
+   "stopped": 0.834
+  },
+  "1500|15|lock": {
+   "final": 4464881,
+   "addon_total": 2173565,
+   "n": 589,
+   "avg_lots": 14.8,
+   "win": 0.144,
+   "worst": -50724,
+   "dd": -27.7,
+   "stopped": 0.842
+  },
+  "1500|15|own": {
+   "final": 4141858,
+   "addon_total": 1850542,
+   "n": 589,
+   "avg_lots": 14.8,
+   "win": 0.124,
+   "worst": -35752,
+   "dd": -31.4,
+   "stopped": 0.866
+  },
+  "2000|10|BE": {
+   "final": 3540368,
+   "addon_total": 1249052,
+   "n": 523,
+   "avg_lots": 10.0,
+   "win": 0.166,
+   "worst": -39827,
+   "dd": -27.9,
+   "stopped": 0.813
+  },
+  "2000|10|lock": {
+   "final": 3585205,
+   "addon_total": 1293889,
+   "n": 523,
+   "avg_lots": 10.0,
+   "win": 0.159,
+   "worst": -39827,
+   "dd": -27.9,
+   "stopped": 0.826
+  },
+  "2000|10|own": {
+   "final": 3340893,
+   "addon_total": 1049577,
+   "n": 523,
+   "avg_lots": 10.0,
+   "win": 0.126,
+   "worst": -39827,
+   "dd": -29.1,
+   "stopped": 0.868
+  },
+  "2000|15|BE": {
+   "final": 4249770,
+   "addon_total": 1958454,
+   "n": 523,
+   "avg_lots": 14.8,
+   "win": 0.159,
+   "worst": -59716,
+   "dd": -30.2,
+   "stopped": 0.83
+  },
+  "2000|15|lock": {
+   "final": 4299882,
+   "addon_total": 2008566,
+   "n": 523,
+   "avg_lots": 14.8,
+   "win": 0.155,
+   "worst": -59716,
+   "dd": -30.2,
+   "stopped": 0.834
+  },
+  "2000|15|own": {
+   "final": 3809395,
+   "addon_total": 1518079,
+   "n": 523,
+   "avg_lots": 14.8,
+   "win": 0.126,
+   "worst": -59716,
+   "dd": -32.5,
+   "stopped": 0.868
+  },
+  "2500|10|BE": {
+   "final": 3317035,
+   "addon_total": 1025719,
+   "n": 483,
+   "avg_lots": 10.0,
+   "win": 0.164,
+   "worst": -39827,
+   "dd": -48.1,
+   "stopped": 0.812
+  },
+  "2500|10|lock": {
+   "final": 3369560,
+   "addon_total": 1078244,
+   "n": 483,
+   "avg_lots": 10.0,
+   "win": 0.161,
+   "worst": -39827,
+   "dd": -47.9,
+   "stopped": 0.822
+  },
+  "2500|10|own": {
+   "final": 3071482,
+   "addon_total": 780166,
+   "n": 483,
+   "avg_lots": 10.0,
+   "win": 0.122,
+   "worst": -39827,
+   "dd": -47.6,
+   "stopped": 0.872
+  },
+  "2500|15|BE": {
+   "final": 3938252,
+   "addon_total": 1646936,
+   "n": 483,
+   "avg_lots": 14.8,
+   "win": 0.159,
+   "worst": -59716,
+   "dd": -57.0,
+   "stopped": 0.828
+  },
+  "2500|15|lock": {
+   "final": 4082253,
+   "addon_total": 1790937,
+   "n": 483,
+   "avg_lots": 14.8,
+   "win": 0.159,
+   "worst": -59716,
+   "dd": -55.4,
+   "stopped": 0.828
+  },
+  "2500|15|own": {
+   "final": 3421974,
+   "addon_total": 1130658,
+   "n": 483,
+   "avg_lots": 14.8,
+   "win": 0.122,
+   "worst": -59716,
+   "dd": -53.9,
+   "stopped": 0.872
+  }
+ },
+ "200000|full": {
+  "today": {
+   "final": 17167247,
+   "dd": -31.3,
+   "trades": 2590
+  },
+  "1500|10|BE": {
+   "final": 20770076,
+   "addon_total": 3602829,
+   "n": 1767,
+   "avg_lots": 10.0,
+   "win": 0.181,
+   "worst": -30812,
+   "dd": -39.5,
+   "stopped": 0.789
+  },
+  "1500|10|lock": {
+   "final": 20780690,
+   "addon_total": 3613443,
+   "n": 1767,
+   "avg_lots": 10.0,
+   "win": 0.177,
+   "worst": -30812,
+   "dd": -35.8,
+   "stopped": 0.795
+  },
+  "1500|10|own": {
+   "final": 18460182,
+   "addon_total": 1292935,
+   "n": 1767,
+   "avg_lots": 10.0,
+   "win": 0.091,
+   "worst": -30812,
+   "dd": -40.0,
+   "stopped": 0.901
+  },
+  "1500|15|BE": {
+   "final": 22031777,
+   "addon_total": 4864530,
+   "n": 1767,
+   "avg_lots": 15.0,
+   "win": 0.168,
+   "worst": -46195,
+   "dd": -51.4,
+   "stopped": 0.806
+  },
+  "1500|15|lock": {
+   "final": 21921947,
+   "addon_total": 4754700,
+   "n": 1767,
+   "avg_lots": 15.0,
+   "win": 0.164,
+   "worst": -46195,
+   "dd": -57.3,
+   "stopped": 0.81
+  },
+  "1500|15|own": {
+   "final": 18944416,
+   "addon_total": 1777169,
+   "n": 1767,
+   "avg_lots": 15.0,
+   "win": 0.091,
+   "worst": -46195,
+   "dd": -64.4,
+   "stopped": 0.901
+  },
+  "2000|10|BE": {
+   "final": 20559977,
+   "addon_total": 3392730,
+   "n": 1707,
+   "avg_lots": 10.0,
+   "win": 0.185,
+   "worst": -30812,
+   "dd": -55.0,
+   "stopped": 0.784
+  },
+  "2000|10|lock": {
+   "final": 20593706,
+   "addon_total": 3426459,
+   "n": 1707,
+   "avg_lots": 10.0,
+   "win": 0.181,
+   "worst": -30812,
+   "dd": -51.2,
+   "stopped": 0.79
+  },
+  "2000|10|own": {
+   "final": 18307245,
+   "addon_total": 1139998,
+   "n": 1707,
+   "avg_lots": 10.0,
+   "win": 0.092,
+   "worst": -30812,
+   "dd": -47.8,
+   "stopped": 0.9
+  },
+  "2000|15|BE": {
+   "final": 21888552,
+   "addon_total": 4721305,
+   "n": 1707,
+   "avg_lots": 14.9,
+   "win": 0.171,
+   "worst": -46195,
+   "dd": -65.8,
+   "stopped": 0.802
+  },
+  "2000|15|lock": {
+   "final": 21886770,
+   "addon_total": 4719523,
+   "n": 1707,
+   "avg_lots": 14.9,
+   "win": 0.169,
+   "worst": -46195,
+   "dd": -63.5,
+   "stopped": 0.805
+  },
+  "2000|15|own": {
+   "final": 18816881,
+   "addon_total": 1649634,
+   "n": 1707,
+   "avg_lots": 14.9,
+   "win": 0.092,
+   "worst": -46195,
+   "dd": -64.5,
+   "stopped": 0.9
+  },
+  "2500|10|BE": {
+   "final": 20784084,
+   "addon_total": 3616837,
+   "n": 1645,
+   "avg_lots": 10.0,
+   "win": 0.193,
+   "worst": -30812,
+   "dd": -60.1,
+   "stopped": 0.777
+  },
+  "2500|10|lock": {
+   "final": 20714948,
+   "addon_total": 3547701,
+   "n": 1645,
+   "avg_lots": 10.0,
+   "win": 0.188,
+   "worst": -30812,
+   "dd": -56.0,
+   "stopped": 0.783
+  },
+  "2500|10|own": {
+   "final": 18287669,
+   "addon_total": 1120422,
+   "n": 1645,
+   "avg_lots": 10.0,
+   "win": 0.091,
+   "worst": -30812,
+   "dd": -50.0,
+   "stopped": 0.903
+  },
+  "2500|15|BE": {
+   "final": 22093516,
+   "addon_total": 4926269,
+   "n": 1645,
+   "avg_lots": 14.9,
+   "win": 0.177,
+   "worst": -46195,
+   "dd": -68.7,
+   "stopped": 0.797
+  },
+  "2500|15|lock": {
+   "final": 22131358,
+   "addon_total": 4964111,
+   "n": 1645,
+   "avg_lots": 14.9,
+   "win": 0.174,
+   "worst": -46195,
+   "dd": -66.1,
+   "stopped": 0.8
+  },
+  "2500|15|own": {
+   "final": 18818506,
+   "addon_total": 1651259,
+   "n": 1645,
+   "avg_lots": 14.9,
+   "win": 0.091,
+   "worst": -46195,
+   "dd": -65.8,
+   "stopped": 0.903
+  }
+ },
+ "20000|2023-24": {
+  "today": {
+   "final": 195915,
+   "dd": -66.2,
+   "trades": 669
+  },
+  "1500|10|BE": {
+   "final": 114349,
+   "addon_total": -81566,
+   "n": 245,
+   "avg_lots": 6.2,
+   "win": 0.204,
+   "worst": -25327,
+   "dd": -81.5,
+   "stopped": 0.776
+  },
+  "1500|10|lock": {
+   "final": 143161,
+   "addon_total": -52754,
+   "n": 245,
+   "avg_lots": 6.2,
+   "win": 0.18,
+   "worst": -25327,
+   "dd": -82.4,
+   "stopped": 0.804
+  },
+  "1500|10|own": {
+   "final": -108662,
+   "addon_total": -304577,
+   "n": 245,
+   "avg_lots": 6.2,
+   "win": 0.098,
+   "worst": -24246,
+   "dd": -156.9,
+   "stopped": 0.894
+  },
+  "1500|15|BE": {
+   "final": 83179,
+   "addon_total": -112736,
+   "n": 245,
+   "avg_lots": 7.2,
+   "win": 0.204,
+   "worst": -37967,
+   "dd": -85.6,
+   "stopped": 0.776
+  },
+  "1500|15|lock": {
+   "final": 158323,
+   "addon_total": -37592,
+   "n": 245,
+   "avg_lots": 7.2,
+   "win": 0.18,
+   "worst": -35148,
+   "dd": -82.4,
+   "stopped": 0.804
+  },
+  "1500|15|own": {
+   "final": -166986,
+   "addon_total": -362901,
+   "n": 245,
+   "avg_lots": 7.2,
+   "win": 0.098,
+   "worst": -35148,
+   "dd": -170.5,
+   "stopped": 0.894
+  },
+  "2000|10|BE": {
+   "final": -213971,
+   "addon_total": -409886,
+   "n": 203,
+   "avg_lots": 6.3,
+   "win": 0.172,
+   "worst": -25327,
+   "dd": -217.7,
+   "stopped": 0.798
+  },
+  "2000|10|lock": {
+   "final": -196944,
+   "addon_total": -392859,
+   "n": 203,
+   "avg_lots": 6.3,
+   "win": 0.148,
+   "worst": -25327,
+   "dd": -217.4,
+   "stopped": 0.823
+  },
+  "2000|10|own": {
+   "final": -220162,
+   "addon_total": -416077,
+   "n": 203,
+   "avg_lots": 6.3,
+   "win": 0.089,
+   "worst": -24869,
+   "dd": -266.6,
+   "stopped": 0.906
+  },
+  "2000|15|BE": {
+   "final": -321725,
+   "addon_total": -517640,
+   "n": 203,
+   "avg_lots": 7.2,
+   "win": 0.172,
+   "worst": -37967,
+   "dd": -272.2,
+   "stopped": 0.798
+  },
+  "2000|15|lock": {
+   "final": -286643,
+   "addon_total": -482558,
+   "n": 203,
+   "avg_lots": 7.2,
+   "win": 0.143,
+   "worst": -35148,
+   "dd": -266.5,
+   "stopped": 0.828
+  },
+  "2000|15|own": {
+   "final": -324493,
+   "addon_total": -520408,
+   "n": 203,
+   "avg_lots": 7.2,
+   "win": 0.089,
+   "worst": -35148,
+   "dd": -346.9,
+   "stopped": 0.906
+  },
+  "2500|10|BE": {
+   "final": 8447,
+   "addon_total": -187468,
+   "n": 171,
+   "avg_lots": 6.0,
+   "win": 0.222,
+   "worst": -24869,
+   "dd": -97.0,
+   "stopped": 0.725
+  },
+  "2500|10|lock": {
+   "final": -1266,
+   "addon_total": -197181,
+   "n": 171,
+   "avg_lots": 6.0,
+   "win": 0.193,
+   "worst": -24869,
+   "dd": -100.5,
+   "stopped": 0.766
+  },
+  "2500|10|own": {
+   "final": -203649,
+   "addon_total": -399564,
+   "n": 171,
+   "avg_lots": 6.0,
+   "win": 0.07,
+   "worst": -24869,
+   "dd": -304.7,
+   "stopped": 0.918
+  },
+  "2500|15|BE": {
+   "final": -66034,
+   "addon_total": -261949,
+   "n": 171,
+   "avg_lots": 6.8,
+   "win": 0.222,
+   "worst": -30466,
+   "dd": -123.4,
+   "stopped": 0.725
+  },
+  "2500|15|lock": {
+   "final": -99359,
+   "addon_total": -295274,
+   "n": 171,
+   "avg_lots": 6.8,
+   "win": 0.187,
+   "worst": -30466,
+   "dd": -137.7,
+   "stopped": 0.772
+  },
+  "2500|15|own": {
+   "final": -284785,
+   "addon_total": -480700,
+   "n": 171,
+   "avg_lots": 6.8,
+   "win": 0.07,
+   "worst": -30466,
+   "dd": -386.3,
+   "stopped": 0.918
+  }
+ },
+ "20000|2025-26": {
+  "today": {
+   "final": 188619,
+   "dd": -62.6,
+   "trades": 575
+  },
+  "1500|10|BE": {
+   "final": 207583,
+   "addon_total": 18964,
+   "n": 221,
+   "avg_lots": 5.2,
+   "win": 0.181,
+   "worst": -18109,
+   "dd": -61.4,
+   "stopped": 0.792
+  },
+  "1500|10|lock": {
+   "final": 222847,
+   "addon_total": 34228,
+   "n": 221,
+   "avg_lots": 5.2,
+   "win": 0.158,
+   "worst": -18109,
+   "dd": -60.7,
+   "stopped": 0.824
+  },
+  "1500|10|own": {
+   "final": 193796,
+   "addon_total": 5177,
+   "n": 221,
+   "avg_lots": 5.2,
+   "win": 0.118,
+   "worst": -18109,
+   "dd": -62.5,
+   "stopped": 0.864
+  },
+  "1500|15|BE": {
+   "final": 194278,
+   "addon_total": 5659,
+   "n": 221,
+   "avg_lots": 5.5,
+   "win": 0.181,
+   "worst": -18109,
+   "dd": -61.4,
+   "stopped": 0.792
+  },
+  "1500|15|lock": {
+   "final": 202721,
+   "addon_total": 14102,
+   "n": 221,
+   "avg_lots": 5.5,
+   "win": 0.158,
+   "worst": -18109,
+   "dd": -60.7,
+   "stopped": 0.824
+  },
+  "1500|15|own": {
+   "final": 176860,
+   "addon_total": -11759,
+   "n": 221,
+   "avg_lots": 5.5,
+   "win": 0.118,
+   "worst": -18109,
+   "dd": -62.5,
+   "stopped": 0.864
+  },
+  "2000|10|BE": {
+   "final": 113423,
+   "addon_total": -75196,
+   "n": 191,
+   "avg_lots": 5.1,
+   "win": 0.178,
+   "worst": -18109,
+   "dd": -112.1,
+   "stopped": 0.791
+  },
+  "2000|10|lock": {
+   "final": 100562,
+   "addon_total": -88057,
+   "n": 191,
+   "avg_lots": 5.1,
+   "win": 0.152,
+   "worst": -18109,
+   "dd": -123.4,
+   "stopped": 0.832
+  },
+  "2000|10|own": {
+   "final": 81663,
+   "addon_total": -106956,
+   "n": 191,
+   "avg_lots": 5.1,
+   "win": 0.089,
+   "worst": -18109,
+   "dd": -242.5,
+   "stopped": 0.906
+  },
+  "2000|15|BE": {
+   "final": 96621,
+   "addon_total": -91998,
+   "n": 191,
+   "avg_lots": 5.3,
+   "win": 0.178,
+   "worst": -18109,
+   "dd": -112.1,
+   "stopped": 0.791
+  },
+  "2000|15|lock": {
+   "final": 83760,
+   "addon_total": -104859,
+   "n": 191,
+   "avg_lots": 5.3,
+   "win": 0.152,
+   "worst": -18109,
+   "dd": -123.4,
+   "stopped": 0.832
+  },
+  "2000|15|own": {
+   "final": 66084,
+   "addon_total": -122535,
+   "n": 191,
+   "avg_lots": 5.3,
+   "win": 0.089,
+   "worst": -18109,
+   "dd": -242.5,
+   "stopped": 0.906
+  },
+  "2500|10|BE": {
+   "final": 66006,
+   "addon_total": -122613,
+   "n": 164,
+   "avg_lots": 4.8,
+   "win": 0.22,
+   "worst": -14499,
+   "dd": -110.4,
+   "stopped": 0.744
+  },
+  "2500|10|lock": {
+   "final": 51674,
+   "addon_total": -136945,
+   "n": 164,
+   "avg_lots": 4.8,
+   "win": 0.201,
+   "worst": -14499,
+   "dd": -114.2,
+   "stopped": 0.774
+  },
+  "2500|10|own": {
+   "final": 65997,
+   "addon_total": -122622,
+   "n": 164,
+   "avg_lots": 4.8,
+   "win": 0.085,
+   "worst": -11885,
+   "dd": -177.7,
+   "stopped": 0.902
+  },
+  "2500|15|BE": {
+   "final": 58232,
+   "addon_total": -130387,
+   "n": 164,
+   "avg_lots": 4.9,
+   "win": 0.22,
+   "worst": -14499,
+   "dd": -110.4,
+   "stopped": 0.744
+  },
+  "2500|15|lock": {
+   "final": 43900,
+   "addon_total": -144719,
+   "n": 164,
+   "avg_lots": 4.9,
+   "win": 0.201,
+   "worst": -14499,
+   "dd": -114.2,
+   "stopped": 0.774
+  },
+  "2500|15|own": {
+   "final": 58223,
+   "addon_total": -130396,
+   "n": 164,
+   "avg_lots": 4.9,
+   "win": 0.085,
+   "worst": -11885,
+   "dd": -177.7,
+   "stopped": 0.902
+  }
+ },
+ "20000|full": {
+  "today": {
+   "final": 869705,
+   "dd": -66.2,
+   "trades": 1473
+  },
+  "1500|10|BE": {
+   "final": 1603966,
+   "addon_total": 734261,
+   "n": 604,
+   "avg_lots": 8.3,
+   "win": 0.174,
+   "worst": -39029,
+   "dd": -81.5,
+   "stopped": 0.815
+  },
+  "1500|10|lock": {
+   "final": 1718533,
+   "addon_total": 848828,
+   "n": 604,
+   "avg_lots": 8.3,
+   "win": 0.161,
+   "worst": -39029,
+   "dd": -82.4,
+   "stopped": 0.829
+  },
+  "1500|10|own": {
+   "final": 1254773,
+   "addon_total": 385068,
+   "n": 604,
+   "avg_lots": 8.3,
+   "win": 0.114,
+   "worst": -24246,
+   "dd": -173.5,
+   "stopped": 0.879
+  },
+  "1500|15|BE": {
+   "final": 2136569,
+   "addon_total": 1266864,
+   "n": 604,
+   "avg_lots": 11.1,
+   "win": 0.174,
+   "worst": -39029,
+   "dd": -85.6,
+   "stopped": 0.815
+  },
+  "1500|15|lock": {
+   "final": 2138367,
+   "addon_total": 1268662,
+   "n": 604,
+   "avg_lots": 11.1,
+   "win": 0.157,
+   "worst": -39029,
+   "dd": -86.4,
+   "stopped": 0.833
+  },
+  "1500|15|own": {
+   "final": 1547639,
+   "addon_total": 677934,
+   "n": 604,
+   "avg_lots": 11.1,
+   "win": 0.114,
+   "worst": -35148,
+   "dd": -187.0,
+   "stopped": 0.879
+  },
+  "2000|10|BE": {
+   "final": 766082,
+   "addon_total": -103623,
+   "n": 520,
+   "avg_lots": 8.4,
+   "win": 0.15,
+   "worst": -39827,
+   "dd": -366.0,
+   "stopped": 0.837
+  },
+  "2000|10|lock": {
+   "final": 845610,
+   "addon_total": -24095,
+   "n": 520,
+   "avg_lots": 8.4,
+   "win": 0.138,
+   "worst": -39827,
+   "dd": -347.8,
+   "stopped": 0.848
+  },
+  "2000|10|own": {
+   "final": 826071,
+   "addon_total": -43634,
+   "n": 520,
+   "avg_lots": 8.4,
+   "win": 0.104,
+   "worst": -39827,
+   "dd": -460.1,
+   "stopped": 0.892
+  },
+  "2000|15|BE": {
+   "final": 952541,
+   "addon_total": 82836,
+   "n": 520,
+   "avg_lots": 11.2,
+   "win": 0.148,
+   "worst": -55738,
+   "dd": -450.8,
+   "stopped": 0.838
+  },
+  "2000|15|lock": {
+   "final": 1125930,
+   "addon_total": 256225,
+   "n": 520,
+   "avg_lots": 11.2,
+   "win": 0.137,
+   "worst": -55738,
+   "dd": -402.8,
+   "stopped": 0.85
+  },
+  "2000|15|own": {
+   "final": 944341,
+   "addon_total": 74636,
+   "n": 520,
+   "avg_lots": 11.2,
+   "win": 0.104,
+   "worst": -55738,
+   "dd": -622.6,
+   "stopped": 0.892
+  },
+  "2500|10|BE": {
+   "final": 689706,
+   "addon_total": -179999,
+   "n": 461,
+   "avg_lots": 8.4,
+   "win": 0.167,
+   "worst": -39827,
+   "dd": -204.9,
+   "stopped": 0.807
+  },
+  "2500|10|lock": {
+   "final": 701037,
+   "addon_total": -168668,
+   "n": 461,
+   "avg_lots": 8.4,
+   "win": 0.152,
+   "worst": -39827,
+   "dd": -209.4,
+   "stopped": 0.826
+  },
+  "2500|10|own": {
+   "final": 611547,
+   "addon_total": -258158,
+   "n": 461,
+   "avg_lots": 8.4,
+   "win": 0.089,
+   "worst": -39827,
+   "dd": -678.1,
+   "stopped": 0.905
+  },
+  "2500|15|BE": {
+   "final": 782683,
+   "addon_total": -87022,
+   "n": 461,
+   "avg_lots": 11.1,
+   "win": 0.163,
+   "worst": -55738,
+   "dd": -261.4,
+   "stopped": 0.811
+  },
+  "2500|15|lock": {
+   "final": 818829,
+   "addon_total": -50876,
+   "n": 461,
+   "avg_lots": 11.1,
+   "win": 0.148,
+   "worst": -55738,
+   "dd": -268.2,
+   "stopped": 0.833
+  },
+  "2500|15|own": {
+   "final": 689130,
+   "addon_total": -180575,
+   "n": 461,
+   "avg_lots": 11.1,
+   "win": 0.089,
+   "worst": -55738,
+   "dd": -844.0,
+   "stopped": 0.905
+  }
+ }
+}
