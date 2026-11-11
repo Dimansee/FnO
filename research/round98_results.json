@@ -1,0 +1,116 @@
+{
+ "_problem": {
+  "Camarilla": {
+   "n": 673,
+   "pnl_1lot": 148183,
+   "reach1R": 262,
+   "reach1R_lost": 125,
+   "reach1R_lost_rs": -58971,
+   "reach1.5R": 183,
+   "reach1.5R_lost": 61,
+   "reach1.5R_lost_rs": -29736,
+   "reach2R": 133,
+   "reach2R_lost": 27,
+   "reach2R_lost_rs": -13945
+  },
+  "Channel 15m": {
+   "n": 2044,
+   "pnl_1lot": 89438,
+   "reach1R": 0,
+   "reach1R_lost": 0,
+   "reach1R_lost_rs": 0,
+   "reach1.5R": 0,
+   "reach1.5R_lost": 0,
+   "reach1.5R_lost_rs": 0,
+   "reach2R": 0,
+   "reach2R_lost": 0,
+   "reach2R_lost_rs": 0
+  },
+  "Fibonacci 0.618": {
+   "n": 699,
+   "pnl_1lot": 207167,
+   "reach1R": 276,
+   "reach1R_lost": 125,
+   "reach1R_lost_rs": -50523,
+   "reach1.5R": 194,
+   "reach1.5R_lost": 60,
+   "reach1.5R_lost_rs": -26410,
+   "reach2R": 150,
+   "reach2R_lost": 26,
+   "reach2R_lost_rs": -12905
+  },
+  "Noise band": {
+   "n": 462,
+   "pnl_1lot": 91880,
+   "reach1R": 185,
+   "reach1R_lost": 45,
+   "reach1R_lost_rs": -53945,
+   "reach1.5R": 126,
+   "reach1.5R_lost": 18,
+   "reach1.5R_lost_rs": -18088,
+   "reach2R": 95,
+   "reach2R_lost": 9,
+   "reach2R_lost_rs": -5452
+  },
+  "Trend-day": {
+   "n": 331,
+   "pnl_1lot": 141615,
+   "reach1R": 166,
+   "reach1R_lost": 66,
+   "reach1R_lost_rs": -24991,
+   "reach1.5R": 101,
+   "reach1.5R_lost": 21,
+   "reach1.5R_lost_rs": -8433,
+   "reach2R": 69,
+   "reach2R_lost": 7,
+   "reach2R_lost_rs": -3416
+  }
+ },
+ "today": {
+  "label": "Today's exits",
+  "200000": {
+   "2023-24": {
+    "final": 1826929,
+    "dd": -31.3,
+    "trades": 1139
+   },
+   "2025-26": {
+    "final": 2291316,
+    "dd": -28.3,
+    "trades": 1064
+   },
+   "full": {
+    "final": 17167247,
+    "dd": -31.3,
+    "trades": 2590
+   },
+   "2026": {
+    "final": 557956,
+    "dd": -21.1,
+    "trades": 350
+   }
+  },
+  "20000": {
+   "2023-24": {
+    "final": 195915,
+    "dd": -66.2,
+    "trades": 669
+   },
+   "2025-26": {
+    "final": 188619,
+    "dd": -62.6,
+    "trades": 575
+   },
+   "full": {
+    "final": 869705,
+    "dd": -66.2,
+    "trades": 1473
+   },
+   "2026": {
+    "final": 101474,
+    "dd": -45.9,
+    "trades": 248
+   }
+  }
+ }
+}
