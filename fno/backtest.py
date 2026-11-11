@@ -40,7 +40,9 @@ from . import pricing as PR
 #                lost this much; ("skip_over", x) instead skips trades whose normal stop would lose more than x per lot
 #   rev_exit:    close the rest early on a reversal once the trade has been in profit by rev_after_R:
 #                "ema9" (5-min close back across its 9-EMA), "vwap" (5-min close back across VWAP), "give50" (half of the
-#                best open move given back), "candle" (a strong opposite 5-min candle: body >= 60% of range, range >= 0.5 ATR)
+#                best open move given back), "candle" (a strong opposite 5-min candle: body >= 60% of range, range >= 0.5 ATR),
+#                "ema9_vwap" (5-min close back across BOTH its 9-EMA and VWAP)
+#   only:        round 98: apply lock_steps / giveback / rev_exit to this strategy only ("noise", "camarilla" or "trend")
 EXIT_DEFAULT = {"rev_exit": None, "rev_after_R": 1.0, "partials": (), "be_after_t1": False, "lots_x": 1, "be_r": None, "be_lock": 0.0, "lock_steps": (), "giveback": None, "noise_rr": None, "noise_be_r": None, "noise_be_lock": 0.0}
 EXIT: dict = {}
 STOP_CHECK = None      # portfolio backtest: a callable that raises to stop a long run between trading days
@@ -88,6 +90,8 @@ def _reversal(kind, sign, spot, risk, c, ema9, best_r):
     cl = float(c["close"])
     if kind == "ema9":
         return sign * (cl - ema9) < 0
+    if kind == "ema9_vwap":
+        return sign * (cl - ema9) < 0 and sign * (cl - float(c["vwap"])) < 0
     if kind == "vwap":
         return sign * (cl - float(c["vwap"])) < 0
     if kind == "give50":
@@ -120,11 +124,13 @@ def _cap_stop(sign, spot, sl, p_in, lot, prem_at):
     return spot - sign * lo, True, False
 
 
-def _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock):
+def _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock, strat=None):
     """Move the stop for the best favourable move so far (in R). Never loosens it."""
     cands = []
     if be_r is not None and best_r >= be_r:
         cands.append(spot + sign * be_lock * risk)
+    if _ex("only", None) and strat != _ex("only", None):
+        return max(cands + [live_sl], key=lambda c: sign * c) if cands else live_sl
     for reach, lock in _ex("lock_steps", ()):
         if best_r >= reach:
             cands.append(spot + sign * lock * risk)
@@ -541,8 +547,8 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
         if skip_c:
             return ("skip", entry_i, "loss_cap")
         live_sl, reached, best_r, booked, rest = sl_c, False, 0.0, [], 1.0
-        rev = _ex("rev_exit", None)
-        ema9 = day["close"].ewm(span=9, adjust=False).mean() if rev == "ema9" else None
+        rev = _ex("rev_exit", None) if not _ex("only", None) or _ex("only", None) == strat else None
+        ema9 = day["close"].ewm(span=9, adjust=False).mean() if rev in ("ema9", "ema9_vwap") else None
         be_r, be_lock = (_ex("be_r", C.CAM_BE_R), _ex("be_lock", 0.0)) if strat == "camarilla" else (_ex("noise_be_r", None), _ex("noise_be_lock", 0.0))
         for ts in idx[entry_i + 1:]:
             c = day.loc[ts]
@@ -559,7 +565,7 @@ def _one_trade(day, idx, bands, start, exp, iv_of, step, lot, capital, equity, d
                     live_sl, rest = _book_partials(sign, spot, risk, c, end, ts, best_r, booked, live_sl)
                     if rest <= 1e-9:
                         reason, x_spot = "All targets booked", booked[-1][1]
-                live_sl = _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock)
+                live_sl = _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock, strat)
                 if reason is None and rev and _reversal(rev, sign, spot, risk, c, float(ema9.loc[ts]) if ema9 is not None else None, best_r):
                     reason, x_spot = f"Reversal exit ({rev})", float(c["close"])
             if reason:
@@ -812,8 +818,8 @@ def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="ris
         return ("skip", entry_i, "loss_cap")
     live_sl, reason, x_spot, x_ts, x_bar, best_r = sl_c, None, None, None, None, 0.0
     booked, rest = [], 1.0
-    rev = _ex("rev_exit", None)
-    ema9 = day["close"].ewm(span=9, adjust=False).mean() if rev == "ema9" else None
+    rev = _ex("rev_exit", None) if not _ex("only", None) or _ex("only", None) == "trend" else None
+    ema9 = day["close"].ewm(span=9, adjust=False).mean() if rev in ("ema9", "ema9_vwap") else None
     be_r, be_lock = _ex("be_r", C.TREND_BE_R), _ex("be_lock", 0.0)
     for ts in idx[entry_i + 1:]:
         c = day.loc[ts]
@@ -828,7 +834,7 @@ def _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing="ris
                 live_sl, rest = _book_partials(sign, spot, risk, c, end, ts, best_r, booked, live_sl)
                 if rest <= 1e-9:
                     reason, x_spot = "All targets booked", booked[-1][1]
-            live_sl = _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock)
+            live_sl = _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock, "trend")
             if reason is None and rev and _reversal(rev, sign, spot, risk, c, float(ema9.loc[ts]) if ema9 is not None else None, best_r):
                 reason, x_spot = f"Reversal exit ({rev})", float(c["close"])
         if reason is None and end.time() >= C.SQUARE_OFF:
