@@ -1,0 +1,350 @@
+{
+ "before_r99": {
+  "200000": {
+   "2023": {
+    "final": 288049,
+    "max_dd_pct": -31.2,
+    "trades": 450,
+    "win_rate": 26.2,
+    "profit_factor": 1.18,
+    "losing_months": 8,
+    "months": 12,
+    "worst_month": -39428,
+    "best_month": 81102,
+    "cagr_pct": 47.1
+   },
+   "2024": {
+    "final": 803917,
+    "max_dd_pct": -20.4,
+    "trades": 588,
+    "win_rate": 39.1,
+    "profit_factor": 1.54,
+    "losing_months": 1,
+    "months": 12,
+    "worst_month": -48104,
+    "best_month": 298892,
+    "cagr_pct": 305.4
+   },
+   "2025": {
+    "final": 384769,
+    "max_dd_pct": -24.6,
+    "trades": 497,
+    "win_rate": 29.8,
+    "profit_factor": 1.28,
+    "losing_months": 5,
+    "months": 12,
+    "worst_month": -59104,
+    "best_month": 146874,
+    "cagr_pct": 101.1
+   },
+   "2026": {
+    "final": 513553,
+    "max_dd_pct": -21.1,
+    "trades": 391,
+    "win_rate": 36.6,
+    "profit_factor": 1.65,
+    "losing_months": 3,
+    "months": 11,
+    "worst_month": -37494,
+    "best_month": 162056,
+    "cagr_pct": 218.9
+   },
+   "2023-24": {
+    "final": 1826929,
+    "max_dd_pct": -31.3,
+    "trades": 1139,
+    "win_rate": 33.9,
+    "profit_factor": 1.53,
+    "losing_months": 10,
+    "months": 24,
+    "worst_month": -57472,
+    "best_month": 841139,
+    "cagr_pct": 210.6
+   },
+   "2025-26": {
+    "final": 2091153,
+    "max_dd_pct": -28.3,
+    "trades": 1099,
+    "win_rate": 36.7,
+    "profit_factor": 1.76,
+    "losing_months": 7,
+    "months": 23,
+    "worst_month": -162564,
+    "best_month": 1057664,
+    "cagr_pct": 257.5
+   },
+   "full": {
+    "final": 15844865,
+    "max_dd_pct": -31.3,
+    "trades": 2625,
+    "win_rate": 37.4,
+    "profit_factor": 1.37,
+    "losing_months": 16,
+    "months": 47,
+    "worst_month": -1632500,
+    "best_month": 4057244,
+    "cagr_pct": 216.0
+   }
+  },
+  "20000": {
+   "2023": {
+    "final": 31805,
+    "max_dd_pct": -58.9,
+    "trades": 308,
+    "win_rate": 27.6,
+    "profit_factor": 1.07,
+    "losing_months": 7,
+    "months": 12,
+    "worst_month": -13466,
+    "best_month": 16587,
+    "cagr_pct": 63.2
+   },
+   "2024": {
+    "final": 160910,
+    "max_dd_pct": -32.6,
+    "trades": 314,
+    "win_rate": 35.4,
+    "profit_factor": 1.52,
+    "losing_months": 2,
+    "months": 12,
+    "worst_month": -26519,
+    "best_month": 66564,
+    "cagr_pct": 710.3
+   },
+   "2025": {
+    "final": 68436,
+    "max_dd_pct": -62.6,
+    "trades": 331,
+    "win_rate": 32.6,
+    "profit_factor": 1.17,
+    "losing_months": 5,
+    "months": 12,
+    "worst_month": -14244,
+    "best_month": 23423,
+    "cagr_pct": 273.5
+   },
+   "2026": {
+    "final": 84519,
+    "max_dd_pct": -45.9,
+    "trades": 258,
+    "win_rate": 33.7,
+    "profit_factor": 1.29,
+    "losing_months": 4,
+    "months": 11,
+    "worst_month": -19961,
+    "best_month": 30183,
+    "cagr_pct": 488.5
+   },
+   "2023-24": {
+    "final": 195915,
+    "max_dd_pct": -66.2,
+    "trades": 669,
+    "win_rate": 31.8,
+    "profit_factor": 1.35,
+    "losing_months": 9,
+    "months": 24,
+    "worst_month": -27661,
+    "best_month": 66564,
+    "cagr_pct": 221.3
+   },
+   "2025-26": {
+    "final": 171665,
+    "max_dd_pct": -62.6,
+    "trades": 585,
+    "win_rate": 34.0,
+    "profit_factor": 1.29,
+    "losing_months": 8,
+    "months": 23,
+    "worst_month": -17399,
+    "best_month": 39990,
+    "cagr_pct": 221.7
+   },
+   "full": {
+    "final": 800488,
+    "max_dd_pct": -66.2,
+    "trades": 1508,
+    "win_rate": 32.8,
+    "profit_factor": 1.51,
+    "losing_months": 16,
+    "months": 47,
+    "worst_month": -50773,
+    "best_month": 342593,
+    "cagr_pct": 164.0
+   }
+  }
+ },
+ "today_live": {
+  "200000": {
+   "2023": {
+    "final": 310565,
+    "max_dd_pct": -23.0,
+    "trades": 435,
+    "win_rate": 28.5,
+    "profit_factor": 1.22,
+    "losing_months": 7,
+    "months": 12,
+    "worst_month": -43180,
+    "best_month": 73759,
+    "cagr_pct": 59.3
+   },
+   "2024": {
+    "final": 839706,
+    "max_dd_pct": -22.4,
+    "trades": 632,
+    "win_rate": 40.2,
+    "profit_factor": 1.44,
+    "losing_months": 2,
+    "months": 12,
+    "worst_month": -89295,
+    "best_month": 268504,
+    "cagr_pct": 323.6
+   },
+   "2025": {
+    "final": 358486,
+    "max_dd_pct": -28.0,
+    "trades": 470,
+    "win_rate": 33.0,
+    "profit_factor": 1.27,
+    "losing_months": 5,
+    "months": 12,
+    "worst_month": -27913,
+    "best_month": 106605,
+    "cagr_pct": 86.5
+   },
+   "2026": {
+    "final": 622480,
+    "max_dd_pct": -20.7,
+    "trades": 403,
+    "win_rate": 39.0,
+    "profit_factor": 1.8,
+    "losing_months": 3,
+    "months": 11,
+    "worst_month": -38611,
+    "best_month": 259061,
+    "cagr_pct": 304.0
+   },
+   "2023-24": {
+    "final": 3069722,
+    "max_dd_pct": -25.9,
+    "trades": 1175,
+    "win_rate": 36.9,
+    "profit_factor": 1.53,
+    "losing_months": 10,
+    "months": 24,
+    "worst_month": -117101,
+    "best_month": 1396998,
+    "cagr_pct": 305.1
+   },
+   "2025-26": {
+    "final": 1957509,
+    "max_dd_pct": -28.0,
+    "trades": 1081,
+    "win_rate": 38.5,
+    "profit_factor": 1.77,
+    "losing_months": 6,
+    "months": 23,
+    "worst_month": -138013,
+    "best_month": 1046802,
+    "cagr_pct": 244.9
+   },
+   "full": {
+    "final": 16904066,
+    "max_dd_pct": -25.9,
+    "trades": 2655,
+    "win_rate": 38.8,
+    "profit_factor": 1.34,
+    "losing_months": 17,
+    "months": 47,
+    "worst_month": -1611126,
+    "best_month": 4715467,
+    "cagr_pct": 221.4
+   }
+  },
+  "20000": {
+   "2023": {
+    "final": 32869,
+    "max_dd_pct": -58.0,
+    "trades": 308,
+    "win_rate": 29.2,
+    "profit_factor": 1.07,
+    "losing_months": 7,
+    "months": 12,
+    "worst_month": -13795,
+    "best_month": 17837,
+    "cagr_pct": 69.0
+   },
+   "2024": {
+    "final": 202991,
+    "max_dd_pct": -26.6,
+    "trades": 355,
+    "win_rate": 37.7,
+    "profit_factor": 1.61,
+    "losing_months": 2,
+    "months": 12,
+    "worst_month": -24587,
+    "best_month": 57432,
+    "cagr_pct": 923.1
+   },
+   "2025": {
+    "final": 69584,
+    "max_dd_pct": -76.6,
+    "trades": 308,
+    "win_rate": 33.8,
+    "profit_factor": 1.19,
+    "losing_months": 5,
+    "months": 12,
+    "worst_month": -16184,
+    "best_month": 27403,
+    "cagr_pct": 280.2
+   },
+   "2026": {
+    "final": 103432,
+    "max_dd_pct": -42.5,
+    "trades": 262,
+    "win_rate": 35.5,
+    "profit_factor": 1.36,
+    "losing_months": 4,
+    "months": 11,
+    "worst_month": -15123,
+    "best_month": 33953,
+    "cagr_pct": 654.4
+   },
+   "2023-24": {
+    "final": 194434,
+    "max_dd_pct": -66.0,
+    "trades": 668,
+    "win_rate": 33.7,
+    "profit_factor": 1.35,
+    "losing_months": 9,
+    "months": 24,
+    "worst_month": -25121,
+    "best_month": 57432,
+    "cagr_pct": 220.1
+   },
+   "2025-26": {
+    "final": 198235,
+    "max_dd_pct": -76.6,
+    "trades": 585,
+    "win_rate": 35.6,
+    "profit_factor": 1.35,
+    "losing_months": 8,
+    "months": 23,
+    "worst_month": -16184,
+    "best_month": 43706,
+    "cagr_pct": 247.9
+   },
+   "full": {
+    "final": 1826656,
+    "max_dd_pct": -66.0,
+    "trades": 1746,
+    "win_rate": 36.5,
+    "profit_factor": 1.69,
+    "losing_months": 15,
+    "months": 47,
+    "worst_month": -134186,
+    "best_month": 976364,
+    "cagr_pct": 228.0
+   }
+  }
+ }
+}
