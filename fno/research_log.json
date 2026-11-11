@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-10",
+ "updated": "2026-11-11",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
@@ -1684,6 +1684,17 @@
    "decision": "Not adopted. Tight 2-3 point stops on 15-25 extra lots are hit by ordinary one-minute noise ~90% of the time; every version loses, most heavily, and small accounts are wiped out.",
    "summary": "Add-on scalp (15-25 lots, +5-10 / -2-3 premium points): 0 of 96 versions beat today; ~90% stopped by one-minute noise; Rs 20k accounts wiped. Not adopted.",
    "period": "Jan 2023 - Oct 2026"
+  },
+  {
+   "id": "r98",
+   "date": "2026-11-11",
+   "area": "Index options",
+   "title": "Round 98: catch the reversal, or trail the stop up once a trade is in profit?",
+   "asked": "11 Nov: Autopilot Bank Nifty Noise-band CE 60900 (10:45, Rs 863.2, index 61,021) ran +357 pts (+1.7R, about +Rs 6,500-7,000) to 61,378, then reversed; the half-hour band/VWAP check closed it at 12:45 at 60,916: -Rs 496. User: (1) find the reversal and exit on it, or (2) move the stop up once in profit so a reversal still closes in profit.",
+   "period": "Today's Autopilot (rounds 88 + 90), trades re-run bar by bar under each exit (fno.backtest EXIT; channel slot keeps its own exit), Outcomes replay Rs 2L and Rs 20k, Jan 2023 - 16 Oct 2026, both halves restart from the capital. 23 versions, Noise-only and all-rules.",
+   "result": "Problem size (1 lot): Noise trades that reached +1R and still lost: 45 of 185, -Rs 54k (Camarilla 125 of 262, -59k; Fib 125 of 276, -51k; trend 66 of 166, -25k). Today Rs 2L 18.27L / 22.91L / 1.72 Cr (fall -31.3%), Rs 20k 1.96L / 1.89L. Closest: trail 1.5R behind the best once +3R (all rules) 18.76L / 28.29L / 1.55 Cr, fall -27.0%, Rs 20k 1.93L / 1.98L - fails the full period and Rs 20k 2023-24. Noise trail 1R once +2R 36.86L / 20.72L / 1.87 Cr - 2025-26 worse. Noise trail 1R once +1R 25.31L / 21.16L / 1.80 Cr - 2025-26 worse. Noise stop to entry at +1R 9.63L / 23.04L / 1.21 Cr. Noise VWAP 5-min reversal exit 17.26L / 23.19L / 1.716 Cr. 9-EMA reversal exit on all rules 3.65L / 5.11L / 5.8L and Rs 20k wiped out. Breakeven at +0.75R on all rules: Rs 20k wiped out.",
+   "decision": "Not adopted (0 of 23 pass). Trades that reverse after +1R cost about Rs 2L per lot over 4 years, but every stop or exit that saves them also cuts the trend-day runs that pay for the system. Watch list: trail 1.5R once +3R (better in both halves at Rs 2L, shallower fall) - re-check with live trades.",
+   "summary": "Reversal exit / profit trail: 0 of 23 versions pass. Closest: trail 1.5R behind the best once +3R. Breakeven and quick reversal exits cut the trend-day winners. Not adopted."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
