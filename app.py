@@ -245,6 +245,13 @@ def _ap_counts():
     return out
 
 
+def _db_table_mb():
+    if store.backend() != "supabase":
+        return None
+    from fno import pgkv
+    return round(pgkv.size_bytes() / 1e6, 2)
+
+
 @app.route("/api/health", methods=["GET", "POST", "HEAD"])   # POST: the 08:50 QStash wake-up call (was a 500 before)
 def health():
     from fno import runner as RN
@@ -262,6 +269,7 @@ def health():
             "fii_auto": lambda: bool(M.cached("fii", 3600, __import__("fno.context").context.fii_dii)),
             "lot_master": lambda: M.master().get("lots", {}),
             "scheduler": lambda: scheduler.ensure(request.host),
+            "db_table_mb": _db_table_mb,          # audit 11 Nov 2026: how full the free Supabase database is (500 MB on the free plan)
         }
         for k, fn in checks.items():
             try:
