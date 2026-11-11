@@ -548,6 +548,23 @@ def account_reset():
                     (f" ({r['archived']} old trades kept in the history, out of the P&L)." if r["archived"] else ".")})
 
 
+@app.post("/api/account/net")
+def account_net():
+    """Set the Autopilot amount (net): the account is worth exactly this from now; open positions are kept."""
+    b = request.get_json(force=True) or {}
+    try:
+        amt = float(b.get("amount"))
+    except (TypeError, ValueError):
+        return jsonify({"ok": False, "message": "Enter an amount in rupees."}), 400
+    if not 10_000 <= amt <= 100_000_000:
+        return jsonify({"ok": False, "message": "The Autopilot amount must be between ₹10,000 and ₹10 crore."}), 400
+    from fno import paper as P
+    r = P.set_net(amt)
+    return jsonify({"ok": True, **r, "message": f"Autopilot amount set to ₹{amt:,.0f} net (was ₹{r['equity_before']:,.0f}). "
+                    + (f"{r['open_kept']} open position(s) kept. " if r["open_kept"] else "")
+                    + (f"{r['archived']} past trade(s) moved to the history." if r["archived"] else "")})
+
+
 @app.post("/api/account/week-reset")
 def account_week_reset():
     """Restart this week's loss count (the weekly limit then counts only trades closed from now)."""

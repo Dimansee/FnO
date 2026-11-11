@@ -1027,7 +1027,7 @@ button.mini{padding:5px 10px;font-size:12.5px}
       <div class="card">
         <h3>Demo account</h3>
         <label>Demo capital (₹)</label>
-        <div class="copy"><input id="capIn" type="number" value="200000" min="0" step="1000"><button class="primary" id="capSave" title="Change the capital, keep positions and the journal">Save</button><button class="danger" id="resetBtn" title="Clears all positions and the journal">Reset account</button></div>
+        <div class="copy"><input id="capIn" type="number" value="200000" min="0" step="1000"><button class="primary" id="capSave" title="Change the STARTING capital; past P&L still adds to it">Save</button><button id="capNet" title="Make the account worth exactly this amount now (net); open positions kept">Set as net amount</button><button class="danger" id="resetBtn" title="Clears all positions and the journal">Reset account</button></div>
         <p class="muted" style="font-size:12px;margin:6px 0 0">Save changes the capital and keeps everything else. Reset starts over with this capital and clears all positions and the trade journal. <b>0</b> = take the starting money out and keep trading only the profit already made (needs ₹10,000+ of profit).</p>
         <h4 style="margin:16px 0 6px">Trades in the P&amp;L</h4>
         <div id="originBox" class="muted" style="font-size:12.5px">Loading…</div>
@@ -3109,6 +3109,7 @@ $("#pfWeekly").onchange = weeklyUi;
 $("#pref").onchange = async () => { await post("/api/settings", {broker_pref: $("#pref").value}); toast("Saved"); };
 $("#fiiSave").onclick = async () => { await post("/api/settings", {fii_manual: $("#fiiIn").value}); toast("Saved"); };
 $("#capSave").onclick = async () => { try { const r = await post("/api/account/capital", {capital: +$("#capIn").value}); toast(r.message); } catch (e) { toast(e.message); } };
+$("#capNet").onclick = () => setNet(+$("#capIn").value);
 $("#resetBtn").onclick = async () => {
   if (!confirm("Reset the demo account? This deletes all positions and the trade journal.")) return;
   try { const r = await post("/api/account/reset", {capital: +$("#capIn").value}); toast(r.message); } catch (e) { toast(e.message); }
@@ -4818,10 +4819,14 @@ async function apStatus(quiet) {
           <div>Counts</div><div>${wk.system_only ? "Autopilot's own trades (your manual trades don't stop it)" : "All trades"}</div></div>
         <div class="row wrap" style="margin-top:12px"><button data-weekreset>Restart weekly count</button></div>
         <p class="muted fs12" style="margin:8px 0 0">Restarting lets Autopilot trade again this week; the limit then counts only trades closed from now. The 15:15 square-off, stops and daily limit are not affected.</p>
+        <h4 style="margin:16px 0 6px">Autopilot amount (net)</h4>
+        <div class="row wrap" style="align-items:flex-end"><div><label for="apNet">Trade with</label><input id="apNet" type="number" min="10000" step="1000" value="${Math.round(s.equity || 25000)}" style="width:150px"></div>
+          <button class="primary" id="apNetSet">Set amount</button></div>
+        <p class="muted fs12" style="margin:6px 0 0">Now ${rs(s.equity)}. The account becomes worth exactly this amount from now: open positions stay open, past trades move to the history (journal kept) and stop counting in P&amp;L and the limits.</p>
         <h4 style="margin:16px 0 6px">Reset P&amp;L</h4>
         <div class="row wrap" style="align-items:flex-end"><div><label for="apCap">Start again with</label><input id="apCap" type="number" min="10000" step="1000" value="${Math.round(s.capital_start || 200000)}" style="width:150px"></div>
           <label class="tog" style="margin:0 0 8px"><input type="checkbox" id="apKeep" checked> keep old trades in the history</label><button class="danger" id="apReset">Reset P&amp;L</button></div>
-        ${(s.resets || []).length ? `<p class="muted fs12" style="margin:8px 0 0">Earlier resets: ${s.resets.map(r => `${esc(String(r.at).slice(0, 10))} (from ${rs(r.from_capital)}, ${r.archived} trades kept)`).join(" · ")}</p>` : ""}</div>
+        ${(s.resets || []).length ? `<p class="muted fs12" style="margin:8px 0 0">Earlier resets: ${s.resets.map(r => r.kind === "net" ? `${esc(String(r.at).slice(0, 10))} (amount set, was ${rs(r.equity_before)}, ${r.archived} trades to history)` : `${esc(String(r.at).slice(0, 10))} (from ${rs(r.from_capital)}, ${r.archived} trades kept)`).join(" · ")}</p>` : ""}</div>
       <div class="card"><h3>Capital shield</h3>
         <div class="kv"><div>Status</div><div>${sh.on ? (sh.below_floor ? '<span class="dpill no">Stopped: below floor</span>' : '<span class="dpill ok">On</span>') : '<span class="dpill wait">Off</span>'}</div>
           <div>Floor (stops Autopilot)</div><div class="mono">${rs(sh.floor)} <span class="muted">(${sh.floor_pct}% of ${rs(sh.start)})</span></div>
@@ -4832,6 +4837,12 @@ async function apStatus(quiet) {
     </div>
     ${jd ? decisionsHtml(jd, {limit: 12, title: "today", today: true, noScalp: false}) : `<div class="card" style="margin-top:14px"><div class="empty">No journal for today yet - it starts at 09:16 on trading days.</div></div>`}`;
   $("#apReset").onclick = () => pnlReset(+$("#apCap").value, $("#apKeep").checked);
+  $("#apNetSet").onclick = () => setNet(+$("#apNet").value);
+}
+async function setNet(amt) {
+  if (!(amt >= 10000)) { toast("The Autopilot amount must be at least ₹10,000."); return; }
+  if (!confirm(`Set the Autopilot amount to ${rs(amt)} net?\n\nThe account will be worth exactly ${rs(amt)} from now. Open positions stay open. Past closed trades move to the history (the journal and the learning keep them) and no longer count in P&L, cash or the loss limits.`)) return;
+  try { const r = await post("/api/account/net", {amount: amt}); toast(r.message, 6000); AP.ov = null; riskBanner(); if (S.tab === "autopilot") loadAutopilot(); } catch (e) { toast(e.message); }
 }
 async function apDecisions() {
   if (!S.jrDays) S.jrDays = (await api("/api/journal")).days.slice().reverse();

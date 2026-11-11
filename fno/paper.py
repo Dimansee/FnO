@@ -115,6 +115,26 @@ def reset(capital: float, keep_history: bool = True) -> dict:
     return {"archived": moved}
 
 
+def set_net(amount: float) -> dict:
+    """Make the Autopilot account worth exactly `amount` from now (user, 11 Nov 2026: "set my Autopilot amount to 25k net").
+    Unlike reset(): open positions stay open and are managed as before. Closed trades move to the archive (the journal and the
+    learning engine keep them) and stop counting in P&L, cash and the loss limits; the account starts again at `amount`."""
+    import json as _j
+    now = C.now_ist().isoformat(timespec="seconds")
+    old = account()
+    before = equity(old, store.trades())
+    moved = 0
+    for t in store.trades() + _removed():
+        store.hset(ARCHIVE, f"{t['id']}:{now[:10]}", _j.dumps({**t, "archived_at": now}, default=str, separators=(",", ":")))
+        moved += 1
+    store.clear_trades()
+    store.hdrop(REMOVED)
+    store.put("account", {"capital_start": float(amount), "created": old.get("created") or now,
+                          "resets": (old.get("resets") or [])[-20:] + [{"at": now, "from_capital": old.get("capital_start"), "archived": moved,
+                                                                        "kind": "net", "equity_before": round(before, 2)}]})
+    return {"archived": moved, "equity_before": round(before, 2), "open_kept": len(store.positions())}
+
+
 def week_reset_at() -> str | None:
     return (store.get("account") or {}).get("week_reset_at")
 

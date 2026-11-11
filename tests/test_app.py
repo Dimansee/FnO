@@ -267,6 +267,19 @@ assert first and first["id"] == "race1" and second is None, "double close must b
 store.update_position({"id": "race1", "symbol": "NIFTY", "opened": "x"})
 assert all(p["id"] != "race1" for p in store.positions()), "update must not resurrect a closed position"
 assert store.ping()
+# ---------- set the Autopilot amount (net): exact equity, open positions kept, trades to the history ----------
+from fno import paper as _P11
+j(c.post("/api/account/reset", json={"capital": 200000})); store.clear_positions(); store.clear_trades()
+store.insert_trade({"id": "nt1", "symbol": "NIFTY", "pnl": 41000.0, "closed": "2026-11-10T11:00:00+05:30", "opened": "2026-11-10T10:00:00+05:30"})
+store.insert_position({"id": "np1", "symbol": "NIFTY", "opened": "2026-11-11T10:00:00+05:30", "margin": 9000.0, "legs": []})
+assert _P11.equity(_P11.account(), store.trades()) == 241000
+r = j(c.post("/api/account/net", json={"amount": 25000})); assert r["ok"] and r["open_kept"] == 1 and r["archived"] == 1, r
+a11, _, tr11, cash11 = _P11.snapshot()
+assert _P11.equity(a11, tr11) == 25000 and not tr11 and cash11 == 16000 and [p["id"] for p in store.positions()] == ["np1"], (a11, cash11)
+assert a11["resets"][-1]["kind"] == "net" and a11["resets"][-1]["equity_before"] == 241000
+assert c.post("/api/account/net", json={"amount": 5000}).status_code == 400
+store.clear_positions(); store.clear_trades(); j(c.post("/api/account/reset", json={"capital": 200000}))
+print("set net amount OK")
 # ---------- AI strategy (round 8) ----------
 from fno import ai as AI, ai_model as AM  # noqa: E402
 assert AI.available() and AI.train_until() >= date(2026, 4, 9)   # retrains roll the cutoff forward
