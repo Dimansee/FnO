@@ -193,6 +193,7 @@ def _open(market: str, t: dict, fill_px: float | None = None, why: str = "") -> 
            "size_mult": 1.0, "tf": "5m", "hold": "swing", "exit": GB.MANUAL_EXIT, "manual": True,
            "liq": round(liq, 8) if liq else None, "stop_is_liq": stop is None or eff != stop, "user_stop": stop}
     GB._save_pos(pos)
+    GB.push_open(pos)
     return pos
 
 

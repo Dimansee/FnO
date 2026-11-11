@@ -111,6 +111,37 @@ def _save_pos(p):
     store.hset(POS + p["market"], p["id"], _dump(p))
 
 
+_BOOK = {"CRYPTO": "Crypto", "US": "US", "GOLD": "Gold"}
+
+
+def _push(title, body, event_id, market):
+    """Phone / laptop alert for a crypto or US book trade (user, 11 Nov 2026: a push on every executed trade). Never raises."""
+    try:
+        from . import push as PUSH
+        PUSH.send(title, body, event_id=event_id, url=f"/#{str(market).lower()}")
+    except Exception:
+        pass
+
+
+def push_open(pos):
+  try:
+    cur = MK.CURRENCY.get(pos["market"], "")
+    _push(f"{_BOOK.get(pos['market'], pos['market'])}: {pos['symbol']} {pos['side']} opened",
+          f"{pos.get('strategy_name') or 'Trade'} · qty {pos['qty']:g} at {pos['entry']:,.6g} {cur} · stop {pos['state']['sl']:,.6g}"
+          + (f" · target {pos['state']['tp']:,.6g}" if pos["state"].get("tp") else ""), f"g_open:{pos['id']}", pos["market"])
+  except Exception:
+    pass
+
+
+def push_close(rec):
+  try:
+    cur = MK.CURRENCY.get(rec["market"], "")
+    _push(f"{_BOOK.get(rec['market'], rec['market'])}: {rec['symbol']} {rec['side']} closed {rec['pnl']:+,.2f} {cur}",
+          f"{rec.get('strategy_name') or 'Trade'} · {rec.get('reason')} · exit {rec['exit']:,.6g} ({rec.get('R', 0):+.2f}R)", f"g_close:{rec['id']}", rec["market"])
+  except Exception:
+    pass
+
+
 def _take_pos(market, pid):
     v = store.htake(POS + market, pid)
     return json.loads(v) if v else None
@@ -213,6 +244,7 @@ def open_position(market: str, spec: dict, symbol: str, side: int, price: float,
            "state": st, "opened": now.isoformat(timespec="seconds"), "from_bar_ts": bar_end.isoformat(), "ctx": _ctx(market, bars, side, 0), "size_mult": mult,
            "tf": spec["timeframe"], "hold": spec["hold"]}
     _save_pos(pos)
+    push_open(pos)
     return True, f"{spec['name']}: {pos['side']} {symbol} x {qty:g} at {entry:,.4f} (stop {st['sl']:,.4f}" + (f", target {st['tp']:,.4f}" if st["tp"] else "") + ")"
 
 
@@ -264,6 +296,7 @@ def close_position(market: str, pid: str, px: float, reason: str) -> dict | None
     rec = store.close_into(POS + market, TRD + market, pid, lambda pos: _closed_rec(pos, px, reason))   # one atomic step
     if not rec:
         return None
+    push_close(rec)
     if not rec.get("manual"):                  # the learning engine studies the rules, not your own manual trades
         try:
             from . import learn as LN

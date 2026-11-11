@@ -921,7 +921,10 @@ def place_signal(symbol, strike=None, auto=False, which=None):
         if tok is None:
             return False, "Another order for this instrument is being placed - try again in a moment."
         try:
-            return _place_signal(symbol, strike=strike, auto=auto, which=which)
+            res = _place_signal(symbol, strike=strike, auto=auto, which=which)
+            if not auto:                              # a signal you placed by hand (Autopilot entries push in _push_placed)
+                _push_trade(res, f"{symbol}: signal trade placed", f"mplaced:{symbol}")
+            return res
         finally:
             _db_unlock(f"place:{symbol}", tok)
     finally:
@@ -1269,7 +1272,18 @@ def place_manual(symbol, expiry, strike, opt, side, lots):
     src = m.br.name if ch.attrs.get("source") == "live" and m.br else "demo"
     leg = {"side": side, "strike": float(strike), "opt": opt, "key": row[f"{t}_key"], "price": float(px), "src": src}
     _, _, _, cash = P.snapshot()
-    return P.open_position(cash, symbol, [leg], int(lots), g["lot"], exp, g["spot"], m.source)
+    res = P.open_position(cash, symbol, [leg], int(lots), g["lot"], exp, g["spot"], m.source)
+    _push_trade(res, f"{symbol}: manual {opt} order placed", f"manual:{symbol}:{opt}")
+    return res
+
+
+def _push_trade(res, title, eid):
+    """Push for an order you placed yourself (user, 11 Nov 2026: a push on every executed trade). Never raises."""
+    try:
+        if isinstance(res, tuple) and res and res[0]:
+            _push_safe(title, str(res[1])[:180], f"{eid}:{datetime.now(C.IST).strftime('%H%M%S')}", "/#portfolio")
+    except Exception:
+        pass
 
 
 def candles(symbol, kind="UND", strike=None, expiry=None):
@@ -1352,6 +1366,11 @@ def exit_position(pos_id):
     prices = m.leg_prices(pos, sp, m.vix()["level"])
     rec = P.close_position(pos_id, m.exit_fills(pos, prices, eprefs().get("fills", "realistic")), "Manual exit",
                            extra={"spot_exit": sp[pos[0]["symbol"]]})
+    if rec:
+        try:
+            _push_safe(f"{rec['symbol']} position closed", f"Manual exit - P&L ₹{rec['pnl']:+,.0f}", f"close:{rec.get('id') or pos_id}:manual", "/#portfolio")
+        except Exception:
+            pass
     return (True, f"Closed. Net P&L after charges ₹{rec['pnl']:,.0f}") if rec else (False, "Already closed.")
 
 
@@ -1784,6 +1803,13 @@ def _tick():
             _push_safe(f"{x['symbol']}: scalp trade placed", str(x.get("message"))[:180], f"scalp:{x['symbol']}:{now.strftime('%H%M')}", "/#scalp")
         for x in sc.get("skipped") or []:
             _note_auto_safe(x["symbol"], "scalp", False, x.get("why"), now)
+        for c in sc.get("closed") or []:                     # every scalp exit (user, 11 Nov 2026: a push on every executed trade)
+            try:
+                _push_safe(f"{c['symbol']} scalp closed ₹{c['pnl']:+,.0f}",
+                           f"{c['strike']:g}{c['opt']} x{c.get('lots', 1)} lot · {c['reason']} · {c['entry_prem']:g} → {c['exit_prem']:g}",
+                           f"scalpx:{c['id']}", "/#scalp")
+            except Exception:
+                pass
         if sc.get("closed"):                                 # one phone alert when the governor stops an index for the day
             scfg = SC.settings()
             for s in {c["symbol"] for c in sc["closed"]}:
