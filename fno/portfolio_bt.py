@@ -40,7 +40,8 @@ EARLIEST = date(2022, 1, 3)
 
 T3 = 1 / 3
 EXITS = {
-    "current": {"label": "Current exits (the rules)", "ov": {}},
+    "current": {"label": "Current exits (the rules, incl. the round 99 profit trail)", "ov": {}},
+    "no_trail": {"label": "Profit trail OFF (exits before round 99)", "ov": {"giveback": None}},
     "t123": {"label": "Book a third at T1 1R / T2 2R / T3 3R", "ov": {"partials": [(1, T3), (2, T3), (3, T3)]}},
     "t123_253050": {"label": "Book 20% / 30% / 50% at 1R / 2R / 3R", "ov": {"partials": [(1, 0.2), (2, 0.3), (3, 0.5)]}},
     "t2_t4": {"label": "A third at 2R, a third at 4R, rest runs", "ov": {"partials": [(2, T3), (4, T3)]}},
@@ -50,7 +51,7 @@ EXITS = {
     "ema9_2r": {"label": "No targets; exit on 9-EMA cross once +2R", "ov": {"rev_exit": "ema9", "rev_after_R": 2.0}},
     "candle_2r": {"label": "No targets; exit on a strong opposite candle once +2R", "ov": {"rev_exit": "candle", "rev_after_R": 2.0}},
     "lock_2r": {"label": "Lock +1R once +2R", "ov": {"lock_steps": [(2.0, 1.0)]}},
-    "trail_25": {"label": "Trail 1.5R behind the best move once +2.5R", "ov": {"giveback": (2.5, 1.5)}},
+    "trail_25": {"label": "Trail 1.5R behind the best move once +2.5R (= today's rule since round 99)", "ov": {"giveback": (2.5, 1.5)}},
     "trail_2": {"label": "Trail 1R behind the best move once +2R", "ov": {"giveback": (2.0, 1.0)}},
     "be_025": {"label": "Breakeven stop at +0.25R instead of entry", "ov": {"be_lock": 0.25}},
     "noise_t2": {"label": "Noise target 2R (instead of 4R)", "ov": {"noise_rr": 2.0}},

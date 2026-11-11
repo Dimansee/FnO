@@ -40,7 +40,7 @@ def generate(p: dict, index: str, exit_ov: dict, exit_label: str, lot: int | Non
     parts = (parts + [(0, 0)] * 3)[:3]
     locks = list(exit_ov.get("lock_steps") or [])
     locks = (locks + [(0, 0)] * 2)[:2]
-    gb = exit_ov.get("giveback") or (0, 0)
+    gb = (exit_ov["giveback"] if "giveback" in exit_ov else (C.TRAIL_START_R, C.TRAIL_GIVE_R)) or (0, 0)   # round 99: live trail by default
     conf = p.get("confidence", "standard")
     budget = ", ".join(f"timestamp(\"Asia/Kolkata\", {d.year}, {d.month}, {d.day}, 0, 0)" for d in sorted(C.BUDGET_DAYS))
     sub = {

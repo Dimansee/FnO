@@ -21,7 +21,7 @@ CACHE = "/tmp/outcomes_trades"
 os.makedirs(CACHE, exist_ok=True)
 SYMS = ["NIFTY", "BANKNIFTY", "SENSEX"]
 CAPS = [200_000, 20_000]
-PERIODS = {"full": ("2023-01-02", "2026-10-23"), "y2026": ("2026-01-01", "2026-10-23")}
+PERIODS = {"full": ("2023-01-02", "2026-11-05"), "y2026": ("2026-01-01", "2026-11-05")}
 OUT_JSON = os.path.join(ROOT, "fno", "outcomes.json")
 OUT_PDF = os.path.join(ROOT, "fno", "outcomes.pdf")
 
@@ -34,7 +34,7 @@ def sc(group, name, **ch):
 
 SCEN = [sc("Baseline", "Current Autopilot rules")]
 for k, v in PB.EXITS.items():
-    if k != "current":
+    if k not in ("current", "trail_25"):                 # trail_25 = today's rule since round 99
         SCEN.append(sc("Exits & targets", v["label"], exit=k))
 SCEN += [sc("Risk per trade", f"Risk {r:g}% a trade", risk_pct=r) for r in (0.5, 0.75, 1.5, 2.0, 3.0)]
 SCEN += [sc("Lot sizing", "No compounding (1% of the starting capital)", sizing="fixed_risk"),

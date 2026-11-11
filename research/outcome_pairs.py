@@ -4,7 +4,7 @@ Factors (each has 1-7 alternatives to today's value). A pair changes two differe
 today's Autopilot (fno.portfolio_bt.BASELINE). Pairs that make no sense are left out (fixed lots ignore risk %, confidence
 and the drawdown brake). Each pair is shown next to its two single changes, so you can see whether the two together beat
 either one alone (do they add up, or cancel out?).
-Capital Rs 2 lakh and Rs 20,000; full history 2 Jan 2023 - 23 Oct 2026 and 2026 alone (account restarted 1 Jan 2026).
+Capital Rs 2 lakh and Rs 20,000; full history 2 Jan 2023 - 5 Nov 2026 and 2026 alone (account restarted 1 Jan 2026).
 Output: fno/outcomes_pairs.json (Outcomes tab, "Pairs" view) and pages appended to fno/outcomes.pdf.
 Run: python research/outcome_pairs.py
 """
@@ -35,12 +35,12 @@ F = {
     "Drawdown brake": [("drawdown brake off", {"dd_half": False})],
     "Equity gates": [("gates off", {"gates": False})],
     "Strike": [("ATM", {"otm": 0}), ("1 OTM", {"otm": 1}), ("2 OTM", {"otm": 2})],
-    "Exit": [(PB.EXITS[k]["label"], {"exit": k}) for k in ("lock_2r", "trail_25", "trail_2", "noise_t2", "noise_be", "half_2r", "t123")],
+    "Exit": [(PB.EXITS[k]["label"], {"exit": k}) for k in ("lock_2r", "no_trail", "trail_2", "noise_t2", "noise_be", "half_2r", "t123")],
     "Loss cap": [("₹2,200/lot loss cap", {"max_loss_lot": 2200}), ("₹3,000/lot loss cap", {"max_loss_lot": 3000})],
     "Indices": [("no Bank Nifty", {"indices": ["NIFTY", "SENSEX"]}), ("no Sensex", {"indices": ["NIFTY", "BANKNIFTY"]}), ("Nifty only", {"indices": ["NIFTY"]})],
     "Lot cap": [("max 20 lots", {"max_lots": 20}), ("no lot cap", {"max_lots": 0})],
 }
-SHORT_EXIT = {"lock_2r": "lock +1R at +2R", "trail_25": "trail 1.5R after +2.5R", "trail_2": "trail 1R after +2R", "noise_t2": "Noise target 2R",
+SHORT_EXIT = {"lock_2r": "lock +1R at +2R", "no_trail": "profit trail OFF", "trail_2": "trail 1R after +2R", "noise_t2": "Noise target 2R",
               "noise_be": "Noise BE at +1R", "half_2r": "half at 2R", "t123": "T1/T2/T3"}
 F["Exit"] = [(SHORT_EXIT[c["exit"]], c) for _, c in F["Exit"]]
 BAD = {frozenset(("Lot sizing", "Risk per trade")), frozenset(("Lot sizing", "Confidence")), frozenset(("Lot sizing", "Drawdown brake"))}
