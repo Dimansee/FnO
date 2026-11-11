@@ -123,6 +123,22 @@ assert why.startswith("Breakeven"), why
 why, _ = S.exit_check(pc, 100.5, 50, datetime(2026, 10, 1, 10, 50, tzinfo=C.IST))
 assert why and why.startswith("Time stop"), why
 print("camarilla exits OK")
+# round 99 profit trail: +2.5R -> stop 1.5R behind the best, ratchets up, never down, exits as a profit trail; switchable
+why, upd = S.exit_check({**pc, "at_breakeven": True, "live_sl": 100.0}, 105.0, 50, datetime(2026, 10, 1, 10, 30, tzinfo=C.IST))
+assert why is None and upd.get("trail_on") and abs(upd["live_sl"] - 102.0) < 1e-9 and upd["best_spot"] == 105.0, (why, upd)
+p2 = {**pc, "at_breakeven": True, "live_sl": 100.0, **upd}
+why, upd2 = S.exit_check(p2, 104.0, 50, datetime(2026, 10, 1, 10, 31, tzinfo=C.IST))
+assert why is None and upd2.get("live_sl") is None, upd2                                 # lower price: stop stays at 102
+why, _ = S.exit_check(p2, 101.9, 50, datetime(2026, 10, 1, 10, 32, tzinfo=C.IST))
+assert why and why.startswith("Profit trail stop"), why
+why, upd3 = S.exit_check({**pc, "at_breakeven": True, "live_sl": 100.0}, 104.0, 50, datetime(2026, 10, 1, 10, 30, tzinfo=C.IST))
+assert not upd3.get("trail_on"), upd3                                                    # +2R: not yet
+pch = {"opened": "2026-10-01T10:00:00+05:30", "plan": {"strategy": "channel", "opt": "CE", "entry": 100.0, "risk_pts": 2.0, "sl": 90.0}}
+assert not S.exit_check(pch, 110.0, 50, datetime(2026, 10, 1, 10, 30, tzinfo=C.IST))[1].get("trail_on")   # channel slot keeps its exit
+j(c.post("/api/changes/profit_trail", json={"on": False}))
+assert not S.exit_check({**pc, "at_breakeven": True, "live_sl": 100.0}, 105.0, 50, datetime(2026, 10, 1, 10, 30, tzinfo=C.IST))[1].get("trail_on")
+j(c.post("/api/changes/profit_trail", json={"on": True}))
+print("round 99 profit trail OK")
 assert d_after["signal"]["bands"] and len(d_after["signal"]["bands"]["series"]) > 10
 # noise-band trailing exit fires only on a half-hour check bar, after entry
 pz = {"opened": "2026-10-01T10:52:00+05:30", "sl_prem": 1, "target_prem": 999,

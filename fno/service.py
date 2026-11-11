@@ -1131,6 +1131,13 @@ def changes() -> list[dict]:
         removed = 0
     po = float(acct.get("capital_start") or 0) <= 0 and acct.get("capital_before")
     return [
+        {"id": "profit_trail", "date": "2026-11-11", "title": "Profit trail once +2.5R (round 99)",
+         "what": f"Noise, Camarilla, Fibonacci and trend-day trades: once a trade has been +{C.TRAIL_START_R:g}R in favour, the index stop follows the "
+                 f"best move {C.TRAIL_GIVE_R:g}R behind it, so a late reversal gives back at most {C.TRAIL_GIVE_R:g}R from the best. The 15-min channel slot "
+                 f"keeps its own exit. Outcomes replay, 2026 only (5 Nov): Rs 2L 6.22L vs 5.14L, Jan-Jun and Jul-Nov both better, same worst fall; "
+                 f"Rs 20k 1.03L vs 0.85L. 2023 - Oct 2026 Rs 1.83 Cr vs 1.72 Cr, worst fall -26% vs -31%. Weaker on a fresh start in 2025-26 at "
+                 f"Rs 2L (21.3L vs 22.9L) - watch it.",
+         "before": "Only the rule's own stop, breakeven at +1R (not Noise) and the Noise band/VWAP trail.", "on": flag("profit_trail"), "kind": "switch"},
         {"id": "channel_slot", "date": "2026-11-05", "title": "15-min channel breakout slot from Rs 5 lakh (round 90)",
          "what": f"Once equity reaches ₹{C.CHANNEL_MIN_EQUITY:,.0f}, Autopilot also trades Nifty and Sensex on a 15-minute channel: a break above the "
                  f"highest high of the last {C.CHANNEL_N} completed 15-min bars with RSI(14) above 50 buys a CALL, a break below the lowest low with RSI below 50 "
@@ -1182,7 +1189,7 @@ def changes() -> list[dict]:
 
 
 def revert_change(cid: str, on: bool | None = None) -> str:
-    if cid in ("conviction", "limits_system_only", "small_otm", "ai_judge", "big_run_skip", "dd_half", "crypto_book_r64", "cpr_size", "big_otm", "channel_slot"):
+    if cid in ("conviction", "limits_system_only", "small_otm", "ai_judge", "big_run_skip", "dd_half", "crypto_book_r64", "cpr_size", "big_otm", "channel_slot", "profit_trail"):
         set_flag(cid, bool(on))
         return ("Switched on again." if on else "Switched back to how it worked before.")
     if cid == "weekly_limit":

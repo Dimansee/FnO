@@ -134,7 +134,7 @@ def _protect(sign, spot, risk, live_sl, best_r, be_r, be_lock, strat=None):
     for reach, lock in _ex("lock_steps", ()):
         if best_r >= reach:
             cands.append(spot + sign * lock * risk)
-    gb = _ex("giveback", None)
+    gb = _ex("giveback", (C.TRAIL_START_R, C.TRAIL_GIVE_R) if _flag("profit_trail") else None)   # round 99: live rule
     if gb and best_r >= gb[0]:
         cands.append(spot + sign * (best_r - gb[1]) * risk)
     for c in cands:

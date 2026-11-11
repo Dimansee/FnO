@@ -142,6 +142,11 @@ TREND_FIRST_CHECK = time(10, 45)
 TREND_LAST_CHECK = time(14, 15)
 TREND_VWAP_SHARE = 0.80
 TREND_BE_R = 1.0
+# Round 99 (11 Nov 2026): profit trail. Once a Noise / Camarilla / Fibonacci / trend-day trade has been +2.5R in favour, the index
+# stop follows the best move 1.5R behind it (never loosens). 2026 both halves better at Rs 2L and Rs 20k; 2023 - Oct 2026 Rs 1.83 Cr vs
+# 1.72 Cr, worst fall -26% vs -31%. Switch: Research -> Recent changes (flag profit_trail). Not the 15-min channel slot.
+TRAIL_START_R, TRAIL_GIVE_R = 2.5, 1.5
+TRAIL_STRATS = ("noise", "camarilla", "fib", "trend")
 # Fourth rule: Fibonacci 0.618 breakout (research round 29, pivot-point study). A 5-min close crossing yesterday's pivot + 0.618 x range
 # (buy CALL) or pivot - 0.618 x range (buy PUT), 09:20-13:00, stop at the 0.382 level (1-3 ATR), stop to entry at +1R, 45-min time
 # stop, else 15:15 - the Camarilla exits. Own slot. Picked on 2023-25 for Nifty and Sensex (Bank Nifty lost). Autopilot adds it once

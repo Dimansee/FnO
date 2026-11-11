@@ -758,6 +758,8 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
     if (long_ and lo_e <= sl) or (not long_ and hi_e >= sl):
         if fixed and not ((long_ and spot <= sl) or (not long_ and spot >= sl)):
             upd["_level"] = sl                              # touched between checks: price the exit at the stop, not at today's price
+        if pos.get("trail_on"):
+            return f"Profit trail stop ({C.TRAIL_GIVE_R:g}R behind the best move after +{C.TRAIL_START_R:g}R)", upd
         if pos.get("at_breakeven"):
             return "Breakeven stop (moved to entry at +1R)", upd
         if is_custom and pos.get("live_sl") is not None and abs(pos["live_sl"] - plan["sl"]) > 1e-9:
@@ -801,7 +803,34 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
             mins = (now.replace(tzinfo=None) - opened.replace(tzinfo=None)).total_seconds() / 60
             if not reached and mins >= plan["time_stop_min"]:
                 return f"Time stop ({plan['time_stop_min']} min, no follow-through)", upd
+    _profit_trail(pos, plan, spot, long_, sl, ext, upd)
     return None, upd
+
+
+def _profit_trail(pos, plan, spot, long_, sl, ext, upd):
+    """Round 99: once the trade has been +TRAIL_START_R in favour, the index stop follows the best move TRAIL_GIVE_R behind it
+    (as backtested: the new stop counts from the next check). Never loosens the stop."""
+    if plan.get("strategy") not in C.TRAIL_STRATS or not plan.get("risk_pts") or plan.get("entry") is None:
+        return
+    try:
+        from . import store as _st
+        if not (_st.get("change_flags") or {}).get("profit_trail", True):
+            return
+    except Exception:
+        pass
+    sg, risk = (1 if long_ else -1), float(plan["risk_pts"])
+    seen = [spot, pos.get("best_spot", spot)] + ([ext[0] if long_ else ext[1]] if ext else [])
+    best = max(seen) if long_ else min(seen)
+    best_r = sg * (best - plan["entry"]) / risk
+    if best != pos.get("best_spot") and best_r >= 1.0:          # remembered once it matters (fewer writes)
+        upd["best_spot"] = best
+    if best_r < C.TRAIL_START_R:
+        return
+    cur = upd.get("live_sl", sl)
+    lock = plan["entry"] + sg * (best_r - C.TRAIL_GIVE_R) * risk
+    if sg * (lock - cur) > 0:
+        upd["live_sl"] = round(lock, 2)
+        upd["trail_on"] = True
 
 
 # ---------------- round 33: multi-timeframe conviction score

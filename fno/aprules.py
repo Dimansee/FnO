@@ -38,7 +38,7 @@ def rulebook() -> dict:
     """Sections of {title, rows: [[name, value]]} plus the live switch states."""
     per = _idx_rules()
     which = {r: ", ".join(LABEL[s] for s, rr in per.items() if r in rr) for r in NAMES}
-    sw = {k: _flag(k) for k in ("conviction", "big_run_skip", "dd_half", "small_otm", "ai_judge", "limits_system_only", "big_otm", "channel_slot")}
+    sw = {k: _flag(k) for k in ("conviction", "big_run_skip", "dd_half", "small_otm", "ai_judge", "limits_system_only", "big_otm", "channel_slot", "profit_trail")}
     on = lambda k: "ON" if sw[k] else "OFF (switched off in Research → Changes)"
     sections = [
         {"title": "What Autopilot trades", "rows": [
@@ -67,6 +67,8 @@ def rulebook() -> dict:
             ["Slots", "One Noise/Camarilla position per index; trend-day, Fibonacci and the 15-min channel each have their own slot"],
         ]},
         {"title": "Stops, targets and exits", "rows": [
+            ["Profit trail", f"{on('profit_trail')}: Noise, Camarilla, Fibonacci and trend-day - once a trade has been +{C.TRAIL_START_R:g}R in favour, "
+                             f"the index stop follows the best move {C.TRAIL_GIVE_R:g}R behind it (round 99)"],
             ["Noise", f"Stop {C.STOP_ATR:g} × ATR(14, 5-min) on the index. Target {C.RR_NOISE:g}R. Trails on the band / VWAP. No breakeven move"],
             ["Camarilla", f"Stop at H3/L3, kept between {C.CAM_RMIN:g} and {C.CAM_RMAX:g} ATR. Stop to entry at +{C.CAM_BE_R:g}R. "
                           f"Exit after {C.CAM_TIME_STOP} min if +0.5R not reached. No target"],
