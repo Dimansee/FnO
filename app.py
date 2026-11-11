@@ -245,6 +245,15 @@ def _ap_counts():
     return out
 
 
+def _ledger():
+    from fno import paper as P
+    a, _, tr, cash = P.snapshot()
+    rem = sorted(P._removed(), key=lambda t: t.get("closed") or "")[-5:]
+    return {"trades": len(tr), "removed": len(P._removed()), "archived": len(P.archived()), "equity": round(P.equity(a, tr)), "cash": round(cash),
+            "capital_start": a.get("capital_start"), "net_steps": [{"at": x["at"], "to": x["to"]} for x in a.get("adjustments") or []],
+            "recent_removed": [{"id": t.get("id"), "symbol": t.get("symbol"), "pnl": t.get("pnl"), "closed": t.get("closed")} for t in rem]}
+
+
 def _db_table_mb():
     if store.backend() != "supabase":
         return None
@@ -268,6 +277,7 @@ def health():
             "news_items": lambda: len(SV.news("NIFTY")["items"]),
             "fii_auto": lambda: bool(M.cached("fii", 3600, __import__("fno.context").context.fii_dii)),
             "lot_master": lambda: M.master().get("lots", {}),
+            "ledger": _ledger,                    # review 11 Nov 2026: trades / removed / archived / net steps, for audits
             "scheduler": lambda: scheduler.ensure(request.host),
             "db_table_mb": _db_table_mb,          # audit 11 Nov 2026: how full the free Supabase database is (500 MB on the free plan)
         }

@@ -294,6 +294,8 @@ assert a12["capital_start"] == 200000 and [t["id"] for t in store.trades()] == [
 assert not any(r.get("kind") == "net" for r in a12.get("resets") or []) and not any(t["id"] == "nt1" for t in _P11.archived())
 assert c.post("/api/account/net", json={"amount": 5000}).status_code == 400
 store.clear_positions(); store.clear_trades(); j(c.post("/api/account/reset", json={"capital": 200000}))
+import app as _A11
+_lg = _A11._ledger(); assert {"trades", "removed", "archived", "equity", "net_steps", "recent_removed"} <= set(_lg), _lg
 print("set net amount OK")
 # ---------- AI strategy (round 8) ----------
 from fno import ai as AI, ai_model as AM  # noqa: E402
