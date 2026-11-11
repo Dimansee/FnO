@@ -273,10 +273,20 @@ j(c.post("/api/account/reset", json={"capital": 200000})); store.clear_positions
 store.insert_trade({"id": "nt1", "symbol": "NIFTY", "pnl": 41000.0, "closed": "2026-11-10T11:00:00+05:30", "opened": "2026-11-10T10:00:00+05:30"})
 store.insert_position({"id": "np1", "symbol": "NIFTY", "opened": "2026-11-11T10:00:00+05:30", "margin": 9000.0, "legs": []})
 assert _P11.equity(_P11.account(), store.trades()) == 241000
-r = j(c.post("/api/account/net", json={"amount": 25000})); assert r["ok"] and r["open_kept"] == 1 and r["archived"] == 1, r
+r = j(c.post("/api/account/net", json={"amount": 25000})); assert r["ok"] and r["open_kept"] == 1, r
 a11, _, tr11, cash11 = _P11.snapshot()
-assert _P11.equity(a11, tr11) == 25000 and not tr11 and cash11 == 16000 and [p["id"] for p in store.positions()] == ["np1"], (a11, cash11)
-assert a11["resets"][-1]["kind"] == "net" and a11["resets"][-1]["equity_before"] == 241000
+assert _P11.equity(a11, tr11) == 25000 and [t["id"] for t in tr11] == ["nt1"] and cash11 == 16000 and [p["id"] for p in store.positions()] == ["np1"], (a11, cash11)
+assert _P11.base(a11, tr11) == 25000 and _P11.peak_equity(a11, tr11) == 25000 and a11["capital_start"] == 200000   # trades kept, limits from 25k
+store.insert_trade({"id": "nt2", "symbol": "NIFTY", "pnl": 1500.0, "closed": "2099-01-01T11:00:00+05:30", "opened": "2099-01-01T10:00:00+05:30"})
+assert _P11.equity(_P11.account(), store.trades()) == 26500 and _P11.peak_equity(_P11.account(), store.trades()) == 26500
+# the first version archived the trades: an account in that state is put back automatically, same equity
+import json as _j11
+store.clear_trades()
+store.hset(_P11.ARCHIVE, "nt1:2026-11-11", _j11.dumps({"id": "nt1", "symbol": "NIFTY", "pnl": 41000.0, "closed": "2026-11-10T11:00:00+05:30", "archived_at": "2026-11-11T19:05:00+05:30"}))
+store.put("account", {"capital_start": 25000.0, "created": "x", "resets": [{"at": "2026-11-11T19:05:00+05:30", "from_capital": 200000.0, "archived": 1, "kind": "net", "equity_before": 241000.0}]})
+a12 = _P11.account()
+assert a12["capital_start"] == 200000 and [t["id"] for t in store.trades()] == ["nt1"] and _P11.equity(a12, store.trades()) == 25000, a12
+assert not any(r.get("kind") == "net" for r in a12.get("resets") or []) and not any(t["id"] == "nt1" for t in _P11.archived())
 assert c.post("/api/account/net", json={"amount": 5000}).status_code == 400
 store.clear_positions(); store.clear_trades(); j(c.post("/api/account/reset", json={"capital": 200000}))
 print("set net amount OK")

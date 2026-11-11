@@ -20,6 +20,49 @@ def account() -> dict:
     if not a:
         a = {"capital_start": C.DEFAULT_CAPITAL, "created": C.now_ist().isoformat(timespec="seconds")}
         store.put("account", a)
+    if any(r.get("kind") == "net" and not r.get("undone") for r in a.get("resets") or []):
+        a = _undo_net_archive(a)
+    return a
+
+
+def adj_total(acct) -> float:
+    """Money set aside or added by 'Set the Autopilot amount (net)' (negative = taken out). Trades and P&L are untouched."""
+    return float(sum(float(x.get("amount") or 0) for x in acct.get("adjustments") or []))
+
+
+def start_now(acct) -> float:
+    """The amount the account restarted from: the last 'Set amount (net)', else the starting capital."""
+    adj = acct.get("adjustments") or []
+    return float(adj[-1]["to"]) if adj else float(acct["capital_start"])
+
+
+def _undo_net_archive(a: dict) -> dict:
+    """11 Nov 2026 fix: the first 'Set amount (net)' moved closed trades to the archive, which hid them from the trade list,
+    P&L and journal. Put them back and record the amount as an adjustment instead (same equity, nothing hidden)."""
+    import json as _j
+    resets = a.get("resets") or []
+    nets = [r for r in resets if r.get("kind") == "net" and not r.get("undone")]
+    rows = {}
+    for v in store.hvals(ARCHIVE):
+        t = _j.loads(v) if isinstance(v, str) else v
+        rows[f"{t['id']}:{str(t.get('archived_at', ''))[:10]}"] = t
+    adjustments = list(a.get("adjustments") or [])
+    cap0 = None
+    for i, r in enumerate(nets):
+        amount = float(nets[i + 1]["from_capital"]) if i + 1 < len(nets) else float(a["capital_start"])
+        for key, t in list(rows.items()):
+            if t.get("archived_at") == r["at"]:
+                t = {k: v for k, v in t.items() if k != "archived_at"}
+                store._cmd("HSET", store.TRADES, t["id"], store._dump(t)); store._hset_mem(store.TRADES, t["id"], store._dump(t))
+                store._cmd("HDEL", ARCHIVE, key); store._hset_mem(ARCHIVE, key, None)
+                rows.pop(key)
+        if cap0 is None:
+            cap0 = float(r["from_capital"]) if r.get("from_capital") is not None else amount
+        adjustments.append({"at": r["at"], "amount": round(amount - float(r.get("equity_before") or amount), 2), "to": amount, "kind": "net"})
+        r["undone"] = True
+    a = {**a, "capital_start": cap0 if cap0 is not None else a["capital_start"], "adjustments": adjustments,
+         "resets": [r for r in resets if not (r.get("kind") == "net")]}
+    store.put("account", a)
     return a
 
 
@@ -27,7 +70,7 @@ def snapshot():
     """(account, positions, trades, cash)"""
     a = account()
     pos, tr = store.positions(), store.trades()
-    cash = a["capital_start"] - sum(p["margin"] for p in pos) + sum(t["pnl"] for t in tr)
+    cash = a["capital_start"] + adj_total(a) - sum(p["margin"] for p in pos) + sum(t["pnl"] for t in tr)
     return a, pos, tr, round(cash, 2)
 
 
@@ -117,22 +160,15 @@ def reset(capital: float, keep_history: bool = True) -> dict:
 
 def set_net(amount: float) -> dict:
     """Make the Autopilot account worth exactly `amount` from now (user, 11 Nov 2026: "set my Autopilot amount to 25k net").
-    Unlike reset(): open positions stay open and are managed as before. Closed trades move to the archive (the journal and the
-    learning engine keep them) and stop counting in P&L, cash and the loss limits; the account starts again at `amount`."""
-    import json as _j
+    Like a withdrawal or deposit: every trade, the P&L, the journal and open positions stay exactly as they are; only the money
+    in the account changes. Sizing, the weekly limit, the capital shield and the drawdown brake restart from `amount`."""
     now = C.now_ist().isoformat(timespec="seconds")
-    old = account()
-    before = equity(old, store.trades())
-    moved = 0
-    for t in store.trades() + _removed():
-        store.hset(ARCHIVE, f"{t['id']}:{now[:10]}", _j.dumps({**t, "archived_at": now}, default=str, separators=(",", ":")))
-        moved += 1
-    store.clear_trades()
-    store.hdrop(REMOVED)
-    store.put("account", {"capital_start": float(amount), "created": old.get("created") or now,
-                          "resets": (old.get("resets") or [])[-20:] + [{"at": now, "from_capital": old.get("capital_start"), "archived": moved,
-                                                                        "kind": "net", "equity_before": round(before, 2)}]})
-    return {"archived": moved, "equity_before": round(before, 2), "open_kept": len(store.positions())}
+    a = account()
+    before = equity(a, store.trades())
+    delta = float(amount) - before
+    adj = (a.get("adjustments") or [])[-50:] + [{"at": now, "amount": round(delta, 2), "to": float(amount), "kind": "net"}]
+    store.put("account", {**a, "adjustments": adj, "week_reset_at": now})
+    return {"equity_before": round(before, 2), "moved": round(delta, 2), "open_kept": len(store.positions())}
 
 
 def week_reset_at() -> str | None:
@@ -240,22 +276,25 @@ def day_guard(positions, trades, capital) -> dict:
 
 def equity(acct, trades) -> float:
     """Starting capital plus realised P&L - what compounding sizes from."""
-    return float(acct["capital_start"]) + sum(h["pnl"] for h in trades)
+    return float(acct["capital_start"]) + adj_total(acct) + sum(h["pnl"] for h in trades)
 
 
 def peak_equity(acct, trades) -> float:
-    """Highest realised account value so far (trades in closing order)."""
+    """Highest realised account value so far (trades in closing order). A 'Set amount (net)' restarts the peak there."""
     eq = pk = float(acct["capital_start"])
-    for h in sorted(trades, key=lambda x: x.get("closed") or ""):
-        eq += h["pnl"]
-        pk = max(pk, eq)
+    ev = [(h.get("closed") or "", 1, h) for h in trades] + [(x["at"], 0, x) for x in acct.get("adjustments") or []]
+    for _, kind, h in sorted(ev, key=lambda e: (e[0], e[1])):
+        if kind == 0:
+            eq += float(h["amount"]); pk = eq
+        else:
+            eq += h["pnl"]; pk = max(pk, eq)
     return pk
 
 
 def base(acct, trades) -> float:
     """The capital the risk limits and fixed sizing are measured on: the starting capital, or - when it is set to 0 to trade
     only the profit already made - the current equity (never 0, so a 2% limit is never 'any loss')."""
-    cs = float(acct["capital_start"])
+    cs = start_now(acct)
     return cs if cs > 0 else max(equity(acct, trades), 1.0)
 
 

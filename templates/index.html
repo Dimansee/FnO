@@ -4822,11 +4822,11 @@ async function apStatus(quiet) {
         <h4 style="margin:16px 0 6px">Autopilot amount (net)</h4>
         <div class="row wrap" style="align-items:flex-end"><div><label for="apNet">Trade with</label><input id="apNet" type="number" min="10000" step="1000" value="${Math.round(s.equity || 25000)}" style="width:150px"></div>
           <button class="primary" id="apNetSet">Set amount</button></div>
-        <p class="muted fs12" style="margin:6px 0 0">Now ${rs(s.equity)}. The account becomes worth exactly this amount from now: open positions stay open, past trades move to the history (journal kept) and stop counting in P&amp;L and the limits.</p>
+        <p class="muted fs12" style="margin:6px 0 0">Now ${rs(s.equity)}. The account becomes worth exactly this amount from now, like a withdrawal or deposit. Every trade, the P&amp;L, the journal and open positions stay as they are; sizing, the weekly limit and the capital shield restart from this amount.${(s.adjustments || []).length ? " Set before: " + s.adjustments.map(x => `${esc(String(x.at).slice(0, 16).replace("T", " "))} → ${rs(x.to)}`).join(" · ") : ""}</p>
         <h4 style="margin:16px 0 6px">Reset P&amp;L</h4>
         <div class="row wrap" style="align-items:flex-end"><div><label for="apCap">Start again with</label><input id="apCap" type="number" min="10000" step="1000" value="${Math.round(s.capital_start || 200000)}" style="width:150px"></div>
           <label class="tog" style="margin:0 0 8px"><input type="checkbox" id="apKeep" checked> keep old trades in the history</label><button class="danger" id="apReset">Reset P&amp;L</button></div>
-        ${(s.resets || []).length ? `<p class="muted fs12" style="margin:8px 0 0">Earlier resets: ${s.resets.map(r => r.kind === "net" ? `${esc(String(r.at).slice(0, 10))} (amount set, was ${rs(r.equity_before)}, ${r.archived} trades to history)` : `${esc(String(r.at).slice(0, 10))} (from ${rs(r.from_capital)}, ${r.archived} trades kept)`).join(" · ")}</p>` : ""}</div>
+        ${(s.resets || []).length ? `<p class="muted fs12" style="margin:8px 0 0">Earlier resets: ${s.resets.map(r => `${esc(String(r.at).slice(0, 10))} (from ${rs(r.from_capital)}, ${r.archived} trades kept)`).join(" · ")}</p>` : ""}</div>
       <div class="card"><h3>Capital shield</h3>
         <div class="kv"><div>Status</div><div>${sh.on ? (sh.below_floor ? '<span class="dpill no">Stopped: below floor</span>' : '<span class="dpill ok">On</span>') : '<span class="dpill wait">Off</span>'}</div>
           <div>Floor (stops Autopilot)</div><div class="mono">${rs(sh.floor)} <span class="muted">(${sh.floor_pct}% of ${rs(sh.start)})</span></div>
@@ -4841,7 +4841,7 @@ async function apStatus(quiet) {
 }
 async function setNet(amt) {
   if (!(amt >= 10000)) { toast("The Autopilot amount must be at least ₹10,000."); return; }
-  if (!confirm(`Set the Autopilot amount to ${rs(amt)} net?\n\nThe account will be worth exactly ${rs(amt)} from now. Open positions stay open. Past closed trades move to the history (the journal and the learning keep them) and no longer count in P&L, cash or the loss limits.`)) return;
+  if (!confirm(`Set the Autopilot amount to ${rs(amt)} net?\n\nThe account will be worth exactly ${rs(amt)} from now (like a withdrawal or deposit). All trades, the P&L, the journal and open positions are kept. Sizing, the weekly limit and the capital shield restart from ${rs(amt)}.`)) return;
   try { const r = await post("/api/account/net", {amount: amt}); toast(r.message, 6000); AP.ov = null; riskBanner(); if (S.tab === "autopilot") loadAutopilot(); } catch (e) { toast(e.message); }
 }
 async function apDecisions() {

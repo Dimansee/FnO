@@ -561,8 +561,7 @@ def account_net():
     from fno import paper as P
     r = P.set_net(amt)
     return jsonify({"ok": True, **r, "message": f"Autopilot amount set to ₹{amt:,.0f} net (was ₹{r['equity_before']:,.0f}). "
-                    + (f"{r['open_kept']} open position(s) kept. " if r["open_kept"] else "")
-                    + (f"{r['archived']} past trade(s) moved to the history." if r["archived"] else "")})
+                    "All trades, P&L and the journal are kept" + (f"; {r['open_kept']} open position(s) stay open." if r["open_kept"] else ".")})
 
 
 @app.post("/api/account/week-reset")

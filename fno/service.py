@@ -452,7 +452,7 @@ def risk_status() -> dict:
     return {"autopilot": bool(pf.get("autopilot")), "auto": bool(pf.get("auto")), "auto_syms": pf.get("auto_syms"), "strategies": pf.get("strategies"),
             "equity": round(eq), "capital_start": acct.get("capital_start"), "cash": round(cash), "open_positions": len(pos),
             "weekly": wk, "daily": day, "blocked": bool(g.get("blocked")), "block_reason": g.get("reason"), "shield": sh, "scalp": sc,
-            "banners": banners, "resets": (acct.get("resets") or [])[-5:], "time": C.now_ist().isoformat(timespec="seconds")}
+            "banners": banners, "resets": (acct.get("resets") or [])[-5:], "adjustments": (acct.get("adjustments") or [])[-5:], "time": C.now_ist().isoformat(timespec="seconds")}
 
 
 def autopilot_overview() -> dict:
@@ -877,7 +877,7 @@ def shield_state(acct=None, pos=None, tr=None, pf=None) -> dict:
         acct, pos, tr, _ = P.snapshot()
     pf = pf or prefs()
     eq = P.equity(acct, tr)
-    start = float(acct.get("capital_start") or 0) or float(acct.get("capital_before") or 0) or eq
+    start = P.start_now(acct) or float(acct.get("capital_before") or 0) or eq
     floor = start * float(pf.get("shield_floor_pct") or 0) / 100
     used = sum(float(p.get("margin") or 0) for p in pos)
     cap = eq * float(pf.get("shield_open_pct") or 100) / 100
