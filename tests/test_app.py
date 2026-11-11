@@ -279,6 +279,11 @@ assert _P11.equity(a11, tr11) == 25000 and [t["id"] for t in tr11] == ["nt1"] an
 assert _P11.base(a11, tr11) == 25000 and _P11.peak_equity(a11, tr11) == 25000 and a11["capital_start"] == 200000   # trades kept, limits from 25k
 store.insert_trade({"id": "nt2", "symbol": "NIFTY", "pnl": 1500.0, "closed": "2099-01-01T11:00:00+05:30", "opened": "2099-01-01T10:00:00+05:30"})
 assert _P11.equity(_P11.account(), store.trades()) == 26500 and _P11.peak_equity(_P11.account(), store.trades()) == 26500
+from fno import service as _SV11
+import json as _j10; _ovj = _j10.dumps(_SV11.autopilot_overview(), default=str)                                   # the overview builds with a net step
+assert '"set": true' in _ovj, "net step missing from the Autopilot curve"
+assert j(c.post("/api/account/capital", json={"capital": 50000}))["ok"]                        # new starting capital replaces the net step
+assert not _P11.account().get("adjustments") and _P11.equity(_P11.account(), store.trades()) == 50000 + 41000 + 1500
 # the first version archived the trades: an account in that state is put back automatically, same equity
 import json as _j11
 store.clear_trades()

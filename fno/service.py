@@ -474,7 +474,10 @@ def autopilot_overview() -> dict:
                 "best": round(max((t["pnl"] for t in rows), default=0)), "worst": round(min((t["pnl"] for t in rows), default=0))}
     by_st, by_sym, by_wk, curve = {}, {}, {}, []
     eq = float(acct.get("capital_start") or 0)
+    adj = sorted(acct.get("adjustments") or [], key=lambda x: x["at"])          # 'Set amount (net)' steps, shown on the curve
     for t in sorted(sig_tr, key=lambda x: x.get("closed") or ""):
+        while adj and adj[0]["at"] <= (t.get("closed") or ""):
+            x = adj.pop(0); eq += float(x["amount"]); curve.append({"t": x["at"][:16], "equity": round(eq), "set": True})
         st = (t.get("plan") or {}).get("strategy") or "?"
         by_st.setdefault(st, []).append(t)
         by_sym.setdefault(t.get("symbol"), []).append(t)
@@ -485,6 +488,8 @@ def autopilot_overview() -> dict:
         by_wk.setdefault(wk, []).append(t)
         eq += float(t.get("pnl") or 0)
         curve.append({"t": (t.get("closed") or "")[:16], "equity": round(eq)})
+    for x in adj:
+        eq += float(x["amount"]); curve.append({"t": x["at"][:16], "equity": round(eq), "set": True})
     exits = {}
     for t in sig_tr:
         r = (t.get("reason") or "?").split("(")[0].strip()[:40]

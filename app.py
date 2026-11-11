@@ -482,7 +482,7 @@ def account_capital():
     """Change the demo capital without clearing positions, trades or the journal."""
     cap = float((request.get_json(force=True) or {}).get("capital", C.DEFAULT_CAPITAL))
     from fno import paper as P
-    a = P.account()
+    a = {k: v for k, v in P.account().items() if k != "adjustments"}   # a new starting capital replaces any 'Set amount (net)'
     if cap == 0:                                   # "profit only": take the starting money out, keep trading the realised profit
         eq0 = P.equity(a, store.trades()) - float(a["capital_start"])
         if eq0 < 10_000:
@@ -493,7 +493,8 @@ def account_capital():
     if not 10_000 <= cap <= 100_000_000:
         return jsonify({"ok": False, "message": "Capital must be 0 (trade only your profit) or between ₹10,000 and ₹10 crore."}), 400
     store.put("account", {**{k: v for k, v in a.items() if k not in ("capital_before", "profit_only_since")}, "capital_start": cap})
-    return jsonify({"ok": True, "message": f"Demo capital set to ₹{cap:,.0f} (positions and journal kept)."})
+    return jsonify({"ok": True, "message": f"Starting capital set to ₹{cap:,.0f}; past P&L adds to it (positions and journal kept). "
+                    "To make the account worth an exact amount, use 'Set as net amount'."})
 
 
 @app.get("/api/changes")
