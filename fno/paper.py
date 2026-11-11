@@ -22,6 +22,24 @@ def account() -> dict:
         store.put("account", a)
     if any(r.get("kind") == "net" and not r.get("undone") for r in a.get("resets") or []):
         a = _undo_net_archive(a)
+    if a.get("adjustments") and not a.get("net_repair_1111"):
+        a = _repair_net(a)
+    return a
+
+
+def _repair_net(a: dict) -> dict:
+    """One-time fix (review 11 Nov 2026): before the fixes, saving a starting capital kept an earlier 'Set amount (net)' step and
+    removing trades closed before the step moved the amount. Put the account back to the last amount set plus the P&L of
+    trades closed since then."""
+    last = a["adjustments"][-1]
+    tr = store.trades()
+    want = float(last["to"]) + sum(float(t.get("pnl") or 0) for t in tr if (t.get("closed") or "") > last["at"])
+    now_eq = float(a["capital_start"]) + adj_total(a) + sum(float(t.get("pnl") or 0) for t in tr)
+    adj = list(a["adjustments"])
+    if abs(want - now_eq) > 0.5:
+        adj[-1] = {**last, "amount": round(float(last["amount"]) + want - now_eq, 2), "repaired": round(want - now_eq, 2)}
+    a = {**a, "adjustments": adj, "net_repair_1111": True}
+    store.put("account", a)
     return a
 
 
@@ -106,6 +124,24 @@ def _removed() -> list[dict]:
     return [_j.loads(v) for v in store.hvals(REMOVED)]
 
 
+def _keep_net(moved_pnl_before: float, sign: int):
+    """Trades closed before the last 'Set amount (net)' are already inside that amount: taking them out of the ledger (sign -1)
+    or putting them back (+1) must not change what the account is worth, so the last net step absorbs their P&L."""
+    if not moved_pnl_before:
+        return
+    a = store.get("account") or {}
+    adj = a.get("adjustments") or []
+    if not adj:
+        return
+    adj[-1] = {**adj[-1], "amount": round(float(adj[-1]["amount"]) - sign * moved_pnl_before, 2)}
+    store.put("account", {**a, "adjustments": adj})
+
+
+def _last_net_at() -> str:
+    adj = (store.get("account") or {}).get("adjustments") or []
+    return adj[-1]["at"] if adj else ""
+
+
 def remove_trades(kinds) -> dict:
     """Take closed trades of the given origins out of the ledger (P&L, cash, equity and every stat are derived from it).
     Each one is copied to REMOVED first, then deleted, so restore_removed() can put it back. Open positions are not touched."""
@@ -113,21 +149,29 @@ def remove_trades(kinds) -> dict:
     kinds = [k for k in kinds if k in ("manual", "signal")]          # automatic trades can never be removed here
     if not kinds:
         raise ValueError("Pick manual orders and/or signals you placed yourself.")
-    moved, pnl = 0, 0.0
+    moved, pnl, before = 0, 0.0, 0.0
+    cut = _last_net_at()
     for t in store.trades():
         if origin(t) in kinds:
             store.hset(REMOVED, t["id"], store._dump(t))
             store._cmd("HDEL", store.TRADES, t["id"]); store._hset_mem(store.TRADES, t["id"], None)
             moved += 1; pnl += float(t.get("pnl") or 0)
+            if cut and (t.get("closed") or "") <= cut:
+                before += float(t.get("pnl") or 0)
+    _keep_net(before, -1)
     return {"removed": moved, "pnl_removed": round(pnl, 2)}
 
 
 def restore_removed() -> dict:
     import json as _j
-    n = 0
+    n, before = 0, 0.0
+    cut = _last_net_at()
     for t in _removed():
         store._cmd("HSET", store.TRADES, t["id"], store._dump(t)); store._hset_mem(store.TRADES, t["id"], store._dump(t))
         store._cmd("HDEL", REMOVED, t["id"]); store._hset_mem(REMOVED, t["id"], None); n += 1
+        if cut and (t.get("closed") or "") <= cut:
+            before += float(t.get("pnl") or 0)
+    _keep_net(before, +1)
     return {"restored": n}
 
 

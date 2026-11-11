@@ -270,7 +270,7 @@ assert store.ping()
 # ---------- set the Autopilot amount (net): exact equity, open positions kept, trades to the history ----------
 from fno import paper as _P11
 j(c.post("/api/account/reset", json={"capital": 200000})); store.clear_positions(); store.clear_trades()
-store.insert_trade({"id": "nt1", "symbol": "NIFTY", "pnl": 41000.0, "closed": "2026-11-10T11:00:00+05:30", "opened": "2026-11-10T10:00:00+05:30"})
+store.insert_trade({"id": "nt1", "symbol": "NIFTY", "pnl": 41000.0, "closed": "2026-09-30T11:00:00+05:30", "opened": "2026-09-30T10:00:00+05:30"})
 store.insert_position({"id": "np1", "symbol": "NIFTY", "opened": "2026-11-11T10:00:00+05:30", "margin": 9000.0, "legs": []})
 assert _P11.equity(_P11.account(), store.trades()) == 241000
 r = j(c.post("/api/account/net", json={"amount": 25000})); assert r["ok"] and r["open_kept"] == 1, r
@@ -287,13 +287,24 @@ assert not _P11.account().get("adjustments") and _P11.equity(_P11.account(), sto
 # the first version archived the trades: an account in that state is put back automatically, same equity
 import json as _j11
 store.clear_trades()
-store.hset(_P11.ARCHIVE, "nt1:2026-11-11", _j11.dumps({"id": "nt1", "symbol": "NIFTY", "pnl": 41000.0, "closed": "2026-11-10T11:00:00+05:30", "archived_at": "2026-11-11T19:05:00+05:30"}))
+store.hset(_P11.ARCHIVE, "nt1:2026-11-11", _j11.dumps({"id": "nt1", "symbol": "NIFTY", "pnl": 41000.0, "closed": "2026-09-30T11:00:00+05:30", "archived_at": "2026-11-11T19:05:00+05:30"}))
 store.put("account", {"capital_start": 25000.0, "created": "x", "resets": [{"at": "2026-11-11T19:05:00+05:30", "from_capital": 200000.0, "archived": 1, "kind": "net", "equity_before": 241000.0}]})
 a12 = _P11.account()
 assert a12["capital_start"] == 200000 and [t["id"] for t in store.trades()] == ["nt1"] and _P11.equity(a12, store.trades()) == 25000, a12
 assert not any(r.get("kind") == "net" for r in a12.get("resets") or []) and not any(t["id"] == "nt1" for t in _P11.archived())
 assert c.post("/api/account/net", json={"amount": 5000}).status_code == 400
 store.clear_positions(); store.clear_trades(); j(c.post("/api/account/reset", json={"capital": 200000}))
+# removing / restoring trades closed before the net step keeps the amount; the one-time repair fixes a drifted account
+store.clear_trades(); store.clear_positions(); j(c.post("/api/account/reset", json={"capital": 200000}))
+store.insert_trade({"id": "m1", "symbol": "NIFTY", "pnl": -3700.0, "mode": "manual", "closed": "2026-09-30T15:15:00+05:30"})
+store.insert_trade({"id": "s1", "symbol": "NIFTY", "pnl": 5000.0, "mode": "signal", "plan": {"auto": True}, "closed": "2026-09-30T12:00:00+05:30"})
+j(c.post("/api/account/net", json={"amount": 25000}))
+assert _P11.equity(_P11.account(), store.trades()) == 25000
+_P11.remove_trades(["manual"]); assert _P11.equity(_P11.account(), store.trades()) == 25000, _P11.account()
+_P11.restore_removed(); assert _P11.equity(_P11.account(), store.trades()) == 25000
+_a = _P11.account(); store.put("account", {**_a, "capital_start": 25000.0, "net_repair_1111": False})      # the state the old Save left
+assert _P11.equity(_P11.account(), store.trades()) == 25000 and _P11.account()["net_repair_1111"]
+store.clear_trades(); store.clear_positions(); j(c.post("/api/account/reset", json={"capital": 200000}))
 import app as _A11
 _lg = _A11._ledger(); assert {"trades", "removed", "archived", "equity", "net_steps", "recent_removed"} <= set(_lg), _lg
 print("set net amount OK")
