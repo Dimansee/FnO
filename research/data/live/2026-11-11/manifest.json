@@ -18,11 +18,7 @@
    "2026-11-19"
   ]
  },
- "errors": [
-  "bhavcopy not available yet",
-  "participant_oi not available yet",
-  "participant_vol not available yet"
- ],
+ "errors": [],
  "candles": {
   "rows": 247394,
   "instruments": 673,
@@ -30,5 +26,8 @@
  },
  "snapshots": 288,
  "journal_recos": 1,
- "updated": "2026-11-11T16:52:22+05:30"
+ "updated": "2026-11-12T16:59:19+05:30",
+ "bhav_fo_rows": 5077,
+ "participant_oi": true,
+ "participant_vol": true
 }
