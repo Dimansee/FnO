@@ -290,6 +290,11 @@ def tick(now=None, m=None) -> dict:
     c5 = m.candles(SYM)
     if c5 is None or len(c5) == 0:
         return {"skipped": [{"why": "no candles"}]}
+    try:                                                     # the Muhurat hour and other special short sessions are not part of the bar history
+        from . import strategy as ST
+        c5 = ST.drop_special_sessions(c5, keep=now.date())
+    except Exception:
+        pass
     b = frame(c5, now)
     for p in open_:
         try:
