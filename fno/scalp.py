@@ -453,6 +453,8 @@ def five_d(c5: pd.DataFrame, d1: dict, today) -> dict | None:
     h5 = c5[["open", "high", "low", "close"]].copy()
     tm = h5.index.time
     h5 = h5[(tm >= time(9, 15)) & (tm <= time(15, 25)) & (h5.index.date < today)]
+    from .strategy import drop_special_sessions
+    h5 = drop_special_sessions(h5)                                      # Muhurat hour is not a prior day
     keep = sorted(set(h5.index.date))[-30:]
     h5 = h5[np.isin(h5.index.date, keep)]
     t, dy, o, h, l, c, m1 = [], [], [], [], [], [], []

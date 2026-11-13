@@ -712,6 +712,7 @@ def live_chart(symbol: str = "NIFTY", day: str | None = None) -> dict:
         pass
     all_days = sorted(set(days_avail) | set(vault_days))
     d = day or days_avail[-1]
+    c = S.drop_special_sessions(c, keep=_date.fromisoformat(d))      # Muhurat hour is not "yesterday"
     df = I.add_indicators(c[c.index.date <= _date.fromisoformat(d)])
     today = df[df.index.date == _date.fromisoformat(d)]
     hist = df[df.index.date < _date.fromisoformat(d)]

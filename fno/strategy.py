@@ -38,10 +38,37 @@ def _f(name, score, value, why):
     return {"factor": name, "score": int(score), "value": value, "why": why}
 
 
+def special_session_days(candles: pd.DataFrame, keep=None) -> set:
+    """Prior sessions that are not a normal trading day: Diwali Muhurat (C.MUHURAT_DAYS) and any weekend / holiday
+    session shorter than C.SPECIAL_SESSION_MAX_MIN. `keep` (a date) is never dropped (the session being traded)."""
+    if candles is None or candles.empty:
+        return set()
+    out = set()
+    for d, g in candles.groupby(candles.index.date):
+        if d == keep:
+            continue
+        if d in C.MUHURAT_DAYS:
+            out.add(d)
+        elif (d.weekday() >= 5 or d in C.HOLIDAYS) and (g.index[-1] - g.index[0]) < pd.Timedelta(minutes=C.SPECIAL_SESSION_MAX_MIN):
+            out.add(d)
+    return out
+
+
+def drop_special_sessions(candles: pd.DataFrame, keep=None) -> pd.DataFrame:
+    """Candles without the special short sessions (see special_session_days), so "yesterday" is the last normal day."""
+    bad = special_session_days(candles, keep)
+    if not bad:
+        return candles
+    return candles[~pd.Index(candles.index.date).isin(list(bad))]
+
+
 def session_frames(candles: pd.DataFrame, now: datetime):
-    """Split candles into today's session (only completed bars) and history."""
+    """Split candles into today's session (only completed bars) and history.
+    Muhurat / other special short sessions are left out of history (9 Nov 2026 review: Sunday's Muhurat hour
+    had become "yesterday" for CPR, pivots, gap and the 3-day run)."""
     if candles.empty:
         return candles, candles
+    candles = drop_special_sessions(candles, keep=candles.index[-1].date())
     df = I.add_indicators(candles)
     last_day = df.index[-1].date()
     today = df[df.index.date == last_day]

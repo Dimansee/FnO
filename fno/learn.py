@@ -728,7 +728,7 @@ def post_close_in(day: str | None = None, force: bool = False) -> dict:
         except Exception:
             continue
         today = c[c.index.date == d]
-        hist = c[c.index.date < d]
+        hist = S.drop_special_sessions(c[c.index.date < d])          # Muhurat hour is not "yesterday"
         if len(today) < 30:
             continue
         syms[sym] = _day_stats(today, hist)
