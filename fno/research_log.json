@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-11",
+ "updated": "2026-11-13",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
@@ -1706,6 +1706,17 @@
    "result": "2026 by rule (Rs 2L replay): Fibonacci +1.44L, Camarilla Nifty +1.21L, Camarilla Bank Nifty -34k (26% wins), trend +50k, channel +22k, Noise +10k (per lot -Rs 14 in 2026 vs +398 in 2025). Today 5.14L (Jan-Jun 3.85L, Jul-Nov 2.10L, fall -21%); Rs 20k 0.85L. Passed both halves at both capitals: trail 1.5R behind the best once +2.5R 6.22L (3.99L / 2.63L, fall -21%), Rs 20k 1.03L; trail 1.5R once +2R 6.44L (2023-25 worse: 49.5L vs 60.1L); Noise strong-opposite-candle exit 6.01L (2023-25 worse). More risk = more money but deeper falls: risk 2.5% 55.2L (fall -43%), strong confidence 15.6L (-31%), risk 1.5% 11.9L (-34%) - fail the fall limit. Dropping Camarilla on Bank Nifty or Noise on Nifty: better in one half only. Rs 20k does not change with risk (1-lot floor).",
    "decision": "Adopted: profit trail - Noise, Camarilla, Fibonacci and trend-day: once a trade has been +2.5R in favour, the index stop follows the best move 1.5R behind (channel slot unchanged). Also better 2023-25 (79.1L vs 60.1L, fall -26% vs -31%) and 2023 - Oct 2026 (1.83 Cr vs 1.72 Cr); weaker on a fresh start in 2025-26 at Rs 2L (21.3L vs 22.9L). Switch in Research -> Recent changes. Higher risk / strong confidence not adopted (falls 10-22 points deeper).",
    "summary": "2026-only search: profit trail (1.5R behind the best once +2.5R) adopted - 2026 Rs 2L 6.22L vs 5.14L, both halves better. Higher risk grows faster but falls deeper - not adopted."
+  },
+  {
+   "id": "r101",
+   "date": "2026-11-13",
+   "area": "Index options",
+   "title": "Round 101: every rule reviewed, 24 other strategy families, combinations and overlays - one candidate (squeeze release on Sensex), not adopted yet",
+   "asked": "User (13 Nov): review all the strategies, find other strategies, and research and backtest in depth whether any strategy or any combination beats today's rules.",
+   "period": "Today's Autopilot (rounds 88 + 90 + 99), Outcomes replay Rs 2L and Rs 20k, 1-min data 2 Jan 2023 - 16 Oct 2026. Chosen on 2023-24, judged on 2025-26. Bar: better in 2023-24, 2025-26 and full at both capitals, worst fall not deeper by more than 2 points. Controls: random-entry pieces, random size tilts, block bootstrap, cost and timing stress. Over 3,500 backtests.",
+   "result": "Today Rs 2L 30.70L / 21.27L / 1.83 Cr (fall -25.9%), Rs 20k 1.94L / 2.21L / 19.96L. All 11 slots positive per lot (avg R 0.11-0.33); removing any one: 0 of 11 pass. 24 indicator families x exits x 5m/15m = 372 versions: 133 make money in 2023-24, 29 in 2025-26, 15 in both. Intraday momentum (first half-hour -> last half-hour): no effect, 0 of 168 option cells positive in both. Long straddle: 0 of 288. Today's rules on other indices (Channel / Fib / Trend-day Bank Nifty, Camarilla Sensex) and their 11 combinations: none pass. Correlation cap Nifty-Sensex hurts (twin trades 0.22R vs 0.06R); equity-curve sizing no better than random tilts. Keltner breakout as a slot: more money but deeper fall; with risk lowered 0 of 360 pass. Squeeze release (Bollinger inside Keltner, then out; 15-min; exit when momentum turns) on Sensex at half size PASSES: n=14, 1 a day: Rs 2L 45.77L / 29.11L / 2.10 Cr (fall -27 / -28 / -28%), Rs 20k 3.08L / 2.68L / 28.61L; alone +Rs 110k / +85k per lot (569 trades, positive every year); beats 60 of 60 random-entry controls in every cell; bootstrap ahead in 84% (Rs 2L) / 74% (Rs 20k). Against it: 2026 alone worse (Rs 2L 6.80L -> 6.39L, Rs 20k 1.20L -> 0.60L); 85% of its trades open while today's rules hold the same side; fall 4-7 pts deeper at Rs 5L-10L; +1% worse fills each side loses the edge at Rs 2L.",
+   "decision": "No change to today's rules. Squeeze release on Sensex is the first candidate since the channel slot to meet the bar, but it is the same bet as the existing Sensex trades, 2026 alone is worse and it is thin against costs - proposed as a shadow slot (signals recorded, no orders) before any live use. Watch list: Keltner breakout on Nifty, average-price band 2.0 trend, channel trades not confirmed by the other index (-0.08R). Closed: correlation cap, equity-curve sizing, intraday momentum, long straddles, Supertrend, PSAR, Ichimoku, Stochastic, Heikin-Ashi, DMI, RSI(2), initial balance, value-area 80% rule.",
+   "summary": "All 11 slots earn their place. Over 3,500 backtests of other strategies and combinations: one passes - a squeeze-release slot on Sensex at half size. Not adopted yet (same bet as existing Sensex trades, 2026 alone worse, thin against costs); shadow slot proposed."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2159,6 +2170,13 @@
    "title": "Add +100% of the trade's lots after Rs 2,500 open profit, stop lock +Rs 500, from Rs 5L equity",
    "waiting_for": "Intrabar (1-min) stop check and live fill slippage on larger orders",
    "why": "Round 96 near-miss: better in every period at Rs 2L (full 213.7L vs 171.7L), unchanged at Rs 20k, but the 2025-26 fall is 3.1 pts deeper."
+  },
+  {
+   "id": "p-squeeze",
+   "area": "Index options",
+   "title": "Squeeze release slot on Sensex (15-min, n=14, exit when momentum turns, 1 a day, half size)",
+   "waiting_for": "4-6 weeks of shadow signals (no orders) to compare live timing and fills with the backtest; real Sensex option quotes",
+   "why": "Round 101: meets the bar (Rs 2L 45.77L / 29.11L / 2.10 Cr vs 30.70L / 21.27L / 1.83 Cr; Rs 20k better in all three), beats every random control, bootstrap ahead 84% / 74%. But 2026 alone is worse, 85% of trades overlap existing same-side trades, and +1% worse fills lose the edge at Rs 2L."
   }
  ],
  "crypto_rounds": [
@@ -3214,6 +3232,15 @@
     "r97"
    ],
    "takeaway": "0 of 96 versions beat today; ~90% of add-ons stopped by one-minute noise (Nifty option moves ~3.8 pts a minute); small accounts wiped. Not adopted."
+  },
+  {
+   "n": 101,
+   "date": "2026-11-13",
+   "topic": "Review of every rule, 24 other strategy families, combinations and overlays",
+   "ids": [
+    "r101"
+   ],
+   "takeaway": "All 11 slots earn their place; over 3,500 backtests, one passes: squeeze release on Sensex (half size). 2026 alone is worse and it overlaps existing Sensex trades - shadow slot proposed, not adopted."
   }
  ],
  "india_status": {
