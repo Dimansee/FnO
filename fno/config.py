@@ -163,6 +163,12 @@ RECORD_KEEP_DAYS = 120     # Redis copy expires after this; the nightly job keep
 HOLIDAYS = {date(2026, 1, 15), date(2026, 1, 26), date(2026, 3, 3), date(2026, 3, 26), date(2026, 3, 31), date(2026, 4, 3),
             date(2026, 4, 14), date(2026, 5, 1), date(2026, 5, 28), date(2026, 6, 26), date(2026, 9, 14), date(2026, 10, 2),
             date(2026, 10, 20), date(2026, 11, 10), date(2026, 11, 24), date(2026, 12, 25)}
+# Special short sessions that are not a normal trading day (Diwali Muhurat ~1 hour; also any weekend /
+# holiday session under SPECIAL_SESSION_MAX_MIN, e.g. the 2024 disaster-recovery Saturdays). They are skipped
+# when the app builds "yesterday" (prior-day high/low/close, CPR, pivots, Camarilla, gap, 3-day run).
+# A full Saturday session (e.g. Budget day 1 Feb 2025) runs ~6 hours and is kept.
+MUHURAT_DAYS = {date(2023, 11, 12), date(2024, 11, 1), date(2025, 10, 21), date(2026, 11, 8)}
+SPECIAL_SESSION_MAX_MIN = 150
 HOLIDAYS_YEAR = 2026     # the last year the list above covers; the app warns when today is past it
 # Calendar rules (research round 6, research/README.md)
 BUDGET_DAYS = {date(2023, 2, 1), date(2024, 2, 1), date(2024, 7, 23), date(2025, 2, 1), date(2026, 2, 1), date(2027, 2, 1)}   # Union Budget: no new signal trades (all 4 test-period Budget days lost). Update yearly.
