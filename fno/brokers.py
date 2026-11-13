@@ -89,14 +89,161 @@ def _num(v):
 # Upstox
 # =============================================================================
 UPSTOX = "https://api.upstox.com"
-# Request pacing (26 Oct 2026: Cloudflare error 1015 "you are being rate limited" on candles). At most ~6 calls a second from
-# this server, and after a 429 no Upstox calls at all for UPSTOX_COOLDOWN seconds (each retry during a ban extends it).
+# Request pacing (26 Oct 2026: Cloudflare error 1015 "you are being rate limited" on candles). After a 429 no Upstox calls at all
+# for UPSTOX_COOLDOWN seconds (doubling on every further 429 the same day, up to 30 min).
 import threading as _th
 import time as _tm
+from collections import deque as _deque
 _ux_lock = _th.Lock()
 _ux = {"last": 0.0, "until": 0.0}
 UPSTOX_GAP = 0.17
 UPSTOX_COOLDOWN = 180
+
+
+# =============================================================================
+# Request budget (13 Nov 2026). Both brokers count every call per second, per minute, per 30 min and per day; we stay
+# under ~85-90% of the published limits so a burst never trips the broker's own limiter.
+#   Upstox  (upstox.com/developer/api-documentation/rate-limiting): 50/s, 500/min, 2,000 per 30 min
+#   Fyers   (Data APIs, from 16 Oct 2026): Standard 5/s, 50/min, 5,000/day; Prime 10/s, 500/min, 5,00,000/day.
+#           More than 3 per-minute breaches in a day = Fyers blocks the user for the rest of that day.
+# Set FYERS_PLAN=prime on the server if the Fyers account has Prime.
+# =============================================================================
+import os as _os
+FYERS_PLAN = (_os.environ.get("FYERS_PLAN") or "standard").strip().lower()
+LIMITS = {
+    "upstox": {"sec": 40, "min": 420, "30m": 1700, "day": None},
+    "fyers": ({"sec": 8, "min": 420, "30m": None, "day": 450_000} if FYERS_PLAN == "prime"
+              else {"sec": 4, "min": 42, "30m": None, "day": 4_600}),
+}
+MAX_WAIT = 6.0          # a call waits at most this long for room in the budget; longer = served from the last data instead
+_STATE: dict = {}       # broker -> {"q": deque of send times (30 min), "day": date, "n": calls today, "strikes": 429s today, ...}
+
+
+def _st(name):
+    st = _STATE.get(name)
+    today = C.today_ist()
+    if st is None or st["day"] != today:
+        n = 0
+        try:                                   # today's count survives a restart / deploy (written every 20 calls)
+            from . import store as _store
+            n = int((_store.get(f"brcount:{name}:{today.isoformat()}") or {}).get("n") or 0)
+        except Exception:
+            pass
+        st = _STATE[name] = {"q": _deque(), "day": today, "n": n, "strikes": 0, "saved": n, "lock": _th.Lock()}
+    return st
+
+
+def _cool(name) -> dict:
+    return _ux if name == "upstox" else _fy
+
+
+def _seconds_to_midnight() -> float:
+    now = C.now_ist()
+    nxt = (now + timedelta(days=1)).replace(hour=0, minute=1, second=0, microsecond=0)
+    return max(60.0, (nxt - now).total_seconds())
+
+
+def _acquire(name):
+    """Wait for room in the broker's budget (or raise RateLimited without sending anything)."""
+    st, lim, cd = _st(name), LIMITS[name], _cool(name)
+    with st["lock"]:
+        waited = 0.0
+        while True:
+            now = _tm.time()
+            left = cd["until"] - now
+            if left > 0:
+                raise RateLimited(f"{name.title()} asked us to slow down - pausing {name.title()} calls for {int(left) + 1}s")
+            if lim["day"] and st["n"] >= lim["day"]:
+                cd["until"] = now + _seconds_to_midnight()
+                raise RateLimited(f"{name.title()} daily request budget used up ({lim['day']:,}) - using the other broker / last data until tomorrow")
+            q = st["q"]
+            while q and q[0] < now - 1800:
+                q.popleft()
+            need = 0.0
+            gap = UPSTOX_GAP if name == "upstox" else FYERS_GAP
+            if q and gap:
+                need = max(need, q[-1] + gap - now)
+            per_min = lim["min"] if st["strikes"] < 2 else lim["min"] // 2     # after two 429s in a day: half speed till tomorrow
+            for win, cap in ((1, lim["sec"]), (60, per_min), (1800, lim["30m"])):
+                if not cap:
+                    continue
+                inside = [t for t in q if t > now - win] if win < 1800 else list(q)
+                if len(inside) >= cap:
+                    need = max(need, inside[len(inside) - cap] + win - now + 0.01)
+            if need <= 0:
+                q.append(now)
+                st["n"] += 1
+                break
+            if waited + need > MAX_WAIT:
+                raise RateLimited(f"{name.title()} request budget is full for the moment - showing the last fetched data")
+            _tm.sleep(need)
+            waited += need
+    if st["n"] - st["saved"] >= 20:
+        st["saved"] = st["n"]
+        try:
+            from . import store as _store
+            _store.put(f"brcount:{name}:{st['day'].isoformat()}", {"n": st["n"]})
+        except Exception:
+            pass
+
+
+def _on_429(name, base):
+    """The broker refused: pause, longer each time today (60 s / 180 s base, doubling, max 30 min)."""
+    st, cd, lim = _st(name), _cool(name), LIMITS[name]
+    st["strikes"] += 1
+    secs = min(1800, base * 2 ** (st["strikes"] - 1))
+    if name == "fyers" and st["strikes"] >= 2:
+        secs = max(secs, 900)                  # Fyers blocks the whole day after >3 per-minute breaches: never get near that
+    if lim["day"] and st["n"] >= 0.9 * lim["day"]:
+        secs = _seconds_to_midnight()          # almost certainly the daily cap: retrying only adds strikes
+    cd["until"] = _tm.time() + secs
+    return int(secs)
+
+
+def budget(name) -> dict:
+    """Calls used / limits, for Settings and the health check."""
+    st, lim, now = _st(name), LIMITS[name], _tm.time()
+    q = [t for t in st["q"] if t > now - 1800]
+    return {"today": st["n"], "last_min": sum(1 for t in q if t > now - 60), "last_30m": len(q), "limits": lim,
+            "strikes_today": st["strikes"], "cooldown_s": max(0, int(_cool(name)["until"] - now)),
+            "plan": FYERS_PLAN if name == "fyers" else None}
+
+
+def limited(name) -> bool:
+    """True while a broker is cooling down or has (almost) used its daily budget: Market then prefers the other one."""
+    try:
+        st, lim = _st(name), LIMITS[name]
+        return _cool(name)["until"] > _tm.time() or bool(lim["day"] and st["n"] >= 0.97 * lim["day"])
+    except Exception:
+        return False
+
+
+# Today's 1-minute bars are fetched at most once per clock minute per instrument and shared: the scalp book uses them and
+# today's 5-minute bars are built from them (was: a separate 5-min intraday call every 25 s + a 1-min call every 20 s).
+_today1: dict = {}
+
+
+def _today_bars(broker, key, fetch):
+    now = _tm.time()
+    hit = _today1.get((broker, key))
+    if hit and int(hit[0] // 60) == int(now // 60):
+        return hit[1]
+    df = fetch()
+    _today1[(broker, key)] = (now, df)
+    if len(_today1) > 400:
+        for k in [k for k, v in list(_today1.items()) if v[0] < now - 3600]:
+            _today1.pop(k, None)
+    return df
+
+
+def _to5(df1: pd.DataFrame) -> pd.DataFrame:
+    """1-minute bars -> 5-minute bars labelled by their start (09:15, 09:20, ... the same as the brokers' own 5-min bars)."""
+    if df1 is None or df1.empty:
+        return pd.DataFrame()
+    g = df1.resample("5min", label="left", closed="left")
+    out = pd.DataFrame({"open": g["open"].first(), "high": g["high"].max(), "low": g["low"].min(),
+                        "close": g["close"].last(), "volume": g["volume"].sum()})
+    return out.dropna(subset=["open"])
 
 
 def upstox_cooldown_left() -> int:
@@ -130,18 +277,11 @@ class Upstox:
         self.s.headers.update({"Authorization": f"Bearer {token}", "Accept": "application/json"})
 
     def _get(self, path, params=None):
-        with _ux_lock:
-            left = _ux["until"] - _tm.time()
-            if left > 0:
-                raise RateLimited(f"Upstox asked us to slow down - pausing Upstox calls for {int(left) + 1}s")
-            wait = _ux["last"] + UPSTOX_GAP - _tm.time()
-            if wait > 0:
-                _tm.sleep(wait)
-            _ux["last"] = _tm.time()
+        _acquire("upstox")
         r = self.s.get(UPSTOX + path, params=params, timeout=15)
         if r.status_code == 429 or (r.status_code == 403 and "1015" in r.text[:400]):
-            _ux["until"] = _tm.time() + UPSTOX_COOLDOWN
-            raise RateLimited(f"Upstox asked us to slow down (too many requests) - pausing Upstox calls for {UPSTOX_COOLDOWN // 60} min")
+            secs = _on_429("upstox", UPSTOX_COOLDOWN)
+            raise RateLimited(f"Upstox asked us to slow down (too many requests) - pausing Upstox calls for {max(1, secs // 60)} min")
         if r.status_code == 401:
             raise AuthExpired("Upstox session expired - log in again in Settings.")
         if r.status_code >= 400:
@@ -230,23 +370,30 @@ class Upstox:
             if past_rows:
                 _hist[hk] = (_tm.time(), past_rows)
             rows += past_rows
-        today = self._get(f"/v3/historical-candle/intraday/{enc}/minutes/5") or {}
-        rows += today.get("candles", [])
-        if not rows:
+        today5 = _to5(self.candles1(key))           # today's 5-min bars built from the shared 1-min fetch (no extra call)
+        if not rows and today5.empty:
             return pd.DataFrame()
         df = pd.DataFrame([r[:6] for r in rows], columns=["ts", "open", "high", "low", "close", "volume"])
-        df["ts"] = pd.to_datetime(df["ts"], utc=True).dt.tz_convert(IST)
-        return df.drop_duplicates("ts").set_index("ts").sort_index().astype(float)
+        if len(df):
+            df["ts"] = pd.to_datetime(df["ts"], utc=True).dt.tz_convert(IST)
+            df = df.drop_duplicates("ts").set_index("ts").sort_index().astype(float)
+        else:
+            df = pd.DataFrame(columns=["open", "high", "low", "close", "volume"], dtype=float)
+        if not today5.empty:
+            df = pd.concat([df[df.index.date != C.today_ist()] if len(df) else df, today5.astype(float)])
+        return df[~df.index.duplicated(keep="last")].sort_index()
 
     def candles1(self, key):
-        """Today's 1-minute candles (the scalp book)."""
-        enc = quote(key, safe="")
-        rows = (self._get(f"/v3/historical-candle/intraday/{enc}/minutes/1") or {}).get("candles", [])
-        if not rows:
-            return pd.DataFrame()
-        df = pd.DataFrame([r[:6] for r in rows], columns=["ts", "open", "high", "low", "close", "volume"])
-        df["ts"] = pd.to_datetime(df["ts"], utc=True).dt.tz_convert(IST)
-        return df.drop_duplicates("ts").set_index("ts").sort_index().astype(float)
+        """Today's 1-minute candles (the scalp book). One call per instrument per clock minute, shared."""
+        def fetch():
+            enc = quote(key, safe="")
+            rows = (self._get(f"/v3/historical-candle/intraday/{enc}/minutes/1") or {}).get("candles", [])
+            if not rows:
+                return pd.DataFrame()
+            df = pd.DataFrame([r[:6] for r in rows], columns=["ts", "open", "high", "low", "close", "volume"])
+            df["ts"] = pd.to_datetime(df["ts"], utc=True).dt.tz_convert(IST)
+            return df.drop_duplicates("ts").set_index("ts").sort_index().astype(float)
+        return _today_bars("upstox", key, fetch)
 
 
 # =============================================================================
@@ -294,7 +441,7 @@ def fyers_refresh(app_id, secret, refresh_token, pin) -> str:
 
 _fy = {"last": 0.0, "until": 0.0, "no_greeks_until": 0.0}
 _FY_EXP: dict = {}          # option-chain key -> {expiry date: Fyers expiry timestamp}; refreshed by expiries() (cached 1 h upstream)
-FYERS_GAP = 0.12            # Fyers allows ~10 calls a second; stay under it
+FYERS_GAP = 0.22            # spacing between calls; the budget above caps each second / minute / day
 FYERS_COOLDOWN = 60
 
 
@@ -311,26 +458,20 @@ class Fyers:
         self._exp_ts = _FY_EXP                      # shared by every client: each page / tick makes a new client
 
     def _get(self, path, params=None):
-        with _ux_lock:
-            left = _fy["until"] - _tm.time()
-            if left > 0:
-                raise RateLimited(f"Fyers asked us to slow down - pausing Fyers calls for {int(left) + 1}s")
-            wait = _fy["last"] + FYERS_GAP - _tm.time()
-            if wait > 0:
-                _tm.sleep(wait)
-            _fy["last"] = _tm.time()
+        _acquire("fyers")
         r = self.s.get(FYERS_DATA + path, params=params, timeout=15)
         try:
             j = r.json()
         except Exception:
             if r.status_code == 429:
-                _fy["until"] = _tm.time() + FYERS_COOLDOWN
-                raise RateLimited("Fyers asked us to slow down (too many requests) - pausing Fyers calls for 1 min")
+                secs = _on_429("fyers", FYERS_COOLDOWN)
+                raise RateLimited(f"Fyers asked us to slow down (too many requests) - pausing Fyers calls for {max(1, secs // 60)} min")
             raise BrokerError(f"Fyers {r.status_code}: {r.text[:160]}")
         msg = str(j.get("message", "")).lower()
-        if r.status_code == 429 or j.get("code") == 429 or "request limit" in msg or "rate limit" in msg or "too many" in msg:
-            _fy["until"] = _tm.time() + FYERS_COOLDOWN
-            raise RateLimited("Fyers asked us to slow down (too many requests) - pausing Fyers calls for 1 min")
+        if (r.status_code == 429 or j.get("code") in (429, -429) or "request limit" in msg or "rate limit" in msg
+                or "too many" in msg or "limit exceeded" in msg):
+            secs = _on_429("fyers", FYERS_COOLDOWN)
+            raise RateLimited(f"Fyers asked us to slow down (too many requests) - pausing Fyers calls for {max(1, secs // 60)} min")
         if r.status_code == 401 or j.get("code") in (-8, -15, -16, -17) or (j.get("s") != "ok" and "token" in msg):
             raise AuthExpired("Fyers session expired - log in again in Settings.")
         if j.get("s") not in ("ok", None):
@@ -431,23 +572,30 @@ class Fyers:
             past = jp.get("candles") or []
             if past:
                 _hist[hk] = (_tm.time(), past)
-        jt = self._get("/history", {"symbol": key, "resolution": "5", "date_format": "1",
-                                    "range_from": to_d.isoformat(), "range_to": to_d.isoformat(), "cont_flag": "1"})
-        rows = list(past) + (jt.get("candles") or [])
-        if not rows:
+        today5 = _to5(self.candles1(key))           # today's 5-min bars built from the shared 1-min fetch (no extra call)
+        rows = list(past)
+        if not rows and today5.empty:
             return pd.DataFrame()
         df = pd.DataFrame([r[:6] for r in rows], columns=["ts", "open", "high", "low", "close", "volume"])
-        df["ts"] = pd.to_datetime(df["ts"], unit="s", utc=True).dt.tz_convert(IST)
-        return df.drop_duplicates("ts").set_index("ts").sort_index().astype(float)
+        if len(df):
+            df["ts"] = pd.to_datetime(df["ts"], unit="s", utc=True).dt.tz_convert(IST)
+            df = df.drop_duplicates("ts").set_index("ts").sort_index().astype(float)
+        else:
+            df = pd.DataFrame(columns=["open", "high", "low", "close", "volume"], dtype=float)
+        if not today5.empty:
+            df = pd.concat([df[df.index.date != to_d] if len(df) else df, today5.astype(float)])
+        return df[~df.index.duplicated(keep="last")].sort_index()
 
     def candles1(self, key):
-        """Today's 1-minute candles (the scalp book)."""
-        d = C.today_ist().isoformat()
-        j = self._get("/history", {"symbol": key, "resolution": "1", "date_format": "1",
-                                   "range_from": d, "range_to": d, "cont_flag": "1"})
-        rows = j.get("candles") or []
-        if not rows:
-            return pd.DataFrame()
-        df = pd.DataFrame([r[:6] for r in rows], columns=["ts", "open", "high", "low", "close", "volume"])
-        df["ts"] = pd.to_datetime(df["ts"], unit="s", utc=True).dt.tz_convert(IST)
-        return df.drop_duplicates("ts").set_index("ts").sort_index().astype(float)
+        """Today's 1-minute candles (the scalp book). One call per instrument per clock minute, shared."""
+        def fetch():
+            d = C.today_ist().isoformat()
+            j = self._get("/history", {"symbol": key, "resolution": "1", "date_format": "1",
+                                       "range_from": d, "range_to": d, "cont_flag": "1"})
+            rows = j.get("candles") or []
+            if not rows:
+                return pd.DataFrame()
+            df = pd.DataFrame([r[:6] for r in rows], columns=["ts", "open", "high", "low", "close", "volume"])
+            df["ts"] = pd.to_datetime(df["ts"], unit="s", utc=True).dt.tz_convert(IST)
+            return df.drop_duplicates("ts").set_index("ts").sort_index().astype(float)
+        return _today_bars("fyers", key, fetch)

@@ -1344,7 +1344,7 @@ def option_candles(symbol, expiry=None, strike=None, opt="CE"):
     out, source = [], "theoretical"
     if m.br and ch.attrs.get("source") == "live" and key and not str(key).startswith("DEMO|"):
         try:
-            oc = M.cached(f"oc:{m.br.name}:{key}", 25, lambda: m.br.candles(key))
+            oc = M.cached(f"oc:{m.br.name}:{key}", 30, lambda: m.br.candles(key), minute=True)
             oc = oc[oc.index >= under.index[0]] if not oc.empty else oc
             if not oc.empty:
                 source = "live"

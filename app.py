@@ -828,8 +828,8 @@ def _verify_upstox(tok: str) -> dict:
 def settings_get():
     s = store.get_many(["upstox", "fyers", "broker_pref", "fii_manual"])
     return jsonify({
-        "upstox": {**_status(s.get("upstox") or {}, "api_key"), "redirect": f"{_base()}/api/upstox/callback"},
-        "fyers": {**_status(s.get("fyers") or {}, "app_id"), "redirect": f"{_base()}/api/fyers/callback"},
+        "upstox": {**_status(s.get("upstox") or {}, "api_key"), "redirect": f"{_base()}/api/upstox/callback", "usage": B.budget("upstox")},
+        "fyers": {**_status(s.get("fyers") or {}, "app_id"), "redirect": f"{_base()}/api/fyers/callback", "usage": B.budget("fyers")},
         "broker_pref": s.get("broker_pref") or "auto", "fii_manual": s.get("fii_manual"), "prefs": SV.prefs(),
     })
 

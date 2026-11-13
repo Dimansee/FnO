@@ -27,10 +27,14 @@ u = B.Upstox("tok"); u.s.get = fake_get
 B.UPSTOX_GAP = 0
 df = u.candles("NSE_INDEX|Nifty 50"); n1 = len(calls)
 u.candles("NSE_INDEX|Nifty 50"); n2 = len(calls)
-assert not df.empty and n2 - n1 == 1, (n1, n2)          # second call: only today's intraday request, history from cache
-print("history cached OK:", n1, "calls first time, 1 after")
+assert not df.empty and n2 - n1 == 0, (n1, n2)          # same minute: history and today's bars both reused (13 Nov 2026)
+B._today1.clear()                                       # = a new clock minute
+u.candles("NSE_INDEX|Nifty 50"); n3 = len(calls)
+assert n3 - n2 == 1 and "minutes/1" in calls[-1], calls[-3:]   # only today's 1-min bars (5-min bars are built from them)
+print("history cached OK:", n1, "calls first time, 0 in the same minute, 1 next minute")
 
 mode["code"] = 429
+B._today1.clear()
 try:
     u.candles1("NSE_INDEX|Nifty 50"); raise SystemExit("no error")
 except B.RateLimited:
@@ -85,7 +89,11 @@ def fy_get(url, params=None, timeout=None):
 B.FYERS_GAP = 0
 fy = B.Fyers("APP", "TOK"); fy.s.get = fy_get
 fy.candles("NSE:NIFTY50-INDEX"); n1 = len(fcalls); fy.candles("NSE:NIFTY50-INDEX")
-assert n1 == 2 and len(fcalls) == 3 and fcalls[-1]["range_from"] == fcalls[-1]["range_to"], fcalls
+assert n1 == 2 and len(fcalls) == 2, fcalls            # same minute: nothing re-fetched
+B._today1.clear()
+fy.candles("NSE:NIFTY50-INDEX")
+assert len(fcalls) == 3 and fcalls[-1]["range_from"] == fcalls[-1]["range_to"] and fcalls[-1]["resolution"] == "1", fcalls
+B._today1.clear()
 mode["fy"] = 429
 try:
     fy.candles1("NSE:NIFTY50-INDEX"); raise SystemExit("no error")
@@ -112,3 +120,32 @@ for _ in range(3):
     f2.chain("NSE:NIFTY50-INDEX", _d(2026, 10, 27))
 assert len(ccalls) == 4, ccalls        # 1 expiry list + 3 chains (was 2 calls per chain)
 print("fyers chain calls OK")
+
+# 13 Nov 2026: request budget (Fyers Standard from 16 Oct 2026: 5/s, 50/min, 5,000/day) and switching to the other broker
+clock = [1_000_000.0]
+B._tm.time = lambda: clock[0]
+B._tm.sleep = lambda s: clock.__setitem__(0, clock[0] + s)
+B._STATE.clear(); B._fy["until"] = 0; B.FYERS_GAP = 0
+sent = []
+for _ in range(10):
+    B._acquire("fyers"); sent.append(clock[0])
+assert max(sum(1 for t in sent if a <= t < a + 1) for a in sent) <= B.LIMITS["fyers"]["sec"], sent
+B._STATE["fyers"]["n"] = B.LIMITS["fyers"]["day"]
+try:
+    B._acquire("fyers"); raise SystemExit("daily cap not enforced")
+except B.RateLimited:
+    pass
+assert B.limited("fyers") and B.fyers_cooldown_left() > 60
+print("fyers budget OK (per second + daily cap)")
+B._STATE.clear(); B._fy["until"] = 0
+assert B._on_429("fyers", 60) == 60 and B._on_429("fyers", 60) >= 900      # second 429 the same day: long pause
+print("growing cooldown OK")
+
+class Up:
+    name = "upstox"
+class Fy:
+    name = "fyers"
+B._ux["until"] = 0
+m3 = M.Market.__new__(M.Market); m3.errors = []; m3.clients = {"fyers": Fy(), "upstox": Up()}; m3.br = m3.clients["fyers"]
+assert m3._switch() and m3.br.name == "upstox" and not m3._switch()      # once per request, never ping-pong
+print("switch to the other broker OK")

@@ -27,15 +27,22 @@ _klocks: dict = {}
 _klock = _th.Lock()
 
 
-def cached(key, ttl, fn):
+def _fresh(hit, ttl, minute):
+    now = _t.time()
+    return hit and now - hit[0] < ttl and (not minute or int(hit[0] // 60) == int(now // 60))
+
+
+def cached(key, ttl, fn, minute=False):
+    """minute=True: also refetch as soon as a new clock minute starts, so the every-minute tick always sees this minute's
+    data, while page refreshes inside the same minute reuse it (no extra broker call)."""
     hit = _cache.get(key)
-    if hit and _t.time() - hit[0] < ttl:
+    if _fresh(hit, ttl, minute):
         return hit[1]
     with _klock:
         lk = _klocks.setdefault(key, _th.Lock())
     with lk:                                   # one fetch per key at a time: other threads wait and reuse it
         hit = _cache.get(key)
-        if hit and _t.time() - hit[0] < ttl:
+        if _fresh(hit, ttl, minute):
             return hit[1]
         val = fn()
         _cache[key] = (_t.time(), val)
@@ -244,7 +251,22 @@ class Market:
             self.token_kind["fyers"] = "daily"
         self.clients = clients
         self.br = clients.get(pref) or clients.get("upstox") or clients.get("fyers")
+        if self.br is not None and B.limited(self.br.name):      # paused / daily budget used: the other broker serves data
+            other = next((c for n, c in clients.items() if n != self.br.name and not B.limited(n)), None)
+            if other is not None:
+                self.br = other
         self.connected = {k: True for k in clients}
+
+    def _switch(self) -> bool:
+        """After a rate-limit reply: move this request to the other connected broker (if it isn't limited too)."""
+        if self.br is None or getattr(self, "_switched", False):     # once per request: never ping-pong between two busy brokers
+            return False
+        other = next((c for n, c in (getattr(self, "clients", None) or {}).items() if n != self.br.name and not B.limited(n)), None)
+        if other is None:
+            return False
+        self._switched = True
+        self.br = other
+        return True
 
     def _fyers_refresh_if_needed(self, fy: dict) -> dict:
         """Today's Fyers token is missing/expired but a refresh token + PIN were saved: get a new one silently."""
@@ -284,8 +306,9 @@ class Market:
         elif isinstance(e, B.RateLimited):
             nm = self.br.name.title() if self.br else "The broker"
             left = B.upstox_cooldown_left() if nm == "Upstox" else B.fyers_cooldown_left()
-            msg = (f"{nm} is limiting requests right now - showing the last fetched data (or Yahoo) and retrying in about "
-                   f"{max(1, round(left / 60))} min. Nothing to do on your side.")
+            when = (f"retrying in about {max(1, round(left / 60))} min" if left < 3 * 3600 else "back tomorrow (daily limit)")
+            msg = (f"{nm} is limiting requests right now - showing the last fetched data (or Yahoo) and {when}. "
+                   f"Nothing to do on your side.")
             if msg not in self.errors:
                 self.errors.append(msg)
         else:
@@ -301,10 +324,12 @@ class Market:
         if self.br:
             ck = f"c:{self.br.name}:{symbol}"
             try:
-                df = cached(ck, 25, lambda: self.br.candles(self.key(symbol)))
+                df = cached(ck, 25, lambda: self.br.candles(self.key(symbol)), minute=True)
                 if not df.empty:
                     return self._fill_gaps(df, symbol)
             except Exception as e:
+                if isinstance(e, B.RateLimited) and self._switch():
+                    return self.candles(symbol)
                 self._fail("Candles", e)
                 old = stale(ck, 120)                  # bridge a short broker hiccup only; after 2 min use Yahoo (moving, if delayed)
                 if old is not None and not old.empty:
@@ -325,7 +350,7 @@ class Market:
                 df = yahoo_candles(C.INDIA_VIX_YAHOO, period="1d", interval="5m")
             return df
         try:
-            df = cached(f"vixc:{self.br.name if self.br else 'yahoo'}", 60, get)
+            df = cached(f"vixc:{self.br.name if self.br else 'yahoo'}", 60, get, minute=True)
             if df is None or df.empty:
                 return None
             today = C.today_ist()
@@ -342,6 +367,8 @@ class Market:
                 if df is not None and not df.empty:
                     return df
             except Exception as e:
+                if isinstance(e, B.RateLimited) and self._switch():
+                    return self.candles1(symbol)
                 self._fail("1-minute candles", e)
                 old = stale(f"c1:{self.br.name}:{symbol}", 600)
                 if old is not None and not old.empty:
@@ -376,11 +403,19 @@ class Market:
     def vix(self) -> dict:
         if self.br:
             try:
-                q = cached(f"vix:{self.br.name}", 25, lambda: self.br.quotes([self.br.vix_key()]))
+                q = cached(f"vix:{self.br.name}", 30, lambda: self.br.quotes([self.br.vix_key()]), minute=True)
                 v = next(iter(q.values()))
                 if v["ltp"] and v["prev_close"]:
                     return {"level": v["ltp"], "chg_pct": (v["ltp"] / v["prev_close"] - 1) * 100}
             except Exception as e:
+                if isinstance(e, B.RateLimited) and self._switch():
+                    return self.vix()
+                old = stale(f"vix:{self.br.name}", 600) if self.br else None
+                if old:
+                    v = next(iter(old.values()))
+                    if v.get("ltp") and v.get("prev_close"):
+                        self._fail("VIX", e)
+                        return {"level": v["ltp"], "chg_pct": (v["ltp"] / v["prev_close"] - 1) * 100}
                 self._fail("VIX", e)
 
         def yv():
@@ -399,19 +434,29 @@ class Market:
                 if exps:
                     return exps, int(lot or lot_size(symbol))
             except Exception as e:
+                if isinstance(e, B.RateLimited) and self._switch():
+                    return self.expiries_and_lot(symbol)
                 self._fail("Expiry list", e)
         return I.demo_expiries(meta["expiry"], exchange=meta.get("exchange", "NSE")), lot_size(symbol)
 
     def chain(self, symbol, expiry: date, spot, vix, candles=None) -> pd.DataFrame:
         if self.br:
             try:
-                ch = cached(f"ch:{self.br.name}:{symbol}:{expiry}", 15, lambda: self.br.chain(self.key(symbol), expiry))
+                ck = f"ch:{self.br.name}:{symbol}:{expiry}"
+                ch = cached(ck, 30, lambda: self.br.chain(self.key(symbol), expiry), minute=True)
                 if ch is not None and not ch.empty:
                     ch = ch.copy()
                     ch.attrs["source"] = "live"
                     return ch
             except Exception as e:
+                if isinstance(e, B.RateLimited) and self._switch():
+                    return self.chain(symbol, expiry, spot, vix, candles)
                 self._fail("Option chain", e)
+                old = stale(f"ch:{self.br.name}:{symbol}:{expiry}", 90) if self.br else None
+                if old is not None and not old.empty:          # a short pause: last minute's live chain beats the formula
+                    ch = old.copy()
+                    ch.attrs["source"] = "live"
+                    return ch
         return theoretical_chain(symbol, expiry, spot, vix, candles)
 
     def spot(self, symbol) -> float | None:
@@ -474,7 +519,7 @@ class Market:
         for name, keys in by_broker.items():
             try:
                 ks = sorted(keys)                    # the page refresh and the minute tick ask for the same legs: reuse for 10 s
-                q = cached(f"q:{name}:{hash(tuple(ks))}", 10, lambda: self.clients[name].quotes(ks))
+                q = cached(f"q:{name}:{hash(tuple(ks))}", 20, lambda: self.clients[name].quotes(ks))
                 prices.update({k: v["ltp"] for k, v in q.items() if v.get("ltp") is not None})
                 self.ba.update({k: (v.get("bid"), v.get("ask")) for k, v in q.items()})
             except Exception as e:

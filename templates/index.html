@@ -2671,7 +2671,18 @@ function brokerCard(name, title, idLabel, st, steps) {
       ${st.connected ? `<button class="danger" data-disc="${name}">Disconnect</button>` : ""}
     </div>
     ${st.logged_in_at ? `<div class="muted" style="font-size:12px;margin-top:8px">Last login ${esc(st.logged_in_at.replace("T", " ").slice(0, 16))} IST · logins expire every night around 3:30 AM.</div>` : ""}
+    ${brokerUsage(name, st.usage)}
     ${brokerExtra(name, st)}`;
+}
+function brokerUsage(name, u) {
+  if (!u) return "";
+  const L = u.limits || {}, n = v => Number(v || 0).toLocaleString("en-IN");
+  const parts = [`${n(u.last_min)} in the last minute (app cap ${n(L.min)})`];
+  if (L["30m"]) parts.push(`${n(u.last_30m)} in the last 30 min (cap ${n(L["30m"])})`);
+  parts.push(L.day ? `${n(u.today)} today (cap ${n(L.day)})` : `${n(u.today)} today`);
+  const warn = u.cooldown_s > 0 ? `<br><span class="down">Paused for ${Math.ceil(u.cooldown_s / 60)} min after a "too many requests" reply - the other broker / last data is used meanwhile.</span>` : "";
+  const plan = name === "fyers" ? ` · Fyers plan: ${esc(u.plan || "standard")}` : "";
+  return `<div class="muted" style="font-size:12px;margin-top:6px">API calls: ${parts.join(" · ")}${plan}${warn}</div>`;
 }
 function brokerExtra(name, st) {
   if (name === "upstox") return `<div class="notice" style="margin-top:14px"><b>No daily login: one-year data token</b>
