@@ -433,6 +433,18 @@ def scalp_exit():
     return jsonify({"ok": True, "trade": SV.clean(rec)})
 
 
+@app.get("/api/squeeze")
+def squeeze_page():
+    from fno import squeeze as SQ
+    return jsonify(SV.clean(SQ.page()))
+
+
+@app.post("/api/squeeze/settings")
+def squeeze_settings():
+    from fno import squeeze as SQ
+    return jsonify({"ok": True, "settings": SQ.save_settings(request.get_json(force=True) or {})})
+
+
 @app.get("/api/carry")
 def carry_page():
     from fno import carry as CY

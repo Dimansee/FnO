@@ -485,6 +485,11 @@ def day(d: str) -> dict:
         scalp_open = [p for p in SC.positions() if (p.get("opened") or "")[:10] == d]
     except Exception:
         scalp_tr, scalp_open = [], []
+    try:                                                     # squeeze shadow slot (round 101): what the rule would have done - no orders
+        from . import squeeze as SQ
+        squeeze = SQ.day(d)
+    except Exception:
+        squeeze = None
     dec = decisions(d, h, recos, trades, open_)
     summary = {"recommendations": len(recos), "settled": len(res),
                "by_outcome": {k: sum(1 for r in res if r["index_outcome"] == k) for k in ("target", "stop", "square-off")},
@@ -495,5 +500,5 @@ def day(d: str) -> dict:
                "open_positions": len(open_), "executed": dec["summary"]["executed"], "skipped": dec["summary"]["skipped"],
                "scalp_trades": len(scalp_tr), "scalp_pnl": round(sum(t.get("pnl") or 0 for t in scalp_tr), 0)}
     return {"date": d, "context": {s: h.get(f"ctx:{s}") for s in SYMS}, "recommendations": recos, "ai": ai, "paper_trades": trades,
-            "open_positions": open_, "decisions": dec, "scalp_trades": scalp_tr, "scalp_open": scalp_open,
+            "open_positions": open_, "decisions": dec, "scalp_trades": scalp_tr, "scalp_open": scalp_open, "squeeze_shadow": squeeze,
             "settled": h.get("settled"), "summary": summary}

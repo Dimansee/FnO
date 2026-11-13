@@ -6,7 +6,7 @@ Devansh (13 Nov): review all the strategies, find other strategies, and research
 ## Bottom line
 - **Today's 11 slots all earn their place.** Every one makes money per lot over 2023 – Oct 2026, and removing any one of them makes the account worse (0 of 11 removals pass).
 - **Over 3,500 backtests of other things. One passes.** A "squeeze release" slot on Sensex (15-min bars, half size) beats today's rules in all six cells with the worst fall inside the 2-point rule, beats every random-entry control, and stays ahead in 84% (₹2L) and 74% (₹20k) of resampled histories.
-- **Not switched on.** Three things hold it back: 2026 on its own is worse with it (₹2L 6.80L → 6.39L, ₹20k 1.20L → 0.60L); 85% of its trades open while today's rules already hold the same side, so it adds to the same bet and deepens the worst fall at ₹5L and above; and with fills 1% worse on each side the advantage at ₹2L is gone. Proposed next step: run it as a shadow slot (signals recorded, no orders) and compare with this backtest.
+- **Not switched on.** Three things hold it back: 2026 on its own is worse with it (₹2L 6.80L → 6.39L, ₹20k 1.20L → 0.60L); 85% of its trades open while today's rules already hold the same side, so it adds to the same bet and deepens the worst fall at ₹5L and above; and with fills 1% worse on each side the advantage at ₹2L is gone. It now runs as a shadow slot: from 16 Nov the app records every signal with live option prices and places no orders; review after 25 sessions (about 21 Dec).
 - **Everything else fails**: 24 indicator families (372 versions), intraday momentum, long straddles, today's rules on the indices where they are not traded, correlation caps, equity-curve sizing, cross-index confirmation, Keltner breakouts.
 
 ## Method

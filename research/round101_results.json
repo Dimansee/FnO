@@ -3223,7 +3223,7 @@
    "pass": 0
   }
  },
- "passes": "squeeze release on Sensex (half size) - shadow slot proposed, not adopted",
+ "passes": "squeeze release on Sensex (half size) - running as a shadow slot from 16 Nov 2026, not adopted",
  "K_three_families": {
   "design_n": 720,
   "design_ok": 13,
@@ -4963,5 +4963,17 @@
     "alone_both": 1
    }
   }
+ },
+ "N_shadow_parity": {
+  "backtest": 569,
+  "live_code": 569,
+  "same_entry": 569,
+  "same_entry_exit": 403,
+  "only_backtest": 0,
+  "only_live": 0,
+  "exit_differs": 166,
+  "of_which_square_off": 166,
+  "square_off_median_gap_pts": 2.2850000000034925,
+  "square_off_max_gap_pts": 24.410000000003492
  }
 }

@@ -922,6 +922,7 @@ button.mini{padding:5px 10px;font-size:12.5px}
     </div>
     <div id="rsList" style="margin-top:14px"></div>
     <div class="card" id="rsChanges" style="margin-top:14px"><h3 style="margin:0 0 4px">Recent changes</h3><p class="muted" style="margin:0">Loading…</p></div>
+    <div class="sqMount" style="margin-top:14px"></div>
     <div id="rsPending" style="margin-top:14px"></div>
     <div id="study" style="margin-top:14px"></div>
   </section>
@@ -966,7 +967,7 @@ button.mini{padding:5px 10px;font-size:12.5px}
     <div class="appanel hidden" data-app="outcomes"><div id="apOutcomes"></div>
       <details class="card" id="ocWrap" style="margin-top:14px"><summary><h3 style="margin:0;display:inline">Research outcomes matrix</h3> <span class="muted">· every tested change vs today's rules (backtest)</span></summary>
         <div id="ocTop" style="margin-top:10px"></div><div id="ocPineBox" class="hidden" style="margin-top:12px"></div><div id="ocTbl" style="margin-top:12px"></div></details></div>
-    <div class="appanel hidden" data-app="improve"><div id="apImprove"></div></div>
+    <div class="appanel hidden" data-app="improve"><div id="apImprove"></div><div class="sqMount" style="margin-top:14px"></div></div>
     <div class="appanel hidden" data-app="rules"><div class="card rule" id="apRules"></div></div>
     <div class="appanel hidden" data-app="settings"><div id="apSettings"></div></div>
     <div class="appanel hidden" data-app="safety"><div id="apSafety"></div></div>
@@ -1386,6 +1387,32 @@ $("#scPos").onclick = async e => {
   const b = e.target.closest("[data-scexit]"); if (!b) return;
   try { const r = await post("/api/scalp/exit", {id: b.dataset.scexit}); toast(`Scalp position closed → ${rs(r.trade.pnl)}`); await loadScalp(); } catch (err) { toast(err.message); }
 };
+// Squeeze-release shadow slot (round 101): the rule's signals are recorded, no orders are placed. Shown on Research and on Autopilot -> Improvements.
+async function loadSqueeze() {
+  const mounts = document.querySelectorAll(".sqMount"); if (!mounts.length) return;
+  let d; try { d = await api("/api/squeeze"); } catch (e) { return; }
+  const st = d.stats, bt = d.backtest, on = d.settings.on, tm = x => (x || "").slice(5, 16).replace("T", " ");
+  const pill = on ? '<span class="pill live"><span class="dot"></span><span>RECORDING · no orders</span></span>' : '<span class="pill demo"><span>OFF</span></span>';
+  const open = d.positions.map(p => { const l = p.legs[0]; return `<div class="leg" style="flex-wrap:wrap;gap:10px;padding:10px 12px"><div style="flex:1;min-width:220px"><b>${esc(p.symbol)}</b> ${l.strike}${l.opt} · would have bought 1 lot at ₹${n2(p.entry_prem)}
+      <div class="muted" style="font-size:12px">${tm(p.opened)} · index ${n2(p.entry_spot)} · stop ${n2(p.sl)} · exits when momentum turns, else 15:15 · nothing was bought</div></div></div>`; }).join("");
+  const rows = d.trades.length ? "<tr><th>Opened</th><th>Closed</th><th>Option</th><th>Entry</th><th>Exit</th><th>Why it closed</th><th>R</th><th>Net / lot</th></tr>" +
+    d.trades.map(t => `<tr><td>${tm(t.opened)}</td><td>${tm(t.closed)}</td><td>${t.strike}${t.opt}</td><td class="mono">${n2(t.entry_prem)}</td><td class="mono">${n2(t.exit_prem)}</td>
+      <td>${esc(t.reason)}${t.price_src === "live" ? "" : ' <span class="muted">(formula price)</span>'}</td><td class="mono ${cls(t.r_live)}">${t.r_live == null ? "–" : n2(t.r_live)}</td><td class="mono ${cls(t.pnl)}"><b>${rs(t.pnl)}</b></td></tr>`).join("")
+    : `<tr><td class="empty">No signal yet. The backtest had about 3 a week.</td></tr>`;
+  const sum = st.trades ? `${st.trades} signal${st.trades > 1 ? "s" : ""} on ${st.days} day${st.days > 1 ? "s" : ""} · ${st.wins} green · net ${rs(st.pnl)} per lot (recorded only) · average R ${st.avg_r_live == null ? "–" : n2(st.avg_r_live)} live, ${st.avg_r_rule == null ? "–" : n2(st.avg_r_rule)} by the rule${st.avg_spread_pct == null ? "" : ` · average bid-ask gap ${n2(st.avg_spread_pct)}%`} · ${st.live_priced} with live prices`
+    : `Recording since ${esc(d.started)}. Review after 4–6 weeks.`;
+  const html = `<div class="card"><div class="cardhead"><h3 style="margin:0">Shadow slot: squeeze release on ${esc(d.symbol)}</h3>${pill}</div>
+    <p class="muted fs13" style="margin:6px 0 8px">${esc(d.rule)}</p>
+    <p style="margin:0 0 8px"><b>${sum}</b></p>${open}
+    <div class="tablewrap"><table>${rows}</table></div>
+    <details style="margin-top:10px"><summary class="muted fs13">Backtest and why it is not live (round 101)</summary><p class="muted fs13" style="margin:8px 0 0">${esc(bt.period)}.<br>
+      Alone: ${bt.alone.trades} trades, ${rs(bt.alone.per_lot)} per lot, ${bt.alone.wins_pct}% wins.<br>${bt.rows.map(r => `${esc(r.name)}: full ${rs(r.full)} · 2023-24 ${rs(r.y2324)} · 2025-26 ${rs(r.y2526)} · worst fall ${r.fall}%`).join("<br>")}<br><b>${esc(bt.warning)}</b></p></details>
+    <div style="margin-top:10px"><button class="ghost sqToggle">${on ? "Stop recording" : "Start recording"}</button></div></div>`;
+  mounts.forEach(m => { m.innerHTML = html; });
+  document.querySelectorAll(".sqToggle").forEach(b => b.onclick = async () => {
+    try { await post("/api/squeeze/settings", {on: !on}); toast(on ? "Shadow slot stopped." : "Shadow slot recording."); await loadSqueeze(); } catch (e) { toast(e.message); }
+  });
+}
 async function loadCarry() {
   const d = await api("/api/carry"); S.carry = d;
   const st = d.settings, bt = d.backtest, st2 = d.stats;
@@ -2660,7 +2687,7 @@ async function loadChanges(target = "#rsChanges", title = "Recent changes") {
   } catch (e) { $(target).innerHTML = `<h3>${esc(title)}</h3><p class="muted">Could not load: ${esc(e.message)}</p>`; }
 }
 async function loadResearch() {
-  loadChanges();
+  loadChanges(); loadSqueeze();
   if (!S.rlog) S.rlog = await api("/api/research/log");
   const L = S.rlog;
   L.entries = (L.entries || []).filter(x => !["Crypto", "Crypto & US", "US", "Gold"].includes(x.area));   // those live on the Crypto side
@@ -5241,6 +5268,7 @@ function isoWeekOf(d) {
   return `${t.getUTCFullYear()}-W${String(w).padStart(2, "0")}`;
 }
 async function apImprove() {
+  loadSqueeze();
   const w = await api("/api/autopilot/weekly" + (AP.week ? "?week=" + AP.week : ""));
   const mon = new Date(w.monday + "T00:00:00Z"), weeks = [];
   const cur = isoWeekOf(new Date(Date.now() + 5.5 * 3600e3));

@@ -8,6 +8,7 @@ source of the one-time copy on 1 Nov (fno/store.py: portfolio and scalp book fro
 - **Trade** (was Signal + Option chain): hero, open positions, entry checklist, one order ticket with two tabs (Signal trade /
   My own order), charts, option chain (near the money or full chain with any expiry), options flow.
 - **Manual orders carry their own exits.** `POST /api/trade/manual` takes optional `sl`, `target`, `trail` (the option's own
+- **Squeeze-release shadow slot (round 101).** `fno/squeeze.py` checks the squeeze-release rule on Sensex every minute and records what it would have done (index levels, live at-the-money option bid / ask / price at entry and exit). It places no orders and has no ledger of money; `GET /api/squeeze` shows it (Research page and Autopilot → Improvements), `POST /api/squeeze/settings {on}` stops or starts the recording, and the nightly journal carries it as `squeeze_shadow`. Tests: `tests/test_squeeze_shadow.py`; trade-by-trade parity with the backtest: `research/round101/n_shadow_parity.py` (569 of 569).
   price in rupees); `POST /api/trade/modify` changes or clears them later. `service.manual_levels` validates and stores them,
   `service.manage_positions` (the minute tick) enforces them, `_manual_trail` moves a trailing stop. A manual trade without
   levels is only closed by you or the 15:15 square-off. Rule trades keep their rule's index stop / target and cannot be edited.

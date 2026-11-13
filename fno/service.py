@@ -2059,6 +2059,11 @@ def _tick():
                        f"carryx:{x['id']}", "/#scalp")
     except Exception as e:
         cy = {"error": str(e)[:160]}
+    try:                                                     # squeeze-release shadow slot (round 101): records signals, places no orders
+        from . import squeeze as SQ
+        sq = SQ.tick(now)
+    except Exception as e:
+        sq = {"error": str(e)[:160]}
     if t <= time(9, 45):
         try:
             stocks_morning_push(now)
@@ -2087,7 +2092,7 @@ def _tick():
                     _push_safe("Upstox data token ending soon", h["text"] + ". Generate a new one in the Upstox developer page and paste it in Settings.", f"antoken:{now.date()}", "/#settings")
     except Exception:
         pass
-    return {"closed": closed, "placed": placed, "scalp": sc, "carry": cy, "recorded": rec, "journal": jr, "time": now.isoformat(timespec="seconds")}
+    return {"closed": closed, "placed": placed, "scalp": sc, "carry": cy, "squeeze": sq, "recorded": rec, "journal": jr, "time": now.isoformat(timespec="seconds")}
 
 
 def _untested_note(symbol, g, ev):
