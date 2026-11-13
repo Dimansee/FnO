@@ -17,6 +17,8 @@ from fno import config as C, store, market as M, context as X, brokers as B, str
 # ---------- synthetic market ----------
 rng = np.random.default_rng(5)
 NOW = [datetime(2026, 10, 1, 10, 52, tzinfo=C.IST)]  # a Thursday, 7 min after the 10:45 check
+if os.environ.get("MOCK_NOW"):                       # e.g. MOCK_NOW=2026-10-01T18:05 to look at the closed-market pages
+    NOW = [datetime.fromisoformat(os.environ["MOCK_NOW"]).replace(tzinfo=C.IST)]
 C.now_ist = lambda: NOW[0]
 C.today_ist = lambda: NOW[0].date()
 

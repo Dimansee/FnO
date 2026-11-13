@@ -477,7 +477,15 @@ def trade_signal():
 def trade_manual():
     b = request.get_json(force=True)
     ok, msg = SV.place_manual(_sym(), b.get("expiry"), float(b["strike"]), b["opt"], b["side"],
-                              max(1, min(50, int(b.get("lots", 1)))))
+                              max(1, min(50, int(b.get("lots", 1)))), b.get("sl"), b.get("target"), b.get("trail"))
+    return jsonify({"ok": ok, "message": msg}), (200 if ok else 400)
+
+
+@app.post("/api/trade/modify")
+def trade_modify():
+    """Your own stop-loss / target / trailing stop on a manual trade (option price in rupees; empty clears the level)."""
+    b = request.get_json(force=True) or {}
+    ok, msg = SV.modify_position(str(b.get("id", "")), b.get("sl"), b.get("target"), b.get("trail"))
     return jsonify({"ok": ok, "message": msg}), (200 if ok else 400)
 
 

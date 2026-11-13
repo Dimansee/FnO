@@ -538,6 +538,58 @@ button.mini{padding:5px 10px;font-size:12.5px}
 .rsrow.open .rsarrow{transform:rotate(90deg);color:var(--gold)}
 .rsdet > td{background:var(--bg2);padding:12px 14px!important}
 .rsdet .rscard{margin:10px 0 0;background:var(--panel)}
+
+/* ===== 13 Nov 2026: Trade page - order ticket, open positions, market status ===== */
+.fs11{font-size:11px}
+.pill.mkt.closed{background:var(--chip,rgba(143,163,176,.14));color:var(--muted)}
+.pill.mkt.closed .dot{animation:none;opacity:.6}
+.pill.mkt .dt{font-weight:500;opacity:.9}
+@media(max-width:1180px){.pill.mkt .dt{display:none}}
+.tkhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+#tkTabs .seg{position:relative}
+.tkdot{position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px var(--green-bg)}
+#ticket>.cardhead:first-child,#ticket>.muted:first-child{margin-top:12px}
+#ticket .k4{gap:8px}#ticket .k4 .kpi{padding:12px 10px;min-width:0}#ticket .k4 .kpi .v{font-size:18px}
+.mt-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.mt-row .seg button{padding:7px 14px}
+#mSide button.on[data-v="BUY"]{background:var(--green);color:var(--on-green,#06150f)}
+#mSide button.on[data-v="SELL"]{background:var(--red);color:var(--on-red,#1d0606)}
+.mt-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:12px;margin-top:12px;align-items:end}
+.mt-px{font-size:22px;font-weight:700;line-height:38px}
+.stepper{display:flex;align-items:stretch}
+.stepper input{width:100%;min-width:0;text-align:center;border-radius:0;border-left:none;border-right:none;-moz-appearance:textfield;appearance:textfield}
+.stepper input::-webkit-outer-spin-button,.stepper input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.stepper button{padding:0 12px;font-size:17px;line-height:1;border-color:var(--line);background:var(--bg2)}
+.stepper button:first-child{border-radius:var(--r-sm) 0 0 var(--r-sm)}.stepper button:last-child{border-radius:0 var(--r-sm) var(--r-sm) 0}
+.mt-lv{margin-top:14px;display:grid;gap:8px;padding:12px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--bg2)}
+.mt-lvrow{display:grid;grid-template-columns:104px minmax(84px,120px) 1fr;gap:10px;align-items:center}
+.mt-lvrow label{margin:0;color:var(--text);font-size:13.5px;font-weight:600}
+.mt-lvrow input{width:100%;background:var(--panel)}
+.qchips{display:flex;gap:5px;flex-wrap:wrap}
+.qchips button{padding:4px 9px;font-size:12px;border-radius:99px;background:transparent;border-color:var(--line2);color:var(--muted);font-weight:600}
+.qchips button.on{background:var(--gold-bg);border-color:var(--gold);color:var(--text)}
+.mt-sum{margin-top:12px}
+#mPlace.sellbtn{background:var(--red);border-color:var(--red);color:var(--on-red,#1d0606)}
+@media(max-width:520px){.mt-grid{grid-template-columns:1fr 1fr}.mt-grid>div:first-child{grid-column:span 2}.mt-lvrow{grid-template-columns:96px 1fr}.mt-lvrow .qchips{grid-column:span 2}}
+.poslist{display:grid;gap:8px}
+.pos{border:1px solid var(--line);border-radius:var(--r-md);background:var(--bg2);overflow:hidden}
+.pos.editing{border-color:var(--gold)}
+.pos-main{display:grid;grid-template-columns:minmax(210px,1.6fr) minmax(130px,.9fr) minmax(90px,.6fr) minmax(200px,1.7fr) auto;gap:6px 14px;align-items:center;padding:10px 12px}
+.pos-id .tag{margin-left:2px}
+.pos-pnl{font-weight:700;font-size:16px}
+.pos-lv{display:flex;flex-wrap:wrap;gap:6px}
+.lv{display:inline-flex;align-items:baseline;gap:6px;font-size:12.5px;font-weight:600;padding:3px 9px;border-radius:99px;border:1px solid var(--line2);white-space:nowrap}
+.lv small{font-weight:500;font-family:var(--num);font-size:11.5px;opacity:.85}
+.lv.sl{border-color:rgba(226,103,90,.45);color:var(--red-ink);background:var(--red-bg)}
+.lv.tp{border-color:rgba(63,191,143,.45);color:var(--green-ink);background:var(--green-bg)}
+.lv.none{border-style:dashed;color:var(--muted);font-weight:500}
+.pos-act{display:flex;gap:6px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.pos-act button{margin:0}.pos-act .danger{padding:5px 12px;font-size:13px}
+.pos-edit{border-top:1px dashed var(--line2);padding:12px;background:var(--panel)}
+.pe-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.pe-grid input{width:100%;margin-bottom:6px}
+@media(max-width:1100px){.pos-main{grid-template-columns:1fr auto}.pos-id{grid-column:1/-1}.pos-lv{grid-column:1/-1}.pos-act{grid-column:1/-1;justify-content:flex-start}}
+@media(max-width:700px){.pe-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -570,37 +622,31 @@ button.mini{padding:5px 10px;font-size:12.5px}
     <div class="brand"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 17 L8 11 L12 14 L21 5" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="5" r="2.4" fill="var(--accent)"/></svg><b>F&amp;O <span>Trainer</span></b></div>
     <nav id="tabs">
       <div class="grp">Trade</div>
-      <button data-t="signal" class="on"><svg class="ic"><use href="#i-signal"/></svg><span class="lb">Signal</span></button>
-      <button data-t="chain"><svg class="ic"><use href="#i-chain"/></svg><span class="lb">Option chain</span></button>
-      <button data-t="portfolio"><svg class="ic"><use href="#i-portfolio"/></svg><span class="lb">Portfolio</span></button>
+      <button data-t="signal" class="on"><svg class="ic"><use href="#i-signal"/></svg><span class="lb">Trade</span></button>
+      <button data-t="portfolio"><svg class="ic"><use href="#i-portfolio"/></svg><span class="lb">Positions &amp; P&amp;L</span></button>
       <button data-t="scalp"><svg class="ic"><use href="#i-scalp"/></svg><span class="lb">Scalp book</span></button>
-      <button data-t="autopilot"><svg class="ic"><use href="#i-autopilot"/></svg><span class="lb">Autopilot</span><span class="newb">NEW</span></button>
-      <button data-t="livechart"><svg class="ic"><use href="#i-livechart"/></svg><span class="lb">Live chart</span><span class="newb">NEW</span></button>
-      <button data-t="markets"><svg class="ic"><use href="#i-markets"/></svg><span class="lb">Dashboard</span><span class="newb">NEW</span></button>
-      <button data-t="gtrade"><svg class="ic"><use href="#i-stocks"/></svg><span class="lb">Trade</span><span class="newb">NEW</span></button>
+      <button data-t="autopilot"><svg class="ic"><use href="#i-autopilot"/></svg><span class="lb">Autopilot</span></button>
+      <button data-t="livechart"><svg class="ic"><use href="#i-livechart"/></svg><span class="lb">Levels &amp; replay</span></button>
+      <button data-t="markets"><svg class="ic"><use href="#i-markets"/></svg><span class="lb">Dashboard</span></button>
+      <button data-t="gtrade"><svg class="ic"><use href="#i-stocks"/></svg><span class="lb">Trade</span></button>
       <button data-t="gportfolio"><svg class="ic"><use href="#i-portfolio"/></svg><span class="lb">Portfolio</span></button>
-      <div class="grp">Strategy lab</div>
-      <button data-t="strategies"><svg class="ic"><use href="#i-strategies"/></svg><span class="lb">Strategies</span><span class="newb">NEW</span></button>
-      <button data-t="learning"><svg class="ic"><use href="#i-learning"/></svg><span class="lb">Learning</span><span class="newb">NEW</span></button>
       <div class="grp">Insight</div>
       <button data-t="context"><svg class="ic"><use href="#i-context"/></svg><span class="lb">Market context</span></button>
       <button data-t="gcontext"><svg class="ic"><use href="#i-context"/></svg><span class="lb">Market context</span></button>
       <button data-t="stocks"><svg class="ic"><use href="#i-stocks"/></svg><span class="lb">Stocks</span></button>
-      <button data-t="recs"><svg class="ic"><use href="#i-recs"/></svg><span class="lb">Recommendations</span></button>
       <button data-t="journal"><svg class="ic"><use href="#i-journal"/></svg><span class="lb">Journal</span></button>
       <button data-t="gjournal"><svg class="ic"><use href="#i-journal"/></svg><span class="lb">Journal</span></button>
-      <div class="grp">Data</div>
-      <button data-t="data"><svg class="ic"><use href="#i-data"/></svg><span class="lb">Saved data</span><span class="newb">NEW</span></button>
-      <div class="grp">Study</div>
+      <div class="grp">Strategy lab</div>
+      <button data-t="strategies"><svg class="ic"><use href="#i-strategies"/></svg><span class="lb">Strategies</span></button>
+      <button data-t="learning"><svg class="ic"><use href="#i-learning"/></svg><span class="lb">Learning</span></button>
       <button data-t="backtest"><svg class="ic"><use href="#i-backtest"/></svg><span class="lb">Backtest</span></button>
       <button data-t="gbacktest"><svg class="ic"><use href="#i-backtest"/></svg><span class="lb">Backtest</span></button>
       <button data-t="research"><svg class="ic"><use href="#i-research"/></svg><span class="lb">Research</span></button>
       <button data-t="gresearch"><svg class="ic"><use href="#i-research"/></svg><span class="lb">Research</span></button>
-      <button data-t="rules"><svg class="ic"><use href="#i-rules"/></svg><span class="lb">Options rulebook</span></button>
+      <div class="grp">Reference</div>
+      <button data-t="guide"><svg class="ic"><use href="#i-rules"/></svg><span class="lb">Rules &amp; glossary</span></button>
       <button data-t="grules"><svg class="ic"><use href="#i-rules"/></svg><span class="lb">Rulebook</span></button>
-      <button data-t="stockrules"><svg class="ic"><use href="#i-stockrules"/></svg><span class="lb">Stock rulebook</span></button>
-      <button data-t="glossary"><svg class="ic"><use href="#i-glossary"/></svg><span class="lb">Glossary</span></button>
-      <div class="grp">System</div>
+      <button data-t="data"><svg class="ic"><use href="#i-data"/></svg><span class="lb">Saved data</span></button>
       <button data-t="settings"><svg class="ic"><use href="#i-settings"/></svg><span class="lb">Settings</span></button>
       <span class="ink" id="ink"></span>
     </nav>
@@ -614,7 +660,8 @@ button.mini{padding:5px 10px;font-size:12.5px}
       <div class="brand"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" style="vertical-align:-5px;margin-right:6px"><path d="M2 17 L8 11 L12 14 L21 5" fill="none" stroke="#f2a93b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="21" cy="5" r="2.4" fill="#f2a93b"/></svg>F&amp;O <span>Trainer</span></div>
       <div class="segs" id="wsSwitch" role="tablist" aria-label="Market"><button class="seg" data-ws="IN">India F&amp;O</button><button class="seg" data-ws="CRYPTO">Crypto</button><button class="seg" data-ws="US">US</button></div>
       <select id="symbol" aria-label="Instrument"></select>
-      <span id="srcPill" class="pill demo"><span class="dot"></span><span>…</span></span>
+      <span id="srcPill" class="pill demo hidden"><span class="dot"></span><span>…</span></span>
+      <span id="mktPill" class="pill mkt hidden" title="NSE session"><span class="dot"></span><span></span></span>
       <div class="spacer"></div>
       <label style="display:flex;align-items:center;gap:6px;margin:0;font-size:13px"><input type="checkbox" id="auto" checked style="min-width:auto"> Auto 30s</label>
       <button id="refresh" class="iconbtn" title="Refresh">↻</button>
@@ -645,6 +692,11 @@ button.mini{padding:5px 10px;font-size:12.5px}
       <div class="hero-strip" id="hStrip"></div>
     </div>
     <div id="sigNotes" style="margin-top:12px"></div>
+    <div class="card hidden" style="margin-top:14px" id="tpPosCard">
+      <div class="cardhead"><h3 style="margin:0">Open positions <span class="muted" style="font-weight:400" id="tpPosSum"></span></h3>
+        <a href="#portfolio" data-goto="portfolio" class="fs13">Closed trades &amp; P&amp;L →</a></div>
+      <div id="tpPositions" class="poslist"></div>
+    </div>
     <div class="grid g2" style="margin-top:14px">
       <div class="card">
         <div id="sigCard"></div>
@@ -652,7 +704,35 @@ button.mini{padding:5px 10px;font-size:12.5px}
         <div id="orb" class="muted" style="font-size:12px;margin-top:6px"></div>
       </div>
       <div class="grid" style="align-content:start">
-        <div class="card ticket hidden" id="ticket"></div>
+        <div class="card ticket" id="ticketCard">
+          <div class="tkhead"><div class="segs" id="tkTabs" role="tablist" aria-label="Order ticket"><button class="seg" data-tk="signal" role="tab">Signal trade<i class="tkdot hidden" id="tkDot"></i></button><button class="seg" data-tk="manual" role="tab">My own order</button></div>
+            <span class="muted fs12" id="tkSes"></span></div>
+          <div id="ticket"></div>
+          <div id="mTicket" class="hidden">
+            <div class="mt-row">
+              <div class="seg" id="mOpt"><button data-v="CE" class="on">Call (CE)</button><button data-v="PE">Put (PE)</button></div>
+              <div class="seg" id="mSide"><button data-v="BUY" class="on">Buy</button><button data-v="SELL">Sell</button></div>
+              <span class="muted fs12" id="mExp"></span>
+            </div>
+            <div class="mt-grid">
+              <div><label for="mStrike">Strike</label><select id="mStrike" style="width:100%"></select></div>
+              <div><label for="mLots">Lots <span id="mQty"></span></label><div class="stepper"><button type="button" data-step="-1" aria-label="One lot less">−</button><input id="mLots" type="number" min="1" max="50" value="1" inputmode="numeric"><button type="button" data-step="1" aria-label="One lot more">+</button></div></div>
+              <div><label>Fill price <span id="mPxSide"></span></label><div id="mPrice" class="mono mt-px">–</div></div>
+            </div>
+            <div class="mt-lv">
+              <div class="mt-lvrow"><label for="mSl">Stop-loss ₹</label><input id="mSl" type="number" step="0.05" min="0" placeholder="none" inputmode="decimal">
+                <div class="qchips" data-lv="sl"><button type="button" data-p="10">10%</button><button type="button" data-p="20">20%</button><button type="button" data-p="30">30%</button><button type="button" data-p="0">none</button></div></div>
+              <div class="mt-lvrow"><label for="mTp">Target ₹</label><input id="mTp" type="number" step="0.05" min="0" placeholder="none" inputmode="decimal">
+                <div class="qchips" data-lv="tp"><button type="button" data-p="25">25%</button><button type="button" data-p="50">50%</button><button type="button" data-p="100">100%</button><button type="button" data-p="0">none</button></div></div>
+              <div class="mt-lvrow"><label for="mTrail" title="The stop-loss follows the best price by this many rupees and never moves back">Trailing SL ₹</label><input id="mTrail" type="number" step="0.05" min="0" placeholder="off" inputmode="decimal">
+                <div class="qchips" data-lv="trail"><button type="button" data-p="10">10%</button><button type="button" data-p="20">20%</button><button type="button" data-p="0">off</button></div></div>
+            </div>
+            <div class="mt-sum" id="mSum"></div>
+            <div id="mWarn" class="warn hidden">Option SELLING has unlimited risk and needs large margin. The rulebook only buys options.</div>
+            <button class="primary" id="mPlace" style="width:100%;margin-top:12px">Place paper order</button>
+            <p class="muted fs12" style="margin:8px 0 0">Stop-loss, target and trailing SL are the option's own price. The server checks them every minute in market hours and exits for you, even with this page closed; everything still open is squared off at 15:15. You can change them later under Open positions.</p>
+          </div>
+        </div>
         <div class="card hidden" id="aiCard"></div>
         <div class="card">
           <h3>Market score breakdown</h3>
@@ -660,12 +740,32 @@ button.mini{padding:5px 10px;font-size:12.5px}
         </div>
       </div>
     </div>
-    <div class="card" style="margin-top:14px">
+    <div class="card" style="margin-top:14px" id="compareCard">
       <div class="cardhead">
-        <h3 style="margin:0">Option chain · near the money <span class="muted" style="font-weight:400" id="mcExp"></span></h3>
-        <span class="muted" style="font-size:12px">Click a price to chart that contract · ⭐ recommended · ▶ selected</span>
+        <h3 style="margin:0">Charts</h3>
+        <div class="formrow" style="gap:10px;align-items:center">
+          <div class="seg lay" id="cmpLayout" role="group" aria-label="Chart layout"><button data-v="1" title="One chart" aria-label="One chart"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="20" height="14" rx="2"/></svg></button><button data-v="2v" title="Two side by side" aria-label="Two side by side"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="9" height="14" rx="2"/><rect x="12" y="1" width="9" height="14" rx="2"/></svg></button><button data-v="2h" title="Two stacked" aria-label="Two stacked"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="20" height="6" rx="2"/><rect x="1" y="9" width="20" height="6" rx="2"/></svg></button><button data-v="3l" title="Three: big on the left" aria-label="Three: big on the left"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="11" height="14" rx="2"/><rect x="14" y="1" width="7" height="6" rx="2"/><rect x="14" y="9" width="7" height="6" rx="2"/></svg></button><button data-v="3t" title="Three: big on top" aria-label="Three: big on top"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="20" height="7" rx="2"/><rect x="1" y="10" width="9" height="5" rx="2"/><rect x="12" y="10" width="9" height="5" rx="2"/></svg></button><button data-v="4" title="Four charts" aria-label="Four charts"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="9" height="6" rx="2"/><rect x="12" y="1" width="9" height="6" rx="2"/><rect x="1" y="9" width="9" height="6" rx="2"/><rect x="12" y="9" width="9" height="6" rx="2"/></svg></button></div>
+          <label class="tog" title="When on, moving or zooming one chart moves all of them"><input type="checkbox" id="cmpSync"> Move charts together</label>
+          <button id="cmpFull">Full screen</button>
+        </div>
       </div>
-      <div class="tablewrap" style="margin-top:10px"><table class="chain mini" id="miniChain"></table></div>
+      <div class="muted hint">Drag to move · scroll or pinch to zoom · drag the price or time axis to stretch it. The chart stays where you leave it; "Auto" re-fits prices and the ↺ button resets the view. Click a chart to select it, then click a price in the option chain to show that contract there. Open trades are drawn with their entry, stop-loss and target.</div>
+      <div class="ws l2v" id="cmpGrid"></div>
+      <div id="oNote" class="muted" style="font-size:12px;margin-top:8px"></div>
+    </div>
+    <div class="card" style="margin-top:14px" id="chainCard">
+      <div class="cardhead">
+        <h3 style="margin:0">Option chain <span class="muted" style="font-weight:400" id="mcExp"></span></h3>
+        <div class="row wrap" style="gap:8px">
+          <select id="expiry" class="hidden" aria-label="Expiry"></select>
+          <div class="segs" id="chMode" role="tablist" aria-label="Option chain view"><button class="seg" data-chm="near">Near the money</button><button class="seg" data-chm="full">Full chain</button></div>
+        </div>
+      </div>
+      <p class="muted" style="font-size:12.5px;margin:6px 0 0">Click any price: it opens that contract on the chart and loads it in <b>My own order</b>. ⭐ recommended · ▶ selected</p>
+      <div class="grid g4 hidden" id="chainStats" style="margin-top:10px"></div>
+      <div id="chainNote" style="margin-top:10px"></div>
+      <div class="tablewrap" style="margin-top:10px" id="mcWrap"><table class="chain mini" id="miniChain"></table></div>
+      <div class="tablewrap hidden" style="margin-top:10px;max-height:70vh" id="chWrap"><table class="chain" id="chainTbl"></table></div>
     </div>
     <div class="card" style="margin-top:14px" id="flowCard">
       <div class="cardhead">
@@ -690,47 +790,12 @@ button.mini{padding:5px 10px;font-size:12.5px}
       </div>
       <p class="muted" style="font-size:12px;margin:10px 0 0">GEX (gamma exposure) estimates how much option dealers must buy or sell as the index moves 1% - Black-Scholes gamma × open interest × lot × spot² × 1%, calls counted positive and puts negative (the usual dealer-sign convention, which assumes dealers are long calls and short puts versus customers). Above the zero-gamma level moves tend to be dampened, below it amplified; the largest bars are the "call wall" and "put wall". Computed from this app's own 5-minute snapshots of the nearest expiry, so it fills in through the session. Educational only, not advice.</p>
     </div>
-    <div class="card" style="margin-top:14px" id="compareCard">
-      <div class="cardhead">
-        <h3 style="margin:0">Charts</h3>
-        <div class="formrow" style="gap:10px;align-items:center">
-          <div class="seg lay" id="cmpLayout" role="group" aria-label="Chart layout"><button data-v="1" title="One chart" aria-label="One chart"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="20" height="14" rx="2"/></svg></button><button data-v="2v" title="Two side by side" aria-label="Two side by side"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="9" height="14" rx="2"/><rect x="12" y="1" width="9" height="14" rx="2"/></svg></button><button data-v="2h" title="Two stacked" aria-label="Two stacked"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="20" height="6" rx="2"/><rect x="1" y="9" width="20" height="6" rx="2"/></svg></button><button data-v="3l" title="Three: big on the left" aria-label="Three: big on the left"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="11" height="14" rx="2"/><rect x="14" y="1" width="7" height="6" rx="2"/><rect x="14" y="9" width="7" height="6" rx="2"/></svg></button><button data-v="3t" title="Three: big on top" aria-label="Three: big on top"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="20" height="7" rx="2"/><rect x="1" y="10" width="9" height="5" rx="2"/><rect x="12" y="10" width="9" height="5" rx="2"/></svg></button><button data-v="4" title="Four charts" aria-label="Four charts"><svg width="22" height="16" viewBox="0 0 22 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="9" height="6" rx="2"/><rect x="12" y="1" width="9" height="6" rx="2"/><rect x="1" y="9" width="9" height="6" rx="2"/><rect x="12" y="9" width="9" height="6" rx="2"/></svg></button></div>
-          <label class="tog" title="When on, moving or zooming one chart moves all of them"><input type="checkbox" id="cmpSync"> Move charts together</label>
-          <button id="cmpFull">Full screen</button>
-        </div>
-      </div>
-      <div class="muted hint">Drag to move · scroll or pinch to zoom · drag the price or time axis to stretch it. The chart stays where you leave it; "Auto" re-fits prices and the ↺ button resets the view. Click a chart to select it, then click a price in the option chain to show that contract there.</div>
-      <div class="ws l2v" id="cmpGrid"></div>
-      <div id="oNote" class="muted" style="font-size:12px;margin-top:8px"></div>
-    </div>
-  </section>
-
-  <!-- CHAIN -->
-  <section id="t-chain" class="hidden">
-    <div class="formrow">
-      <div style="max-width:200px"><label>Expiry</label><select id="expiry" style="width:100%"></select></div>
-      <div class="grid g4" id="chainStats" style="flex:4"></div>
-    </div>
-    <div id="chainNote" style="margin-top:10px"></div>
-    <div class="tablewrap" style="margin-top:12px;max-height:70vh"><table class="chain" id="chainTbl"></table></div>
-    <div class="card" style="margin-top:14px">
-      <h3>Manual paper order <span class="muted" style="font-weight:400">· tip: click any price in the chain</span></h3>
-      <div class="formrow">
-        <div><label>Strike</label><select id="mStrike" style="width:100%"></select></div>
-        <div><label>Type</label><div class="seg" id="mOpt"><button data-v="CE" class="on">CE</button><button data-v="PE">PE</button></div></div>
-        <div><label>Side</label><div class="seg" id="mSide"><button data-v="BUY" class="on">BUY</button><button data-v="SELL">SELL</button></div></div>
-        <div style="max-width:100px"><label>Lots</label><input id="mLots" type="number" min="1" max="50" value="1" style="width:100%"></div>
-        <div><label>Fill price</label><div id="mPrice" class="mono" style="font-size:18px;font-weight:700;padding:6px 0">–</div></div>
-        <div style="flex:0"><button class="primary" id="mPlace">Place</button></div>
-      </div>
-      <div id="mWarn" class="warn hidden">Option SELLING has unlimited risk and needs large margin. The rulebook only buys options or debit spreads.</div>
-    </div>
   </section>
 
   <!-- PORTFOLIO -->
   <section id="t-portfolio" class="hidden">
     <div class="grid g4" id="pKpis"></div>
-    <div class="card" style="margin-top:14px"><h3>Open positions</h3><div id="positions"></div></div>
+    <div class="card" style="margin-top:14px"><div class="cardhead"><h3 style="margin:0">Open positions</h3><a href="#signal" data-goto="signal" class="fs13">Place an order →</a></div><div id="positions" class="poslist" style="margin-top:10px"></div></div>
     <div class="card" style="margin-top:14px">
       <h3>Performance</h3>
       <div class="grid g5" id="pStats"></div>
@@ -752,7 +817,7 @@ button.mini{padding:5px 10px;font-size:12.5px}
         <label class="chip"><input type="checkbox" id="scNifty"> Nifty</label>
         <label class="chip"><input type="checkbox" id="scBank"> Bank Nifty</label>
         <label class="chip"><input type="checkbox" id="scSensex"> Sensex</label>
-        <label class="chip"><input type="checkbox" id="scLv"> Show levels on the Signal chart</label>
+        <label class="chip"><input type="checkbox" id="scLv"> Show levels on the Trade page chart</label>
       </div>
       <div class="row wrap" style="gap:16px;margin-top:10px">
         <label style="margin:0">Capital ₹ <input id="scCap" type="number" min="5000" step="1000" style="width:120px"></label>
@@ -802,7 +867,7 @@ button.mini{padding:5px 10px;font-size:12.5px}
   <section id="t-backtest" class="hidden">
     <div class="card" id="pbCard">
       <div class="cardhead"><h3 style="margin:0">Portfolio backtest - all indices, one account</h3><span class="muted" style="font-size:12.5px">Nifty + Bank Nifty + Sensex from one capital, as Autopilot trades them</span></div>
-      <p class="muted" style="margin:6px 0 10px;font-size:13px">Choose the period, how lots are sized (compounding from your capital, fixed capital or a fixed number of lots), confidence sizing, the big-run skip and the exit / target style. With <b>Compare</b> on, your settings are run next to the <b>Current Autopilot rules</b> (today's full live rule set – see the Autopilot rules tab) on the same period, indices and capital. Full history runs take a few minutes; it runs on the server, so you can leave the page.</p>
+      <p class="muted" style="margin:6px 0 10px;font-size:13px">Choose the period, how lots are sized (compounding from your capital, fixed capital or a fixed number of lots), confidence sizing, the big-run skip and the exit / target style. With <b>Compare</b> on, your settings are run next to the <b>Current Autopilot rules</b> (today's full live rule set – see Autopilot → Rules) on the same period, indices and capital. Full history runs take a few minutes; it runs on the server, so you can leave the page.</p>
       <div class="formrow formgrid">
         <div><label>From</label><input id="pbFrom" type="date" value="2023-01-02" min="2022-01-03" style="width:100%"></div>
         <div><label>To</label><input id="pbTo" type="date" style="width:100%"></div>
@@ -872,8 +937,8 @@ button.mini{padding:5px 10px;font-size:12.5px}
   </section>
   <section id="t-stocks" class="hidden">
     <div class="card"><div class="cardhead"><h3 style="margin:0">Stocks</h3>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-        <button class="mini on" data-sv="picks">Picks</button><button class="mini" data-sv="heat">Heatmap</button><button class="mini" data-sv="list">List</button>
+      <div class="segs" role="tablist" aria-label="Stocks view" style="flex-wrap:wrap">
+        <button class="seg on" data-sv="recs">Today's picks</button><button class="seg" data-sv="picks">Pick list &amp; record</button><button class="seg" data-sv="heat">Heatmap</button><button class="seg" data-sv="list">All stocks</button>
       </div></div>
       <p class="muted" style="margin:6px 0 0" id="stRule"></p>
       <div id="stTools" class="sttools hidden">
@@ -884,39 +949,44 @@ button.mini{padding:5px 10px;font-size:12.5px}
         <select id="stMetric" title="Metric"><option value="chg_1d">Today</option><option value="chg_3d">3 days</option><option value="chg_1m">1 month</option><option value="chg_3m">3 months</option><option value="chg_1y">1 year</option><option value="vs_200dma">vs 200-day avg</option><option value="from_52w_high">From 52-week high</option></select>
       </div></div>
     <div id="stPanel" class="hidden"></div>
+    <div id="recsBody" class="hidden"></div>
     <div id="stBody"></div>
   </section>
-  <section id="t-recs" class="hidden"><div id="recsBody"></div></section>
-  <section id="t-glossary" class="hidden"><div class="card"><h3 style="font-size:19px">Glossary - every term in simple words</h3>
-    <p class="muted" style="margin-top:0">Plain-language meanings of the words used across the app, with small examples. Type to search.</p>
-    <input id="glQ" placeholder="Search a word, e.g. noise, VWAP, circuit" style="width:100%;margin:6px 0"></div><div id="glList"></div></section>
-  <section id="t-stockrules" class="hidden"><div class="card rule" id="stockRulebook"></div></section>
   <section id="t-autopilot" class="hidden">
     <div class="aphead">
       <div><h2 class="apttl">Autopilot</h2><p class="muted" id="apSub" style="margin:2px 0 0">What the automatic system is doing, why, and how it is protected.</p></div>
       <div class="segs apsubs" id="apSubs" role="tablist">
-        <button class="seg" data-aps="status">Status</button><button class="seg" data-aps="decisions">Decisions</button><button class="seg" data-aps="chart">Chart</button>
-        <button class="seg" data-aps="outcomes">Outcomes</button><button class="seg" data-aps="improve">Improvements</button><button class="seg" data-aps="learning">Learning applied</button>
+        <button class="seg" data-aps="status">Status</button><button class="seg" data-aps="decisions">Decisions</button>
+        <button class="seg" data-aps="outcomes">Outcomes</button><button class="seg" data-aps="improve">Improvements</button>
         <button class="seg" data-aps="rules">Rules</button><button class="seg" data-aps="settings">Settings</button><button class="seg" data-aps="safety">Safety</button>
       </div>
     </div>
     <div class="appanel" data-app="status"><div id="apStatus"></div></div>
     <div class="appanel hidden" data-app="decisions"><div id="apDecisions"></div></div>
-    <div class="appanel hidden" data-app="chart"><div id="lcHostAp"></div></div>
     <div class="appanel hidden" data-app="outcomes"><div id="apOutcomes"></div>
       <details class="card" id="ocWrap" style="margin-top:14px"><summary><h3 style="margin:0;display:inline">Research outcomes matrix</h3> <span class="muted">· every tested change vs today's rules (backtest)</span></summary>
         <div id="ocTop" style="margin-top:10px"></div><div id="ocPineBox" class="hidden" style="margin-top:12px"></div><div id="ocTbl" style="margin-top:12px"></div></details></div>
     <div class="appanel hidden" data-app="improve"><div id="apImprove"></div></div>
-    <div class="appanel hidden" data-app="learning"><div id="apLearning"></div></div>
     <div class="appanel hidden" data-app="rules"><div class="card rule" id="apRules"></div></div>
     <div class="appanel hidden" data-app="settings"><div id="apSettings"></div></div>
     <div class="appanel hidden" data-app="safety"><div id="apSafety"></div></div>
   </section>
   <section id="t-livechart" class="hidden"><div id="lcHostTab"></div></section>
-  <section id="t-rules" class="hidden"><div class="card rule" id="rulebook"></div></section>
+  <section id="t-guide" class="hidden">
+    <div class="aphead">
+      <div><h2 class="apttl">Rules &amp; glossary</h2><p class="muted" style="margin:2px 0 0">How the system trades, written out, and every term in plain words.</p></div>
+      <div class="segs apsubs" id="gdSubs" role="tablist"><button class="seg" data-gd="options">Options rulebook</button><button class="seg" data-gd="stocks">Stock rulebook</button><button class="seg" data-gd="glossary">Glossary</button></div>
+    </div>
+    <div data-gdp="options"><div class="card rule" id="rulebook"></div><p class="muted fs13" style="margin:10px 2px 0">The exact numbers Autopilot uses right now are under <a href="#autopilot/rules" data-goap="rules">Autopilot → Rules</a>.</p></div>
+    <div data-gdp="stocks" class="hidden"><div class="card rule" id="stockRulebook"></div></div>
+    <div data-gdp="glossary" class="hidden"><div class="card"><h3 style="font-size:19px">Glossary - every term in simple words</h3>
+    <p class="muted" style="margin-top:0">Plain-language meanings of the words used across the app, with small examples. Type to search.</p>
+    <input id="glQ" placeholder="Search a word, e.g. noise, VWAP, circuit" style="width:100%;margin:6px 0"></div><div id="glList"></div></div>
+  </section>
 
   <!-- SETTINGS -->
-  <section id="t-data" class="hidden"><div id="dxBody"></div></section>
+  <section id="t-data" class="hidden"><div id="dxBody"></div>
+    <div class="card" id="recCard" style="margin-top:14px"><h3>Option-chain recorder</h3><div id="recBody" class="muted">Loading…</div></div></section>
   <section id="t-strategies" class="hidden"><div id="sxBody"></div></section>
   <section id="t-learning" class="hidden"><div id="lxBody"></div></section>
   <section id="t-gtrade" class="hidden">
@@ -979,18 +1049,13 @@ button.mini{padding:5px 10px;font-size:12.5px}
         </div>
       </div>
       <div class="card" id="autoCard" style="border-left:3px solid var(--accent,#f2a93b)">
-        <h3>🤖 Autopilot</h3>
-        <label class="tog"><input type="checkbox" id="pfAutopilot"> Autopilot - the app decides everything itself and trades automatically</label>
-        <div style="margin-top:8px;max-width:520px"><label>Autopilot confidence sizing</label><select id="pfConf" style="width:100%"><option value="standard">Standard (tested rule): 1.33x / 0.67x on Nifty and Sensex</option><option value="strong">Strong (round 42): 2x / 1x / 0.5x on all indices - more profit, much deeper falls</option></select></div>
-        <div class="row wrap" style="gap:10px;margin-top:10px;align-items:flex-end">
-          <div><label>Weekly loss limit</label><select id="pfWeekly"><option value="auto">Tested rule: 4% of equity (15% below ₹1 lakh)</option><option value="custom">My own amount per week</option><option value="off">Off - never stop for the week</option></select></div>
-          <div id="pfWeeklyRsBox"><label>Amount (₹)</label><input id="pfWeeklyRs" type="number" min="500" step="500" placeholder="e.g. 5000" style="width:130px"></div>
-        </div>
-        <p class="muted" style="font-size:12px;margin:6px 0 0" id="pfWeeklyNote"></p>
-        <p class="muted" style="margin:8px 0 0">When ON it ignores the preferences below and uses the tested rules per index: Nifty - Noise band, Camarilla, trend-day catcher (from ₹40,000 equity) and Fibonacci breakout (from ₹2 lakh); Bank Nifty - Noise band and Camarilla; Sensex - Noise band, trend-day catcher and Fibonacci; from ₹5 lakh equity Nifty and Sensex also get the 15-minute channel breakout at half size (round 90, switchable in Research → Changes). Always the 1-strike in-the-money option. Position size is worked out from your <b>current equity</b> (so it compounds): lots = 1% of equity ÷ risk per lot - 1.33% when the 5-min, 15-min and 1-hour charts agree with the trade, 0.67% when they don't (Nifty and Sensex, round 33), and on Nifty the AI judge raises or lowers that again (round 39) - with a minimum of 1 lot while one lot risks no more than 15% of equity, otherwise it skips the trade. A weekly loss limit (15% below ₹1 lakh, 4% above), counted on the system's own trades only, stops new trades. When OFF, everything works exactly as set below. It is rule-based, not a promise of profit - see the Research tab (round 20) for the small-account results. Press <b>Save preferences</b> below after switching it.</p>
+        <h3>Autopilot &amp; automatic trading</h3>
+        <div id="autoSum" class="muted">Loading…</div>
+        <div class="row wrap" style="margin-top:12px"><button class="primary" data-goap="settings">Open Autopilot settings</button><button data-goap="safety">Capital shield</button></div>
+        <p class="muted fs12" style="margin:10px 0 0">The Autopilot switch, auto-trade, instruments, confidence sizing and the weekly loss limit are all set in one place: <b>Autopilot → Settings</b>.</p>
       </div>
       <div class="card" id="prefCard">
-        <h3>Trading preferences</h3>
+        <h3>Trading preferences <span class="muted" style="font-weight:400">· when Autopilot is off</span></h3>
         <div class="formrow">
           <div><label>Position size</label><select id="pfSize" style="width:100%"><option value="risk">Risk a % of capital per trade (recommended)</option><option value="one_lot">Always 1 lot (small accounts - riskier)</option><option value="all_in">Experiment: all available cash in every trade (very risky)</option></select></div>
           <div><label>Risk per trade</label><select id="pfRisk" style="width:100%"><option value="0.5">0.5%</option><option value="1">1% (the rule)</option><option value="1.5">1.5%</option><option value="2">2%</option></select></div>
@@ -1007,10 +1072,7 @@ button.mini{padding:5px 10px;font-size:12.5px}
         <label>Trade fills</label>
         <select id="pfFills" style="width:100%"><option value="realistic">Realistic: buy at the ask, sell at the bid (recommended)</option><option value="ltp">Last traded price on exit (flatters results)</option></select>
         <div class="muted" style="font-size:12px;margin:4px 0 10px">Entries already pay the ask. This makes exits receive the bid, so paper profits match what a real order would get.</div>
-        <label style="margin-top:12px">Auto paper-trading</label>
-        <label class="tog"><input type="checkbox" id="pfAuto"> Place signal trades automatically, even when this page is closed</label>
-        <div style="margin-top:6px" id="pfSyms"></div>
-        <p class="muted" style="font-size:12px;margin-bottom:0">The server checks every minute in market hours. Auto trades follow exactly the same rules and exits, so your journal builds a real paper track record.</p>
+        <p class="muted" style="font-size:12px;margin:10px 0 0">These apply to signals you place yourself and to auto-trade while Autopilot is off. With Autopilot on, the tested rules decide size, risk and strategies.</p>
         <button class="primary" id="pfSave" style="margin-top:10px">Save preferences</button>
         <label style="margin-top:16px">Push notifications</label>
         <p class="muted" style="font-size:12px;margin:0 0 6px">Signals, paper trades placed and exits reach this phone or laptop even when the app is closed. Turn it on separately on each device. On iPhone, first add the app to the Home Screen (Share → Add to Home Screen), open it from there, then turn this on.</p>
@@ -1020,15 +1082,18 @@ button.mini{padding:5px 10px;font-size:12.5px}
           <span class="muted" id="pushInfo" style="font-size:12px"></span>
         </div>
       </div>
-      <div class="card" id="recCard">
-        <h3>Market recorder</h3>
-        <div id="recBody" class="muted">Loading…</div>
-      </div>
-      <div class="card">
-        <h3>Demo account</h3>
-        <label>Demo capital (₹)</label>
-        <div class="copy"><input id="capIn" type="number" value="200000" min="0" step="1000"><button class="primary" id="capSave" title="Change the STARTING capital; past P&L still adds to it">Save</button><button id="capNet" title="Make the account worth exactly this amount now (net); open positions kept">Set as net amount</button><button class="danger" id="resetBtn" title="Clears all positions and the journal">Reset account</button></div>
-        <p class="muted" style="font-size:12px;margin:6px 0 0">Save changes the capital and keeps everything else. Reset starts over with this capital and clears all positions and the trade journal. <b>0</b> = take the starting money out and keep trading only the profit already made (needs ₹10,000+ of profit).</p>
+      <div class="card" id="acctCard">
+        <h3>Paper account money</h3>
+        <div id="acctNow" class="muted fs13" style="margin-bottom:10px"></div>
+        <label for="capIn">Amount (₹)</label>
+        <div class="copy"><input id="capIn" type="number" value="200000" min="0" step="1000"><button class="primary" id="capNet" title="Make the account worth exactly this amount now; trades, P&amp;L and open positions are kept">Set account to this amount</button></div>
+        <p class="muted" style="font-size:12px;margin:6px 0 0"><b>Set account to this amount</b> works like a deposit or withdrawal: the account is worth exactly this from now, and every trade, the P&amp;L, the journal and open positions stay. Sizing, the weekly limit and the capital shield restart from it.</p>
+        <details style="margin-top:10px"><summary class="muted" style="cursor:pointer">More: change the starting capital, or reset the P&amp;L</summary>
+          <div class="row wrap" style="margin-top:10px;align-items:center"><button id="capSave" title="Change the STARTING capital; past P&amp;L still adds to it">Save as starting capital</button>
+            <label class="tog" style="margin:0"><input type="checkbox" id="apKeep" checked> keep old trades in the history</label><button class="danger" id="resetBtn" title="Starts the account again with this amount">Reset P&amp;L</button></div>
+          <p class="muted" style="font-size:12px;margin:6px 0 0"><b>Save as starting capital</b> changes where the account started; past P&amp;L still adds to it (<b>0</b> = take the starting money out and trade only the profit already made, needs ₹10,000+ of profit). <b>Reset P&amp;L</b> starts again with this amount: open positions are closed out of the book and closed trades move to the history (or are deleted if you untick the box).</p>
+          <div id="acctHist" class="muted fs12" style="margin-top:6px"></div>
+        </details>
         <h4 style="margin:16px 0 6px">Trades in the P&amp;L</h4>
         <div id="originBox" class="muted" style="font-size:12.5px">Loading…</div>
         <label class="tog" style="margin-top:8px"><input type="checkbox" id="rmManual" checked> Manual orders (option chain / order ticket)</label>
@@ -1108,7 +1173,18 @@ async function start() {
 /* ---- market workspace: India F&O, Crypto or US. Each shows only its own tabs and data. ---- */
 const WS = {mk: (localStorage.getItem("ws") || "IN").replace("GOLD", "CRYPTO")};
 const AP = {sub: "status", ov: null, at: 0, dday: null, week: null};      // Autopilot tab state (31 Oct 2026)      // Gold was merged into Crypto (28 Oct 2026)
-const WS_IN = new Set(["signal", "chain", "portfolio", "scalp", "autopilot", "livechart", "context", "stocks", "recs", "journal", "data", "backtest", "research", "rules", "aprules", "outcomes", "stockrules", "settings"]);
+const WS_IN = new Set(["signal", "portfolio", "scalp", "autopilot", "livechart", "context", "stocks", "journal", "data", "backtest", "research", "guide", "settings"]);
+// 13 Nov 2026 restructure: pages that were merged into another one. Old links, bookmarks and phone alerts keep working.
+const GD = {sub: "options"};
+const ROUTE_ALIAS = {
+  chain: () => { S.chainMode = "full"; S.scrollTo = "#chainCard"; return "signal"; },
+  recs: () => { S.stView = "recs"; return "stocks"; },
+  rules: () => { GD.sub = "options"; return "guide"; },
+  stockrules: () => { GD.sub = "stocks"; return "guide"; },
+  glossary: () => { GD.sub = "glossary"; return "guide"; },
+  aprules: () => { AP.sub = "rules"; return "autopilot"; },
+  outcomes: () => { AP.sub = "outcomes"; return "autopilot"; },
+};
 const WS_GLOBAL = new Set(["gtrade", "markets", "gportfolio", "gjournal", "grules", "gbacktest", "gresearch", "gcontext"]);
 const wsAllows = t => WS.mk === "IN" ? !WS_GLOBAL.has(t) : !WS_IN.has(t);
 function applyWS() {
@@ -1123,7 +1199,8 @@ function applyWS() {
   });
   close();
   const mb = document.querySelector('#tabs button[data-t="markets"] .lb'); if (mb) mb.textContent = (tabs[WS.mk] || "").replace("US stocks", "US") + " dashboard";
-  ["#symbol", "#srcPill"].forEach(q => { const e = $(q); if (e) e.classList.toggle("hidden", WS.mk !== "IN"); });
+  $("#symbol").classList.toggle("hidden", WS.mk !== "IN"); $("#srcPill").classList.toggle("hidden", WS.mk !== "IN" || !S.srcKnown);
+  const mp = $("#mktPill"); if (mp) mp.classList.toggle("hidden", WS.mk !== "IN" || !S.ses);
   if (WS.mk !== "IN") { GX.mk = WS.mk; LX.mk = WS.mk; } else { LX.mk = "IN"; }
 }
 $("#wsSwitch").onclick = e => {
@@ -1134,11 +1211,15 @@ $("#wsSwitch").onclick = e => {
 function go(t) {
   const [t0, sub] = String(t).split("/");
   t = t0;
-  if (t === "aprules" || t === "outcomes") { AP.sub = t === "aprules" ? "rules" : "outcomes"; t = "autopilot"; }
+  if (t === "autopilot" && sub === "chart") t = "livechart";                 // the chart has one home: Levels & replay
+  else if (t === "autopilot" && sub === "learning") t = "learning";
+  else if (ROUTE_ALIAS[t]) t = ROUTE_ALIAS[t]();
   else if (t === "autopilot" && sub) AP.sub = sub;
+  else if (t === "guide" && sub) GD.sub = sub;
   if (!document.getElementById("t-" + t)) t = "signal";
   if (!wsAllows(t)) t = WS.mk === "IN" ? "signal" : "markets";
-  S.tab = t; location.hash = t === "autopilot" ? "autopilot/" + AP.sub : t;
+  if (t !== S.tab) { S.posEdit = null; S.posEditVals = null; S.posDraft = null; }      // an edit form left open never follows you to another page
+  S.tab = t; location.hash = t === "autopilot" ? "autopilot/" + AP.sub : t === "guide" ? "guide/" + GD.sub : t;
   document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.t === t));
   document.querySelectorAll("main section").forEach(s => s.classList.toggle("hidden", s.id !== "t-" + t));
   placeInk(); load(); schedule();
@@ -1156,20 +1237,20 @@ $("#refresh").onclick = () => load();
 $("#auto").onchange = schedule;
 function schedule() {
   clearInterval(S.timer);
-  if ($("#auto").checked && ["signal", "portfolio", "scalp", "chain", "recs", "markets", "gportfolio", "livechart", "autopilot"].includes(S.tab)) S.timer = setInterval(() => !document.hidden && load(true), 30000);
+  if ($("#auto").checked && ["signal", "portfolio", "scalp", "stocks", "markets", "gportfolio", "livechart", "autopilot"].includes(S.tab))
+    S.timer = setInterval(() => { if (!document.hidden && !S.posEdit && !(S.tab === "stocks" && S.stView !== "recs")) load(true); }, 30000);   // never refresh under an open edit form
 }
 async function load(quiet) {
   const sec = $("#t-" + S.tab); if (!quiet) { sec.classList.add("loading"); pStart(); }
   try {
     if (S.tab === "signal") await loadSignal();
-    else if (S.tab === "chain") await loadChain();
     else if (S.tab === "portfolio") await loadPortfolio();
     else if (S.tab === "scalp") { await loadScalp(); await loadCarry().catch(e => toast(e.message)); }
     else if (S.tab === "context") await loadContext();
     else if (S.tab === "settings") await loadSettings();
     else if (S.tab === "journal") await loadJournal();
     else if (S.tab === "stocks") await loadStocks();
-    else if (S.tab === "recs") await loadRecs();
+    else if (S.tab === "guide") showGuide();
     else if (S.tab === "backtest") { await pbInit(); const pj = localStorage.getItem("pbJob"); if (pj && !PB.last) pbWatch(pj); await loadStudy(); }
     else if (S.tab === "research") await loadResearch();
     else if (S.tab === "autopilot") await loadAutopilot(quiet);
@@ -1184,11 +1265,12 @@ async function load(quiet) {
     else if (S.tab === "gbacktest") await loadGBacktest();
     else if (S.tab === "gresearch") await loadGResearch();
     else if (S.tab === "gcontext") await loadGContext();
-    else if (S.tab === "data") await loadData();
+    else if (S.tab === "data") { await loadData(); loadRecorder(); }
   } catch (e) { if (!quiet) toast(e.message); }
   finally { sec.classList.remove("loading"); if (!quiet) pDone(); hideSplash(); }
 }
 function setSource(src, live) {
+  S.live = !!live; S.srcKnown = true;
   const p = $("#srcPill"); p.className = "pill " + (live ? "live" : "demo"); p.lastElementChild.textContent = src;
 }
 const kpi = (k, v, d, dc) => `<div class="card kpi"><div class="k">${k}</div><div class="v mono">${v}</div>${d != null ? `<div class="d ${dc || ""}">${d}</div>` : ""}</div>`;
@@ -1380,25 +1462,33 @@ async function loadSignal() {
   const k = s === "BUY CALL" ? "call" : s === "BUY PUT" ? "put" : ["STOP FOR TODAY", "NO TRADE TODAY"].includes(s) ? "stop" : "wait";
   const sub = {"WAIT": "No valid setup right now. Waiting is a position.", "BUY CALL": "All entry conditions met for a bullish trade.",
     "BUY PUT": "All entry conditions met for a bearish trade.", "NO TRADE TODAY": "Today's conditions fail the rulebook.",
-    "NO NEW ENTRIES": "Entry window closed. Manage open trades only.", "STOP FOR TODAY": "Risk limit reached.",
-    "MARKET CLOSED": "Showing the last session. Review your journal."}[s] || "";
+    "NO NEW ENTRIES": "No new rule entries now (the entry window is over, or today's trade is already taken). You can still place your own order.", "STOP FOR TODAY": "Risk limit reached.",
+    "MARKET CLOSED": `${(d.session || {}).detail || "Showing the last session"}. The chart and levels are the last session's.`}[s] || "";
   const done = sg.checks.filter(c => c[0] === true).length, total = sg.checks.filter(c => c[0] !== null).length;
-  $("#sigCard").innerHTML = `<div class="cardhead"><h3 style="margin:0">Entry checklist</h3><span class="badge ${k === "call" || k === "put" ? "ok" : "no"}">${done} of ${total} met</span></div>` +
-    `<div class="muted" style="font-size:14px;margin-top:4px">${sub}</div>` +
+  const shut = s === "MARKET CLOSED";
+  $("#sigCard").innerHTML = `<div class="cardhead"><h3 style="margin:0">Entry checklist</h3>${shut ? `<span class="badge">${esc((d.session || {}).label || "Market closed")}</span>` : `<span class="badge ${k === "call" || k === "put" ? "ok" : "no"}">${done} of ${total} met</span>`}</div>` +
+    (shut ? "" : `<div class="muted" style="font-size:14px;margin-top:4px">${sub}</div>`) +
     (sg.warnings || []).map(w => `<div class="warn">${esc(w)}</div>`).join("");
   $("#checks").classList.toggle("still", S.checksKey === S.symbol); S.checksKey = S.symbol;
   $("#checks").innerHTML = sg.checks.map(([ok, t]) => `<li><span class="ic">${ok === true ? "✅" : ok === false ? "❌" : "👀"}</span><span>${esc(t)}</span></li>`).join("");
-  $("#orb").textContent = sg.bands ? `Noise band now ${n2(sg.bands.lo)} – ${n2(sg.bands.up)} (${sg.bands.mult}× the usual move since the open)` : "";
+  $("#orb").textContent = sg.bands && !shut ? `Noise band now ${n2(sg.bands.lo)} – ${n2(sg.bands.up)} (${sg.bands.mult}× the usual move since the open)` : "";
   $("#factors").innerHTML = "<tr><th>Factor</th><th>Value</th><th>Score</th></tr>" + sg.factors.map(f =>
     `<tr title="${esc(f.why)}"><td>${esc(f.factor)}<div class="muted" style="font-size:11px;white-space:normal">${esc(f.why)}</div></td><td class="mono">${esc(f.value)}</td>` +
     `<td class="factor-score ${f.score > 0 ? "up" : f.score < 0 ? "down" : "muted"}">${f.score > 0 ? "+1" : f.score < 0 ? "−1" : "0"}</td></tr>`).join("");
 
+  setSession(d.session);
+  S.positions = d.positions || [];
   renderState(d);
   renderTicket(d);
+  tkShow(); chainModeUi();
   renderAI(d);
   renderMiniChain(d);
+  renderTradePositions();
+  mtSync();
   if (!PC.length) renderWorkspace(); else refreshPanes();
   loadScalpLv(d.symbol);
+  if (S.chainMode === "full") loadChain().then(() => mtSync(true)).catch(e => toast(e.message));
+  if (S.scrollTo) { const q = S.scrollTo; S.scrollTo = null; setTimeout(() => { const el = $(q); if (el) el.scrollIntoView({behavior: "smooth", block: "start"}); }, 400); }
 }
 
 /* ---------- hero: today's session ---------- */
@@ -1529,11 +1619,13 @@ function nextCheckText() {
   const n = new Date(Date.now() + (330 + new Date().getTimezoneOffset()) * 60000);   // IST wall clock
   const m = n.getHours() * 60 + n.getMinutes(), s = n.getSeconds();
   const day = n.getDay();
+  if (S.ses && S.ses.state === "closed") return "";                       // the state above already says when it opens (holidays included)
+  if (S.ses && S.ses.state === "squareoff") return "Square-off 15:15 · market closes 15:30";
   if (day === 0 || day === 6) return "Market closed today";
   let nxt = null;
   for (let c = 585; c <= 855; c += 30) if (c > m || (c === m && s === 0)) { nxt = c; break; }
   if (m < 555) return "Market opens 09:15";
-  if (nxt === null) return m < 930 ? "No new entries after 14:30" : "Market closed";
+  if (nxt === null) return m < 915 ? "Rule entries ended 14:30 · your own orders until 15:15" : m < 930 ? "Square-off 15:15 · market closes 15:30" : "Market closed";
   const left = (nxt - m) * 60 - s;
   return `Next noise-band check ${String(Math.floor(nxt / 60)).padStart(2, "0")}:${String(nxt % 60).padStart(2, "0")} · in ${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}` +
     (m >= 560 && m < 780 ? " · Camarilla watching every 5 min" : "");
@@ -1613,11 +1705,12 @@ function renderState(d) {
   const s = d.signal.signal, el = $("#hState");
   const k = s === "BUY CALL" ? "call" : s === "BUY PUT" ? "put" : ["STOP FOR TODAY", "NO TRADE TODAY"].includes(s) ? "stop" : "";
   el.className = "state " + k;
-  el.lastElementChild.textContent = {"WAIT": "Waiting for a setup"}[s] || s.charAt(0) + s.slice(1).toLowerCase();
+  const ses = d.session || {};
+  el.lastElementChild.textContent = s === "MARKET CLOSED" ? (ses.label || "Market closed") : ({"WAIT": "Waiting for a setup"}[s] || s.charAt(0) + s.slice(1).toLowerCase());
   const o = d.order;
   $("#hSub").textContent = o && d.signal.plan ? `${o.strike} ${o.opt} at ₹${n2(o.entry_prem)} · SL ₹${n2(o.sl_prem)} · ${tgtTxt(o)}` :
-    {"WAIT": "Every checklist item has to turn green before an entry.", "NO NEW ENTRIES": "Entry window closed at 14:30. Manage open trades only.",
-     "MARKET CLOSED": "Showing the last session.", "NO TRADE TODAY": "Today's conditions fail the rulebook.", "STOP FOR TODAY": "Daily risk limit reached."}[s] || "";
+    {"WAIT": "Every checklist item has to turn green before an entry.", "NO NEW ENTRIES": "No new rule entries now. Open trades are managed; your own orders are open until 15:15.",
+     "MARKET CLOSED": `${ses.detail || ""}${ses.detail ? " · " : ""}showing the last session`, "NO TRADE TODAY": "Today's conditions fail the rulebook.", "STOP FOR TODAY": "Daily risk limit reached."}[s] || "";
   const key = S.symbol + s;
   if ((k === "call" || k === "put") && S.lastSig !== key) {
     if (!RM.matches) { el.classList.remove("armed"); void el.offsetWidth; el.classList.add("armed"); }
@@ -1737,13 +1830,15 @@ function renderAI(d) {
 function renderTicket(d) {
   const t = $("#ticket"), sg = d.signal;
   if (!(d.order && sg.plan)) {
-    t.innerHTML = `<h3>Trade ticket</h3><div class="muted">No recommendation right now. When every checklist item turns green, this card shows the exact option to buy with its LTP, entry, stop-loss, target and the capital needed, and you can switch to a cheaper strike if it's more than your cash.</div>`;
-    t.classList.remove("hidden");
+    const ses = d.session || {};
+    t.innerHTML = `<div class="muted" style="margin-top:12px">${ses.state === "closed" ? `<b style="color:var(--text)">${esc(ses.label)}.</b> ${esc(ses.detail)}. Signals appear here in market hours.`
+      : `<b style="color:var(--text)">No signal right now.</b> When every checklist item turns green, the exact option to buy appears here with its entry, stop-loss, target and the capital needed.`}
+      ${ses.can_order ? `<div style="margin-top:10px"><button class="mini" style="margin:0" data-tkgo="manual">Place my own order instead →</button></div>` : ""}</div>`;
     return;
   }
   const o = d.order, p = sg.plan, rec = d.alternatives.find(a => a.is_default);
   const cash = d.cash;
-  t.innerHTML = `<div class="cardhead"><h3 style="margin:0">Trade ticket – ${esc(sg.strategy || o.type)}</h3>
+  t.innerHTML = `<div class="cardhead" style="margin-top:12px"><h3 style="margin:0">${esc(sg.strategy || o.type)}</h3>
       ${o.affordable && o.lots > 0 ? `<span class="badge ok">Affordable</span>` : `<span class="badge no">Not affordable</span>`}</div>
     <div class="legs" style="margin-top:10px">${o.legs.map(l => `<div class="leg"><span class="tag ${l.side.toLowerCase()}">${l.side}</span><span><b>${esc(d.label)} ${l.strike} ${l.opt}</b> <span class="muted">· ${new Date(d.expiry).toLocaleDateString("en-IN", {day: "2-digit", month: "short"})} expiry${l.side === "BUY" ? " · " + esc(o.moneyness) : ""}</span></span><span class="spacer"></span><span class="mono">₹${n2(l.price)}</span></div>`).join("")}</div>
     <div class="k4">
@@ -1775,8 +1870,7 @@ function renderTicket(d) {
       </table></div>
       ${S.pick ? `<button style="margin-top:8px" id="resetPick">↺ Back to recommended strike</button>` : ""}
     </details>
-    ${o.lots > 0 ? `<button class="primary" id="placeSig" style="width:100%;margin-top:12px">📝 Place ${o.lots} lot(s) of ${o.strike} ${o.opt} as a paper trade</button>` : ""}`;
-  t.classList.remove("hidden");
+    ${o.lots > 0 ? `<button class="primary" id="placeSig" style="width:100%;margin-top:12px">Place ${o.lots} lot(s) of ${o.strike} ${o.opt} as a paper trade</button>` : ""}`;
   t.querySelectorAll("[data-pick]").forEach(r => r.onclick = () => {
     const k = +r.dataset.pick;
     S.pick = (rec && k === rec.strike) ? null : k;
@@ -1833,7 +1927,11 @@ const segIn = (el, v) => el.querySelectorAll("button").forEach(b => b.classList.
 function autoStrike(p) {
   const d = S.dash;
   if (p.strike) return p.strike;
-  if (d && paneSym(p) === d.symbol) return d.order && d.order.opt === p.kind ? d.order.strike : d.atm;
+  if (d && paneSym(p) === d.symbol) {
+    if (d.order && d.order.opt === p.kind) return d.order.strike;
+    const held = (S.positions || []).find(x => x.symbol === d.symbol && x.single && x.opt === p.kind && String(x.expiry) === String(d.expiry));
+    return held ? held.strike : d.atm;                 // a chart left on "Auto" follows the contract you hold
+  }
   return null;
 }
 // group 5-minute bars into 15m / 30m / 1h bars anchored at 9:15 like broker apps
@@ -1992,20 +2090,8 @@ async function refreshPane(i) {
     const ser = mine && p.tf === 5 && d.signal.bands ? d.signal.bands.series : [];
     o.bands.forEach(([k, s]) => s.setData(ser.map(x => ({time: x.time, value: x[k]}))));
   }
-  o.pls.forEach(pl => o.main.removePriceLine(pl)); o.pls = []; o.levels = [];
-  const add = (price, color, title, style) => o.pls.push(o.main.createPriceLine({price, color, title, lineWidth: 1, lineStyle: style, axisLabelVisible: true}));
-  if (mine) {
-    const sg = d.signal, od = d.order;
-    if (p.kind === "UND") {
-
-      if (sg.plan) { add(sg.plan.sl, "#e2675a", "Stop", 0); if (sg.plan.target != null) add(sg.plan.target, "#3fbf8f", "Target", 0); o.levels = [sg.plan.sl, sg.plan.target].filter(v => v != null); }
-      const cam = sg.camarilla && sg.camarilla.levels;
-      if (cam && p.tf === 5) { add(cam.h4, "rgba(127,180,217,.8)", "H4", 3); add(cam.l4, "rgba(127,180,217,.8)", "L4", 3); }
-    } else if (od && od.type === "Buy option" && od.strike === r.strike && od.opt === p.kind) {
-      add(od.entry_prem, "#8fa3b0", "Entry", 2); add(od.sl_prem, "#e2675a", "SL", 0); add(od.target_prem, "#3fbf8f", od.target_fixed === false ? "3R guide" : "TP", 0);
-      o.levels = [od.sl_prem, od.target_prem];
-    }
-  }
+  o.ctx = {sym, mine, strike: r.strike};
+  paneLevels(i);
   drawScalpLv(o, p.kind === "UND" ? sym : null);
   const key = [sym, p.kind, r.strike, p.tf, p.sty].join("|");
   if (keep && !atEdge) o.chart.timeScale().setVisibleLogicalRange(keep);   // new candles never move a chart you have scrolled back
@@ -2015,6 +2101,56 @@ async function refreshPane(i) {
   }
   syncPaneControls(i); legend(o, null); autoBtn(o); optNote();
   if (S.dash && i === targetPane()) renderMiniChain(S.dash);
+}
+// every price line and marker of one chart pane: the signal's plan, your open trades, and the order / edit you are typing
+function paneLevels(i) {
+  const o = PC[i], p = CW.panes[i]; if (!o || !o.ctx || !o.data.length) return;
+  const d = S.dash, {sym, mine, strike} = o.ctx;
+  o.pls.forEach(pl => { try { o.main.removePriceLine(pl); } catch (e) {} }); o.pls = []; o.levels = [];
+  const add = (price, color, title, style, w) => price != null && isFinite(price) && o.pls.push(o.main.createPriceLine({price, color, title, lineWidth: w || 1, lineStyle: style, axisLabelVisible: true}));
+  if (mine) {
+    const sg = d.signal, od = d.order;
+    if (p.kind === "UND") {
+      if (sg.plan) { add(sg.plan.sl, "#e2675a", "Stop", 0); if (sg.plan.target != null) add(sg.plan.target, "#3fbf8f", "Target", 0); o.levels = [sg.plan.sl, sg.plan.target].filter(v => v != null); }
+      const cam = sg.camarilla && sg.camarilla.levels;
+      if (cam && p.tf === 5) { add(cam.h4, "rgba(127,180,217,.8)", "H4", 3); add(cam.l4, "rgba(127,180,217,.8)", "L4", 3); }
+    } else if (od && od.type === "Buy option" && od.strike === strike && od.opt === p.kind && S.tk !== "manual") {
+      add(od.entry_prem, "#8fa3b0", "Entry", 2); add(od.sl_prem, "#e2675a", "SL", 0); add(od.target_prem, "#3fbf8f", od.target_fixed === false ? "3R guide" : "TP", 0);
+      o.levels = [od.sl_prem, od.target_prem];
+    }
+  }
+  // open trades of this instrument
+  const marks = [], barAt = ts => { let t = null; for (const b of o.data) { if (b.time <= ts) t = b.time; else break; } return t; };
+  const sameExp = x => !d || d.symbol !== sym || String(x.expiry) === String(d.expiry);
+  (S.positions || []).forEach(x => {
+    if (x.symbol !== sym) return;
+    const man = x.kind === "manual", tag = man ? "My" : "Trade", t0 = barAt(x.opened_ts), dr = S.posDraft && S.posDraft.id === x.id ? S.posDraft : null;
+    if (p.kind === "UND") {
+      if (!man) {
+        add(x.idx_entry, "#e8eef0", "Trade entry", 2);
+        if (x.idx_sl0 != null && x.idx_sl != null && Math.abs(x.idx_sl0 - x.idx_sl) > 0.01) add(x.idx_sl, "#f2a93b", x.at_breakeven ? "Trade SL (breakeven)" : "Trade SL (trailed)", 0, 2);
+        else add(x.idx_sl, "#e2675a", "Trade SL", 0, 2);
+        add(x.idx_target, "#3fbf8f", "Trade target", 0, 2);
+        o.levels.push(...[x.idx_sl, x.idx_target].filter(v => v != null));
+      }
+      if (t0 != null) marks.push({time: t0, position: x.bullish ? "belowBar" : "aboveBar", color: "#f2a93b", shape: x.bullish ? "arrowUp" : "arrowDown", text: `${man ? "" : (RULE_NAME[x.rule] || "Trade") + " "}${x.strike ?? ""} ${x.opt || ""}`.trim()});
+    } else if (x.single && x.strike === strike && x.opt === p.kind && sameExp(x)) {
+      const sl = dr ? dr.sl : x.sl_px, tp = dr ? dr.tp : x.target_px, est = man ? "" : " ≈";
+      add(x.entry_px, "#e8eef0", `${tag} entry`, 2);
+      add(sl, dr ? "#f2a93b" : "#e2675a", dr ? "SL (not saved)" : `${tag} SL${est}${x.trail_moved && man ? " · trailed" : ""}`, dr ? 2 : 0, 2);
+      add(tp, dr ? "#f2a93b" : "#3fbf8f", dr ? "Target (not saved)" : `${tag} target${est}`, dr ? 2 : 0, 2);
+      if (!man && x.target_guide != null) add(x.target_guide, "rgba(63,191,143,.6)", "3R guide", 2);
+      o.levels.push(...[sl, tp, x.entry_px].filter(v => v != null));
+      if (t0 != null) marks.push({time: t0, position: x.side === "SELL" ? "aboveBar" : "belowBar", color: "#f2a93b", shape: x.side === "SELL" ? "arrowDown" : "arrowUp", text: `${x.side === "SELL" ? "Sold" : "Bought"} ₹${n2(x.entry_px)}`});
+    }
+  });
+  // the order you are building in "My own order"
+  const v = S.mtView;
+  if (v && mine && p.kind !== "UND" && v.strike === strike && v.opt === p.kind && !S.posEdit && !(S.positions || []).some(x => x.symbol === sym && x.single && x.strike === strike && x.opt === p.kind)) {
+    add(v.px, "rgba(232,238,240,.75)", "New order", 3); add(v.sl, "rgba(226,103,90,.85)", "New SL", 3); add(v.tp, "rgba(63,191,143,.85)", "New target", 3);
+    o.levels.push(...[v.sl, v.tp].filter(x => x != null));
+  }
+  try { o.main.setMarkers(marks.sort((a, b) => a.time - b.time)); } catch (e) {}
 }
 function lagGroup(msgs) { const m = new Map(); msgs.forEach(x => m.set(x, (m.get(x) || 0) + 1)); return [...m.entries()]; }
 function lagHtml(L) {
@@ -2097,12 +2233,41 @@ function chartMax(on) {
 $("#cmpFull").onclick = () => chartMax(!$("#compareCard").classList.contains("max"));
 addEventListener("keydown", e => { if (e.key === "Escape" && $("#compareCard").classList.contains("max")) chartMax(false); });
 
-$("#miniChain").onclick = e => {
-  const td = e.target.closest("td.pick"); if (!td) return;
-  showContract(+td.dataset.cs, td.dataset.co);
-};
+$("#miniChain").onclick = e => { const td = e.target.closest("td.pick"); if (td) pickContract(+td.dataset.cs, td.dataset.co); };
+$("#ticket").addEventListener("click", e => { if (e.target.closest("[data-tkgo]")) { S.tk = "manual"; lss("fno.tk", "manual"); tkShow(); mtSync(true); } });
 
 /* ---------- chain ---------- */
+function setSeg(id, v) { document.querySelectorAll(id + " button").forEach(b => b.classList.toggle("on", b.dataset.v === v)); }
+const lsg = (k, d) => { try { return localStorage.getItem(k) ?? d; } catch (e) { return d; } };
+const lss = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+const dmy = e => new Date(e).toLocaleDateString("en-IN", {day: "2-digit", month: "short"});
+
+/* ---------- NSE session: one answer to "is the market open?" for every India page ---------- */
+S.ses = null;
+function setSession(ses) {
+  if (!ses) return;
+  S.ses = ses;
+  const p = $("#mktPill");
+  p.className = "pill mkt " + (ses.state === "open" ? "live" : ses.state === "squareoff" ? "demo" : "closed") + (WS.mk !== "IN" ? " hidden" : "");
+  p.innerHTML = `<span class="dot"></span><span>${esc(ses.label)}</span>${ses.state === "closed" ? `<span class="dt">· ${esc(ses.detail)}</span>` : ""}`;
+  p.title = `${ses.label} · ${ses.detail}`;
+  const k = $("#tkSes"); if (k) k.textContent = ses.state === "open" ? "" : ses.state === "squareoff" ? "No new orders after 15:15" : ses.detail;
+}
+
+/* ---------- option chain on the Trade page: near the money, or the full chain with any expiry ---------- */
+S.chainMode = lsg("fno.chm", "near") === "full" ? "full" : "near";
+function chainModeUi() {
+  const full = S.chainMode === "full";
+  document.querySelectorAll("#chMode [data-chm]").forEach(b => b.classList.toggle("on", b.dataset.chm === S.chainMode));
+  $("#mcWrap").classList.toggle("hidden", full); $("#mcExp").classList.toggle("hidden", full);
+  ["#chWrap", "#chainStats", "#expiry", "#chainNote"].forEach(q => $(q).classList.toggle("hidden", !full));
+}
+$("#chMode").onclick = async e => {
+  const b = e.target.closest("[data-chm]"); if (!b || b.dataset.chm === S.chainMode) return;
+  S.chainMode = b.dataset.chm; lss("fno.chm", S.chainMode); chainModeUi();
+  if (S.chainMode === "full") { try { await loadChain(); } catch (er) { toast(er.message); } }
+  mtSync(true);
+};
 async function loadChain() {
   const exp = S.chain && S.chain.symbol === S.symbol ? $("#expiry").value : "";
   const d = await api(`/api/chain?symbol=${S.symbol}${exp ? "&expiry=" + exp : ""}`);
@@ -2113,52 +2278,239 @@ async function loadChain() {
     kpi("Resistance (max call OI)", st.resistance ?? "–") + kpi("Max pain", st.max_pain ?? "–");
   $("#chainNote").innerHTML = (d.source === "theoretical" ? `<div class="note">THEORETICAL prices - OI, volume and PCR need a broker connection.</div>` : "") +
     (d.errors || []).map(e => `<div class="err" style="margin-top:8px">${esc(e)}</div>`).join("");
+  renderFullChain();
+}
+function renderFullChain() {
+  const d = S.chain; if (!d) return;
   const h = `<tr><th>OI</th><th>ΔOI</th><th>IV</th><th>Δ</th><th>Call LTP</th><th class="strike">Strike · spot ${n2(d.spot)}</th><th style="text-align:left">Put LTP</th><th>Δ</th><th>IV</th><th>ΔOI</th><th>OI</th></tr>`;
+  const sel = (k, o) => MT.strike === k && MT.opt === o && S.tk === "manual" ? "cur" : "";
   $("#chainTbl").innerHTML = h + d.rows.map(r => {
     const ci = r.strike < d.spot ? "itm" : "", pi = r.strike > d.spot ? "itm" : "";
     return `<tr class="${r.strike === d.atm ? "atm" : ""}">
       <td class="mono ${ci}">${big(r.ce_oi)}</td><td class="mono ${ci} ${cls(r.ce_chg_oi)}">${big(r.ce_chg_oi)}</td><td class="mono ${ci}">${n2(r.ce_iv)}</td><td class="mono ${ci}">${n2(r.ce_delta)}</td>
-      <td class="mono ${ci} pick" data-k="${r.strike}" data-o="CE"><b>${n2(r.ce_ltp)}</b></td>
-      <td class="strike mono">${r.strike} <button class="mini" title="Chart ${r.strike} CE vs index" data-gc="${r.strike}" data-go="CE">📈C</button><button class="mini" title="Chart ${r.strike} PE vs index" data-gc="${r.strike}" data-go="PE">📈P</button></td>
-      <td class="mono ${pi} pick" style="text-align:left" data-k="${r.strike}" data-o="PE"><b>${n2(r.pe_ltp)}</b></td>
+      <td class="mono ${ci} pick ${sel(r.strike, "CE")}" data-k="${r.strike}" data-o="CE"><b>${n2(r.ce_ltp)}</b></td>
+      <td class="strike mono">${r.strike}</td>
+      <td class="mono ${pi} pick ${sel(r.strike, "PE")}" style="text-align:left" data-k="${r.strike}" data-o="PE"><b>${n2(r.pe_ltp)}</b></td>
       <td class="mono ${pi}">${n2(r.pe_delta)}</td><td class="mono ${pi}">${n2(r.pe_iv)}</td><td class="mono ${pi} ${cls(r.pe_chg_oi)}">${big(r.pe_chg_oi)}</td><td class="mono ${pi}">${big(r.pe_oi)}</td></tr>`;
   }).join("");
-  const cur = $("#mStrike").value;
-  $("#mStrike").innerHTML = d.rows.map(r => `<option value="${r.strike}">${r.strike}</option>`).join("");
-  $("#mStrike").value = d.rows.some(r => String(r.strike) === cur) ? cur : d.atm;
-  updPrice();
 }
-$("#expiry").onchange = () => load();
-$("#chainTbl").onclick = e => {
-  const g = e.target.closest("[data-gc]");
-  if (g) {
-    showContract(+g.dataset.gc, g.dataset.go);
-    go("signal");
-    setTimeout(() => $("#compareCard").scrollIntoView({behavior: "smooth", block: "start"}), 600);
+$("#expiry").onchange = async () => { try { await loadChain(); mtSync(true); } catch (e) { toast(e.message); } };
+$("#chainTbl").onclick = e => { const td = e.target.closest("td.pick"); if (td) pickContract(+td.dataset.k, td.dataset.o); };
+
+/* ---------- order ticket: the signal's trade, or your own order with stop-loss / target / trailing SL ---------- */
+S.tk = null;
+const MT = {sym: null, opt: "CE", side: "BUY", strike: null, lots: 1, sl: {pct: 20}, tp: {pct: 50}, trail: {}};
+try { const m = JSON.parse(lsg("fno.mt", "{}")); ["sl", "tp", "trail"].forEach(k => { if (m[k] != null) MT[k] = m[k] > 0 ? {pct: +m[k]} : {}; }); } catch (e) {}
+const hasRec = () => !!(S.dash && S.dash.order && S.dash.signal.plan);
+function tkShow() {
+  if (!S.tk) S.tk = hasRec() ? "signal" : (lsg("fno.tk", "signal") === "manual" ? "manual" : "signal");
+  document.querySelectorAll("#tkTabs [data-tk]").forEach(b => b.classList.toggle("on", b.dataset.tk === S.tk));
+  $("#ticket").classList.toggle("hidden", S.tk !== "signal"); $("#mTicket").classList.toggle("hidden", S.tk !== "manual");
+  $("#tkDot").classList.toggle("hidden", !(hasRec() && S.tk !== "signal"));
+}
+$("#tkTabs").onclick = e => { const b = e.target.closest("[data-tk]"); if (!b) return; S.tk = b.dataset.tk; lss("fno.tk", S.tk); tkShow(); mtSync(true); };
+// the chain the ticket prices from: the full chain (any expiry) when it is open, otherwise the near-the-money rows of the dashboard
+function mtChain() {
+  const d = S.dash;
+  if (S.chainMode === "full" && S.chain && S.chain.symbol === S.symbol) return {rows: S.chain.rows, expiry: S.chain.expiry, atm: S.chain.atm};
+  return d && d.symbol === S.symbol ? {rows: d.chain, expiry: d.expiry, atm: d.atm} : null;
+}
+function mtPx() {
+  const c = mtChain(), r = c && c.rows.find(x => x.strike === MT.strike); if (!r) return null;
+  const t = MT.opt.toLowerCase(); let p = MT.side === "BUY" ? r[t + "_ask"] : r[t + "_bid"];
+  if (!(p > 0)) p = r[t + "_ltp"];
+  return p > 0 ? p : null;
+}
+const r05 = v => Math.round(v * 20) / 20;
+function mtLevels(px) {            // {sl, tp, trail} in rupees of the option price, from a % of the fill price or a typed value
+  const buy = MT.side === "BUY", f = (L, dir) => L.pct && px ? r05(px * (1 + dir * L.pct / 100)) : (L.abs > 0 ? L.abs : null);
+  return {sl: f(MT.sl, buy ? -1 : 1), tp: f(MT.tp, buy ? 1 : -1), trail: MT.trail.pct && px ? r05(px * MT.trail.pct / 100) : (MT.trail.abs > 0 ? MT.trail.abs : null)};
+}
+function mtSync(redraw) {
+  const c = mtChain(), d = S.dash; if (!c || !d) return;
+  if (MT.sym !== S.symbol) { MT.sym = S.symbol; MT.strike = null; }
+  if (MT.strike == null || !c.rows.some(r => r.strike === MT.strike)) MT.strike = c.atm;
+  const sel = $("#mStrike"), t = MT.opt.toLowerCase();
+  if (document.activeElement !== sel) {
+    sel.innerHTML = c.rows.map(r => `<option value="${r.strike}">${r.strike}${r.strike === c.atm ? " · ATM" : ""} · ₹${n2(r[t + "_ltp"])}</option>`).join("");
+    sel.value = String(MT.strike);
+  }
+  setSeg("#mOpt", MT.opt); setSeg("#mSide", MT.side);
+  if (document.activeElement !== $("#mLots")) $("#mLots").value = MT.lots;
+  const buy = MT.side === "BUY", px = mtPx(), qty = MT.lots * d.lot, lv = mtLevels(px), ses = d.session || S.ses || {};
+  $("#mExp").textContent = dmy(c.expiry) + " expiry";
+  $("#mQty").textContent = `· ${qty} qty`;
+  $("#mPxSide").textContent = buy ? "(ask)" : "(bid)";
+  $("#mPrice").textContent = px ? "₹" + n2(px) : "–";
+  [["#mSl", "sl"], ["#mTp", "tp"], ["#mTrail", "trail"]].forEach(([q, k]) => {
+    const el = $(q); if (document.activeElement !== el && (MT[k].pct || !MT[k].abs)) el.value = lv[k] != null && MT[k].pct ? lv[k].toFixed(2) : (MT[k].abs || "");
+    document.querySelectorAll(`#mTicket .qchips[data-lv="${k}"] button`).forEach(b => b.classList.toggle("on", +b.dataset.p === (MT[k].pct || (MT[k].abs ? -1 : 0))));
+  });
+  $("#mWarn").classList.toggle("hidden", buy);
+  // what the order costs and risks
+  const eq = d.equity || d.cash || 1, cost = px ? px * qty : null, pc = v => (Math.abs(v) / eq * 100).toFixed(1) + "%";
+  let bad = null;
+  if (px && lv.sl != null && (buy ? lv.sl >= px : lv.sl <= px)) bad = `Stop-loss must be ${buy ? "below" : "above"} the fill price ₹${n2(px)}.`;
+  else if (px && lv.tp != null && (buy ? lv.tp <= px : lv.tp >= px)) bad = `Target must be ${buy ? "above" : "below"} the fill price ₹${n2(px)}.`;
+  else if (px && buy && lv.trail != null && lv.trail >= px) bad = "Trailing distance must be smaller than the option price.";
+  const sg = buy ? 1 : -1;
+  let effSl = lv.sl;                                   // a trailing SL starts `trail` behind the fill price if that is tighter
+  if (px && lv.trail != null) { const tsl = r05(px - sg * lv.trail); effSl = effSl == null ? tsl : (buy ? Math.max(effSl, tsl) : Math.min(effSl, tsl)); }
+  const risk = px && effSl != null ? (effSl - px) * sg * qty : null, rew = px && lv.tp != null ? (lv.tp - px) * sg * qty : null;
+  const row = (k, v, c2) => `<div class="row"><span class="muted">${k}</span><span class="mono ${c2 || ""}">${v}</span></div>`;
+  $("#mSum").innerHTML = !px ? `<div class="err">No price for this strike right now.</div>` :
+    row(buy ? "Cost (premium paid)" : "Margin blocked (approx.)", `${rs(buy ? cost : 0.12 * d.spot * qty)} <span class="muted">of ${rs(d.cash)} cash</span>`, buy && cost > d.cash ? "down" : "") +
+    (risk != null ? row(lv.trail != null ? "Loss at the starting SL ₹" + n2(effSl) : "Loss at stop-loss", `<span class="down">${rs(risk)}</span> <span class="muted">· ${pc(risk)} of account</span>`)
+      : row("Loss if it goes wrong", buy ? `<span class="down">up to ${rs(-cost)}</span> <span class="muted">· ${pc(cost)} of account</span>` : `<span class="down">unlimited</span>`)) +
+    (rew != null ? row("Profit at target", `<span class="up">+${rs(rew).replace("₹-", "₹")}</span>${risk ? ` <span class="muted">· reward ${(rew / -risk).toFixed(1)}× risk</span>` : ""}`) : row("Target", `<span class="muted">none - you exit, or 15:15 square-off</span>`)) +
+    (lv.trail != null ? row("Trailing SL", `<span class="muted">follows the best price ₹${n2(lv.trail)} behind</span>`) : "") +
+    (bad ? `<div class="err" style="margin-top:8px">${esc(bad)}</div>` : risk == null && buy ? `<div class="warn" style="margin-top:8px">No stop-loss: the whole premium is at risk until you exit or the 15:15 square-off.</div>` : "");
+  const b = $("#mPlace");
+  const why = !ses.can_order && ses.label ? `${ses.label} · ${ses.detail}` : !px ? "No price for this strike" : bad ? "Fix the levels above" : buy && cost > d.cash ? `Not enough demo cash (needs ${rs(cost)})` : null;
+  b.disabled = !!why || !!b.dataset.busy;
+  b.textContent = why || `${buy ? "Buy" : "Sell"} ${MT.lots} lot${MT.lots > 1 ? "s" : ""} · ${MT.strike} ${MT.opt} at ₹${n2(px)}`;
+  b.classList.toggle("sellbtn", !buy && !why);
+  S.mtView = px && S.tk === "manual" && c.expiry === d.expiry ? {strike: MT.strike, opt: MT.opt, px, sl: effSl, tp: lv.tp} : null;
+  if (redraw) { PC.forEach((o, i) => o && paneLevels(i)); if (S.dash) renderMiniChain(S.dash); if (S.chainMode === "full") renderFullChain(); }
+}
+// a price clicked in the chain: show that contract on the chart and load it in "My own order"
+function pickContract(strike, opt) {
+  MT.strike = strike; MT.opt = opt; S.tk = "manual"; lss("fno.tk", "manual"); tkShow();
+  const c = mtChain();
+  if (c && S.dash && c.expiry === S.dash.expiry) showContract(strike, opt);
+  mtSync(true);
+}
+function mtFollowChart() { const c = mtChain(); if (c && S.dash && c.expiry === S.dash.expiry) showContract(MT.strike, MT.opt); }
+$("#mOpt").onclick = e => { const b = e.target.closest("button"); if (b && b.dataset.v !== MT.opt) { MT.opt = b.dataset.v; mtFollowChart(); mtSync(true); } };
+$("#mSide").onclick = e => { const b = e.target.closest("button"); if (b && b.dataset.v !== MT.side) { MT.side = b.dataset.v; mtSync(true); } };
+$("#mStrike").onchange = () => { MT.strike = +$("#mStrike").value; mtFollowChart(); mtSync(true); };
+$("#mLots").oninput = () => { MT.lots = Math.max(1, Math.min(50, Math.round(+$("#mLots").value) || 1)); mtSync(); };
+$("#mLots").onblur = () => { $("#mLots").value = MT.lots; };
+$("#mTicket").addEventListener("click", e => {
+  const st = e.target.closest("[data-step]");
+  if (st) { MT.lots = Math.max(1, Math.min(50, MT.lots + +st.dataset.step)); $("#mLots").value = MT.lots; mtSync(); return; }
+  const ch = e.target.closest(".qchips button"); if (!ch) return;
+  const k = ch.parentElement.dataset.lv, p = +ch.dataset.p;
+  MT[k] = p > 0 ? {pct: p} : {};
+  if (!(p > 0)) $({sl: "#mSl", tp: "#mTp", trail: "#mTrail"}[k]).value = "";
+  mtSync(true);
+});
+[["#mSl", "sl"], ["#mTp", "tp"], ["#mTrail", "trail"]].forEach(([q, k]) => $(q).addEventListener("input", () => { const v = +$(q).value; MT[k] = v > 0 ? {abs: v} : {}; mtSync(true); }));
+$("#mPlace").onclick = async () => {
+  const b = $("#mPlace"), c = mtChain(), px = mtPx(); if (!c || !px) return;
+  const lv = mtLevels(px);
+  b.dataset.busy = "1"; b.disabled = true;
+  try {
+    const r = await post("/api/trade/manual", {symbol: S.symbol, expiry: c.expiry, strike: MT.strike, opt: MT.opt, side: MT.side, lots: MT.lots, sl: lv.sl, target: lv.tp, trail: lv.trail});
+    toast(r.message, 6000);
+    lss("fno.mt", JSON.stringify({sl: MT.sl.pct || 0, tp: MT.tp.pct || 0, trail: MT.trail.pct || 0}));     // your usual % become the next order's defaults
+    if (S.dash && c.expiry === S.dash.expiry) showContract(MT.strike, MT.opt);
+    delete b.dataset.busy; await load(true);
+    const pc = $("#tpPosCard"); if (pc && !pc.classList.contains("hidden")) pc.scrollIntoView({behavior: "smooth", block: "nearest"});
+  } catch (e) { toast(e.message, 7000); } finally { delete b.dataset.busy; mtSync(); }
+};
+
+/* ---------- open positions: one renderer for the Trade page and Positions & P&L ---------- */
+S.positions = []; S.posEdit = null;
+const RULE_NAME = {noise: "Noise band", camarilla: "Camarilla", ai: "AI model", trend: "Trend-day", fib: "Fibonacci", channel: "Channel 15m"};
+function posRow(p) {
+  const man = p.kind === "manual", ed = S.posEdit === p.id;
+  const legs = p.legs.map(l => `<span class="tag ${l.side.toLowerCase()}">${l.side}</span> <b>${esc(p.symbol)} ${l.strike} ${l.opt}</b>`).join(" / ");
+  const who = man ? `<span class="tag">Your order</span>` : `<span class="tag twarn">${esc(RULE_NAME[p.rule] || String(p.rule).replace("custom:", "Custom: "))} · ${p.auto ? "Autopilot" : "signal you placed"}</span>`;
+  let lv;
+  if (man) {
+    lv = (p.sl_px != null ? `<span class="lv sl">SL ₹${n2(p.sl_px)}${p.trail_moved ? " · trailed" : ""}${p.at_sl_rs != null ? ` <small>${rs(p.at_sl_rs)}</small>` : ""}</span>` : `<span class="lv none">No stop-loss</span>`) +
+      (p.target_px != null ? `<span class="lv tp">Target ₹${n2(p.target_px)}${p.at_target_rs != null ? ` <small>+${rs(p.at_target_rs).replace("₹-", "₹")}</small>` : ""}</span>` : `<span class="lv none">No target</span>`) +
+      (p.trail != null ? `<span class="lv">Trailing ₹${n2(p.trail)}</span>` : "");
+  } else {
+    lv = `<span class="lv sl" title="The rule exits on the index level, as backtested. The option price is an estimate of where the premium will be there.">Stop: index ${n2(p.idx_sl)}${p.at_breakeven ? " · at breakeven" : p.trail_moved ? " · trailing" : ""}${p.sl_px != null ? ` <small>≈ ₹${n2(p.sl_px)}</small>` : ""}</span>` +
+      (p.idx_target != null ? `<span class="lv tp">Target: index ${n2(p.idx_target)}${p.target_px != null ? ` <small>≈ ₹${n2(p.target_px)}</small>` : ""}</span>` : `<span class="lv">No fixed target · the rule trails</span>`);
+  }
+  const src = p.price_src === "live" ? "live broker price" : p.price_src === "chain" ? "live option-chain price" : p.price_src ? (S.live ? `<span class="down">estimate - broker price unavailable right now</span>` : "theoretical price (no broker connected)") : "";
+  const now = p.ltp ?? Math.abs(p.current_prem ?? p.entry_prem);
+  return `<div class="pos ${ed ? "editing" : ""}" data-pid="${p.id}">
+    <div class="pos-main">
+      <div class="pos-id">${legs} ${who}<div class="muted fs12">${p.lots} lot${p.lots > 1 ? "s" : ""} · ${p.qty} qty · exp ${dmy(p.expiry)} · opened ${p.opened.slice(11, 16)}</div></div>
+      <div class="pos-px mono">₹${n2(p.entry_px ?? Math.abs(p.entry_prem))} → <b>₹${n2(now)}</b><div class="muted fs11">${src}</div></div>
+      <div class="pos-pnl mono ${cls(p.unrealised)}">${p.unrealised != null ? (p.unrealised >= 0 ? "+" : "") + rs(p.unrealised) : "–"}</div>
+      <div class="pos-lv">${lv}</div>
+      <div class="pos-act">${p.single ? `<button class="mini" data-pa="chart" title="Show this contract on the chart with its entry, stop-loss and target">Chart</button>` : ""}${p.editable ? `<button class="mini" data-pa="edit">${p.sl_px != null || p.target_px != null || p.trail != null ? "Edit SL / target" : "Set SL / target"}</button>` : `<span class="muted fs12" title="Rule trades keep the stop and target of their rule, as backtested">rule-managed</span>`}<button class="danger" data-pa="exit">Exit</button></div>
+    </div>${ed ? posEditHtml(p, now) : ""}</div>`;
+}
+function posEditHtml(p, now) {
+  const buy = p.side === "BUY", e = p.entry_px, v = S.posEditVals || {};
+  const val = (k, cur) => v[k] != null ? v[k] : (cur != null ? Number(cur).toFixed(2) : "");
+  return `<div class="pos-edit" data-buy="${buy ? 1 : 0}" data-now="${now}" data-entry="${e}">
+    <div class="pe-grid">
+      <div><label for="peSl">Stop-loss ₹</label><input id="peSl" type="number" step="0.05" min="0" placeholder="none" inputmode="decimal" value="${val("sl", p.sl_px)}">
+        <div class="qchips" data-pe="sl"><button type="button" data-v="cost" title="Move the stop to your entry price">At cost</button><button type="button" data-v="5">5% from now</button><button type="button" data-v="10">10%</button><button type="button" data-v="20">20%</button><button type="button" data-v="none">none</button></div></div>
+      <div><label for="peTp">Target ₹</label><input id="peTp" type="number" step="0.05" min="0" placeholder="none" inputmode="decimal" value="${val("tp", p.target_px)}">
+        <div class="qchips" data-pe="tp"><button type="button" data-v="10">10% from now</button><button type="button" data-v="25">25%</button><button type="button" data-v="50">50%</button><button type="button" data-v="none">none</button></div></div>
+      <div><label for="peTrail" title="The stop-loss follows the best price by this many rupees and never moves back">Trailing SL ₹</label><input id="peTrail" type="number" step="0.05" min="0" placeholder="off" inputmode="decimal" value="${val("trail", p.trail)}">
+        <div class="qchips" data-pe="trail"><button type="button" data-v="5">5% of price</button><button type="button" data-v="10">10%</button><button type="button" data-v="none">off</button></div></div>
+    </div>
+    <div class="row wrap" style="margin-top:10px"><button class="primary" data-pa="save">Save levels</button><button data-pa="cancel">Cancel</button>
+      <span class="muted fs12">Option price now ₹${n2(now)} · your entry ₹${n2(e)}. ${buy ? "Stop-loss below the price, target above." : "Stop-loss above the price, target below."} Empty = no level. Checked every minute in market hours.</span></div></div>`;
+}
+function renderPositions(q, list, empty) {
+  const el = $(q); if (!el) return;
+  if (S.posEdit && !list.some(p => p.id === S.posEdit)) S.posEdit = null;
+  el.innerHTML = list.length ? list.map(posRow).join("") : `<div class="empty">${empty}</div>`;
+}
+function renderTradePositions() {
+  const l = S.positions || [], card = $("#tpPosCard");
+  card.classList.toggle("hidden", !l.length);
+  if (!l.length) return;
+  const u = l.reduce((a, p) => a + (p.unrealised || 0), 0), noSl = l.filter(p => p.kind === "manual" && p.sl_px == null).length;
+  $("#tpPosSum").innerHTML = `· ${l.length} · open P&L <span class="mono ${cls(u)}">${u >= 0 ? "+" : ""}${rs(u)}</span>${noSl ? ` · <span class="down">${noSl} without a stop-loss</span>` : ""}`;
+  renderPositions("#tpPositions", l, "");
+}
+function posRerender() { if (S.tab === "signal") renderTradePositions(); else if (S.tab === "portfolio") renderPositions("#positions", S.positions, "No open positions."); }
+document.addEventListener("input", e => {
+  const m = {peSl: "sl", peTp: "tp", peTrail: "trail"}[e.target.id]; if (!m) return;
+  (S.posEditVals = S.posEditVals || {})[m] = e.target.value;
+  posPreview();
+});
+// while you edit, the chart shows the levels you are typing
+function posPreview() {
+  const f = document.querySelector(".pos-edit"); if (!f || !S.posEdit) { S.posDraft = null; } else {
+    const g = q => { const v = +f.querySelector(q).value; return v > 0 ? v : null; };
+    S.posDraft = {id: S.posEdit, sl: g("#peSl"), tp: g("#peTp")};
+  }
+  PC.forEach((o, i) => o && paneLevels(i));
+}
+document.addEventListener("click", async e => {
+  const chip = e.target.closest(".pos-edit .qchips button");
+  if (chip) {
+    const f = chip.closest(".pos-edit"), k = chip.parentElement.dataset.pe, v = chip.dataset.v, buy = f.dataset.buy === "1", now = +f.dataset.now, entry = +f.dataset.entry;
+    const inp = f.querySelector({sl: "#peSl", tp: "#peTp", trail: "#peTrail"}[k]);
+    const dir = k === "sl" ? (buy ? -1 : 1) : (buy ? 1 : -1);
+    inp.value = v === "none" ? "" : v === "cost" ? entry.toFixed(2) : k === "trail" ? r05(now * +v / 100).toFixed(2) : r05(now * (1 + dir * +v / 100)).toFixed(2);
+    inp.dispatchEvent(new Event("input", {bubbles: true}));
     return;
   }
-  const td = e.target.closest("td.pick"); if (!td) return;
-  $("#mStrike").value = td.dataset.k; setSeg("#mOpt", td.dataset.o); S.opt = td.dataset.o; updPrice();
-  $("#mPlace").scrollIntoView({behavior: "smooth", block: "center"});
-};
-function setSeg(id, v) { document.querySelectorAll(id + " button").forEach(b => b.classList.toggle("on", b.dataset.v === v)); }
-$("#mOpt").onclick = e => { const b = e.target.closest("button"); if (b) { S.opt = b.dataset.v; setSeg("#mOpt", S.opt); updPrice(); } };
-$("#mSide").onclick = e => { const b = e.target.closest("button"); if (b) { S.side = b.dataset.v; setSeg("#mSide", S.side); updPrice(); } };
-$("#mStrike").onchange = updPrice;
-function updPrice() {
-  if (!S.chain) return;
-  const r = S.chain.rows.find(x => String(x.strike) === $("#mStrike").value); if (!r) return;
-  const t = S.opt.toLowerCase(); let p = S.side === "BUY" ? r[t + "_ask"] : r[t + "_bid"]; if (!p) p = r[t + "_ltp"];
-  $("#mPrice").textContent = p ? "₹" + n2(p) : "–";
-  $("#mWarn").classList.toggle("hidden", S.side !== "SELL");
-}
-$("#mPlace").onclick = async () => {
-  const b = $("#mPlace"); b.disabled = true;
-  try {
-    const r = await post("/api/trade/manual", {symbol: S.symbol, expiry: S.chain.expiry, strike: +$("#mStrike").value, opt: S.opt, side: S.side, lots: +$("#mLots").value});
-    toast(r.message);
-  } catch (e) { toast(e.message); } finally { b.disabled = false; }
-};
+  const b = e.target.closest("[data-pa]"); if (!b) return;
+  const row = b.closest("[data-pid]"), id = row && row.dataset.pid, p = (S.positions || []).find(x => x.id === id); if (!p) return;
+  const act = b.dataset.pa;
+  if (act === "chart") {
+    if (S.symbol !== p.symbol) { S.symbol = p.symbol; lss("sym", S.symbol); $("#symbol").value = S.symbol; $("#btSym").value = S.symbol; S.chain = null; S.pick = null; }
+    const i = targetPane(); Object.assign(CW.panes[i], {sym: null, kind: p.opt, strike: p.strike}); saveCW(); CW.focus = i;
+    if (S.tab !== "signal") go("signal"); else { rebuildPane(i); setFocus(i); load(true); }
+    setTimeout(() => $("#compareCard").scrollIntoView({behavior: "smooth", block: "start"}), 500);
+  } else if (act === "edit") {
+    S.posEdit = S.posEdit === id ? null : id; S.posEditVals = null; posRerender(); posPreview();
+    const f = document.querySelector(".pos-edit #peSl"); if (f) f.focus();
+  } else if (act === "cancel") { S.posEdit = null; S.posEditVals = null; posRerender(); posPreview(); }
+  else if (act === "save") {
+    const f = row.querySelector(".pos-edit"), g = q => { const v = +f.querySelector(q).value; return v > 0 ? v : null; };
+    b.disabled = true;
+    try { const r = await post("/api/trade/modify", {id, sl: g("#peSl"), target: g("#peTp"), trail: g("#peTrail")}); toast(r.message, 5000); S.posEdit = null; S.posEditVals = null; S.posDraft = null; await load(true); }
+    catch (err) { toast(err.message, 7000); b.disabled = false; }
+  } else if (act === "exit") {
+    b.disabled = true;
+    try { const r = await post("/api/trade/exit", {id}); toast(r.message, 5000); S.posEdit = null; await load(true); } catch (err) { toast(err.message); b.disabled = false; }
+  }
+});
 
 /* ---------- portfolio ---------- */
 let eqc, eqs;
@@ -2173,14 +2525,8 @@ async function loadPortfolio() {
   (d.closed_now || []).forEach(c => toast(`Auto-exit ${c.symbol}: ${c.reason} → ${rs(c.pnl)}`, 6000));
   $("#pKpis").innerHTML = kpi("Demo cash", rs(d.cash)) + kpi("Open P&L", rs(d.unrealised), null) +
     kpi("Realised P&L", `<span class="${cls(d.realised)}">${rs(d.realised)}</span>`) + kpi("Account value", rs(d.account_value), d.profit_only_since ? `trading profit only since ${esc(d.profit_only_since.slice(0, 10))} (started with ${rs(d.capital_before)})` : "started with " + rs(d.capital_start), "muted");
-  $("#positions").innerHTML = d.positions.length ? d.positions.map(p => `
-    <div class="leg" style="flex-wrap:wrap;gap:10px;padding:10px 12px">
-      <div style="flex:2;min-width:200px"><b>${esc(p.symbol)}</b> ${p.legs.map(l => `<span class="tag ${l.side.toLowerCase()}">${l.side}</span> ${l.strike}${l.opt}`).join(" / ")}
-        <div class="muted" style="font-size:12px">exp ${p.expiry} · ${p.lots} lot(s) · ${p.mode} · opened ${p.opened.slice(11, 16)} · SL ₹${n2(p.sl_prem)} · ${tgtTxt(p)}${p.at_breakeven ? " · stop at breakeven" : ""}</div></div>
-      <div class="mono" style="flex:1">₹${n2(p.entry_prem)} → ₹${n2(p.current_prem)}<div class="muted" style="font-size:11px">${p.price_src === "live" ? "live broker price" : p.price_src === "chain" ? "live option-chain price" : `<span class="down">estimate only - broker price unavailable right now</span>`}</div></div>
-      <div class="mono ${cls(p.unrealised)}" style="flex:1;font-weight:700">${rs(p.unrealised)}</div>
-      <button class="danger" data-exit="${p.id}">Exit</button>
-    </div>`).join("") : `<div class="empty">No open positions.</div>`;
+  setSession(d.session); S.positions = d.positions || [];
+  renderPositions("#positions", S.positions, "No open positions. Place an order from the Trade page.");
   const s = d.stats || {};
   $("#pStats").innerHTML = s.trades ? kpi("Trades", s.trades) + kpi("Win rate", s.win_rate.toFixed(0) + "%") +
     kpi("Avg win / loss", `<span class="up">${rs(s.avg_win)}</span> / <span class="down">${rs(s.avg_loss)}</span>`) +
@@ -2202,7 +2548,7 @@ async function loadPortfolio() {
       return `<tr><td>${esc(k)}</td><td class="mono">${v.length}</td><td class="mono">${(w.length / v.length * 100).toFixed(0)}%</td><td class="mono">${pf == null ? "∞" : pf.toFixed(2)}</td><td class="mono ${cls(v.reduce((a, b) => a + b, 0))}">${rs(v.reduce((a, b) => a + b, 0))}</td>
         <td class="muted">${e ? `win ≈ ${e.win_rate}% · PF ≈ ${e.pf}` : "–"}</td></tr>`; }).join("")}</table></div>
     <p class="muted" style="font-size:12px;margin-bottom:0">Judge after 30+ trades per strategy: with ~35% winners, 10 trades can easily look bad (or great) by luck. If after 30+ trades your win rate or profit factor is far below the backtest, stop and review before risking money.</p>`
-    : `<div class="empty">Closed signal trades will be compared with the backtest here. Turn on auto paper-trading in Settings to build a track record without watching the screen.</div>`}`;
+    : `<div class="empty">Closed signal trades will be compared with the backtest here. Turn on Autopilot or auto-trade (Autopilot → Settings) to build a track record without watching the screen.</div>`}`;
   $("#jCsv").onclick = () => downloadCsv("paper_journal.csv", d.history, [h => h.opened, h => h.closed, "symbol", stratOf,
     h => h.legs.map(l => l.side + " " + l.strike + l.opt).join(" / "), "lots", "entry_prem", "exit_prem", "charges", "pnl", "reason"]);
   $("#journal").innerHTML = d.history.length ? "<tr><th>Opened</th><th>Closed</th><th>Instrument</th><th>Strategy</th><th>Legs</th><th>Lots</th><th>Entry</th><th>Exit</th><th>Charges</th><th>Net P&L</th><th style='text-align:left'>Reason</th></tr>" +
@@ -2211,11 +2557,6 @@ async function loadPortfolio() {
       <td class="mono">${rs(h.charges)}</td><td class="mono ${cls(h.pnl)}"><b>${rs(h.pnl)}</b></td><td style="text-align:left">${esc(h.reason)}</td></tr>`).join("")
     : `<tr><td class="empty">Closed trades will appear here.</td></tr>`;
 }
-$("#positions").onclick = async e => {
-  const b = e.target.closest("[data-exit]"); if (!b) return;
-  b.disabled = true;
-  try { const r = await post("/api/trade/exit", {id: b.dataset.exit}); toast(r.message); load(); } catch (err) { toast(err.message); b.disabled = false; }
-};
 
 /* ---------- context ---------- */
 async function loadContext() {
@@ -2697,7 +3038,7 @@ function brokerExtra(name, st) {
       <div class="copy"><input id="fyPin" type="password" inputmode="numeric" placeholder="Fyers PIN" autocomplete="new-password"><button data-pin="fyers">Save PIN</button></div></div>`;
 }
 /* ---------- stocks ---------- */
-Object.assign(S, {stView: "picks", stQ: "", stUni: "N500", stCat: "", stTurn: 0, stMetric: "chg_1d", stSort: null, stShown: 100, stRange: 250, stSeries: {}, stOpen: null, stMarket: null, stMarketAt: 0, stPicks: null});
+Object.assign(S, {stView: "recs", stQ: "", stUni: "N500", stCat: "", stTurn: 0, stMetric: "chg_1d", stSort: null, stShown: 100, stRange: 250, stSeries: {}, stOpen: null, stMarket: null, stMarketAt: 0, stPicks: null});
 const ST_METRICS = {chg_1d: ["Today", 5], chg_3d: ["3 days", 8], chg_1m: ["1 month", 15], chg_3m: ["3 months", 25], chg_1y: ["1 year", 60], vs_200dma: ["vs 200-day avg", 25], from_52w_high: ["From 52-week high", 40]};
 const ST_COLS = [["sym", "Stock"], ["close", "Price"], ["chg_1d", "Today"], ["chg_1m", "1m"], ["chg_3m", "3m"], ["chg_1y", "1y"], ["vs_200dma", "vs 200-d"], ["from_52w_high", "From 52-w high"], ["rsi14", "RSI"], ["turnover_cr", "Turnover"], ["upside", "Analyst target"]];
 const pctc = v => v == null ? `<span class="muted">–</span>` : `<span class="mono ${cls(v)}">${sgn(v)}%</span>`;
@@ -2711,7 +3052,9 @@ const stAnalyst = x => x.analyst ? `<span class="mono">₹${x.analyst.target}</s
 const stPickSet = () => new Set((((S.stPicks || {}).today) || []).map(p => p.sym));
 function stSyncUI() {
   document.querySelectorAll("[data-sv]").forEach(x => x.classList.toggle("on", x.dataset.sv === S.stView));
-  $("#stTools").classList.toggle("hidden", S.stView === "picks");
+  $("#stTools").classList.toggle("hidden", S.stView === "picks" || S.stView === "recs");
+  $("#recsBody").classList.toggle("hidden", S.stView !== "recs"); $("#stBody").classList.toggle("hidden", S.stView === "recs");
+  $("#stRule").classList.toggle("hidden", S.stView === "recs");
   $("#stFind").value = S.stQ; $("#stUni").value = S.stUni; $("#stTurn").value = String(S.stTurn); $("#stMetric").value = S.stMetric;
 }
 document.querySelectorAll("[data-sv]").forEach(b => b.onclick = () => { if (S.stView === b.dataset.sv) return; S.stView = b.dataset.sv; S.stShown = 100; stSyncUI(); load(); });
@@ -2736,6 +3079,7 @@ async function stLoadMarket() {
 }
 async function loadStocks() {
   stSyncUI();
+  if (S.stView === "recs") { closeStock(); return loadRecs(); }
   const d = await api("/api/stocks"); S.stPicks = d.error ? null : d;
   if (S.stView === "picks") { closeStock(); return renderPicks(d); }
   try { await stLoadMarket(); } catch (e) { $("#stBody").innerHTML = `<div class="card" style="margin-top:12px"><p class="muted">${esc(e.message)}</p></div>`; return; }
@@ -2753,7 +3097,7 @@ function stSort() {
   return {k: ST_COLS.some(c => c[0] === S.stMetric) ? S.stMetric : "chg_1d", dir: -1};
 }
 function renderMarket() {
-  const m = S.stMarket; if (!m || S.stView === "picks") return;
+  const m = S.stMarket; if (!m || S.stView === "picks" || S.stView === "recs") return;
   $("#stRule").textContent = `${m.count || m.stocks.length} NSE stocks, data to ${m.data_to}. ${m.analyst_note || ""}`;
   const rows = stFiltered(), k = S.stMetric, picks = stPickSet();
   const hint = S.stQ && rows.hiddenByUniverse ? ` <span class="muted">· ${rows.hiddenByUniverse} more match in All stocks</span>` : "";
@@ -2911,7 +3255,7 @@ function renderRecs(d) {
       <p><b>Exit:</b> ${esc(p.exit_rule || t.exit || "")}</p>
       <p class="muted">Backtest hit rate ${t.backtest_win_pct ?? "–"}% · ${esc(live(p.tier))}</p></div>`; };
   const strong = ups.filter(p => p.tier === "rule");
-  el.innerHTML = `<div class="card" style="margin-top:14px"><div class="cardhead"><h3 style="margin:0">Today's recommendations</h3><span class="muted">Data to ${esc(d.data_to)} · list refreshed ${esc(d.generated || "")} · checked ${istNow().at.toTimeString().slice(0, 5)} IST</span></div>
+  el.innerHTML = `<div class="card" style="margin-top:14px"><div class="cardhead"><h3 style="margin:0">Today's picks</h3><span class="muted">Data to ${esc(d.data_to)} · list refreshed ${esc(d.generated || "")} · checked ${istNow().at.toTimeString().slice(0, 5)} IST</span></div>
     <p class="muted" style="font-size:12px;margin:6px 0 0">Schedule (IST, trading days): 06:00 final overnight scan · 09:00 pre-open list + phone alert · 09:30 live check against the real open + phone alert · this tab re-checks live prices every 30 s while open (turn on Auto refresh).</p>
     <div class="stsum" style="margin-top:6px"><span><b>${strong.length}</b> BUY · <b>${ups.filter(p => p.tier === "near").length}</b> BUY SMALL · <b>${ups.filter(p => p.tier === "breakout").length}</b> WATCH · <b>${downs.length}</b> AVOID</span></div>
     ${strong.length ? "" : `<p class="muted" style="margin:8px 0 0">No full-strength BUY today. The tested rule fires only on a sharp dip in a stock above its 200-day average, so quiet days are normal - waiting is the rule too.</p>`}
@@ -2995,7 +3339,7 @@ function drawStockChart() {
     [[from, "left"], [Math.floor((from + n - 1) / 2), "center"], [n - 1, "right"]].forEach(([i, al]) => { g.textAlign = al; g.fillText(s.dates[i] || "", X(i), H - 2); }); }
 }
 addEventListener("resize", () => { if (S.tab === "stocks" && S.stCur) drawStockChart(); });
-addEventListener("hashchange", () => { if (location.hash === "#stocks" && S.tab !== "stocks") { S.stView = "picks"; go("stocks"); } });
+addEventListener("hashchange", () => { const h = location.hash.slice(1); if (h && h.split("/")[0] !== S.tab) go(h); });   // typed / phone-alert links
 async function loadJournal() {
   const sel = $("#jrDay");
   if (!S.study) { try { S.study = await api("/api/research"); } catch (e) {} }
@@ -3039,7 +3383,7 @@ async function loadJournal() {
     <div class="grid g2" style="margin-top:14px">${ctxCard("NIFTY")}${ctxCard("BANKNIFTY")}${j.context.SENSEX ? ctxCard("SENSEX") : ""}</div>
     <div class="card" style="margin-top:14px"><h3>Recommendations and what happened</h3>
       ${j.recommendations.length ? `<div class="tablewrap"><table class="prose"><tr><th>Time</th><th>Index</th><th>Strategy</th><th>Option</th><th>Premium entry / SL / target</th><th>Index entry / SL / target</th><th>Win % (backtest)</th><th>Basis</th><th>Outcome</th><th>Exit prem</th><th></th></tr>${j.recommendations.map(recoRow).join("")}</table></div>
-      <p class="muted" style="font-size:12px">Win % is the strategy's historical win rate from the 2023-26 backtest (the AI's is its own estimate for that candle). "Market score" is the context score on the Signal page (global cues, gap, VIX, put/call ratio, news, FII) - shown for information, it does not decide trades. Premium SL / target are the option-price estimates of the index levels; the exit premium comes from the recorded 5-minute chain.</p>` : `<div class="empty">No recommendations recorded for this day${j.context.NIFTY ? " - the strategies did not fire" : ""}.</div>`}</div>
+      <p class="muted" style="font-size:12px">Win % is the strategy's historical win rate from the 2023-26 backtest (the AI's is its own estimate for that candle). "Market score" is the context score on the Trade page (global cues, gap, VIX, put/call ratio, news, FII) - shown for information, it does not decide trades. Premium SL / target are the option-price estimates of the index levels; the exit premium comes from the recorded 5-minute chain.</p>` : `<div class="empty">No recommendations recorded for this day${j.context.NIFTY ? " - the strategies did not fire" : ""}.</div>`}</div>
     <div class="grid g2" style="margin-top:14px">${["NIFTY", "BANKNIFTY"].map(sym => `<div class="card"><h3>AI view through the day · ${sym === "NIFTY" ? "Nifty" : "Bank Nifty"}</h3>${(j.ai[sym] || []).length ? `<div class="tablewrap" style="max-height:320px;overflow:auto"><table><tr><th>Candle</th><th>Spot</th><th>Best</th><th>Exp. R</th><th>Win</th><th></th></tr>${aiRows(sym)}</table></div>` : `<div class="muted">No AI scores recorded (switch the AI model on in Settings to log its view).</div>`}</div>`).join("")}</div>
     ${(j.open_positions || []).length ? `<div class="card" style="margin-top:14px"><h3>Positions opened this day and still open</h3><div class="tablewrap"><table><tr><th>Opened</th><th>Index</th><th>Rule</th><th>Legs</th><th>Lots</th><th>Entry</th><th>By</th></tr>${j.open_positions.map(t => `<tr><td class="mono">${esc((t.opened || "").slice(11, 16))}</td><td>${esc(t.symbol)}</td><td>${t.mode !== "signal" ? "Manual" : esc(ST_NAME((t.plan || {}).strategy))}</td><td>${(t.legs || []).map(l => `${l.side} ${l.strike}${l.opt}`).join(" / ")}</td><td>${t.lots}</td><td class="mono">₹${n2(t.entry_prem)}</td><td>${(t.plan || {}).auto ? "Autopilot" : "You"}</td></tr>`).join("")}</table></div></div>` : ""}
     ${(j.scalp_trades || []).length ? `<div class="card" style="margin-top:14px"><div class="row between wrap"><h3 style="margin:0">Scalp book trades</h3><span class="mono ${cls(sm.scalp_pnl)}">${rs(sm.scalp_pnl)}</span></div><div class="tablewrap" style="margin-top:8px"><table><tr><th>In → out</th><th>Index</th><th>Setup</th><th>Option</th><th>Lots</th><th>Index pts</th><th>P&amp;L</th><th>Exit</th></tr>${j.scalp_trades.map(t => `<tr><td class="mono">${esc((t.opened || "").slice(11, 16))} → ${esc((t.closed || "").slice(11, 16))}</td><td>${esc(t.symbol)}</td><td>${esc(t.tag)}</td><td>${t.strike}${t.opt}</td><td>${t.lots}</td><td class="mono ${cls(t.pts)}">${sgn(t.pts)}</td><td class="mono ${cls(t.pnl)}">${rs(t.pnl)}</td><td class="fs12">${esc(t.reason)}</td></tr>`).join("")}</table></div></div>` : ""}
@@ -3058,12 +3402,25 @@ async function loadSettings() {
   $("#pfSize").value = pf.sizing || "risk"; $("#pfRisk").value = String(pf.risk_pct ?? 1);
   $("#pfNoise").checked = (pf.strategies || []).includes("noise"); $("#pfCam").checked = (pf.strategies || []).includes("camarilla");
   $("#pfAI").checked = (pf.strategies || []).includes("ai"); $("#pfTrend").checked = (pf.strategies || []).includes("trend"); $("#pfFib").checked = (pf.strategies || []).includes("fib");
-  $("#pfWeekly").value = pf.weekly_limit || "auto"; $("#pfWeeklyRs").value = pf.weekly_limit_rs || ""; weeklyUi();
-  $("#pfAutopilot").checked = !!pf.autopilot; $("#pfConf").value = pf.confidence || "standard"; $("#pfAuto").checked = !!pf.auto; $("#pfLimits").checked = !!pf.enforce_limits; $("#pfFills").value = pf.fills || "realistic";
+  $("#pfLimits").checked = !!pf.enforce_limits; $("#pfFills").value = pf.fills || "realistic";
+  const wl = pf.weekly_limit || "auto";
+  $("#autoSum").innerHTML = `<div class="kv"><div>Autopilot</div><div>${pf.autopilot ? '<span class="dpill ok">ON</span> tested rules decide everything' : '<span class="dpill wait">OFF</span>'}</div>
+    <div>Auto-trade</div><div>${pf.autopilot ? "–" : pf.auto ? `<span class="dpill ok">ON</span> ${(pf.auto_syms || []).map(x => IDX_LABEL[x] || x).join(", ") || "no instruments"}` : '<span class="dpill wait">OFF</span> signals are only shown'}</div>
+    <div>Weekly loss limit</div><div>${wl === "off" ? "Off" : wl === "custom" ? "Your amount " + rs(pf.weekly_limit_rs) : "Tested rule"}</div>
+    <div>Confidence sizing</div><div>${pf.confidence === "strong" ? "Strong" : "Standard"}</div></div>`;
+  acctBox();
   if (!PUSH_INIT) { PUSH_INIT = true; pushInit(); }
-  $("#pfSyms").innerHTML = Object.keys(IDX_LABEL).map(x => `<label class="tog" style="margin-right:14px"><input type="checkbox" data-asym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${IDX_LABEL[x]}${x === "SENSEX" ? ' <span class="muted" style="font-size:11px">(Noise + trend-day + Fibonacci; real Sensex option prices recorded from 19 Oct 2026)</span>' : ""}</label>`).join("");
   $("#fiiIn").value = d.fii_manual ? d.fii_manual.value : "";
-  loadRecorder();
+}
+async function acctBox() {
+  try {
+    const r = S.risk || await api("/api/autopilot/status");
+    $("#acctNow").innerHTML = `Account now <b class="mono" style="color:var(--text)">${rs(r.equity)}</b> · cash ${rs(r.cash)} · started with ${rs(r.capital_start)}`;
+    if (document.activeElement !== $("#capIn")) $("#capIn").value = Math.round(r.equity || r.capital_start || 200000);
+    const h = [(r.adjustments || []).length ? "Amount set before: " + r.adjustments.map(x => `${esc(String(x.at).slice(0, 16).replace("T", " "))} → ${rs(x.to)}`).join(" · ") : "",
+               (r.resets || []).length ? "Earlier resets: " + r.resets.map(x => `${esc(String(x.at).slice(0, 10))} (from ${rs(x.from_capital)}, ${x.archived} trades kept)`).join(" · ") : ""].filter(Boolean);
+    $("#acctHist").innerHTML = h.join("<br>");
+  } catch (e) {}
 }
 async function loadRecorder() {
   let r;
@@ -3104,27 +3461,19 @@ document.addEventListener("click", async e => {
 });
 $("#pfSave").onclick = async () => {
   const strategies = [$("#pfNoise").checked && "noise", $("#pfCam").checked && "camarilla", $("#pfAI").checked && "ai", $("#pfTrend").checked && "trend", $("#pfFib").checked && "fib"].filter(Boolean);
-  const auto_syms = [...document.querySelectorAll("[data-asym]")].filter(x => x.checked).map(x => x.dataset.asym);
   try {
-    await post("/api/settings", {prefs: {sizing: $("#pfSize").value, risk_pct: +$("#pfRisk").value, strategies, auto: $("#pfAuto").checked, autopilot: $("#pfAutopilot").checked, confidence: $("#pfConf").value, auto_syms, enforce_limits: $("#pfLimits").checked, fills: $("#pfFills").value, weekly_limit: $("#pfWeekly").value, weekly_limit_rs: +$("#pfWeeklyRs").value || 0}});
+    await post("/api/settings", {prefs: {sizing: $("#pfSize").value, risk_pct: +$("#pfRisk").value, strategies, enforce_limits: $("#pfLimits").checked, fills: $("#pfFills").value}});
     toast("Preferences saved"); loadSettings();
   } catch (e) { toast(e.message); }
 };
-function weeklyUi() {
-  const v = $("#pfWeekly").value; $("#pfWeeklyRsBox").style.display = v === "custom" ? "" : "none";
-  $("#pfWeeklyNote").textContent = {auto: "Counts only the system's own trades. Tested in rounds 18 and 20: on large accounts it raised profit and cut the deepest fall; on small accounts (15%) it made about the same as no limit.",
-    custom: "Stops new automatic trades for the rest of the week once the system's own trades have lost this much since Monday. Not backtested - your choice.",
-    off: "No weekly stop. On a ₹20,000 account this tested about the same as the 15% limit; on large accounts the 4% limit did better."}[v];
-}
-$("#pfWeekly").onchange = weeklyUi;
+const WEEKLY_NOTE = {auto: "Counts only the system's own trades. Tested in rounds 18 and 20: on large accounts it raised profit and cut the deepest fall; on small accounts (15%) it made about the same as no limit.",
+  custom: "Stops new automatic trades for the rest of the week once the system's own trades have lost this much since Monday. Not backtested - your choice.",
+  off: "No weekly stop. On a ₹20,000 account this tested about the same as the 15% limit; on large accounts the 4% limit did better."};
 $("#pref").onchange = async () => { await post("/api/settings", {broker_pref: $("#pref").value}); toast("Saved"); };
 $("#fiiSave").onclick = async () => { await post("/api/settings", {fii_manual: $("#fiiIn").value}); toast("Saved"); };
-$("#capSave").onclick = async () => { try { const r = await post("/api/account/capital", {capital: +$("#capIn").value}); toast(r.message); } catch (e) { toast(e.message); } };
+$("#capSave").onclick = async () => { try { const r = await post("/api/account/capital", {capital: +$("#capIn").value}); toast(r.message); S.risk = null; AP.ov = null; acctBox(); riskBanner(); } catch (e) { toast(e.message); } };
 $("#capNet").onclick = () => setNet(+$("#capIn").value);
-$("#resetBtn").onclick = async () => {
-  if (!confirm("Reset the demo account? This deletes all positions and the trade journal.")) return;
-  try { const r = await post("/api/account/reset", {capital: +$("#capIn").value}); toast(r.message); } catch (e) { toast(e.message); }
-};
+$("#resetBtn").onclick = () => pnlReset(+$("#capIn").value, $("#apKeep").checked);
 async function loadOrigins() {
   try {
     const o = await api("/api/account/origins"), row = (k, x) => `${esc(x.label)}: <b>${x.n}</b> closed${x.n ? ` (P&amp;L ${fmtN(x.pnl)})` : ""}${o.open[k].n ? ` · ${o.open[k].n} open` : ""}`;
@@ -3155,7 +3504,7 @@ const GLOSS = [
   ["IV (implied volatility)", "How big a move the market expects, already priced into the option. High IV = expensive options. It often drops after big news, hurting buyers even when the index moves their way.", ""],
   ["India VIX", "The market's 'fear meter'. High = big swings expected. The app takes no trades when VIX is below 11 (moves too small to pay for the option) or above 18 for Noise / 20 for Camarilla (fear spikes lost money in testing).", ""],
   ["Bid-ask spread", "The gap between the price buyers offer (bid) and sellers ask. You buy at the ask and sell at the bid, so a wide gap is an instant loss. The app skips strikes where the gap is over 10%.", "Bid 80, ask 100 → a 20% gap: you lose 20% the moment you enter."],
-  ["Autopilot", "A single Settings switch. ON: the app picks instruments, strategies, option strike, lot count (from current equity) and limits itself using the tested rules, and trades automatically. OFF: it uses your own preferences.", ""],
+  ["Autopilot", "A single switch (Autopilot → Settings). ON: the app picks instruments, strategies, option strike, lot count (from current equity) and limits itself using the tested rules, and trades automatically. OFF: it uses your own preferences.", ""],
   ["Compounding", "Reinvesting profits so the next trade is sized on a bigger account. Autopilot recalculates lots from current equity before every trade.", "Equity ₹20,000 → 1 lot. When equity reaches ~₹3 lakh, 1% risk allows 2 lots."],
   ["Partial exit (scale-out)", "Selling part of the position at a first target and leaving the rest to run with a protected stop. Needs several lots to split.", "3 lots: sell 1 at +1.5R, 1 at +3R, trail the last."],
   ["Re-entry", "Taking a new trade in the same direction after the first one ended. The rules allow one trade per strategy per index per day; testing showed re-entry after a stop-out lowers profit.", ""],
@@ -3196,6 +3545,12 @@ const GLOSS = [
   ["Backtest vs live hit rate", "Backtest = past data (64% for the Rule tier). Live = what really happened after the app published picks (51%). Trust live numbers more.", ""],
  ]],
 ];
+function showGuide() {
+  if (!["options", "stocks", "glossary"].includes(GD.sub)) GD.sub = "options";
+  document.querySelectorAll("#gdSubs [data-gd]").forEach(b => b.classList.toggle("on", b.dataset.gd === GD.sub));
+  document.querySelectorAll("#t-guide [data-gdp]").forEach(p => p.classList.toggle("hidden", p.dataset.gdp !== GD.sub));
+}
+$("#gdSubs").onclick = e => { const b = e.target.closest("[data-gd]"); if (!b) return; GD.sub = b.dataset.gd; history.replaceState(null, "", "#guide/" + GD.sub); showGuide(); };
 function renderGlossary() {
   const q = ($("#glQ").value || "").trim().toLowerCase();
   let n = 0;
@@ -3452,7 +3807,7 @@ function renderRules() {
   <ul><li>Move to real money only after <b>30+ paper trades</b> that look like the backtest, and start with 1 lot.</li>
   <li>Profit is measured on the <b>option premium</b>, checked against real NSE option prices. The full evidence, with the date of each study, is in the <b>Research</b> tab.</li></ul>
 
-  <h3 style="font-size:17px;margin-top:22px">Part 7 · Autopilot (Settings → 🤖 Autopilot)</h3>
+  <h3 style="font-size:17px;margin-top:22px">Part 7 · Autopilot (Autopilot → Settings)</h3>
   <h4>7.1 · What it does</h4>
   <ul><li>One switch. <b>ON</b>: the app trades by itself on Nifty and Bank Nifty with both strategies, using the tested rules (1-strike in-the-money option, stop 2 × ATR, noise band 1.75×) and ignoring the preferences below it. <b>OFF</b>: everything works exactly as you set it.</li>
   <li><b>Position size from current equity</b> (so it compounds): lots = 1% of equity ÷ the risk of one lot. Equity = starting money + realised profit and loss.</li>
@@ -4738,7 +5093,7 @@ async function riskBanner() {
   if (WS.mk !== "IN") { el.classList.add("hidden"); return; }
   let s;
   try { s = await api("/api/autopilot/status"); } catch (e) { return; }
-  S.risk = s;
+  S.risk = s; setSession(s.session);
   const b = s.banners || [];
   if (!b.length) { el.className = "hidden"; el.innerHTML = ""; return; }
   el.className = b.some(x => x.level === "bad") ? "bad" : "warn";
@@ -4752,7 +5107,7 @@ async function weekReset() {
 async function pnlReset(cap, keep) {
   if (!(cap >= 10000)) { toast("Capital must be at least ₹10,000."); return; }
   if (!confirm(`Reset the P&L and start the paper account again with ${rs(cap)}?\n\n${keep ? "Closed trades are moved to the history (the journal and the learning keep them) and no longer count in P&L, cash or limits." : "Closed trades will be DELETED."} Open positions are closed out of the book without P&L. The scalp and crypto books are not touched.`)) return;
-  try { const r = await post("/api/account/reset", {capital: cap, keep_history: keep}); toast(r.message, 6000); AP.ov = null; riskBanner(); if (S.tab === "autopilot") loadAutopilot(); } catch (e) { toast(e.message); }
+  try { const r = await post("/api/account/reset", {capital: cap, keep_history: keep}); toast(r.message, 6000); AP.ov = null; S.risk = null; await riskBanner(); if (S.tab === "autopilot") loadAutopilot(); if (S.tab === "settings") { acctBox(); loadOrigins(); } } catch (e) { toast(e.message); }
 }
 document.addEventListener("click", e => {
   if (e.target.closest("[data-weekreset]")) { weekReset(); return; }
@@ -4797,12 +5152,11 @@ async function loadAutopilot(quiet) {
   if (!AP_SUBS.includes(AP.sub)) AP.sub = "status";
   document.querySelectorAll("#apSubs [data-aps]").forEach(b => b.classList.toggle("on", b.dataset.aps === AP.sub));
   document.querySelectorAll("#t-autopilot .appanel").forEach(p => p.classList.toggle("hidden", p.dataset.app !== AP.sub));
-  if (quiet && !["status", "chart", "decisions"].includes(AP.sub)) return;
-  const f = {status: apStatus, decisions: apDecisions, chart: q => loadLiveChart("#lcHostAp", q), outcomes: apOutcomes, improve: apImprove,
-             learning: apLearning, rules: loadApRules, settings: apSettings, safety: apSafety}[AP.sub];
+  if (quiet && !["status", "decisions"].includes(AP.sub)) return;
+  const f = {status: apStatus, decisions: apDecisions, outcomes: apOutcomes, improve: apImprove, rules: loadApRules, settings: apSettings, safety: apSafety}[AP.sub];
   await f(quiet);
 }
-const AP_SUBS = ["status", "decisions", "chart", "outcomes", "improve", "learning", "rules", "settings", "safety"];
+const AP_SUBS = ["status", "decisions", "outcomes", "improve", "rules", "settings", "safety"];
 function weekMeter(wk) {
   if (!wk.limit_rs) return `<div class="muted fs12">${wk.mode === "off" ? "Weekly limit is off" : "–"}</div>`;
   const used = Math.max(0, -wk.week_pnl) / wk.limit_rs, pc = Math.min(100, Math.round(used * 100));
@@ -4830,14 +5184,7 @@ async function apStatus(quiet) {
           <div>Counts</div><div>${wk.system_only ? "Autopilot's own trades (your manual trades don't stop it)" : "All trades"}</div></div>
         <div class="row wrap" style="margin-top:12px"><button data-weekreset>Restart weekly count</button></div>
         <p class="muted fs12" style="margin:8px 0 0">Restarting lets Autopilot trade again this week; the limit then counts only trades closed from now. The 15:15 square-off, stops and daily limit are not affected.</p>
-        <h4 style="margin:16px 0 6px">Autopilot amount (net)</h4>
-        <div class="row wrap" style="align-items:flex-end"><div><label for="apNet">Trade with</label><input id="apNet" type="number" min="10000" step="1000" value="${Math.round(s.equity || 25000)}" style="width:150px"></div>
-          <button class="primary" id="apNetSet">Set amount</button></div>
-        <p class="muted fs12" style="margin:6px 0 0">Now ${rs(s.equity)}. The account becomes worth exactly this amount from now, like a withdrawal or deposit. Every trade, the P&amp;L, the journal and open positions stay as they are; sizing, the weekly limit and the capital shield restart from this amount.${(s.adjustments || []).length ? " Set before: " + s.adjustments.map(x => `${esc(String(x.at).slice(0, 16).replace("T", " "))} → ${rs(x.to)}`).join(" · ") : ""}</p>
-        <h4 style="margin:16px 0 6px">Reset P&amp;L</h4>
-        <div class="row wrap" style="align-items:flex-end"><div><label for="apCap">Start again with</label><input id="apCap" type="number" min="10000" step="1000" value="${Math.round(s.capital_start || 200000)}" style="width:150px"></div>
-          <label class="tog" style="margin:0 0 8px"><input type="checkbox" id="apKeep" checked> keep old trades in the history</label><button class="danger" id="apReset">Reset P&amp;L</button></div>
-        ${(s.resets || []).length ? `<p class="muted fs12" style="margin:8px 0 0">Earlier resets: ${s.resets.map(r => `${esc(String(r.at).slice(0, 10))} (from ${rs(r.from_capital)}, ${r.archived} trades kept)`).join(" · ")}</p>` : ""}</div>
+        <p class="fs13" style="margin:14px 0 0">Limit, auto-trade and instruments: <a href="#autopilot/settings" data-goap="settings">Autopilot settings</a> · Account amount or a P&amp;L reset: <a href="#settings" data-goto="settings">Settings → Paper account money</a></p></div>
       <div class="card"><h3>Capital shield</h3>
         <div class="kv"><div>Status</div><div>${sh.on ? (sh.below_floor ? '<span class="dpill no">Stopped: below floor</span>' : '<span class="dpill ok">On</span>') : '<span class="dpill wait">Off</span>'}</div>
           <div>Floor (stops Autopilot)</div><div class="mono">${rs(sh.floor)} <span class="muted">(${sh.floor_pct}% of ${rs(sh.start)})</span></div>
@@ -4846,14 +5193,17 @@ async function apStatus(quiet) {
         <p class="muted fs12" style="margin:10px 0 0">Bought options can lose at most what was paid. With open premium capped and a floor that stops new trades, a crash or gap cannot empty the account. <a href="#autopilot/safety" data-goap="safety">Change</a></p>
         ${s.scalp && s.scalp.on ? `<h4 style="margin:14px 0 4px">Scalp book</h4><p class="fs13" style="margin:0">${s.scalp.shield ? esc(s.scalp.shield) : Object.entries(s.scalp.stopped || {}).map(([k, v]) => `${esc(IDX_LABEL[k] || k)}: ${v ? '<span class="down">' + esc(v) + "</span>" : '<span class="up">trading</span>'}`).join(" · ")}</p>` : ""}</div>
     </div>
-    ${jd ? decisionsHtml(jd, {limit: 12, title: "today", today: true, noScalp: false}) : `<div class="card" style="margin-top:14px"><div class="empty">No journal for today yet - it starts at 09:16 on trading days.</div></div>`}`;
-  $("#apReset").onclick = () => pnlReset(+$("#apCap").value, $("#apKeep").checked);
-  $("#apNetSet").onclick = () => setNet(+$("#apNet").value);
+    ${(() => { const sm = (jd && jd.decisions && jd.decisions.summary) || null, ses = s.session || {};
+      const chips = sm ? Object.entries(sm.skipped_by_reason || {}).map(([k, v]) => `<span class="chip">${esc(k)} <b>${v}</b></span>`).join("") : "";
+      return `<div class="card" style="margin-top:14px"><div class="row between wrap"><div><h3 style="margin:0">Today's decisions</h3>
+        <p class="muted fs13" style="margin:4px 0 0">${sm ? `${sm.signals || 0} signal(s) · <span class="up">${sm.executed || 0} executed</span> · <span class="down">${sm.skipped || 0} not executed</span>` : esc(ses.state === "closed" ? `${ses.label}. ${ses.detail}.` : "No journal for today yet - it starts at 09:16 on trading days.")}</p></div>
+        <button data-goap="decisions">Every signal and why →</button></div>${chips ? `<div class="chips" style="margin-top:10px">${chips}</div>` : ""}</div>`; })()}
+    <p class="muted fs13" style="margin:12px 2px 0">Chart with every level, signal and trade: <a href="#livechart" data-goto="livechart">Levels &amp; replay</a> · What the system has learned: <a href="#learning" data-goto="learning">Learning</a></p>`;
 }
 async function setNet(amt) {
   if (!(amt >= 10000)) { toast("The Autopilot amount must be at least ₹10,000."); return; }
   if (!confirm(`Set the Autopilot amount to ${rs(amt)} net?\n\nThe account will be worth exactly ${rs(amt)} from now (like a withdrawal or deposit). All trades, the P&L, the journal and open positions are kept. Sizing, the weekly limit and the capital shield restart from ${rs(amt)}.`)) return;
-  try { const r = await post("/api/account/net", {amount: amt}); toast(r.message, 6000); AP.ov = null; riskBanner(); if (S.tab === "autopilot") loadAutopilot(); } catch (e) { toast(e.message); }
+  try { const r = await post("/api/account/net", {amount: amt}); toast(r.message, 6000); AP.ov = null; S.risk = null; await riskBanner(); if (S.tab === "autopilot") loadAutopilot(); if (S.tab === "settings") acctBox(); } catch (e) { toast(e.message); }
 }
 async function apDecisions() {
   if (!S.jrDays) S.jrDays = (await api("/api/journal")).days.slice().reverse();
@@ -4909,14 +5259,6 @@ async function apImprove() {
         <h4 style="margin:16px 0 4px">Last ${w.rolling.sessions} sessions</h4><p class="fs13" style="margin:0">${esc(w.rolling.summary)}</p></div></div>`;
   $("#apWeek").onchange = e => { AP.week = e.target.value === cur ? null : e.target.value; apImprove(); };
 }
-async function apLearning() {
-  const L = (await apData()).learning;
-  $("#apLearning").innerHTML = `<div class="card"><h3>Learning engine: ${esc(L.mode || "–")}</h3><p class="muted fs13" style="margin:0">Guarded changes made from live evidence. They apply to automatic entries only, expire on their own, and can be reverted in the <a href="#learning" onclick="go('learning');return false">Learning</a> tab.</p>
-      ${L.overlay.length ? `<div class="tablewrap" style="margin-top:10px"><table class="prose"><tr><th>Type</th><th>Rule / bucket</th><th>Why</th><th>Since → expires</th></tr>${L.overlay.map(r => `<tr><td><span class="tag ${r.type === "veto" ? "tdown" : "twarn"}">${r.type === "veto" ? "skip" : "½ size"}</span></td><td>${esc(ST_NAME(r.strategy))} ${r.tag ? "· " + esc(r.tag) : ""} <span class="muted">${esc(r.market || "")}</span></td><td class="fs13">${esc(r.reason || "")}${r.evidence ? `<div class="muted fs12">n ${r.evidence.n} · mean ${sgn(r.evidence.mean_R)}R${r.evidence.z != null ? " · z " + r.evidence.z : ""}</div>` : ""}</td><td class="mono fs12">${esc(r.since || "")} → ${esc(r.expires || "until it recovers")}</td></tr>`).join("")}</table></div>` : '<p class="muted" style="margin:10px 0 0">No learning rule is active right now - Autopilot trades the researched rules as they are.</p>'}</div>
-    <div class="card" id="apChanges" style="margin-top:14px"><h3>Research changes in use</h3><p class="muted">Loading…</p></div>
-    <div class="card" style="margin-top:14px"><h3>Recent learning log</h3>${L.changes.length ? L.changes.slice(0, 15).map(c => `<div class="lnote"><div class="row between wrap"><b>${esc(c.title)}</b><span class="muted mono fs12">${esc(String(c.ts || "").slice(0, 16).replace("T", " "))}</span></div><div class="muted fs12">${esc(c.kind)} · ${esc(c.status)}${c.market ? " · " + esc(c.market) : ""}</div></div>`).join("") : '<p class="muted">Nothing logged yet.</p>'}</div>`;
-  loadChanges("#apChanges", "Research changes in use");
-}
 async function apSettings() {
   const st = (await apData(true)).settings, pf = S.prefs || (await api("/api/settings")).prefs || {};
   const syms = Object.keys(IDX_LABEL);
@@ -4930,15 +5272,19 @@ async function apSettings() {
         <div>Confidence</div><div>${esc(st.confidence)}</div><div>Fills</div><div>${esc(st.fills)}</div><div>Learning</div><div>${esc(st.learn_mode || "–")}</div>
         <div>Capital shield</div><div>${st.shield.shield_on ? `floor ${st.shield.shield_floor_pct}% · open ${st.shield.shield_open_pct}% · trade ${st.shield.shield_trade_pct}%` : "off"}</div></div>
       ${st.overrides.length ? `<h4 style="margin:14px 0 4px">Autopilot overrides these saved settings</h4><div class="tablewrap"><table><tr><th>Setting</th><th>Saved</th><th>Autopilot uses</th></tr>${st.overrides.map(o => `<tr><td>${esc(o.setting)}</td><td class="mono fs12">${esc(JSON.stringify(o.saved))}</td><td class="mono fs12">${esc(JSON.stringify(o.autopilot_uses))}</td></tr>`).join("")}</table></div>` : ""}</div>
-    <div class="card"><h3>Quick settings</h3>
-      <label class="tog"><input type="checkbox" id="asAp" ${pf.autopilot ? "checked" : ""}> Autopilot (tested rules decide everything)</label>
-      <label class="tog"><input type="checkbox" id="asAuto" ${pf.auto ? "checked" : ""}> Auto-trade signals with my settings (when Autopilot is off)</label>
-      <div style="margin:10px 0"><label>Instruments for auto-trade (Autopilot uses its own list)</label>${syms.map(x => `<label class="tog" style="display:inline-flex;margin-right:12px"><input type="checkbox" data-assym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${IDX_LABEL[x]}</label>`).join("")}</div>
-      <div class="formrow"><div><label>Weekly loss limit</label><select id="asWl"><option value="auto">Tested rule</option><option value="custom">My amount</option><option value="off">Off</option></select></div>
-        <div><label>My amount (₹)</label><input id="asWlRs" type="number" min="500" step="500" value="${pf.weekly_limit_rs || ""}"></div>
-        <div><label>Confidence</label><select id="asConf"><option value="standard">Standard</option><option value="strong">Strong (no AI judge)</option></select></div></div>
-      <div class="row wrap" style="margin-top:12px"><button class="primary" id="asSave">Save</button><a href="#settings" onclick="go('settings');return false">All settings →</a></div>
-      <p class="muted fs12" style="margin:10px 0 0">Changes apply from the next minute check. Rule numbers themselves are research decisions (see Rules and Research).</p></div></div>`;
+    <div class="card" style="border-left:3px solid var(--accent,#f2a93b)"><h3>Switches</h3>
+      <label class="tog"><input type="checkbox" id="asAp" ${pf.autopilot ? "checked" : ""}> <span><b>Autopilot</b> - the app decides everything itself (instruments, rules, strike, lots from current equity) and trades automatically</span></label>
+      <label class="tog" style="margin-top:8px"><input type="checkbox" id="asAuto" ${pf.auto ? "checked" : ""}> <span><b>Auto-trade my signals</b> - when Autopilot is off, place signal trades automatically with my own Trading preferences, even when the page is closed</span></label>
+      <div style="margin:12px 0 0"><label>Instruments for auto-trade (Autopilot uses its own tested list)</label>${syms.map(x => `<label class="tog" style="display:inline-flex;margin-right:12px"><input type="checkbox" data-assym="${x}" ${(pf.auto_syms || []).includes(x) ? "checked" : ""}> ${IDX_LABEL[x]}</label>`).join("")}</div>
+      <div class="formrow" style="margin-top:12px"><div style="flex:2;min-width:220px"><label for="asWl">Weekly loss limit</label><select id="asWl" style="width:100%"><option value="auto">Tested rule: 4% of equity (15% below ₹1 lakh)</option><option value="custom">My own amount per week</option><option value="off">Off - never stop for the week</option></select></div>
+        <div id="asWlRsBox"><label for="asWlRs">Amount (₹)</label><input id="asWlRs" type="number" min="500" step="500" placeholder="e.g. 5000" value="${pf.weekly_limit_rs || ""}" style="width:130px"></div></div>
+      <p class="muted fs12" style="margin:6px 0 0" id="asWlNote"></p>
+      <div style="margin-top:12px"><label for="asConf">Confidence sizing</label><select id="asConf" style="width:100%"><option value="standard">Standard (tested rule): 1.33x / 0.67x on Nifty and Sensex</option><option value="strong">Strong (round 42): 2x / 1x / 0.5x on all indices - more profit, much deeper falls</option></select></div>
+      <div class="row wrap" style="margin-top:14px"><button class="primary" id="asSave">Save</button><span class="muted fs12">Applies from the next minute check.</span></div>
+      <details style="margin-top:12px"><summary class="muted" style="cursor:pointer">How Autopilot decides</summary>
+        <p class="muted fs13" style="margin:8px 0 0">When ON it ignores your Trading preferences and uses the tested rules per index: Nifty - Noise band, Camarilla, trend-day catcher (from ₹40,000 equity) and Fibonacci breakout (from ₹2 lakh); Bank Nifty - Noise band and Camarilla; Sensex - Noise band, trend-day catcher and Fibonacci; from ₹5 lakh equity Nifty and Sensex also get the 15-minute channel breakout at half size (round 90, switchable in Research → Changes). Always the 1-strike in-the-money option. Position size is worked out from your <b>current equity</b> (so it compounds): lots = 1% of equity ÷ risk per lot - 1.33% when the 5-min, 15-min and 1-hour charts agree with the trade, 0.67% when they don't (Nifty and Sensex, round 33), and on Nifty the AI judge raises or lowers that again (round 39) - with a minimum of 1 lot while one lot risks no more than 15% of equity, otherwise it skips the trade. A weekly loss limit, counted on the system's own trades only, stops new trades. It is rule-based, not a promise of profit - see the Research tab (round 20) for the small-account results. Your own strategies, daily limits and fills are under <a href="#settings" data-goto="settings">Settings → Trading preferences</a>.</p></details></div></div>`;
+  const wlUi = () => { const v = $("#asWl").value; $("#asWlRsBox").style.display = v === "custom" ? "" : "none"; $("#asWlNote").textContent = WEEKLY_NOTE[v] || ""; };
+  $("#asWl").onchange = wlUi; setTimeout(wlUi, 0);
   $("#asWl").value = pf.weekly_limit || "auto"; $("#asConf").value = pf.confidence || "standard";
   $("#asSave").onclick = async () => {
     const p = {autopilot: $("#asAp").checked, auto: $("#asAuto").checked, auto_syms: [...document.querySelectorAll("[data-assym]:checked")].map(x => x.dataset.assym),
@@ -5084,7 +5430,7 @@ function lcDraw(fresh) {
     if (!ex) { const t1 = s.time + 45 * 60; seg(s.time, t1, s.entry, "rgba(143,163,176,.8)", 2); seg(s.time, t1, s.sl, "rgba(226,103,90,.7)", 2); seg(s.time, t1, s.target, "rgba(63,191,143,.7)", 2); }
   });
   if (L.trades) d.trades.forEach(t => {
-    if (t.opened == null || t.opened > cut) return;
+    if (t.opened == null || snap5(t.opened) > cut) return;
     const closedNow = t.closed != null && t.closed <= cut, t1 = closedNow ? t.closed : endT;
     seg(t.opened, t1, t.entry, "#e8eef0", 2, 1);
     if (t.initial_sl != null && t.sl != null && Math.abs(t.initial_sl - t.sl) > 0.01) { seg(t.opened, t1, t.initial_sl, "rgba(226,103,90,.45)", 2); seg(t.opened, t1, t.sl, "#f2a93b", 0, 2); }
@@ -5107,14 +5453,15 @@ function lcDraw(fresh) {
 }
 function lcSide(cut) {
   const d = LC.d, sh = d.shield, lv = d.levels, live = d.live;
-  const open = d.trades.filter(t => t.opened <= cut && (t.closed == null || t.closed > cut));
+  const open = d.trades.filter(t => snap5(t.opened) <= cut && (t.closed == null || t.closed > cut));
   const risk = t => t.risk ? `<div class="muted fs12">premium paid ${rs(t.risk.premium_paid)} = worst case ${t.risk.worst_case_pct}% of equity${t.risk.to_stop != null ? ` · to stop ${rs(t.risk.to_stop)} (${t.risk.to_stop_pct}%)` : ""}${t.risk.sl_pts ? ` · SL ${t.risk.sl_pts} pts away` : ""}</div>` : "";
   const tr = t => `<div class="setup ${t.closed != null && t.closed <= cut ? ((t.pnl || 0) >= 0 ? "ex" : "sk") : "op"}"><b>${t.book === "scalp" ? "Scalp " : ""}${esc(ST_NAME(t.strategy))}</b> ${SIDE(t.side)} ${t.auto ? '<span class="muted fs12">autopilot</span>' : ""}
-     <div class="mono">entry ${n1(t.entry)} · SL ${n1(t.sl ?? t.initial_sl)}${t.initial_sl != null && t.sl != null && Math.abs(t.initial_sl - t.sl) > .01 ? ` <span class="muted">(trailed from ${n1(t.initial_sl)})</span>` : ""} · target ${t.target == null ? "trails" : n1(t.target)}</div>
+     ${t.manual ? `<div class="mono">${esc(t.contract || "")} @ ₹${n2(t.entry_prem)} · SL ${t.sl_prem != null ? "₹" + n2(t.sl_prem) : "none"} · target ${t.target_prem != null ? "₹" + n2(t.target_prem) : "none"}${t.trail ? ` · trail ₹${n2(t.trail)}` : ""}</div><div class="muted fs12">index at entry ${n1(t.entry)} · your own levels are on the option price</div>`
+      : `<div class="mono">entry ${n1(t.entry)} · SL ${n1(t.sl ?? t.initial_sl)}${t.initial_sl != null && t.sl != null && Math.abs(t.initial_sl - t.sl) > .01 ? ` <span class="muted">(trailed from ${n1(t.initial_sl)})</span>` : ""} · target ${t.target == null ? "trails" : n1(t.target)}</div>`}
      ${t.closed != null && t.closed <= cut ? `<div class="fs12">exit ${n1(t.exit)} · ${esc(t.reason || "")} · <b class="${cls(t.pnl)}">${rs(t.pnl)}</b></div>` : risk(t)}</div>`;
   const sp = s => `<div class="setup ${s.state === "executed" ? "ex" : "sk"}"><span class="mono">${new Date(s.time * 1000).toISOString().slice(11, 16)}</span> <b>${esc(ST_NAME(s.strategy))}</b> ${SIDE(s.side)} · ${s.state === "executed" ? '<span class="up">executed</span>' : `<span class="down">${esc(s.label || "not executed")}</span>`}
      <div class="mono">entry ${n1(s.entry)} · SL ${n1(s.sl)} · target ${s.target == null ? "trails" : n1(s.target)}</div>${s.what && (LC.k == null) ? `<div class="muted fs12">${esc(s.what)}</div>` : ""}</div>`;
-  const setups = d.setups.filter(s => s.time != null && s.time <= cut), done = d.trades.filter(t => t.opened <= cut && t.closed != null && t.closed <= cut);
+  const setups = d.setups.filter(s => s.time != null && s.time <= cut), done = d.trades.filter(t => snap5(t.opened) <= cut && t.closed != null && t.closed <= cut);
   const lvRow = (a, b) => `<div>${a}</div><div class="mono">${b}</div>`;
   $("#lcSide").innerHTML = `
     ${live && !live.error && LC.k == null ? `<div class="card"><h4>Right now: ${esc(live.signal || "WAIT")}</h4>${live.plan ? `<div class="mono fs13">${esc(ST_NAME(live.plan.strategy))} ${SIDE(live.plan.opt)} · entry ${n1(live.plan.entry)} · SL ${n1(live.plan.sl)} · target ${live.plan.target == null ? "trails" : n1(live.plan.target)}</div>${live.order ? `<div class="fs12" style="margin-top:4px">${live.order.lots} lot(s) ${live.order.strike} @ ₹${n2(live.order.entry_prem)} · SL ₹${n2(live.order.sl_prem)}</div>` : ""}${live.risk ? `<div class="muted fs12">loss at stop ${rs(live.risk.to_stop)} (${live.risk.to_stop_pct}%) · worst case ${rs(live.risk.worst_case)} (${live.risk.worst_case_pct}%)</div>` : ""}` : ""}

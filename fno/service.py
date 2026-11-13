@@ -150,6 +150,101 @@ def _traded_today(symbol, positions, trades) -> dict:
     return done
 
 
+def session_info(now: datetime | None = None) -> dict:
+    """Where the NSE session stands right now, in words the pages can show as they are: open / square-off window / closed
+    (after hours, weekend or holiday) and when it opens next. `can_order` = a paper order placed now would not be squared
+    off at once (09:15 to 15:15 on a trading day)."""
+    now = now or C.now_ist()
+    d, t = now.date(), now.time()
+    trading = d.weekday() < 5 and d not in C.HOLIDAYS
+
+    def nxt(x):
+        while x.weekday() >= 5 or x in C.HOLIDAYS:
+            x += timedelta(days=1)
+        return x
+
+    def when(x):
+        return "today" if x == d else "tomorrow" if x == d + timedelta(days=1) else f"{x:%a %d %b}"
+
+    op, sq, cl = f"{C.MARKET_OPEN:%H:%M}", f"{C.SQUARE_OFF:%H:%M}", f"{C.MARKET_CLOSE:%H:%M}"
+    out = {"open": False, "can_order": False, "entries_open": False, "next_open": None, "time": now.strftime("%H:%M")}
+    if trading and C.MARKET_OPEN <= t < C.SQUARE_OFF:
+        ent = t <= C.LAST_ENTRY
+        out.update(state="open", open=True, can_order=True, entries_open=ent, label="Market open",
+                   detail=(f"Rule entries until {C.LAST_ENTRY:%H:%M} · square-off {sq}" if ent else
+                           f"Rule entries closed at {C.LAST_ENTRY:%H:%M} · your own orders until {sq} · square-off {sq}"))
+    elif trading and C.SQUARE_OFF <= t <= C.MARKET_CLOSE:
+        out.update(state="squareoff", open=True, label="Square-off time",
+                   detail=f"Open trades are closed from {sq} · no new orders · market closes {cl}")
+    else:
+        nd = nxt(d if (trading and t < C.MARKET_OPEN) else d + timedelta(days=1))
+        why = ("pre" if trading and t < C.MARKET_OPEN else "holiday" if d.weekday() < 5 and d in C.HOLIDAYS else
+               "weekend" if d.weekday() >= 5 else "after")
+        out.update(state="closed", why=why, next_open=f"{nd.isoformat()}T{op}:00",
+                   label={"pre": "Market not open yet", "holiday": "Market closed · NSE holiday", "weekend": "Market closed · weekend",
+                          "after": "Market closed"}[why],
+                   detail=f"Opens {when(nd)} at {op}")
+    return out
+
+
+def manual_levels(side: str, ref_px: float, sl=None, target=None, trail=None) -> tuple[str | None, dict]:
+    """Check and store the stop-loss / target / trailing stop of a MANUAL order. All three are optional and given as the
+    option's own price in rupees (trail = how many rupees the stop follows behind the best price). `ref_px` is the price they
+    must make sense against: the fill price at entry, the current price when edited later.
+    Returns (error or None, fields for the position). Internally the levels are kept as net premium (bought option +price,
+    sold option -price), which is what strategy.exit_check compares, so a sold option works the same way."""
+    def num(v):
+        try:
+            v = float(v)
+        except (TypeError, ValueError):
+            return None
+        return v if v > 0 and math.isfinite(v) else None
+    sl, target, trail = num(sl), num(target), num(trail)
+    buy = side == "BUY"
+    sg = 1 if buy else -1
+    ref = float(ref_px)
+    if sl is not None and ((buy and sl >= ref) or (not buy and sl <= ref)):
+        return (f"Stop-loss ₹{sl:g} must be {'below' if buy else 'above'} the option price ₹{ref:g} "
+                f"({'you bought' if buy else 'you sold'} it) - otherwise it would exit at once."), {}
+    if target is not None and ((buy and target <= ref) or (not buy and target >= ref)):
+        return f"Target ₹{target:g} must be {'above' if buy else 'below'} the option price ₹{ref:g}.", {}
+    if trail is not None and buy and trail >= ref:
+        return f"Trailing distance ₹{trail:g} must be smaller than the option price ₹{ref:g}.", {}
+    sl_net = sg * sl if sl is not None else -1e9
+    out = {"exits_on": True, "m_trail": trail, "m_target": round(target, 2) if target is not None else None,
+           "target_prem": round(sg * target, 2) if target is not None else 1e9, "target_fixed": True, "trail_moved": False,
+           "m_rev": uuid.uuid4().hex[:6]}
+    if trail is not None:                                   # the trailing stop starts `trail` behind the price right now
+        out["best_net"] = round(sg * ref, 2)
+        sl_net = max(sl_net, sg * ref - trail)
+    out["sl_prem"] = round(sl_net, 2)
+    out["m_sl"] = round(sg * sl_net, 2) if sl_net > -1e8 else None
+    return None, out
+
+
+def _manual_trail(p: dict, prem: float) -> dict:
+    """Your trailing stop on a manual trade: it follows the best premium seen, `m_trail` rupees behind, and never moves back."""
+    tr = p.get("m_trail")
+    if not tr:
+        return {}
+    upd = {}
+    best = max(float(p.get("best_net", p["entry_prem"])), float(prem))
+    if best > float(p.get("best_net", -1e9)) + 1e-9:
+        upd["best_net"] = round(best, 2)
+    new_sl = round(best - float(tr), 2)
+    if new_sl > float(p.get("sl_prem", -1e9)) + 1e-9:
+        sg = 1 if p["entry_prem"] >= 0 else -1
+        upd.update(sl_prem=new_sl, m_sl=round(sg * new_sl, 2), trail_moved=True)
+    return upd
+
+
+def _edited_meanwhile(p: dict) -> bool:
+    """A manual trade's levels can be edited from the page while a check is running. Never act on, or write back, a copy read
+    before that edit: skip this check and let the next one (a minute later) use the new levels."""
+    cur = next((x for x in store.positions() if x["id"] == p["id"]), None)
+    return cur is None or cur.get("m_rev") != p.get("m_rev")
+
+
 def manage_positions(m: M.Market | None = None) -> list[dict]:
     pos = store.positions()
     if not pos:
@@ -211,21 +306,32 @@ def manage_positions(m: M.Market | None = None) -> list[dict]:
             continue
         prem = P.net_price(p["legs"], prices)
         sp = spots[p["symbol"]]
+        own = p.get("mode") != "signal" and bool(p.get("exits_on"))     # a manual trade with its own stop / target / trail
+        tupd = _manual_trail(p, prem) if own else {}
+        if tupd:
+            p.update(tupd)
         is_c = str((p.get("plan") or {}).get("strategy", "")).startswith("custom:")
         is_ch = (p.get("plan") or {}).get("strategy") == "channel"
         reason, upd = S.exit_check(p, sp, prem, now, cstates.get(p["id"]) if is_c else chstates.get(p["symbol"]) if is_ch else states.get(p["symbol"]),
                                    exts.get(p["id"]))
         level = upd.pop("_level", None)                      # stop / target touched between two checks (price already moved away)
+        if tupd:
+            upd = {**tupd, **upd}
+        if own and reason and not reason.startswith("Square-off"):
+            reason = ((("Trailing stop-loss hit" if p.get("trail_moved") else "Stop-loss hit") + f" (your level ₹{p.get('m_sl') or 0:g})")
+                      if "stop" in reason.lower() else f"Target hit (your level ₹{p.get('m_target') or 0:g})")
         hi, lo = max(p.get("hi", sp), sp), min(p.get("lo", sp), sp)      # best / worst index level seen: feeds the lesson written when the trade closes
         if hi != p.get("hi") or lo != p.get("lo"):
             upd = {**upd, "hi": hi, "lo": lo}
         lp = {lg["key"]: round(float(prices[lg["key"]]), 2) for lg in p["legs"]}
         if lp != p.get("last_px"):                       # last seen leg prices: the square-off fallback when the feed drops
             upd = {**upd, "last_px": lp, "last_spot": round(float(sp), 2)}
+        if p.get("mode") != "signal" and (upd or reason) and not str(reason or "").startswith("Square-off") and _edited_meanwhile(p):
+            continue                                         # your levels were edited while this check ran: use them at the next check
         if upd:
             p.update(upd)
             store.update_position(p)
-        if reason and (p["mode"] == "signal" or reason.startswith("Square-off")):
+        if reason and (p["mode"] == "signal" or reason.startswith("Square-off") or own):
             fills = m.exit_fills([p], prices, eprefs().get("fills", "realistic"))
             if level is not None and p.get("delta") and (p.get("plan") or {}).get("opt"):
                 sg = 1 if p["plan"]["opt"] == "CE" else -1  # premium when the index was at the level, from the option's delta
@@ -452,7 +558,8 @@ def risk_status() -> dict:
     return {"autopilot": bool(pf.get("autopilot")), "auto": bool(pf.get("auto")), "auto_syms": pf.get("auto_syms"), "strategies": pf.get("strategies"),
             "equity": round(eq), "capital_start": acct.get("capital_start"), "cash": round(cash), "open_positions": len(pos),
             "weekly": wk, "daily": day, "blocked": bool(g.get("blocked")), "block_reason": g.get("reason"), "shield": sh, "scalp": sc,
-            "banners": banners, "resets": (acct.get("resets") or [])[-5:], "adjustments": (acct.get("adjustments") or [])[-5:], "time": C.now_ist().isoformat(timespec="seconds")}
+            "banners": banners, "resets": (acct.get("resets") or [])[-5:], "adjustments": (acct.get("adjustments") or [])[-5:], "time": C.now_ist().isoformat(timespec="seconds"),
+            "session": session_info()}
 
 
 def autopilot_overview() -> dict:
@@ -681,12 +788,19 @@ def live_chart(symbol: str = "NIFTY", day: str | None = None) -> dict:
                  "reason": t.get("reason"), "strategy": f"scalp {t.get('tag')}", "lots": t.get("lots"), "qty": t.get("qty"), "entry_prem": t.get("entry_prem")}
         else:
             pl = t.get("plan") or {}
-            x = {"book": "paper", "id": t["id"], "open": op, "opened": tsec(t.get("opened")), "closed": tsec(t.get("closed")), "side": pl.get("opt"),
+            lg0 = (t.get("legs") or [{}])[0]
+            man = t.get("mode") != "signal"
+            mside = ("CE" if (lg0.get("opt") == "CE") == (lg0.get("side") == "BUY") else "PE") if lg0.get("opt") else None
+            x = {"book": "paper", "id": t["id"], "open": op, "opened": tsec(t.get("opened")), "closed": tsec(t.get("closed")), "side": pl.get("opt") or mside,
+                 "manual": man, "contract": f"{lg0.get('side', '')} {lg0.get('strike', 0):g} {lg0.get('opt', '')}".strip() if man else None,
                  "entry": t.get("spot_at_entry"), "sl": t.get("live_sl", pl.get("sl")) if op else pl.get("sl"), "initial_sl": pl.get("sl"),
                  "target": pl.get("target"), "breakeven": bool(t.get("at_breakeven")), "target_hit": bool(t.get("target_hit")),
                  "exit": t.get("spot_exit"), "pnl": t.get("pnl"), "reason": t.get("reason"), "strategy": pl.get("strategy") or "manual",
                  "auto": bool(pl.get("auto")), "lots": t.get("lots"), "qty": t.get("qty"), "entry_prem": t.get("entry_prem"),
-                 "sl_prem": t.get("sl_prem"), "target_prem": t.get("target_prem")}
+                 "sl_prem": t.get("m_sl") if man else t.get("sl_prem"), "target_prem": t.get("m_target") if man else t.get("target_prem"),
+                 "trail": t.get("m_trail") if man else None}
+            if man:
+                x["entry_prem"] = abs(float(t.get("entry_prem") or 0))
         if op and x.get("entry_prem") and x.get("qty"):
             paid = float(x["entry_prem"]) * float(x["qty"])
             to_sl = (float(x["entry_prem"]) - float(x.get("sl_prem") or 0)) * float(x["qty"]) if x.get("sl_prem") else None
@@ -725,7 +839,7 @@ def live_chart(symbol: str = "NIFTY", day: str | None = None) -> dict:
 def _mini_chain(ch, spot, width=6):
     atm_i = int((ch["strike"] - spot).abs().values.argmin())
     view = ch.iloc[max(0, atm_i - width): atm_i + width + 1]
-    cols = ["strike"] + [f"{s}_{f}" for s in ("ce", "pe") for f in ("ltp", "oi", "chg_oi", "iv", "delta")]
+    cols = ["strike"] + [f"{s}_{f}" for s in ("ce", "pe") for f in ("ltp", "bid", "ask", "oi", "chg_oi", "iv", "delta")]
     return float(ch["strike"].iloc[atm_i]), view.reindex(columns=cols).to_dict("records")
 
 
@@ -812,14 +926,24 @@ def dashboard(symbol, strike=None):
         alts = S.strike_alternatives(*args, cash=cash, prefs=pf)
     atm, chain_rows = _mini_chain(g["chain"], g["spot"])
     ev.pop("today", None)
+    ses = session_info(g["now"])
+    if ses["state"] == "closed" and ev.get("signal") != "MARKET CLOSED":     # after 15:30 the rules still say "no new entries": say what is true
+        ev.update(signal="MARKET CLOSED", plan=None, closed_from=ev.get("signal"),
+                  checks=[(None, f"{ses['label']}. {ses['detail']}. The chart and levels below are the last session's.")])
+        order, alts = None, []
+    try:
+        pos_view, _ = positions_view(m, pos)
+    except Exception as e:                                   # never lose the page because one position has no price
+        m.errors.append(f"Open positions could not be priced: {str(e)[:100]}")
+        pos_view = [position_view(p) for p in pos]
     if ev.get("bands"):
         ev["bands"]["series"] = [{"time": int(x["ts"].timestamp()) + 19800, "up": x["up"], "lo": x["lo"]}
                                  for x in ev["bands"]["series"]]
     return clean({
         "symbol": symbol, "label": g["meta"]["label"], "source": m.source, "live": m.live,
         "time": g["now"].strftime("%H:%M:%S"), "spot": g["spot"], "prev_close": prev, "health": health(m, g["candles"], g["now"]),
-        "vix": g["vix"], "expiry": g["trade_exp"], "lot": g["lot"], "cash": cash,
-        "chain_source": g["chain"].attrs.get("source", "live"),
+        "vix": g["vix"], "expiry": g["trade_exp"], "lot": g["lot"], "cash": cash, "equity": P.equity(acct, tr),
+        "session": ses, "positions": pos_view, "chain_source": g["chain"].attrs.get("source", "live"),
         "signal": ev, "order": order, "alternatives": alts, "atm": atm, "chain": chain_rows,
         "chart": _chart(today, hist), "closed_now": closed,
         "errors": m.errors[-3:],
@@ -1264,9 +1388,14 @@ def _ai_judge(symbol, g, plan, pf, which=None, m=None) -> dict | None:
         return None
 
 
-def place_manual(symbol, expiry, strike, opt, side, lots):
+def place_manual(symbol, expiry, strike, opt, side, lots, sl=None, target=None, trail=None):
+    """Your own paper order. sl / target / trail are optional and in the option's own price (rupees); when given, the minute
+    check exits the trade at those levels exactly like a rule trade's stop (see manual_levels)."""
     if side not in ("BUY", "SELL") or opt not in ("CE", "PE"):
         return False, "Invalid order."
+    ses = session_info()
+    if not ses["can_order"]:                                 # an order placed now would be squared off at the very next check, with charges
+        return False, f"{ses['label']}. {ses['detail']}. Paper orders can be placed {C.MARKET_OPEN:%H:%M}-{C.SQUARE_OFF:%H:%M} on trading days."
     m = M.Market()
     g = _gather(symbol, m)
     exp = date.fromisoformat(expiry) if expiry else g["trade_exp"]
@@ -1281,12 +1410,57 @@ def place_manual(symbol, expiry, strike, opt, side, lots):
         px = row.get(f"{t}_ltp")
     if px is None or pd.isna(px) or px <= 0:
         return False, "No price available for this strike."
+    err, lv = manual_levels(side, float(px), sl, target, trail)
+    if err:
+        return False, err
     src = m.br.name if ch.attrs.get("source") == "live" and m.br else "demo"
     leg = {"side": side, "strike": float(strike), "opt": opt, "key": row[f"{t}_key"], "price": float(px), "src": src}
     _, _, _, cash = P.snapshot()
-    res = P.open_position(cash, symbol, [leg], int(lots), g["lot"], exp, g["spot"], m.source)
+    res = P.open_position(cash, symbol, [leg], int(lots), g["lot"], exp, g["spot"], m.source,
+                          order={"sl_prem": lv["sl_prem"], "target_prem": lv["target_prem"], "target_fixed": True}, extra=lv)
+    if res[0]:
+        bits = [f"SL ₹{lv['m_sl']:g}" if lv.get("m_sl") else None, f"target ₹{lv['m_target']:g}" if lv.get("m_target") else None,
+                f"trailing ₹{lv['m_trail']:g}" if lv.get("m_trail") else None]
+        bits = [b for b in bits if b]
+        res = (True, res[1] + (" " + " · ".join(bits) + "." if bits else " No stop-loss or target set - add them from Open positions."))
     _push_trade(res, f"{symbol}: manual {opt} order placed", f"manual:{symbol}:{opt}")
     return res
+
+
+def modify_position(pos_id, sl=None, target=None, trail=None):
+    """Set, change or clear the stop-loss / target / trailing stop of a manual trade (option price in rupees; empty clears).
+    Rule trades keep the stop and target of their rule, as backtested, and cannot be edited."""
+    pos = next((p for p in store.positions() if p["id"] == pos_id), None)
+    if not pos:
+        return False, "Position not found (it may have been closed already)."
+    if pos.get("mode") == "signal":
+        return False, "This trade follows its rule's own stop and target (as backtested), so they can't be changed. Use Exit to close it yourself."
+    if len(pos["legs"]) != 1:
+        return False, "Levels can be set on single-option trades only."
+    lg = pos["legs"][0]
+    now_px = None
+    try:                                                     # the levels must make sense against the price right now
+        m = M.Market()
+        probe = copy.deepcopy(pos)                           # leg_prices may re-link a leg: never on the copy we save
+        prices = m.leg_prices([probe], {pos["symbol"]: m.spot(pos["symbol"])}, m.vix()["level"])
+        now_px = prices.get(probe["legs"][0]["key"])
+    except Exception:
+        now_px = None
+    if now_px is None:
+        now_px = (pos.get("last_px") or {}).get(lg["key"], lg["price"])
+    err, lv = manual_levels(lg["side"], float(now_px), sl, target, trail)
+    if err:
+        return False, err
+    fresh = next((p for p in store.positions() if p["id"] == pos_id), None)
+    if not fresh:
+        return False, "Position was closed while you were editing it."
+    fresh.pop("best_net", None)
+    fresh.update(lv)
+    store.update_position(fresh)
+    bits = [f"SL ₹{lv['m_sl']:g}" if lv.get("m_sl") else "no stop-loss", f"target ₹{lv['m_target']:g}" if lv.get("m_target") else "no target"]
+    if lv.get("m_trail"):
+        bits.append(f"trailing ₹{lv['m_trail']:g} behind the best price")
+    return True, f"Saved: {' · '.join(bits)}. Checked every minute while the market is open."
 
 
 def _push_trade(res, title, eid):
@@ -1386,27 +1560,72 @@ def exit_position(pos_id):
     return (True, f"Closed. Net P&L after charges ₹{rec['pnl']:,.0f}") if rec else (False, "Already closed.")
 
 
+def _tsec(iso):
+    """Chart time (IST shown as UTC seconds, like every candle the pages get) of an ISO timestamp."""
+    return int(datetime.fromisoformat(str(iso)).timestamp()) + 19800 if iso else None
+
+
+def position_view(p: dict, prices: dict | None = None) -> dict:
+    """One open position with everything a page needs to show it, edit it and draw it on a chart: the option, its price now,
+    P&L, and its levels - your own stop / target / trail for a manual trade, the rule's index and premium levels for a rule trade."""
+    prices = prices or {}
+    legs = p["legs"]
+    lg = legs[0]
+    single = len(legs) == 1
+    manual = p.get("mode") != "signal"
+    pl = p.get("plan") or {}
+    out = {**p, "kind": "manual" if manual else "signal", "single": single, "editable": manual and single,
+           "strike": lg["strike"] if single else None, "opt": lg["opt"] if single else None, "side": lg["side"] if single else None,
+           "entry_px": lg["price"] if single else abs(p["entry_prem"]), "ltp": prices.get(lg["key"]) if single else None,
+           "opened_ts": _tsec(p.get("opened")), "rule": pl.get("strategy") or "manual", "auto": bool(pl.get("auto")),
+           "bullish": (lg["opt"] == "CE") == (lg["side"] == "BUY") if single else (pl.get("opt") == "CE")}
+    if manual:
+        on = bool(p.get("exits_on"))
+        out.update(levels_on=on, sl_px=p.get("m_sl") if on else None, target_px=p.get("m_target") if on else None,
+                   trail=p.get("m_trail") if on else None, trail_moved=bool(p.get("trail_moved")))
+        sl_net, tp_net = (p.get("sl_prem") if out["sl_px"] is not None else None), (p.get("target_prem") if out["target_px"] is not None else None)
+    else:
+        fixed = p.get("target_fixed", True)
+        out.update(levels_on=True, sl_px=p.get("sl_prem"), target_px=p.get("target_prem") if fixed else None,
+                   target_guide=None if fixed else p.get("target_prem"), levels_est=True, trail=None,
+                   idx_entry=pl.get("entry"), idx_sl=p.get("live_sl", pl.get("sl")), idx_sl0=pl.get("sl"), idx_target=pl.get("target"),
+                   at_breakeven=bool(p.get("at_breakeven")), trail_moved=bool(p.get("trail_on")))
+        sl_net, tp_net = p.get("sl_prem"), (p.get("target_prem") if fixed else None)
+    q = p["qty"]
+    out["at_sl_rs"] = round((sl_net - p["entry_prem"]) * q) if sl_net is not None and abs(sl_net) < 1e8 else None
+    out["at_target_rs"] = round((tp_net - p["entry_prem"]) * q) if tp_net is not None and abs(tp_net) < 1e8 else None
+    for k in ("sl_prem", "target_prem"):                     # internal 'no level' markers never reach the page
+        if isinstance(out.get(k), (int, float)) and abs(out[k]) >= 1e8:
+            out[k] = None
+    return out
+
+
+def positions_view(m: M.Market, pos: list) -> tuple[list, float]:
+    """Open positions priced now (shared by the Trade page and Positions & P&L)."""
+    prices, out, unreal = {}, [], 0.0
+    if pos:
+        spots = {s: m.spot(s) for s in {p["symbol"] for p in pos}}
+        prices = m.leg_prices(pos, spots, m.vix()["level"])
+    for p in pos:
+        u = P.unrealised(p, prices)
+        unreal += u
+        out.append({**position_view(p, prices), "current_prem": round(P.net_price(p["legs"], prices), 2), "unrealised": round(u, 2),
+                    "price_src": "formula" if any(l.get("price_src") == "formula" for l in p["legs"]) or not all(l.get("src", "demo") in m.clients for l in p["legs"])
+                                 else "chain" if any(l.get("price_src") == "chain" for l in p["legs"]) else "live"})
+    return out, unreal
+
+
 def portfolio():
     m = M.Market()
     closed = manage_positions(m)
     acct, pos, tr, cash = P.snapshot()
-    prices, out = {}, []
-    if pos:
-        spots = {s: m.spot(s) for s in {p["symbol"] for p in pos}}
-        prices = m.leg_prices(pos, spots, m.vix()["level"])
-    unreal = 0.0
-    for p in pos:
-        u = P.unrealised(p, prices)
-        unreal += u
-        out.append({**p, "current_prem": round(P.net_price(p["legs"], prices), 2), "unrealised": round(u, 2),
-                    "price_src": "formula" if any(l.get("price_src") == "formula" for l in p["legs"]) or not all(l.get("src", "demo") in m.clients for l in p["legs"])
-                                 else "chain" if any(l.get("price_src") == "chain" for l in p["legs"]) else "live"})
+    out, unreal = positions_view(m, pos)
     return clean({
         "capital_start": acct["capital_start"], "capital_before": acct.get("capital_before"), "profit_only_since": acct.get("profit_only_since"),
-        "cash": cash, "unrealised": unreal,
+        "cash": cash, "unrealised": unreal, "equity": P.equity(acct, tr),
         "realised": sum(t["pnl"] for t in tr), "account_value": cash + sum(p["margin"] for p in pos) + unreal,
         "positions": out, "history": list(reversed(tr)), "stats": P.stats(tr, P.stats_capital(acct)),
-        "closed_now": closed, "source": m.source, "errors": m.errors[-3:], "expected": _expected(),
+        "closed_now": closed, "source": m.source, "errors": m.errors[-3:], "expected": _expected(), "session": session_info(),
     })
 
 

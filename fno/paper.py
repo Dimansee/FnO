@@ -254,7 +254,7 @@ def margin_needed(legs, qty, spot) -> float:
     return debit + naked * 0.12 * spot * qty
 
 
-def open_position(cash, symbol, legs, lots, lot, expiry, spot, source, order=None, plan=None):
+def open_position(cash, symbol, legs, lots, lot, expiry, spot, source, order=None, plan=None, extra=None):
     qty = int(lots) * int(lot)
     if qty <= 0:
         return False, "Quantity is zero."
@@ -270,6 +270,7 @@ def open_position(cash, symbol, legs, lots, lot, expiry, spot, source, order=Non
         "sl_prem": (order or {}).get("sl_prem", round(entry * (1 - C.PREMIUM_HARD_SL), 2) if entry > 0 else -1e9),
         "target_prem": (order or {}).get("target_prem", round(entry * 1.6, 2) if entry > 0 else 1e9),
         "target_fixed": (order or {}).get("target_fixed", True),
+        **(extra or {}),                                     # your own stop / target / trail on a manual order (service.manual_levels)
     }
     store.insert_position(pos)
     desc = ", ".join("%s %g%s" % (l["side"], l["strike"], l["opt"]) for l in legs)

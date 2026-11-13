@@ -4,9 +4,30 @@ Runs on Render (see render.yaml; free web service, Singapore). Earlier host: Ver
 Data lives in Supabase Postgres (DATABASE_URL, fno/pgkv.py) since 28 Oct 2026; Upstash Redis is the old store and the
 source of the one-time copy on 1 Nov (fno/store.py: portfolio and scalp book from Upstash, newer research / rules / learning kept).
 
+## Trade page, manual stop-loss / target, one home per feature (13 Nov 2026)
+- **Trade** (was Signal + Option chain): hero, open positions, entry checklist, one order ticket with two tabs (Signal trade /
+  My own order), charts, option chain (near the money or full chain with any expiry), options flow.
+- **Manual orders carry their own exits.** `POST /api/trade/manual` takes optional `sl`, `target`, `trail` (the option's own
+  price in rupees); `POST /api/trade/modify` changes or clears them later. `service.manual_levels` validates and stores them,
+  `service.manage_positions` (the minute tick) enforces them, `_manual_trail` moves a trailing stop. A manual trade without
+  levels is only closed by you or the 15:15 square-off. Rule trades keep their rule's index stop / target and cannot be edited.
+- **Open trades are drawn on the charts** (`paneLevels` in the page): entry / SL / target of every open position, plus the
+  order or edit being typed. `service.position_view` is the one shape both pages use.
+- **Market session** (`service.session_info`): open / square-off / closed (after hours, weekend, holiday) with the next open.
+  The dashboard shows "Market closed" after 15:30 (it used to say "No new entries"), and paper orders are refused outside
+  09:15-15:15 (they used to open and be squared off at once, with charges).
+- **Menu: 20 items down to 15.** Merged: Option chain into Trade; Recommendations into Stocks (first view); Options rulebook,
+  Stock rulebook and Glossary into Rules & glossary; Autopilot -> Chart into Levels & replay; Autopilot -> Learning applied
+  into Learning. Old links (`#chain`, `#recs`, `#rules`, `#glossary`, `#stockrules`, `#autopilot/chart`) still open the right page.
+- **One place per setting:** Autopilot switch, auto-trade, instruments, weekly limit and confidence only in Autopilot ->
+  Settings; account amount / starting capital / P&L reset only in Settings -> Paper account money; option-chain recorder
+  status on Saved data.
+- Test: `python tests/test_manual_levels.py` (also runs on Postgres with `TEST_DATABASE_URL`). UI check with fake data:
+  `python tests/serve_mock.py` (`MOCK_NOW=2026-10-01T18:05` shows the closed-market pages).
+
 ## Autopilot tab, live chart, journal decisions (31 Oct 2026)
-- Autopilot tab: Status (weekly / daily limit, restart weekly count, reset P&L with history kept), Decisions, Chart,
-  Outcomes, Improvements (weekly review, fno/lag.py weekly()), Learning applied, Rules, Settings, Safety (capital shield).
+- Autopilot tab: Status (weekly / daily limit, restart weekly count), Decisions, Outcomes, Improvements (weekly review,
+  fno/lag.py weekly()), Rules, Settings, Safety (capital shield). The chart is the Levels & replay page.
 - Capital shield (service.shield_state): floor % of capital, max open premium % of equity, max planned loss per trade.
 - Journal: every automatic attempt is logged (journal.note_auto) and linked to its signal: executed, or not executed + why,
   and what the skipped signal would have done (settled after 15:15).
