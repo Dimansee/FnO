@@ -943,7 +943,7 @@ def dashboard(symbol, strike=None):
     return clean({
         "symbol": symbol, "label": g["meta"]["label"], "source": m.source, "live": m.live,
         "time": g["now"].strftime("%H:%M:%S"), "spot": g["spot"], "prev_close": prev, "health": health(m, g["candles"], g["now"]),
-        "vix": g["vix"], "expiry": g["trade_exp"], "lot": g["lot"], "cash": cash, "equity": P.equity(acct, tr),
+        "vix": g["vix"], "expiry": g["trade_exp"], "expiries": g["exps"][:8], "lot": g["lot"], "cash": cash, "equity": P.equity(acct, tr),
         "session": ses, "positions": pos_view, "chain_source": g["chain"].attrs.get("source", "live"),
         "signal": ev, "order": order, "alternatives": alts, "atm": atm, "chain": chain_rows,
         "chart": _chart(today, hist), "closed_now": closed,
@@ -1401,7 +1401,14 @@ def place_manual(symbol, expiry, strike, opt, side, lots, sl=None, target=None, 
         return False, f"{ses['label']}. {ses['detail']}. Paper orders can be placed {C.MARKET_OPEN:%H:%M}-{C.SQUARE_OFF:%H:%M} on trading days."
     m = M.Market()
     g = _gather(symbol, m)
-    exp = date.fromisoformat(expiry) if expiry else g["trade_exp"]
+    try:
+        exp = date.fromisoformat(str(expiry)[:10]) if expiry else g["trade_exp"]
+    except ValueError:
+        return False, "That expiry date is not valid."
+    if exp not in g["exps"]:                                 # your own order may use any LISTED expiry (ticket: Expiry)
+        return False, f"{exp:%d %b %Y} is not a listed expiry for {symbol}. Choose one from the Expiry list."
+    if exp < g["now"].date():
+        return False, "That expiry has already passed."
     ch = g["chain"] if exp == g["trade_exp"] else m.chain(symbol, exp, g["spot"], g["vix"]["level"], g["candles"])
     if M.live_needed(m, ch):
         return False, M.NO_LIVE_PRICE

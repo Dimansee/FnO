@@ -216,6 +216,25 @@ assert t["risk"]["to_stop"] == round(18 * 65), t["risk"]
 assert lc["live"] is not None
 print("9 live chart manual trade OK")
 
+# ---------- 9b. your own order on another listed expiry (ticket: Expiry list, 16 Nov 2026)
+dash = j(c.get("/api/dashboard?symbol=NIFTY"))
+exps = dash["expiries"]
+assert len(exps) >= 2 and str(dash["expiry"]) in [str(e) for e in exps], exps
+other = next(str(e) for e in exps if str(e) != str(dash["expiry"]))
+ch2 = j(c.get(f"/api/chain?symbol=NIFTY&expiry={other}"))
+assert str(ch2["expiry"]) == other and ch2["rows"]
+n0 = len(store.positions())
+r = j(c.post("/api/trade/manual", json={"symbol": "NIFTY", "expiry": other, "strike": ch2["atm"], "opt": "CE", "side": "BUY", "lots": 1}))
+assert r["ok"], r
+newp = [x for x in store.positions() if x["expiry"] == other]
+assert len(store.positions()) == n0 + 1 and len(newp) == 1 and newp[0]["legs"][0]["strike"] == ch2["atm"], store.positions()
+bad = j(c.post("/api/trade/manual", json={"symbol": "NIFTY", "expiry": "2026-10-14", "strike": ch2["atm"], "opt": "CE", "side": "BUY", "lots": 1}))
+assert not bad["ok"] and "not a listed expiry" in bad["message"], bad
+bad = j(c.post("/api/trade/manual", json={"symbol": "NIFTY", "expiry": "soon", "strike": ch2["atm"], "opt": "CE", "side": "BUY", "lots": 1}))
+assert not bad["ok"] and "not valid" in bad["message"], bad
+assert j(c.post("/api/trade/exit", json={"id": newp[0]["id"]})).get("ok", True) is not False
+print("9b order on another expiry OK")
+
 # ---------- 10. square-off still closes manual trades; after hours: no orders, honest status
 NOW[0] = NOW[0].replace(hour=15, minute=16); CANDLES.clear()
 tick()

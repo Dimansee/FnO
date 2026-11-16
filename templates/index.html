@@ -712,6 +712,7 @@ button.mini{padding:5px 10px;font-size:12.5px}
             <div class="mt-row">
               <div class="seg" id="mOpt"><button data-v="CE" class="on">Call (CE)</button><button data-v="PE">Put (PE)</button></div>
               <div class="seg" id="mSide"><button data-v="BUY" class="on">Buy</button><button data-v="SELL">Sell</button></div>
+              <label class="muted fs12" style="display:inline-flex;align-items:center;gap:6px">Expiry <select id="mExpSel" aria-label="Expiry of your own order" style="min-width:150px"></select></label>
               <span class="muted fs12" id="mExp"></span>
             </div>
             <div class="mt-grid">
@@ -1515,6 +1516,7 @@ async function loadSignal() {
   if (!PC.length) renderWorkspace(); else refreshPanes();
   loadScalpLv(d.symbol);
   if (S.chainMode === "full") loadChain().then(() => mtSync(true)).catch(e => toast(e.message));
+  else if (S.mtExp) mtLoadExp().then(() => mtSync()).catch(() => {});      // keep the other expiry's prices fresh in the ticket
   if (S.scrollTo) { const q = S.scrollTo; S.scrollTo = null; setTimeout(() => { const el = $(q); if (el) el.scrollIntoView({behavior: "smooth", block: "start"}); }, 400); }
 }
 
@@ -2322,6 +2324,14 @@ function renderFullChain() {
   }).join("");
 }
 $("#expiry").onchange = async () => { try { await loadChain(); mtSync(true); } catch (e) { toast(e.message); } };
+$("#mExpSel").onchange = async e => {                        // the ticket's own Expiry list
+  const v = e.target.value; e.target.blur();
+  try {
+    if (S.chainMode === "full") { $("#expiry").value = v; await loadChain(); S.mtExp = null; S.mtCh = null; }
+    else { S.mtExp = S.dash && v === String(S.dash.expiry) ? null : v; S.mtCh = null; if (S.mtExp) await mtLoadExp(); }
+    mtSync(true);
+  } catch (er) { S.mtExp = null; S.mtCh = null; toast(er.message); mtSync(true); }
+};
 $("#chainTbl").onclick = e => { const td = e.target.closest("td.pick"); if (td) pickContract(+td.dataset.k, td.dataset.o); };
 
 /* ---------- order ticket: the signal's trade, or your own order with stop-loss / target / trailing SL ---------- */
@@ -2337,8 +2347,20 @@ function tkShow() {
 }
 $("#tkTabs").onclick = e => { const b = e.target.closest("[data-tk]"); if (!b) return; S.tk = b.dataset.tk; lss("fno.tk", S.tk); tkShow(); mtSync(true); };
 // the chain the ticket prices from: the full chain (any expiry) when it is open, otherwise the near-the-money rows of the dashboard
+// Expiry of your own order: the ticket's Expiry list. Another expiry than the rule's loads that expiry's chain for the ticket (S.mtCh).
+S.mtExp = null; S.mtCh = null;
+async function mtLoadExp() {
+  if (!S.mtExp) return;
+  const sym = S.symbol, exp = S.mtExp, c = await api(`/api/chain?symbol=${sym}&expiry=${exp}`);
+  if (S.symbol === sym && S.mtExp === exp) S.mtCh = {symbol: c.symbol, expiry: String(c.expiry), rows: c.rows, atm: c.atm};
+}
+function mtExpList() {
+  const d = S.dash, full = S.chainMode === "full" && S.chain && S.chain.symbol === S.symbol;
+  return ((full ? S.chain.expiries : d && d.expiries) || (d ? [d.expiry] : [])).map(String);
+}
 function mtChain() {
   const d = S.dash;
+  if (S.chainMode !== "full" && S.mtExp && S.mtCh && S.mtCh.symbol === S.symbol && S.mtCh.expiry === S.mtExp) return S.mtCh;
   if (S.chainMode === "full" && S.chain && S.chain.symbol === S.symbol) return {rows: S.chain.rows, expiry: S.chain.expiry, atm: S.chain.atm};
   return d && d.symbol === S.symbol ? {rows: d.chain, expiry: d.expiry, atm: d.atm} : null;
 }
@@ -2355,7 +2377,7 @@ function mtLevels(px) {            // {sl, tp, trail} in rupees of the option pr
 }
 function mtSync(redraw) {
   const c = mtChain(), d = S.dash; if (!c || !d) return;
-  if (MT.sym !== S.symbol) { MT.sym = S.symbol; MT.strike = null; }
+  if (MT.sym !== S.symbol) { MT.sym = S.symbol; MT.strike = null; S.mtExp = null; S.mtCh = null; }
   if (MT.strike == null || !c.rows.some(r => r.strike === MT.strike)) MT.strike = c.atm;
   const sel = $("#mStrike"), t = MT.opt.toLowerCase();
   if (document.activeElement !== sel) {
@@ -2365,7 +2387,12 @@ function mtSync(redraw) {
   setSeg("#mOpt", MT.opt); setSeg("#mSide", MT.side);
   if (document.activeElement !== $("#mLots")) $("#mLots").value = MT.lots;
   const buy = MT.side === "BUY", px = mtPx(), qty = MT.lots * d.lot, lv = mtLevels(px), ses = d.session || S.ses || {};
-  $("#mExp").textContent = dmy(c.expiry) + " expiry";
+  const es = $("#mExpSel"), list = mtExpList(), dleft = e => Math.round((new Date(e) - new Date(new Date().toDateString())) / 864e5);
+  if (document.activeElement !== es) {
+    es.innerHTML = list.map(e => { const n = dleft(e); return `<option value="${e}">${dmy(e)}${n < 0 ? "" : n === 0 ? " · today" : n === 1 ? " · 1 day" : " · " + n + " days"}${e === String(d.expiry) ? " · rule's choice" : ""}</option>`; }).join("");
+    es.value = String(c.expiry);
+  }
+  $("#mExp").textContent = String(c.expiry) === String(d.expiry) ? "" : "not the rule's expiry";
   $("#mQty").textContent = `· ${qty} qty`;
   $("#mPxSide").textContent = buy ? "(ask)" : "(bid)";
   $("#mPrice").textContent = px ? "₹" + n2(px) : "–";
@@ -2450,7 +2477,7 @@ function posRow(p) {
       (p.target_px != null ? `<span class="lv tp">Target ₹${n2(p.target_px)}${p.at_target_rs != null ? ` <small>+${rs(p.at_target_rs).replace("₹-", "₹")}</small>` : ""}</span>` : `<span class="lv none">No target</span>`) +
       (p.trail != null ? `<span class="lv">Trailing ₹${n2(p.trail)}</span>` : "");
   } else {
-    lv = `<span class="lv sl" title="The rule exits on the index level, as backtested. The option price is an estimate of where the premium will be there.">Stop: index ${n2(p.idx_sl)}${p.at_breakeven ? " · at breakeven" : p.trail_moved ? " · trailing" : ""}${p.sl_px != null ? ` <small>≈ ₹${n2(p.sl_px)}</small>` : ""}</span>` +
+    lv = `<span class="lv sl" title="The rule exits on the index level, as backtested. The option price is an estimate of where the premium will be there.">Stop: index ${n2(p.idx_sl)}${p.at_breakeven ? " · at breakeven" : p.trail_moved ? " · trailing" : ""}${p.sl_px != null && !p.at_breakeven && !p.trail_moved ? ` <small>≈ ₹${n2(p.sl_px)}</small>` : ""}</span>` +
       (p.idx_target != null ? `<span class="lv tp">Target: index ${n2(p.idx_target)}${p.target_px != null ? ` <small>≈ ₹${n2(p.target_px)}</small>` : ""}</span>` : `<span class="lv">No fixed target · the rule trails</span>`);
   }
   const src = p.price_src === "live" ? "live broker price" : p.price_src === "chain" ? "live option-chain price" : p.price_src ? (S.live ? `<span class="down">estimate - broker price unavailable right now</span>` : "theoretical price (no broker connected)") : "";
