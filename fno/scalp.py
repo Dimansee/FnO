@@ -819,6 +819,9 @@ def _open(sym, x, i, pl, m, now, cfg, max_spread=None) -> tuple[bool, str]:
     vix = m.vix()["level"]
     ch = m.chain(sym, exp, spot, vix, m.candles(sym))
     live = ch.attrs.get("source") == "live"
+    from . import market as _MK
+    if _MK.live_needed(m, ch):
+        return False, _MK.NO_LIVE_PRICE
     c_, why = pick_strike(ch, sym, pl["side"], spot, min(pl["room"], 2 * pl["risk"]), exp, now, cash(cfg), {**cfg, "lot": lot}, live, vix,
                           max_spread)
     if c_ is None:

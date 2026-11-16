@@ -136,6 +136,9 @@ def _open(sym, sg, m, now, cfg, trs) -> tuple[bool, str]:
     vix = m.vix()["level"]
     ch = m.chain(sym, exp, spot, vix, m.candles(sym))
     live = ch.attrs.get("source") == "live"
+    from . import market as _MK
+    if _MK.live_needed(m, ch):
+        return False, _MK.NO_LIVE_PRICE
     step = C.INDICES[sym]["step"]
     k = float(round(spot / step) * step)
     opt, tag = ("CE", "ce") if sg["side"] > 0 else ("PE", "pe")

@@ -164,8 +164,20 @@ def expiry_weekday(day: date, exchange: str = "NSE") -> int:
     return 1 if day >= date(2025, 9, 1) else 3
 
 
+def _expiry_trading_day(d: date) -> date:
+    """An expiry that falls on a market holiday or a weekend moves to the previous trading day (exchange rule).
+    16 Nov 2026: the estimated list said 24 Nov (Guru Nanak Jayanti); the real contract expires on 23 Nov."""
+    while d.weekday() >= 5 or d in C.HOLIDAYS:
+        d -= timedelta(days=1)
+    return d
+
+
 def demo_expiries(kind: str, today: date | None = None, n: int = 4, exchange: str = "NSE") -> list[date]:
     today = today or C.today_ist()
+    return sorted({_expiry_trading_day(d) for d in _demo_expiries_raw(kind, today, n, exchange)})
+
+
+def _demo_expiries_raw(kind: str, today: date, n: int = 4, exchange: str = "NSE") -> list[date]:
     out = []
     wd = expiry_weekday(today, exchange)
     if kind == "weekly":

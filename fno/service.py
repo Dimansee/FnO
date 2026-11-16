@@ -1187,6 +1187,8 @@ def _place_signal(symbol, strike=None, auto=False, which=None):
             return False, why
         if lots_ok < order["lots"]:
             order = {**order, "lots": lots_ok, "note": ((order.get("note") or "") + " " + why).strip()}
+    if M.live_needed(m, g["chain"]):                           # 16 Nov 2026: Autopilot bought at a formula price while the broker was logged out
+        return False, M.NO_LIVE_PRICE
     src = m.br.name if g["chain"].attrs.get("source") == "live" and m.br else "demo"
     legs = [{**lg, "src": src} for lg in order["legs"]]
     return P.open_position(cash, symbol, legs, order["lots"], g["lot"], g["trade_exp"], g["spot"], m.source,
@@ -1401,6 +1403,8 @@ def place_manual(symbol, expiry, strike, opt, side, lots, sl=None, target=None, 
     g = _gather(symbol, m)
     exp = date.fromisoformat(expiry) if expiry else g["trade_exp"]
     ch = g["chain"] if exp == g["trade_exp"] else m.chain(symbol, exp, g["spot"], g["vix"]["level"], g["candles"])
+    if M.live_needed(m, ch):
+        return False, M.NO_LIVE_PRICE
     row = ch[ch.strike == float(strike)]
     if row.empty:
         return False, "Strike not found in the option chain."

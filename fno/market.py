@@ -230,6 +230,15 @@ def slip_pct(premium: float) -> float:
     return 0.02 if premium < 20 else 0.012 if premium < 60 else 0.006
 
 
+NO_LIVE_PRICE = ("No live option prices from the broker right now, so no order is placed on an estimated price. "
+                 "Log in to Fyers / Upstox (Settings) - orders resume by themselves once live prices are back.")
+
+
+def live_needed(m, chain) -> bool:
+    """True when a new order must be refused: a broker is set up on this app but this option chain is not the broker's."""
+    return bool(getattr(m, "broker_setup", False)) and not (chain is not None and chain.attrs.get("source") == "live" and getattr(m, "br", None))
+
+
 class Market:
     def __init__(self):
         s = store.get_many(["upstox", "fyers", "broker_pref"])
@@ -237,6 +246,8 @@ class Market:
         up, fy = s.get("upstox") or {}, s.get("fyers") or {}
         pref = (s.get("broker_pref") or "auto")
         clients = {}
+        # A broker has been set up on this app: new orders then need the broker's live option prices (never a formula price).
+        self.broker_setup = bool(up.get("token") or up.get("analytics_token") or up.get("api_key") or fy.get("app_id") or fy.get("token"))
         self.token_kind: dict[str, str] = {}
         self.ba: dict[str, tuple] = {}                       # option key -> (best bid, best ask) from the last quote call
         if up.get("token") and B.token_valid(up.get("token_created")):
@@ -439,6 +450,79 @@ class Market:
                 self._fail("Expiry list", e)
         return I.demo_expiries(meta["expiry"], exchange=meta.get("exchange", "NSE")), lot_size(symbol)
 
+    def _real_contract(self, symbol, exp: date):
+        """(broker client, its contract date for `exp`) from the first connected broker that can say: the same date when it
+        is listed, else the listed expiry within 3 days of it (an expiry on a holiday moves to the previous trading day)."""
+        meta = instrument(symbol)
+        for c in [self.br] + [x for x in (getattr(self, "clients", None) or {}).values() if x is not self.br]:
+            if c is None or B.limited(c.name):
+                continue
+            try:
+                exps, _ = cached(f"exp:{c.name}:{symbol}", 3600, lambda c=c: c.expiries(c.underlying_key(meta)))
+            except Exception:
+                continue
+            if not exps:
+                continue
+            if exp in exps:
+                return c, exp
+            near = [e for e in exps if abs((e - exp).days) <= 3]
+            return c, (min(near, key=lambda e: (abs((e - exp).days), e)) if near else None)
+        return None, None
+
+    def real_expiry(self, symbol, exp: date) -> date | None:
+        return self._real_contract(symbol, exp)[1]
+
+    def fix_contract(self, p: dict, spots: dict, vix_level: float) -> bool:
+        """An open position whose expiry is not a real contract date (opened on formula prices with an estimated expiry
+        list, 16 Nov 2026: dated 24 Nov, a holiday): link every leg to the real contract (23 Nov), and take the entry
+        price from the broker's 1-minute candle of that contract at the minute it was opened."""
+        exp = date.fromisoformat(p["expiry"])
+        c, real = self._real_contract(p["symbol"], exp)
+        if c is None or real is None or real == exp:
+            return False
+        try:
+            ch = cached(f"ch:{c.name}:{p['symbol']}:{real}", 30, lambda: c.chain(c.underlying_key(instrument(p["symbol"])), real), minute=True)
+        except Exception:
+            return False
+        if ch is None or ch.empty:
+            return False
+        changed = False
+        for lg in p["legs"]:
+            row = ch[ch["strike"] == float(lg["strike"])]
+            key = row.iloc[0].get(f"{lg['opt'].lower()}_key") if len(row) else None
+            if not key:
+                return False
+            if lg.get("key") != key or lg.get("src") != c.name:
+                lg["key"], lg["src"] = key, c.name
+                changed = True
+        p["contract_fixed"] = {"at": C.now_ist().isoformat(timespec="seconds"), "expiry_was": p["expiry"], "expiry": str(real),
+                               "why": "The trade was opened on an estimated price while no broker option prices were available; "
+                                      "it is now linked to the real contract."}
+        p["expiry"] = str(real)
+        try:                                                 # the real price at the minute of entry (single bought option only)
+            if len(p["legs"]) == 1 and p["legs"][0]["side"] == "BUY" and p["opened"][:10] == C.today_ist().isoformat():
+                lg = p["legs"][0]
+                bars = c.candles1(lg["key"])
+                t0 = pd.Timestamp(p["opened"]).floor("min")
+                at = bars[bars.index >= t0] if bars is not None and len(bars) else None
+                if at is not None and len(at) and (at.index[0] - t0) <= pd.Timedelta(minutes=5):
+                    px = float(at["open"].iloc[0])
+                    if px > 0:
+                        old = float(lg["price"])
+                        new = round(px * (1 + slip_pct(px)), 2)
+                        k = new / old if old > 0 else 1.0
+                        lg["price"] = new
+                        p["entry_prem"] = new
+                        p["margin"] = round(new * p["qty"], 0)
+                        for f in ("sl_prem", "target_prem", "m_sl", "m_target"):
+                            v = p.get(f)
+                            if isinstance(v, (int, float)) and 0 < abs(v) < 1e8:
+                                p[f] = round(v * k, 2)
+                        p["contract_fixed"].update(entry_was=old, entry=new, entry_from=f"{c.name.title()} 1-minute candle {at.index[0]:%H:%M} open + usual slippage")
+        except Exception as e:
+            self.errors.append(f"Could not read the real entry price of {p['symbol']}: {e}")
+        return True
+
     def chain(self, symbol, expiry: date, spot, vix, candles=None) -> pd.DataFrame:
         if self.br:
             try:
@@ -495,6 +579,13 @@ class Market:
         for p in positions:
             for lg in p["legs"]:
                 lg.pop("price_src", None)                    # worked out afresh on every call
+        if self.br or getattr(self, "clients", None):        # a position dated on an expiry that is not a real contract: repair it first
+            for p in positions:
+                try:
+                    if self.fix_contract(p, spots, vix_level):
+                        p["_relinked"] = True
+                except Exception as e:
+                    self.errors.append(f"Could not check the contract of {p.get('symbol')}: {e}")
         if self.br:                                          # legs opened on theoretical prices: switch them to the live contract
             for p in positions:
                 for lg in p["legs"]:

@@ -525,9 +525,11 @@ class Fyers:
         return sorted(m), (int(lot) if lot else None)
 
     def chain(self, key, expiry: date):
-        if key not in self._exp_ts:
+        if key not in self._exp_ts or expiry not in self._exp_ts.get(key, {}):
             self.expiries(key)
-        ts = self._exp_ts.get(key, {}).get(expiry, "")
+        ts = self._exp_ts.get(key, {}).get(expiry)
+        if not ts:                                           # 16 Nov 2026: an unknown expiry date (a formula trade dated on the 24 Nov holiday)
+            return pd.DataFrame()                            # made Fyers answer with the NEAREST expiry - the wrong contract. No chain instead.
         data = self._raw_chain(key, ts=ts, strikecount=12)
         spot, by_strike = None, {}
         for o in data.get("optionsChain", []):

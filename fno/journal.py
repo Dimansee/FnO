@@ -35,6 +35,7 @@ AUTO_CATS = [
     ("money", ("not enough", "cash", "position size is zero", "quantity is zero"), "Not enough money"),
     ("risk_cap", ("skip (autopilot)", "even 1 lot risks"), "1 lot risks too much of the account"),
     ("calendar", ("holiday", "budget day", "expiry day"), "Calendar rule (holiday / budget / expiry)"),
+    ("no_live_price", ("no live option prices",), "Broker not connected: no live option prices"),
     ("data", ("vix is unavailable", "candle is", "no price candles", "stale"), "Market data not reliable"),
     ("slot_busy", ("already have an open",), "A trade was already open in this slot"),
     ("learn_veto", ("learning", "veto", "half size"), "Learning engine veto"),
