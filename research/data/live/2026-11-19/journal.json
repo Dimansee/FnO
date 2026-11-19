@@ -1,0 +1,2019 @@
+{
+ "ai": {
+  "BANKNIFTY": [],
+  "NIFTY": [],
+  "SENSEX": []
+ },
+ "context": {
+  "BANKNIFTY": {
+   "atr_5m": null,
+   "calendar": null,
+   "camarilla": {
+    "h3": 62203.1825,
+    "h4": 62367.715000000004,
+    "l3": 61874.1175,
+    "l4": 61709.585,
+    "pivot": 62055.950000000004
+   },
+   "cpr": {
+    "bc": 62064.6,
+    "tc": 62047.30000000001,
+    "width_pct": 0.028
+   },
+   "expiries": [
+    "2026-11-23",
+    "2026-12-29",
+    "2027-01-25"
+   ],
+   "expiry": "2026-11-23",
+   "fii": {
+    "date": "18-Nov-2026",
+    "dii": -3159.9,
+    "fii": 5866.78,
+    "source": "NSE"
+   },
+   "gap_pct": 0.17,
+   "global": {
+    "avg_equity_chg": -0.34,
+    "notes": []
+   },
+   "lot": 30,
+   "noise_band_at": {
+    "09:45": [
+     61634.4,
+     62549.8
+    ],
+    "10:15": [
+     61596.2,
+     62588.1
+    ],
+    "11:15": [
+     61634.4,
+     62549.8
+    ],
+    "12:15": [
+     61593.8,
+     62590.5
+    ],
+    "13:15": [
+     61469.2,
+     62715.3
+    ],
+    "14:15": [
+     61312.7,
+     62872.0
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 62144.85,
+   "pcr_prev_close": 0.89,
+   "pivot": 62055.950000000004,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY",
+     "BANKNIFTY",
+     "SENSEX"
+    ],
+    "risk_pct": 1.0,
+    "sizing": "compound",
+    "strategies": [
+     "noise",
+     "camarilla",
+     "trend",
+     "fib"
+    ]
+   },
+   "prev_close": 62038.65,
+   "prev_high": 62363.75,
+   "prev_low": 61765.45,
+   "symbol": "BANKNIFTY",
+   "time": "09:17",
+   "vix": {
+    "chg_pct": 0.19267822736031004,
+    "level": 15.6
+   }
+  },
+  "NIFTY": {
+   "atr_5m": null,
+   "calendar": null,
+   "camarilla": {
+    "h3": 25296.425,
+    "h4": 25364.9,
+    "l3": 25159.475000000002,
+    "l4": 25091.0,
+    "pivot": 25253.516666666666
+   },
+   "cpr": {
+    "bc": 25266.3,
+    "tc": 25240.733333333334,
+    "width_pct": 0.101
+   },
+   "expiries": [
+    "2026-11-23",
+    "2026-12-01",
+    "2026-12-08"
+   ],
+   "expiry": "2026-11-23",
+   "fii": {
+    "date": "18-Nov-2026",
+    "dii": -3159.9,
+    "fii": 5866.78,
+    "source": "NSE"
+   },
+   "gap_pct": -0.14,
+   "global": {
+    "avg_equity_chg": -0.34,
+    "notes": []
+   },
+   "lot": 65,
+   "noise_band_at": {
+    "09:45": [
+     25062.3,
+     25358.9
+    ],
+    "10:15": [
+     25052.3,
+     25368.9
+    ],
+    "11:15": [
+     25050.8,
+     25370.4
+    ],
+    "12:15": [
+     25025.3,
+     25396.0
+    ],
+    "13:15": [
+     25003.3,
+     25418.0
+    ],
+    "14:15": [
+     24978.7,
+     25442.6
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 25193.05,
+   "pcr_prev_close": 1.01,
+   "pivot": 25253.516666666666,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY",
+     "BANKNIFTY",
+     "SENSEX"
+    ],
+    "risk_pct": 1.0,
+    "sizing": "compound",
+    "strategies": [
+     "noise",
+     "camarilla",
+     "trend",
+     "fib"
+    ]
+   },
+   "prev_close": 25227.95,
+   "prev_high": 25390.8,
+   "prev_low": 25141.8,
+   "symbol": "NIFTY",
+   "time": "09:17",
+   "vix": {
+    "chg_pct": 0.19267822736031004,
+    "level": 15.6
+   }
+  },
+  "SENSEX": {
+   "atr_5m": null,
+   "calendar": null,
+   "camarilla": {
+    "h3": 82251.37,
+    "h4": 82470.93,
+    "l3": 81812.25,
+    "l4": 81592.69,
+    "pivot": 82130.38333333333
+   },
+   "cpr": {
+    "bc": 82179.67,
+    "tc": 82081.09666666666,
+    "width_pct": 0.12
+   },
+   "expiries": [
+    "2026-11-19",
+    "2026-11-26",
+    "2026-12-03"
+   ],
+   "expiry": "2026-11-26",
+   "fii": {
+    "date": "18-Nov-2026",
+    "dii": -3159.9,
+    "fii": 5866.78,
+    "source": "NSE"
+   },
+   "gap_pct": -0.06,
+   "global": {
+    "avg_equity_chg": -0.34,
+    "notes": []
+   },
+   "lot": 25,
+   "noise_band_at": {
+    "09:45": [
+     81543.0,
+     82471.3
+    ],
+    "10:15": [
+     81512.6,
+     82501.6
+    ],
+    "11:15": [
+     81485.1,
+     82529.1
+    ],
+    "12:15": [
+     81392.1,
+     82622.3
+    ],
+    "13:15": [
+     81324.7,
+     82689.7
+    ],
+    "14:15": [
+     81292.6,
+     82721.8
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 81982.18,
+   "pcr_prev_close": null,
+   "pivot": 82130.38333333333,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY",
+     "BANKNIFTY",
+     "SENSEX"
+    ],
+    "risk_pct": 1.0,
+    "sizing": "compound",
+    "strategies": [
+     "noise",
+     "camarilla",
+     "trend",
+     "fib"
+    ]
+   },
+   "prev_close": 82031.81,
+   "prev_high": 82578.87,
+   "prev_low": 81780.47,
+   "symbol": "SENSEX",
+   "time": "09:17",
+   "vix": {
+    "chg_pct": 0.19267822736031004,
+    "level": 15.6
+   }
+  }
+ },
+ "date": "2026-11-19",
+ "decisions": {
+  "blocks": [
+   {
+    "cat": "equity_gate",
+    "entry": null,
+    "from": "09:20",
+    "label": "Rule waits for a bigger account",
+    "msg": "Autopilot adds the Fibonacci breakout once equity reaches \u20b9200,000.",
+    "n": 320,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "slot": "fib",
+    "strategy": "fib",
+    "symbol": "NIFTY",
+    "target": null,
+    "to": "14:39",
+    "trade_id": null
+   },
+   {
+    "cat": "equity_gate",
+    "entry": null,
+    "from": "09:20",
+    "label": "Rule waits for a bigger account",
+    "msg": "Autopilot adds the Fibonacci breakout once equity reaches \u20b9200,000.",
+    "n": 320,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "slot": "fib",
+    "strategy": "fib",
+    "symbol": "SENSEX",
+    "target": null,
+    "to": "14:39",
+    "trade_id": null
+   },
+   {
+    "cat": "slot_busy",
+    "entry": null,
+    "from": "10:05",
+    "label": "A trade was already open in this slot",
+    "msg": "You already have an open signal trade in this instrument.",
+    "n": 55,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "slot": "main",
+    "strategy": null,
+    "symbol": "BANKNIFTY",
+    "target": null,
+    "to": "10:59",
+    "trade_id": null
+   },
+   {
+    "cat": "equity_gate",
+    "entry": null,
+    "from": "10:45",
+    "label": "Rule waits for a bigger account",
+    "msg": "Autopilot adds the trend-day catcher once equity reaches \u20b940,000.",
+    "n": 235,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "slot": "trend",
+    "strategy": "trend",
+    "symbol": "NIFTY",
+    "target": null,
+    "to": "14:39",
+    "trade_id": null
+   },
+   {
+    "cat": "equity_gate",
+    "entry": null,
+    "from": "10:45",
+    "label": "Rule waits for a bigger account",
+    "msg": "Autopilot adds the trend-day catcher once equity reaches \u20b940,000.",
+    "n": 235,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "slot": "trend",
+    "strategy": "trend",
+    "symbol": "SENSEX",
+    "target": null,
+    "to": "14:39",
+    "trade_id": null
+   },
+   {
+    "cat": "slot_busy",
+    "entry": null,
+    "from": "12:05",
+    "label": "A trade was already open in this slot",
+    "msg": "You already have an open signal trade in this instrument.",
+    "n": 45,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "slot": "main",
+    "strategy": null,
+    "symbol": "NIFTY",
+    "target": null,
+    "to": "12:49",
+    "trade_id": null
+   },
+   {
+    "cat": "slot_busy",
+    "entry": null,
+    "from": "12:51",
+    "label": "A trade was already open in this slot",
+    "msg": "You already have an open signal trade in this instrument.",
+    "n": 24,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "slot": "main",
+    "strategy": null,
+    "symbol": "BANKNIFTY",
+    "target": null,
+    "to": "13:14",
+    "trade_id": null
+   }
+  ],
+  "rows": [
+   {
+    "index": {
+     "entry": 62387.35,
+     "risk_pts": 184.16749999999593,
+     "rr": null,
+     "sl": 62203.1825,
+     "target": null
+    },
+    "opt": "CE",
+    "option": {},
+    "reco_id": "BANKNIFTY:camarilla:10:00",
+    "result": {
+     "R": 3.44,
+     "at": "15:15",
+     "close_15_15": 63022.65,
+     "exit_spot": 63021.6,
+     "index_outcome": "square-off",
+     "mae_pts": 38.2,
+     "mfe_pts": 665.9
+    },
+    "source": "autopilot",
+    "status": {
+     "label": "Executed",
+     "state": "executed",
+     "trade": {
+      "by": "autopilot",
+      "closed": "11:00",
+      "entry_prem": 331.3,
+      "exit_prem": 341.05,
+      "id": "a9286df7",
+      "legs": [
+       "BUY 62500CE"
+      ],
+      "lots": 1,
+      "open": false,
+      "opened": "10:04",
+      "pnl": 221.29,
+      "reason": "Breakeven stop (moved to entry at +1R)"
+     }
+    },
+    "strategy": "camarilla",
+    "symbol": "BANKNIFTY",
+    "time": "10:00",
+    "what_happened": "Closed 11:00 \u00b7 Breakeven stop (moved to entry at +1R)"
+   },
+   {
+    "index": {
+     "entry": 62480.2,
+     "risk_pts": 195.69939999999042,
+     "rr": null,
+     "sl": 62284.50060000001,
+     "target": null
+    },
+    "opt": "CE",
+    "option": {
+     "cost_per_lot": null,
+     "delta": null,
+     "entry_prem": null,
+     "expiry": "2026-11-23",
+     "lots": null,
+     "ltp": null,
+     "sl_prem": null,
+     "strike": null,
+     "target_prem": null
+    },
+    "reco_id": "BANKNIFTY:fib:10:15",
+    "result": {
+     "R": 2.77,
+     "at": "15:15",
+     "close_15_15": 63022.65,
+     "exit_spot": 63021.6,
+     "index_outcome": "square-off",
+     "mae_pts": 130.0,
+     "mfe_pts": 573.1
+    },
+    "source": "scan",
+    "status": {
+     "cat": "not_attempted",
+     "label": "No automatic attempt logged",
+     "msg": "The minute check did not try this signal (it had changed or expired before the check, or this was before decisions were logged).",
+     "state": "skipped"
+    },
+    "strategy": "fib",
+    "symbol": "BANKNIFTY",
+    "time": "10:16",
+    "what_happened": "If taken: square-off at 15:15 (+2.8R on the index)"
+   },
+   {
+    "index": {
+     "entry": 25367.69921875,
+     "risk_pts": 71.31635742187427,
+     "rr": null,
+     "sl": 25296.382861328126,
+     "target": null
+    },
+    "opt": "CE",
+    "option": {},
+    "reco_id": "NIFTY:camarilla:12:00",
+    "result": {
+     "R": 1.91,
+     "at": "15:15",
+     "close_15_15": 25503.7,
+     "exit_spot": 25503.7,
+     "index_outcome": "square-off",
+     "mae_pts": 33.7,
+     "mfe_pts": 140.5
+    },
+    "source": "autopilot",
+    "status": {
+     "label": "Executed",
+     "state": "executed",
+     "trade": {
+      "by": "autopilot",
+      "closed": "12:50",
+      "entry_prem": 129.1,
+      "exit_prem": 129.8,
+      "id": "3ff442b3",
+      "legs": [
+       "BUY 25400CE"
+      ],
+      "lots": 1,
+      "open": false,
+      "opened": "12:04",
+      "pnl": -21.58,
+      "reason": "Time stop (45 min, no follow-through)"
+     }
+    },
+    "strategy": "camarilla",
+    "symbol": "NIFTY",
+    "time": "12:00",
+    "what_happened": "Closed 12:50 \u00b7 Time stop (45 min, no follow-through)"
+   },
+   {
+    "index": {
+     "entry": 62542.0,
+     "risk_pts": 132.9542512056426,
+     "rr": 4.0,
+     "sl": 62409.04574879436,
+     "target": 63073.81700482257
+    },
+    "opt": "CE",
+    "option": {},
+    "reco_id": "BANKNIFTY:noise:12:15",
+    "result": {
+     "R": 3.61,
+     "at": "15:15",
+     "close_15_15": 63022.65,
+     "exit_spot": 63021.6,
+     "index_outcome": "square-off",
+     "mae_pts": 9.8,
+     "mfe_pts": 511.2
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "money",
+     "from": "12:15",
+     "label": "Not enough money",
+     "msg": "Not enough cash: 1 lot needs \u20b99,699, you have \u20b96,893. Pick a cheaper strike below.",
+     "state": "skipped",
+     "to": "12:24"
+    },
+    "strategy": "noise",
+    "symbol": "BANKNIFTY",
+    "time": "12:15",
+    "what_happened": "If taken: square-off at 15:15 (+3.6R on the index)"
+   },
+   {
+    "index": {
+     "entry": 62542.0,
+     "risk_pts": 199.4313768084639,
+     "rr": null,
+     "sl": 62342.56862319154,
+     "target": null
+    },
+    "opt": "CE",
+    "option": {
+     "cost_per_lot": null,
+     "delta": null,
+     "entry_prem": null,
+     "expiry": "2026-11-23",
+     "lots": null,
+     "ltp": null,
+     "sl_prem": null,
+     "strike": null,
+     "target_prem": null
+    },
+    "reco_id": "BANKNIFTY:trend:12:15",
+    "result": {
+     "R": 2.4,
+     "at": "15:15",
+     "close_15_15": 63022.65,
+     "exit_spot": 63021.6,
+     "index_outcome": "square-off",
+     "mae_pts": 9.8,
+     "mfe_pts": 511.2
+    },
+    "source": "scan",
+    "status": {
+     "cat": "not_attempted",
+     "label": "No automatic attempt logged",
+     "msg": "The minute check did not try this signal (it had changed or expired before the check, or this was before decisions were logged).",
+     "state": "skipped"
+    },
+    "strategy": "trend",
+    "symbol": "BANKNIFTY",
+    "time": "12:16",
+    "what_happened": "If taken: square-off at 15:15 (+2.4R on the index)"
+   },
+   {
+    "index": {
+     "entry": 82502.56,
+     "risk_pts": 214.8662088576334,
+     "rr": null,
+     "sl": 82287.69379114236,
+     "target": null
+    },
+    "opt": "CE",
+    "option": {
+     "cost_per_lot": 15527.0,
+     "delta": 0.56,
+     "entry_prem": 776.35,
+     "expiry": "2026-11-26",
+     "lots": 0,
+     "ltp": 778.95,
+     "sl_prem": 656.02,
+     "strike": 82400.0,
+     "target_prem": 1137.33
+    },
+    "reco_id": "SENSEX:camarilla:12:35",
+    "result": {
+     "R": 2.13,
+     "at": "15:15",
+     "close_15_15": 82960.86,
+     "exit_spot": 82961.1,
+     "index_outcome": "square-off",
+     "mae_pts": 79.9,
+     "mfe_pts": 489.7
+    },
+    "source": "scan",
+    "status": {
+     "cat": "not_attempted",
+     "label": "No automatic attempt logged",
+     "msg": "The minute check did not try this signal (it had changed or expired before the check, or this was before decisions were logged).",
+     "state": "skipped"
+    },
+    "strategy": "camarilla",
+    "symbol": "SENSEX",
+    "time": "12:36",
+    "what_happened": "If taken: square-off at 15:15 (+2.1R on the index)"
+   },
+   {
+    "index": {
+     "entry": 62605.8,
+     "risk_pts": 135.03491232496313,
+     "rr": 4.0,
+     "sl": 62470.76508767504,
+     "target": 63145.93964929986
+    },
+    "opt": "CE",
+    "option": {},
+    "reco_id": "BANKNIFTY:noise:12:45",
+    "result": {
+     "R": 3.08,
+     "at": "15:15",
+     "close_15_15": 63022.65,
+     "exit_spot": 63021.6,
+     "index_outcome": "square-off",
+     "mae_pts": 33.0,
+     "mfe_pts": 447.4
+    },
+    "source": "autopilot",
+    "status": {
+     "label": "Executed",
+     "state": "executed",
+     "trade": {
+      "by": "autopilot",
+      "closed": "13:15",
+      "entry_prem": 372.35,
+      "exit_prem": 357.35,
+      "id": "b7579c92",
+      "legs": [
+       "BUY 62700CE"
+      ],
+      "lots": 1,
+      "open": false,
+      "opened": "12:50",
+      "pnl": -522.69,
+      "reason": "Trailing exit at 13:15: back inside the band / below VWAP"
+     }
+    },
+    "strategy": "noise",
+    "symbol": "BANKNIFTY",
+    "time": "12:45",
+    "what_happened": "Closed 13:15 \u00b7 Trailing exit at 13:15: back inside the band / below VWAP"
+   }
+  ],
+  "scalp": [
+   {
+    "cat": "other",
+    "entry": null,
+    "from": "09:15",
+    "label": "Other reason",
+    "msg": "Waiting for today's 1-minute and 5-minute candles.",
+    "n": 3,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "strategy": null,
+    "symbol": "BANKNIFTY",
+    "target": null,
+    "to": "09:17",
+    "trade_id": null
+   },
+   {
+    "cat": "other",
+    "entry": null,
+    "from": "09:15",
+    "label": "Other reason",
+    "msg": "Waiting for today's 1-minute and 5-minute candles.",
+    "n": 3,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "strategy": null,
+    "symbol": "NIFTY",
+    "target": null,
+    "to": "09:17",
+    "trade_id": null
+   },
+   {
+    "cat": "other",
+    "entry": null,
+    "from": "09:15",
+    "label": "Other reason",
+    "msg": "Waiting for today's 1-minute and 5-minute candles.",
+    "n": 3,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "strategy": null,
+    "symbol": "SENSEX",
+    "target": null,
+    "to": "09:17",
+    "trade_id": null
+   },
+   {
+    "cat": "scalp_filter",
+    "entry": null,
+    "from": "09:26",
+    "label": "Scalp filter not met",
+    "msg": "too little room to the next level to pay the fees",
+    "n": 18,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "strategy": null,
+    "symbol": "NIFTY",
+    "target": null,
+    "to": "12:17",
+    "trade_id": null
+   },
+   {
+    "cat": "scalp_filter",
+    "entry": null,
+    "from": "09:26",
+    "label": "Scalp filter not met",
+    "msg": "setup D: Strong candle (body \u2265 60%, close in the outer 25%, range \u2265 10-candle average); One-way: last 30 min efficiency \u2265 0.30, same direction; PCR at the open agrees (\u2265 1 for calls, < 1 for puts)",
+    "n": 10,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "strategy": null,
+    "symbol": "SENSEX",
+    "target": null,
+    "to": "11:36",
+    "trade_id": null
+   },
+   {
+    "cat": "scalp_filter",
+    "entry": null,
+    "from": "09:36",
+    "label": "Scalp filter not met",
+    "msg": "setup D: Strong candle (body \u2265 60%, close in the outer 25%, range \u2265 10-candle average); One-way: last 30 min efficiency \u2265 0.30, same direction; PCR at the open agrees (\u2265 1 for calls, < 1 for puts); Room to the next key level \u2265 1.5 \u00d7 ATR (5-min)",
+    "n": 3,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "strategy": null,
+    "symbol": "BANKNIFTY",
+    "target": null,
+    "to": "09:56",
+    "trade_id": null
+   },
+   {
+    "cat": "executed",
+    "entry": null,
+    "from": "10:07",
+    "label": "Executed",
+    "msg": "Scalp B BANKNIFTY 62300CE (1 ITM) \u00d7 1 lot(s) at \u20b9435.25 (stop 62357.0, conf 88)",
+    "n": 1,
+    "ok": true,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "strategy": null,
+    "symbol": "BANKNIFTY",
+    "target": null,
+    "to": "10:07",
+    "trade_id": null
+   },
+   {
+    "cat": "executed",
+    "entry": null,
+    "from": "10:26",
+    "label": "Executed",
+    "msg": "Scalp B BANKNIFTY 62300CE (2 ITM) \u00d7 1 lot(s) at \u20b9519.70 (stop 62493.7, conf 88)",
+    "n": 1,
+    "ok": true,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "strategy": null,
+    "symbol": "BANKNIFTY",
+    "target": null,
+    "to": "10:26",
+    "trade_id": null
+   },
+   {
+    "cat": "scalp_gov",
+    "entry": null,
+    "from": "11:14",
+    "label": "Scalp governor stop",
+    "msg": "Scalp book stopped for today: Give-back lock: day peaked at \u20b92,496, 40% given back",
+    "n": 47,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "strategy": null,
+    "symbol": "BANKNIFTY",
+    "target": null,
+    "to": "14:44",
+    "trade_id": null
+   },
+   {
+    "cat": "no_live_price",
+    "entry": null,
+    "from": "11:48",
+    "label": "Broker not connected: no live option prices",
+    "msg": "No live option prices from the broker right now, so no order is placed on an estimated price. Log in to Fyers / Upstox (Settings) - orders resume by themselves once live prices are back.",
+    "n": 8,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "strategy": null,
+    "symbol": "SENSEX",
+    "target": null,
+    "to": "11:55",
+    "trade_id": null
+   },
+   {
+    "cat": "scalp_filter",
+    "entry": null,
+    "from": "12:14",
+    "label": "Scalp filter not met",
+    "msg": "too little room to the next level to pay the fees",
+    "n": 8,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "strategy": null,
+    "symbol": "SENSEX",
+    "target": null,
+    "to": "12:31",
+    "trade_id": null
+   },
+   {
+    "cat": "executed",
+    "entry": null,
+    "from": "12:18",
+    "label": "Executed",
+    "msg": "Scalp B NIFTY 25450CE (2 OTM) \u00d7 2 lot(s) at \u20b9107.20 (stop 25358.7, conf 78)",
+    "n": 1,
+    "ok": true,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "strategy": null,
+    "symbol": "NIFTY",
+    "target": null,
+    "to": "12:18",
+    "trade_id": null
+   },
+   {
+    "cat": "scalp_gov",
+    "entry": null,
+    "from": "12:22",
+    "label": "Scalp governor stop",
+    "msg": "Scalp book stopped for today: Day loss limit (2% of capital) reached",
+    "n": 19,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "strategy": null,
+    "symbol": "NIFTY",
+    "target": null,
+    "to": "14:36",
+    "trade_id": null
+   },
+   {
+    "cat": "executed",
+    "entry": null,
+    "from": "12:32",
+    "label": "Executed",
+    "msg": "Scalp B SENSEX 82600CE (1 OTM) \u00d7 1 lot(s) at \u20b9664.00 (stop 82478.2, conf 78)",
+    "n": 1,
+    "ok": true,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "strategy": null,
+    "symbol": "SENSEX",
+    "target": null,
+    "to": "12:32",
+    "trade_id": null
+   },
+   {
+    "cat": "executed",
+    "entry": null,
+    "from": "12:53",
+    "label": "Executed",
+    "msg": "Scalp B SENSEX 82700CE (2 OTM) \u00d7 1 lot(s) at \u20b9624.20 (stop 82498.4, conf 78)",
+    "n": 1,
+    "ok": true,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "strategy": null,
+    "symbol": "SENSEX",
+    "target": null,
+    "to": "12:53",
+    "trade_id": null
+   },
+   {
+    "cat": "scalp_gov",
+    "entry": null,
+    "from": "12:59",
+    "label": "Scalp governor stop",
+    "msg": "Scalp book stopped for today: Day loss limit (2% of capital) reached",
+    "n": 19,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "strategy": null,
+    "symbol": "SENSEX",
+    "target": null,
+    "to": "14:43",
+    "trade_id": null
+   }
+  ],
+  "summary": {
+   "executed": 3,
+   "signals": 7,
+   "skipped": 4,
+   "skipped_by_reason": {
+    "No automatic attempt logged": 3,
+    "Not enough money": 1
+   }
+  }
+ },
+ "open_positions": [],
+ "paper_trades": [
+  {
+   "at_breakeven": true,
+   "best_spot": 62626.45,
+   "charges": 71.21,
+   "closed": "2026-11-19T11:00:04+05:30",
+   "delta": 0.44,
+   "entry_prem": 331.3,
+   "exit_ltp": 341.1,
+   "exit_prem": 341.05,
+   "expiry": "2026-11-23",
+   "gross_pnl": 292.5,
+   "hi": 62603.45,
+   "id": "a9286df7",
+   "last_px": {
+    "NSE_FO|62487": 341.1
+   },
+   "last_spot": 62363.75,
+   "legs": [
+    {
+     "key": "NSE_FO|62487",
+     "opt": "CE",
+     "price": 331.3,
+     "side": "BUY",
+     "src": "upstox",
+     "strike": 62500.0
+    }
+   ],
+   "live_sl": 62375.3,
+   "lo": 62355.85,
+   "lot": 30,
+   "lots": 1,
+   "margin": 9939.0,
+   "mode": "signal",
+   "opened": "2026-11-19T10:04:06+05:30",
+   "plan": {
+    "auto": true,
+    "breakeven_at": 62547.4175,
+    "cpr_size": {
+     "mult": 1.2,
+     "width": 0.028
+    },
+    "ctx": {
+     "atr_pct": 0.151,
+     "dte": 4,
+     "gap_pct": 0.07,
+     "minute_of_day": 604,
+     "trend": "up",
+     "vix": 16.27,
+     "vix_chg": 4.5,
+     "weekday": 3
+    },
+    "entry": 62375.3,
+    "opt": "CE",
+    "risk_pts": 172.1175000000003,
+    "rr": null,
+    "signal_bar": "10:00",
+    "sl": 62203.1825,
+    "small_account_otm": true,
+    "strategy": "camarilla",
+    "target": null,
+    "time_stop_min": 45,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "pnl": 221.29,
+   "qty": 30,
+   "reached_half_r": true,
+   "reason": "Breakeven stop (moved to entry at +1R)",
+   "sl_prem": 256.03,
+   "source": "LIVE \u00b7 Upstox",
+   "spot_at_entry": 62376.1,
+   "spot_exit": 62363.75,
+   "symbol": "BANKNIFTY",
+   "target_fixed": false,
+   "target_prem": 557.1
+  },
+  {
+   "charges": 67.08,
+   "closed": "2026-11-19T12:50:02+05:30",
+   "delta": 0.48,
+   "entry_prem": 129.1,
+   "exit_ltp": 129.8,
+   "exit_prem": 129.8,
+   "expiry": "2026-11-23",
+   "gross_pnl": 45.5,
+   "hi": 25384.45,
+   "id": "3ff442b3",
+   "last_px": {
+    "NSE:NIFTY26NOV25400CE": 129.8
+   },
+   "last_spot": 25361.0,
+   "legs": [
+    {
+     "key": "NSE:NIFTY26NOV25400CE",
+     "opt": "CE",
+     "price": 129.1,
+     "side": "BUY",
+     "src": "fyers",
+     "strike": 25400.0
+    }
+   ],
+   "lo": 25339.5,
+   "lot": 65,
+   "lots": 1,
+   "margin": 8392.0,
+   "mode": "signal",
+   "opened": "2026-11-19T12:04:03+05:30",
+   "plan": {
+    "ai_judge": {
+     "cut": -0.047,
+     "good": false,
+     "mult": 0.67,
+     "pred": -0.057,
+     "total_mult": 0.67
+    },
+    "auto": true,
+    "breakeven_at": 25439.575,
+    "cpr_size": {
+     "mult": 1.2,
+     "width": 0.101
+    },
+    "ctx": {
+     "atr_pct": 0.094,
+     "dte": 4,
+     "gap_pct": -0.16,
+     "minute_of_day": 724,
+     "trend": "up",
+     "vix": 16.18,
+     "vix_chg": 3.92,
+     "weekday": 3
+    },
+    "entry": 25368.0,
+    "opt": "CE",
+    "risk_pts": 71.57500000000073,
+    "rr": null,
+    "signal_bar": "12:00",
+    "sl": 25296.425,
+    "small_account_otm": true,
+    "strategy": "camarilla",
+    "target": null,
+    "time_stop_min": 45,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "pnl": -21.58,
+   "qty": 65,
+   "reason": "Time stop (45 min, no follow-through)",
+   "sl_prem": 94.74,
+   "source": "LIVE \u00b7 Fyers",
+   "spot_at_entry": 25358.35,
+   "spot_exit": 25361.0,
+   "symbol": "NIFTY",
+   "target_fixed": false,
+   "target_prem": 232.17
+  },
+  {
+   "charges": 72.69,
+   "closed": "2026-11-19T13:15:02+05:30",
+   "delta": 0.48,
+   "entry_prem": 372.35,
+   "exit_ltp": 357.35,
+   "exit_prem": 357.35,
+   "expiry": "2026-11-23",
+   "gross_pnl": -450.0,
+   "hi": 62658.7,
+   "id": "b7579c92",
+   "last_check": "2026-11-19T13:15:00+05:30",
+   "last_px": {
+    "NSE:BANKNIFTY26NOV62700CE": 357.35
+   },
+   "last_spot": 62609.25,
+   "legs": [
+    {
+     "key": "NSE:BANKNIFTY26NOV62700CE",
+     "opt": "CE",
+     "price": 372.35,
+     "side": "BUY",
+     "src": "fyers",
+     "strike": 62700.0
+    }
+   ],
+   "lo": 62581.1,
+   "lot": 30,
+   "lots": 1,
+   "margin": 11170.0,
+   "mode": "signal",
+   "opened": "2026-11-19T12:50:11+05:30",
+   "plan": {
+    "auto": true,
+    "cpr_size": {
+     "mult": 1.2,
+     "width": 0.028
+    },
+    "ctx": {
+     "atr_pct": 0.108,
+     "dte": 4,
+     "gap_pct": 0.07,
+     "minute_of_day": 770,
+     "trend": "up",
+     "vix": 16.22,
+     "vix_chg": 4.17,
+     "weekday": 3
+    },
+    "entry": 62638.85,
+    "opt": "CE",
+    "risk_pts": 135.58956144460885,
+    "rr": 4.0,
+    "signal_bar": "12:45",
+    "sl": 62503.26043855539,
+    "small_account_otm": true,
+    "strategy": "noise",
+    "target": 63181.208245778435,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "pnl": -522.69,
+   "qty": 30,
+   "reason": "Trailing exit at 13:15: back inside the band / below VWAP",
+   "sl_prem": 307.27,
+   "source": "LIVE \u00b7 Fyers",
+   "spot_at_entry": 62642.75,
+   "spot_exit": 62609.25,
+   "symbol": "BANKNIFTY",
+   "target_fixed": true,
+   "target_prem": 632.68
+  }
+ ],
+ "recommendations": [
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "id": "BANKNIFTY:camarilla:10:00",
+   "index": {
+    "entry": 62387.35,
+    "risk_pts": 184.16749999999593,
+    "rr": null,
+    "sl": 62203.1825,
+    "target": null
+   },
+   "opt": "CE",
+   "option": {},
+   "result": {
+    "R": 3.44,
+    "at": "15:15",
+    "close_15_15": 63022.65,
+    "exit_spot": 63021.6,
+    "index_outcome": "square-off",
+    "mae_pts": 38.2,
+    "mfe_pts": 665.9
+   },
+   "signal": "BUY CALL",
+   "signal_bar": "10:00",
+   "source": "autopilot",
+   "strategy": "camarilla",
+   "symbol": "BANKNIFTY",
+   "time": "10:00:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 16.27 between 11 and 18 (enough movement to pay for an option, but not a fear spike)"
+     ],
+     [
+      null,
+      "Last check 10:15 (next 10:45) \u00b7 band 61596.2 \u2013 62524.1"
+     ],
+     [
+      null,
+      "Watching CALL side (1/3 conditions met):"
+     ],
+     [
+      "False",
+      "10:15 close 62480.2 above upper band 62524.1"
+     ],
+     [
+      "True",
+      "Above VWAP 62246.7"
+     ],
+     [
+      false,
+      "Still above the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Trend-day catcher (own slot, trades alongside the others):"
+     ],
+     [
+      null,
+      "First trend-day check at 10:45"
+     ],
+     [
+      null,
+      "Fibonacci 0.618 breakout (own slot):"
+     ],
+     [
+      true,
+      "India VIX 16.27 between 11 and 20"
+     ],
+     [
+      null,
+      "Yesterday's levels: H4 62425.7 \u00b7 H3 62284.5 \u00b7 L3 61827.4 \u00b7 L4 61686.2"
+     ],
+     [
+      true,
+      "10:15 close crossed above H4"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 16.27 between 11 and 20"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": 0,
+      "value": "+0.00% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "+0.07%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 0,
+      "value": "16.27 (+4.5%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 1,
+      "value": "1.26"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": 1,
+      "value": "\u20b95,867 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": 1,
+      "value": "62480.2 vs 62246.7"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": 1,
+      "value": "Up"
+     }
+    ],
+    "p_win": null,
+    "score": 4,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "id": "BANKNIFTY:fib:10:15",
+   "index": {
+    "entry": 62480.2,
+    "risk_pts": 195.69939999999042,
+    "rr": null,
+    "sl": 62284.50060000001,
+    "target": null
+   },
+   "lot": 30,
+   "opt": "CE",
+   "option": {
+    "cost_per_lot": null,
+    "delta": null,
+    "entry_prem": null,
+    "expiry": "2026-11-23",
+    "lots": null,
+    "ltp": null,
+    "sl_prem": null,
+    "strike": null,
+    "target_prem": null
+   },
+   "result": {
+    "R": 2.77,
+    "at": "15:15",
+    "close_15_15": 63022.65,
+    "exit_spot": 63021.6,
+    "index_outcome": "square-off",
+    "mae_pts": 130.0,
+    "mfe_pts": 573.1
+   },
+   "signal": "WAIT",
+   "signal_bar": "10:15",
+   "spot": 62480.2,
+   "strategy": "fib",
+   "symbol": "BANKNIFTY",
+   "time": "10:16:14",
+   "vix": 16.27
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "id": "NIFTY:camarilla:12:00",
+   "index": {
+    "entry": 25367.69921875,
+    "risk_pts": 71.31635742187427,
+    "rr": null,
+    "sl": 25296.382861328126,
+    "target": null
+   },
+   "opt": "CE",
+   "option": {},
+   "result": {
+    "R": 1.91,
+    "at": "15:15",
+    "close_15_15": 25503.7,
+    "exit_spot": 25503.7,
+    "index_outcome": "square-off",
+    "mae_pts": 33.7,
+    "mfe_pts": 140.5
+   },
+   "signal": "BUY CALL",
+   "signal_bar": "12:00",
+   "source": "autopilot",
+   "strategy": "camarilla",
+   "symbol": "NIFTY",
+   "time": "12:00:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "BANKNIFTY:noise:12:15",
+   "index": {
+    "entry": 62542.0,
+    "risk_pts": 132.9542512056426,
+    "rr": 4.0,
+    "sl": 62409.04574879436,
+    "target": 63073.81700482257
+   },
+   "opt": "CE",
+   "option": {},
+   "result": {
+    "R": 3.61,
+    "at": "15:15",
+    "close_15_15": 63022.65,
+    "exit_spot": 63021.6,
+    "index_outcome": "square-off",
+    "mae_pts": 9.8,
+    "mfe_pts": 511.2
+   },
+   "signal": "BUY CALL",
+   "signal_bar": "12:15",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "BANKNIFTY",
+   "time": "12:15:01"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 16.21 between 11 and 18 (enough movement to pay for an option, but not a fear spike)"
+     ],
+     [
+      null,
+      "Last check 12:15 (next 12:45) \u00b7 band 61593.8 \u2013 62526.5"
+     ],
+     [
+      "True",
+      "12:15 close 62542.0 above upper band 62526.5"
+     ],
+     [
+      "True",
+      "Above VWAP 62334.6"
+     ],
+     [
+      true,
+      "Still above the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Trend-day catcher (own slot, trades alongside the others):"
+     ],
+     [
+      null,
+      "12:15 check \u00b7 band 61593.8 \u2013 62526.5 \u00b7 price above VWAP on 94% of today's bars (needs 80% on one side)"
+     ],
+     [
+      true,
+      "Trend day up: beyond the band and VWAP, held one side of VWAP all day"
+     ],
+     [
+      null,
+      "Fibonacci 0.618 breakout (own slot):"
+     ],
+     [
+      true,
+      "India VIX 16.21 between 11 and 20"
+     ],
+     [
+      null,
+      "Yesterday's levels: H4 62425.7 \u00b7 H3 62284.5 \u00b7 L3 61827.4 \u00b7 L4 61686.2"
+     ],
+     [
+      false,
+      "Waiting for a 5-min close above H4 (now 62542.0)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 16.21 between 11 and 20"
+     ],
+     [
+      false,
+      "Camarilla trade already taken in this instrument today"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": 0,
+      "value": "+0.10% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "+0.07%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 0,
+      "value": "16.21 (+4.1%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "0.81"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": 1,
+      "value": "\u20b95,867 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": 1,
+      "value": "62542.0 vs 62334.6"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": 1,
+      "value": "Up"
+     }
+    ],
+    "p_win": null,
+    "score": 3,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "BANKNIFTY:trend:12:15",
+   "index": {
+    "entry": 62542.0,
+    "risk_pts": 199.4313768084639,
+    "rr": null,
+    "sl": 62342.56862319154,
+    "target": null
+   },
+   "lot": 30,
+   "opt": "CE",
+   "option": {
+    "cost_per_lot": null,
+    "delta": null,
+    "entry_prem": null,
+    "expiry": "2026-11-23",
+    "lots": null,
+    "ltp": null,
+    "sl_prem": null,
+    "strike": null,
+    "target_prem": null
+   },
+   "result": {
+    "R": 2.4,
+    "at": "15:15",
+    "close_15_15": 63022.65,
+    "exit_spot": 63021.6,
+    "index_outcome": "square-off",
+    "mae_pts": 9.8,
+    "mfe_pts": 511.2
+   },
+   "signal": "BUY CALL",
+   "signal_bar": "12:15",
+   "spot": 62562.6,
+   "strategy": "trend",
+   "symbol": "BANKNIFTY",
+   "time": "12:16:17",
+   "vix": 16.21
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      true,
+      "India VIX 16.21 between 11 and 18 (enough movement to pay for an option, but not a fear spike)"
+     ],
+     [
+      null,
+      "Last check 12:15 (next 12:45) \u00b7 band 81441.4 \u2013 82664.9"
+     ],
+     [
+      null,
+      "Watching CALL side (1/3 conditions met):"
+     ],
+     [
+      "False",
+      "12:15 close 82470.2 above upper band 82664.9"
+     ],
+     [
+      "True",
+      "Above VWAP 82158.5"
+     ],
+     [
+      false,
+      "Still above the band now (signal valid 10 min after the check)"
+     ],
+     [
+      null,
+      "Trend-day catcher (own slot, trades alongside the others):"
+     ],
+     [
+      null,
+      "12:15 check \u00b7 band 81441.4 \u2013 82664.9 \u00b7 price above VWAP on 92% of today's bars (needs 80% on one side)"
+     ],
+     [
+      false,
+      "No trend-day setup at this check"
+     ],
+     [
+      null,
+      "Fibonacci 0.618 breakout (own slot):"
+     ],
+     [
+      true,
+      "India VIX 16.21 between 11 and 20"
+     ],
+     [
+      null,
+      "Yesterday's levels: H4 82623.8 \u00b7 H3 82435.4 \u00b7 L3 81825.4 \u00b7 L4 81637.0"
+     ],
+     [
+      false,
+      "Waiting for a 5-min close above H4 (now 82502.6)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 16.21 between 11 and 20"
+     ],
+     [
+      null,
+      "Yesterday's levels: H4 82470.9 \u00b7 H3 82251.4 \u00b7 L3 81812.2 \u00b7 L4 81592.7"
+     ],
+     [
+      true,
+      "12:35 close crossed above H4"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": 0,
+      "value": "+0.17% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 0,
+      "value": "+0.05%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 0,
+      "value": "16.21 (+4.1%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "0.92"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": 1,
+      "value": "\u20b95,867 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": 1,
+      "value": "82502.6 vs 82202.1"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": 1,
+      "value": "Up"
+     }
+    ],
+    "p_win": null,
+    "score": 3,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "id": "SENSEX:camarilla:12:35",
+   "index": {
+    "entry": 82502.56,
+    "risk_pts": 214.8662088576334,
+    "rr": null,
+    "sl": 82287.69379114236,
+    "target": null
+   },
+   "lot": 20,
+   "opt": "CE",
+   "option": {
+    "cost_per_lot": 15527.0,
+    "delta": 0.56,
+    "entry_prem": 776.35,
+    "expiry": "2026-11-26",
+    "lots": 0,
+    "ltp": 778.95,
+    "sl_prem": 656.02,
+    "strike": 82400.0,
+    "target_prem": 1137.33
+   },
+   "result": {
+    "R": 2.13,
+    "at": "15:15",
+    "close_15_15": 82960.86,
+    "exit_spot": 82961.1,
+    "index_outcome": "square-off",
+    "mae_pts": 79.9,
+    "mfe_pts": 489.7
+   },
+   "signal": "BUY CALL",
+   "signal_bar": "12:35",
+   "spot": 82526.43,
+   "strategy": "camarilla",
+   "symbol": "SENSEX",
+   "time": "12:36:13",
+   "vix": 16.21
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "BANKNIFTY:noise:12:45",
+   "index": {
+    "entry": 62605.8,
+    "risk_pts": 135.03491232496313,
+    "rr": 4.0,
+    "sl": 62470.76508767504,
+    "target": 63145.93964929986
+   },
+   "opt": "CE",
+   "option": {},
+   "result": {
+    "R": 3.08,
+    "at": "15:15",
+    "close_15_15": 63022.65,
+    "exit_spot": 63021.6,
+    "index_outcome": "square-off",
+    "mae_pts": 33.0,
+    "mfe_pts": 447.4
+   },
+   "signal": "BUY CALL",
+   "signal_bar": "12:45",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "BANKNIFTY",
+   "time": "12:45:01"
+  }
+ ],
+ "scalp_open": [],
+ "scalp_trades": [
+  {
+   "charges": 82.94,
+   "closed": "2026-11-19T10:23:00+05:30",
+   "conf": 87.5,
+   "entry_prem": 435.25,
+   "entry_spot": 62397.35,
+   "exit_prem": 521.2,
+   "exit_spot": 62531.4,
+   "expiry": "2026-11-23",
+   "gross": 2578.5,
+   "id": "e12bb461",
+   "itm": 1,
+   "lots": 1,
+   "mode": "trend",
+   "opened": "2026-11-19T10:07:01+05:30",
+   "opt": "CE",
+   "pnl": 2495.56,
+   "price_src": "live",
+   "pts": 134.05,
+   "qty": 30,
+   "reason": "Trail: closed through EMA 9",
+   "risk": 40.38565779576167,
+   "side": 1,
+   "strike": 62300.0,
+   "symbol": "BANKNIFTY",
+   "tag": "B"
+  },
+  {
+   "charges": 80.69,
+   "closed": "2026-11-19T10:28:01+05:30",
+   "conf": 87.5,
+   "entry_prem": 519.7,
+   "entry_spot": 62537.1,
+   "exit_prem": 462.35,
+   "exit_spot": 62493.71,
+   "expiry": "2026-11-23",
+   "gross": -1720.5,
+   "id": "c22c1c92",
+   "itm": 2,
+   "lots": 1,
+   "mode": "trend",
+   "opened": "2026-11-19T10:26:01+05:30",
+   "opt": "CE",
+   "pnl": -1801.19,
+   "price_src": "live",
+   "pts": -43.39,
+   "qty": 30,
+   "reason": "Stop",
+   "risk": 43.38973634384112,
+   "side": 1,
+   "strike": 62300.0,
+   "symbol": "BANKNIFTY",
+   "tag": "B"
+  },
+  {
+   "charges": 77.79,
+   "closed": "2026-11-19T12:19:01+05:30",
+   "conf": 77.5,
+   "entry_prem": 107.2,
+   "entry_spot": 25367.0,
+   "exit_prem": 98.0,
+   "exit_spot": 25358.7,
+   "expiry": "2026-11-23",
+   "gross": -1196.0,
+   "id": "b1116776",
+   "itm": -2,
+   "lots": 2,
+   "mode": "trend",
+   "opened": "2026-11-19T12:18:00+05:30",
+   "opt": "CE",
+   "pnl": -1273.79,
+   "price_src": "live",
+   "pts": -8.3,
+   "qty": 130,
+   "reason": "Stop",
+   "risk": 8.298445139327788,
+   "side": 1,
+   "strike": 25450.0,
+   "symbol": "NIFTY",
+   "tag": "B"
+  },
+  {
+   "charges": 77.55,
+   "closed": "2026-11-19T12:42:01+05:30",
+   "conf": 77.5,
+   "entry_prem": 664.0,
+   "entry_spot": 82508.33,
+   "exit_prem": 659.0,
+   "exit_spot": 82516.06,
+   "expiry": "2026-11-26",
+   "gross": -100.0,
+   "id": "183df55d",
+   "itm": -1,
+   "lots": 1,
+   "mode": "trend",
+   "opened": "2026-11-19T12:32:00+05:30",
+   "opt": "CE",
+   "pnl": -177.55,
+   "price_src": "live",
+   "pts": 7.73,
+   "qty": 20,
+   "reason": "Stop",
+   "risk": 30.106188403271993,
+   "side": 1,
+   "strike": 82600.0,
+   "symbol": "SENSEX",
+   "tag": "B"
+  },
+  {
+   "charges": 75.39,
+   "closed": "2026-11-19T12:54:00+05:30",
+   "conf": 77.5,
+   "entry_prem": 624.2,
+   "entry_spot": 82522.56,
+   "exit_prem": 610.45,
+   "exit_spot": 82498.39,
+   "expiry": "2026-11-26",
+   "gross": -275.0,
+   "id": "7afe8e6f",
+   "itm": -2,
+   "lots": 1,
+   "mode": "trend",
+   "opened": "2026-11-19T12:53:01+05:30",
+   "opt": "CE",
+   "pnl": -350.39,
+   "price_src": "live",
+   "pts": -24.17,
+   "qty": 20,
+   "reason": "Stop",
+   "risk": 24.165226943545804,
+   "side": 1,
+   "strike": 82700.0,
+   "symbol": "SENSEX",
+   "tag": "B"
+  }
+ ],
+ "settled": {
+  "at": "2026-11-19T15:16:08+05:30",
+  "lesson": "7 recommendations: 0 target, 0 stop, 7 squared off; +19.3R in total. Best: BANKNIFTY CE  at 12:15 (+3.6R, ran 511 pts in favour). 6 squared-off trades reached 2R during the day and gave part of it back - the rules hold to 15:15 by design; the backtest says trailing earlier did not help. India VIX was 15.6 at the open - the band where the rules did best historically (50-75th percentile) is roughly 13-16. 3 of 3 high-score (3+) ideas ended positive. Carry forward: one trade per rule per day, the index-level stop decides, premium paths are shown so you can see where the plan and the option diverged.",
+  "recos": 7
+ },
+ "squeeze_shadow": {
+  "log": [],
+  "on": true,
+  "open": [],
+  "rule": {
+   "atr_kc": 10,
+   "atr_stop": 14,
+   "bb": 2.0,
+   "kc": 1.5,
+   "n": 14,
+   "per_day": 1,
+   "stop_k": 1.5,
+   "tf": 15
+  },
+  "trades": []
+ },
+ "summary": {
+  "by_outcome": {
+   "square-off": 7,
+   "stop": 0,
+   "target": 0
+  },
+  "by_strategy": {
+   "camarilla": {
+    "R": 7.48,
+    "n": 3
+   },
+   "fib": {
+    "R": 2.77,
+    "n": 1
+   },
+   "noise": {
+    "R": 6.69,
+    "n": 2
+   },
+   "trend": {
+    "R": 2.4,
+    "n": 1
+   }
+  },
+  "executed": 3,
+  "open_positions": 0,
+  "paper_pnl": -323.0,
+  "paper_trades": 3,
+  "recommendations": 7,
+  "scalp_pnl": -1107.0,
+  "scalp_trades": 5,
+  "settled": 7,
+  "skipped": 4,
+  "sum_R": 19.34
+ }
+}
