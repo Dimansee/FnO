@@ -284,7 +284,7 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
             do_fib = "fib" in ap
         else:
             do_fib = strategy == "fib"
-            main_strats = ["noise", "camarilla"] if strategy in ("both", "all") else ([] if strategy in ("trend", "fib", "channel") else [strategy])
+            main_strats = ["noise", "camarilla"] if strategy in ("both", "all") else ([] if strategy in ("trend", "fib", "channel", "rlevel") else [strategy])
             do_trend = strategy in ("trend", "all")
         if do_trend:                   # round 23: own slot, not blocked by an open Noise / Camarilla trade
             res = _trend_trade(day, idx, bands, exp, iv_of, step, lot, capital, d, sizing, otm, budget_pct, I.exch_rate(symbol),
@@ -337,10 +337,13 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
     if strategy in ("autopilot", "channel") and symbol in C.CHANNEL_SYMS:   # round 90: 15-min channel slot (own slot)
         trades += _channel_trades(symbol, meta, df, frames, trade_from, vx, vix_daily, step, lot, capital, sizing, otm, budget_pct,
                                   size_fn if strategy == "autopilot" else None)
+    if (strategy == "rlevel" or (strategy == "autopilot" and _flag("rlevel_slot"))) and symbol in C.RLEVEL_SYMS:   # round 102
+        trades += _rlevel_trades(symbol, meta, df, frames, trade_from, vx, vix_daily, step, lot, capital, sizing, otm, budget_pct,
+                                 size_fn if strategy == "autopilot" else None)
     trades.sort(key=lambda t: (t["date"], t["entry_time"]))
     if run_skip:                                       # round 42: no trade against a big 3-day run (the channel slot is not filtered, as live)
         n0 = len(trades)
-        trades = [t for t in trades if str(t.get("strategy", "")).startswith("Channel")
+        trades = [t for t in trades if str(t.get("strategy", "")).startswith(("Channel", "Round-level"))
                   or not S.against_big_run(runs.get(t["date"]), "CE" if t["side"] == "CALL" else "PE")]
         skips["big_run"] = n0 - len(trades)
     live = None
@@ -702,6 +705,105 @@ def _channel_trades(symbol, meta, df, frames, trade_from, vx, vix_daily, step, l
                     pos = (sign, i, f, lo_[j] if sign > 0 else hi_[j], a / C.CHANNEL_SIZE)
             if pos is not None and t >= sq_start:
                 close(pos, i, c[i], "Square-off"); pos = None
+    return out
+
+
+def _rlevel_trades(symbol, meta, df, frames, trade_from, vx, vix_daily, step, lot, capital, sizing, otm, budget_pct, size_fn=None):
+    """Round 102: the round-level break slot, same rules as the live check (S.rlevel_events / S.rlevel_signals on the 15-min bars):
+    signal at a 15-min close, buy at the next bar's open (09:30-14:45 bars), stop at the signal bar's low / high, once ahead the stop
+    follows the best 15-min close RLEVEL_TRAIL_R behind; square-off with the 15:00 bar; up to RLEVEL_PER_DAY a day, one at a time.
+    Sized at RLEVEL_SIZE of the normal risk."""
+    cb = S.channel_frame(df)
+    if cb.empty:
+        return []
+    sg = S.rlevel_signals(cb, S.rlevel_events(cb, symbol))
+    out = []
+    days_ok = {d for d, g in frames if len(g) >= 60}
+
+    def vix_at(ts, d):
+        if vx is not None:
+            i = vx.index.searchsorted(ts, side="right") - 1
+            if i >= 0:
+                return float(vx.iloc[i])
+        if vix_daily is not None and len(vix_daily):
+            v = vix_daily[vix_daily.index < pd.Timestamp(d)]
+            if len(v):
+                return float(v.iloc[-1])
+        return 14.0
+
+    sq_start = (datetime.combine(date.today(), C.SQUARE_OFF) - timedelta(minutes=C.CHANNEL_TF)).time()
+    allb = list(cb.index); pos_of = {ts: i for i, ts in enumerate(allb)}
+    for d, g in cb.groupby(cb.index.date):
+        if d not in days_ok or (trade_from and d < trade_from):
+            continue
+        day_exps = I.demo_expiries(meta["expiry"], d, 3, meta.get("exchange", "NSE"))
+        if d in C.BUDGET_DAYS or (symbol in C.SKIP_OWN_EXPIRY and day_exps and day_exps[0] == d):
+            continue
+        exp = I.pick_trading_expiry(day_exps, meta["expiry"], d)
+        if exp is None:
+            continue
+        o, h, l, c = (g[k].values for k in ("open", "high", "low", "close"))
+        idx = list(g.index)
+        ssig, sstop = sg["sig"].values[[pos_of[t] for t in idx]], sg["stop"].values[[pos_of[t] for t in idx]]
+        taken, i = 0, 1
+        while i < len(idx) and taken < C.RLEVEL_PER_DAY:
+            j0, t = i - 1, idx[i].time()
+            if not (C.RLEVEL_FIRST_BAR <= t <= C.RLEVEL_LAST_BAR) or not ssig[j0]:
+                i += 1; continue
+            sign, e, sl = int(ssig[j0]), float(o[i]), float(sstop[j0])
+            if sign * (e - sl) <= 0:
+                i += 1; continue
+            r = abs(e - sl); best = e; j = i; why = "Square-off"
+            while True:
+                adv = l[j] if sign > 0 else h[j]
+                if sign * (adv - sl) <= 0:
+                    x = o[j] if (j > i and sign * (o[j] - sl) < 0) else sl
+                    why = "Trailing stop" if abs(sl - sstop[j0]) > 1e-9 else "Index stop-loss hit"; break
+                if idx[j].time() >= sq_start or j + 1 >= len(idx):
+                    x = c[j]; break
+                if sign * (c[j] - best) > 0:
+                    best = c[j]
+                if sign * (best - e) > 0:
+                    tr = best - sign * C.RLEVEL_TRAIL_R * r
+                    if sign * (tr - sl) > 0:
+                        sl = tr
+                j += 1
+            ts_in, ts_out = idx[i], idx[j]
+            t_in = ts_in + timedelta(minutes=1)
+            t_out = ts_out + timedelta(minutes=C.CHANNEL_TF) if why == "Square-off" else ts_out + timedelta(minutes=1)
+            opt = "CE" if sign > 0 else "PE"
+            k = round(e / step) * step + sign * otm * step
+
+            def prem(s_, when, ts):
+                iv = PR.iv(symbol, vix_at(ts, d), s_, k, opt, (exp - d).days, step, meta["iv_mult"]) if meta["iv_mult"] else 0.25
+                tt = I.years_to_expiry(exp, when.to_pydatetime().replace(tzinfo=None))
+                return I.bs_price(s_, k, max(tt, 1 / (365 * 24 * 12)), iv, opt)
+
+            p_in = prem(e, t_in, ts_in) * (1 + SLIP)
+            risk_unit = max(p_in - prem(e - sign * r / C.RLEVEL_SIZE, t_in, ts_in), p_in * 0.05)
+            cost = p_in * lot
+            lots = 0
+            if cost <= capital:
+                if sizing == "one_lot":
+                    lots = 1
+                else:
+                    budget = capital * budget_pct * (size_fn(ts_in, sign) if size_fn else 1.0)
+                    lots = int(budget // (risk_unit * lot))
+                    if lots == 0 and risk_unit * lot <= 1.5 * capital * budget_pct:
+                        lots = 1
+                    lots = min(lots, int(capital // cost))
+            if lots > 0:
+                p_out = PR.real_adjust(p_in / (1 + SLIP), prem(x, t_out, ts_out), (exp - d).days, (t_out - t_in).total_seconds() / 3600) * (1 - SLIP)
+                qty = lots * lot
+                pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty, exch_pct=I.exch_rate(symbol))
+                out.append({"date": d.isoformat(), "entry_time": t_in.strftime("%H:%M"), "exit_time": t_out.strftime("%H:%M"),
+                            "side": "CALL" if sign > 0 else "PUT", "type": "ATM option" if not otm else (f"{otm} OTM option" if otm > 0 else f"{-otm} ITM option"),
+                            "band": None, "spot_in": round(e, 1), "spot_out": round(float(x), 1), "R": round(sign * (x - e) / r, 2),
+                            "prem_in": round(p_in, 2), "prem_out": round(p_out, 2), "lots": lots, "pnl": round(pnl, 0), "reason": why,
+                            "equity": 0, "strategy": "Round-level break", "risk_lot": round(risk_unit * lot, 0), "mfe_R": None, "pieces": 1,
+                            "risk_lot_capped": round(risk_unit * lot, 0)})
+            taken += 1
+            i = j + 1
     return out
 
 

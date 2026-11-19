@@ -120,10 +120,15 @@ def channel_allowed(pf, equity: float, symbol: str | None = None) -> bool:
             and (symbol is None or symbol in C.CHANNEL_SYMS))
 
 
+def rlevel_allowed(pf, symbol: str | None = None) -> bool:
+    """Round 102: Autopilot's round-level break slot - Nifty only, no equity gate, switchable."""
+    return bool(pf.get("autopilot")) and flag("rlevel_slot") and (symbol is None or symbol in C.RLEVEL_SYMS)
+
+
 def _trend_only(pf, symbol) -> bool:
     """Autopilot trades this index with the trend-day slot only (no Noise / Camarilla / custom main-slot entries)."""
     st = C.AUTOPILOT_SYM_STRATEGIES.get(symbol)
-    return bool(pf.get("autopilot")) and bool(st) and set(st) <= set(C.SLOTS) - {"channel"}
+    return bool(pf.get("autopilot")) and bool(st) and set(st) <= set(C.SLOTS) - {"channel", "rlevel"}
 
 
 def trend_allowed(pf, equity: float) -> bool:
@@ -147,6 +152,13 @@ def _traded_today(symbol, positions, trades) -> dict:
                 last_ch = (x["opened"], (x.get("plan") or {}).get("opt"))
     if last_ch:
         done["channel_last"] = last_ch[1]                    # the channel slot only reverses (round 90)
+    rl = [x for x in list(positions) + list(trades) if x["symbol"] == symbol and x.get("mode") == "signal" and x["opened"][:10] == today
+          and (x.get("plan") or {}).get("strategy") == "rlevel"]
+    if rl:                                                   # round 102: up to 3 a day, one at a time, each on a fresh break
+        ends = [x["closed"][11:16] for x in rl if x.get("closed")]
+        last = max(ends) if ends else None
+        done["rlevel_done"] = {"n": len(rl), "bars": [(x.get("plan") or {}).get("signal_bar") for x in rl],
+                               "free_from": f"{last[:3]}{int(last[3:]) // 15 * 15:02d}" if last else None}
     return done
 
 
@@ -266,6 +278,12 @@ def manage_positions(m: M.Market | None = None) -> list[dict]:
             chstates[sym] = S.channel_state(m.candles(sym), now)
         except Exception as e:
             m.errors.append(f"Channel check failed for {sym}: {e}")
+    rlstates = {}
+    for sym in {p["symbol"] for p in pos if (p.get("plan") or {}).get("strategy") == "rlevel"}:
+        try:
+            rlstates[sym] = S.rlevel_state(m.candles(sym), now, sym)
+        except Exception as e:
+            m.errors.append(f"Round-level check failed for {sym}: {e}")
     cspecs = {x["id"]: x for x in _safe_specs()}
     cstates = {}
     for p in pos:
@@ -312,7 +330,9 @@ def manage_positions(m: M.Market | None = None) -> list[dict]:
             p.update(tupd)
         is_c = str((p.get("plan") or {}).get("strategy", "")).startswith("custom:")
         is_ch = (p.get("plan") or {}).get("strategy") == "channel"
-        reason, upd = S.exit_check(p, sp, prem, now, cstates.get(p["id"]) if is_c else chstates.get(p["symbol"]) if is_ch else states.get(p["symbol"]),
+        is_rl = (p.get("plan") or {}).get("strategy") == "rlevel"
+        reason, upd = S.exit_check(p, sp, prem, now, cstates.get(p["id"]) if is_c else chstates.get(p["symbol"]) if is_ch
+                                   else rlstates.get(p["symbol"]) if is_rl else states.get(p["symbol"]),
                                    exts.get(p["id"]))
         level = upd.pop("_level", None)                      # stop / target touched between two checks (price already moved away)
         if tupd:
@@ -1096,7 +1116,8 @@ def _place_signal(symbol, strike=None, auto=False, which=None):
     if any(p["symbol"] == symbol and p["mode"] == "signal" and slot_of(p) == which for p in pos):
         return False, ({"trend": "You already have an open trend-day trade in this instrument.",
                         "fib": "You already have an open Fibonacci-breakout trade in this instrument.",
-                        "channel": "You already have an open channel-breakout trade in this instrument."}.get(which)
+                        "channel": "You already have an open channel-breakout trade in this instrument.",
+                        "rlevel": "You already have an open round-level break trade in this instrument."}.get(which)
                        or "You already have an open signal trade in this instrument.")
     cstats = M.chain_stats(g["chain"], g["spot"])
     traded = _traded_today(symbol, pos, tr)
@@ -1112,6 +1133,11 @@ def _place_signal(symbol, strike=None, auto=False, which=None):
             return False, (f"The 15-min channel slot trades {' and '.join(s.title() for s in C.CHANNEL_SYMS)} on Autopilot once equity reaches "
                            f"₹{C.CHANNEL_MIN_EQUITY:,.0f} (round 90)." if flag("channel_slot") else "The 15-min channel slot is switched off.")
         strats = list(strats) + ["channel"]
+    if which == "rlevel":
+        if not rlevel_allowed(pf, symbol):
+            return False, ("The round-level break slot trades Nifty on Autopilot (round 102)." if flag("rlevel_slot")
+                           else "The round-level break slot is switched off.")
+        strats = list(strats) + ["rlevel"]
     if which is None and _trend_only(pf, symbol):
         return False, "Only the own-slot rules trade this instrument."
     ev = _evaluate_once(symbol, g, cstats, guard, traded, strats)
@@ -1263,6 +1289,15 @@ def changes() -> list[dict]:
         removed = 0
     po = float(acct.get("capital_start") or 0) <= 0 and acct.get("capital_before")
     return [
+        {"id": "rlevel_slot", "date": "2026-11-19", "title": "Round-level break slot on Nifty (round 102)",
+         "what": f"Autopilot also trades Nifty when a 15-min candle closes through a round {C.RLEVEL_STEP['NIFTY']}-point level (zone ±{C.RLEVEL_ZONE:g}) "
+                 f"that had already rejected price at least once in the last {C.RLEVEL_WEEK_SESSIONS} sessions: CALL on a break up, PUT on a break down, "
+                 f"bought at the next 15-min bar. Stop at the signal bar's low / high; once ahead, the stop follows the best 15-min close "
+                 f"{C.RLEVEL_TRAIL_R:g}R behind; else 15:15. Own slot, half the normal risk, up to {C.RLEVEL_PER_DAY} a day, any account size. "
+                 f"Outcomes replay with today's rules: Rs 20k 2023-24 5.49L vs 1.94L, 2025-26 3.49L vs 2.21L, full 95.4L vs 20.0L, worst fall -49% vs -66%; "
+                 f"Rs 2L 37.2L vs 30.7L, 20.8L vs 21.3L (slightly worse), 183L vs 172L, worst fall -31% vs -26%; Rs 5L full 252L vs 204L. "
+                 f"Fails the usual bar (Rs 2L 2025-26 and a deeper fall at Rs 2L) - switched on because the extra profit was judged worth it. Watch it.",
+         "before": "No round-level trades.", "on": flag("rlevel_slot"), "kind": "switch"},
         {"id": "profit_trail", "date": "2026-11-11", "title": "Profit trail once +2.5R (round 99)",
          "what": f"Noise, Camarilla, Fibonacci and trend-day trades: once a trade has been +{C.TRAIL_START_R:g}R in favour, the index stop follows the "
                  f"best move {C.TRAIL_GIVE_R:g}R behind it, so a late reversal gives back at most {C.TRAIL_GIVE_R:g}R from the best. The 15-min channel slot "
@@ -1321,7 +1356,7 @@ def changes() -> list[dict]:
 
 
 def revert_change(cid: str, on: bool | None = None) -> str:
-    if cid in ("conviction", "limits_system_only", "small_otm", "ai_judge", "big_run_skip", "dd_half", "crypto_book_r64", "cpr_size", "big_otm", "channel_slot", "profit_trail"):
+    if cid in ("conviction", "limits_system_only", "small_otm", "ai_judge", "big_run_skip", "dd_half", "crypto_book_r64", "cpr_size", "big_otm", "channel_slot", "profit_trail", "rlevel_slot"):
         set_flag(cid, bool(on))
         return ("Switched on again." if on else "Switched back to how it worked before.")
     if cid == "weekly_limit":
@@ -1850,7 +1885,7 @@ def _reco_id(sym, plan, now) -> str:
 
 
 def _sname(st):
-    return {"noise": "Noise-area", "camarilla": "Camarilla", "ai": "AI model", "trend": "Trend-day", "fib": "Fibonacci", "channel": "Channel 15m"}.get(st, st)
+    return {"noise": "Noise-area", "camarilla": "Camarilla", "ai": "AI model", "trend": "Trend-day", "fib": "Fibonacci", "channel": "Channel 15m", "rlevel": "Round-level break"}.get(st, st)
 
 
 def _push_entry(sym, slot, ok, msg, now):
@@ -2025,6 +2060,9 @@ def _tick():
                 for slot in C.SLOTS:                      # own-slot rules (round 23 trend-day catcher, round 29 Fibonacci breakout, round 90 channel)
                     if slot == "channel":
                         if not channel_allowed(pf, ch_eq, sym):
+                            continue
+                    elif slot == "rlevel":
+                        if not rlevel_allowed(pf, sym):
                             continue
                     elif slot not in strats or (slot == "trend" and t < C.TREND_FIRST_CHECK):
                         continue

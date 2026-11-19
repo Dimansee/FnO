@@ -152,7 +152,7 @@ TRAIL_STRATS = ("noise", "camarilla", "fib", "trend")
 # stop, else 15:15 - the Camarilla exits. Own slot. Picked on 2023-25 for Nifty and Sensex (Bank Nifty lost). Autopilot adds it once
 # equity reaches FIB_MIN_EQUITY: at Rs 2 lakh it lifted the median 12-month return +25% -> +41% but deepened the typical fall.
 FIB_MIN_EQUITY = 200_000
-SLOTS = ("trend", "fib", "channel")   # rules with their own position slot (may hold a trade while a Noise / Camarilla trade is open)
+SLOTS = ("trend", "fib", "channel", "rlevel")   # rules with their own position slot (may hold a trade while a Noise / Camarilla trade is open)
 TREND_MIN_EQUITY = 40_000   # round 24: Autopilot adds the trend slot only once equity is >= Rs 40k (1-year bootstrap from Rs 20k:
                             # 65.9% of paths ended unable to afford a lot vs 73.5% ungated and 68.5% without the catcher)
 # Market recorder (fno/recorder.py): option-chain snapshots kept for later research
@@ -214,7 +214,7 @@ CONVICTION_LOW = 0.67
 # better in 2023, 2024, 2025 and 2026 (full 44.2L vs 33.4L); narrow-day trades earn more per lot every year (t-test p = 0.0004).
 CPR_NARROW, CPR_WIDE = 0.25, 0.5
 CPR_MULT_NARROW, CPR_MULT_MID = 1.2, 0.85
-CONVICTION_STRATS = ("noise", "camarilla", "trend", "fib")
+CONVICTION_STRATS = ("noise", "camarilla", "trend", "fib", "rlevel")   # rlevel: round 102 was replayed with conviction sizing
 # Round 42 "strong" confidence sizing (opt-in, Settings): all three indices, score 5-6 -> 2x risk, 3-4 -> 1x, 0-2 -> 0.5x.
 # Backtest from Rs 2 lakh: more profit (1-year median +95% vs +53%) but a fall of 30%+ in 58% of 1-year paths (vs 36%).
 STRONG_CONF = ((5, 2.0), (3, 1.0), (0, 0.5))
@@ -257,3 +257,25 @@ CHANNEL_FIRST_BAR = time(9, 30)   # first 15-min bar that may trade (the 09:15 b
 CHANNEL_LAST_BAR = time(14, 45)   # last 15-min bar that may open a trade
 CHANNEL_HARD_STOP = False  # an index stop at the opposite edge at entry was NOT in the round-90 test and cost money in the app's
                            # backtest (Sensex 2025-26 -11k vs +0.5k per lot): the opposite channel break is the exit, as tested
+
+# Round 102 (19 Nov 2026): round-level break slot, Nifty only, half size, no equity gate. Round levels every 100 Nifty points, zone
+# +/- 25. A test of a level from below starts when the previous 15-min close is under the zone and the bar's high reaches it; it ends
+# as a rejection (close back under the zone) or a break (close above it); mirror for support. Tests reset each session; rejections
+# are counted per level and side over the last 5 sessions. A 15-min close that breaks a level already rejected >= 1 time this week
+# (same side) -> buy at the next bar's open (CALL up, PUT down). Stop = the signal bar's low / high -/+ 0.02%; once ahead, the stop
+# follows the best 15-min close 1R behind it; else 15:15. Up to 3 a day, one at a time. Outcomes replay with today's rules:
+# Rs 20k 5.49L / 3.49L / 95.4L vs 1.94L / 2.21L / 20.0L (2023-24 / 2025-26 / full), worst fall -49% vs -66%; Rs 2L 37.2L / 20.8L /
+# 183.0L vs 30.7L / 21.3L / 171.6L, worst fall -31% vs -26%; Rs 5L full 252L vs 204L. Beat 80-100% of random entries; fails the
+# house bar (Rs 2L 2025-26 and a deeper fall) - adopted on the user's say-so (19 Nov: deeper falls are fine if the profit is worth it).
+RLEVEL_SYMS = ("NIFTY",)
+RLEVEL_STEP = {"NIFTY": 100}
+RLEVEL_ZONE = 25.0          # +/- points around the level
+RLEVEL_WEEK_SESSIONS = 5    # rejections counted over this many sessions (today included)
+RLEVEL_MIN_REJ = 1
+RLEVEL_BUF = 0.0002         # stop buffer beyond the signal bar, fraction of price
+RLEVEL_TRAIL_R = 1.0
+RLEVEL_SIZE = 0.5           # half the normal risk (the tested size)
+RLEVEL_PER_DAY = 3
+RLEVEL_FIRST_BAR = time(9, 30)    # first 15-min bar the entry may be in (signal bar 09:15)
+RLEVEL_LAST_BAR = time(14, 45)    # last 15-min bar the entry may be in
+RLEVEL_ENTRY_MIN = 5        # enter only in the first 5 minutes of the bar after the signal (the backtest buys at its open)

@@ -38,7 +38,7 @@ def rulebook() -> dict:
     """Sections of {title, rows: [[name, value]]} plus the live switch states."""
     per = _idx_rules()
     which = {r: ", ".join(LABEL[s] for s, rr in per.items() if r in rr) for r in NAMES}
-    sw = {k: _flag(k) for k in ("conviction", "big_run_skip", "dd_half", "small_otm", "ai_judge", "limits_system_only", "big_otm", "channel_slot", "profit_trail")}
+    sw = {k: _flag(k) for k in ("conviction", "big_run_skip", "dd_half", "small_otm", "ai_judge", "limits_system_only", "big_otm", "channel_slot", "profit_trail", "rlevel_slot")}
     on = lambda k: "ON" if sw[k] else "OFF (switched off in Research → Changes)"
     sections = [
         {"title": "What Autopilot trades", "rows": [
@@ -64,7 +64,11 @@ def rulebook() -> dict:
              f"{on('channel_slot')}: price breaks the highest high (CALL) / lowest low (PUT) of the last {C.CHANNEL_N} completed 15-min bars, "
              f"with RSI(14, 15-min) above / below 50. 15-min bars {_t(C.CHANNEL_FIRST_BAR)}-{_t(C.CHANNEL_LAST_BAR)}. Own slot, half the normal risk. "
              f"Only once equity ≥ {_rs(C.CHANNEL_MIN_EQUITY)} (round 90)"],
-            ["Slots", "One Noise/Camarilla position per index; trend-day, Fibonacci and the 15-min channel each have their own slot"],
+            ["Round-level break (Nifty)",
+             f"{on('rlevel_slot')}: a 15-min close through a round {C.RLEVEL_STEP['NIFTY']}-point level (zone ±{C.RLEVEL_ZONE:g}) that rejected price at least "
+             f"{C.RLEVEL_MIN_REJ} time in the last {C.RLEVEL_WEEK_SESSIONS} sessions - CALL up, PUT down, bought at the next 15-min bar "
+             f"({_t(C.RLEVEL_FIRST_BAR)}-{_t(C.RLEVEL_LAST_BAR)}). Own slot, half the normal risk, up to {C.RLEVEL_PER_DAY} a day, any account size (round 102)"],
+            ["Slots", "One Noise/Camarilla position per index; trend-day, Fibonacci, the 15-min channel and the round-level break each have their own slot"],
         ]},
         {"title": "Stops, targets and exits", "rows": [
             ["Profit trail", f"{on('profit_trail')}: Noise, Camarilla, Fibonacci and trend-day - once a trade has been +{C.TRAIL_START_R:g}R in favour, "
@@ -76,6 +80,8 @@ def rulebook() -> dict:
             ["Fibonacci", f"Stop at the 0.382 level (1-3 ATR). Stop to entry at +1R. {C.CAM_TIME_STOP}-min time stop. No target"],
             ["15-min channel", "No fixed stop (as tested): exits when the channel breaks the other way with RSI the other side of 50, "
                                "then trades that way (stop-and-reverse) until 14:45; otherwise holds to 15:15. Half size. No target"],
+            ["Round-level break", f"Stop at the signal bar's low (CALL) / high (PUT); once a 15-min close is ahead of the entry, the stop follows the best "
+                                  f"15-min close {C.RLEVEL_TRAIL_R:g}R behind it. No target, no round-99 profit trail. Half size"],
             ["Square-off", f"Every open trade closes at {_t(C.SQUARE_OFF)}. Nothing is held overnight"],
             ["Partial booking", "None - the whole position exits together (rounds 40-41: T1/T2/T3 booking earned less)"],
         ]},

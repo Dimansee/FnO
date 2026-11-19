@@ -251,6 +251,10 @@ def evaluate(symbol, candles, vix, cstats, news, gcues, fii, now: datetime, day_
         res["channel"] = evaluate_channel(candles, vix, now, tt.get("channel_last"))
         res["checks"].append((None, "15-min channel breakout (own slot):"))
         res["checks"] += res["channel"]["checks"]
+    if "rlevel" in enabled:                      # round 102: round-level break, own slot (Nifty, half size)
+        res["rlevel"] = evaluate_rlevel(candles, vix, now, symbol, tt.get("rlevel_done"))
+        res["checks"].append((None, "Round-level break (own slot):"))
+        res["checks"] += res["rlevel"]["checks"]
     if "camarilla" not in enabled:
         return res
     res["checks"].append((None, "Second strategy - Camarilla breakout:"))
@@ -436,6 +440,140 @@ def evaluate_channel(candles, vix, now: datetime, last_side: str | None = None) 
                    "breakeven_at": None, "time_stop_min": None,
                    "trail": "no fixed stop: exits on the opposite 15-min channel break (RSI the other side of 50), else 15:15"}
     return out
+
+
+# ---------------- round 102: round-level break slot (Nifty, half size, no equity gate)
+def rlevel_events(b: pd.DataFrame, symbol: str) -> pd.DataFrame:
+    """Per 15-min bar (b = completed bars, oldest first): brk_u / brk_d = the round level a close broke up / down through (NaN if none)
+    and brk_u_w / brk_d_w = how many times that level had rejected price on that side over the last RLEVEL_WEEK_SESSIONS sessions
+    before this break. Same rules as research round 102 (zones.events): a test from below starts when the previous close is under
+    the zone and the bar's high reaches it; a close back under the zone = rejection, above it = break. Tests reset each session."""
+    import numpy as np
+    step = C.RLEVEL_STEP.get(symbol, 100); z = C.RLEVEL_ZONE; wk = C.RLEVEL_WEEK_SESSIONS - 1
+    o, h, l, c = (b[k].values.astype(float) for k in ("open", "high", "low", "close"))
+    dates = b.index.date
+    n = len(c)
+    bu, bd = np.full(n, np.nan), np.full(n, np.nan)
+    buw, bdw = np.full(n, np.nan), np.full(n, np.nan)
+    rej: dict = {}
+    act_r, act_s = set(), set()
+    cur, di = None, -1
+    for t in range(n):
+        if dates[t] != cur:
+            cur = dates[t]; di += 1; act_r.clear(); act_s.clear(); pc = None
+        else:
+            pc = c[t - 1]
+        for k in range(int(np.floor((l[t] - 2 * z) / step)), int(np.ceil((h[t] + 2 * z) / step)) + 1):
+            lv = k * step
+            if pc is not None and pc < lv - z and h[t] >= lv - z:
+                act_r.add(lv)
+            if pc is not None and pc > lv + z and l[t] <= lv + z:
+                act_s.add(lv)
+        for side, act in (("r", act_r), ("s", act_s)):
+            for lv in list(act):
+                if not (c[t] > lv + z or c[t] < lv - z):
+                    continue
+                cw = sum(1 for x in rej.get((side, lv), []) if di - wk <= x <= di)
+                held = c[t] < lv - z if side == "r" else c[t] > lv + z
+                if held:
+                    rej.setdefault((side, lv), []).append(di)
+                elif side == "r":
+                    if np.isnan(bu[t]) or lv > bu[t]:
+                        bu[t], buw[t] = lv, cw
+                else:
+                    if np.isnan(bd[t]) or lv < bd[t]:
+                        bd[t], bdw[t] = lv, cw
+                act.discard(lv)
+    return pd.DataFrame({"brk_u": bu, "brk_u_w": buw, "brk_d": bd, "brk_d_w": bdw}, index=b.index)
+
+
+def rlevel_signals(b: pd.DataFrame, ev: pd.DataFrame) -> pd.DataFrame:
+    """sig (+1 CALL / -1 PUT / 0), level and stop at each completed bar's close (the entry is at the next bar's open)."""
+    import numpy as np
+    up = ev["brk_u"].notna() & (ev["brk_u_w"] >= C.RLEVEL_MIN_REJ)
+    dn = ev["brk_d"].notna() & (ev["brk_d_w"] >= C.RLEVEL_MIN_REJ) & ~up
+    buf = b["close"] * C.RLEVEL_BUF
+    return pd.DataFrame({"sig": np.where(up, 1, np.where(dn, -1, 0)),
+                         "level": np.where(up, ev["brk_u"], np.where(dn, ev["brk_d"], np.nan)),
+                         "stop": np.where(up, b["low"] - buf, np.where(dn, b["high"] + buf, np.nan))}, index=b.index)
+
+
+def rlevel_state(candles: pd.DataFrame, now: datetime, symbol: str = "NIFTY") -> dict | None:
+    """The live round-level picture: completed 15-min bars (session-anchored 09:15) with their signals, the bar the orders work in."""
+    today, hist = session_frames(candles, now)
+    b = channel_frame(pd.concat([hist, today]), drop_partial_last=True)
+    if b.empty:
+        return None
+    sg = rlevel_signals(b, rlevel_events(b, symbol))
+    last = b.index[-1]
+    return {"bars": b[["open", "high", "low", "close"]], "sig": sg, "last": last, "bar_end": last + timedelta(minutes=C.CHANNEL_TF),
+            "same_day": last.date() == now.date()}
+
+
+def evaluate_rlevel(candles, vix, now: datetime, symbol: str = "NIFTY", done: dict | None = None) -> dict:
+    """Round 102 slot. done = {"n": rlevel trades today, "bars": signal bars already used, "free_from": 15-min bar start of the
+    last exit} - up to RLEVEL_PER_DAY a day, one at a time, each on a fresh signal after the previous trade ended (as tested)."""
+    done = done or {}
+    out = {"signal": "WAIT", "checks": [], "plan": None}
+    st = rlevel_state(candles, now, symbol)
+    if not st or not st["same_day"]:
+        out["checks"].append((None, "Waiting for today's first completed 15-min bar"))
+        return out
+    cur = st["bar_end"]
+    if not (C.RLEVEL_FIRST_BAR <= cur.time() <= C.RLEVEL_LAST_BAR):
+        out["signal"] = "NO NEW ENTRIES" if cur.time() > C.RLEVEL_LAST_BAR else "WAIT"
+        out["checks"].append((False, f"Round-level entries in the 15-min bars {C.RLEVEL_FIRST_BAR:%H:%M}-{C.RLEVEL_LAST_BAR:%H:%M}"))
+        return out
+    if int(done.get("n") or 0) >= C.RLEVEL_PER_DAY:
+        out["checks"].append((False, f"{C.RLEVEL_PER_DAY} round-level trades today already"))
+        return out
+    row = st["sig"].iloc[-1]
+    sbar = st["last"].strftime("%H:%M")
+    step = C.RLEVEL_STEP.get(symbol, 100)
+    if not row["sig"]:
+        out["checks"].append((False, f"No 15-min close through a {step}-point level (±{C.RLEVEL_ZONE:g}) that was rejected this week"))
+        return out
+    if sbar in (done.get("bars") or ()) or (done.get("free_from") and sbar < done["free_from"]):
+        out["checks"].append((False, f"The {sbar} break was already used, or came while the previous trade was open"))
+        return out
+    mins = (now.replace(tzinfo=None) - cur.replace(tzinfo=None)).total_seconds() / 60
+    if mins > C.RLEVEL_ENTRY_MIN:
+        out["checks"].append((False, f"The {sbar} break is {mins:.0f} min old: entries only in the first {C.RLEVEL_ENTRY_MIN} min of the next bar"))
+        return out
+    spot = float(candles["close"].iloc[-1])
+    sign = int(row["sig"]); stop = float(row["stop"]); lv = float(row["level"])
+    if sign * (spot - stop) <= 0:
+        out["checks"].append((False, f"Price is already through the stop ({stop:.1f})"))
+        return out
+    r = abs(spot - stop)
+    opt = "CE" if sign > 0 else "PE"
+    out["signal"] = "BUY CALL" if opt == "CE" else "BUY PUT"
+    out["checks"].append((True, f"15-min close {'above' if sign > 0 else 'below'} {lv:,.0f} (zone ±{C.RLEVEL_ZONE:g}), a level rejected this week"))
+    out["plan"] = {"strategy": "rlevel", "opt": opt, "entry": spot, "sl": round(stop, 2), "r_pts": r, "risk_pts": r / C.RLEVEL_SIZE,
+                   "level": lv, "signal_bar": sbar, "target": None, "rr": None, "breakeven_at": None, "time_stop_min": None,
+                   "trail": f"stop at the signal bar's {'low' if sign > 0 else 'high'}; once ahead it follows the best 15-min close "
+                            f"{C.RLEVEL_TRAIL_R:g}R behind; else 15:15"}
+    return out
+
+
+def rlevel_trail(pos: dict, plan: dict, state: dict | None, sl: float) -> float | None:
+    """Round 102 trail: the stop follows the best completed 15-min close since entry (entry bar included) RLEVEL_TRAIL_R x the
+    initial risk behind it, once that close is ahead of the entry. Returns the new stop if it tightens, else None."""
+    if not state or state.get("bars") is None or plan.get("r_pts") is None:
+        return None
+    b = state["bars"]
+    o = datetime.fromisoformat(pos["opened"]).replace(tzinfo=None)
+    start = o.replace(minute=(o.minute // 15) * 15, second=0, microsecond=0)   # the entry bar (bars start :00 / :15 / :30 / :45)
+    idx = b.index.tz_localize(None) if getattr(b.index, "tz", None) is not None else b.index
+    after = b["close"].values[idx >= start]
+    if not len(after):
+        return None
+    long_ = plan["opt"] == "CE"; sg = 1 if long_ else -1
+    best = max(after) if long_ else min(after)
+    if sg * (best - plan["entry"]) <= 0:
+        return None
+    new = best - sg * C.RLEVEL_TRAIL_R * float(plan["r_pts"])
+    return round(float(new), 2) if sg * (new - sl) > 0 else None
 
 
 def trend_signal(today: pd.DataFrame, bands: pd.DataFrame, i: int):
@@ -761,7 +899,7 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
     if t >= C.SQUARE_OFF or pos["opened"][:10] < now.date().isoformat():
         return "Square-off 15:15", upd
     is_custom = bool(plan) and str(plan.get("strategy", "")).startswith("custom:")
-    if not plan or (plan.get("strategy") not in ("noise", "camarilla", "ai", "trend", "fib", "channel") and not is_custom):
+    if not plan or (plan.get("strategy") not in ("noise", "camarilla", "ai", "trend", "fib", "channel", "rlevel") and not is_custom):
         if prem <= pos["sl_prem"]:
             return "Premium stop-loss hit", upd
         if prem >= pos["target_prem"]:
@@ -785,6 +923,8 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
     if (long_ and lo_e <= sl) or (not long_ and hi_e >= sl):
         if fixed and not ((long_ and spot <= sl) or (not long_ and spot >= sl)):
             upd["_level"] = sl                              # touched between checks: price the exit at the stop, not at today's price
+        if plan.get("strategy") == "rlevel" and pos.get("rl_trail"):
+            return f"Trailing stop ({C.RLEVEL_TRAIL_R:g}R behind the best 15-min close)", upd
         if pos.get("trail_on"):
             return f"Profit trail stop ({C.TRAIL_GIVE_R:g}R behind the best move after +{C.TRAIL_START_R:g}R)", upd
         if pos.get("at_breakeven"):
@@ -830,6 +970,11 @@ def exit_check(pos: dict, spot: float, prem: float, now: datetime, state: dict |
             mins = (now.replace(tzinfo=None) - opened.replace(tzinfo=None)).total_seconds() / 60
             if not reached and mins >= plan["time_stop_min"]:
                 return f"Time stop ({plan['time_stop_min']} min, no follow-through)", upd
+    if plan.get("strategy") == "rlevel":            # round 102: own trail on 15-min closes (not the round-99 profit trail)
+        new = rlevel_trail(pos, plan, state, sl)
+        if new is not None:
+            upd.update({"live_sl": new, "rl_trail": True})
+        return None, upd
     _profit_trail(pos, plan, spot, long_, sl, ext, upd)
     return None, upd
 
