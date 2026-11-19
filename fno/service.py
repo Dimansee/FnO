@@ -121,7 +121,7 @@ def channel_allowed(pf, equity: float, symbol: str | None = None) -> bool:
 
 
 def rlevel_allowed(pf, symbol: str | None = None) -> bool:
-    """Round 102: Autopilot's round-level break slot - Nifty only, no equity gate, switchable."""
+    """Round 102: Autopilot's round-level break slot - Nifty only, switchable (equity gate RLEVEL_MIN_EQUITY in place_signal)."""
     return bool(pf.get("autopilot")) and flag("rlevel_slot") and (symbol is None or symbol in C.RLEVEL_SYMS)
 
 
@@ -1137,6 +1137,8 @@ def _place_signal(symbol, strike=None, auto=False, which=None):
         if not rlevel_allowed(pf, symbol):
             return False, ("The round-level break slot trades Nifty on Autopilot (round 102)." if flag("rlevel_slot")
                            else "The round-level break slot is switched off.")
+        if P.equity(acct, tr) < C.RLEVEL_MIN_EQUITY:
+            return False, f"Autopilot adds the round-level break slot once equity reaches ₹{C.RLEVEL_MIN_EQUITY:,.0f} (round 102)."
         strats = list(strats) + ["rlevel"]
     if which is None and _trend_only(pf, symbol):
         return False, "Only the own-slot rules trade this instrument."
@@ -1293,7 +1295,8 @@ def changes() -> list[dict]:
          "what": f"Autopilot also trades Nifty when a 15-min candle closes through a round {C.RLEVEL_STEP['NIFTY']}-point level (zone ±{C.RLEVEL_ZONE:g}) "
                  f"that had already rejected price at least once in the last {C.RLEVEL_WEEK_SESSIONS} sessions: CALL on a break up, PUT on a break down, "
                  f"bought at the next 15-min bar. Stop at the signal bar's low / high; once ahead, the stop follows the best 15-min close "
-                 f"{C.RLEVEL_TRAIL_R:g}R behind; else 15:15. Own slot, half the normal risk, up to {C.RLEVEL_PER_DAY} a day, any account size. "
+                 f"{C.RLEVEL_TRAIL_R:g}R behind; else 15:15. Own slot, half the normal risk, up to {C.RLEVEL_PER_DAY} a day, from ₹{C.RLEVEL_MIN_EQUITY:,.0f} equity "
+                 f"(20 Nov: with no gate a 2025-like year took a ₹20k account to ₹7k). "
                  f"Outcomes replay with today's rules: Rs 20k 2023-24 5.49L vs 1.94L, 2025-26 3.49L vs 2.21L, full 95.4L vs 20.0L, worst fall -49% vs -66%; "
                  f"Rs 2L 37.2L vs 30.7L, 20.8L vs 21.3L (slightly worse), 183L vs 172L, worst fall -31% vs -26%; Rs 5L full 252L vs 204L. "
                  f"Fails the usual bar (Rs 2L 2025-26 and a deeper fall at Rs 2L) - switched on because the extra profit was judged worth it. Watch it.",

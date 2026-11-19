@@ -268,6 +268,8 @@ CHANNEL_HARD_STOP = False  # an index stop at the opposite edge at entry was NOT
 # 183.0L vs 30.7L / 21.3L / 171.6L, worst fall -31% vs -26%; Rs 5L full 252L vs 204L. Beat 80-100% of random entries; fails the
 # house bar (Rs 2L 2025-26 and a deeper fall) - adopted on the user's say-so (19 Nov: deeper falls are fine if the profit is worth it).
 RLEVEL_SYMS = ("NIFTY",)
+RLEVEL_MIN_EQUITY = 100000  # equity gate (20 Nov 2026): from Rs 20k with no gate, 2025 alone went Rs 20k -> Rs 7k (-88%);
+                            # from Rs 1L every year at Rs 20k is as good or better than without the slot, worst fall unchanged
 RLEVEL_STEP = {"NIFTY": 100}
 RLEVEL_ZONE = 25.0          # +/- points around the level
 RLEVEL_WEEK_SESSIONS = 5    # rejections counted over this many sessions (today included)

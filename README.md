@@ -8,7 +8,8 @@ source of the one-time copy on 1 Nov (fno/store.py: portfolio and scalp book fro
 - Autopilot trades Nifty when a 15-min candle closes through a round 100-point level (zone ±25) that rejected price at least
   once on that side in the last 5 sessions: CALL up / PUT down, bought in the first 5 minutes of the next 15-min bar (bars
   09:30-14:45). Stop at the signal bar's low / high; once ahead, the stop follows the best 15-min close 1R behind; else 15:15.
-  Own slot (`rlevel`), half size, any equity, up to 3 a day, one at a time. Conviction and CPR sizing apply; the big-run skip
+  Own slot (`rlevel`), half size, from ₹1 lakh equity (`C.RLEVEL_MIN_EQUITY`, 20 Nov: with no gate a 2025-like year took a
+  ₹20k account to ₹7k), up to 3 a day, one at a time. Conviction and CPR sizing apply; the big-run skip
   and the round-99 profit trail do not.
 - Code: `strategy.rlevel_events / rlevel_signals / rlevel_state / evaluate_rlevel / rlevel_trail`, `service.rlevel_allowed`,
   `backtest._rlevel_trades` (Outcomes and Backtest), `portfolio_bt.replay(rlevel=...)`. Constants `C.RLEVEL_*`.

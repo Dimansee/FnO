@@ -284,6 +284,7 @@ FIX_TEXT = {
     "spread": ("Option spread too wide", "r34", "Keep: wide spreads cost more than the signal earns."),
     "calendar": ("Calendar rule", "r6", "Keep."),
     "auto_off": ("Autopilot was off for the instrument", "settings", "Your action: tick the instrument in Settings → Auto-trade if you want it traded."),
+    "rule_not_used": ("Rule not used on this index", "r24, r29", "By design: rounds 24 / 29 chose which rules Autopilot trades on each index (e.g. no Camarilla on Sensex; tested again in r101). Keep."),
     "not_attempted": ("Signal changed before the minute check", "ops", "Watch: if this repeats on winners, research an entry on the signal bar itself."),
 }
 

@@ -22,6 +22,8 @@ import numpy as np
 import pandas as pd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(HERE))
+from fno import config as C   # noqa: E402  (Muhurat days / holidays for "previous session")
 DAY = sys.argv[1] if len(sys.argv) > 1 else date.today().isoformat()
 DATA = sys.argv[2] if len(sys.argv) > 2 else os.path.join(HERE, "data")
 LIVE = os.path.join(DATA, "live")
@@ -54,7 +56,10 @@ def prev_hlc(sym, day):
     """Previous session high / low / close: previous live day if recorded, else the 1-minute history file."""
     d = date.fromisoformat(day)
     for k in range(1, 8):
-        p = (d - timedelta(days=k)).isoformat()
+        pd_ = d - timedelta(days=k)
+        if pd_ in C.MUHURAT_DAYS or pd_.weekday() >= 5 or pd_ in C.HOLIDAYS:   # Muhurat / special sessions are not "yesterday"
+            continue
+        p = pd_.isoformat()
         ix, _ = idx_candles(p)
         if ix is not None and len(ix[ix.sym == sym]):
             x = ix[ix.sym == sym]
@@ -63,6 +68,7 @@ def prev_hlc(sym, day):
     if os.path.exists(f):
         h = pd.read_csv(f, parse_dates=["ts"]).set_index("ts")
         h = h[h.index < pd.Timestamp(day)]
+        h = h[~pd.Index(h.index.date).isin(list(C.MUHURAT_DAYS))]
         last = h[h.index.normalize() == h.index[-1].normalize()]
         return float(last.high.max()), float(last.low.min()), float(last.close.iloc[-1])
     return None

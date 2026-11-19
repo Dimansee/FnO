@@ -211,6 +211,7 @@ def run(symbol: str, capital: float = C.DEFAULT_CAPITAL, mult: float = C.NOISE_M
         return {"error": "No historical candles returned."}
     if vix_intraday is None and vix_daily is None:
         vix_intraday, vix_daily = _vix_series()
+    candles = S.drop_special_sessions(candles)          # Muhurat / special short sessions are not a prior day (19 Nov 2026)
     df = I.add_indicators(candles)
     frames = [(d, g) for d, g in df.groupby(df.index.date)]
     trade_from = frames[-days][0] if days and days < len(frames) else None
@@ -843,6 +844,8 @@ def _autopilot_replay(trades, capital, lot, alt=None):
             why["fib_gate"] += 1; continue
         if t["strategy"].startswith("Channel") and (eq < C.CHANNEL_MIN_EQUITY or not _flag("channel_slot")):
             why["channel_gate"] = why.get("channel_gate", 0) + 1; continue
+        if str(t["strategy"]).startswith("Round-level") and (eq < C.RLEVEL_MIN_EQUITY or not _flag("rlevel_slot")):
+            why["rlevel_gate"] = why.get("rlevel_gate", 0) + 1; continue
         if t["lots"] == 1 and t.get("risk_lot") and t["risk_lot"] > C.AUTOPILOT_MAX_TRADE_RISK * eq:
             why["risk15"] += 1; continue
         if cost + sum(p[1] for p in open_) > eq:

@@ -103,7 +103,7 @@ def _trades(sym, candles, vix, otm, ov, big_run, max_loss=0):
 
 def cpr_widths(candles) -> pd.Series:
     """Round 71: each session's CPR width (% of the pivot) from the previous session's high / low / close, indexed 'YYYY-MM-DD'."""
-    c = candles
+    c = S.drop_special_sessions(candles)                 # Muhurat hour is not "yesterday" (19 Nov 2026)
     if getattr(c.index, "tz", None) is not None:
         c = c.tz_localize(None)
     g = c.groupby(c.index.normalize()).agg(H=("high", "max"), L=("low", "min"), C=("close", "last"))
@@ -171,8 +171,8 @@ def replay(T: pd.DataFrame, capital: float, sizing: str, risk_pct: float, lots_f
             why = "Fibonacci slot below Rs 2 lakh"
         elif str(r.strategy).startswith("Channel") and (not channel or (gates and eq < C.CHANNEL_MIN_EQUITY)):
             why = "channel slot below Rs 5 lakh" if channel else "channel slot off"
-        elif not rlevel and str(r.strategy).startswith("Round-level"):
-            why = "round-level slot off"
+        elif str(r.strategy).startswith("Round-level") and (not rlevel or (gates and eq < C.RLEVEL_MIN_EQUITY)):
+            why = "round-level slot below its equity gate" if rlevel else "round-level slot off"
         lots, m = 0, _mult(conf, s, int(r.score))
         if cpr and why is None:
             ct = S.cpr_tilt(getattr(r, "cpr_w", None))

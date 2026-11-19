@@ -396,6 +396,17 @@ def decisions(d: str, h: dict, recos: list, closed: list, open_: list) -> dict:
                 return t, op
         return None, None
 
+    def _rule_not_used(strategy, symbol):
+        """True when Autopilot never trades this rule on this index (e.g. Camarilla on Sensex, round 24/29)."""
+        if not strategy:
+            return False
+        if strategy == "channel":
+            return symbol not in C.CHANNEL_SYMS
+        if strategy == "rlevel":
+            return symbol not in C.RLEVEL_SYMS
+        allowed = C.AUTOPILOT_SYM_STRATEGIES.get(symbol)
+        return allowed is not None and strategy in ("noise", "camarilla", "trend", "fib") and strategy not in allowed
+
     def match_episode(r):
         mine = [(k, e) for k, lst in eps.items() if k.split(":")[0] == r["symbol"] and not k.endswith(":scalp") for e in lst if not e.get("ok")]
         exact = [e for _, e in mine if e.get("strategy") == r.get("strategy") and e.get("signal_bar") and e.get("signal_bar") == r.get("signal_bar")]
@@ -419,6 +430,9 @@ def decisions(d: str, h: dict, recos: list, closed: list, open_: list) -> dict:
             elif not r.get("auto_enabled"):
                 st = {"state": "skipped", "cat": "auto_off", "label": "Autopilot off for this instrument",
                       "msg": "Automatic trading was off (or this index was not ticked in Settings → Auto-trade), so the signal was only recorded."}
+            elif _rule_not_used(r.get("strategy"), r["symbol"]):
+                st = {"state": "skipped", "cat": "rule_not_used", "label": "Rule not used on this index (round 24/29)",
+                      "msg": "Autopilot does not trade this rule on this index (rounds 24 / 29 chose the rules per index), so the signal was only recorded."}
             elif _hm(r.get("time")) > C.LAST_ENTRY_ANY.hour * 60 + C.LAST_ENTRY_ANY.minute:
                 st = {"state": "skipped", "cat": "late", "label": "After the last entry time",
                       "msg": f"Automatic entries stop at {C.LAST_ENTRY_ANY.strftime('%H:%M')}."}

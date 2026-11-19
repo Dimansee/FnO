@@ -67,7 +67,7 @@ def rulebook() -> dict:
             ["Round-level break (Nifty)",
              f"{on('rlevel_slot')}: a 15-min close through a round {C.RLEVEL_STEP['NIFTY']}-point level (zone ±{C.RLEVEL_ZONE:g}) that rejected price at least "
              f"{C.RLEVEL_MIN_REJ} time in the last {C.RLEVEL_WEEK_SESSIONS} sessions - CALL up, PUT down, bought at the next 15-min bar "
-             f"({_t(C.RLEVEL_FIRST_BAR)}-{_t(C.RLEVEL_LAST_BAR)}). Own slot, half the normal risk, up to {C.RLEVEL_PER_DAY} a day, any account size (round 102)"],
+             f"({_t(C.RLEVEL_FIRST_BAR)}-{_t(C.RLEVEL_LAST_BAR)}). Own slot, half the normal risk, up to {C.RLEVEL_PER_DAY} a day, from ₹{C.RLEVEL_MIN_EQUITY:,.0f} equity (round 102)"],
             ["Slots", "One Noise/Camarilla position per index; trend-day, Fibonacci, the 15-min channel and the round-level break each have their own slot"],
         ]},
         {"title": "Stops, targets and exits", "rows": [

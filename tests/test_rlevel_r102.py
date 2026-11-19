@@ -86,6 +86,16 @@ assert not SV.rlevel_allowed(pf, "NIFTY")
 SV.revert_change("rlevel_slot", True)
 assert SV.rlevel_allowed(pf, "NIFTY")
 assert "rlevel" in C.SLOTS and "rlevel" in C.CONVICTION_STRATS and "rlevel" not in C.TRAIL_STRATS
+assert C.RLEVEL_MIN_EQUITY == 100000
+from fno import portfolio_bt as PB
+_row = dict(sym="NIFTY", date="2026-11-16", entry_time="10:31", exit_time="11:30", strategy="Round-level break", side="CALL",
+            prem_in=100.0, prem_out=150.0, lot=65, risk_lot=1000.0, risk_lot_capped=1000.0, R=1.0, spot_in=25300.0, spot_out=25350.0,
+            reason="t", pieces=1, score=3, cpr_w=float("nan"))
+_T = pd.DataFrame([_row])
+_r = PB.replay(_T, 20000, "compound", 1.0, 1, "standard", True, 50, False, None)
+assert _r["skipped"].iloc[0] == "round-level slot below its equity gate", _r
+_r = PB.replay(_T, 200000, "compound", 1.0, 1, "standard", True, 50, False, None)
+assert "skipped" not in _r or pd.isna(_r["skipped"].iloc[0]), _r
 
 # 5. done-today: count, used signal bars and the bar the last trade ended in
 today = C.today_ist().isoformat()
