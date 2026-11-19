@@ -1272,5 +1272,51 @@
 "lag": "range_day"
 }
 ]
+},
+{
+"day": "2026-11-19",
+"idx": {
+"NIFTY": {
+"move_pct": 1.3,
+"trend": true,
+"cpr": "narrow",
+"trades": 1,
+"caught_pts": 2.8,
+"r72": []
+},
+"BANKNIFTY": {
+"move_pct": 1.58,
+"trend": true,
+"cpr": "narrow",
+"trades": 2,
+"caught_pts": 4.8,
+"r72": []
+},
+"SENSEX": {
+"move_pct": 1.15,
+"trend": true,
+"cpr": "narrow",
+"trades": 0,
+"caught_pts": 0.0,
+"r72": []
+}
+},
+"lags": [
+{
+"sym": "NIFTY",
+"lag": "trail_exit",
+"pts": 143.5
+},
+{
+"sym": "BANKNIFTY",
+"lag": "trail_exit",
+"pts": 440.8
+},
+{
+"sym": "SENSEX",
+"lag": "no_trade_trend",
+"pts": 947.6
+}
+]
 }
 ]
