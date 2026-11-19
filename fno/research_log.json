@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-13",
+ "updated": "2026-11-19",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
@@ -1717,6 +1717,17 @@
    "result": "Today Rs 2L 30.70L / 21.27L / 1.83 Cr (fall -25.9%), Rs 20k 1.94L / 2.21L / 19.96L. All 11 slots positive per lot (avg R 0.11-0.33); removing any one: 0 of 11 pass. 24 indicator families x exits x 5m/15m = 372 versions: 133 make money in 2023-24, 29 in 2025-26, 15 in both. Intraday momentum (first half-hour -> last half-hour): no effect, 0 of 168 option cells positive in both. Long straddle: 0 of 288. Today's rules on other indices (Channel / Fib / Trend-day Bank Nifty, Camarilla Sensex) and their 11 combinations: none pass. Correlation cap Nifty-Sensex hurts (twin trades 0.22R vs 0.06R); equity-curve sizing no better than random tilts. Keltner breakout as a slot: more money but deeper fall; with risk lowered 0 of 360 pass. Squeeze release (Bollinger inside Keltner, then out; 15-min; exit when momentum turns) on Sensex at half size PASSES: n=14, 1 a day: Rs 2L 45.77L / 29.11L / 2.10 Cr (fall -27 / -28 / -28%), Rs 20k 3.08L / 2.68L / 28.61L; alone +Rs 110k / +85k per lot (569 trades, positive every year); beats 60 of 60 random-entry controls in every cell; bootstrap ahead in 84% (Rs 2L) / 74% (Rs 20k). Against it: 2026 alone worse (Rs 2L 6.80L -> 6.39L, Rs 20k 1.20L -> 0.60L); 85% of its trades open while today's rules hold the same side; fall 4-7 pts deeper at Rs 5L-10L; +1% worse fills each side loses the edge at Rs 2L.",
    "decision": "No change to today's rules. Squeeze release on Sensex is the first candidate since the channel slot to meet the bar, but it is the same bet as the existing Sensex trades, 2026 alone is worse and it is thin against costs. Built as a SHADOW slot (13 Nov, fno/squeeze.py): from 16 Nov the app records every signal with the live price of the at-the-money option at entry and exit, and places no orders. The live code takes the same 569 of 569 trades as the backtest. Review after 25 sessions (about 21 Dec). Watch list: Keltner breakout on Nifty, average-price band 2.0 trend, channel trades not confirmed by the other index (-0.08R). Closed: correlation cap, equity-curve sizing, intraday momentum, long straddles, Supertrend, PSAR, Ichimoku, Stochastic, Heikin-Ashi, DMI, RSI(2), initial balance, value-area 80% rule.",
    "summary": "All 11 slots earn their place. Over 3,500 backtests of other strategies and combinations: one passes - a squeeze-release slot on Sensex at half size. Not live: it runs as a shadow slot (signals recorded, no orders) from 16 Nov, review about 21 Dec."
+  },
+  {
+   "id": "r102",
+   "date": "2026-11-19",
+   "area": "Index options",
+   "title": "Round 102: round-number rejection zones, multi-timeframe EMA (200 EMA) swing, Improvements items, combinations - round-level break slot on Nifty adopted",
+   "asked": "User (19 Nov): near round numbers (25200, 25300) count rejections in a day and a week, use level +/-50 as the reversal zone with candle open/close entry; track other timeframes with EMAs incl. the 200 EMA for swing trades; backtest both against today's rules incl. the Rs 5 lakh rules; research the Improvements items and any combination that beats today. Afternoon: 'if losses are deeper but profit is worth it, do what you prefer' - then 'deploy'.",
+   "period": "Today's Autopilot incl. the Rs 5L rules (channel slot from Rs 5L, 2 OTM from Rs 5L), Outcomes replay at Rs 20k / 2L / 5L / 10L, 1-min data 2 Jan 2023 - 16 Oct 2026; swing also on real NSE closing prices (bhavcopy, Nifty + Bank Nifty, Oct 2023 - Oct 2026). Chosen on 2023-24, judged on 2025-26. 8,640 zone versions, 384 swing versions, gates, overlays, forward selection and 144 pairs.",
+   "result": "Round levels hold no more often than half-way levels (Nifty +/-25: 85.5% vs 85.9%); reversal trades at round numbers have no edge (99 of 4,608 versions positive in both periods; +1 to +1.5 index pts before costs; more rejections = worse). Breaks of a level already rejected this week do better. Swing: the daily 200 EMA helps, stacking 1-hour / 15-min EMAs hurts (+43 -> -49 pts a trade); best swing 4/6 cells but 40 trades, money all from 2024, fails at other sizes. Rs 5L rules: Rs 2L full 171.6L with them vs 48.2L without. Equity gates / range-day filters: none pass. Combinations: the 8 'passing' pairs were the same swing entered twice (replay key artifact). Round-level break (Nifty 15m, +/-25, 1R trail, half size), as built in the Outcomes engine: Rs 20k 3.77L / 2.59L / 65.9L vs 1.94L / 2.21L / 20.0L (fall -44% vs -66%); Rs 2L 38.0L / 21.5L / 198.2L vs 30.7L / 21.3L / 171.6L (2025-26 fall -33% vs -28%); Rs 5L full 247.9L vs 203.8L but 2025-26 78.1L vs 106.7L. Beats random entries in 80-100% of draws; 1 bar late 5/6; 1% worse fills 4/6. 2026 alone worse at Rs 20k and Rs 5L. Outcomes page after deploy (same engine, trade order now fixed): Rs 2L Jan 2023 - Nov 2026 176.6L (fall -30.1%) with the slot vs 158.2L (-25.9%) without; 2026 alone 5.94L vs 5.69L; Rs 20k 48.2L (-56.2%) vs 9.27L (-63.0%); 2026 alone 1.18L vs 1.04L.",
+   "decision": "Adopted on the user's say-so (deeper falls accepted for more profit): round-level break slot on Nifty, own slot, half size, any equity, up to 3 a day (rlevel_slot switch in Research -> Changes; Outcomes has an on/off box). Live signals match the backtest on 1,197 of 1,197 signals. Review after 25 sessions (about 26 Dec): switch off if the live result per trade is clearly below the backtest or the account falls > 35% from its peak while the slot is losing. Watch list: Nifty daily-trend swing (200 EMA, 1-hour pullback), trend-day gate at Rs 20k. Closed: round-number reversals, rejection counts as range filter or size tilt, multi-timeframe EMA stacking for swings, Bank Nifty breaks and swings. Also fixed: the portfolio replay sorted trades with an unstable sort, so trades entered in the same minute could change order when other trades were added (path noise of about 7% in final money); it now uses a stable order (date, time, index, strategy, side).",
+   "summary": "Round-number reversals have no edge, but the break of a level that already rejected price this week does. It is now a half-size Nifty slot (adopted with a deeper worst fall at Rs 2L-5L for more profit; much better at Rs 20k). EMA swing: watch list."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2185,6 +2196,21 @@
    "need": 25,
    "unit": "sessions",
    "next": "Go live at half size only if the shadow signals match the rule (timing within one minute), the real bid-ask gap is well under 1% a side and the live result per lot is not worse than the backtest's Rs 340 a trade; otherwise drop it."
+  },
+  {
+   "id": "p-rlevel",
+   "area": "Index options",
+   "title": "Round-level break slot on Nifty - live review after 25 sessions",
+   "waiting_for": "25 sessions of live round-level trades",
+   "why": "Round 102: adopted with a deeper worst fall at Rs 2L-5L (2025-26 -33% vs -28% at Rs 2L) and 2026 alone worse at Rs 20k and Rs 5L.",
+   "since": "2026-11-20",
+   "refs": [
+    "r102"
+   ],
+   "collecting": "Live round-level trades (signal bar, entry, stop, trail, exit, P&L) in the trade journal",
+   "need": 25,
+   "unit": "sessions",
+   "next": "Keep if the live result per trade is in line with the backtest; switch off (Research -> Changes) if clearly below it, or if the account falls more than 35% from its peak while the slot is losing."
   }
  ],
  "crypto_rounds": [
@@ -3249,6 +3275,15 @@
     "r101"
    ],
    "takeaway": "All 11 slots earn their place; over 3,500 backtests, one passes: squeeze release on Sensex (half size). 2026 alone is worse and it overlaps existing Sensex trades - running as a shadow slot (no orders) from 16 Nov."
+  },
+  {
+   "n": 102,
+   "date": "2026-11-19",
+   "topic": "Round-number rejection zones, multi-timeframe EMA swing, Improvements items, combinations",
+   "ids": [
+    "r102"
+   ],
+   "takeaway": "Reversals at round numbers: no edge. Break of a level rejected this week: adopted as a half-size Nifty slot (more profit, deeper fall at Rs 2L-5L; better and shallower at Rs 20k). EMA swing and trend-day gate at Rs 20k: watch list."
   }
  ],
  "india_status": {

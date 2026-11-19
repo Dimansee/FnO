@@ -887,6 +887,7 @@ button.mini{padding:5px 10px;font-size:12.5px}
         <div><label>&nbsp;</label><label class="tog"><input type="checkbox" id="pbCmp" checked> Compare with current Autopilot rules</label></div>
         <div><label>&nbsp;</label><label class="tog" title="Live rule: while equity is below Rs 60k Autopilot buys 1 strike out of the money (only with the 1 ITM strike and risk-based sizing)"><input type="checkbox" id="pbSmall" checked> 1 OTM below ₹60k</label></div>
         <div><label>&nbsp;</label><label class="tog" title="Round 90: Autopilot's 15-min channel breakout on Nifty + Sensex, half size, from Rs 5 lakh equity"><input type="checkbox" id="pbChan" checked> 15-min channel slot (from ₹5L)</label></div>
+        <div><label>&nbsp;</label><label class="tog" title="Round 102: Autopilot's round-level break on Nifty, half size, any account size"><input type="checkbox" id="pbRl" checked> Round-level break slot (Nifty)</label></div>
         <div><label>&nbsp;</label><div style="display:flex;gap:6px"><button class="primary" id="pbGo" style="flex:1">▶ Run portfolio backtest</button><button class="danger hidden" id="pbStop" title="Stop this backtest">■ Stop</button></div></div>
       </div>
       <div class="row wrap" style="margin-top:10px;gap:8px">
@@ -2868,13 +2869,13 @@ async function pbInit() {
 function pbParams() {
   return {start: $("#pbFrom").value, end: $("#pbTo").value, indices: [...document.querySelectorAll("#pbIdx input:checked")].map(x => x.value),
     capital: +$("#pbCap").value, sizing: $("#pbSize").value, risk_pct: +$("#pbRisk").value, lots: +$("#pbLots").value, confidence: $("#pbConf").value,
-    otm: +$("#pbOtm").value, max_lots: +$("#pbMax").value, max_loss_lot: +$("#pbMaxLoss").value, exit: $("#pbExit").value, big_run_skip: $("#pbRun2").checked, dd_half: $("#pbDD").checked, small_otm: $("#pbSmall").checked, channel: $("#pbChan").checked, compare: $("#pbCmp").checked};
+    otm: +$("#pbOtm").value, max_lots: +$("#pbMax").value, max_loss_lot: +$("#pbMaxLoss").value, exit: $("#pbExit").value, big_run_skip: $("#pbRun2").checked, dd_half: $("#pbDD").checked, small_otm: $("#pbSmall").checked, channel: $("#pbChan").checked, rlevel: $("#pbRl").checked, compare: $("#pbCmp").checked};
 }
 function pbApply(p) {
   const set = (id, v) => { if (v != null && $(id)) $(id).value = v; };
   set("#pbFrom", p.start); set("#pbTo", p.end); set("#pbCap", p.capital); set("#pbSize", p.sizing); set("#pbRisk", String(p.risk_pct)); set("#pbLots", p.lots);
   set("#pbConf", p.confidence); set("#pbOtm", String(p.otm)); set("#pbMax", p.max_lots); set("#pbMaxLoss", p.max_loss_lot || 0); set("#pbExit", p.exit);
-  $("#pbRun2").checked = !!p.big_run_skip; $("#pbDD").checked = p.dd_half !== false; $("#pbCmp").checked = p.compare !== false; $("#pbSmall").checked = p.small_otm !== false; $("#pbChan").checked = p.channel !== false;
+  $("#pbRun2").checked = !!p.big_run_skip; $("#pbDD").checked = p.dd_half !== false; $("#pbCmp").checked = p.compare !== false; $("#pbSmall").checked = p.small_otm !== false; $("#pbChan").checked = p.channel !== false; $("#pbRl").checked = p.rlevel !== false;
   document.querySelectorAll("#pbIdx input").forEach(x => { x.checked = (p.indices || []).includes(x.value); });
   $("#pbSize").onchange();
 }

@@ -4,6 +4,18 @@ Runs on Render (see render.yaml; free web service, Singapore). Earlier host: Ver
 Data lives in Supabase Postgres (DATABASE_URL, fno/pgkv.py) since 28 Oct 2026; Upstash Redis is the old store and the
 source of the one-time copy on 1 Nov (fno/store.py: portfolio and scalp book from Upstash, newer research / rules / learning kept).
 
+## Round-level break slot on Nifty (round 102, 19 Nov 2026)
+- Autopilot trades Nifty when a 15-min candle closes through a round 100-point level (zone ±25) that rejected price at least
+  once on that side in the last 5 sessions: CALL up / PUT down, bought in the first 5 minutes of the next 15-min bar (bars
+  09:30-14:45). Stop at the signal bar's low / high; once ahead, the stop follows the best 15-min close 1R behind; else 15:15.
+  Own slot (`rlevel`), half size, any equity, up to 3 a day, one at a time. Conviction and CPR sizing apply; the big-run skip
+  and the round-99 profit trail do not.
+- Code: `strategy.rlevel_events / rlevel_signals / rlevel_state / evaluate_rlevel / rlevel_trail`, `service.rlevel_allowed`,
+  `backtest._rlevel_trades` (Outcomes and Backtest), `portfolio_bt.replay(rlevel=...)`. Constants `C.RLEVEL_*`.
+  Switch: Research → Changes (`rlevel_slot`); Outcomes / portfolio backtest box "Round-level break slot (Nifty)".
+- Tests: `tests/test_rlevel_r102.py`; live vs backtest signals: `research/round102/parity.py` (1,197 of 1,197).
+  Research: `research/round102/` and the round-102 entry in the Research log.
+
 ## Trade page, manual stop-loss / target, one home per feature (13 Nov 2026)
 - **Trade** (was Signal + Option chain): hero, open positions, entry checklist, one order ticket with two tabs (Signal trade /
   My own order), charts, option chain (near the money or full chain with any expiry), options flow.

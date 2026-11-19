@@ -43,7 +43,7 @@ def replay(cap, a, b, extra=None, T=None, A=None, H=None, raw=False, **over):
     f = lambda X: None if X is None else X[(X.date >= a) & (X.date <= b)]
     R = PB.replay(f(T), q["capital"], q["sizing"], q["risk_pct"], q["lots"], q["confidence"], q["gates"], q["max_lots"],
                   q["dd_half"] and q["sizing"] != "fixed", f(A), cpr=q.get("cpr_size", False) and q["sizing"] != "fixed", hi=f(H),
-                  channel=q.get("channel", True))
+                  channel=q.get("channel", True), rlevel=q.get("rlevel", True))
     if raw:
         return R
     s = PB._summary(R, q["capital"])
