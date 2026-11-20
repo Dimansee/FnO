@@ -114,6 +114,8 @@ LIMITS = {
     "upstox": {"sec": 40, "min": 420, "30m": 1700, "day": None},
     "fyers": ({"sec": 8, "min": 420, "30m": None, "day": 450_000} if FYERS_PLAN == "prime"
               else {"sec": 4, "min": 42, "30m": None, "day": 4_600}),
+    # Dhan Data APIs (21 Nov 2026): 5/s; the per-minute / per-hour caps were removed; option chain 1 unique request per 3 s.
+    "dhan": {"sec": 4, "min": 240, "30m": None, "day": None},
 }
 MAX_WAIT = 6.0          # a call waits at most this long for room in the budget; longer = served from the last data instead
 _STATE: dict = {}       # broker -> {"q": deque of send times (30 min), "day": date, "n": calls today, "strikes": 429s today, ...}
@@ -160,7 +162,7 @@ def _acquire(name):
             while q and q[0] < now - 1800:
                 q.popleft()
             need = 0.0
-            gap = UPSTOX_GAP if name == "upstox" else FYERS_GAP
+            gap = UPSTOX_GAP if name == "upstox" else (0.21 if name == "dhan" else FYERS_GAP)
             if q and gap:
                 need = max(need, q[-1] + gap - now)
             per_min = lim["min"] if st["strikes"] < 2 else lim["min"] // 2     # after two 429s in a day: half speed till tomorrow
