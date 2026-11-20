@@ -77,7 +77,7 @@
 4. Your opening-candle retest (r72) fired on Sensex: CALL 10:05, stopped 10:20 for -1R on the index (the option itself closed +2%). Sensex then ran 1,000 pts higher.
 
 **Your action**
-- **Scalp book is switched off by the capital shield** until you reset the scalp book or lower its floor. Decide whether to reset it; it has lost on most days this month.
+- **Scalp book is switched off by the capital shield** until you reset the scalp book or lower its floor. Decide whether to reset it.
 - Main Autopilot settings look fine: auto on, all three indices ticked, risk 1%, compound sizing, Noise / Camarilla / Trend / Fib on. Capital still under Rs 40k, so the trend-day catcher stays off.
 
 **Rule questions**
