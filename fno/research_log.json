@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20",
+ "updated": "2026-11-21",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
@@ -1738,6 +1738,16 @@
    "period": "Autopilot replay incl. the Rs 5L rules, 1-min data to 20 Nov 2026, real option 1-min candles and 5-level depth snapshots (12 days with depth). Rs 2L and Rs 20k x 2023-24 / 2025-26 / full, plus the forward window 19 Oct - 20 Nov 2026.",
    "result": "At Rs 40K today's rules take no trade: the wide-CPR skip (round 71) applies. Wide-CPR exemptions for the trend-day, Fibonacci, channel and round-level slots do not beat today's rule in both halves (full Rs 2L: 195.4L today vs 193.9L at best; exempting everything deepens the Rs 20k fall by 6.6 pts). Lot cap: no change below about Rs 5L (the Rs 2L account never reaches 53 lots); above it the replay gains money and a deeper fall, and shrinks sharply with a 2x market-impact model. The add-on at +0.95R lost to just raising the cap; a fixed 10-25 point exit for the whole position cuts the big trend winners (win rate up to 46-67%, money down). Recorded Nifty depth is about 6-8 lots at the best ask and 47-94 in the top 5 levels, so 500 lots cannot be filled at one price. Improvements labels were updated: only 'signal changed before the minute check' remains unresearched. The scalp section was removed from the app.",
    "decision": "No rule change. Scalp section removed; Improvements labels updated; lot-cap and live-fill studies added to Pending research."
+  },
+  {
+   "id": "r104",
+   "date": "2026-11-21",
+   "area": "Index options",
+   "title": "Round 104: not missing one-sided days like 20 Nov - wide-CPR probe size, weekly-limit probe",
+   "asked": "User (20 Nov night): improve the rules so a very good one-sided day like today is not missed; research from every perspective.",
+   "period": "Today's Autopilot replay, Rs 2L and Rs 20k x 2023-24 / 2025-26 / full, forward 19 Oct - 20 Nov 2026.",
+   "result": "Two separate blockers on 20 Nov: at Rs 20-40k the wide-CPR skip (plus the Rs 40k / 2L / 5L slot gates); at Rs 2L the 4% weekly loss limit (Mon-Wed losses) blocked all 10 signals before CPR mattered. Wide-CPR days are rare (170 trades on 49 days in 4 years; Camarilla and channel won, Noise and round-level lost; 2026 +30.9k after 2023-25 negative), so the evidence is thin. Trading wide days at 0.25-0.85x size: 0 of 6 cells better. Only after 11:30: 2-3 of 6, Rs 20k full 38.7L -> 52L, Rs 2L slightly lower. Weekly-limit probe (allow entries after 11:30 at 0.5x once the limit is hit): better in 6 of 6 cells (Rs 2L full 204.5L vs 195.4L, Rs 20k full 71.7L vs 38.7L) but the Rs 2L 2025-26 fall is 4.2 points deeper (2.2 at 13:00, 2.8 at 12:00), forward window Rs 2L -6%; small-account-only version gives nothing. Combined with the late wide-CPR probe it still fails the fall bar. Nothing adopted.",
+   "decision": "Watch-list: weekly-limit probe after 11:30 at half size (fails the fall bar by 2-4 pts). No rule change."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2236,6 +2246,21 @@
     "r103"
    ],
    "next": "Run Autopilot in watch mode first, compare modelled vs real fills per order, then decide on live size."
+  },
+  {
+   "id": "p-weekly-probe",
+   "area": "Index options",
+   "title": "After the weekly loss limit: entries after 11:30 at half size",
+   "waiting_for": "More weeks with a limit hit and a later trend day (live paper record)",
+   "why": "Round 104: 6 of 6 cells have more money (Rs 2L full 204.5L vs 195.4L) but the Rs 2L 2025-26 fall is 4.2 pts deeper and the forward window is -6% at Rs 2L.",
+   "since": "2026-11-21",
+   "refs": [
+    "r104"
+   ],
+   "collecting": "Journal: signals blocked by the weekly limit and what they would have made",
+   "need": "60",
+   "unit": "sessions",
+   "next": "Re-run research/round103/c3_weekly_probe.py with new sessions; adopt only if the fall is within 2 pts."
   }
  ],
  "crypto_rounds": [
@@ -3318,6 +3343,15 @@
     "r103"
    ],
    "takeaway": "No change. Rs 40k takes no trade today (wide-CPR skip, exemptions rejected). A higher lot cap only pays above about Rs 5L and rests on fills the order book may not give; add-on and fixed 10-25 point exits lose to the current exits. Scalp section removed."
+  },
+  {
+   "n": 104,
+   "date": "2026-11-21",
+   "topic": "Not missing one-sided days: wide-CPR probe, weekly-limit probe",
+   "ids": [
+    "r104"
+   ],
+   "takeaway": "20 Nov was blocked by wide CPR at small accounts and by the weekly limit at Rs 2L. Probe-size entries gain money but deepen the fall 2-4 pts at Rs 2L: watch list, not adopted."
   }
  ],
  "india_status": {
