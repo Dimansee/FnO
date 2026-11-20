@@ -1,0 +1,1144 @@
+{
+ "by_strategy": [
+  {
+   "strategy": "Camarilla",
+   "year": "2023",
+   "wide": false,
+   "n": 161,
+   "pnl_per_trade": 254,
+   "R": 0.248,
+   "win": 0.248,
+   "total": 40961
+  },
+  {
+   "strategy": "Camarilla",
+   "year": "2023",
+   "wide": true,
+   "n": 3,
+   "pnl_per_trade": 2635,
+   "R": 0.417,
+   "win": 0.667,
+   "total": 7904
+  },
+  {
+   "strategy": "Camarilla",
+   "year": "2024",
+   "wide": false,
+   "n": 200,
+   "pnl_per_trade": 389,
+   "R": 0.282,
+   "win": 0.335,
+   "total": 77867
+  },
+  {
+   "strategy": "Camarilla",
+   "year": "2024",
+   "wide": true,
+   "n": 1,
+   "pnl_per_trade": -1961,
+   "R": -0.47,
+   "win": 0.0,
+   "total": -1961
+  },
+  {
+   "strategy": "Camarilla",
+   "year": "2025",
+   "wide": false,
+   "n": 170,
+   "pnl_per_trade": 29,
+   "R": 0.099,
+   "win": 0.276,
+   "total": 4969
+  },
+  {
+   "strategy": "Camarilla",
+   "year": "2025",
+   "wide": true,
+   "n": 2,
+   "pnl_per_trade": -198,
+   "R": 0.05,
+   "win": 0.5,
+   "total": -395
+  },
+  {
+   "strategy": "Camarilla",
+   "year": "2026",
+   "wide": false,
+   "n": 141,
+   "pnl_per_trade": 469,
+   "R": 0.267,
+   "win": 0.312,
+   "total": 66139
+  },
+  {
+   "strategy": "Camarilla",
+   "year": "2026",
+   "wide": true,
+   "n": 4,
+   "pnl_per_trade": 3288,
+   "R": 0.467,
+   "win": 0.5,
+   "total": 13150
+  },
+  {
+   "strategy": "Camarilla",
+   "year": "all",
+   "wide": false,
+   "n": 672,
+   "pnl_per_trade": 283,
+   "R": 0.224,
+   "win": 0.295,
+   "total": 189936
+  },
+  {
+   "strategy": "Camarilla",
+   "year": "all",
+   "wide": true,
+   "n": 10,
+   "pnl_per_trade": 1870,
+   "R": 0.275,
+   "win": 0.5,
+   "total": 18698
+  },
+  {
+   "strategy": "Channel 15m",
+   "year": "2023",
+   "wide": false,
+   "n": 535,
+   "pnl_per_trade": 6,
+   "R": 0.133,
+   "win": 0.484,
+   "total": 3449
+  },
+  {
+   "strategy": "Channel 15m",
+   "year": "2023",
+   "wide": true,
+   "n": 3,
+   "pnl_per_trade": -81,
+   "R": 0.213,
+   "win": 0.333,
+   "total": -244
+  },
+  {
+   "strategy": "Channel 15m",
+   "year": "2024",
+   "wide": false,
+   "n": 516,
+   "pnl_per_trade": 174,
+   "R": 0.079,
+   "win": 0.424,
+   "total": 89823
+  },
+  {
+   "strategy": "Channel 15m",
+   "year": "2024",
+   "wide": true,
+   "n": 22,
+   "pnl_per_trade": 1187,
+   "R": 0.106,
+   "win": 0.409,
+   "total": 26120
+  },
+  {
+   "strategy": "Channel 15m",
+   "year": "2025",
+   "wide": false,
+   "n": 514,
+   "pnl_per_trade": 40,
+   "R": 0.148,
+   "win": 0.477,
+   "total": 20400
+  },
+  {
+   "strategy": "Channel 15m",
+   "year": "2025",
+   "wide": true,
+   "n": 9,
+   "pnl_per_trade": 132,
+   "R": 0.236,
+   "win": 0.667,
+   "total": 1190
+  },
+  {
+   "strategy": "Channel 15m",
+   "year": "2026",
+   "wide": false,
+   "n": 438,
+   "pnl_per_trade": -61,
+   "R": 0.106,
+   "win": 0.477,
+   "total": -26715
+  },
+  {
+   "strategy": "Channel 15m",
+   "year": "2026",
+   "wide": true,
+   "n": 26,
+   "pnl_per_trade": 496,
+   "R": -0.005,
+   "win": 0.462,
+   "total": 12905
+  },
+  {
+   "strategy": "Channel 15m",
+   "year": "all",
+   "wide": false,
+   "n": 2003,
+   "pnl_per_trade": 43,
+   "R": 0.117,
+   "win": 0.465,
+   "total": 86957
+  },
+  {
+   "strategy": "Channel 15m",
+   "year": "all",
+   "wide": true,
+   "n": 60,
+   "pnl_per_trade": 666,
+   "R": 0.083,
+   "win": 0.467,
+   "total": 39971
+  },
+  {
+   "strategy": "Fibonacci 0.618",
+   "year": "2023",
+   "wide": false,
+   "n": 170,
+   "pnl_per_trade": -120,
+   "R": 0.119,
+   "win": 0.265,
+   "total": -20336
+  },
+  {
+   "strategy": "Fibonacci 0.618",
+   "year": "2024",
+   "wide": false,
+   "n": 204,
+   "pnl_per_trade": 417,
+   "R": 0.304,
+   "win": 0.333,
+   "total": 85034
+  },
+  {
+   "strategy": "Fibonacci 0.618",
+   "year": "2024",
+   "wide": true,
+   "n": 7,
+   "pnl_per_trade": -1995,
+   "R": -0.584,
+   "win": 0.143,
+   "total": -13964
+  },
+  {
+   "strategy": "Fibonacci 0.618",
+   "year": "2025",
+   "wide": false,
+   "n": 181,
+   "pnl_per_trade": 485,
+   "R": 0.306,
+   "win": 0.315,
+   "total": 87809
+  },
+  {
+   "strategy": "Fibonacci 0.618",
+   "year": "2025",
+   "wide": true,
+   "n": 2,
+   "pnl_per_trade": -180,
+   "R": -0.07,
+   "win": 0.5,
+   "total": -359
+  },
+  {
+   "strategy": "Fibonacci 0.618",
+   "year": "2026",
+   "wide": false,
+   "n": 143,
+   "pnl_per_trade": 259,
+   "R": 0.293,
+   "win": 0.294,
+   "total": 36997
+  },
+  {
+   "strategy": "Fibonacci 0.618",
+   "year": "2026",
+   "wide": true,
+   "n": 4,
+   "pnl_per_trade": 1674,
+   "R": 0.74,
+   "win": 0.5,
+   "total": 6697
+  },
+  {
+   "strategy": "Fibonacci 0.618",
+   "year": "all",
+   "wide": false,
+   "n": 698,
+   "pnl_per_trade": 271,
+   "R": 0.257,
+   "win": 0.304,
+   "total": 189504
+  },
+  {
+   "strategy": "Fibonacci 0.618",
+   "year": "all",
+   "wide": true,
+   "n": 13,
+   "pnl_per_trade": -587,
+   "R": -0.098,
+   "win": 0.308,
+   "total": -7626
+  },
+  {
+   "strategy": "Noise band",
+   "year": "2023",
+   "wide": false,
+   "n": 117,
+   "pnl_per_trade": -73,
+   "R": 0.169,
+   "win": 0.35,
+   "total": -8553
+  },
+  {
+   "strategy": "Noise band",
+   "year": "2023",
+   "wide": true,
+   "n": 7,
+   "pnl_per_trade": -1194,
+   "R": -0.326,
+   "win": 0.143,
+   "total": -8356
+  },
+  {
+   "strategy": "Noise band",
+   "year": "2024",
+   "wide": false,
+   "n": 105,
+   "pnl_per_trade": 787,
+   "R": 0.433,
+   "win": 0.419,
+   "total": 82681
+  },
+  {
+   "strategy": "Noise band",
+   "year": "2024",
+   "wide": true,
+   "n": 8,
+   "pnl_per_trade": -1911,
+   "R": -0.59,
+   "win": 0.125,
+   "total": -15287
+  },
+  {
+   "strategy": "Noise band",
+   "year": "2025",
+   "wide": false,
+   "n": 122,
+   "pnl_per_trade": 465,
+   "R": 0.311,
+   "win": 0.385,
+   "total": 56738
+  },
+  {
+   "strategy": "Noise band",
+   "year": "2025",
+   "wide": true,
+   "n": 4,
+   "pnl_per_trade": -1459,
+   "R": -0.525,
+   "win": 0.0,
+   "total": -5837
+  },
+  {
+   "strategy": "Noise band",
+   "year": "2026",
+   "wide": false,
+   "n": 103,
+   "pnl_per_trade": 14,
+   "R": 0.165,
+   "win": 0.369,
+   "total": 1401
+  },
+  {
+   "strategy": "Noise band",
+   "year": "2026",
+   "wide": true,
+   "n": 9,
+   "pnl_per_trade": 778,
+   "R": 0.384,
+   "win": 0.444,
+   "total": 7003
+  },
+  {
+   "strategy": "Noise band",
+   "year": "all",
+   "wide": false,
+   "n": 447,
+   "pnl_per_trade": 296,
+   "R": 0.269,
+   "win": 0.38,
+   "total": 132267
+  },
+  {
+   "strategy": "Noise band",
+   "year": "all",
+   "wide": true,
+   "n": 28,
+   "pnl_per_trade": -803,
+   "R": -0.201,
+   "win": 0.214,
+   "total": -22477
+  },
+  {
+   "strategy": "Round-level break",
+   "year": "2023",
+   "wide": false,
+   "n": 117,
+   "pnl_per_trade": 127,
+   "R": 0.155,
+   "win": 0.342,
+   "total": 14833
+  },
+  {
+   "strategy": "Round-level break",
+   "year": "2023",
+   "wide": true,
+   "n": 4,
+   "pnl_per_trade": -348,
+   "R": -0.235,
+   "win": 0.25,
+   "total": -1393
+  },
+  {
+   "strategy": "Round-level break",
+   "year": "2024",
+   "wide": false,
+   "n": 215,
+   "pnl_per_trade": 658,
+   "R": 0.273,
+   "win": 0.391,
+   "total": 141439
+  },
+  {
+   "strategy": "Round-level break",
+   "year": "2024",
+   "wide": true,
+   "n": 14,
+   "pnl_per_trade": -1008,
+   "R": -0.338,
+   "win": 0.143,
+   "total": -14109
+  },
+  {
+   "strategy": "Round-level break",
+   "year": "2025",
+   "wide": false,
+   "n": 211,
+   "pnl_per_trade": 57,
+   "R": 0.076,
+   "win": 0.341,
+   "total": 11945
+  },
+  {
+   "strategy": "Round-level break",
+   "year": "2025",
+   "wide": true,
+   "n": 6,
+   "pnl_per_trade": -9,
+   "R": -0.14,
+   "win": 0.333,
+   "total": -56
+  },
+  {
+   "strategy": "Round-level break",
+   "year": "2026",
+   "wide": false,
+   "n": 207,
+   "pnl_per_trade": 273,
+   "R": 0.237,
+   "win": 0.396,
+   "total": 56422
+  },
+  {
+   "strategy": "Round-level break",
+   "year": "2026",
+   "wide": true,
+   "n": 20,
+   "pnl_per_trade": -489,
+   "R": -0.155,
+   "win": 0.3,
+   "total": -9778
+  },
+  {
+   "strategy": "Round-level break",
+   "year": "all",
+   "wide": false,
+   "n": 750,
+   "pnl_per_trade": 300,
+   "R": 0.189,
+   "win": 0.371,
+   "total": 224639
+  },
+  {
+   "strategy": "Round-level break",
+   "year": "all",
+   "wide": true,
+   "n": 44,
+   "pnl_per_trade": -576,
+   "R": -0.218,
+   "win": 0.25,
+   "total": -25336
+  },
+  {
+   "strategy": "Trend-day",
+   "year": "2023",
+   "wide": false,
+   "n": 82,
+   "pnl_per_trade": 268,
+   "R": 0.245,
+   "win": 0.329,
+   "total": 22009
+  },
+  {
+   "strategy": "Trend-day",
+   "year": "2023",
+   "wide": true,
+   "n": 2,
+   "pnl_per_trade": -277,
+   "R": 0.015,
+   "win": 0.5,
+   "total": -554
+  },
+  {
+   "strategy": "Trend-day",
+   "year": "2024",
+   "wide": false,
+   "n": 88,
+   "pnl_per_trade": 966,
+   "R": 0.491,
+   "win": 0.432,
+   "total": 84974
+  },
+  {
+   "strategy": "Trend-day",
+   "year": "2024",
+   "wide": true,
+   "n": 6,
+   "pnl_per_trade": -603,
+   "R": -0.447,
+   "win": 0.167,
+   "total": -3617
+  },
+  {
+   "strategy": "Trend-day",
+   "year": "2025",
+   "wide": false,
+   "n": 72,
+   "pnl_per_trade": 163,
+   "R": 0.2,
+   "win": 0.375,
+   "total": 11722
+  },
+  {
+   "strategy": "Trend-day",
+   "year": "2025",
+   "wide": true,
+   "n": 3,
+   "pnl_per_trade": -526,
+   "R": -0.133,
+   "win": 0.667,
+   "total": -1579
+  },
+  {
+   "strategy": "Trend-day",
+   "year": "2026",
+   "wide": false,
+   "n": 79,
+   "pnl_per_trade": 511,
+   "R": 0.383,
+   "win": 0.405,
+   "total": 40340
+  },
+  {
+   "strategy": "Trend-day",
+   "year": "2026",
+   "wide": true,
+   "n": 4,
+   "pnl_per_trade": 226,
+   "R": 0.342,
+   "win": 0.5,
+   "total": 906
+  },
+  {
+   "strategy": "Trend-day",
+   "year": "all",
+   "wide": false,
+   "n": 321,
+   "pnl_per_trade": 495,
+   "R": 0.336,
+   "win": 0.386,
+   "total": 159045
+  },
+  {
+   "strategy": "Trend-day",
+   "year": "all",
+   "wide": true,
+   "n": 15,
+   "pnl_per_trade": -323,
+   "R": -0.112,
+   "win": 0.4,
+   "total": -4844
+  }
+ ],
+ "today": {
+  "200000|2023-24": {
+   "final": 3765624.0,
+   "dd": -26.9,
+   "trades": 1397
+  },
+  "200000|2025-26": {
+   "final": 2199016.0,
+   "dd": -33.7,
+   "trades": 1349
+  },
+  "200000|full": {
+   "final": 19540539.0,
+   "dd": -29.5,
+   "trades": 3210
+  },
+  "20000|2023-24": {
+   "final": 307651.0,
+   "dd": -63.0,
+   "trades": 847
+  },
+  "20000|2025-26": {
+   "final": 198136.0,
+   "dd": -76.4,
+   "trades": 665
+  },
+  "20000|full": {
+   "final": 3872057.0,
+   "dd": -63.0,
+   "trades": 2516
+  }
+ },
+ "trend-day exempt (mid)": {
+  "cells": {
+   "200000|2023-24": {
+    "final": 3759244.0,
+    "dd": -26.9,
+    "trades": 1405
+   },
+   "200000|2025-26": {
+    "final": 2147099.0,
+    "dd": -34.1,
+    "trades": 1336
+   },
+   "200000|full": {
+    "final": 19396629.0,
+    "dd": -27.7,
+    "trades": 3199
+   },
+   "20000|2023-24": {
+    "final": 304857.0,
+    "dd": -64.2,
+    "trades": 852
+   },
+   "20000|2025-26": {
+    "final": 336986.0,
+    "dd": -76.4,
+    "trades": 693
+   },
+   "20000|full": {
+    "final": 5204921.0,
+    "dd": -64.2,
+    "trades": 2440
+   }
+  },
+  "better": 2,
+  "deeper": 1.2,
+  "fwd": {
+   "200000": [
+    {
+     "final": 197058.0,
+     "dd": -7.6,
+     "trades": 50
+    },
+    {
+     "final": 197058.0,
+     "dd": -7.6,
+     "trades": 50
+    }
+   ],
+   "20000": [
+    {
+     "final": 19231.0,
+     "dd": -35.1,
+     "trades": 12
+    },
+    {
+     "final": 19231.0,
+     "dd": -35.1,
+     "trades": 12
+    }
+   ],
+   "40000": [
+    {
+     "final": 23618.0,
+     "dd": -43.9,
+     "trades": 19
+    },
+    {
+     "final": 23618.0,
+     "dd": -43.9,
+     "trades": 19
+    }
+   ]
+  }
+ },
+ "trend-day exempt (none)": {
+  "cells": {
+   "200000|2023-24": {
+    "final": 3096135.0,
+    "dd": -27.0,
+    "trades": 1399
+   },
+   "200000|2025-26": {
+    "final": 2074816.0,
+    "dd": -33.5,
+    "trades": 1335
+   },
+   "200000|full": {
+    "final": 17071052.0,
+    "dd": -29.0,
+    "trades": 3245
+   },
+   "20000|2023-24": {
+    "final": 306298.0,
+    "dd": -64.2,
+    "trades": 852
+   },
+   "20000|2025-26": {
+    "final": 327876.0,
+    "dd": -76.4,
+    "trades": 693
+   },
+   "20000|full": {
+    "final": 3561269.0,
+    "dd": -64.2,
+    "trades": 2549
+   }
+  },
+  "better": 1,
+  "deeper": 1.2,
+  "fwd": {
+   "200000": [
+    {
+     "final": 197058.0,
+     "dd": -7.6,
+     "trades": 50
+    },
+    {
+     "final": 197058.0,
+     "dd": -7.6,
+     "trades": 50
+    }
+   ],
+   "20000": [
+    {
+     "final": 19231.0,
+     "dd": -35.1,
+     "trades": 12
+    },
+    {
+     "final": 19231.0,
+     "dd": -35.1,
+     "trades": 12
+    }
+   ],
+   "40000": [
+    {
+     "final": 23618.0,
+     "dd": -43.9,
+     "trades": 19
+    },
+    {
+     "final": 23618.0,
+     "dd": -43.9,
+     "trades": 19
+    }
+   ]
+  }
+ },
+ "trend + Fibonacci exempt (mid)": {
+  "cells": {
+   "200000|2023-24": {
+    "final": 3350437.0,
+    "dd": -27.8,
+    "trades": 1418
+   },
+   "200000|2025-26": {
+    "final": 2135895.0,
+    "dd": -34.1,
+    "trades": 1338
+   },
+   "200000|full": {
+    "final": 18494524.0,
+    "dd": -29.3,
+    "trades": 3249
+   },
+   "20000|2023-24": {
+    "final": 301278.0,
+    "dd": -64.2,
+    "trades": 855
+   },
+   "20000|2025-26": {
+    "final": 335563.0,
+    "dd": -76.4,
+    "trades": 694
+   },
+   "20000|full": {
+    "final": 4069884.0,
+    "dd": -64.2,
+    "trades": 2440
+   }
+  },
+  "better": 2,
+  "deeper": 1.2,
+  "fwd": {
+   "200000": [
+    {
+     "final": 197058.0,
+     "dd": -7.6,
+     "trades": 50
+    },
+    {
+     "final": 197058.0,
+     "dd": -7.6,
+     "trades": 50
+    }
+   ],
+   "20000": [
+    {
+     "final": 19231.0,
+     "dd": -35.1,
+     "trades": 12
+    },
+    {
+     "final": 19231.0,
+     "dd": -35.1,
+     "trades": 12
+    }
+   ],
+   "40000": [
+    {
+     "final": 23618.0,
+     "dd": -43.9,
+     "trades": 19
+    },
+    {
+     "final": 23618.0,
+     "dd": -43.9,
+     "trades": 19
+    }
+   ]
+  }
+ },
+ "new slots exempt (channel, round-level) (mid)": {
+  "cells": {
+   "200000|2023-24": {
+    "final": 3800877.0,
+    "dd": -26.8,
+    "trades": 1428
+   },
+   "200000|2025-26": {
+    "final": 2081250.0,
+    "dd": -33.7,
+    "trades": 1357
+   },
+   "200000|full": {
+    "final": 19286725.0,
+    "dd": -28.5,
+    "trades": 3320
+   },
+   "20000|2023-24": {
+    "final": 303239.0,
+    "dd": -63.0,
+    "trades": 859
+   },
+   "20000|2025-26": {
+    "final": 202401.0,
+    "dd": -76.4,
+    "trades": 666
+   },
+   "20000|full": {
+    "final": 3735713.0,
+    "dd": -63.0,
+    "trades": 2600
+   }
+  },
+  "better": 2,
+  "deeper": 0.0,
+  "fwd": {
+   "200000": [
+    {
+     "final": 193839.0,
+     "dd": -8.4,
+     "trades": 51
+    },
+    {
+     "final": 197058.0,
+     "dd": -7.6,
+     "trades": 50
+    }
+   ],
+   "20000": [
+    {
+     "final": 19231.0,
+     "dd": -35.1,
+     "trades": 12
+    },
+    {
+     "final": 19231.0,
+     "dd": -35.1,
+     "trades": 12
+    }
+   ],
+   "40000": [
+    {
+     "final": 23618.0,
+     "dd": -43.9,
+     "trades": 19
+    },
+    {
+     "final": 23618.0,
+     "dd": -43.9,
+     "trades": 19
+    }
+   ]
+  }
+ },
+ "trend + fib + channel + round-level exempt (mid)": {
+  "cells": {
+   "200000|2023-24": {
+    "final": 3487546.0,
+    "dd": -27.7,
+    "trades": 1456
+   },
+   "200000|2025-26": {
+    "final": 1847790.0,
+    "dd": -34.1,
+    "trades": 1344
+   },
+   "200000|full": {
+    "final": 17905990.0,
+    "dd": -29.3,
+    "trades": 3341
+   },
+   "20000|2023-24": {
+    "final": 296338.0,
+    "dd": -64.2,
+    "trades": 866
+   },
+   "20000|2025-26": {
+    "final": 195876.0,
+    "dd": -76.4,
+    "trades": 672
+   },
+   "20000|full": {
+    "final": 4460651.0,
+    "dd": -64.2,
+    "trades": 2503
+   }
+  },
+  "better": 1,
+  "deeper": 1.2,
+  "fwd": {
+   "200000": [
+    {
+     "final": 193839.0,
+     "dd": -8.4,
+     "trades": 51
+    },
+    {
+     "final": 197058.0,
+     "dd": -7.6,
+     "trades": 50
+    }
+   ],
+   "20000": [
+    {
+     "final": 19231.0,
+     "dd": -35.1,
+     "trades": 12
+    },
+    {
+     "final": 19231.0,
+     "dd": -35.1,
+     "trades": 12
+    }
+   ],
+   "40000": [
+    {
+     "final": 23618.0,
+     "dd": -43.9,
+     "trades": 19
+    },
+    {
+     "final": 23618.0,
+     "dd": -43.9,
+     "trades": 19
+    }
+   ]
+  }
+ },
+ "trend + fib + channel + round-level exempt (none)": {
+  "cells": {
+   "200000|2023-24": {
+    "final": 1652844.0,
+    "dd": -23.9,
+    "trades": 1469
+   },
+   "200000|2025-26": {
+    "final": 927741.0,
+    "dd": -33.6,
+    "trades": 1242
+   },
+   "200000|full": {
+    "final": 10834754.0,
+    "dd": -28.9,
+    "trades": 3298
+   },
+   "20000|2023-24": {
+    "final": 288554.0,
+    "dd": -64.2,
+    "trades": 870
+   },
+   "20000|2025-26": {
+    "final": 195850.0,
+    "dd": -76.4,
+    "trades": 672
+   },
+   "20000|full": {
+    "final": 1586828.0,
+    "dd": -64.2,
+    "trades": 2383
+   }
+  },
+  "better": 0,
+  "deeper": 1.2,
+  "fwd": {
+   "200000": [
+    {
+     "final": 193839.0,
+     "dd": -8.4,
+     "trades": 51
+    },
+    {
+     "final": 197058.0,
+     "dd": -7.6,
+     "trades": 50
+    }
+   ],
+   "20000": [
+    {
+     "final": 19231.0,
+     "dd": -35.1,
+     "trades": 12
+    },
+    {
+     "final": 19231.0,
+     "dd": -35.1,
+     "trades": 12
+    }
+   ],
+   "40000": [
+    {
+     "final": 23618.0,
+     "dd": -43.9,
+     "trades": 19
+    },
+    {
+     "final": 23618.0,
+     "dd": -43.9,
+     "trades": 19
+    }
+   ]
+  }
+ },
+ "everything exempt (no wide-CPR skip, mid)": {
+  "cells": {
+   "200000|2023-24": {
+    "final": 3980761.0,
+    "dd": -28.0,
+    "trades": 1473
+   },
+   "200000|2025-26": {
+    "final": 1850977.0,
+    "dd": -33.8,
+    "trades": 1351
+   },
+   "200000|full": {
+    "final": 18121509.0,
+    "dd": -29.3,
+    "trades": 3346
+   },
+   "20000|2023-24": {
+    "final": 285067.0,
+    "dd": -69.6,
+    "trades": 846
+   },
+   "20000|2025-26": {
+    "final": 191893.0,
+    "dd": -75.0,
+    "trades": 682
+   },
+   "20000|full": {
+    "final": 3751758.0,
+    "dd": -69.6,
+    "trades": 2575
+   }
+  },
+  "better": 1,
+  "deeper": 6.6,
+  "fwd": {
+   "200000": [
+    {
+     "final": 200741.0,
+     "dd": -8.4,
+     "trades": 56
+    },
+    {
+     "final": 197058.0,
+     "dd": -7.6,
+     "trades": 50
+    }
+   ],
+   "20000": [
+    {
+     "final": 19757.0,
+     "dd": -35.1,
+     "trades": 13
+    },
+    {
+     "final": 19231.0,
+     "dd": -35.1,
+     "trades": 12
+    }
+   ],
+   "40000": [
+    {
+     "final": 24144.0,
+     "dd": -43.9,
+     "trades": 20
+    },
+    {
+     "final": 23618.0,
+     "dd": -43.9,
+     "trades": 19
+    }
+   ]
+  }
+ }
+}

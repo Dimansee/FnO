@@ -1,0 +1,722 @@
+{
+ "200000|50": {
+  "2023-24": {
+   "final": 3765624,
+   "dd": -26.9,
+   "max_lots": 50,
+   "avg_lots": 7.0,
+   "trades": 1397
+  },
+  "2025-26": {
+   "final": 2199016,
+   "dd": -33.7,
+   "max_lots": 22,
+   "avg_lots": 2.4,
+   "trades": 1349
+  },
+  "full": {
+   "final": 19540539,
+   "dd": -29.5,
+   "max_lots": 50,
+   "avg_lots": 22.2,
+   "trades": 3210
+  },
+  "fwd": {
+   "final": 197058,
+   "dd": -7.6,
+   "max_lots": 2,
+   "avg_lots": 1.0,
+   "trades": 50
+  }
+ },
+ "200000|100": {
+  "2023-24": {
+   "final": 3765592,
+   "dd": -26.9,
+   "max_lots": 53,
+   "avg_lots": 7.0,
+   "trades": 1397
+  },
+  "2025-26": {
+   "final": 2199016,
+   "dd": -33.7,
+   "max_lots": 22,
+   "avg_lots": 2.4,
+   "trades": 1349
+  },
+  "full": {
+   "final": 29399336,
+   "dd": -30.5,
+   "max_lots": 100,
+   "avg_lots": 29.0,
+   "trades": 3151
+  },
+  "fwd": {
+   "final": 197058,
+   "dd": -7.6,
+   "max_lots": 2,
+   "avg_lots": 1.0,
+   "trades": 50
+  }
+ },
+ "200000|200": {
+  "2023-24": {
+   "final": 3765592,
+   "dd": -26.9,
+   "max_lots": 53,
+   "avg_lots": 7.0,
+   "trades": 1397
+  },
+  "2025-26": {
+   "final": 2199016,
+   "dd": -33.7,
+   "max_lots": 22,
+   "avg_lots": 2.4,
+   "trades": 1349
+  },
+  "full": {
+   "final": 44428362,
+   "dd": -29.1,
+   "max_lots": 200,
+   "avg_lots": 35.1,
+   "trades": 3124
+  },
+  "fwd": {
+   "final": 197058,
+   "dd": -7.6,
+   "max_lots": 2,
+   "avg_lots": 1.0,
+   "trades": 50
+  }
+ },
+ "200000|500": {
+  "2023-24": {
+   "final": 3765592,
+   "dd": -26.9,
+   "max_lots": 53,
+   "avg_lots": 7.0,
+   "trades": 1397
+  },
+  "2025-26": {
+   "final": 2199016,
+   "dd": -33.7,
+   "max_lots": 22,
+   "avg_lots": 2.4,
+   "trades": 1349
+  },
+  "full": {
+   "final": 62890846,
+   "dd": -28.9,
+   "max_lots": 500,
+   "avg_lots": 38.8,
+   "trades": 3108
+  },
+  "fwd": {
+   "final": 197058,
+   "dd": -7.6,
+   "max_lots": 2,
+   "avg_lots": 1.0,
+   "trades": 50
+  }
+ },
+ "500000|50": {
+  "2023-24": {
+   "final": 9223075,
+   "dd": -38.4,
+   "max_lots": 50,
+   "avg_lots": 16.6,
+   "trades": 1755
+  },
+  "2025-26": {
+   "final": 8603185,
+   "dd": -33.6,
+   "max_lots": 50,
+   "avg_lots": 12.6,
+   "trades": 1682
+  },
+  "full": {
+   "final": 23932465,
+   "dd": -38.4,
+   "max_lots": 50,
+   "avg_lots": 31.5,
+   "trades": 3640
+  },
+  "fwd": {
+   "final": 565424,
+   "dd": -8.3,
+   "max_lots": 7,
+   "avg_lots": 1.7,
+   "trades": 72
+  }
+ },
+ "500000|100": {
+  "2023-24": {
+   "final": 9712115,
+   "dd": -39.4,
+   "max_lots": 100,
+   "avg_lots": 18.3,
+   "trades": 1730
+  },
+  "2025-26": {
+   "final": 9910477,
+   "dd": -32.7,
+   "max_lots": 99,
+   "avg_lots": 12.8,
+   "trades": 1669
+  },
+  "full": {
+   "final": 40726842,
+   "dd": -39.4,
+   "max_lots": 100,
+   "avg_lots": 48.7,
+   "trades": 3522
+  },
+  "fwd": {
+   "final": 565424,
+   "dd": -8.3,
+   "max_lots": 7,
+   "avg_lots": 1.7,
+   "trades": 72
+  }
+ },
+ "500000|200": {
+  "2023-24": {
+   "final": 10009254,
+   "dd": -39.4,
+   "max_lots": 195,
+   "avg_lots": 18.6,
+   "trades": 1727
+  },
+  "2025-26": {
+   "final": 9910477,
+   "dd": -32.7,
+   "max_lots": 99,
+   "avg_lots": 12.8,
+   "trades": 1669
+  },
+  "full": {
+   "final": 66325755,
+   "dd": -39.4,
+   "max_lots": 200,
+   "avg_lots": 65.7,
+   "trades": 3489
+  },
+  "fwd": {
+   "final": 565424,
+   "dd": -8.3,
+   "max_lots": 7,
+   "avg_lots": 1.7,
+   "trades": 72
+  }
+ },
+ "500000|500": {
+  "2023-24": {
+   "final": 10009254,
+   "dd": -39.4,
+   "max_lots": 195,
+   "avg_lots": 18.6,
+   "trades": 1727
+  },
+  "2025-26": {
+   "final": 9910477,
+   "dd": -32.7,
+   "max_lots": 99,
+   "avg_lots": 12.8,
+   "trades": 1669
+  },
+  "full": {
+   "final": 111302262,
+   "dd": -39.4,
+   "max_lots": 500,
+   "avg_lots": 86.9,
+   "trades": 3389
+  },
+  "fwd": {
+   "final": 565424,
+   "dd": -8.3,
+   "max_lots": 7,
+   "avg_lots": 1.7,
+   "trades": 72
+  }
+ },
+ "1000000|50": {
+  "2023-24": {
+   "final": 21645601,
+   "dd": -25.9,
+   "max_lots": 50,
+   "avg_lots": 34.3,
+   "trades": 1808
+  },
+  "2025-26": {
+   "final": 16597068,
+   "dd": -27.1,
+   "max_lots": 50,
+   "avg_lots": 28.3,
+   "trades": 1734
+  },
+  "full": {
+   "final": 33292811,
+   "dd": -25.9,
+   "max_lots": 50,
+   "avg_lots": 42.4,
+   "trades": 3924
+  },
+  "fwd": {
+   "final": 1030293,
+   "dd": -12.9,
+   "max_lots": 15,
+   "avg_lots": 4.6,
+   "trades": 84
+  }
+ },
+ "1000000|100": {
+  "2023-24": {
+   "final": 23969377,
+   "dd": -38.5,
+   "max_lots": 100,
+   "avg_lots": 47.7,
+   "trades": 1676
+  },
+  "2025-26": {
+   "final": 17593695,
+   "dd": -33.2,
+   "max_lots": 100,
+   "avg_lots": 25.3,
+   "trades": 1772
+  },
+  "full": {
+   "final": 51218763,
+   "dd": -38.5,
+   "max_lots": 100,
+   "avg_lots": 70.3,
+   "trades": 3616
+  },
+  "fwd": {
+   "final": 1030293,
+   "dd": -12.9,
+   "max_lots": 15,
+   "avg_lots": 4.6,
+   "trades": 84
+  }
+ },
+ "1000000|200": {
+  "2023-24": {
+   "final": 21420769,
+   "dd": -40.2,
+   "max_lots": 200,
+   "avg_lots": 48.3,
+   "trades": 1636
+  },
+  "2025-26": {
+   "final": 18274029,
+   "dd": -32.6,
+   "max_lots": 184,
+   "avg_lots": 25.4,
+   "trades": 1757
+  },
+  "full": {
+   "final": 84699433,
+   "dd": -40.2,
+   "max_lots": 200,
+   "avg_lots": 104.7,
+   "trades": 3456
+  },
+  "fwd": {
+   "final": 1030293,
+   "dd": -12.9,
+   "max_lots": 15,
+   "avg_lots": 4.6,
+   "trades": 84
+  }
+ },
+ "1000000|500": {
+  "2023-24": {
+   "final": 30727340,
+   "dd": -40.3,
+   "max_lots": 500,
+   "avg_lots": 64.1,
+   "trades": 1649
+  },
+  "2025-26": {
+   "final": 18274029,
+   "dd": -32.6,
+   "max_lots": 184,
+   "avg_lots": 25.4,
+   "trades": 1757
+  },
+  "full": {
+   "final": 159059716,
+   "dd": -40.3,
+   "max_lots": 500,
+   "avg_lots": 180.1,
+   "trades": 3408
+  },
+  "fwd": {
+   "final": 1030293,
+   "dd": -12.9,
+   "max_lots": 15,
+   "avg_lots": 4.6,
+   "trades": 84
+  }
+ },
+ "2500000|50": {
+  "2023-24": {
+   "final": 24477016,
+   "dd": -25.8,
+   "max_lots": 50,
+   "avg_lots": 40.1,
+   "trades": 1876
+  },
+  "2025-26": {
+   "final": 19931377,
+   "dd": -29.2,
+   "max_lots": 50,
+   "avg_lots": 35.7,
+   "trades": 1835
+  },
+  "full": {
+   "final": 37811594,
+   "dd": -25.8,
+   "max_lots": 50,
+   "avg_lots": 45.3,
+   "trades": 4054
+  },
+  "fwd": {
+   "final": 2643732,
+   "dd": -13.7,
+   "max_lots": 33,
+   "avg_lots": 9.7,
+   "trades": 64
+  }
+ },
+ "2500000|100": {
+  "2023-24": {
+   "final": 34398184,
+   "dd": -30.9,
+   "max_lots": 100,
+   "avg_lots": 67.1,
+   "trades": 1766
+  },
+  "2025-26": {
+   "final": 33389555,
+   "dd": -26.4,
+   "max_lots": 100,
+   "avg_lots": 61.2,
+   "trades": 1754
+  },
+  "full": {
+   "final": 59392201,
+   "dd": -30.9,
+   "max_lots": 100,
+   "avg_lots": 81.5,
+   "trades": 3840
+  },
+  "fwd": {
+   "final": 2643732,
+   "dd": -13.7,
+   "max_lots": 33,
+   "avg_lots": 9.7,
+   "trades": 64
+  }
+ },
+ "2500000|200": {
+  "2023-24": {
+   "final": 46026391,
+   "dd": -38.1,
+   "max_lots": 200,
+   "avg_lots": 97.3,
+   "trades": 1667
+  },
+  "2025-26": {
+   "final": 46811609,
+   "dd": -28.6,
+   "max_lots": 200,
+   "avg_lots": 64.8,
+   "trades": 1763
+  },
+  "full": {
+   "final": 99038007,
+   "dd": -38.1,
+   "max_lots": 200,
+   "avg_lots": 137.4,
+   "trades": 3591
+  },
+  "fwd": {
+   "final": 2643732,
+   "dd": -13.7,
+   "max_lots": 33,
+   "avg_lots": 9.7,
+   "trades": 64
+  }
+ },
+ "2500000|500": {
+  "2023-24": {
+   "final": 62364500,
+   "dd": -40.7,
+   "max_lots": 500,
+   "avg_lots": 131.8,
+   "trades": 1655
+  },
+  "2025-26": {
+   "final": 73955923,
+   "dd": -28.7,
+   "max_lots": 500,
+   "avg_lots": 77.6,
+   "trades": 1734
+  },
+  "full": {
+   "final": 207856275,
+   "dd": -40.7,
+   "max_lots": 500,
+   "avg_lots": 262.8,
+   "trades": 3492
+  },
+  "fwd": {
+   "final": 2643732,
+   "dd": -13.7,
+   "max_lots": 33,
+   "avg_lots": 9.7,
+   "trades": 64
+  }
+ },
+ "5000000|50": {
+  "2023-24": {
+   "final": 28067873,
+   "dd": -24.4,
+   "max_lots": 50,
+   "avg_lots": 45.0,
+   "trades": 1967
+  },
+  "2025-26": {
+   "final": 23736013,
+   "dd": -24.7,
+   "max_lots": 50,
+   "avg_lots": 44.8,
+   "trades": 1894
+  },
+  "full": {
+   "final": 40953170,
+   "dd": -24.4,
+   "max_lots": 50,
+   "avg_lots": 47.6,
+   "trades": 4166
+  },
+  "fwd": {
+   "final": 5304681,
+   "dd": -13.2,
+   "max_lots": 50,
+   "avg_lots": 19.9,
+   "trades": 62
+  }
+ },
+ "5000000|100": {
+  "2023-24": {
+   "final": 47841715,
+   "dd": -25.0,
+   "max_lots": 100,
+   "avg_lots": 78.8,
+   "trades": 1884
+  },
+  "2025-26": {
+   "final": 40100676,
+   "dd": -24.8,
+   "max_lots": 100,
+   "avg_lots": 76.1,
+   "trades": 1810
+  },
+  "full": {
+   "final": 67832222,
+   "dd": -25.0,
+   "max_lots": 100,
+   "avg_lots": 87.6,
+   "trades": 4014
+  },
+  "fwd": {
+   "final": 5326962,
+   "dd": -13.2,
+   "max_lots": 66,
+   "avg_lots": 20.1,
+   "trades": 62
+  }
+ },
+ "5000000|200": {
+  "2023-24": {
+   "final": 75554195,
+   "dd": -27.1,
+   "max_lots": 200,
+   "avg_lots": 130.9,
+   "trades": 1784
+  },
+  "2025-26": {
+   "final": 67441355,
+   "dd": -25.4,
+   "max_lots": 200,
+   "avg_lots": 116.3,
+   "trades": 1754
+  },
+  "full": {
+   "final": 120127093,
+   "dd": -27.1,
+   "max_lots": 200,
+   "avg_lots": 159.1,
+   "trades": 3860
+  },
+  "fwd": {
+   "final": 5326962,
+   "dd": -13.2,
+   "max_lots": 66,
+   "avg_lots": 20.1,
+   "trades": 62
+  }
+ },
+ "5000000|500": {
+  "2023-24": {
+   "final": 114449966,
+   "dd": -28.7,
+   "max_lots": 500,
+   "avg_lots": 213.3,
+   "trades": 1671
+  },
+  "2025-26": {
+   "final": 109467636,
+   "dd": -28.4,
+   "max_lots": 500,
+   "avg_lots": 151.7,
+   "trades": 1684
+  },
+  "full": {
+   "final": 230530070,
+   "dd": -28.7,
+   "max_lots": 500,
+   "avg_lots": 320.7,
+   "trades": 3578
+  },
+  "fwd": {
+   "final": 5326962,
+   "dd": -13.2,
+   "max_lots": 66,
+   "avg_lots": 20.1,
+   "trades": 62
+  }
+ },
+ "10000000|50": {
+  "2023-24": {
+   "final": 29901110,
+   "dd": -27.3,
+   "max_lots": 50,
+   "avg_lots": 47.4,
+   "trades": 2119
+  },
+  "2025-26": {
+   "final": 27350240,
+   "dd": -24.8,
+   "max_lots": 50,
+   "avg_lots": 47.6,
+   "trades": 2000
+  },
+  "full": {
+   "final": 42431119,
+   "dd": -27.3,
+   "max_lots": 50,
+   "avg_lots": 48.7,
+   "trades": 4320
+  },
+  "fwd": {
+   "final": 10050516,
+   "dd": -13.5,
+   "max_lots": 50,
+   "avg_lots": 35.7,
+   "trades": 62
+  }
+ },
+ "10000000|100": {
+  "2023-24": {
+   "final": 51161697,
+   "dd": -25.3,
+   "max_lots": 100,
+   "avg_lots": 85.9,
+   "trades": 1960
+  },
+  "2025-26": {
+   "final": 48593373,
+   "dd": -25.4,
+   "max_lots": 100,
+   "avg_lots": 86.7,
+   "trades": 1907
+  },
+  "full": {
+   "final": 77672525,
+   "dd": -25.3,
+   "max_lots": 100,
+   "avg_lots": 91.2,
+   "trades": 4155
+  },
+  "fwd": {
+   "final": 10505683,
+   "dd": -13.8,
+   "max_lots": 100,
+   "avg_lots": 40.1,
+   "trades": 62
+  }
+ },
+ "10000000|200": {
+  "2023-24": {
+   "final": 87079079,
+   "dd": -29.3,
+   "max_lots": 200,
+   "avg_lots": 146.3,
+   "trades": 1872
+  },
+  "2025-26": {
+   "final": 81940316,
+   "dd": -25.4,
+   "max_lots": 200,
+   "avg_lots": 148.3,
+   "trades": 1823
+  },
+  "full": {
+   "final": 128498552,
+   "dd": -29.3,
+   "max_lots": 200,
+   "avg_lots": 166.8,
+   "trades": 3977
+  },
+  "fwd": {
+   "final": 10572508,
+   "dd": -13.8,
+   "max_lots": 132,
+   "avg_lots": 40.6,
+   "trades": 62
+  }
+ },
+ "10000000|500": {
+  "2023-24": {
+   "final": 151605221,
+   "dd": -28.3,
+   "max_lots": 500,
+   "avg_lots": 289.2,
+   "trades": 1740
+  },
+  "2025-26": {
+   "final": 139095475,
+   "dd": -27.2,
+   "max_lots": 500,
+   "avg_lots": 229.2,
+   "trades": 1710
+  },
+  "full": {
+   "final": 257906939,
+   "dd": -28.3,
+   "max_lots": 500,
+   "avg_lots": 369.2,
+   "trades": 3741
+  },
+  "fwd": {
+   "final": 10572508,
+   "dd": -13.8,
+   "max_lots": 132,
+   "avg_lots": 40.6,
+   "trades": 62
+  }
+ }
+}

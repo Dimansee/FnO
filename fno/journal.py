@@ -30,6 +30,7 @@ MAX_EPISODES = 80
 # why an automatic entry did not happen -> (category, plain label). Order matters: first match wins.
 AUTO_CATS = [
     ("weekly_limit", ("weekly loss limit",), "Weekly loss limit reached"),
+    ("wide_cpr", ("wide cpr",), "Wide-CPR day skipped (round 71)"),
     ("daily_limit", ("daily loss limit", "two losing", "max ", "daily risk limit"), "Daily limit reached"),
     ("shield", ("capital shield",), "Capital shield (account protection)"),
     ("money", ("not enough", "cash", "position size is zero", "quantity is zero"), "Not enough money"),
@@ -44,8 +45,6 @@ AUTO_CATS = [
     ("custom_off", ("custom strategy",), "Custom strategy not set to auto"),
     ("equity_gate", ("equity reaches", "once equity"), "Rule waits for a bigger account"),
     ("lock", ("another order",), "Another order was being placed"),
-    ("scalp_gov", ("stopped for today", "paused after", "lost twice today"), "Scalp governor stop"),
-    ("scalp_filter", ("confidence", "too little room", "setup d:"), "Scalp filter not met"),
 ]
 
 
@@ -67,7 +66,7 @@ def note_auto(symbol: str, slot: str, ok: bool, msg: str, now, plan: dict | None
     cat, label = ("executed", "Executed") if ok else auto_cat(str(msg))
     pl = plan or {}
     ep = {"from": now.strftime("%H:%M"), "to": now.strftime("%H:%M"), "n": 1, "ok": bool(ok), "cat": cat, "label": label, "msg": str(msg)[:260],
-          "strategy": pl.get("strategy") or (slot if slot not in ("main", "scalp") else None), "signal_bar": pl.get("signal_bar"),
+          "strategy": pl.get("strategy") or (slot if slot != "main" else None), "signal_bar": pl.get("signal_bar"),
           "opt": pl.get("opt"), "entry": pl.get("entry"), "sl": pl.get("sl"), "target": pl.get("target"), "trade_id": trade_id}
     field = f"auto:{symbol}:{slot}"
     lst = _get(day, field) or []
@@ -81,7 +80,7 @@ def note_auto(symbol: str, slot: str, ok: bool, msg: str, now, plan: dict | None
         lst.append(ep)
     _put(day, field, lst[-MAX_EPISODES:])
     # a skipped signal with an index plan becomes a recommendation too, so the close settles what it would have done
-    if not ok and pl.get("entry") is not None and pl.get("sl") is not None and slot != "scalp":
+    if not ok and pl.get("entry") is not None and pl.get("sl") is not None :
         stamp = pl.get("signal_bar") or now.strftime("%H:%M")
         rid = f"{symbol}:{pl.get('strategy')}:{stamp}"
         if _get(day, f"reco:{rid}") is None:
@@ -408,7 +407,7 @@ def decisions(d: str, h: dict, recos: list, closed: list, open_: list) -> dict:
         return allowed is not None and strategy in ("noise", "camarilla", "trend", "fib") and strategy not in allowed
 
     def match_episode(r):
-        mine = [(k, e) for k, lst in eps.items() if k.split(":")[0] == r["symbol"] and not k.endswith(":scalp") for e in lst if not e.get("ok")]
+        mine = [(k, e) for k, lst in eps.items() if k.split(":")[0] == r["symbol"] for e in lst if not e.get("ok")]
         exact = [e for _, e in mine if e.get("strategy") == r.get("strategy") and e.get("signal_bar") and e.get("signal_bar") == r.get("signal_bar")]
         if exact:
             return exact[0]
@@ -464,16 +463,14 @@ def decisions(d: str, h: dict, recos: list, closed: list, open_: list) -> dict:
                      "result": None, "source": "trade"})
     rows.sort(key=lambda x: x["time"] or "")
     blocks = [{"symbol": k.split(":")[0], "slot": k.split(":", 1)[1], **e} for k, lst in eps.items() for e in lst
-              if not e.get("ok") and not e.get("signal_bar") and not k.endswith(":scalp")]
+              if not e.get("ok") and not e.get("signal_bar")]
     blocks.sort(key=lambda e: e["from"])
-    scalp_eps = [{"symbol": k.split(":")[0], **e} for k, lst in eps.items() if k.endswith(":scalp") for e in lst]
-    scalp_eps.sort(key=lambda e: e["from"])
     by_cat: dict = {}
     for r in rows:
         if r["status"]["state"] == "skipped":
             c = r["status"]["label"]
             by_cat[c] = by_cat.get(c, 0) + 1
-    return {"rows": rows, "blocks": blocks, "scalp": scalp_eps,
+    return {"rows": rows, "blocks": blocks,
             "summary": {"signals": len(rows), "executed": sum(1 for r in rows if r["status"]["state"] == "executed"),
                         "skipped": sum(1 for r in rows if r["status"]["state"] == "skipped"), "skipped_by_reason": by_cat}}
 
@@ -494,12 +491,6 @@ def day(d: str) -> dict:
     open_ = [p for p in store.positions() if p.get("opened", "")[:10] == d]
     ai = {s: h.get(f"ai:{s}") or [] for s in SYMS}
     res = [r["result"] for r in recos if r.get("result")]
-    try:
-        from . import scalp as SC
-        scalp_tr = sorted([t for t in SC.trades() if (t.get("opened") or "")[:10] == d], key=lambda t: t.get("opened") or "")
-        scalp_open = [p for p in SC.positions() if (p.get("opened") or "")[:10] == d]
-    except Exception:
-        scalp_tr, scalp_open = [], []
     try:                                                     # squeeze shadow slot (round 101): what the rule would have done - no orders
         from . import squeeze as SQ
         squeeze = SQ.day(d)
@@ -512,8 +503,7 @@ def day(d: str) -> dict:
                "by_strategy": {st: {"n": sum(1 for r in recos if r["strategy"] == st),
                                     "R": round(sum(r["result"]["R"] for r in recos if r["strategy"] == st and r.get("result")), 2)} for st in {r["strategy"] for r in recos}},
                "paper_trades": len(trades), "paper_pnl": round(sum(t["pnl"] for t in trades), 0),
-               "open_positions": len(open_), "executed": dec["summary"]["executed"], "skipped": dec["summary"]["skipped"],
-               "scalp_trades": len(scalp_tr), "scalp_pnl": round(sum(t.get("pnl") or 0 for t in scalp_tr), 0)}
+               "open_positions": len(open_), "executed": dec["summary"]["executed"], "skipped": dec["summary"]["skipped"]}
     return {"date": d, "context": {s: h.get(f"ctx:{s}") for s in SYMS}, "recommendations": recos, "ai": ai, "paper_trades": trades,
-            "open_positions": open_, "decisions": dec, "scalp_trades": scalp_tr, "scalp_open": scalp_open, "squeeze_shadow": squeeze,
+            "open_positions": open_, "decisions": dec, "squeeze_shadow": squeeze,
             "settled": h.get("settled"), "summary": summary}

@@ -1,0 +1,60 @@
+strategy,year,wide,n,pnl_per_trade,R,win,total
+Camarilla,2023,False,161,254,0.248,0.248,40961
+Camarilla,2023,True,3,2635,0.417,0.667,7904
+Camarilla,2024,False,200,389,0.282,0.335,77867
+Camarilla,2024,True,1,-1961,-0.47,0.0,-1961
+Camarilla,2025,False,170,29,0.099,0.276,4969
+Camarilla,2025,True,2,-198,0.05,0.5,-395
+Camarilla,2026,False,141,469,0.267,0.312,66139
+Camarilla,2026,True,4,3288,0.467,0.5,13150
+Camarilla,all,False,672,283,0.224,0.295,189936
+Camarilla,all,True,10,1870,0.275,0.5,18698
+Channel 15m,2023,False,535,6,0.133,0.484,3449
+Channel 15m,2023,True,3,-81,0.213,0.333,-244
+Channel 15m,2024,False,516,174,0.079,0.424,89823
+Channel 15m,2024,True,22,1187,0.106,0.409,26120
+Channel 15m,2025,False,514,40,0.148,0.477,20400
+Channel 15m,2025,True,9,132,0.236,0.667,1190
+Channel 15m,2026,False,438,-61,0.106,0.477,-26715
+Channel 15m,2026,True,26,496,-0.005,0.462,12905
+Channel 15m,all,False,2003,43,0.117,0.465,86957
+Channel 15m,all,True,60,666,0.083,0.467,39971
+Fibonacci 0.618,2023,False,170,-120,0.119,0.265,-20336
+Fibonacci 0.618,2024,False,204,417,0.304,0.333,85034
+Fibonacci 0.618,2024,True,7,-1995,-0.584,0.143,-13964
+Fibonacci 0.618,2025,False,181,485,0.306,0.315,87809
+Fibonacci 0.618,2025,True,2,-180,-0.07,0.5,-359
+Fibonacci 0.618,2026,False,143,259,0.293,0.294,36997
+Fibonacci 0.618,2026,True,4,1674,0.74,0.5,6697
+Fibonacci 0.618,all,False,698,271,0.257,0.304,189504
+Fibonacci 0.618,all,True,13,-587,-0.098,0.308,-7626
+Noise band,2023,False,117,-73,0.169,0.35,-8553
+Noise band,2023,True,7,-1194,-0.326,0.143,-8356
+Noise band,2024,False,105,787,0.433,0.419,82681
+Noise band,2024,True,8,-1911,-0.59,0.125,-15287
+Noise band,2025,False,122,465,0.311,0.385,56738
+Noise band,2025,True,4,-1459,-0.525,0.0,-5837
+Noise band,2026,False,103,14,0.165,0.369,1401
+Noise band,2026,True,9,778,0.384,0.444,7003
+Noise band,all,False,447,296,0.269,0.38,132267
+Noise band,all,True,28,-803,-0.201,0.214,-22477
+Round-level break,2023,False,117,127,0.155,0.342,14833
+Round-level break,2023,True,4,-348,-0.235,0.25,-1393
+Round-level break,2024,False,215,658,0.273,0.391,141439
+Round-level break,2024,True,14,-1008,-0.338,0.143,-14109
+Round-level break,2025,False,211,57,0.076,0.341,11945
+Round-level break,2025,True,6,-9,-0.14,0.333,-56
+Round-level break,2026,False,207,273,0.237,0.396,56422
+Round-level break,2026,True,20,-489,-0.155,0.3,-9778
+Round-level break,all,False,750,300,0.189,0.371,224639
+Round-level break,all,True,44,-576,-0.218,0.25,-25336
+Trend-day,2023,False,82,268,0.245,0.329,22009
+Trend-day,2023,True,2,-277,0.015,0.5,-554
+Trend-day,2024,False,88,966,0.491,0.432,84974
+Trend-day,2024,True,6,-603,-0.447,0.167,-3617
+Trend-day,2025,False,72,163,0.2,0.375,11722
+Trend-day,2025,True,3,-526,-0.133,0.667,-1579
+Trend-day,2026,False,79,511,0.383,0.405,40340
+Trend-day,2026,True,4,226,0.342,0.5,906
+Trend-day,all,False,321,495,0.336,0.386,159045
+Trend-day,all,True,15,-323,-0.112,0.4,-4844

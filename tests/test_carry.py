@@ -20,7 +20,7 @@ os.environ.update(APP_PASSWORD="pw", SESSION_SECRET="s", CRON_SECRET="c", KV_RES
 import pandas as pd
 
 from fno import config as C, store, indicators as I, market as M
-from fno import carry as CY, scalp as SC
+from fno import carry as CY
 
 IST = C.IST
 D1, D2 = date(2026, 10, 19), date(2026, 10, 20)          # Monday, Tuesday
@@ -113,7 +113,7 @@ r = CY.tick(NOW[0], fm)
 assert len(r["closed"]) == 1 and not CY.positions(), r
 t = CY.trades()[0]
 assert t["reason"] == "Sold at the next open" and t["gap_pct"] > 0 and t["charges"] > 0 and t["pnl"] > 0, t
-assert store.positions() == [] and store.trades() == [] and SC.trades() == [], "carry must never write to the main ledger or the scalp book"
+assert store.positions() == [] and store.trades() == [], "carry must never write to the main ledger"
 print(f"tick OK: bought {t['strike']:g}{t['opt']} at {t['entry_prem']}, sold at {t['exit_prem']} after a {t['gap_pct']}% gap, net ₹{t['pnl']:,.0f}")
 
 # guards: premium > 50% of equity; weekly budget used up

@@ -1728,6 +1728,16 @@
    "result": "Round levels hold no more often than half-way levels (Nifty +/-25: 85.5% vs 85.9%); reversal trades at round numbers have no edge (99 of 4,608 versions positive in both periods; +1 to +1.5 index pts before costs; more rejections = worse). Breaks of a level already rejected this week do better. Swing: the daily 200 EMA helps, stacking 1-hour / 15-min EMAs hurts (+43 -> -49 pts a trade); best swing 4/6 cells but 40 trades, money all from 2024, fails at other sizes. Rs 5L rules: Rs 2L full 171.6L with them vs 48.2L without. Equity gates / range-day filters: none pass. Combinations: the 8 'passing' pairs were the same swing entered twice (replay key artifact). Round-level break (Nifty 15m, +/-25, 1R trail, half size), as built in the Outcomes engine: Rs 20k 3.77L / 2.59L / 65.9L vs 1.94L / 2.21L / 20.0L (fall -44% vs -66%); Rs 2L 38.0L / 21.5L / 198.2L vs 30.7L / 21.3L / 171.6L (2025-26 fall -33% vs -28%); Rs 5L full 247.9L vs 203.8L but 2025-26 78.1L vs 106.7L. Beats random entries in 80-100% of draws; 1 bar late 5/6; 1% worse fills 4/6. 2026 alone worse at Rs 20k and Rs 5L. Outcomes page after deploy (same engine, trade order now fixed): Rs 2L Jan 2023 - Nov 2026 176.6L (fall -30.1%) with the slot vs 158.2L (-25.9%) without; 2026 alone 5.94L vs 5.69L; Rs 20k 48.2L (-56.2%) vs 9.27L (-63.0%); 2026 alone 1.18L vs 1.04L. 20 Nov follow-up (same Outcomes engine, Muhurat sessions out of prior-day levels): each year alone from Rs 20k with vs without the slot: 2023 0.40L / 0.36L, 2024 3.09L / 1.72L, 2025 0.07L (-88%) / 0.75L (-76%), 2026 1.18L / 1.04L. With the slot from Rs 1L equity: 0.36L / 2.84L / 0.78L (-76%) / 1.21L, full 35.9L (-63%) vs 9.3L (-63%). Rs 2L and Rs 5L unchanged by the gate: Rs 2L full 183.1L (-29.5%) vs 158.3L (-25.9%); 2026 5.94L vs 5.69L. Rs 5L 2026 alone is worse (24.4L vs 33.9L).",
    "decision": "Adopted on the user's say-so (deeper falls accepted for more profit): round-level break slot on Nifty, own slot, half size, any equity, up to 3 a day (rlevel_slot switch in Research -> Changes; Outcomes has an on/off box). Live signals match the backtest on 1,197 of 1,197 signals. Review after 25 sessions (about 26 Dec): switch off if the live result per trade is clearly below the backtest or the account falls > 35% from its peak while the slot is losing. Watch list: Nifty daily-trend swing (200 EMA, 1-hour pullback), trend-day gate at Rs 20k. Closed: round-number reversals, rejection counts as range filter or size tilt, multi-timeframe EMA stacking for swings, Bank Nifty breaks and swings. Also fixed: the portfolio replay sorted trades with an unstable sort, so trades entered in the same minute could change order when other trades were added (path noise of about 7% in final money); it now uses a stable order (date, time, index, strategy, side). 20 Nov: slot now starts at Rs 1 lakh equity (C.RLEVEL_MIN_EQUITY) - with no gate a 2025-like year took a Rs 20k account to Rs 7k; from Rs 1L every year at Rs 20k is as good or better than without the slot with the same worst fall. Also 20 Nov: Muhurat / special sessions are left out of prior-day levels in the backtester, the CPR-width sizing and the daily review (the live app already did this since 9 Nov), and signals from a rule Autopilot does not use on that index are labelled 'Rule not used on this index (round 24/29)' instead of 'No automatic attempt logged'.",
    "summary": "Round-number reversals have no edge, but the break of a level that already rejected price this week does. It is now a half-size Nifty slot from Rs 1 lakh equity (more profit, deeper worst fall at Rs 2L-5L; Rs 5L 2026 alone worse). EMA swing: watch list."
+  },
+  {
+   "id": "r103",
+   "date": "2026-11-20",
+   "area": "Index options",
+   "title": "Round 103: Rs 40k day check, wide-CPR exemptions, lot cap to 500, add-on at +0.95R with 10-25 point exits, order-book depth, scalp section removed",
+   "asked": "User (20 Nov): would a Rs 40K balance trade today; will 500 lots plus adding lots at +0.95R and exiting after 10-25 points make money; check Improvements 'research next' labels and the watch list; look for more points from other strategies.",
+   "period": "Autopilot replay incl. the Rs 5L rules, 1-min data to 20 Nov 2026, real option 1-min candles and 5-level depth snapshots (12 days with depth). Rs 2L and Rs 20k x 2023-24 / 2025-26 / full, plus the forward window 19 Oct - 20 Nov 2026.",
+   "result": "At Rs 40K today's rules take no trade: the wide-CPR skip (round 71) applies. Wide-CPR exemptions for the trend-day, Fibonacci, channel and round-level slots do not beat today's rule in both halves (full Rs 2L: 195.4L today vs 193.9L at best; exempting everything deepens the Rs 20k fall by 6.6 pts). Lot cap: no change below about Rs 5L (the Rs 2L account never reaches 53 lots); above it the replay gains money and a deeper fall, and shrinks sharply with a 2x market-impact model. The add-on at +0.95R lost to just raising the cap; a fixed 10-25 point exit for the whole position cuts the big trend winners (win rate up to 46-67%, money down). Recorded Nifty depth is about 6-8 lots at the best ask and 47-94 in the top 5 levels, so 500 lots cannot be filled at one price. Improvements labels were updated: only 'signal changed before the minute check' remains unresearched. The scalp section was removed from the app.",
+   "decision": "No rule change. Scalp section removed; Improvements labels updated; lot-cap and live-fill studies added to Pending research."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2065,21 +2075,6 @@
    "next": "Compare score 5-6 vs 0-4 live; switch off if high-score trades are not better over 60 sessions."
   },
   {
-   "id": "p-scalp-spread",
-   "area": "Index options",
-   "title": "Scalping only when the bid-ask spread is tight (<= 0.5%)",
-   "waiting_for": "Live market data",
-   "why": "Round 34: on 11 recorded sessions the spread filter cut EMA 9/15 scalping losses from -Rs 324 to -Rs 14 a trade (Nifty about break-even). Too few days to trust.",
-   "collecting": "Recorder 1-min option candles and option-chain snapshots (bid / ask)",
-   "since": "2026-10-21",
-   "need": 60,
-   "unit": "sessions",
-   "refs": [
-    "r34"
-   ],
-   "next": "Re-run round 34 part B on 60+ sessions; only if Nifty with the spread filter is clearly positive, add it as a paper setup in the Scalp book."
-  },
-  {
    "id": "p-cpr-against",
    "area": "Index options",
    "title": "Trades against the 09:30 CPR side: bigger size?",
@@ -2179,8 +2174,8 @@
    "id": "p-addon",
    "area": "Index options",
    "title": "Add +100% of the trade's lots after Rs 2,500 open profit, stop lock +Rs 500, from Rs 5L equity",
-   "waiting_for": "Intrabar (1-min) stop check and live fill slippage on larger orders",
-   "why": "Round 96 near-miss: better in every period at Rs 2L (full 213.7L vs 171.7L), unchanged at Rs 20k, but the 2025-26 fall is 3.1 pts deeper."
+   "waiting_for": "Real fills on larger orders (the Rs 5L+ add-on); r103 re-tested it on 1-minute paths",
+   "why": "Round 96 near-miss: better in every period at Rs 2L (full 213.7L vs 171.7L), unchanged at Rs 20k, but the 2025-26 fall is 3.1 pts deeper. Round 103 (20 Nov): on 1-minute re-marked paths, adding lots at +0.95R with a 10-25 point exit did NOT beat simply raising the lot cap (Rs 50L 2025-26: 1,020L best add-on vs 1,095L at a 500-lot cap)."
   },
   {
    "id": "p-squeeze",
@@ -2211,6 +2206,36 @@
    "need": 25,
    "unit": "sessions",
    "next": "Keep if the live result per trade is in line with the backtest; switch off (Research -> Changes) if clearly below it, or if the account falls more than 35% from its peak while the slot is losing."
+  },
+  {
+   "id": "p-lotcap",
+   "area": "Index options",
+   "title": "Lot cap above 50 lots (100 / 200 / 500) - real fills needed",
+   "waiting_for": "Real fills on 100+ lot orders (paper or live) and depth snapshots",
+   "why": "Round 103: in the replay a higher cap adds money only above about Rs 5 lakh equity (Rs 10L full period 332.9L at 50 lots vs 1,590.6L at 500) and deepens the worst fall about 14 points at Rs 10L. It depends on the market-impact model: at 2x impact Rs 10L at 500 lots makes 354L (not 1,591L) with a -43% fall, and Rs 50L 1,164L (not 2,305L) with a -46% fall. Recorded depth: about 6-8 lots at the best ask and 47-94 lots in the top 5 levels on Nifty; about 2 and 12 on Bank Nifty.",
+   "collecting": "Option-chain depth snapshots (5 levels) and paper fills",
+   "since": "2026-11-20",
+   "need": "60",
+   "unit": "sessions",
+   "refs": [
+    "r103"
+   ],
+   "next": "Measure the real fill price of 50+ lot paper-to-live orders vs the model before raising MAX_LOTS above 50; test slicing in the freeze quantity."
+  },
+  {
+   "id": "p-broker-live-fill",
+   "area": "Index options",
+   "title": "Live broker fills vs the backtest (slippage, rejections, API latency)",
+   "waiting_for": "Paid broker API connected in paper-mirror mode",
+   "why": "Round 103: connecting a real broker is the only way to measure true slippage; SEBI retail algo rules need a static IP and algo-ID tagging for live orders.",
+   "collecting": "Order-by-order log: signal price, order sent, fill price, latency",
+   "since": "2026-11-20",
+   "need": "20",
+   "unit": "sessions",
+   "refs": [
+    "r103"
+   ],
+   "next": "Run Autopilot in watch mode first, compare modelled vs real fills per order, then decide on live size."
   }
  ],
  "crypto_rounds": [
@@ -3284,6 +3309,15 @@
     "r102"
    ],
    "takeaway": "Reversals at round numbers: no edge. Break of a level rejected this week: adopted as a half-size Nifty slot from Rs 1 lakh equity (a no-gate version nearly wiped a Rs 20k account in 2025). EMA swing and trend-day gate at Rs 20k: watch list."
+  },
+  {
+   "n": 103,
+   "date": "2026-11-20",
+   "topic": "Rs 40k day, wide-CPR exemptions, lot cap to 500, +0.95R add-on, order-book depth",
+   "ids": [
+    "r103"
+   ],
+   "takeaway": "No change. Rs 40k takes no trade today (wide-CPR skip, exemptions rejected). A higher lot cap only pays above about Rs 5L and rests on fills the order book may not give; add-on and fixed 10-25 point exits lose to the current exits. Scalp section removed."
   }
  ],
  "india_status": {

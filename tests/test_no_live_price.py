@@ -83,8 +83,8 @@ assert "estimated price" in M.NO_LIVE_PRICE
 import inspect
 for fn, mod in ((SV._place_signal, "service"), (SV.place_manual, "service")):
     assert "live_needed" in inspect.getsource(fn), f"{fn.__name__} must refuse orders without live prices"
-from fno import scalp as SC, carry as CY, journal as JR
-assert "live_needed" in inspect.getsource(SC._open) and "live_needed" in inspect.getsource(CY._open)
+from fno import carry as CY, journal as JR
+assert "live_needed" in inspect.getsource(CY._open)
 assert JR.AUTO_CATS[[c[0] for c in JR.AUTO_CATS].index("no_live_price")][2].startswith("Broker not connected")
 store.put("fyers", {"app_id": "X", "token": None})          # a broker is set up but logged out -> Market.broker_setup
 mk = M.Market()

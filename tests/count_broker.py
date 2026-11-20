@@ -139,11 +139,6 @@ else:
     store.put("fyers", {"token": "t", "app_id": "APP-100", "token_created": created})
 store.put("broker_pref", BROKER)
 store.put("prefs", {**(store.get("prefs") or {}), "auto": True, "auto_syms": ["NIFTY", "BANKNIFTY", "SENSEX"]})
-try:
-    from fno import scalp as SC
-    SC.save_settings({"on": True, "syms": ["NIFTY", "BANKNIFTY", "SENSEX"]})
-except Exception:
-    pass
 
 c = app.test_client()
 c.post("/api/login", json={"password": "pw"})

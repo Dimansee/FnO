@@ -550,14 +550,6 @@ def risk_status() -> dict:
     g = risk_guard(pos, tr, base, pf, auto=True, equity=eq)
     day = P.day_guard([p for p in pos if not sys_only or p.get("mode") == "signal"], str_, base)
     sh = shield_state(acct, pos, tr, pf)
-    try:
-        from . import scalp as SC
-        scfg = SC.settings()
-        now = C.now_ist()
-        sc = {"on": bool(scfg.get("on")), "capital": scfg.get("capital"), "shield": SC.shield_block(scfg),
-              "stopped": {s: (SC.governor(SC._today_trades(s, now), scfg["capital"]) or {}).get("stopped") for s in scfg.get("syms") or []}}
-    except Exception as e:
-        sc = {"error": str(e)[:120]}
     banners = []
     if pf.get("auto") or pf.get("autopilot"):
         if wk.get("blocked"):
@@ -569,15 +561,9 @@ def risk_status() -> dict:
             banners.append({"level": "warn", "kind": "weekly_near", "text": f"Close to the weekly loss limit: ₹{wk['week_pnl']:,.0f} of -₹{wk['limit_rs']:,.0f} used this week."})
         if sh["below_floor"]:
             banners.append({"level": "bad", "kind": "shield", "text": f"Capital shield: equity ₹{sh['equity']:,.0f} is below the floor ₹{sh['floor']:,.0f}. Autopilot is stopped."})
-    if isinstance(sc, dict) and sc.get("on"):
-        if sc.get("shield"):
-            banners.append({"level": "bad", "kind": "scalp_shield", "text": sc["shield"]})
-        for s_, why in (sc.get("stopped") or {}).items():
-            if why:
-                banners.append({"level": "warn", "kind": "scalp", "text": f"Scalp book {s_} stopped for today: {why}."})
     return {"autopilot": bool(pf.get("autopilot")), "auto": bool(pf.get("auto")), "auto_syms": pf.get("auto_syms"), "strategies": pf.get("strategies"),
             "equity": round(eq), "capital_start": acct.get("capital_start"), "cash": round(cash), "open_positions": len(pos),
-            "weekly": wk, "daily": day, "blocked": bool(g.get("blocked")), "block_reason": g.get("reason"), "shield": sh, "scalp": sc,
+            "weekly": wk, "daily": day, "blocked": bool(g.get("blocked")), "block_reason": g.get("reason"), "shield": sh,
             "banners": banners, "resets": (acct.get("resets") or [])[-5:], "adjustments": (acct.get("adjustments") or [])[-5:], "time": C.now_ist().isoformat(timespec="seconds"),
             "session": session_info()}
 
@@ -791,23 +777,11 @@ def live_chart(symbol: str = "NIFTY", day: str | None = None) -> dict:
                        "side": r.get("opt"), "entry": ix.get("entry"), "sl": ix.get("sl"), "target": ix.get("target"), "state": st["state"],
                        "label": st.get("label"), "msg": st.get("msg"), "what": r.get("what_happened"), "trade_id": tv.get("id")})
     books = [(p, True, "paper") for p in pos] + [(t, False, "paper") for t in tr if (t.get("opened") or "")[:10] == d]
-    try:
-        from . import scalp as SC
-        books += [(p, True, "scalp") for p in SC.positions()] + [(t, False, "scalp") for t in SC.trades() if (t.get("opened") or "")[:10] == d]
-    except Exception:
-        pass
     trades_out = []
     for t, op, book in books:
         if t.get("symbol") != symbol or (t.get("opened") or "")[:10] != d:
             continue
-        if book == "scalp":
-            side = 1 if t.get("side", 1) > 0 else -1
-            e_ = t.get("entry") if op else t.get("entry_spot")
-            x = {"book": "scalp", "id": t["id"], "open": op, "opened": tsec(t.get("opened")), "closed": tsec(t.get("closed")), "side": "CE" if side > 0 else "PE",
-                 "entry": e_, "sl": t.get("stop") if op else None, "initial_sl": (e_ - side * t["risk"]) if (e_ and t.get("risk")) else None,
-                 "target": t.get("nl") if op else None, "trail_on": t.get("trail_on"), "exit": t.get("exit_spot"), "pnl": t.get("pnl"),
-                 "reason": t.get("reason"), "strategy": f"scalp {t.get('tag')}", "lots": t.get("lots"), "qty": t.get("qty"), "entry_prem": t.get("entry_prem")}
-        else:
+        if True:
             pl = t.get("plan") or {}
             lg0 = (t.get("legs") or [{}])[0]
             man = t.get("mode") != "signal"
@@ -846,14 +820,9 @@ def live_chart(symbol: str = "NIFTY", day: str | None = None) -> dict:
                                 "worst_case_pct": round((o_.get("cost_per_lot") or 0) * (o_.get("lots") or 0) / eq * 100, 1)}
         except Exception as e:
             live = {"error": str(e)[:160]}
-    try:
-        from . import scalp as SC
-        sz = SC.state(symbol, m).get("zones") if d == C.today_ist().isoformat() else None
-    except Exception:
-        sz = None
     return {"symbol": symbol, "label": M.instrument(symbol)["label"], "date": d, "days": all_days[-60:], "spot": spot,
             "session_start": int(today.index[0].timestamp()) + 19800, "candles": candles, "levels": lv, "bands": bands,
-            "zones": _zones(hist, today, spot), "scalp_zones": sz, "setups": setups, "trades": trades_out, "live": live,
+            "zones": _zones(hist, today, spot), "setups": setups, "trades": trades_out, "live": live,
             "shield": shield_state(acct, pos, tr), "equity": round(eq), "live_day": d == C.today_ist().isoformat()}
 
 
@@ -1952,7 +1921,7 @@ def _note_auto_safe(sym, slot, ok, msg, now):
     if ep["cat"] == "weekly_limit":
         _push_safe("Weekly loss limit reached", str(msg)[:200] + " Open Autopilot → Status to see the week or reset the weekly counter.",
                    f"weekly:{now.strftime('%G-%V')}", "/#autopilot")
-    elif ep["cat"] == "daily_limit" and slot != "scalp":
+    elif ep["cat"] == "daily_limit":
         _push_safe("Daily limit reached", str(msg)[:200], f"daily:{now.date()}", "/#autopilot")
     elif ep["cat"] == "shield" and "below the floor" in str(msg):
         _push_safe("Capital shield stopped Autopilot", str(msg)[:220], f"shield:{now.date()}", "/#autopilot")
@@ -2079,29 +2048,6 @@ def _tick():
                     _push_entry(sym, slot, ok, msg, now)
             except Exception as e:                       # one instrument failing must not stop the others
                 placed.append({"symbol": sym, "error": str(e)[:120]})
-    try:                                                     # scalp book (separate paper ledger, off unless switched on)
-        from . import scalp as SC
-        sc = SC.tick(now)
-        for x in sc.get("opened") or []:
-            _note_auto_safe(x["symbol"], "scalp", True, x.get("message"), now)
-            _push_safe(f"{x['symbol']}: scalp trade placed", str(x.get("message"))[:180], f"scalp:{x['symbol']}:{now.strftime('%H%M')}", "/#scalp")
-        for x in sc.get("skipped") or []:
-            _note_auto_safe(x["symbol"], "scalp", False, x.get("why"), now)
-        for c in sc.get("closed") or []:                     # every scalp exit (user, 11 Nov 2026: a push on every executed trade)
-            try:
-                _push_safe(f"{c['symbol']} scalp closed ₹{c['pnl']:+,.0f}",
-                           f"{c['strike']:g}{c['opt']} x{c.get('lots', 1)} lot · {c['reason']} · {c['entry_prem']:g} → {c['exit_prem']:g}",
-                           f"scalpx:{c['id']}", "/#scalp")
-            except Exception:
-                pass
-        if sc.get("closed"):                                 # one phone alert when the governor stops an index for the day
-            scfg = SC.settings()
-            for s in {c["symbol"] for c in sc["closed"]}:
-                gv = SC.governor(SC._today_trades(s, now), scfg["capital"])
-                if gv.get("stopped"):
-                    _push_safe(f"{s} scalp book stopped for today", gv["stopped"], f"scalpstop:{s}:{now.date()}", "/#scalp")
-    except Exception as e:
-        sc = {"error": str(e)[:160]}
     try:                                                     # overnight carry slot (round 77; separate paper ledger, off unless switched on)
         from . import carry as CY
         cy = CY.tick(now)
@@ -2145,7 +2091,7 @@ def _tick():
                     _push_safe("Upstox data token ending soon", h["text"] + ". Generate a new one in the Upstox developer page and paste it in Settings.", f"antoken:{now.date()}", "/#settings")
     except Exception:
         pass
-    return {"closed": closed, "placed": placed, "scalp": sc, "carry": cy, "squeeze": sq, "recorded": rec, "journal": jr, "time": now.isoformat(timespec="seconds")}
+    return {"closed": closed, "placed": placed, "carry": cy, "squeeze": sq, "recorded": rec, "journal": jr, "time": now.isoformat(timespec="seconds")}
 
 
 def _untested_note(symbol, g, ev):

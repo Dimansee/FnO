@@ -23,7 +23,7 @@ import numpy as np
 import pandas as pd
 
 from fno import config as C, store, indicators as I, market as M
-from fno import squeeze as SQ, scalp as SC, carry as CY, journal as JR
+from fno import squeeze as SQ, carry as CY, journal as JR
 
 IST = C.IST
 MIN15 = timedelta(minutes=15)
@@ -140,7 +140,7 @@ p = SQ.positions()[0]
 lg = p["legs"][0]
 assert lg["opt"] == ("CE" if SIDE > 0 else "PE") and p["qty"] == 20 and p["shadow"] and abs(lg["strike"] - p["entry_spot"]) <= 50, p
 assert abs(p["sl"] - (p["entry_spot"] - SIDE * p["risk_pts"])) < 0.02 and p["bar_open"] == round(float(BARS.loc[pd.Timestamp(ENTRY), "open"]), 2), p
-assert store.positions() == [] and store.trades() == [] and SC.positions() == [] and CY.positions() == [], "a shadow trade must never reach a ledger"
+assert store.positions() == [] and store.trades() == [] and CY.positions() == [], "a shadow trade must never reach a ledger"
 NOW[0] = ENTRY + timedelta(seconds=100)
 assert not SQ.tick(NOW[0], fm).get("opened") and len(SQ.positions()) == 1, "one a day"
 closed = None
@@ -159,7 +159,7 @@ while t.time() <= C.MARKET_CLOSE:                           # the rest of the da
     NOW[0] = t
     assert not SQ.tick(t, fm).get("opened")
     t += timedelta(minutes=1)
-assert len(SQ.trades()) == 1 and store.positions() == [] and store.trades() == [] and SC.trades() == [] and CY.trades() == []
+assert len(SQ.trades()) == 1 and store.positions() == [] and store.trades() == [] and CY.trades() == []
 print(f"tick OK: {closed['strike']:g}{closed['opt']} {closed['entry_prem']} -> {closed['exit_prem']}, {closed['reason']}, "
       f"R live {closed['r_live']}, R rule {closed['r_rule']}, net ₹{closed['pnl']:,.0f} per lot (recorded only)")
 

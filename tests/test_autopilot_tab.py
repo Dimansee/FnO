@@ -70,7 +70,6 @@ SV._LAST_PLAN.pop(("NIFTY", "main"), None)
 SV._note_auto_safe("NIFTY", "main", False, "No valid signal right now (WAIT).", t0)     # no setup: not logged
 SV._note_auto_safe("BANKNIFTY", "main", False, "Weekly loss limit hit (₹-9,000 this week, limit 4%). No new trades until Monday.", t0)
 assert len(J._get(day, "auto:NIFTY:main")) == 1
-SV._note_auto_safe("NIFTY", "scalp", False, "setup B confidence 55 < 65", t0)
 # an executed trade that matches a second recommendation
 J._put(day, "reco:SENSEX:trend:10:40", {"id": "SENSEX:trend:10:40", "symbol": "SENSEX", "time": "10:41:00", "signal_bar": "10:40", "strategy": "trend",
                                          "opt": "PE", "index": {"entry": 80000, "sl": 80200, "target": None, "risk_pts": 200}, "option": {}, "basis": {"checks": []},
@@ -85,7 +84,6 @@ st = {(r["symbol"], r["strategy"]): r["status"] for r in rows}
 assert st[("NIFTY", "noise")]["state"] == "skipped" and st[("NIFTY", "noise")]["cat"] == "money", st
 assert st[("SENSEX", "trend")]["state"] == "executed" and st[("SENSEX", "trend")]["trade"]["by"] == "autopilot", st
 assert any(b["cat"] == "weekly_limit" for b in jd["decisions"]["blocks"])
-assert any(e["cat"] == "scalp_filter" for e in jd["decisions"]["scalp"])
 assert jd["summary"]["executed"] == 1 and jd["summary"]["skipped"] >= 1
 print("1 journal decisions OK:", jd["decisions"]["summary"])
 

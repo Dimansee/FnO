@@ -27,9 +27,9 @@ FLAG_MIN = 3                    # a cause seen this many times in the window is 
 # cause -> (label, research cards that tested the fix, what they found)
 CAUSES = {
     "vix_ceiling": ("VIX above the Noise / Camarilla ceiling", "r18a, r23, r24",
-                    "Trading those days lost money with bought options (r23: 2026 +91k vs +105k) and with debit spreads (r24: every year negative). Ceilings stay."),
+                    "Trading those days lost money with bought options (r23: 2026 +91k vs +105k) and with debit spreads (r24: every year negative). Ceilings stay. No change."),
     "no_signal": ("No signal: price never cleared the noise band or H4/L4 (slow grind)", "r23",
-                  "The trend-day catcher was added for this (10:45-14:15, own slot). Wider bands / earlier checks earned less (r24)."),
+                  "The trend-day catcher was added for this (10:45-14:15, own slot). Wider bands / earlier checks earned less (r24). No change."),
     "opening_drive": ("Opening drive: most of the move was done before the first check", "r24",
                       "A 09:45 / 10:15 catcher start would catch these but earned less overall (r24). No change."),
     "trail_exit": ("Trailing exit (back inside the band / VWAP) before the move continued", "r23",
@@ -39,16 +39,18 @@ CAUSES = {
     "blocked_open": ("Signal blocked because another trade was open in the index", "r23",
                      "Allowing both rules at once: more profit in training, 2025 negative, deeper fall (r23). No change; the catcher has its own slot."),
     "wrong_way": ("First trade went against the day's direction", "r21d, r14a",
-                  "Re-entering after a loss was worse (r21d); re-entry after a non-losing trade is on the watch-list (p-reentry)."),
+                  "Re-entering after a loss was worse (r21d). Re-entry after a non-losing trade was re-tested in r37: +2% profit from 53 extra trades over 4 years and worse in 2 of 4 years, so not adopted; the live check goes on (p-reentry). No change."),
     "risk_skip": ("Signal skipped: one lot risked more than the per-trade limit for this equity", "r20b, r25",
-                  "Small-account cap (15%). Bigger size or a tighter cap did not help over rolling 12-month windows (r25)."),
-    "cash_skip": ("Signal skipped: not enough free cash", "r25", "Happens when several positions are open; lots shrink to fit the cash."),
-    "weekly_cap": ("Signal skipped: weekly loss limit reached", "r18b, r20c", "Adopted rule (it improved profit and the deepest fall)."),
-    "day_limit": ("Signal skipped: daily limit (2 losers / -2% / 4 trades)", "r19c", "Only advisory on paper unless enforced in Settings."),
+                  "Small-account cap (15%). Bigger size or a tighter cap did not help over rolling 12-month windows (r25); the lot cap up to 500 lots (r103) only matters above about ₹5 lakh. No change."),
+    "cash_skip": ("Signal skipped: not enough free cash", "r25", "Happens when several positions are open; lots shrink to fit the cash. Sizing up beyond cash was tested (r25) and brought 40-80% falls. No change."),
+    "weekly_cap": ("Signal skipped: weekly loss limit reached", "r18b, r20c", "Adopted rule (it improved profit and the deepest fall). No change."),
+    "day_limit": ("Signal skipped: daily limit (2 losers / -2% / 4 trades)", "r19c", "Tested rule (r19c); only advisory on paper unless enforced in Settings. No change."),
     "catcher_gate": ("An own-slot rule waiting for its equity level (catcher Rs 40k, Fibonacci Rs 2 lakh)", "r24, r29",
-                     "Small-account gates: below these levels the extra rule added more risk than profit."),
-    "learn_veto": ("Skipped by the learning engine (veto / half size)", "learning", "Guarded change with its own evidence; see Changes in this tab."),
-    "other_skip": ("Signal skipped for another reason", "-", "See the message."),
+                     "Small-account gates: below these levels the extra rule added more risk than profit (r24, r29; the gates table was re-checked in r102 and the round-level slot added at Rs 1 lakh). No change."),
+    "learn_veto": ("Skipped by the learning engine (veto / half size)", "learning", "Guarded change with its own evidence; see Changes in this tab. No change."),
+    "wide_cpr": ("Signal skipped: wide-CPR day (CPR wider than 0.5% of the pivot)", "r71, r103",
+                 "Round 71 skip. Re-tested in r103 with exemptions for the trend-day catcher, Fibonacci, channel and round-level slots: none beat the plain skip in both halves at both capitals (full Rs 2L 195.4L today vs 193.9L at best). No change."),
+    "other_skip": ("Signal skipped for another reason", "-", "One-off reasons (see the message). No change."),
 }
 
 
@@ -56,6 +58,8 @@ def _skip_cause(msg: str) -> str:
     m = (msg or "").lower()
     if "already have an open" in m:
         return "blocked_open"
+    if "wide cpr" in m:
+        return "wide_cpr"
     if "skip (autopilot)" in m or "risks" in m and "limit" in m or "even 1 lot risks" in m:
         return "risk_skip"
     if "cash" in m:
@@ -275,16 +279,22 @@ FIX_TEXT = {
                      "Adopted rule: in the tests stopping for the week improved profit and the deepest fall. Keep; you can restart the weekly counter yourself in Autopilot → Status."),
     "daily_limit": ("Daily limit blocked entries", "r19c", "Tested rule; keep."),
     "money": ("Not enough cash for the signal", "r25", "Your action: more capital, or fewer positions open at once. Sizing up beyond cash was tested and brought 40-80% falls."),
-    "risk_cap": ("1 lot risked too much for the account size", "r20b, r25", "Small-account cap. Grows away as equity grows; a bigger cap did not help in rolling 12-month windows."),
-    "shield": ("Capital shield cut or blocked a trade", "safety", "Your safety rule (Autopilot → Safety). Loosen it only knowing the worst case grows with it."),
+    "risk_cap": ("1 lot risked too much for the account size", "r20b, r25", "Keep: small-account cap. Grows away as equity grows; a bigger cap did not help in rolling 12-month windows (r25), and lot caps up to 500 were re-tested in r103."),
+    "shield": ("Capital shield cut or blocked a trade", "safety", "Keep: your safety rule (Autopilot → Safety). Loosen it only knowing the worst case grows with it."),
     "data": ("Market data was not reliable", "ops", "Your action: keep the broker logged in (live candles / VIX) - Yahoo fallback is delayed."),
     "slot_busy": ("Signal blocked by a trade already open", "r23", "Allowing both rules at once lost in 2025 and deepened the fall (r23). Keep."),
-    "learn_veto": ("Learning-engine veto", "learning", "Guarded change with its own evidence (Learning tab); it expires on its own."),
+    "learn_veto": ("Learning-engine veto", "learning", "Keep: guarded change with its own evidence (Learning tab); it expires on its own."),
     "big_run": ("Against a big 3-day run", "r42", "Adopted rule; such trades lost in every test period."),
     "spread": ("Option spread too wide", "r34", "Keep: wide spreads cost more than the signal earns."),
     "calendar": ("Calendar rule", "r6", "Keep."),
     "auto_off": ("Autopilot was off for the instrument", "settings", "Your action: tick the instrument in Settings → Auto-trade if you want it traded."),
     "rule_not_used": ("Rule not used on this index", "r24, r29", "By design: rounds 24 / 29 chose which rules Autopilot trades on each index (e.g. no Camarilla on Sensex; tested again in r101). Keep."),
+    "wide_cpr": ("Wide-CPR day skipped (round 71)", "r71, r103", "Keep: trades on wide-CPR days lost money per lot in every test year, and exemptions for the other slots (r103) did not beat the plain skip in both halves. At about Rs 40k this skip is why a day can have no trade."),
+    "no_live_price": ("Broker not connected: no live option prices", "ops", "Your action: connect the broker and keep it logged in. No order is placed without live option prices (safety rule)."),
+    "custom_off": ("Custom strategy not set to auto", "settings", "Your action: set the custom strategy to auto in Settings if you want it traded."),
+    "equity_gate": ("Rule waits for a bigger account", "r24, r29, r90, r102", "Keep: the equity gates were tested again in r102 (trend slot Rs 40k, Fibonacci Rs 2 lakh, channel Rs 5 lakh, round-level Rs 1 lakh). Below them the extra rule added more fall than profit."),
+    "lock": ("Another order was being placed", "ops", "Keep: one order at a time is deliberate; it prevents double entries."),
+    "other": ("Other reason", "-", "Keep: one-off reasons; the exact message is shown on the day."),
     "not_attempted": ("Signal changed before the minute check", "ops", "Watch: if this repeats on winners, research an entry on the signal bar itself."),
 }
 
@@ -343,7 +353,7 @@ def weekly(week: str | None = None) -> dict:
             ct["rs"] += float(x.get("rs") or 0)
             ct["pts"] += float(x.get("pts") or 0)
         sm = (jd or {}).get("summary") or {}
-        sessions.append({"date": d, "executed": e, "skipped": len(s), "paper_pnl": sm.get("paper_pnl"), "scalp_pnl": sm.get("scalp_pnl"),
+        sessions.append({"date": d, "executed": e, "skipped": len(s), "paper_pnl": sm.get("paper_pnl"),
                          "sum_R": sm.get("sum_R"), "trend_days": lr.get("trend_days"), "trend_caught": lr.get("trend_caught"),
                          "lesson": ((jd or {}).get("settled") or {}).get("lesson")})
     tr = [t for t in store.trades() + P.archived() if days[0] <= (t.get("opened") or "")[:10] <= days[-1]]
@@ -353,11 +363,6 @@ def weekly(week: str | None = None) -> dict:
         k = (t.get("plan") or {}).get("strategy") or "?"
         b = by_st.setdefault(k, {"n": 0, "pnl": 0.0, "wins": 0})
         b["n"] += 1; b["pnl"] += float(t.get("pnl") or 0); b["wins"] += 1 if (t.get("pnl") or 0) > 0 else 0
-    try:
-        from . import scalp as SC
-        sc = [t for t in SC.trades() if days[0] <= (t.get("opened") or "")[:10] <= days[-1]]
-    except Exception:
-        sc = []
     exits = {}
     for t in sys_tr:
         r = (t.get("reason") or "?").split("(")[0].strip()[:40]
@@ -381,14 +386,13 @@ def weekly(week: str | None = None) -> dict:
                           "research": "r23, r40-r41", "verdict": "Exit rules were tested (trail / time stop / targets). One week is far too few trades to change them; it is logged for the 60-session forward check.",
                           "status": "keep"})
     pnl = round(sum(float(t.get("pnl") or 0) for t in sys_tr))
-    spnl = round(sum(float(t.get("pnl") or 0) for t in sc))
     head = (f"Week {wk}: {len(sessions)} session(s), Autopilot {exec_n} executed / {skip_n} skipped, system P&L ₹{pnl:+,.0f}"
-            + (f", scalp ₹{spnl:+,.0f}" if sc else "") + ".")
+            + ".")
     top = next((f for f in fixes if f["status"] in ("your action", "research next", "watch")), None)
     if top:
         head += f" First thing to look at: {top['title'].lower()} ({top['times']}×) - {top['status']}."
     return {"week": wk, "monday": days[0], "headline": head, "sessions": sessions, "executed": exec_n, "skipped": skip_n,
-            "system_pnl": pnl, "scalp_pnl": spnl, "scalp_trades": len(sc), "by_strategy": {k: {**v, "pnl": round(v["pnl"])} for k, v in by_st.items()},
+            "system_pnl": pnl, "by_strategy": {k: {**v, "pnl": round(v["pnl"])} for k, v in by_st.items()},
             "exits": {k: {**v, "pnl": round(v["pnl"])} for k, v in exits.items()}, "fixes": fixes,
             "rolling": rolling(), "note": "Nothing here changes a rule on its own. 'Keep' = already tested; 'research next' = flagged for a research round; "
                                           "'watch' = a tested rule that cost money this week - judged over 60 sessions, not one week; 'your action' = a setting, capital or login."}
