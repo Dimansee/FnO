@@ -1,0 +1,30 @@
+"""B: risk structure - open-risk cap, same-direction cap, drawdown brake levels, weekly / monthly loss limits, loss-streak sizing,
+cooldown after a stop-out."""
+import json
+import r106lib as X
+T, A, H = X.load_set("base"); out = {}
+print("BASE  " + " | ".join(f"{k} {X.fmt(v)}" for k, v in X.base_grid().items()), flush=True)
+R = lambda nm, **kw: X.report(nm, T, A, H, out, **kw)
+print("\nOpen-risk / same-direction caps")
+for c in (0.02, 0.025, 0.03): R(f"open risk <= {c*100:g}% of equity", open_risk=c)
+for n in (1, 2): R(f"max {n} same-direction positions", same_dir=n)
+R("open risk 3% + max 2 same-direction", open_risk=0.03, same_dir=2)
+print("\nDrawdown brake (today: 0.5x below a 15% fall)")
+R("brake OFF", dd_levels=())
+for lv in (0.10, 0.20): R(f"0.5x below {lv*100:g}%", dd_levels=((lv, 0.5),))
+R("0.33x below 15%", dd_levels=((0.15, 0.33),))
+R("0.33x below 10%", dd_levels=((0.10, 0.33),))
+R("0.33x below 20%", dd_levels=((0.20, 0.33),))
+R("tiered 0.67x/10%, 0.5x/15%, 0.33x/20%", dd_levels=((0.10, 0.67), (0.15, 0.5), (0.20, 0.33)))
+print("\nWeekly / monthly limits, loss streak (today: weekly 4%, 15% below Rs 1L)")
+for w in (0.03, 0.06): R(f"weekly {w*100:g}%", weekly=w)
+R("weekly limits OFF (both)", weekly=1.0, weekly_small=1.0)
+R("small-account weekly 10% (not 15%)", weekly_small=0.10)
+for m in (0.06, 0.08, 0.10): R(f"+ monthly {m*100:g}%", monthly=m)
+for n, m in ((3, 0.5), (3, 0.67), (4, 0.5)): R(f"after {n} losses in a row {m}x until a win", streak=(n, m))
+print("\nToday's own brakes, judged on closed trades")
+R("brake OFF + weekly OFF", dd_levels=(), weekly=1.0, weekly_small=1.0)
+print("\nCooldown after a stop-out on the same index")
+for cd in (30, 45, 60): R(f"cooldown {cd} min", cooldown=cd)
+R("cooldown 60 min unless score >= 5", cooldown=60, cool_score=5)
+json.dump(out, open("r106_b.json", "w"), indent=1, default=str)

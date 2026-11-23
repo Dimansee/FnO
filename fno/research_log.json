@@ -1758,6 +1758,16 @@
    "period": "Daily history 2007 - Nov 2026 (Sensex from 1997); 5-min bars 2023 - 20 Nov 2026, 1 lot ATM priced with slippage and charges; today's Autopilot replay, Rs 20k - 5L x 2023-24 / 2025-26 / full, forward 19 Oct - 20 Nov 2026.",
    "result": "Daily: after 2+ up closes Nifty closed up again 55.7% (2007-22), 60.5% (2023-24), 57.3% (2025-26) - at or above the normal up-day rate (53 / 56 / 50%); no reversal tendency, and none after down runs that holds in both periods (Bank Nifty bounced after 3+ down closes in 2025-26 but continued down in 2023-24). Last 3 months: 15 Nifty days followed 2+ up closes, 10 closed up again (29 Oct - 12 Nov was 10 up closes in a row, +11.5%). Stand-alone trades: 48 fade versions (at the open, break of the first 30-min range, break of the previous close, failed new high x 4 run definitions x 3 exits): 0 positive in both periods, 43 negative in both (fade at the open after a 2-3 day run: -Rs 1.45L and -1.38L, 34% wins). 24 dip-buy versions (gap against the run, then with it): 0 positive in both; 23 of 24 lose in 2025-26 (mostly Rs 330-1,300 a trade). Only 'with the run' range-break versions were positive in both periods, which Autopilot's breakout rules already trade. Autopilot's own trades: the reversal side after a 2+ day run is its worst bucket and loses per lot every year (-422 / -177 / -61 / -49 a trade, 1,089 trades; after 4+ days -691 / -292 / -1,024 / -462); with the run +276 / +272 / +461 / +304. Chance of 'worse every year' on shuffled labels 6%. Skipping reversal-side trades after a run of 2+ days and >= 2.5%: more money in 5 of 6 house cells (Rs 2L full 196.1L vs 195.4L, Rs 20k full 44.0L vs 38.7L) and 13 of 15 over five sizes, fall not deeper; fails on Rs 20k 2023-24 (3.05L vs 3.08L); the effect is near zero in R terms in 2025-26 (-0.04 / +0.01). Size tilts (reversal side smaller, with-run bigger) fail: bigger with-run size is 6 of 6 but the fall is 13 points deeper.",
    "decision": "No rule change. No reversal / fade rule. Watch-list: skip reversal-side entries after a run of 2+ days and >= 2.5% (5 of 6 cells)."
+  },
+  {
+   "id": "r106",
+   "date": "2026-11-23",
+   "area": "Index options",
+   "title": "Round 106: robustness, risk structure, filters, exits and sizing checklist - and the portfolio replay fixed to count only closed trades",
+   "asked": "User (23 Nov): slippage stress, parameter sensitivity, per-strategy ablation, year by year; open-risk / same-direction caps, drawdown-brake levels, weekly / monthly limits, size cut after 3 losses, cooldown after a stop-out; gap filter, expiry-day rule, Noise entry cutoff, 15:00 square-off, day / time breakdown; Noise time stop, channel catastrophic stop; VIX-scaled size, VIX spike filter, confluence, ADX gate on Noise.",
+   "period": "Today's Autopilot trades (regenerated per rule change where needed), Rs 2L and Rs 20k x 2023-24 / 2025-26 / 2023 - 16 Oct 2026, plus Rs 40k / 1L / 5L and the forward window 19 Oct - 20 Nov 2026 for finalists. Judged on the realised replay.",
+   "result": "Harness bug found and fixed: the portfolio replay added each trade's result at its ENTRY, so trades entered while it was still open were sized, braked and blocked on results nobody knew yet; live Autopilot uses realised P&L only. Realised replay (now the default in the Backtest tab): Rs 2L 10.28L / 7.39L / 66.6L (old 37.7L / 22.0L / 195.4L), Rs 20k 2.26L / 1.11L / 6.89L (old 3.08L / 1.98L / 38.7L). Without compounding the two agree (Rs 2L full 12.9L vs 13.7L), so the per-trade edge is real but the compounded totals were about 3x too high. A '3 losses in a row -> half size' rule looked like +41% on the old replay; on the realised replay it loses (2 of 6). Robustness: average net Rs 194 a lot on Rs 11,859 of premium (1.6%); doubled slippage + impact leaves Rs 2L full at 5.1L and wipes Rs 20k; tripled loses at Rs 2L. Band 1.5 / 2.0, look-back 10 / 20 and VIX caps 16-22 land between 41L and 63L at Rs 2L full (no lonely peak at 1.75), but Rs 20k collapses at band 1.5. Every strategy carries weight: without Camarilla / Trend-day / Fibonacci / round-level Rs 2L full falls to 7.0L / 7.2L / 17.1L / 11.8L; without Noise 40.6L, without channel 29.3L. Years at Rs 2L (restart each Jan): 2023 2.02L, 2024 9.13L, 2025 2.92L, 2026 4.26L; Rs 20k lost 55% in 2023. Risk: open-risk caps 2-3% and same-direction caps cut profit 85-95% (they block the stacked positions the profit comes from); brake levels 10 / 20%, 0.33x and tiers 0-1 of 6; brake off: fall 33 pts deeper; weekly 3% / 6% / off fail; monthly limits fail badly; cooldowns 30-60 min fail. Filters: gap filter fails (gap days earn, mostly with the gap); expiry-day trades earn more per lot (+261 vs +178) - half size / cutoffs fail; Noise last entry 13:30 / 14:00 fail (late Noise entries win); 15:00 square-off costs Rs 2.0L per lot. Exits: Noise time stop 45 / 60 min 0 of 6; channel stop at 2.5 / 3 / 4 / 5 ATR 0-2 of 6 (4-5 ATR rarely fires and never lowered the worst channel loss). Sizing: VIX-scaled size, VIX spike block (VIX-up days are big winners), confluence 1.25x / 1.5x / conflict skip, ADX / range gates on Noise: none passes. Only survivor: no entries 10:00-10:29 (that half hour lost per lot in all 4 years): 5 of 6 house cells, 12 of 15 over five sizes, fall within 1.8 pts, forward 3 of 5 not worse; a shuffle gives 'some slot loses all 4 years' 12% of the time.",
+   "decision": "No trading-rule change. Backtest replay fixed to realised equity (live behaviour); old replay kept as realised=False. Watch-list: no entries 10:00-10:29."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2286,6 +2296,21 @@
    "need": "60",
    "unit": "sessions",
    "next": "Re-run research/round105/e_robust_recent.py with the new sessions; adopt only if 6 of 6 cells are better and 2026-27 trades in this bucket still lose."
+  },
+  {
+   "id": "p-skip-1000",
+   "area": "Index options",
+   "title": "No new entries 10:00-10:29",
+   "waiting_for": "More live sessions",
+   "why": "Round 106: that half hour lost per lot in 2023, 2024, 2025 and 2026 (677 trades, mostly the 10:01 and 10:16 entries across strategies). Skipping it: 5 of 6 house cells, 12 of 15 over five sizes, fall within 1.8 pts; fails on Rs 20k / 40k 2025-26 and forward 3 of 5; a slot like this appears by chance 12% of the time.",
+   "since": "2026-11-23",
+   "refs": [
+    "r106"
+   ],
+   "collecting": "Paper Autopilot trades entered 10:00-10:29 and their result",
+   "need": "60",
+   "unit": "sessions",
+   "next": "Re-run research/round106/f_slot10.py with the new sessions; adopt only if 6 of 6 cells are better and the slot still loses on new trades."
   }
  ],
  "crypto_rounds": [
@@ -3386,6 +3411,15 @@
     "r105"
    ],
    "takeaway": "No change. The day after a 2-3 day run continues more often than it reverses; all 48 fade versions lose. Autopilot's reversal-side trades after a run are its weakest bucket; skipping them after a 2.5%+ run is on the watch list (5 of 6 cells)."
+  },
+  {
+   "n": 106,
+   "date": "2026-11-23",
+   "topic": "Robustness / risk / filters / exits / sizing checklist; realised replay fix",
+   "ids": [
+    "r106"
+   ],
+   "takeaway": "Backtest replay now counts only closed trades (live behaviour): compounded totals were ~3x too high, per-trade edge unchanged. 30+ rule ideas tested: none passes; today's brake and weekly limit stay. Costs are the main risk: the edge is 1.6% of premium a trade. Watch list: no entries 10:00-10:29."
   }
  ],
  "india_status": {

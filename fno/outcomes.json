@@ -38,6 +38,7 @@
 20000
 ],
 "notes": [
+"Round 106 (23 Nov 2026): these rows were built with the replay before the fix that counts a trade's result only once it has closed (live behaviour). The compounded totals here are about 3x higher than the realised replay the Backtest tab now uses (Rs 2L 2023 - 16 Oct 2026: 195L old vs 66.6L realised); rows compare fairly with each other, not with the Backtest tab.",
 "Same engine as the Backtest tab's portfolio backtest (option prices modelled from the index, charges, slippage that grows with order size, freeze-size order splits, weekly loss limit, cash check).",
 "Each row changes only what its 'Changes' column says; everything else is today's Autopilot.",
 "'2026 only' restarts the account on 1 Jan 2026 - an unseen year for most rules (they were picked on 2023-25).",

@@ -4,7 +4,8 @@ rounds 40-42 - compounding or fixed lots, confidence sizing, the big-run skip, a
 How it works
   1. Trades: the app's own backtester (fno.backtest.run, strategy "autopilot" = the rules Autopilot trades on each index),
      one lot, on 5-minute history from Upstox's public API, under the chosen exit profile (fno.backtest.EXIT).
-  2. Portfolio replay in time order across the indices (the same replay as research round 42):
+  2. Portfolio replay in time order across the indices (the same replay as research round 42; since round 106 a trade's
+     result counts for sizing, the brake, the weekly limit and the gates only once it has closed - as live Autopilot):
        * lots = account x risk% x confidence / risk per lot (1-lot floor only while one lot risks <= 15% of the account),
          or a fixed number of lots; cut to what the cash can pay beside the trades already open
        * Autopilot gates: trend-day slot from Rs 40k, Fibonacci from Rs 2 lakh; weekly loss limit 4% (15% below Rs 1 lakh)
@@ -135,8 +136,13 @@ def _mult(conf, sym, score):
 
 def replay(T: pd.DataFrame, capital: float, sizing: str, risk_pct: float, lots_fixed: int, conf: str, gates: bool = True, max_lots: int = 0,
            dd_half: bool = False, alt: pd.DataFrame | None = None, cpr: bool = False, hi: pd.DataFrame | None = None,
-           channel: bool = True, rlevel: bool = True) -> pd.DataFrame:
-    """cpr: round 71 CPR-width sizing (needs the 'cpr_w' column; 1.2x narrow, 0.85x middle, wide days skipped).
+           channel: bool = True, rlevel: bool = True, realised: bool = True) -> pd.DataFrame:
+    """realised (round 106, default): sizing, the drawdown brake, the weekly loss limit, the equity gates and the cash check use
+    only trades CLOSED before this entry - what live Autopilot sees (paper.equity / peak / weekly P&L are realised). False = the
+    replay before round 106, which added each trade's result at its entry, so trades entered while it was still open were sized,
+    braked and blocked on a result nobody knew yet (Rs 2L 2023 - 16 Oct 2026: Rs 195L that way vs Rs 48L realised).
+    The 'equity' column is the running total of all results in entry order either way.
+    cpr: round 71 CPR-width sizing (needs the 'cpr_w' column; 1.2x narrow, 0.85x middle, wide days skipped).
     alt: the same signals priced on the 1-OTM strike; used while equity is below SMALL_OTM_BELOW (live small-account rule).
     hi: the same signals priced on the 2-OTM strike; used once equity reaches BIG_OTM_FROM (round 88 big-account rule).
     channel: include the round-90 15-min channel slot (from CHANNEL_MIN_EQUITY when gates are on).
@@ -150,7 +156,16 @@ def replay(T: pd.DataFrame, capital: float, sizing: str, risk_pct: float, lots_f
     eq = peak = float(capital)
     open_pos, rows = [], []
     week, week_start, week_pnl, blocked = None, eq, 0.0, False
+    pend, tot = [], float(capital)                  # realised mode: (exit key, pnl, week) of trades still open
     for r in T.itertuples(index=False):
+        if realised and pend:
+            key_now = r.date + r.entry_time
+            for p in sorted((p for p in pend if p[0] <= key_now), key=lambda p: p[0]):   # closing order, as paper.peak
+                eq += p[1]
+                peak = max(peak, eq)
+                if p[2] == week:
+                    week_pnl += p[1]
+            pend = [p for p in pend if p[0] > key_now]
         if alt_by and eq < C.SMALL_OTM_BELOW:
             r = alt_by.get((r.sym, r.date, r.entry_time, r.strategy), r)
         elif hi_by and eq >= C.BIG_OTM_FROM:
@@ -161,6 +176,8 @@ def replay(T: pd.DataFrame, capital: float, sizing: str, risk_pct: float, lots_f
         wk = date.fromisoformat(r.date).isocalendar()[:2]
         if wk != week:
             week, week_start, week_pnl, blocked = wk, eq, 0.0, False
+        if realised and week_pnl <= -(0.04 if week_start >= C.AUTOPILOT_SMALL_ACCOUNT else C.AUTOPILOT_WEEKLY_SMALL) * week_start:
+            blocked = True
         why = None
         acct = eq if sizing == "compound" else float(capital)
         if blocked:
@@ -209,16 +226,20 @@ def replay(T: pd.DataFrame, capital: float, sizing: str, risk_pct: float, lots_f
         p_in, p_out = r.prem_in * (1 + imp), max(r.prem_out * (1 - imp), 0.05)
         orders = (1 + int(getattr(r, "pieces", 1) or 1)) * math.ceil(qty / FREEZE[s])
         pnl = (p_out - p_in) * qty - I.charges(p_in, p_out, qty, orders=orders, exch_pct=I.exch_rate(s))
-        eq += pnl
-        peak = max(peak, eq)
-        week_pnl += pnl
-        cap = 0.04 if week_start >= C.AUTOPILOT_SMALL_ACCOUNT else C.AUTOPILOT_WEEKLY_SMALL
-        if week_pnl <= -cap * week_start:
-            blocked = True
+        tot += pnl
+        if realised:
+            pend.append((key_out, pnl, wk))
+        else:
+            eq += pnl
+            peak = max(peak, eq)
+            week_pnl += pnl
+            cap = 0.04 if week_start >= C.AUTOPILOT_SMALL_ACCOUNT else C.AUTOPILOT_WEEKLY_SMALL
+            if week_pnl <= -cap * week_start:
+                blocked = True
         open_pos.append((key_out, p_in * qty))
         rows.append({"date": r.date, "entry_time": r.entry_time, "exit_time": r.exit_time, "sym": s, "strategy": r.strategy, "side": r.side,
                      "score": int(r.score), "conf_mult": m, "lots": lots, "spot_in": r.spot_in, "spot_out": r.spot_out, "R": r.R,
-                     "prem_in": round(p_in, 2), "prem_out": round(p_out, 2), "pnl": round(pnl, 0), "equity": round(eq, 0),
+                     "prem_in": round(p_in, 2), "prem_out": round(p_out, 2), "pnl": round(pnl, 0), "equity": round(tot, 0),
                      "reason": r.reason, "slip_extra_pct": round(imp * 100, 3)})
     return pd.DataFrame(rows)
 
