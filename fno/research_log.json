@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-21",
+ "updated": "2026-11-23",
  "note": "Date = when the study was run or first saved on the research branch. The period each study tested is shown on its card.",
  "entries": [
   {
@@ -1748,6 +1748,16 @@
    "period": "Today's Autopilot replay, Rs 2L and Rs 20k x 2023-24 / 2025-26 / full, forward 19 Oct - 20 Nov 2026.",
    "result": "Two separate blockers on 20 Nov: at Rs 20-40k the wide-CPR skip (plus the Rs 40k / 2L / 5L slot gates); at Rs 2L the 4% weekly loss limit (Mon-Wed losses) blocked all 10 signals before CPR mattered. Wide-CPR days are rare (170 trades on 49 days in 4 years; Camarilla and channel won, Noise and round-level lost; 2026 +30.9k after 2023-25 negative), so the evidence is thin. Trading wide days at 0.25-0.85x size: 0 of 6 cells better. Only after 11:30: 2-3 of 6, Rs 20k full 38.7L -> 52L, Rs 2L slightly lower. Weekly-limit probe (allow entries after 11:30 at 0.5x once the limit is hit): better in 6 of 6 cells (Rs 2L full 204.5L vs 195.4L, Rs 20k full 71.7L vs 38.7L) but the Rs 2L 2025-26 fall is 4.2 points deeper (2.2 at 13:00, 2.8 at 12:00), forward window Rs 2L -6%; small-account-only version gives nothing. Combined with the late wide-CPR probe it still fails the fall bar. Nothing adopted.",
    "decision": "Watch-list: weekly-limit probe after 11:30 at half size (fails the fall bar by 2-4 pts). No rule change."
+  },
+  {
+   "id": "r105",
+   "date": "2026-11-23",
+   "area": "Index options",
+   "title": "Round 105: after a 2-3 day one-way run, trade the other way (fade / dip-buy), and run state as a filter on Autopilot",
+   "asked": "User (23 Nov): after the market rallies 2-3 days it corrects or goes sideways, or opens negative and then goes positive - find an opportunity in the opposite direction.",
+   "period": "Daily history 2007 - Nov 2026 (Sensex from 1997); 5-min bars 2023 - 20 Nov 2026, 1 lot ATM priced with slippage and charges; today's Autopilot replay, Rs 20k - 5L x 2023-24 / 2025-26 / full, forward 19 Oct - 20 Nov 2026.",
+   "result": "Daily: after 2+ up closes Nifty closed up again 55.7% (2007-22), 60.5% (2023-24), 57.3% (2025-26) - at or above the normal up-day rate (53 / 56 / 50%); no reversal tendency, and none after down runs that holds in both periods (Bank Nifty bounced after 3+ down closes in 2025-26 but continued down in 2023-24). Last 3 months: 15 Nifty days followed 2+ up closes, 10 closed up again (29 Oct - 12 Nov was 10 up closes in a row, +11.5%). Stand-alone trades: 48 fade versions (at the open, break of the first 30-min range, break of the previous close, failed new high x 4 run definitions x 3 exits): 0 positive in both periods, 43 negative in both (fade at the open after a 2-3 day run: -Rs 1.45L and -1.38L, 34% wins). 24 dip-buy versions (gap against the run, then with it): 0 positive in both; 23 of 24 lose in 2025-26 (mostly Rs 330-1,300 a trade). Only 'with the run' range-break versions were positive in both periods, which Autopilot's breakout rules already trade. Autopilot's own trades: the reversal side after a 2+ day run is its worst bucket and loses per lot every year (-422 / -177 / -61 / -49 a trade, 1,089 trades; after 4+ days -691 / -292 / -1,024 / -462); with the run +276 / +272 / +461 / +304. Chance of 'worse every year' on shuffled labels 6%. Skipping reversal-side trades after a run of 2+ days and >= 2.5%: more money in 5 of 6 house cells (Rs 2L full 196.1L vs 195.4L, Rs 20k full 44.0L vs 38.7L) and 13 of 15 over five sizes, fall not deeper; fails on Rs 20k 2023-24 (3.05L vs 3.08L); the effect is near zero in R terms in 2025-26 (-0.04 / +0.01). Size tilts (reversal side smaller, with-run bigger) fail: bigger with-run size is 6 of 6 but the fall is 13 points deeper.",
+   "decision": "No rule change. No reversal / fade rule. Watch-list: skip reversal-side entries after a run of 2+ days and >= 2.5% (5 of 6 cells)."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2261,6 +2271,21 @@
    "need": "60",
    "unit": "sessions",
    "next": "Re-run research/round103/c3_weekly_probe.py with new sessions; adopt only if the fall is within 2 pts."
+  },
+  {
+   "id": "p-run-contra-skip",
+   "area": "Index options",
+   "title": "Skip reversal-side entries after a run of 2+ days and 2.5% or more",
+   "waiting_for": "More sessions that follow a strong multi-day run (live paper record)",
+   "why": "Round 105: these trades lost per lot every year 2023-26, and skipping them gives more money in 5 of 6 cells with no deeper fall, but Rs 20k 2023-24 is slightly lower and the effect is near zero in 2025-26.",
+   "since": "2026-11-23",
+   "refs": [
+    "r105"
+   ],
+   "collecting": "Journal: entries taken against a 2+ day run and their result",
+   "need": "60",
+   "unit": "sessions",
+   "next": "Re-run research/round105/e_robust_recent.py with the new sessions; adopt only if 6 of 6 cells are better and 2026-27 trades in this bucket still lose."
   }
  ],
  "crypto_rounds": [
@@ -3352,6 +3377,15 @@
     "r104"
    ],
    "takeaway": "20 Nov was blocked by wide CPR at small accounts and by the weekly limit at Rs 2L. Probe-size entries gain money but deepen the fall 2-4 pts at Rs 2L: watch list, not adopted."
+  },
+  {
+   "n": 105,
+   "date": "2026-11-23",
+   "topic": "Reversal after a 2-3 day run: fade, dip-buy, run state as a filter",
+   "ids": [
+    "r105"
+   ],
+   "takeaway": "No change. The day after a 2-3 day run continues more often than it reverses; all 48 fade versions lose. Autopilot's reversal-side trades after a run are its weakest bucket; skipping them after a 2.5%+ run is on the watch list (5 of 6 cells)."
   }
  ],
  "india_status": {
