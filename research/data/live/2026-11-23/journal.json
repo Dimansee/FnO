@@ -1,0 +1,3553 @@
+{
+ "ai": {
+  "BANKNIFTY": [],
+  "NIFTY": [],
+  "SENSEX": []
+ },
+ "context": {
+  "BANKNIFTY": {
+   "atr_5m": null,
+   "calendar": null,
+   "camarilla": {
+    "h3": 65207.81875,
+    "h4": 65780.4375,
+    "l3": 64062.581249999996,
+    "l4": 63489.962499999994,
+    "pivot": 63971.51666666666
+   },
+   "cpr": {
+    "bc": 63639.675,
+    "tc": 64303.35833333332,
+    "width_pct": 1.027
+   },
+   "expiries": [
+    "2026-11-23",
+    "2026-12-29",
+    "2027-01-25"
+   ],
+   "expiry": "2026-12-29",
+   "fii": {
+    "date": "20-Nov-2026",
+    "dii": -4859.8,
+    "fii": 10308.42,
+    "source": "NSE"
+   },
+   "gap_pct": 0.75,
+   "global": {
+    "avg_equity_chg": -1.9,
+    "notes": []
+   },
+   "lot": 30,
+   "noise_band_at": {
+    "09:45": [
+     64188.6,
+     65568.5
+    ],
+    "10:15": [
+     64137.0,
+     65620.5
+    ],
+    "11:15": [
+     64157.3,
+     65600.1
+    ],
+    "12:15": [
+     64002.8,
+     65755.8
+    ],
+    "13:15": [
+     63813.3,
+     65946.7
+    ],
+    "14:15": [
+     63649.7,
+     66111.5
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 65118.6,
+   "pcr_prev_close": 0.65,
+   "pivot": 63971.51666666666,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY",
+     "BANKNIFTY",
+     "SENSEX"
+    ],
+    "risk_pct": 1.0,
+    "sizing": "compound",
+    "strategies": [
+     "noise",
+     "camarilla",
+     "trend",
+     "fib"
+    ]
+   },
+   "prev_close": 64635.2,
+   "prev_high": 64680.8,
+   "prev_low": 62598.55,
+   "symbol": "BANKNIFTY",
+   "time": "09:17",
+   "vix": {
+    "chg_pct": 7.621247113163965,
+    "level": 18.64
+   }
+  },
+  "NIFTY": {
+   "atr_5m": null,
+   "calendar": null,
+   "camarilla": {
+    "h3": 25928.089999999997,
+    "h4": 26055.579999999998,
+    "l3": 25673.11,
+    "l4": 25545.62,
+    "pivot": 25651.533333333336
+   },
+   "cpr": {
+    "bc": 25577.0,
+    "tc": 25726.066666666673,
+    "width_pct": 0.578
+   },
+   "expiries": [
+    "2026-11-23",
+    "2026-12-01",
+    "2026-12-08"
+   ],
+   "expiry": "2026-12-01",
+   "fii": {
+    "date": "20-Nov-2026",
+    "dii": -4859.8,
+    "fii": 10308.42,
+    "source": "NSE"
+   },
+   "gap_pct": 0.68,
+   "global": {
+    "avg_equity_chg": -1.9,
+    "notes": []
+   },
+   "lot": 65,
+   "noise_band_at": {
+    "09:45": [
+     25654.0,
+     26124.8
+    ],
+    "10:15": [
+     25643.3,
+     26135.6
+    ],
+    "11:15": [
+     25646.7,
+     26132.2
+    ],
+    "12:15": [
+     25611.2,
+     26167.9
+    ],
+    "13:15": [
+     25580.1,
+     26199.2
+    ],
+    "14:15": [
+     25535.3,
+     26244.3
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 25977.2,
+   "pcr_prev_close": 0.62,
+   "pivot": 25651.533333333336,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY",
+     "BANKNIFTY",
+     "SENSEX"
+    ],
+    "risk_pct": 1.0,
+    "sizing": "compound",
+    "strategies": [
+     "noise",
+     "camarilla",
+     "trend",
+     "fib"
+    ]
+   },
+   "prev_close": 25800.6,
+   "prev_high": 25808.8,
+   "prev_low": 25345.2,
+   "symbol": "NIFTY",
+   "time": "09:17",
+   "vix": {
+    "chg_pct": 7.621247113163965,
+    "level": 18.64
+   }
+  },
+  "SENSEX": {
+   "atr_5m": null,
+   "calendar": null,
+   "camarilla": {
+    "h3": 84369.24975,
+    "h4": 84818.78950000001,
+    "l3": 83470.17025000001,
+    "l4": 83020.6305,
+    "pivot": 83453.64666666667
+   },
+   "cpr": {
+    "bc": 83220.615,
+    "tc": 83686.67833333333,
+    "width_pct": 0.555
+   },
+   "expiries": [
+    "2026-11-26",
+    "2026-12-03",
+    "2026-12-10"
+   ],
+   "expiry": "2026-11-26",
+   "fii": {
+    "date": "20-Nov-2026",
+    "dii": -4859.8,
+    "fii": 10308.42,
+    "source": "NSE"
+   },
+   "gap_pct": 0.82,
+   "global": {
+    "avg_equity_chg": -1.9,
+    "notes": []
+   },
+   "lot": 25,
+   "noise_band_at": {
+    "09:45": [
+     83450.6,
+     85084.1
+    ],
+    "10:15": [
+     83406.3,
+     85128.9
+    ],
+    "11:15": [
+     83418.2,
+     85116.8
+    ],
+    "12:15": [
+     83288.6,
+     85247.4
+    ],
+    "13:15": [
+     83193.4,
+     85343.5
+    ],
+    "14:15": [
+     83088.9,
+     85448.8
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 84611.18,
+   "pcr_prev_close": null,
+   "pivot": 83453.64666666667,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY",
+     "BANKNIFTY",
+     "SENSEX"
+    ],
+    "risk_pct": 1.0,
+    "sizing": "compound",
+    "strategies": [
+     "noise",
+     "camarilla",
+     "trend",
+     "fib"
+    ]
+   },
+   "prev_close": 83919.71,
+   "prev_high": 84037.96,
+   "prev_low": 82403.27,
+   "symbol": "SENSEX",
+   "time": "09:17",
+   "vix": {
+    "chg_pct": 7.621247113163965,
+    "level": 18.64
+   }
+  }
+ },
+ "date": "2026-11-23",
+ "decisions": {
+  "blocks": [
+   {
+    "cat": "equity_gate",
+    "entry": null,
+    "from": "09:20",
+    "label": "Rule waits for a bigger account",
+    "msg": "Autopilot adds the Fibonacci breakout once equity reaches \u20b9200,000.",
+    "n": 320,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "slot": "fib",
+    "strategy": "fib",
+    "symbol": "NIFTY",
+    "target": null,
+    "to": "14:39",
+    "trade_id": null
+   },
+   {
+    "cat": "equity_gate",
+    "entry": null,
+    "from": "09:20",
+    "label": "Rule waits for a bigger account",
+    "msg": "Autopilot adds the round-level break slot once equity reaches \u20b9100,000 (round 102).",
+    "n": 320,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "slot": "rlevel",
+    "strategy": "rlevel",
+    "symbol": "NIFTY",
+    "target": null,
+    "to": "14:39",
+    "trade_id": null
+   },
+   {
+    "cat": "equity_gate",
+    "entry": null,
+    "from": "09:20",
+    "label": "Rule waits for a bigger account",
+    "msg": "Autopilot adds the Fibonacci breakout once equity reaches \u20b9200,000.",
+    "n": 320,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "slot": "fib",
+    "strategy": "fib",
+    "symbol": "SENSEX",
+    "target": null,
+    "to": "14:39",
+    "trade_id": null
+   }
+  ],
+  "rows": [
+   {
+    "index": {
+     "entry": 63249.55,
+     "risk_pts": 611.5623943773853,
+     "rr": null,
+     "sl": 63861.112394377385,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "BANKNIFTY:camarilla:09:35",
+    "result": {
+     "R": -1.0,
+     "at": "09:40",
+     "close_15_15": 62609.2,
+     "exit_spot": 63861.1,
+     "index_outcome": "stop",
+     "mae_pts": 651.2,
+     "mfe_pts": 703.4
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 5,
+     "cat": "big_run",
+     "from": "09:35",
+     "label": "Against a big 3-day run (round 42)",
+     "msg": "Skipped (round 42): this PUT bets against a rally of 2,362 points in 3 sessions (2.2x the daily ATR). Such trades lost in every test period.",
+     "state": "skipped",
+     "to": "09:39"
+    },
+    "strategy": "camarilla",
+    "symbol": "BANKNIFTY",
+    "time": "09:35",
+    "what_happened": "If taken: stop at 09:40 (-1.0R on the index)"
+   },
+   {
+    "index": {
+     "entry": 63482.85,
+     "risk_pts": 579.7312499999971,
+     "rr": null,
+     "sl": 64062.581249999996,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "BANKNIFTY:camarilla:09:50",
+    "result": {
+     "R": 1.5,
+     "at": "15:15",
+     "close_15_15": 62609.2,
+     "exit_spot": 62612.6,
+     "index_outcome": "square-off",
+     "mae_pts": 331.6,
+     "mfe_pts": 936.7
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 5,
+     "cat": "big_run",
+     "from": "09:50",
+     "label": "Against a big 3-day run (round 42)",
+     "msg": "Skipped (round 42): this PUT bets against a rally of 2,362 points in 3 sessions (2.2x the daily ATR). Such trades lost in every test period.",
+     "state": "skipped",
+     "to": "09:54"
+    },
+    "strategy": "camarilla",
+    "symbol": "BANKNIFTY",
+    "time": "09:50",
+    "what_happened": "If taken: square-off at 15:15 (+1.5R on the index)"
+   },
+   {
+    "index": {
+     "entry": 63447.65,
+     "risk_pts": 614.9312499999942,
+     "rr": null,
+     "sl": 64062.581249999996,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "BANKNIFTY:camarilla:10:05",
+    "result": {
+     "R": 1.36,
+     "at": "15:15",
+     "close_15_15": 62609.2,
+     "exit_spot": 62612.6,
+     "index_outcome": "square-off",
+     "mae_pts": 366.8,
+     "mfe_pts": 901.5
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "big_run",
+     "from": "10:05",
+     "label": "Against a big 3-day run (round 42)",
+     "msg": "Skipped (round 42): this PUT bets against a rally of 2,362 points in 3 sessions (2.2x the daily ATR). Such trades lost in every test period.",
+     "state": "skipped",
+     "to": "10:14"
+    },
+    "strategy": "camarilla",
+    "symbol": "BANKNIFTY",
+    "time": "10:05",
+    "what_happened": "If taken: square-off at 15:15 (+1.4R on the index)"
+   },
+   {
+    "index": {
+     "entry": 63359.85,
+     "risk_pts": 458.5031665923723,
+     "rr": 4.0,
+     "sl": 63818.35316659237,
+     "target": 61525.83733363051
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "BANKNIFTY:noise:10:15",
+    "result": {
+     "R": 1.63,
+     "at": "15:15",
+     "close_15_15": 62609.2,
+     "exit_spot": 62612.6,
+     "index_outcome": "square-off",
+     "mae_pts": 454.6,
+     "mfe_pts": 813.7
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 3,
+     "cat": "big_run",
+     "from": "10:15",
+     "label": "Against a big 3-day run (round 42)",
+     "msg": "Skipped (round 42): this PUT bets against a rally of 2,362 points in 3 sessions (2.2x the daily ATR). Such trades lost in every test period.",
+     "state": "skipped",
+     "to": "10:17"
+    },
+    "strategy": "noise",
+    "symbol": "BANKNIFTY",
+    "time": "10:15",
+    "what_happened": "If taken: square-off at 15:15 (+1.6R on the index)"
+   },
+   {
+    "index": {
+     "entry": 25609.6,
+     "risk_pts": 110.28895033917459,
+     "rr": 4.0,
+     "sl": 25719.888950339173,
+     "target": 25168.4441986433
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "NIFTY:noise:10:15",
+    "result": {
+     "R": 2.2,
+     "at": "15:15",
+     "close_15_15": 25366.4,
+     "exit_spot": 25367.5,
+     "index_outcome": "square-off",
+     "mae_pts": 54.7,
+     "mfe_pts": 265.8
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 3,
+     "cat": "wide_cpr",
+     "from": "10:15",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.58% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "10:17"
+    },
+    "strategy": "noise",
+    "symbol": "NIFTY",
+    "time": "10:15",
+    "what_happened": "If taken: square-off at 15:15 (+2.2R on the index)"
+   },
+   {
+    "index": {
+     "entry": 83335.98,
+     "risk_pts": 358.08668081229047,
+     "rr": 4.0,
+     "sl": 83694.06668081229,
+     "target": 81903.63327675083
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "SENSEX:noise:10:15",
+    "result": {
+     "R": 2.5,
+     "at": "15:15",
+     "close_15_15": 82443.96,
+     "exit_spot": 82440.4,
+     "index_outcome": "square-off",
+     "mae_pts": 135.9,
+     "mfe_pts": 930.3
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 3,
+     "cat": "wide_cpr",
+     "from": "10:15",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.56% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "10:17"
+    },
+    "strategy": "noise",
+    "symbol": "SENSEX",
+    "time": "10:15",
+    "what_happened": "If taken: square-off at 15:15 (+2.5R on the index)"
+   },
+   {
+    "index": {
+     "entry": 25592.25,
+     "risk_pts": 140.24124041594615,
+     "rr": null,
+     "sl": 25732.491240415948,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "NIFTY:trend:10:45",
+    "result": {
+     "R": 1.6,
+     "at": "15:15",
+     "close_15_15": 25366.4,
+     "exit_spot": 25367.5,
+     "index_outcome": "square-off",
+     "mae_pts": 72.0,
+     "mfe_pts": 248.4
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "wide_cpr",
+     "from": "10:45",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.58% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "10:54"
+    },
+    "strategy": "trend",
+    "symbol": "NIFTY",
+    "time": "10:45",
+    "what_happened": "If taken: square-off at 15:15 (+1.6R on the index)"
+   },
+   {
+    "index": {
+     "entry": 83271.84,
+     "risk_pts": 450.82995476843786,
+     "rr": null,
+     "sl": 83722.66995476844,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "SENSEX:trend:10:45",
+    "result": {
+     "R": 1.84,
+     "at": "15:15",
+     "close_15_15": 82443.96,
+     "exit_spot": 82440.4,
+     "index_outcome": "square-off",
+     "mae_pts": 200.1,
+     "mfe_pts": 866.1
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "wide_cpr",
+     "from": "10:45",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.56% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "10:54"
+    },
+    "strategy": "trend",
+    "symbol": "SENSEX",
+    "time": "10:45",
+    "what_happened": "If taken: square-off at 15:15 (+1.8R on the index)"
+   },
+   {
+    "index": {
+     "entry": 63369.2,
+     "risk_pts": 314.97966118485414,
+     "rr": null,
+     "sl": 63684.17966118485,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {
+     "cost_per_lot": null,
+     "delta": null,
+     "entry_prem": null,
+     "expiry": "2026-12-29",
+     "lots": null,
+     "ltp": null,
+     "sl_prem": null,
+     "strike": null,
+     "target_prem": null
+    },
+    "reco_id": "BANKNIFTY:trend:10:45",
+    "result": {
+     "R": -1.0,
+     "at": "11:20",
+     "close_15_15": 62609.2,
+     "exit_spot": 63684.2,
+     "index_outcome": "stop",
+     "mae_pts": 445.2,
+     "mfe_pts": 823.0
+    },
+    "source": "scan",
+    "status": {
+     "cat": "rule_not_used",
+     "label": "Rule not used on this index (round 24/29)",
+     "msg": "Autopilot does not trade this rule on this index (rounds 24 / 29 chose the rules per index), so the signal was only recorded.",
+     "state": "skipped"
+    },
+    "strategy": "trend",
+    "symbol": "BANKNIFTY",
+    "time": "10:46",
+    "what_happened": "If taken: stop at 11:20 (-1.0R on the index)"
+   },
+   {
+    "index": {
+     "entry": 25520.35,
+     "risk_pts": 131.19938482715116,
+     "rr": null,
+     "sl": 25651.54938482715,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "NIFTY:camarilla:11:05",
+    "result": {
+     "R": -1.0,
+     "at": "11:20",
+     "close_15_15": 25366.4,
+     "exit_spot": 25651.5,
+     "index_outcome": "stop",
+     "mae_pts": 144.0,
+     "mfe_pts": 176.5
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 5,
+     "cat": "wide_cpr",
+     "from": "11:05",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.58% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "11:09"
+    },
+    "strategy": "camarilla",
+    "symbol": "NIFTY",
+    "time": "11:05",
+    "what_happened": "If taken: stop at 11:20 (-1.0R on the index)"
+   },
+   {
+    "index": {
+     "entry": 25599.55,
+     "risk_pts": 105.38535002278351,
+     "rr": null,
+     "sl": 25704.935350022784,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "NIFTY:trend:11:15",
+    "result": {
+     "R": 2.2,
+     "at": "15:15",
+     "close_15_15": 25366.4,
+     "exit_spot": 25367.5,
+     "index_outcome": "square-off",
+     "mae_pts": 64.8,
+     "mfe_pts": 255.7
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "wide_cpr",
+     "from": "11:15",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.58% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "11:24"
+    },
+    "strategy": "trend",
+    "symbol": "NIFTY",
+    "time": "11:15",
+    "what_happened": "If taken: square-off at 15:15 (+2.2R on the index)"
+   },
+   {
+    "index": {
+     "entry": 83271.11,
+     "risk_pts": 352.3565269673175,
+     "rr": null,
+     "sl": 83623.46652696731,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "SENSEX:trend:11:15",
+    "result": {
+     "R": 2.36,
+     "at": "15:15",
+     "close_15_15": 82443.96,
+     "exit_spot": 82440.4,
+     "index_outcome": "square-off",
+     "mae_pts": 200.8,
+     "mfe_pts": 865.4
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "wide_cpr",
+     "from": "11:15",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.56% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "11:24"
+    },
+    "strategy": "trend",
+    "symbol": "SENSEX",
+    "time": "11:15",
+    "what_happened": "If taken: square-off at 15:15 (+2.4R on the index)"
+   },
+   {
+    "index": {
+     "entry": 63440.05,
+     "risk_pts": 593.8915782442948,
+     "rr": null,
+     "sl": 64033.941578244296,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "BANKNIFTY:camarilla:11:20",
+    "result": {
+     "R": 1.39,
+     "at": "15:15",
+     "close_15_15": 62609.2,
+     "exit_spot": 62612.6,
+     "index_outcome": "square-off",
+     "mae_pts": 160.8,
+     "mfe_pts": 893.9
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 6,
+     "cat": "big_run",
+     "from": "11:20",
+     "label": "Against a big 3-day run (round 42)",
+     "msg": "Skipped (round 42): this PUT bets against a rally of 2,362 points in 3 sessions (2.2x the daily ATR). Such trades lost in every test period.",
+     "state": "skipped",
+     "to": "11:25"
+    },
+    "strategy": "camarilla",
+    "symbol": "BANKNIFTY",
+    "time": "11:20",
+    "what_happened": "If taken: square-off at 15:15 (+1.4R on the index)"
+   },
+   {
+    "index": {
+     "entry": 63317.3,
+     "risk_pts": 565.2225717470685,
+     "rr": null,
+     "sl": 63882.522571747075,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "BANKNIFTY:camarilla:11:40",
+    "result": {
+     "R": 1.25,
+     "at": "15:15",
+     "close_15_15": 62609.2,
+     "exit_spot": 62612.6,
+     "index_outcome": "square-off",
+     "mae_pts": 32.8,
+     "mfe_pts": 771.1
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 5,
+     "cat": "big_run",
+     "from": "11:40",
+     "label": "Against a big 3-day run (round 42)",
+     "msg": "Skipped (round 42): this PUT bets against a rally of 2,362 points in 3 sessions (2.2x the daily ATR). Such trades lost in every test period.",
+     "state": "skipped",
+     "to": "11:44"
+    },
+    "strategy": "camarilla",
+    "symbol": "BANKNIFTY",
+    "time": "11:40",
+    "what_happened": "If taken: square-off at 15:15 (+1.2R on the index)"
+   },
+   {
+    "index": {
+     "entry": 63298.05,
+     "risk_pts": 372.62111584342375,
+     "rr": 4.0,
+     "sl": 63670.67111584343,
+     "target": 61807.56553662631
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "BANKNIFTY:noise:11:45",
+    "result": {
+     "R": 1.84,
+     "at": "15:15",
+     "close_15_15": 62609.2,
+     "exit_spot": 62612.6,
+     "index_outcome": "square-off",
+     "mae_pts": 40.0,
+     "mfe_pts": 751.9
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 6,
+     "cat": "big_run",
+     "from": "11:45",
+     "label": "Against a big 3-day run (round 42)",
+     "msg": "Skipped (round 42): this PUT bets against a rally of 2,362 points in 3 sessions (2.2x the daily ATR). Such trades lost in every test period.",
+     "state": "skipped",
+     "to": "11:50"
+    },
+    "strategy": "noise",
+    "symbol": "BANKNIFTY",
+    "time": "11:45",
+    "what_happened": "If taken: square-off at 15:15 (+1.8R on the index)"
+   },
+   {
+    "index": {
+     "entry": 25559.7,
+     "risk_pts": 87.83462901988916,
+     "rr": 4.0,
+     "sl": 25647.53462901989,
+     "target": 25208.361483920446
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "NIFTY:noise:11:45",
+    "result": {
+     "R": 2.19,
+     "at": "15:15",
+     "close_15_15": 25366.4,
+     "exit_spot": 25367.5,
+     "index_outcome": "square-off",
+     "mae_pts": 6.5,
+     "mfe_pts": 215.9
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 6,
+     "cat": "wide_cpr",
+     "from": "11:45",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.58% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "11:50"
+    },
+    "strategy": "noise",
+    "symbol": "NIFTY",
+    "time": "11:45",
+    "what_happened": "If taken: square-off at 15:15 (+2.2R on the index)"
+   },
+   {
+    "index": {
+     "entry": 25559.7,
+     "risk_pts": 131.75194352983374,
+     "rr": null,
+     "sl": 25691.451943529835,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "NIFTY:trend:11:45",
+    "result": {
+     "R": 1.46,
+     "at": "15:15",
+     "close_15_15": 25366.4,
+     "exit_spot": 25367.5,
+     "index_outcome": "square-off",
+     "mae_pts": 6.5,
+     "mfe_pts": 215.9
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "wide_cpr",
+     "from": "11:45",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.58% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "11:54"
+    },
+    "strategy": "trend",
+    "symbol": "NIFTY",
+    "time": "11:45",
+    "what_happened": "If taken: square-off at 15:15 (+1.5R on the index)"
+   },
+   {
+    "index": {
+     "entry": 83131.12,
+     "risk_pts": 277.78721936169137,
+     "rr": 4.0,
+     "sl": 83408.90721936169,
+     "target": 82019.97112255322
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "SENSEX:noise:11:45",
+    "result": {
+     "R": 2.49,
+     "at": "15:15",
+     "close_15_15": 82443.96,
+     "exit_spot": 82440.4,
+     "index_outcome": "square-off",
+     "mae_pts": 8.3,
+     "mfe_pts": 725.4
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 6,
+     "cat": "wide_cpr",
+     "from": "11:45",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.56% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "11:50"
+    },
+    "strategy": "noise",
+    "symbol": "SENSEX",
+    "time": "11:45",
+    "what_happened": "If taken: square-off at 15:15 (+2.5R on the index)"
+   },
+   {
+    "index": {
+     "entry": 83131.12,
+     "risk_pts": 416.6808290425371,
+     "rr": null,
+     "sl": 83547.80082904254,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "SENSEX:trend:11:45",
+    "result": {
+     "R": 1.66,
+     "at": "15:15",
+     "close_15_15": 82443.96,
+     "exit_spot": 82440.4,
+     "index_outcome": "square-off",
+     "mae_pts": 8.3,
+     "mfe_pts": 725.4
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "wide_cpr",
+     "from": "11:45",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.56% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "11:54"
+    },
+    "strategy": "trend",
+    "symbol": "SENSEX",
+    "time": "11:45",
+    "what_happened": "If taken: square-off at 15:15 (+1.7R on the index)"
+   },
+   {
+    "index": {
+     "entry": 25544.8,
+     "risk_pts": 128.3100000000013,
+     "rr": null,
+     "sl": 25673.11,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "NIFTY:camarilla:11:50",
+    "result": {
+     "R": 1.38,
+     "at": "15:15",
+     "close_15_15": 25366.4,
+     "exit_spot": 25367.5,
+     "index_outcome": "square-off",
+     "mae_pts": -1.8,
+     "mfe_pts": 201.0
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 9,
+     "cat": "wide_cpr",
+     "from": "11:51",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.58% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "11:59"
+    },
+    "strategy": "camarilla",
+    "symbol": "NIFTY",
+    "time": "11:51",
+    "what_happened": "If taken: square-off at 15:15 (+1.4R on the index)"
+   },
+   {
+    "index": {
+     "entry": 83001.83,
+     "risk_pts": 399.9342862662704,
+     "rr": null,
+     "sl": 83401.76428626628,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {
+     "cost_per_lot": 13782.0,
+     "delta": 0.53,
+     "entry_prem": 689.1,
+     "expiry": "2026-11-26",
+     "lots": 1,
+     "ltp": 688.9,
+     "sl_prem": 477.13,
+     "strike": 83100.0,
+     "target_prem": 1325.0
+    },
+    "reco_id": "SENSEX:camarilla:11:55",
+    "result": {
+     "R": 1.4,
+     "at": "15:15",
+     "close_15_15": 82443.96,
+     "exit_spot": 82440.4,
+     "index_outcome": "square-off",
+     "mae_pts": 48.3,
+     "mfe_pts": 596.1
+    },
+    "source": "scan",
+    "status": {
+     "cat": "rule_not_used",
+     "label": "Rule not used on this index (round 24/29)",
+     "msg": "Autopilot does not trade this rule on this index (rounds 24 / 29 chose the rules per index), so the signal was only recorded.",
+     "state": "skipped"
+    },
+    "strategy": "camarilla",
+    "symbol": "SENSEX",
+    "time": "11:56",
+    "what_happened": "If taken: square-off at 15:15 (+1.4R on the index)"
+   },
+   {
+    "index": {
+     "entry": 63285.15,
+     "risk_pts": 298.9099258630408,
+     "rr": 4.0,
+     "sl": 63584.05992586304,
+     "target": 62089.510296547836
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "BANKNIFTY:noise:12:15",
+    "result": {
+     "R": 2.25,
+     "at": "15:15",
+     "close_15_15": 62609.2,
+     "exit_spot": 62612.6,
+     "index_outcome": "square-off",
+     "mae_pts": 52.9,
+     "mfe_pts": 739.0
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 5,
+     "cat": "big_run",
+     "from": "12:15",
+     "label": "Against a big 3-day run (round 42)",
+     "msg": "Skipped (round 42): this PUT bets against a rally of 2,362 points in 3 sessions (2.2x the daily ATR). Such trades lost in every test period.",
+     "state": "skipped",
+     "to": "12:22"
+    },
+    "strategy": "noise",
+    "symbol": "BANKNIFTY",
+    "time": "12:15",
+    "what_happened": "If taken: square-off at 15:15 (+2.2R on the index)"
+   },
+   {
+    "index": {
+     "entry": 25530.75,
+     "risk_pts": 75.80392133922531,
+     "rr": 4.0,
+     "sl": 25606.553921339226,
+     "target": 25227.5343146431
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "NIFTY:noise:12:15",
+    "result": {
+     "R": 2.15,
+     "at": "15:15",
+     "close_15_15": 25366.4,
+     "exit_spot": 25367.5,
+     "index_outcome": "square-off",
+     "mae_pts": 2.8,
+     "mfe_pts": 186.9
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 5,
+     "cat": "wide_cpr",
+     "from": "12:15",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.58% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "12:22"
+    },
+    "strategy": "noise",
+    "symbol": "NIFTY",
+    "time": "12:15",
+    "what_happened": "If taken: square-off at 15:15 (+2.1R on the index)"
+   },
+   {
+    "index": {
+     "entry": 25530.75,
+     "risk_pts": 113.70588200883796,
+     "rr": null,
+     "sl": 25644.45588200884,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "NIFTY:trend:12:15",
+    "result": {
+     "R": 1.44,
+     "at": "15:15",
+     "close_15_15": 25366.4,
+     "exit_spot": 25367.5,
+     "index_outcome": "square-off",
+     "mae_pts": 2.8,
+     "mfe_pts": 186.9
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "wide_cpr",
+     "from": "12:15",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.58% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "12:24"
+    },
+    "strategy": "trend",
+    "symbol": "NIFTY",
+    "time": "12:15",
+    "what_happened": "If taken: square-off at 15:15 (+1.4R on the index)"
+   },
+   {
+    "index": {
+     "entry": 83020.91,
+     "risk_pts": 239.57637737836444,
+     "rr": 4.0,
+     "sl": 83260.48637737837,
+     "target": 82062.60449048654
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "SENSEX:noise:12:15",
+    "result": {
+     "R": 2.42,
+     "at": "15:15",
+     "close_15_15": 82443.96,
+     "exit_spot": 82440.4,
+     "index_outcome": "square-off",
+     "mae_pts": 0.7,
+     "mfe_pts": 615.2
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 5,
+     "cat": "wide_cpr",
+     "from": "12:15",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.56% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "12:22"
+    },
+    "strategy": "noise",
+    "symbol": "SENSEX",
+    "time": "12:15",
+    "what_happened": "If taken: square-off at 15:15 (+2.4R on the index)"
+   },
+   {
+    "index": {
+     "entry": 83020.91,
+     "risk_pts": 359.36456606754666,
+     "rr": null,
+     "sl": 83380.27456606756,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "SENSEX:trend:12:15",
+    "result": {
+     "R": 1.62,
+     "at": "15:15",
+     "close_15_15": 82443.96,
+     "exit_spot": 82440.4,
+     "index_outcome": "square-off",
+     "mae_pts": 0.7,
+     "mfe_pts": 615.2
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "wide_cpr",
+     "from": "12:15",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.56% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "12:24"
+    },
+    "strategy": "trend",
+    "symbol": "SENSEX",
+    "time": "12:15",
+    "what_happened": "If taken: square-off at 15:15 (+1.6R on the index)"
+   },
+   {
+    "index": {
+     "entry": 25506.15,
+     "risk_pts": 99.94694501536254,
+     "rr": null,
+     "sl": 25606.096945015364,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "NIFTY:trend:12:45",
+    "result": {
+     "R": 1.39,
+     "at": "15:15",
+     "close_15_15": 25366.4,
+     "exit_spot": 25367.5,
+     "index_outcome": "square-off",
+     "mae_pts": 10.3,
+     "mfe_pts": 162.3
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "wide_cpr",
+     "from": "12:45",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.58% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "12:54"
+    },
+    "strategy": "trend",
+    "symbol": "NIFTY",
+    "time": "12:45",
+    "what_happened": "If taken: square-off at 15:15 (+1.4R on the index)"
+   },
+   {
+    "index": {
+     "entry": 82921.69,
+     "risk_pts": 314.13549221438967,
+     "rr": null,
+     "sl": 83235.8254922144,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "SENSEX:trend:12:45",
+    "result": {
+     "R": 1.53,
+     "at": "15:15",
+     "close_15_15": 82443.96,
+     "exit_spot": 82440.4,
+     "index_outcome": "square-off",
+     "mae_pts": 50.5,
+     "mfe_pts": 516.0
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "wide_cpr",
+     "from": "12:45",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.56% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "12:54"
+    },
+    "strategy": "trend",
+    "symbol": "SENSEX",
+    "time": "12:45",
+    "what_happened": "If taken: square-off at 15:15 (+1.5R on the index)"
+   },
+   {
+    "index": {
+     "entry": 63251.35,
+     "risk_pts": 241.94655939988348,
+     "rr": 4.0,
+     "sl": 63493.29655939988,
+     "target": 62283.56376240047
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "BANKNIFTY:noise:12:45",
+    "result": {
+     "R": 2.64,
+     "at": "15:15",
+     "close_15_15": 62609.2,
+     "exit_spot": 62612.6,
+     "index_outcome": "square-off",
+     "mae_pts": -43.4,
+     "mfe_pts": 705.2
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 1,
+     "cat": "big_run",
+     "from": "12:54",
+     "label": "Against a big 3-day run (round 42)",
+     "msg": "Skipped (round 42): this PUT bets against a rally of 2,362 points in 3 sessions (2.2x the daily ATR). Such trades lost in every test period.",
+     "state": "skipped",
+     "to": "12:54"
+    },
+    "strategy": "noise",
+    "symbol": "BANKNIFTY",
+    "time": "12:54",
+    "what_happened": "If taken: square-off at 15:15 (+2.6R on the index)"
+   },
+   {
+    "index": {
+     "entry": 25495.65,
+     "risk_pts": 66.39334691427226,
+     "rr": 4.0,
+     "sl": 25562.043346914274,
+     "target": 25230.076612342913
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "NIFTY:noise:12:45",
+    "result": {
+     "R": 1.93,
+     "at": "15:15",
+     "close_15_15": 25366.4,
+     "exit_spot": 25367.5,
+     "index_outcome": "square-off",
+     "mae_pts": -6.4,
+     "mfe_pts": 151.8
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 1,
+     "cat": "wide_cpr",
+     "from": "12:54",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.58% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "12:54"
+    },
+    "strategy": "noise",
+    "symbol": "NIFTY",
+    "time": "12:54",
+    "what_happened": "If taken: square-off at 15:15 (+1.9R on the index)"
+   },
+   {
+    "index": {
+     "entry": 82903.4,
+     "risk_pts": 208.23054279938418,
+     "rr": 4.0,
+     "sl": 83111.63054279938,
+     "target": 82070.47782880245
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "SENSEX:noise:12:45",
+    "result": {
+     "R": 2.22,
+     "at": "15:15",
+     "close_15_15": 82443.96,
+     "exit_spot": 82440.4,
+     "index_outcome": "square-off",
+     "mae_pts": -13.6,
+     "mfe_pts": 497.7
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 1,
+     "cat": "wide_cpr",
+     "from": "12:54",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.56% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "12:54"
+    },
+    "strategy": "noise",
+    "symbol": "SENSEX",
+    "time": "12:54",
+    "what_happened": "If taken: square-off at 15:15 (+2.2R on the index)"
+   },
+   {
+    "index": {
+     "entry": 25463.7,
+     "risk_pts": 86.03782851594913,
+     "rr": null,
+     "sl": 25549.73782851595,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "NIFTY:trend:13:15",
+    "result": {
+     "R": 1.12,
+     "at": "15:15",
+     "close_15_15": 25366.4,
+     "exit_spot": 25367.5,
+     "index_outcome": "square-off",
+     "mae_pts": 10.0,
+     "mfe_pts": 119.9
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "wide_cpr",
+     "from": "13:15",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.58% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "13:24"
+    },
+    "strategy": "trend",
+    "symbol": "NIFTY",
+    "time": "13:15",
+    "what_happened": "If taken: square-off at 15:15 (+1.1R on the index)"
+   },
+   {
+    "index": {
+     "entry": 82816.17,
+     "risk_pts": 267.428736950037,
+     "rr": null,
+     "sl": 83083.59873695004,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "SENSEX:trend:13:15",
+    "result": {
+     "R": 1.4,
+     "at": "15:15",
+     "close_15_15": 82443.96,
+     "exit_spot": 82440.4,
+     "index_outcome": "square-off",
+     "mae_pts": 21.0,
+     "mfe_pts": 410.5
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "wide_cpr",
+     "from": "13:15",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.56% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "13:24"
+    },
+    "strategy": "trend",
+    "symbol": "SENSEX",
+    "time": "13:15",
+    "what_happened": "If taken: square-off at 15:15 (+1.4R on the index)"
+   },
+   {
+    "index": {
+     "entry": 25434.65,
+     "risk_pts": 77.32316428545334,
+     "rr": null,
+     "sl": 25511.973164285453,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "NIFTY:trend:13:45",
+    "result": {
+     "R": 0.87,
+     "at": "15:15",
+     "close_15_15": 25366.4,
+     "exit_spot": 25367.5,
+     "index_outcome": "square-off",
+     "mae_pts": 39.0,
+     "mfe_pts": 90.8
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "wide_cpr",
+     "from": "13:45",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.58% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "13:54"
+    },
+    "strategy": "trend",
+    "symbol": "NIFTY",
+    "time": "13:45",
+    "what_happened": "If taken: square-off at 15:15 (+0.9R on the index)"
+   },
+   {
+    "index": {
+     "entry": 82707.65,
+     "risk_pts": 241.86938214241547,
+     "rr": null,
+     "sl": 82949.5193821424,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "SENSEX:trend:13:45",
+    "result": {
+     "R": 1.1,
+     "at": "15:15",
+     "close_15_15": 82443.96,
+     "exit_spot": 82440.4,
+     "index_outcome": "square-off",
+     "mae_pts": 129.6,
+     "mfe_pts": 302.0
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "wide_cpr",
+     "from": "13:45",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.56% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "13:54"
+    },
+    "strategy": "trend",
+    "symbol": "SENSEX",
+    "time": "13:45",
+    "what_happened": "If taken: square-off at 15:15 (+1.1R on the index)"
+   },
+   {
+    "index": {
+     "entry": 62907.9,
+     "risk_pts": 195.89020242180843,
+     "rr": 4.0,
+     "sl": 63103.79020242181,
+     "target": 62124.33919031277
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "BANKNIFTY:noise:14:15",
+    "result": {
+     "R": 1.51,
+     "at": "15:15",
+     "close_15_15": 62609.2,
+     "exit_spot": 62612.6,
+     "index_outcome": "square-off",
+     "mae_pts": 152.0,
+     "mfe_pts": 361.7
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 8,
+     "cat": "big_run",
+     "from": "14:15",
+     "label": "Against a big 3-day run (round 42)",
+     "msg": "Skipped (round 42): this PUT bets against a rally of 2,362 points in 3 sessions (2.2x the daily ATR). Such trades lost in every test period.",
+     "state": "skipped",
+     "to": "14:24"
+    },
+    "strategy": "noise",
+    "symbol": "BANKNIFTY",
+    "time": "14:15",
+    "what_happened": "If taken: square-off at 15:15 (+1.5R on the index)"
+   },
+   {
+    "index": {
+     "entry": 25415.75,
+     "risk_pts": 52.264572512082786,
+     "rr": 4.0,
+     "sl": 25468.014572512082,
+     "target": 25206.69170995167
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "NIFTY:noise:14:15",
+    "result": {
+     "R": 0.92,
+     "at": "15:15",
+     "close_15_15": 25366.4,
+     "exit_spot": 25367.5,
+     "index_outcome": "square-off",
+     "mae_pts": 50.3,
+     "mfe_pts": 71.9
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 8,
+     "cat": "wide_cpr",
+     "from": "14:15",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.58% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "14:24"
+    },
+    "strategy": "noise",
+    "symbol": "NIFTY",
+    "time": "14:15",
+    "what_happened": "If taken: square-off at 15:15 (+0.9R on the index)"
+   },
+   {
+    "index": {
+     "entry": 25415.75,
+     "risk_pts": 78.39685876812418,
+     "rr": null,
+     "sl": 25494.146858768123,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "NIFTY:trend:14:15",
+    "result": {
+     "R": 0.62,
+     "at": "15:15",
+     "close_15_15": 25366.4,
+     "exit_spot": 25367.5,
+     "index_outcome": "square-off",
+     "mae_pts": 50.3,
+     "mfe_pts": 71.9
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "wide_cpr",
+     "from": "14:15",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.58% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "14:24"
+    },
+    "strategy": "trend",
+    "symbol": "NIFTY",
+    "time": "14:15",
+    "what_happened": "If taken: square-off at 15:15 (+0.6R on the index)"
+   },
+   {
+    "index": {
+     "entry": 82637.69,
+     "risk_pts": 165.12947052044248,
+     "rr": 4.0,
+     "sl": 82802.81947052045,
+     "target": 81977.17211791824
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "SENSEX:noise:14:15",
+    "result": {
+     "R": 1.19,
+     "at": "15:15",
+     "close_15_15": 82443.96,
+     "exit_spot": 82440.4,
+     "index_outcome": "square-off",
+     "mae_pts": 158.6,
+     "mfe_pts": 232.0
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 8,
+     "cat": "wide_cpr",
+     "from": "14:15",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.56% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "14:24"
+    },
+    "strategy": "noise",
+    "symbol": "SENSEX",
+    "time": "14:15",
+    "what_happened": "If taken: square-off at 15:15 (+1.2R on the index)"
+   },
+   {
+    "index": {
+     "entry": 82637.69,
+     "risk_pts": 247.6942057806637,
+     "rr": null,
+     "sl": 82885.38420578066,
+     "target": null
+    },
+    "opt": "PE",
+    "option": {},
+    "reco_id": "SENSEX:trend:14:15",
+    "result": {
+     "R": 0.8,
+     "at": "15:15",
+     "close_15_15": 82443.96,
+     "exit_spot": 82440.4,
+     "index_outcome": "square-off",
+     "mae_pts": 158.6,
+     "mfe_pts": 232.0
+    },
+    "source": "autopilot",
+    "status": {
+     "attempts": 10,
+     "cat": "wide_cpr",
+     "from": "14:15",
+     "label": "Wide-CPR day skipped (round 71)",
+     "msg": "Skipped (round 71): wide CPR today (0.56% of the pivot, above 0.5%). Autopilot trades on wide-CPR days lost money per lot in every test year.",
+     "state": "skipped",
+     "to": "14:24"
+    },
+    "strategy": "trend",
+    "symbol": "SENSEX",
+    "time": "14:15",
+    "what_happened": "If taken: square-off at 15:15 (+0.8R on the index)"
+   }
+  ],
+  "summary": {
+   "executed": 0,
+   "signals": 40,
+   "skipped": 40,
+   "skipped_by_reason": {
+    "Against a big 3-day run (round 42)": 10,
+    "Rule not used on this index (round 24/29)": 2,
+    "Wide-CPR day skipped (round 71)": 28
+   }
+  }
+ },
+ "open_positions": [],
+ "paper_trades": [],
+ "recommendations": [
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "id": "BANKNIFTY:camarilla:09:35",
+   "index": {
+    "entry": 63249.55,
+    "risk_pts": 611.5623943773853,
+    "rr": null,
+    "sl": 63861.112394377385,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": -1.0,
+    "at": "09:40",
+    "close_15_15": 62609.2,
+    "exit_spot": 63861.1,
+    "index_outcome": "stop",
+    "mae_pts": 651.2,
+    "mfe_pts": 703.4
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "09:35",
+   "source": "autopilot",
+   "strategy": "camarilla",
+   "symbol": "BANKNIFTY",
+   "time": "09:35:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "id": "BANKNIFTY:camarilla:09:50",
+   "index": {
+    "entry": 63482.85,
+    "risk_pts": 579.7312499999971,
+    "rr": null,
+    "sl": 64062.581249999996,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.5,
+    "at": "15:15",
+    "close_15_15": 62609.2,
+    "exit_spot": 62612.6,
+    "index_outcome": "square-off",
+    "mae_pts": 331.6,
+    "mfe_pts": 936.7
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "09:50",
+   "source": "autopilot",
+   "strategy": "camarilla",
+   "symbol": "BANKNIFTY",
+   "time": "09:50:01"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "id": "BANKNIFTY:camarilla:10:05",
+   "index": {
+    "entry": 63447.65,
+    "risk_pts": 614.9312499999942,
+    "rr": null,
+    "sl": 64062.581249999996,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.36,
+    "at": "15:15",
+    "close_15_15": 62609.2,
+    "exit_spot": 62612.6,
+    "index_outcome": "square-off",
+    "mae_pts": 366.8,
+    "mfe_pts": 901.5
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "10:05",
+   "source": "autopilot",
+   "strategy": "camarilla",
+   "symbol": "BANKNIFTY",
+   "time": "10:05:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "BANKNIFTY:noise:10:15",
+   "index": {
+    "entry": 63359.85,
+    "risk_pts": 458.5031665923723,
+    "rr": 4.0,
+    "sl": 63818.35316659237,
+    "target": 61525.83733363051
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.63,
+    "at": "15:15",
+    "close_15_15": 62609.2,
+    "exit_spot": 62612.6,
+    "index_outcome": "square-off",
+    "mae_pts": 454.6,
+    "mfe_pts": 813.7
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "10:15",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "BANKNIFTY",
+   "time": "10:15:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:10:15",
+   "index": {
+    "entry": 25609.6,
+    "risk_pts": 110.28895033917459,
+    "rr": 4.0,
+    "sl": 25719.888950339173,
+    "target": 25168.4441986433
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 2.2,
+    "at": "15:15",
+    "close_15_15": 25366.4,
+    "exit_spot": 25367.5,
+    "index_outcome": "square-off",
+    "mae_pts": 54.7,
+    "mfe_pts": 265.8
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "10:15",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "10:15:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "SENSEX:noise:10:15",
+   "index": {
+    "entry": 83335.98,
+    "risk_pts": 358.08668081229047,
+    "rr": 4.0,
+    "sl": 83694.06668081229,
+    "target": 81903.63327675083
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 2.5,
+    "at": "15:15",
+    "close_15_15": 82443.96,
+    "exit_spot": 82440.4,
+    "index_outcome": "square-off",
+    "mae_pts": 135.9,
+    "mfe_pts": 930.3
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "10:15",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "SENSEX",
+   "time": "10:15:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "NIFTY:trend:10:45",
+   "index": {
+    "entry": 25592.25,
+    "risk_pts": 140.24124041594615,
+    "rr": null,
+    "sl": 25732.491240415948,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.6,
+    "at": "15:15",
+    "close_15_15": 25366.4,
+    "exit_spot": 25367.5,
+    "index_outcome": "square-off",
+    "mae_pts": 72.0,
+    "mfe_pts": 248.4
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "10:45",
+   "source": "autopilot",
+   "strategy": "trend",
+   "symbol": "NIFTY",
+   "time": "10:45:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "SENSEX:trend:10:45",
+   "index": {
+    "entry": 83271.84,
+    "risk_pts": 450.82995476843786,
+    "rr": null,
+    "sl": 83722.66995476844,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.84,
+    "at": "15:15",
+    "close_15_15": 82443.96,
+    "exit_spot": 82440.4,
+    "index_outcome": "square-off",
+    "mae_pts": 200.1,
+    "mfe_pts": 866.1
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "10:45",
+   "source": "autopilot",
+   "strategy": "trend",
+   "symbol": "SENSEX",
+   "time": "10:45:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      false,
+      "India VIX 18.40 between 11 and 18 (enough movement to pay for an option, but not a fear spike)"
+     ],
+     [
+      null,
+      "Trend-day catcher (own slot, trades alongside the others):"
+     ],
+     [
+      null,
+      "10:45 check \u00b7 band 64094.9 \u2013 65555.5 \u00b7 price above VWAP on 0% of today's bars (needs 80% on one side)"
+     ],
+     [
+      true,
+      "Trend day down: beyond the band and VWAP, held one side of VWAP all day"
+     ],
+     [
+      null,
+      "Fibonacci 0.618 breakout (own slot):"
+     ],
+     [
+      true,
+      "India VIX 18.40 between 11 and 20"
+     ],
+     [
+      null,
+      "Yesterday's levels: H4 65258.3 \u00b7 H3 64766.9 \u00b7 L3 63176.1 \u00b7 L4 62684.7"
+     ],
+     [
+      false,
+      "Waiting for a 5-min close below L4 (now 63369.2)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 18.40 between 11 and 20"
+     ],
+     [
+      null,
+      "Yesterday's levels: H4 65780.4 \u00b7 H3 65207.8 \u00b7 L3 64062.6 \u00b7 L4 63490.0"
+     ],
+     [
+      false,
+      "Waiting for a 5-min close below L4 (now 63369.2)"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-3.64% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 1,
+      "value": "+0.58%"
+     },
+     {
+      "factor": "India VIX",
+      "score": -1,
+      "value": "18.40 (+6.2%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "0.84"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": 1,
+      "value": "\u20b910,308 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "63369.2 vs 63593.1"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -2,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "BANKNIFTY:trend:10:45",
+   "index": {
+    "entry": 63369.2,
+    "risk_pts": 314.97966118485414,
+    "rr": null,
+    "sl": 63684.17966118485,
+    "target": null
+   },
+   "lot": 30,
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": null,
+    "delta": null,
+    "entry_prem": null,
+    "expiry": "2026-12-29",
+    "lots": null,
+    "ltp": null,
+    "sl_prem": null,
+    "strike": null,
+    "target_prem": null
+   },
+   "result": {
+    "R": -1.0,
+    "at": "11:20",
+    "close_15_15": 62609.2,
+    "exit_spot": 63684.2,
+    "index_outcome": "stop",
+    "mae_pts": 445.2,
+    "mfe_pts": 823.0
+   },
+   "signal": "WAIT",
+   "signal_bar": "10:45",
+   "spot": 63369.2,
+   "strategy": "trend",
+   "symbol": "BANKNIFTY",
+   "time": "10:46:16",
+   "vix": 18.4
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "id": "NIFTY:camarilla:11:05",
+   "index": {
+    "entry": 25520.35,
+    "risk_pts": 131.19938482715116,
+    "rr": null,
+    "sl": 25651.54938482715,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": -1.0,
+    "at": "11:20",
+    "close_15_15": 25366.4,
+    "exit_spot": 25651.5,
+    "index_outcome": "stop",
+    "mae_pts": 144.0,
+    "mfe_pts": 176.5
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "11:05",
+   "source": "autopilot",
+   "strategy": "camarilla",
+   "symbol": "NIFTY",
+   "time": "11:05:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "NIFTY:trend:11:15",
+   "index": {
+    "entry": 25599.55,
+    "risk_pts": 105.38535002278351,
+    "rr": null,
+    "sl": 25704.935350022784,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 2.2,
+    "at": "15:15",
+    "close_15_15": 25366.4,
+    "exit_spot": 25367.5,
+    "index_outcome": "square-off",
+    "mae_pts": 64.8,
+    "mfe_pts": 255.7
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "11:15",
+   "source": "autopilot",
+   "strategy": "trend",
+   "symbol": "NIFTY",
+   "time": "11:15:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "SENSEX:trend:11:15",
+   "index": {
+    "entry": 83271.11,
+    "risk_pts": 352.3565269673175,
+    "rr": null,
+    "sl": 83623.46652696731,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 2.36,
+    "at": "15:15",
+    "close_15_15": 82443.96,
+    "exit_spot": 82440.4,
+    "index_outcome": "square-off",
+    "mae_pts": 200.8,
+    "mfe_pts": 865.4
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "11:15",
+   "source": "autopilot",
+   "strategy": "trend",
+   "symbol": "SENSEX",
+   "time": "11:15:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "id": "BANKNIFTY:camarilla:11:20",
+   "index": {
+    "entry": 63440.05,
+    "risk_pts": 593.8915782442948,
+    "rr": null,
+    "sl": 64033.941578244296,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.39,
+    "at": "15:15",
+    "close_15_15": 62609.2,
+    "exit_spot": 62612.6,
+    "index_outcome": "square-off",
+    "mae_pts": 160.8,
+    "mfe_pts": 893.9
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "11:20",
+   "source": "autopilot",
+   "strategy": "camarilla",
+   "symbol": "BANKNIFTY",
+   "time": "11:20:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "id": "BANKNIFTY:camarilla:11:40",
+   "index": {
+    "entry": 63317.3,
+    "risk_pts": 565.2225717470685,
+    "rr": null,
+    "sl": 63882.522571747075,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.25,
+    "at": "15:15",
+    "close_15_15": 62609.2,
+    "exit_spot": 62612.6,
+    "index_outcome": "square-off",
+    "mae_pts": 32.8,
+    "mfe_pts": 771.1
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "11:40",
+   "source": "autopilot",
+   "strategy": "camarilla",
+   "symbol": "BANKNIFTY",
+   "time": "11:40:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "BANKNIFTY:noise:11:45",
+   "index": {
+    "entry": 63298.05,
+    "risk_pts": 372.62111584342375,
+    "rr": 4.0,
+    "sl": 63670.67111584343,
+    "target": 61807.56553662631
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.84,
+    "at": "15:15",
+    "close_15_15": 62609.2,
+    "exit_spot": 62612.6,
+    "index_outcome": "square-off",
+    "mae_pts": 40.0,
+    "mfe_pts": 751.9
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "11:45",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "BANKNIFTY",
+   "time": "11:45:03"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:11:45",
+   "index": {
+    "entry": 25559.7,
+    "risk_pts": 87.83462901988916,
+    "rr": 4.0,
+    "sl": 25647.53462901989,
+    "target": 25208.361483920446
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 2.19,
+    "at": "15:15",
+    "close_15_15": 25366.4,
+    "exit_spot": 25367.5,
+    "index_outcome": "square-off",
+    "mae_pts": 6.5,
+    "mfe_pts": 215.9
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "11:45",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "11:45:03"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "NIFTY:trend:11:45",
+   "index": {
+    "entry": 25559.7,
+    "risk_pts": 131.75194352983374,
+    "rr": null,
+    "sl": 25691.451943529835,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.46,
+    "at": "15:15",
+    "close_15_15": 25366.4,
+    "exit_spot": 25367.5,
+    "index_outcome": "square-off",
+    "mae_pts": 6.5,
+    "mfe_pts": 215.9
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "11:45",
+   "source": "autopilot",
+   "strategy": "trend",
+   "symbol": "NIFTY",
+   "time": "11:45:03"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "SENSEX:noise:11:45",
+   "index": {
+    "entry": 83131.12,
+    "risk_pts": 277.78721936169137,
+    "rr": 4.0,
+    "sl": 83408.90721936169,
+    "target": 82019.97112255322
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 2.49,
+    "at": "15:15",
+    "close_15_15": 82443.96,
+    "exit_spot": 82440.4,
+    "index_outcome": "square-off",
+    "mae_pts": 8.3,
+    "mfe_pts": 725.4
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "11:45",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "SENSEX",
+   "time": "11:45:03"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "SENSEX:trend:11:45",
+   "index": {
+    "entry": 83131.12,
+    "risk_pts": 416.6808290425371,
+    "rr": null,
+    "sl": 83547.80082904254,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.66,
+    "at": "15:15",
+    "close_15_15": 82443.96,
+    "exit_spot": 82440.4,
+    "index_outcome": "square-off",
+    "mae_pts": 8.3,
+    "mfe_pts": 725.4
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "11:45",
+   "source": "autopilot",
+   "strategy": "trend",
+   "symbol": "SENSEX",
+   "time": "11:45:03"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "id": "NIFTY:camarilla:11:50",
+   "index": {
+    "entry": 25544.8,
+    "risk_pts": 128.3100000000013,
+    "rr": null,
+    "sl": 25673.11,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.38,
+    "at": "15:15",
+    "close_15_15": 25366.4,
+    "exit_spot": 25367.5,
+    "index_outcome": "square-off",
+    "mae_pts": -1.8,
+    "mfe_pts": 201.0
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "11:50",
+   "source": "autopilot",
+   "strategy": "camarilla",
+   "symbol": "NIFTY",
+   "time": "11:51:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [
+     [
+      false,
+      "India VIX 18.03 between 11 and 18 (enough movement to pay for an option, but not a fear spike)"
+     ],
+     [
+      null,
+      "Trend-day catcher (own slot, trades alongside the others):"
+     ],
+     [
+      null,
+      "11:45 check \u00b7 band 83448.2 \u2013 84896.3 \u00b7 price above VWAP on 0% of today's bars (needs 80% on one side)"
+     ],
+     [
+      false,
+      "No trend-day setup at this check"
+     ],
+     [
+      null,
+      "Fibonacci 0.618 breakout (own slot):"
+     ],
+     [
+      true,
+      "India VIX 18.03 between 11 and 20"
+     ],
+     [
+      null,
+      "Yesterday's levels: H4 84463.9 \u00b7 H3 84078.1 \u00b7 L3 82829.2 \u00b7 L4 82443.4"
+     ],
+     [
+      false,
+      "Waiting for a 5-min close below L4 (now 83001.8)"
+     ],
+     [
+      null,
+      "Second strategy - Camarilla breakout:"
+     ],
+     [
+      true,
+      "India VIX 18.03 between 11 and 20"
+     ],
+     [
+      null,
+      "Yesterday's levels: H4 84818.8 \u00b7 H3 84369.2 \u00b7 L3 83470.2 \u00b7 L4 83020.6"
+     ],
+     [
+      true,
+      "11:55 close crossed below L4"
+     ]
+    ],
+    "exp_r": null,
+    "factors": [
+     {
+      "factor": "Global markets",
+      "score": -1,
+      "value": "-1.68% avg"
+     },
+     {
+      "factor": "Opening gap",
+      "score": 1,
+      "value": "+0.60%"
+     },
+     {
+      "factor": "India VIX",
+      "score": 0,
+      "value": "18.03 (+4.1%)"
+     },
+     {
+      "factor": "Put-Call Ratio (OI)",
+      "score": 0,
+      "value": "0.95"
+     },
+     {
+      "factor": "News sentiment",
+      "score": 0,
+      "value": "n/a"
+     },
+     {
+      "factor": "FII cash flow",
+      "score": 1,
+      "value": "\u20b910,308 cr"
+     },
+     {
+      "factor": "Price vs VWAP",
+      "score": -1,
+      "value": "83001.8 vs 83513.6"
+     },
+     {
+      "factor": "Trend (EMA9/21 + Supertrend)",
+      "score": -1,
+      "value": "Down"
+     }
+    ],
+    "p_win": null,
+    "score": -1,
+    "trail": "stop to entry at +1R; 45-min time stop"
+   },
+   "id": "SENSEX:camarilla:11:55",
+   "index": {
+    "entry": 83001.83,
+    "risk_pts": 399.9342862662704,
+    "rr": null,
+    "sl": 83401.76428626628,
+    "target": null
+   },
+   "lot": 20,
+   "opt": "PE",
+   "option": {
+    "cost_per_lot": 13782.0,
+    "delta": 0.53,
+    "entry_prem": 689.1,
+    "expiry": "2026-11-26",
+    "lots": 1,
+    "ltp": 688.9,
+    "sl_prem": 477.13,
+    "strike": 83100.0,
+    "target_prem": 1325.0
+   },
+   "result": {
+    "R": 1.4,
+    "at": "15:15",
+    "close_15_15": 82443.96,
+    "exit_spot": 82440.4,
+    "index_outcome": "square-off",
+    "mae_pts": 48.3,
+    "mfe_pts": 596.1
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "11:55",
+   "spot": 83011.58,
+   "strategy": "camarilla",
+   "symbol": "SENSEX",
+   "time": "11:56:14",
+   "vix": 18.03
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "BANKNIFTY:noise:12:15",
+   "index": {
+    "entry": 63285.15,
+    "risk_pts": 298.9099258630408,
+    "rr": 4.0,
+    "sl": 63584.05992586304,
+    "target": 62089.510296547836
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 2.25,
+    "at": "15:15",
+    "close_15_15": 62609.2,
+    "exit_spot": 62612.6,
+    "index_outcome": "square-off",
+    "mae_pts": 52.9,
+    "mfe_pts": 739.0
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "12:15",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "BANKNIFTY",
+   "time": "12:15:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:12:15",
+   "index": {
+    "entry": 25530.75,
+    "risk_pts": 75.80392133922531,
+    "rr": 4.0,
+    "sl": 25606.553921339226,
+    "target": 25227.5343146431
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 2.15,
+    "at": "15:15",
+    "close_15_15": 25366.4,
+    "exit_spot": 25367.5,
+    "index_outcome": "square-off",
+    "mae_pts": 2.8,
+    "mfe_pts": 186.9
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "12:15",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "12:15:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "NIFTY:trend:12:15",
+   "index": {
+    "entry": 25530.75,
+    "risk_pts": 113.70588200883796,
+    "rr": null,
+    "sl": 25644.45588200884,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.44,
+    "at": "15:15",
+    "close_15_15": 25366.4,
+    "exit_spot": 25367.5,
+    "index_outcome": "square-off",
+    "mae_pts": 2.8,
+    "mfe_pts": 186.9
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "12:15",
+   "source": "autopilot",
+   "strategy": "trend",
+   "symbol": "NIFTY",
+   "time": "12:15:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "SENSEX:noise:12:15",
+   "index": {
+    "entry": 83020.91,
+    "risk_pts": 239.57637737836444,
+    "rr": 4.0,
+    "sl": 83260.48637737837,
+    "target": 82062.60449048654
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 2.42,
+    "at": "15:15",
+    "close_15_15": 82443.96,
+    "exit_spot": 82440.4,
+    "index_outcome": "square-off",
+    "mae_pts": 0.7,
+    "mfe_pts": 615.2
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "12:15",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "SENSEX",
+   "time": "12:15:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "SENSEX:trend:12:15",
+   "index": {
+    "entry": 83020.91,
+    "risk_pts": 359.36456606754666,
+    "rr": null,
+    "sl": 83380.27456606756,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.62,
+    "at": "15:15",
+    "close_15_15": 82443.96,
+    "exit_spot": 82440.4,
+    "index_outcome": "square-off",
+    "mae_pts": 0.7,
+    "mfe_pts": 615.2
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "12:15",
+   "source": "autopilot",
+   "strategy": "trend",
+   "symbol": "SENSEX",
+   "time": "12:15:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "NIFTY:trend:12:45",
+   "index": {
+    "entry": 25506.15,
+    "risk_pts": 99.94694501536254,
+    "rr": null,
+    "sl": 25606.096945015364,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.39,
+    "at": "15:15",
+    "close_15_15": 25366.4,
+    "exit_spot": 25367.5,
+    "index_outcome": "square-off",
+    "mae_pts": 10.3,
+    "mfe_pts": 162.3
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "12:45",
+   "source": "autopilot",
+   "strategy": "trend",
+   "symbol": "NIFTY",
+   "time": "12:45:01"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "SENSEX:trend:12:45",
+   "index": {
+    "entry": 82921.69,
+    "risk_pts": 314.13549221438967,
+    "rr": null,
+    "sl": 83235.8254922144,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.53,
+    "at": "15:15",
+    "close_15_15": 82443.96,
+    "exit_spot": 82440.4,
+    "index_outcome": "square-off",
+    "mae_pts": 50.5,
+    "mfe_pts": 516.0
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "12:45",
+   "source": "autopilot",
+   "strategy": "trend",
+   "symbol": "SENSEX",
+   "time": "12:45:01"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "BANKNIFTY:noise:12:45",
+   "index": {
+    "entry": 63251.35,
+    "risk_pts": 241.94655939988348,
+    "rr": 4.0,
+    "sl": 63493.29655939988,
+    "target": 62283.56376240047
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 2.64,
+    "at": "15:15",
+    "close_15_15": 62609.2,
+    "exit_spot": 62612.6,
+    "index_outcome": "square-off",
+    "mae_pts": -43.4,
+    "mfe_pts": 705.2
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "12:45",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "BANKNIFTY",
+   "time": "12:54:01"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:12:45",
+   "index": {
+    "entry": 25495.65,
+    "risk_pts": 66.39334691427226,
+    "rr": 4.0,
+    "sl": 25562.043346914274,
+    "target": 25230.076612342913
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.93,
+    "at": "15:15",
+    "close_15_15": 25366.4,
+    "exit_spot": 25367.5,
+    "index_outcome": "square-off",
+    "mae_pts": -6.4,
+    "mfe_pts": 151.8
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "12:45",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "12:54:01"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "SENSEX:noise:12:45",
+   "index": {
+    "entry": 82903.4,
+    "risk_pts": 208.23054279938418,
+    "rr": 4.0,
+    "sl": 83111.63054279938,
+    "target": 82070.47782880245
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 2.22,
+    "at": "15:15",
+    "close_15_15": 82443.96,
+    "exit_spot": 82440.4,
+    "index_outcome": "square-off",
+    "mae_pts": -13.6,
+    "mfe_pts": 497.7
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "12:45",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "SENSEX",
+   "time": "12:54:01"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "NIFTY:trend:13:15",
+   "index": {
+    "entry": 25463.7,
+    "risk_pts": 86.03782851594913,
+    "rr": null,
+    "sl": 25549.73782851595,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.12,
+    "at": "15:15",
+    "close_15_15": 25366.4,
+    "exit_spot": 25367.5,
+    "index_outcome": "square-off",
+    "mae_pts": 10.0,
+    "mfe_pts": 119.9
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "13:15",
+   "source": "autopilot",
+   "strategy": "trend",
+   "symbol": "NIFTY",
+   "time": "13:15:01"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "SENSEX:trend:13:15",
+   "index": {
+    "entry": 82816.17,
+    "risk_pts": 267.428736950037,
+    "rr": null,
+    "sl": 83083.59873695004,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.4,
+    "at": "15:15",
+    "close_15_15": 82443.96,
+    "exit_spot": 82440.4,
+    "index_outcome": "square-off",
+    "mae_pts": 21.0,
+    "mfe_pts": 410.5
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "13:15",
+   "source": "autopilot",
+   "strategy": "trend",
+   "symbol": "SENSEX",
+   "time": "13:15:01"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "NIFTY:trend:13:45",
+   "index": {
+    "entry": 25434.65,
+    "risk_pts": 77.32316428545334,
+    "rr": null,
+    "sl": 25511.973164285453,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 0.87,
+    "at": "15:15",
+    "close_15_15": 25366.4,
+    "exit_spot": 25367.5,
+    "index_outcome": "square-off",
+    "mae_pts": 39.0,
+    "mfe_pts": 90.8
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "13:45",
+   "source": "autopilot",
+   "strategy": "trend",
+   "symbol": "NIFTY",
+   "time": "13:45:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "SENSEX:trend:13:45",
+   "index": {
+    "entry": 82707.65,
+    "risk_pts": 241.86938214241547,
+    "rr": null,
+    "sl": 82949.5193821424,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.1,
+    "at": "15:15",
+    "close_15_15": 82443.96,
+    "exit_spot": 82440.4,
+    "index_outcome": "square-off",
+    "mae_pts": 129.6,
+    "mfe_pts": 302.0
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "13:45",
+   "source": "autopilot",
+   "strategy": "trend",
+   "symbol": "SENSEX",
+   "time": "13:45:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "BANKNIFTY:noise:14:15",
+   "index": {
+    "entry": 62907.9,
+    "risk_pts": 195.89020242180843,
+    "rr": 4.0,
+    "sl": 63103.79020242181,
+    "target": 62124.33919031277
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.51,
+    "at": "15:15",
+    "close_15_15": 62609.2,
+    "exit_spot": 62612.6,
+    "index_outcome": "square-off",
+    "mae_pts": 152.0,
+    "mfe_pts": 361.7
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "14:15",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "BANKNIFTY",
+   "time": "14:15:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "NIFTY:noise:14:15",
+   "index": {
+    "entry": 25415.75,
+    "risk_pts": 52.264572512082786,
+    "rr": 4.0,
+    "sl": 25468.014572512082,
+    "target": 25206.69170995167
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 0.92,
+    "at": "15:15",
+    "close_15_15": 25366.4,
+    "exit_spot": 25367.5,
+    "index_outcome": "square-off",
+    "mae_pts": 50.3,
+    "mfe_pts": 71.9
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "14:15",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "NIFTY",
+   "time": "14:15:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "NIFTY:trend:14:15",
+   "index": {
+    "entry": 25415.75,
+    "risk_pts": 78.39685876812418,
+    "rr": null,
+    "sl": 25494.146858768123,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 0.62,
+    "at": "15:15",
+    "close_15_15": 25366.4,
+    "exit_spot": 25367.5,
+    "index_outcome": "square-off",
+    "mae_pts": 50.3,
+    "mfe_pts": 71.9
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "14:15",
+   "source": "autopilot",
+   "strategy": "trend",
+   "symbol": "NIFTY",
+   "time": "14:15:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "noise band / VWAP on the half hour"
+   },
+   "id": "SENSEX:noise:14:15",
+   "index": {
+    "entry": 82637.69,
+    "risk_pts": 165.12947052044248,
+    "rr": 4.0,
+    "sl": 82802.81947052045,
+    "target": 81977.17211791824
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 1.19,
+    "at": "15:15",
+    "close_15_15": 82443.96,
+    "exit_spot": 82440.4,
+    "index_outcome": "square-off",
+    "mae_pts": 158.6,
+    "mfe_pts": 232.0
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "14:15",
+   "source": "autopilot",
+   "strategy": "noise",
+   "symbol": "SENSEX",
+   "time": "14:15:00"
+  },
+  {
+   "auto_enabled": true,
+   "basis": {
+    "ai": null,
+    "checks": [],
+    "exp_r": null,
+    "factors": [],
+    "p_win": null,
+    "score": null,
+    "trail": "stop to entry at +1R; hold to 15:15"
+   },
+   "id": "SENSEX:trend:14:15",
+   "index": {
+    "entry": 82637.69,
+    "risk_pts": 247.6942057806637,
+    "rr": null,
+    "sl": 82885.38420578066,
+    "target": null
+   },
+   "opt": "PE",
+   "option": {},
+   "result": {
+    "R": 0.8,
+    "at": "15:15",
+    "close_15_15": 82443.96,
+    "exit_spot": 82440.4,
+    "index_outcome": "square-off",
+    "mae_pts": 158.6,
+    "mfe_pts": 232.0
+   },
+   "signal": "BUY PUT",
+   "signal_bar": "14:15",
+   "source": "autopilot",
+   "strategy": "trend",
+   "symbol": "SENSEX",
+   "time": "14:15:00"
+  }
+ ],
+ "settled": {
+  "at": "2026-11-23T15:16:16+05:30",
+  "lesson": "40 recommendations: 0 target, 3 stop, 37 squared off; +58.4R in total. Best: BANKNIFTY PE  at 12:54 (+2.6R, ran 705 pts in favour). Worst: BANKNIFTY PE  at 09:35 (-1.0R). 13 squared-off trades reached 2R during the day and gave part of it back - the rules hold to 15:15 by design; the backtest says trailing earlier did not help. India VIX was 18.6 at the open. Carry forward: one trade per rule per day, the index-level stop decides, premium paths are shown so you can see where the plan and the option diverged.",
+  "recos": 40
+ },
+ "squeeze_shadow": {
+  "log": [
+   {
+    "event": "opened",
+    "late_s": 0,
+    "note": "Shadow SENSEX 83400PE at \u20b9683.40, index 83,432.2, stop 83,781.8 (no order placed)",
+    "side": -1,
+    "signal_bar": "2026-11-23T09:45:00+05:30",
+    "t": "2026-11-23T10:00:00+05:30"
+   },
+   {
+    "event": "closed",
+    "id": "d6a45703",
+    "pnl": 10708.0,
+    "r_live": 2.83,
+    "r_rule": 2.85,
+    "reason": "15:15 square-off",
+    "t": "2026-11-23T15:15:01+05:30"
+   }
+  ],
+  "on": true,
+  "open": [],
+  "rule": {
+   "atr_kc": 10,
+   "atr_stop": 14,
+   "bb": 2.0,
+   "kc": 1.5,
+   "n": 14,
+   "per_day": 1,
+   "stop_k": 1.5,
+   "tf": 15
+  },
+  "trades": [
+   {
+    "bar_open": 83439.02,
+    "charges": 99.0,
+    "closed": "2026-11-23T15:15:01+05:30",
+    "entry_ask": 683.4,
+    "entry_bar": "2026-11-23T10:00:00+05:30",
+    "entry_bid": 681.15,
+    "entry_ltp": 683.75,
+    "entry_prem": 683.4,
+    "entry_spot": 83432.23,
+    "exit_ltp": 1223.75,
+    "exit_prem": 1223.75,
+    "exit_spot": 82443.96,
+    "expiry": "2026-11-26",
+    "gross": 10807.0,
+    "id": "d6a45703",
+    "late_s": 0,
+    "lots": 1,
+    "opened": "2026-11-23T10:00:00+05:30",
+    "opt": "PE",
+    "pnl": 10708.0,
+    "price_src": "live",
+    "qty": 20,
+    "r_live": 2.83,
+    "r_rule": 2.85,
+    "reason": "15:15 square-off",
+    "risk_pts": 349.58,
+    "rule_exit": 82443.96,
+    "shadow": true,
+    "side": -1,
+    "signal_bar": "2026-11-23T09:45:00+05:30",
+    "sl": 83781.81,
+    "strike": 83400.0,
+    "symbol": "SENSEX"
+   }
+  ]
+ },
+ "summary": {
+  "by_outcome": {
+   "square-off": 37,
+   "stop": 3,
+   "target": 0
+  },
+  "by_strategy": {
+   "camarilla": {
+    "R": 6.28,
+    "n": 8
+   },
+   "noise": {
+    "R": 30.08,
+    "n": 15
+   },
+   "trend": {
+    "R": 22.01,
+    "n": 17
+   }
+  },
+  "executed": 0,
+  "open_positions": 0,
+  "paper_pnl": 0,
+  "paper_trades": 0,
+  "recommendations": 40,
+  "settled": 40,
+  "skipped": 40,
+  "sum_R": 58.37
+ }
+}
