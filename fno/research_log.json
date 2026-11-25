@@ -1768,6 +1768,16 @@
    "period": "Today's Autopilot trades (regenerated per rule change where needed), Rs 2L and Rs 20k x 2023-24 / 2025-26 / 2023 - 16 Oct 2026, plus Rs 40k / 1L / 5L and the forward window 19 Oct - 20 Nov 2026 for finalists. Judged on the realised replay.",
    "result": "Harness bug found and fixed: the portfolio replay added each trade's result at its ENTRY, so trades entered while it was still open were sized, braked and blocked on results nobody knew yet; live Autopilot uses realised P&L only. Realised replay (now the default in the Backtest tab): Rs 2L 10.28L / 7.39L / 66.6L (old 37.7L / 22.0L / 195.4L), Rs 20k 2.26L / 1.11L / 6.89L (old 3.08L / 1.98L / 38.7L). Without compounding the two agree (Rs 2L full 12.9L vs 13.7L), so the per-trade edge is real but the compounded totals were about 3x too high. A '3 losses in a row -> half size' rule looked like +41% on the old replay; on the realised replay it loses (2 of 6). Robustness: average net Rs 194 a lot on Rs 11,859 of premium (1.6%); doubled slippage + impact leaves Rs 2L full at 5.1L and wipes Rs 20k; tripled loses at Rs 2L. Band 1.5 / 2.0, look-back 10 / 20 and VIX caps 16-22 land between 41L and 63L at Rs 2L full (no lonely peak at 1.75), but Rs 20k collapses at band 1.5. Every strategy carries weight: without Camarilla / Trend-day / Fibonacci / round-level Rs 2L full falls to 7.0L / 7.2L / 17.1L / 11.8L; without Noise 40.6L, without channel 29.3L. Years at Rs 2L (restart each Jan): 2023 2.02L, 2024 9.13L, 2025 2.92L, 2026 4.26L; Rs 20k lost 55% in 2023. Risk: open-risk caps 2-3% and same-direction caps cut profit 85-95% (they block the stacked positions the profit comes from); brake levels 10 / 20%, 0.33x and tiers 0-1 of 6; brake off: fall 33 pts deeper; weekly 3% / 6% / off fail; monthly limits fail badly; cooldowns 30-60 min fail. Filters: gap filter fails (gap days earn, mostly with the gap); expiry-day trades earn more per lot (+261 vs +178) - half size / cutoffs fail; Noise last entry 13:30 / 14:00 fail (late Noise entries win); 15:00 square-off costs Rs 2.0L per lot. Exits: Noise time stop 45 / 60 min 0 of 6; channel stop at 2.5 / 3 / 4 / 5 ATR 0-2 of 6 (4-5 ATR rarely fires and never lowered the worst channel loss). Sizing: VIX-scaled size, VIX spike block (VIX-up days are big winners), confluence 1.25x / 1.5x / conflict skip, ADX / range gates on Noise: none passes. Only survivor: no entries 10:00-10:29 (that half hour lost per lot in all 4 years): 5 of 6 house cells, 12 of 15 over five sizes, fall within 1.8 pts, forward 3 of 5 not worse; a shuffle gives 'some slot loses all 4 years' 12% of the time.",
    "decision": "No trading-rule change. Backtest replay fixed to realised equity (live behaviour); old replay kept as realised=False. Watch-list: no entries 10:00-10:29."
+  },
+  {
+   "id": "r107",
+   "date": "2026-11-25",
+   "area": "Index options",
+   "title": "Round 107: can pre-open global cues (US close, crude, gold, USD/INR, Asian open) predict the Indian day?",
+   "asked": "User (25 Nov, before the open): check the US market, news, crude, gold and other factors to see where the market goes today; if they can be measured, add them to research and predict the market.",
+   "period": "Nifty, Bank Nifty, Sensex days Nov 2023 - Oct 2026 (design to Dec 2024, unseen 2025-26); Autopilot trades 2023 - 16 Oct 2026 on the realised replay.",
+   "result": "The cues predict the OPEN, not the day. A walk-forward model of all cues gets the gap's sign right 67% of the time (corr about 0.55-0.6) - GIFT Nifty already shows that at 09:00. For the move after the open the cues are weakly contrarian (S&P / Nasdaq / Dow / Nikkei corr -0.1 to -0.2: a strong US night gaps India up, then it fades a little); crude, gold and USD/INR carry nothing that holds. The model's day-direction hit rate is 52.5-55% vs 52.9-55.5% for always guessing the majority (t 0.9-1.6), so it cannot call the day. Big gaps (> 0.75%) continued only 37% (Nifty) / 30% (Sensex) of the time in 2025-26 but 63% / 48% in 2023-24, so that flips by period. Autopilot per lot: trades WITH an S&P move >= 0.5% average -178 (lost in 2023, 2025, 2026), AGAINST +503 (positive every year) - round 76 again; CALLs after the rupee weakened >= 0.3% lost every year (-668, 161 trades). As rules on the realised replay: skip WITH-US trades 3 of 6 (2025-26 better at both sizes, 2023-24 lower, falls 3 pts shallower); 0.5x WITH 2 of 6; 1.25x / 1.5x AGAINST 2-3 of 6; both together 3 of 6; skip CALLs after a weak rupee 0 of 6; skip trades with a 1%+ Nikkei open 3 of 6.",
+   "decision": "No rule change and no 'market prediction' feature: the cues are already in the gap Autopilot sees at 09:15. p-us-against stays on the watch list with the round-107 evidence. The backfill job now also collects the dollar index, US 10-year yield, Brent, WTI, gold and USD/INR for a re-test."
   }
  ],
  "pending_note": "Studies that cannot be finished yet - mostly because the data only exists from live markets (option chains, real option prices, live trades) and is still being collected. Progress counts trading sessions since collection started; the expected date is an estimate.",
@@ -2161,7 +2171,10 @@
    "area": "Index options",
    "title": "1.3x size when the trade goes against a big (> 0.5%) S&P 500 move from the night before",
    "waiting_for": "live paper record of these trades (about 60 more) and a re-test after Mar 2027 data",
-   "why": "Round 76: these trades beat the rest in every year 2023-26 (unseen Jan-Oct 2023 too) and 1.3x passes the Rs 2L bar (64.6L vs 40.9L), but 1.1-1.25x lower the full period with deeper falls, so the size step is not stable yet."
+   "why": "Round 76: these trades beat the rest in every year 2023-26 (unseen Jan-Oct 2023 too) and 1.3x passes the Rs 2L bar (64.6L vs 40.9L), but 1.1-1.25x lower the full period with deeper falls, so the size step is not stable yet. Round 107 (realised replay, Nov 2023 data refresh): per lot WITH an S&P move >= 0.5% -178 (lost 2023, 2025, 2026), AGAINST +503 (won every year); skip-WITH 3 of 6 cells, 0.5x WITH 2 of 6, 1.25x AGAINST 2 of 6, both 3 of 6 - still not adoptable.",
+   "refs": [
+    "r107"
+   ]
   },
   {
    "id": "p-pro-with",
@@ -3420,6 +3433,15 @@
     "r106"
    ],
    "takeaway": "Backtest replay now counts only closed trades (live behaviour): compounded totals were ~3x too high, per-trade edge unchanged. 30+ rule ideas tested: none passes; today's brake and weekly limit stay. Costs are the main risk: the edge is 1.6% of premium a trade. Watch list: no entries 10:00-10:29."
+  },
+  {
+   "n": 107,
+   "date": "2026-11-25",
+   "topic": "Pre-open global cues: US close, crude, gold, USD/INR, Asian open",
+   "ids": [
+    "r107"
+   ],
+   "takeaway": "Global cues explain the gap (67% sign hit) but not the day after the open (52-55%, no better than guessing the majority). Trades against a big US move keep beating trades with it (round 76), but no rule passes the bar. No change."
   }
  ],
  "india_status": {

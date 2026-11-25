@@ -3,7 +3,7 @@
 Writes into <out> (research/data on the research-data branch):
   participant_oi_hist.csv.gz   NSE participant-wise open interest, one row per day x client type (Client, DII, FII, Pro, TOTAL),
                                every trading day since START (fao_participant_oi_DDMMYYYY.csv from nsearchives)
-  global_long_1d.csv.gz        daily OHLC since START for ^DJI ^IXIC ^GSPC ^N225 ^HSI (Yahoo), column 'sym'
+  global_long_1d.csv.gz        daily OHLC since START for ^DJI ^IXIC ^GSPC ^N225 ^HSI DX-Y.NYB ^TNX BZ=F CL=F GC=F INR=X (Yahoo), column 'sym'
 Resumable: days already in the participant file are skipped.
 Usage: python research/fetch_backfill.py research/data [start=2022-12-01]
 """
@@ -59,7 +59,8 @@ def participant():
 def global_long():
     import yfinance as yf
     parts = []
-    for s in ("^DJI", "^IXIC", "^GSPC", "^N225", "^HSI"):
+    for s in ("^DJI", "^IXIC", "^GSPC", "^N225", "^HSI",
+              "DX-Y.NYB", "^TNX", "BZ=F", "CL=F", "GC=F", "INR=X"):   # round 107: dollar index, US 10y, Brent, WTI, gold, USD/INR
         x = yf.download(s, start=START.isoformat(), interval="1d", auto_adjust=False, progress=False)
         if isinstance(x.columns, pd.MultiIndex):
             x.columns = x.columns.get_level_values(0)
