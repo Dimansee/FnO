@@ -1,0 +1,736 @@
+{
+ "ai": {
+  "BANKNIFTY": [],
+  "NIFTY": [],
+  "SENSEX": []
+ },
+ "context": {
+  "BANKNIFTY": {
+   "atr_5m": null,
+   "calendar": null,
+   "camarilla": {
+    "h3": 63945.6625,
+    "h4": 64188.075,
+    "l3": 63460.8375,
+    "l4": 63218.425,
+    "pivot": 63695.317708333336
+   },
+   "cpr": {
+    "bc": 63691.3515625,
+    "tc": 63699.28385416667,
+    "width_pct": 0.012
+   },
+   "expiries": [
+    "2026-12-29",
+    "2027-01-25",
+    "2027-02-23"
+   ],
+   "expiry": "2026-12-29",
+   "fii": {
+    "date": "25-Nov-2026",
+    "dii": 4018.72,
+    "fii": 4479.08,
+    "source": "NSE"
+   },
+   "gap_pct": 0.03,
+   "global": {
+    "avg_equity_chg": 0.0,
+    "notes": [
+     "S&P 500: YFRateLimitError",
+     "Nasdaq: YFRateLimitError",
+     "Dow Jones: YFRateLimitError",
+     "S&P Futures: YFRateLimitError",
+     "Nasdaq Futures: YFRateLimitError",
+     "Nikkei 225: YFRateLimitError",
+     "Hang Seng: YFRateLimitError",
+     "Kospi: YFRateLimitError",
+     "Brent Crude: YFRateLimitError",
+     "Dollar Index: YFRateLimitError",
+     "USD/INR: YFRateLimitError",
+     "US 10Y Yield: YFRateLimitError"
+    ]
+   },
+   "lot": 30,
+   "noise_band_at": {
+    "09:45": [
+     63085.9,
+     64339.3
+    ],
+    "10:15": [
+     62958.2,
+     64467.0
+    ],
+    "11:15": [
+     62968.8,
+     64456.3
+    ],
+    "12:15": [
+     62792.0,
+     64633.2
+    ],
+    "13:15": [
+     62671.2,
+     64754.0
+    ],
+    "14:15": [
+     62471.1,
+     64954.2
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 63721.69921875,
+   "pcr_prev_close": 1.36,
+   "pivot": 63695.317708333336,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY",
+     "BANKNIFTY",
+     "SENSEX"
+    ],
+    "risk_pct": 1.0,
+    "sizing": "compound",
+    "strategies": [
+     "noise",
+     "camarilla",
+     "trend",
+     "fib"
+    ]
+   },
+   "prev_close": 63703.25,
+   "prev_high": 64132.1015625,
+   "prev_low": 63250.6015625,
+   "symbol": "BANKNIFTY",
+   "time": "09:17",
+   "vix": {
+    "chg_pct": 0.014151296246867062,
+    "level": 17.672500610351562
+   }
+  },
+  "NIFTY": {
+   "atr_5m": null,
+   "calendar": null,
+   "camarilla": {
+    "h3": 25910.399072265624,
+    "h4": 26001.54814453125,
+    "l3": 25728.100927734376,
+    "l4": 25636.95185546875,
+    "pivot": 25797.033203125
+   },
+   "cpr": {
+    "bc": 25785.9248046875,
+    "tc": 25808.1416015625,
+    "width_pct": 0.086
+   },
+   "expiries": [
+    "2026-12-01",
+    "2026-12-08",
+    "2026-12-15"
+   ],
+   "expiry": "2026-12-01",
+   "fii": {
+    "date": "25-Nov-2026",
+    "dii": 4018.72,
+    "fii": 4479.08,
+    "source": "NSE"
+   },
+   "gap_pct": 0.14,
+   "global": {
+    "avg_equity_chg": 0.0,
+    "notes": [
+     "S&P 500: YFRateLimitError",
+     "Nasdaq: YFRateLimitError",
+     "Dow Jones: YFRateLimitError",
+     "S&P Futures: YFRateLimitError",
+     "Nasdaq Futures: YFRateLimitError",
+     "Nikkei 225: YFRateLimitError",
+     "Hang Seng: YFRateLimitError",
+     "Kospi: YFRateLimitError",
+     "Brent Crude: YFRateLimitError",
+     "Dollar Index: YFRateLimitError",
+     "USD/INR: YFRateLimitError",
+     "US 10Y Yield: YFRateLimitError"
+    ]
+   },
+   "lot": 65,
+   "noise_band_at": {
+    "09:45": [
+     25645.6,
+     26030.0
+    ],
+    "10:15": [
+     25625.7,
+     26049.9
+    ],
+    "11:15": [
+     25612.8,
+     26062.9
+    ],
+    "12:15": [
+     25574.5,
+     26101.2
+    ],
+    "13:15": [
+     25553.6,
+     26122.1
+    ],
+    "14:15": [
+     25497.9,
+     26177.9
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 25856.099609375,
+   "pcr_prev_close": 0.69,
+   "pivot": 25797.033203125,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY",
+     "BANKNIFTY",
+     "SENSEX"
+    ],
+    "risk_pct": 1.0,
+    "sizing": "compound",
+    "strategies": [
+     "noise",
+     "camarilla",
+     "trend",
+     "fib"
+    ]
+   },
+   "prev_close": 25819.25,
+   "prev_high": 25951.650390625,
+   "prev_low": 25620.19921875,
+   "symbol": "NIFTY",
+   "time": "09:18",
+   "vix": {
+    "chg_pct": 0.014151296246867062,
+    "level": 17.672500610351562
+   }
+  },
+  "SENSEX": {
+   "atr_5m": 117.4317071901178,
+   "calendar": null,
+   "camarilla": {
+    "h3": 84245.5815,
+    "h4": 84552.883,
+    "l3": 83630.9785,
+    "l4": 83323.677,
+    "pivot": 83939.08
+   },
+   "cpr": {
+    "bc": 83939.48000000001,
+    "tc": 83938.68,
+    "width_pct": 0.001
+   },
+   "expiries": [
+    "2026-11-26",
+    "2026-12-03",
+    "2026-12-10"
+   ],
+   "expiry": "2026-12-03",
+   "fii": {
+    "date": "25-Nov-2026",
+    "dii": 4018.72,
+    "fii": 4479.08,
+    "source": "NSE"
+   },
+   "gap_pct": -0.02,
+   "global": {
+    "avg_equity_chg": 0.54,
+    "notes": []
+   },
+   "lot": 25,
+   "noise_band_at": {
+    "09:45": [
+     83363.3,
+     84878.9
+    ],
+    "10:15": [
+     83290.0,
+     84952.5
+    ],
+    "11:15": [
+     83232.6,
+     85010.1
+    ],
+    "12:15": [
+     83089.8,
+     85153.5
+    ],
+    "13:15": [
+     83065.9,
+     85177.5
+    ],
+    "14:15": [
+     82885.4,
+     85358.8
+    ]
+   },
+   "noise_sigma_known": true,
+   "open": 84301.4,
+   "pcr_prev_close": null,
+   "pivot": 83939.08,
+   "prefs": {
+    "auto": true,
+    "auto_syms": [
+     "NIFTY",
+     "BANKNIFTY",
+     "SENSEX"
+    ],
+    "risk_pct": 1.0,
+    "sizing": "compound",
+    "strategies": [
+     "noise",
+     "camarilla",
+     "trend",
+     "fib"
+    ]
+   },
+   "prev_close": 83938.28,
+   "prev_high": 84498.21,
+   "prev_low": 83380.75,
+   "symbol": "SENSEX",
+   "time": "09:26",
+   "vix": {
+    "chg_pct": -1.1884550084889645,
+    "level": 17.46
+   }
+  }
+ },
+ "date": "2026-11-26",
+ "decisions": {
+  "blocks": [
+   {
+    "cat": "data",
+    "entry": null,
+    "from": "09:20",
+    "label": "Market data not reliable",
+    "msg": "Skipped: the latest 5-minute candle is 1075 minutes old - waiting for fresh prices.",
+    "n": 6,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "slot": "fib",
+    "strategy": "fib",
+    "symbol": "SENSEX",
+    "target": null,
+    "to": "09:25",
+    "trade_id": null
+   },
+   {
+    "cat": "data",
+    "entry": null,
+    "from": "09:20",
+    "label": "Market data not reliable",
+    "msg": "Skipped: the latest 5-minute candle is 1075 minutes old - waiting for fresh prices.",
+    "n": 6,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "slot": "main",
+    "strategy": null,
+    "symbol": "SENSEX",
+    "target": null,
+    "to": "09:25",
+    "trade_id": null
+   },
+   {
+    "cat": "slot_busy",
+    "entry": null,
+    "from": "10:01",
+    "label": "A trade was already open in this slot",
+    "msg": "You already have an open round-level break trade in this instrument.",
+    "n": 191,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "slot": "rlevel",
+    "strategy": "rlevel",
+    "symbol": "NIFTY",
+    "target": null,
+    "to": "13:12",
+    "trade_id": null
+   },
+   {
+    "cat": "equity_gate",
+    "entry": null,
+    "from": "13:13",
+    "label": "Rule waits for a bigger account",
+    "msg": "Autopilot adds the Fibonacci breakout once equity reaches \u20b9200,000.",
+    "n": 87,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "slot": "fib",
+    "strategy": "fib",
+    "symbol": "NIFTY",
+    "target": null,
+    "to": "14:39",
+    "trade_id": null
+   },
+   {
+    "cat": "equity_gate",
+    "entry": null,
+    "from": "13:13",
+    "label": "Rule waits for a bigger account",
+    "msg": "Autopilot adds the Fibonacci breakout once equity reaches \u20b9200,000.",
+    "n": 87,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "slot": "fib",
+    "strategy": "fib",
+    "symbol": "SENSEX",
+    "target": null,
+    "to": "14:39",
+    "trade_id": null
+   },
+   {
+    "cat": "slot_busy",
+    "entry": null,
+    "from": "13:16",
+    "label": "A trade was already open in this slot",
+    "msg": "You already have an open round-level break trade in this instrument.",
+    "n": 70,
+    "ok": false,
+    "opt": null,
+    "signal_bar": null,
+    "sl": null,
+    "slot": "rlevel",
+    "strategy": "rlevel",
+    "symbol": "NIFTY",
+    "target": null,
+    "to": "14:25",
+    "trade_id": null
+   }
+  ],
+  "rows": [
+   {
+    "index": {
+     "entry": 25829.15,
+     "sl": 25728.33,
+     "target": null
+    },
+    "opt": "CE",
+    "option": null,
+    "reco_id": null,
+    "result": null,
+    "source": "trade",
+    "status": {
+     "label": "Executed",
+     "state": "executed",
+     "trade": {
+      "by": "autopilot",
+      "closed": "13:13",
+      "entry_prem": 221.65,
+      "exit_prem": 217.35,
+      "id": "ccf9a350",
+      "legs": [
+       "BUY 25800CE"
+      ],
+      "lots": 1,
+      "open": false,
+      "opened": "10:00",
+      "pnl": -360.15,
+      "reason": "Trailing stop (1R behind the best 15-min close)"
+     }
+    },
+    "strategy": "rlevel",
+    "symbol": "NIFTY",
+    "time": "10:00",
+    "what_happened": "Closed 13:13 \u00b7 Trailing stop (1R behind the best 15-min close)"
+   },
+   {
+    "index": {
+     "entry": 25836.35,
+     "sl": 25906.97,
+     "target": null
+    },
+    "opt": "PE",
+    "option": null,
+    "reco_id": null,
+    "result": null,
+    "source": "trade",
+    "status": {
+     "label": "Executed",
+     "state": "executed",
+     "trade": {
+      "by": "autopilot",
+      "closed": "14:26",
+      "entry_prem": 220.75,
+      "exit_prem": 194.9,
+      "id": "3ecc305c",
+      "legs": [
+       "BUY 25900PE"
+      ],
+      "lots": 1,
+      "open": false,
+      "opened": "13:15",
+      "pnl": -1758.08,
+      "reason": "Trailing stop (1R behind the best 15-min close)"
+     }
+    },
+    "strategy": "rlevel",
+    "symbol": "NIFTY",
+    "time": "13:15",
+    "what_happened": "Closed 14:26 \u00b7 Trailing stop (1R behind the best 15-min close)"
+   }
+  ],
+  "summary": {
+   "executed": 2,
+   "signals": 2,
+   "skipped": 0,
+   "skipped_by_reason": {}
+  }
+ },
+ "open_positions": [],
+ "paper_trades": [
+  {
+   "charges": 80.65,
+   "closed": "2026-11-26T13:13:02+05:30",
+   "delta": 0.55,
+   "entry_prem": 221.65,
+   "exit_ltp": 217.9,
+   "exit_prem": 217.35,
+   "expiry": "2026-12-01",
+   "gross_pnl": -279.5,
+   "hi": 25971.0,
+   "id": "ccf9a350",
+   "last_px": {
+    "NSE_FO|47839": 217.9
+   },
+   "last_spot": 25841.2,
+   "legs": [
+    {
+     "key": "NSE_FO|47839",
+     "opt": "CE",
+     "price": 221.65,
+     "side": "BUY",
+     "src": "upstox",
+     "strike": 25800.0
+    }
+   ],
+   "live_sl": 25855.68,
+   "lo": 25807.6,
+   "lot": 65,
+   "lots": 1,
+   "margin": 14407.0,
+   "mode": "signal",
+   "opened": "2026-11-26T10:00:04+05:30",
+   "plan": {
+    "auto": true,
+    "breakeven_at": null,
+    "cpr_size": {
+     "mult": 1.2,
+     "width": 0.088
+    },
+    "ctx": {
+     "atr_pct": 0.16,
+     "dte": 5,
+     "gap_pct": 0.21,
+     "minute_of_day": 600,
+     "trend": "up",
+     "vix": 17.47,
+     "vix_chg": -1.13,
+     "weekday": 3
+    },
+    "entry": 25829.15,
+    "level": 25800.0,
+    "opt": "CE",
+    "r_pts": 100.81583000000319,
+    "risk_pts": 201.63166000000638,
+    "rr": null,
+    "signal_bar": "09:45",
+    "sl": 25728.33,
+    "strategy": "rlevel",
+    "target": null,
+    "time_stop_min": null,
+    "trail": "stop at the signal bar's low; once ahead it follows the best 15-min close 1R behind; else 15:15"
+   },
+   "pnl": -360.15,
+   "qty": 65,
+   "reason": "Trailing stop (1R behind the best 15-min close)",
+   "rl_trail": true,
+   "sl_prem": 111.44,
+   "source": "LIVE \u00b7 Upstox",
+   "spot_at_entry": 25829.15,
+   "spot_exit": 25841.2,
+   "symbol": "NIFTY",
+   "target_fixed": false,
+   "target_prem": 552.29
+  },
+  {
+   "charges": 77.83,
+   "closed": "2026-11-26T14:26:02+05:30",
+   "delta": 0.55,
+   "entry_prem": 220.75,
+   "exit_ltp": 194.9,
+   "exit_prem": 194.9,
+   "expiry": "2026-12-01",
+   "gross_pnl": -1680.25,
+   "hi": 25879.5,
+   "id": "3ecc305c",
+   "last_px": {
+    "NSE:NIFTY26D0125900PE": 194.9
+   },
+   "last_spot": 25854.85,
+   "legs": [
+    {
+     "key": "NSE:NIFTY26D0125900PE",
+     "opt": "PE",
+     "price": 220.75,
+     "side": "BUY",
+     "src": "fyers",
+     "strike": 25900.0
+    }
+   ],
+   "live_sl": 25848.47,
+   "lo": 25771.95,
+   "lot": 65,
+   "lots": 1,
+   "margin": 14349.0,
+   "mode": "signal",
+   "opened": "2026-11-26T13:15:07+05:30",
+   "plan": {
+    "auto": true,
+    "breakeven_at": null,
+    "cpr_size": {
+     "mult": 1.2,
+     "width": 0.088
+    },
+    "ctx": {
+     "atr_pct": 0.105,
+     "dte": 5,
+     "gap_pct": 0.21,
+     "minute_of_day": 795,
+     "trend": "down",
+     "vix": 17.22,
+     "vix_chg": -2.55,
+     "weekday": 3
+    },
+    "entry": 25836.35,
+    "level": 25900.0,
+    "opt": "PE",
+    "r_pts": 70.61707000000024,
+    "risk_pts": 141.23414000000048,
+    "rr": null,
+    "signal_bar": "13:00",
+    "sl": 25906.97,
+    "strategy": "rlevel",
+    "target": null,
+    "time_stop_min": null,
+    "trail": "stop at the signal bar's high; once ahead it follows the best 15-min close 1R behind; else 15:15"
+   },
+   "pnl": -1758.08,
+   "qty": 65,
+   "reason": "Trailing stop (1R behind the best 15-min close)",
+   "rl_trail": true,
+   "sl_prem": 143.07,
+   "source": "LIVE \u00b7 Fyers",
+   "spot_at_entry": 25836.35,
+   "spot_exit": 25854.85,
+   "symbol": "NIFTY",
+   "target_fixed": false,
+   "target_prem": 453.79
+  }
+ ],
+ "recommendations": [],
+ "settled": {
+  "at": "2026-11-26T15:16:02+05:30",
+  "lesson": null,
+  "recos": 0
+ },
+ "squeeze_shadow": {
+  "log": [
+   {
+    "event": "opened",
+    "late_s": 1,
+    "note": "Shadow SENSEX 84100CE at \u20b9843.35, index 84,086.6, stop 83,731.6 (no order placed)",
+    "side": 1,
+    "signal_bar": "2026-11-26T09:45:00+05:30",
+    "t": "2026-11-26T10:00:01+05:30"
+   },
+   {
+    "event": "closed",
+    "id": "d786599c",
+    "pnl": -1302.15,
+    "r_live": -0.05,
+    "r_rule": -0.04,
+    "reason": "Momentum turned",
+    "t": "2026-11-26T13:15:00+05:30"
+   }
+  ],
+  "on": true,
+  "open": [],
+  "rule": {
+   "atr_kc": 10,
+   "atr_stop": 14,
+   "bb": 2.0,
+   "kc": 1.5,
+   "n": 14,
+   "per_day": 1,
+   "stop_k": 1.5,
+   "tf": 15
+  },
+  "trades": [
+   {
+    "bar_open": null,
+    "charges": 93.4,
+    "closed": "2026-11-26T13:15:00+05:30",
+    "entry_ask": 843.35,
+    "entry_bar": "2026-11-26T10:00:00+05:30",
+    "entry_bid": 840.25,
+    "entry_ltp": 841.95,
+    "entry_prem": 843.35,
+    "entry_spot": 84086.57,
+    "exit_ltp": 796.5,
+    "exit_prem": 795.0,
+    "exit_spot": 84068.56,
+    "expiry": "2026-12-03",
+    "gross": -1208.75,
+    "id": "d786599c",
+    "late_s": 1,
+    "lots": 1,
+    "opened": "2026-11-26T10:00:01+05:30",
+    "opt": "CE",
+    "pnl": -1302.15,
+    "price_src": "live",
+    "qty": 25,
+    "r_live": -0.05,
+    "r_rule": -0.04,
+    "reason": "Momentum turned",
+    "risk_pts": 354.93,
+    "rule_exit": 84071.57,
+    "shadow": true,
+    "side": 1,
+    "signal_bar": "2026-11-26T09:45:00+05:30",
+    "sl": 83731.64,
+    "strike": 84100.0,
+    "symbol": "SENSEX"
+   }
+  ]
+ },
+ "summary": {
+  "by_outcome": {
+   "square-off": 0,
+   "stop": 0,
+   "target": 0
+  },
+  "by_strategy": {},
+  "executed": 2,
+  "open_positions": 0,
+  "paper_pnl": -2118.0,
+  "paper_trades": 2,
+  "recommendations": 0,
+  "settled": 0,
+  "skipped": 0,
+  "sum_R": null
+ }
+}
